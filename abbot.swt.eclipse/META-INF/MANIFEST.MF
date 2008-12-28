@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: abbot.swt Eclipse Plug-in
+Bundle-SymbolicName: abbot.swt.eclipse;singleton:=true
+Bundle-Version: 0.1.0.20080305_1254
+Bundle-Activator: abbot.swt.eclipse.EclipsePlugin
+Bundle-Vendor: IBM
+Export-Package: abbot.swt.eclipse,abbot.swt.eclipse.fixture,abbot.swt.eclipse.jobs,abbot.swt.eclipse.junit.extensions,abbot.swt.eclipse.popups,abbot.swt.eclipse.tester,abbot.swt.eclipse.utils,abbot.tester.swt.eclipse,junit.extensions
+Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.3.0,4.0.0)",org.eclipse.core.resources;bundle-version="[3.3.0,4.0.0)",org.eclipse.ui;bundle-version="[3.3.0,4.0.0)",org.eclipse.ui.ide;bundle-version="[3.3.0,4.0.0)",org.eclipse.jdt.core;bundle-version="[3.3.0,4.0.0)",org.junit;bundle-version="[3.8.2,4.0.0)",abbot.swt;bundle-version="[0.1.0,0.2.0)"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Eclipse-LazyStart: true
