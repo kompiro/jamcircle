@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         id="kanban"
+         point="org.eclipse.ui.views">
+      <category
+            name="JAM Circle"
+            id="org.kompiro.jamcircle">
+      </category>
+      <view
+            allowMultiple="false"
+            class="org.kompiro.jamcircle.kanban.ui.KanbanView"
+            category="org.kompiro.jamcircle"
+            id="org.kompiro.jamcircle.kanban.KanbanView"
+            name="Kanban"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               closeable="true"
+               id="org.kompiro.jamcircle.kanban.KanbanView"
+               moveable="false"
+               ratio="0.5"
+               relationship="top"
+               relative="org.eclipse.ui.views.ContentOutline"
+               visible="true"/>
+         <viewShortcut id="org.kompiro.jamcircle.kanban.KanbanView"/>
+      </perspectiveExtension>
+   </extension>
+    <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="org.kompiro.jamcircle.kanban.ui.KanbanPerspective"
+            icon="icons/kanbans.png"
+            id="org.kompiro.jamcircle.kanban.ui.perspective.kanban"
+            name="Kanban">
+      </perspective>
+   </extension>
+    <extension
+          point="org.eclipse.ui.newWizards">
+       <category
+             id="org.kompiro.jamcircle.kanban.ui"
+             name="JAM Circle">
+       </category>
+       <wizard
+             category="org.kompiro.jamcircle.kanban.ui"
+             class="org.kompiro.jamcircle.kanban.ui.action.BoardNewWizard"
+             descriptionImage="icons/kanbans.png"
+             icon="icons/kanban_016.gif"
+             id="org.kompiro.jamcircle.kanban.ui.action.BoardNewWizard"
+             name="New Board Wizard"
+             project="false">
+       </wizard>
+    </extension>
+    <extension
+          point="org.eclipse.ui.exportWizards">
+       <category
+             id="org.kompiro.jamcircle.kanban.ui"
+             name="JAM Circle">
+       </category>
+       <wizard
+             category="org.kompiro.jamcircle.kanban.ui"
+             class="org.kompiro.jamcircle.kanban.ui.action.CSVExportWizard"
+             icon="icons/page_excel.png"
+             id="org.kompiro.jamcircle.kanban.ui.action.CSVExportWizard"
+             name="CSV Export">
+       </wizard>
+    </extension>
+    <extension
+          point="org.eclipse.ui.importWizards">
+       <category
+             id="org.kompiro.jamcircle.kanban.ui"
+             name="JAM Circle">
+       </category>
+       <wizard
+             class="org.kompiro.jamcircle.kanban.ui.action.CSVImportWizard"
+             icon="icons/page_excel.png"
+             id="org.kompiro.jamcircle.kanban.ui"
+             name="CSV Import">
+       </wizard>
+    </extension>
+    <extension
+          point="org.eclipse.core.runtime.preferences">
+       <initializer
+             class="org.kompiro.jamcircle.kanban.ui.KanbanUIPreferenceInitializer">
+       </initializer>
+    </extension>
+</plugin>

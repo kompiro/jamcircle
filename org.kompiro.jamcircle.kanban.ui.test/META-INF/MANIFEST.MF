@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Kanban UI Test Fragment
+Bundle-SymbolicName: org.kompiro.jamcircle.kanban.ui.test
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Kompiro org..
+Fragment-Host: org.kompiro.jamcircle.kanban.ui;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Require-Bundle: org.junit4;bundle-version="4.3.1",
+ abbot.swt.gef;bundle-version="0.1.0",
+ abbot.swt;bundle-version="0.1.0",
+ abbot.swt.eclipse;bundle-version="0.1.0",
+ com.ibm.icu;bundle-version="3.8.1"

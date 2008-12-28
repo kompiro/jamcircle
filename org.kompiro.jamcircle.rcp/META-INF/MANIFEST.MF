@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JAMCircle RCP Plug-in
+Bundle-SymbolicName: org.kompiro.jamcircle.rcp;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.kompiro.jamcircle.RCPActivator
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.update.ui;bundle-version="3.2.100",
+ org.eclipse.update.core;bundle-version="3.2.200"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

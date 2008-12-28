@@ -1,0 +1,10 @@
+org.kompiro.jamcircle.storage/debug=true
+org.kompiro.jamcircle.storage/debug/debug=true
+org.kompiro.jamcircle.kanban/debug=true
+org.kompiro.jamcircle.kanban/debug/debug=true
+org.kompiro.jamcircle.kanban.ui/debug=true
+org.kompiro.jamcircle.kanban.ui/debug/debug=true
+org.kompiro.jamcircle.xmpp/debug=true
+org.kompiro.jamcircle.xmpp/debug/debug=true
+org.kompiro.jamcircle.xmpp.ui/debug=true
+org.kompiro.jamcircle.xmpp.ui/debug/debug=true

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="org.kompiro.jamcircle.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         id="jamcircle"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.kompiro.jamcircle.rcp.application"
+            name="JAM Circle">
+         <property
+               name="appName"
+               value="JAM Circle">
+         </property>
+         <property
+               name="windowImages"
+               value="icons/kanban_016.gif,icons/kanban_032.gif,icons/kanban_048.gif,icons/kanban_064.gif,icons/kanban_128.gif">
+         </property>
+         <property
+               name="startupForegroundColor"
+               value="FF8000">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="10,115,300,15">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="3,133,294,15">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/about2.png">
+         </property>
+         <property
+               name="aboutText"
+               value="JAM Circle is a kanban platform.">
+         </property>
+      </product>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.kompiro.jamcircle.rcp.application"
+            name="JAM Circle">
+         <property
+               name="windowImages"
+               value="icons/kanban_016.gif,icons/kanban_032.gif,icons/kanban_048.gif,icons/kanban_064.gif,icons/kanban_128.gif">
+         </property>
+         <property
+               name="aboutText"
+               value="JAM Circle is a kanban platform.">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/about2.png">
+         </property>
+         <property
+               name="startupForegroundColor"
+               value="FF8000">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="3,133,294,15">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="10,115,300,15">
+         </property>
+         <property
+               name="appName"
+               value="JAM Circle">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+      </product>
+   </extension>
+</plugin>

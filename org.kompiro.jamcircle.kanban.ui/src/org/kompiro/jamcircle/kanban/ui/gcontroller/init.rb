@@ -1,0 +1,12 @@
+card = $bsf.lookupBean('card');
+lane = $bsf.lookupBean('lane');
+event = $bsf.lookupBean('event');
+monitor = $bsf.lookupBean('monitor');
+RED = $bsf.lookupBean('RED');
+YELLOW = $bsf.lookupBean('YELLOW');
+GREEN = $bsf.lookupBean('GREEN');
+LIGHT_GREEN = $bsf.lookupBean('LIGHT_GREEN');
+LIGHT_BLUE = $bsf.lookupBean('LIGHT_BLUE');
+BLUE = $bsf.lookupBean('BLUE');
+PURPLE = $bsf.lookupBean('PURPLE');
+RED_PURPLE = $bsf.lookupBean('RED_PURPLE');

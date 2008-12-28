@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Storage Plug-in
+Bundle-SymbolicName: org.kompiro.jamcircle.storage;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.kompiro.jamcircle.storage.StorageActivator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.equinox.security
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ClassPath: lib/activeobjects-0.8.2.jar,
+ lib/h2.jar,
+ lib/commons-io-1.4.jar,
+ storage.jar
+Eclipse-BuddyPolicy: dependent
+Export-Package: net.java.ao,
+ net.java.ao.schema,
+ org.kompiro.jamcircle.storage,
+ org.kompiro.jamcircle.storage.exception,
+ org.kompiro.jamcircle.storage.model,
+ org.kompiro.jamcircle.storage.service
+Bundle-Vendor: Kompiro org.

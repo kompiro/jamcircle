@@ -1,0 +1,2 @@
+card.setColorType(%d);
+card.save();

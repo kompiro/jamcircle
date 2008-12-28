@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.kompiro.jamcircle.storage.settingUI">
+      <provider
+            class="org.kompiro.jamcircle.storage.ui.StorageCallbackHandler">
+      </provider>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.kompiro.jamcircle.storage.ui.handlers.StorageSettingHandler"
+            commandId="org.kompiro.jamcircle.storage.ui.commands.settingCommand">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:file?after=additions">
+         <command
+               commandId="org.kompiro.jamcircle.storage.ui.commands.settingCommand"
+               icon="icons/database_connect.png"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="org.kompiro.jamcircle.storage.ui.commands.category"
+            name="Storage">
+      </category>
+      <command
+            categoryId="org.kompiro.jamcircle.storage.ui.commands.category"
+            id="org.kompiro.jamcircle.storage.ui.commands.settingCommand"
+            name="Storage Setting">
+      </command>
+   </extension>
+
+</plugin>

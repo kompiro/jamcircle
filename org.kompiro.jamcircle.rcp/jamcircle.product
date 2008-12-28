@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.4"?>
+
+<product name="JAM Circle" id="org.kompiro.jamcircle.rcp.product" application="org.kompiro.jamcircle.rcp.application" version="1.1.0.qualifier" useFeatures="true">
+
+   <aboutInfo>
+      <image path="/org.kompiro.jamcircle.rcp/icons/about2.png"/>
+      <text>
+         JAM Circle is a kanban platform.
+      </text>
+   </aboutInfo>
+
+   <configIni use="default">
+   </configIni>
+
+   <launcherArgs>
+   </launcherArgs>
+
+   <windowImages i16="/org.kompiro.jamcircle.rcp/icons/kanban_016.gif" i32="/org.kompiro.jamcircle.rcp/icons/kanban_032.gif" i48="/org.kompiro.jamcircle.rcp/icons/kanban_048.gif" i64="/org.kompiro.jamcircle.rcp/icons/kanban_064.gif" i128="/org.kompiro.jamcircle.rcp/icons/kanban_128.gif"/>
+
+   <splash
+      location="org.kompiro.jamcircle.rcp"
+      startupProgressRect="3,133,294,15"
+      startupMessageRect="10,115,300,15"
+      startupForegroundColor="FF8000" />
+   <launcher name="JAMCircle">
+      <linux icon="/org.kompiro.jamcircle/icons/linux/kanban_048.xpm"/>
+      <solaris/>
+      <win useIco="false">
+         <bmp
+            winSmallHigh="/org.kompiro.jamcircle/icons/windows/kanban_016.bmp"
+            winSmallLow="/org.kompiro.jamcircle/icons/windows/kanban_016_8.bmp"
+            winMediumHigh="/org.kompiro.jamcircle/icons/windows/kanban_032.bmp"
+            winMediumLow="/org.kompiro.jamcircle/icons/windows/kanban_032_8.bmp"
+            winLargeHigh="/org.kompiro.jamcircle/icons/windows/kanban_048.bmp"
+            winLargeLow="/org.kompiro.jamcircle/icons/windows/kanban_048_8.bmp"/>
+      </win>
+   </launcher>
+
+   <vm>
+   </vm>
+
+   <plugins>
+   </plugins>
+
+   <features>
+      <feature id="org.kompiro.jamcircle" version="1.0.0.qualifier"/>
+      <feature id="org.kompiro.jamcircle.kanban.feature" version="1.0.0.qualifier"/>
+   </features>
+
+</product>

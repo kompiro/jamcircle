@@ -1,0 +1,14 @@
+package learning;
+
+import static org.junit.Assert.*;
+
+import java.io.File;
+
+import org.junit.Test;
+
+public class LearningTest {
+	@Test
+	public void learning() throws Exception {
+		System.out.println(new File("C:\\temp\\").getAbsolutePath());
+	}
+}

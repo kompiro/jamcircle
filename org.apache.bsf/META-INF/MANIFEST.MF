@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Bean Scripting Framework
+Bundle-SymbolicName: org.apache.bsf
+Bundle-Version: 2.4.0
+Bundle-Vendor: Apache Software Foundation
+Export-Package: org.apache.bsf,
+ org.apache.bsf.engines.jacl,
+ org.apache.bsf.engines.javascript,
+ org.apache.bsf.engines.jython,
+ org.apache.bsf.engines.netrexx,
+ org.apache.bsf.engines.xslt,
+ org.apache.bsf.util,
+ org.apache.bsf.util.cf,
+ org.apache.bsf.util.event,
+ org.apache.bsf.util.event.adapters,
+ org.apache.bsf.util.event.generator,
+ org.apache.bsf.util.type
+Eclipse-BuddyPolicy: dependent
+Bundle-RequiredExecutionEnvironment: J2SE-1.4,
+ J2SE-1.5,
+ JavaSE-1.6
+Bundle-ClassPath: lib/bsf.jar
+Require-Bundle: org.apache.commons.logging;bundle-version="1.0.4"

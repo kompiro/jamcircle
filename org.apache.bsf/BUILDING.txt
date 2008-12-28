@@ -1,0 +1,39 @@
+From the ant "build.xml" file:
+
+   Master Build file for BSF
+
+Notes:
+
+   This is the build file for use with the Jakarta Ant build tool.
+
+Optional additions:
+
+    BeanShell   -> http://www.beanshell.org/ (3rd party BSF engine)
+    JRuby       -> http://www.jruby.org/ (3rd party BSF engine)
+    Jacl        -> http://www.scriptics.com/java/
+    JavaScript  -> http://www.mozilla.org/rhino/
+    JudoScript  -> http://www.judoscript.com/ (3rd party BSF engine)
+    Jython      -> http://www.jython.org/
+    NetRexx     -> http://www2.hursley.ibm.com/netrexx/
+    Xalan       -> http://xml.apache.org/xalan-j
+
+Build Instructions:
+
+   To build, run
+
+     java org.apache.tools.ant.Main <target>
+
+   on the directory where this file is located with the target you want.
+
+Most useful targets:
+
+ - all        -> creates the binary and src distributions, and builds the site
+ - bindist    -> creates the complete binary distribution in "./dist/"
+ - build-site -> creates the website in "./docs"
+ - clean      -> removes all the generated files and directories
+ - compile    -> creates the "bsf.jar" package in "./build/lib" (default target)
+ - dist       -> creates both the binary and the src distributions in "./dist/"
+ - javadocs   -> creates the javadocs in "./build/javadocs"
+ - samples    -> creates/compiles the samples into "./build/samples"
+ - srcdist    -> creates the complete src distribution in "./dist/"
+
