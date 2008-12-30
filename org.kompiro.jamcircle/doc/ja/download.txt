@@ -1,0 +1,42 @@
+ダウンロード
+===========
+
+RCP版
+-----
+
+- [Windows](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-windows-1.1.0.zip)
+- [Linux](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-linux-1.1.0.zip)
+- [Mac(ビルドしてますが、動作確認していません。)](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-macosx-1.1.0.zip)
+
+
+Eclipseプラグイン版
+------------------
+
+- [Eclipseプラグイン版](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-plugin-1.1.0.zip)
+
+**Eclipseの要件**
+
+- Eclipse 3.4
+- GEF 3.4
+
+**更新サイト**
+- http://dl.getdropbox.com/u/221122/JAMCircle/updatesite/
+
+インストール方法
+-----------------
+1. RCP版をお使いになる場合は、お使いのOSにあったものをダウンロードしてください。
+1. ZIP形式での配布ですので、適当なフォルダへ解凍してください。
+
+1. Eclipseプラグイン版をお使いになる場合は、更新サイトに追加いただくか、eclipse/dropinsフォルダへインストールしてください。
+
+アンインストール方法
+---------------------
+1. お使いになっていたデータを削除される場合は[File] - [Storage Setting]の[Current Store Path]に保存されています。
+1. RCP版をお使いの場合は、フォルダごと削除してください。
+
+1. Eclipseプラグイン版をお使いの場合は[Help] - [Software Updates]から[Kanban Feature]を削除してください。
+
+
+システム要件
+------------
+ - JRE 1.5以上

@@ -1,0 +1,19 @@
+How to use JAM Circle
+=====================
+
+About Card
+----------
+
+** How to create card.
+
+About Lane
+----------
+
+** How to create lane.
+
+About Board
+-----------
+
+** How to create board.
+
+** Context Menu

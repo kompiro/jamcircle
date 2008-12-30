@@ -7,7 +7,7 @@ OUT_DIR = "./out"
 CLEAN.include(OUT_DIR)
 
 SRCS = FileList["doc/**/*.txt"]
-FILES = FileList["doc/**/*"].exclude("*.txt").exclude("template")
+FILES = FileList["doc/**/*"].exclude(".txt").exclude("template")
 t_file = open("doc/template/template.html")
 TEMPLATE = t_file.read
 t_file.close
@@ -58,6 +58,6 @@ file "bluecloth" => SRCS do |t|
     out_file = out + filename + '.html'
     puts "output #{out_file}"
     target = open(out_file ,'w')
-    target.write(contents)
+    target.write(html)
   end
 end
