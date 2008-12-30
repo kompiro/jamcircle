@@ -1,0 +1,63 @@
+require 'rubygems'
+gem "BlueCloth","=1.0.0"
+require 'bluecloth'
+require 'rake/clean'
+
+OUT_DIR = "./out"
+CLEAN.include(OUT_DIR)
+
+SRCS = FileList["doc/**/*.txt"]
+FILES = FileList["doc/**/*"].exclude("*.txt").exclude("template")
+t_file = open("doc/template/template.html")
+TEMPLATE = t_file.read
+t_file.close
+
+directory OUT_DIR
+task "default" => "site"
+
+desc "Create site"
+task "site" => ["init","dir","bluecloth","copy_contents"] do
+  puts "Creating site is DONE!"
+end
+
+desc "Initialize directory"
+file "init" => OUT_DIR do
+  puts "Start Creating Site."
+end
+
+desc "Create Directory"
+file "dir" => FILES do |t|
+  t.prerequisites.each do |f|
+    if File.directory?(f) then
+      out = f.gsub('doc',OUT_DIR) + '/'
+      FileUtils::Verbose.mkdir_p(out)
+    end
+  end
+end
+
+desc "Copy all files in src directory"
+file "copy_contents" => FILES do |t|
+  t.prerequisites.each do |f|
+    if File.file?(f) then
+      out = f.gsub('doc',OUT_DIR)
+      FileUtils.copy(f,out)
+    end
+  end
+end
+
+desc "Translate text files that are in src directory using bluecloth"
+file "bluecloth" => SRCS do |t|
+  t.prerequisites.each do |f|
+    file = open f 
+      contents = file.read
+    bc = BlueCloth.new contents
+    html = TEMPLATE.gsub('#{contents}',bc.to_html)
+    filename = File.basename(f,".txt")
+    dir = File.dirname(f)
+    out = dir.gsub('doc',OUT_DIR) + '/'
+    out_file = out + filename + '.html'
+    puts "output #{out_file}"
+    target = open(out_file ,'w')
+    target.write(contents)
+  end
+end
