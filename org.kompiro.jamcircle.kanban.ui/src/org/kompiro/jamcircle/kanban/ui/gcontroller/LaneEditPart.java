@@ -1,12 +1,13 @@
 package org.kompiro.jamcircle.kanban.ui.gcontroller;
 
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-
 
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
@@ -39,7 +40,10 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
@@ -49,10 +53,12 @@ import org.kompiro.jamcircle.kanban.model.ColorTypes;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.model.ScriptTypes;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
+import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
 import org.kompiro.jamcircle.kanban.ui.command.AddCardToOnBoardContainerCommand;
 import org.kompiro.jamcircle.kanban.ui.command.AddLaneTrashCommand;
 import org.kompiro.jamcircle.kanban.ui.command.CardCloneCommand;
+import org.kompiro.jamcircle.kanban.ui.command.CardUpdateCommand;
 import org.kompiro.jamcircle.kanban.ui.command.ChangeLaneConstraintCommand;
 import org.kompiro.jamcircle.kanban.ui.command.CreateCardCommand;
 import org.kompiro.jamcircle.kanban.ui.command.LaneToggleIconizedCommand;
@@ -66,6 +72,8 @@ import org.kompiro.jamcircle.kanban.ui.figure.LaneIconFigure;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 import org.kompiro.jamcircle.kanban.ui.script.ScriptEvent;
+import org.kompiro.jamcircle.kanban.ui.widget.CardListEditProvider;
+import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 public class LaneEditPart extends AbstractEditPart implements CardContainerEditPart{
 
@@ -174,7 +182,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	private LaneFigure laneFigure;
 	private LaneIconFigure laneIconFigure;
 	private TrashModel trash;
-	private Clickable iconizeButton;
+	private Clickable iconizeIcon;
 	private Clickable editIcon;
 	private ActionListener editListener = new ActionListener(){
 		public void actionPerformed(ActionEvent event) {
@@ -188,6 +196,48 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 				ScriptTypes type = dialog.getScriptType();
 				doUpdateLaneCommand(status,script,type);
 			}
+		}
+	};
+
+	private Clickable openListIcon;
+	private ActionListener openListListener = new ActionListener(){
+		public void actionPerformed(ActionEvent event) {
+			Shell shell = getViewer().getControl().getShell();
+			ApplicationWindow window = new ApplicationWindow(shell){
+				private CardListTableViewer viewer;
+				@Override
+				protected Control createContents(Composite parent) {
+					this.viewer = new CardListTableViewer(parent);
+					viewer.setInput(getCardContainer());
+					getCardContainer().addPropertyChangeListener(viewer);
+					viewer.setEditProvider(new CardListEditProvider(){
+						public void edit(Card card, String subject,
+								String content, Date dueDate, List<File> files) {
+							CardUpdateCommand command = new CardUpdateCommand(card,subject,content,dueDate,files);
+							getCommandStack().execute(command);
+							viewer.refresh();
+						}
+					});
+					return parent;
+				}
+				
+				@Override
+				public boolean close() {
+					getCardContainer().removePropertyChangeListener(viewer);
+					return super.close();
+				}
+				
+				@Override
+				protected void configureShell(Shell shell) {
+					super.configureShell(shell);
+					String title = String.format("Card List: %s",getCardContainer().getContainerName());
+					shell.setText(title);
+					Image image = KanbanUIActivator.getDefault().getImageRegistry().get(KanbanImageConstants.KANBANS_IMAGE.toString());
+					shell.setImage(image);
+				}
+			};
+			window.create();
+			window.open();
 		}
 	};
 
@@ -224,22 +274,29 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 
 	private void createActionIcons() {
 		ImageRegistry imageRegistry = getImageRegistry();
-		iconizeButton = new Clickable(new Label(imageRegistry.get(KanbanImageConstants.LANE_ICONIZE_IMAGE.toString())));
-		iconizeButton.setSize(16,16);
-		laneFigure.getActionSection().add(iconizeButton);
+		Image iconizeIconImage = imageRegistry.get(KanbanImageConstants.LANE_ICONIZE_IMAGE.toString());
+		iconizeIcon = new Clickable(new Label(iconizeIconImage));
+		iconizeIcon.setSize(16,16);
+		laneFigure.getActionSection().add(iconizeIcon);
 		
 		Image editIconImage = imageRegistry.get(KanbanImageConstants.EDIT_IMAGE.toString());
 		editIcon = new Clickable(new Label(editIconImage));
 		editIcon.setSize(16, 16);
 		laneFigure.getActionSection().add(editIcon);
+		
+		Image openListIconImage = imageRegistry.get(KanbanImageConstants.OPEN_LIST_ACTION_IMAGE.toString());
+		openListIcon = new Clickable(new Label(openListIconImage));
+		openListIcon.setSize(16, 16);
+		laneFigure.getActionSection().add(openListIcon);
 	}
 	
 	@Override
 	public void activate() {
 		createActionIcons();
 
-		iconizeButton.addActionListener(iconizeListener);
+		iconizeIcon.addActionListener(iconizeListener);
 		editIcon.addActionListener(editListener);
+		openListIcon.addActionListener(openListListener);
 		hideActionIcons();
 		super.activate();
 	}
@@ -248,7 +305,8 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	public void deactivate() {
 		super.deactivate();
 		editIcon.removeActionListener(editListener);
-		iconizeButton.removeActionListener(iconizeListener);
+		iconizeIcon.removeActionListener(iconizeListener);
+		openListIcon.removeActionListener(openListListener);
 	}
 
 	@Override
@@ -494,8 +552,9 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 
 
 	private void showActionIcons() {
-		iconizeButton.setVisible(true);
+		iconizeIcon.setVisible(true);
 		editIcon.setVisible(true);
+		openListIcon.setVisible(true);
 	}
 
 	@Override
@@ -506,8 +565,9 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 
 
 	private void hideActionIcons() {
-		iconizeButton.setVisible(false);
+		iconizeIcon.setVisible(false);
 		editIcon.setVisible(false);
+		openListIcon.setVisible(false);
 	}
 	
 	public LaneIconFigure getLaneIconFigure() {
