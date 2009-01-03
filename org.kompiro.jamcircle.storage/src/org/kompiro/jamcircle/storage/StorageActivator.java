@@ -60,7 +60,11 @@ public class StorageActivator extends Plugin {
 		try {
 			service.loadStorage(setting,new NullProgressMonitor());
 		} catch (StorageConnectException e) {
-			loader.setupStorageSetting();
+			if(!(StorageServiceImpl.testmode)){
+				loader.setupStorageSetting();
+			}else{
+				System.err.println("can't connect storage. and now it set testmode.");
+			}
 		}
 	}
 

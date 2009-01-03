@@ -53,6 +53,7 @@ public class StorageServiceImpl implements StorageService {
 	private static String dbName = System.getProperty(KEY_OF_SYSTEM_STORAGE_DBNAME,"storage");
 	/** this property is used for testing. */
 	private static String addtionalPath = "";
+	public static boolean testmode;
 	
 	private List<StorageChageListener> listeners = new ArrayList<StorageChageListener>();
 	
@@ -62,6 +63,7 @@ public class StorageServiceImpl implements StorageService {
 			if(r != null){
 				dbName = r.getString("dbname");
 				addtionalPath = r.getString("addtionalPath");
+				testmode = Boolean.valueOf(r.getString("testmode"));
 			}
 		}catch(MissingResourceException e){
 			// Noting because there wouldn't like to set default dbname.
