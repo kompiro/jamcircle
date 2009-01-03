@@ -31,6 +31,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.kompiro.jamcircle.kanban.model.ColorTypes;
+import org.kompiro.jamcircle.kanban.model.FlagTypes;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
@@ -62,6 +63,7 @@ public class CardFigure extends RoundedRectangle {
 //	private CardToolTip toolTipFigure;
 	private Figure footerSection;
 	private ColorTypes colorType;
+	private FlagTypes flagType;
 	private Figure middleSection;
 	private Figure actionSection;
 	private Figure statusSection;

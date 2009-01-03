@@ -36,6 +36,7 @@ public interface Card extends HasColorTypeEntity{
 	String PROP_COMPLETED_DATE = "completedDate";
 	
 	String PROP_DUE_DATE = "dueDate";
+	String PROP_FLAG_TYPE = "flagType";
 	
 	String getSubject();
 	
@@ -100,6 +101,10 @@ public interface Card extends HasColorTypeEntity{
 	 * @param uuid
 	 */
 	void setUUID(String uuid);
+	
+	FlagTypes getFlagType();
+	
+	void setFlagType(FlagTypes flagType);
 
 	@Ignore
 	String getStatus();

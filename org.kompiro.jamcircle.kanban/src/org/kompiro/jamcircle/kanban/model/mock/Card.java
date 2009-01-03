@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.ColorTypes;
+import org.kompiro.jamcircle.kanban.model.FlagTypes;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.model.User;
 
@@ -30,6 +31,7 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	private Date completedDate;
 	private boolean trashed;
 	private Date dueDate;
+	private FlagTypes flagType;
 	
 	public Card(){
 		this.createdDate = new Date();
@@ -198,6 +200,14 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 
 	public void setDueDate(Date date) {
 		this.dueDate = date;
+	}
+
+	public FlagTypes getFlagType() {
+		return flagType;
+	}
+
+	public void setFlagType(FlagTypes flagType) {
+		this.flagType = flagType;
 	}
 
 }

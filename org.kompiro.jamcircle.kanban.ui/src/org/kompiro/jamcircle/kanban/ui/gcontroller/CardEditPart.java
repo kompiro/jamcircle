@@ -56,6 +56,7 @@ import org.kompiro.jamcircle.kanban.ui.dialog.CardEditDialog;
 import org.kompiro.jamcircle.kanban.ui.figure.CardFigure;
 import org.kompiro.jamcircle.kanban.ui.figure.CellEditorLocator;
 import org.kompiro.jamcircle.kanban.ui.figure.ColorPopUpHelper;
+import org.kompiro.jamcircle.kanban.ui.figure.FlagPopUpHelper;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
@@ -162,6 +163,24 @@ public class CardEditPart extends AbstractEditPart {
 	};
 	private Clickable completedIcon;
 	private IFigure dueDummy;
+	private Figure flagSection;
+	private Clickable flagEditIcon, flagWhiteIcon, flagBlueIcon, flagOrangeIcon, flagGreenIcon, flagRedIcon;
+	private ActionListener flagIconListener = new ActionListener(){
+		public void actionPerformed(ActionEvent event) {
+			Object source = event.getSource();
+			if (source instanceof Clickable) {
+				Clickable colorIcon = (Clickable) source;
+				Control control = getViewer().getControl();
+				CommandStack stack = getCommandStack();
+				FlagPopUpHelper helper = new FlagPopUpHelper(control,stack,getCardModel());
+				org.eclipse.swt.graphics.Point target = control.getDisplay().getCursorLocation();
+				
+				helper.displayToolTipNear(colorIcon,target.x,target.y);
+			}
+		};
+	};
+	private Clickable flagCurrentIcon;
+	
 
 	public CardEditPart(BoardModel board) {
 		super(board);
@@ -193,6 +212,33 @@ public class CardEditPart extends AbstractEditPart {
 
 	private void createIcons() {
 		ImageRegistry imageRegistry = getImageRegistry();
+		
+		Image flagWhiteIconImage = imageRegistry.get(KanbanImageConstants.FLAG_WHITE_IMAGE.toString());
+		flagWhiteIcon = new Clickable(new Label(flagWhiteIconImage));
+		flagWhiteIcon.setSize(16, 16);
+		flagEditIcon = new Clickable(new Label(flagWhiteIconImage));
+		flagEditIcon.setSize(16, 16);
+
+		Image flagBlueIconImage = imageRegistry.get(KanbanImageConstants.FLAG_BLUE_IMAGE.toString());
+		flagBlueIcon = new Clickable(new Label(flagBlueIconImage));
+		flagBlueIcon.setSize(16, 16);
+
+		Image flagOrangeIconImage = imageRegistry.get(KanbanImageConstants.FLAG_ORANGE_IMAGE.toString());
+		flagOrangeIcon = new Clickable(new Label(flagOrangeIconImage));
+		flagOrangeIcon.setSize(16, 16);
+
+		Image flagRedIconImage = imageRegistry.get(KanbanImageConstants.FLAG_RED_IMAGE.toString());
+		flagRedIcon = new Clickable(new Label(flagRedIconImage));
+		flagRedIcon.setSize(16, 16);
+
+		Image flagGreenIconImage = imageRegistry.get(KanbanImageConstants.FLAG_GREEN_IMAGE.toString());
+		flagGreenIcon = new Clickable(new Label(flagGreenIconImage));
+		flagGreenIcon.setSize(16, 16);
+		
+		flagSection = new Figure();
+		flagSection.setLayoutManager(new StackLayout());
+		flagSection.add(flagEditIcon);
+		
 		Image editIconImage = imageRegistry.get(KanbanImageConstants.EDIT_IMAGE.toString());
 		editIcon = new Clickable(new Label(editIconImage));
 		editIcon.setSize(16, 16);
@@ -246,9 +292,16 @@ public class CardEditPart extends AbstractEditPart {
 		editIcon.addActionListener(editIconListener);
 		
 		colorIcon.addActionListener(colorIconListener);
+		flagEditIcon.addActionListener(flagIconListener);
+		flagWhiteIcon.addActionListener(flagIconListener);
+		flagRedIcon.addActionListener(flagIconListener);
+		flagBlueIcon.addActionListener(flagIconListener);
+		flagGreenIcon.addActionListener(flagIconListener);
+		flagOrangeIcon.addActionListener(flagIconListener);
+
 		hideActionIcons();
-				
 		IFigure actionSection = getCardFigure().getActionSection();
+		actionSection.add(flagSection);
 		actionSection.add(editIcon);
 		actionSection.add(colorIcon);
 		actionSection.add(deleteIcon);
@@ -267,8 +320,38 @@ public class CardEditPart extends AbstractEditPart {
 		setContent(card.getContent());
 		setCompleted(card);
 		setDue(card);
+		setFlag(card);
 	}
 	
+
+	private void setFlag(Card card) {
+		if(flagCurrentIcon != null){
+			flagSection.remove(flagCurrentIcon);
+		}
+		if(card.getFlagType() == null){
+			flagCurrentIcon = null;
+		}else{
+			flagEditIcon.setVisible(false);
+			switch (getCardModel().getFlagType()){
+			case RED:
+				flagCurrentIcon = flagRedIcon;
+				break;
+			case ORANGE:
+				flagCurrentIcon = flagOrangeIcon;
+				break;
+			case GREEN:
+				flagCurrentIcon = flagGreenIcon;
+				break;
+			case BLUE:
+				flagCurrentIcon = flagBlueIcon;
+				break;
+			case WHITE:
+				flagCurrentIcon = flagWhiteIcon;
+				break;
+			}
+			flagSection.add(flagCurrentIcon,0);
+		}
+	}
 
 	private void setDue(Card card) {
 		if(card.getDueDate() == null){
@@ -311,6 +394,12 @@ public class CardEditPart extends AbstractEditPart {
 	@Override
 	public void deactivate() {
 		if(PlatformUI.isWorkbenchRunning()){
+			removeActionListener(flagEditIcon,flagIconListener);
+			removeActionListener(flagWhiteIcon,flagIconListener);
+			removeActionListener(flagRedIcon,flagIconListener);
+			removeActionListener(flagBlueIcon,flagIconListener);
+			removeActionListener(flagGreenIcon,flagIconListener);
+			removeActionListener(flagOrangeIcon,flagIconListener);
 			removeActionListener(fileIcon,fileIconListener);
 			removeActionListener(pageIcon,pageIconListener);
 			removeActionListener(deleteIcon,deleteIconListener);
@@ -418,12 +507,18 @@ public class CardEditPart extends AbstractEditPart {
 		}
 		else if(isPropDue(evt)){
 			setDue(getCardModel());
+		}else if(isPropFlag(evt)){
+			setFlag(getCardModel());
 		}
 		else{
 			KanbanUIStatusHandler.info("no property handler:property name:" + evt.getPropertyName());
 		}
 	}
 	
+	private boolean isPropFlag(PropertyChangeEvent evt) {
+		return Card.PROP_FLAG_TYPE.equals(evt.getPropertyName());
+	}
+
 	private boolean isPropDue(PropertyChangeEvent evt) {
 		return Card.PROP_DUE_DATE.equals(evt.getPropertyName());
 	}
@@ -526,12 +621,16 @@ public class CardEditPart extends AbstractEditPart {
 	}
 
 	private void showActionIcons() {
+		if(getCardModel().getFlagType() == null){
+			flagEditIcon.setVisible(true);
+		}
 		colorIcon.setVisible(true);
 		editIcon.setVisible(true);
 		deleteIcon.setVisible(true);
 	}
 
 	private void hideActionIcons() {
+		flagEditIcon.setVisible(false);
 		editIcon.setVisible(false);
 		colorIcon.setVisible(false);
 		deleteIcon.setVisible(false);

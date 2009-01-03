@@ -110,7 +110,11 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 		reg.put(KanbanImageConstants.DELETE_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/cross.png"));
 		reg.put(KanbanImageConstants.OPEN_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/door_open.png"));
 		reg.put(KanbanImageConstants.MOCK_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/script_gear.png"));
-		
+		reg.put(KanbanImageConstants.FLAG_BLUE_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/flags/flag_blue.gif"));
+		reg.put(KanbanImageConstants.FLAG_GREEN_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/flags/flag_green.gif"));
+		reg.put(KanbanImageConstants.FLAG_ORANGE_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/flags/flag_orange.gif"));
+		reg.put(KanbanImageConstants.FLAG_RED_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/flags/flag_red.gif"));
+		reg.put(KanbanImageConstants.FLAG_WHITE_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/flags/flag_white.gif"));
 	}
 
 	public static KanbanUIActivator getDefault() {

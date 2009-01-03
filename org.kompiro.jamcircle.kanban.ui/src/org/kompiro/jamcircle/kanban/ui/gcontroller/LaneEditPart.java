@@ -50,6 +50,7 @@ import org.eclipse.ui.progress.IProgressService;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
 import org.kompiro.jamcircle.kanban.model.ColorTypes;
+import org.kompiro.jamcircle.kanban.model.FlagTypes;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.model.ScriptTypes;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
@@ -480,6 +481,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 				manager.registerBean("lane", lane);
 				manager.registerBean("event", new ScriptEvent(evt));
 				manager.registerBean("monitor", monitor);
+				
 				manager.registerBean("RED", ColorTypes.RED);
 				manager.registerBean("YELLOW",ColorTypes.YELLOW);
 				manager.registerBean("GREEN",ColorTypes.GREEN);
@@ -488,6 +490,12 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 				manager.registerBean("BLUE",ColorTypes.BLUE);
 				manager.registerBean("PURPLE",ColorTypes.PURPLE);
 				manager.registerBean("RED_PURPLE",ColorTypes.RED_PURPLE);
+
+				manager.registerBean("FLAG_RED", FlagTypes.RED);
+				manager.registerBean("FLAG_WHITE",FlagTypes.WHITE);
+				manager.registerBean("FLAG_GREEN",FlagTypes.GREEN);
+				manager.registerBean("FLAG_BLUE",FlagTypes.BLUE);
+				manager.registerBean("FLAG_ORANGE",FlagTypes.ORANGE);
 
 				
 				String scriptName = String.format("Lane '%s' Script",lane.getStatus());
@@ -505,7 +513,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 				}
 				InputStreamReader reader = new InputStreamReader(getClass().getResource(templateName).openStream());
 				script = IOUtils.getStringFromReader(reader) + script;
-				manager.exec(lane.getScriptType().getType(), scriptName, -12, 0, script);
+				manager.exec(lane.getScriptType().getType(), scriptName, -17, 0, script);
 			} catch (BSFException e) {
 				KanbanUIStatusHandler.fail(e.getTargetException(), String.format("An Error is occured from lane's script. '%s'",e.getTargetException().getMessage()));
 			} catch (IOException e) {
