@@ -82,39 +82,44 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 	
 	@Override
 	protected void initializeImageRegistry(ImageRegistry reg) {
+		initializeImage(reg,KanbanImageConstants.OPEN_LIST_ACTION_IMAGE);
+		initializeImage(reg,KanbanImageConstants.TRASH_FULL_IMAGE);
+		initializeImage(reg,KanbanImageConstants.TRASH_EMPTY_IMAGE);
+		initializeImage(reg,KanbanImageConstants.SEND_ON_IMAGE);
+		initializeImage(reg,KanbanImageConstants.SEND_OFF_IMAGE);
+		initializeImage(reg,KanbanImageConstants.CONNECT_IMAGE);
+		initializeImage(reg,KanbanImageConstants.DISCONNECT_IMAGE);
+		initializeImage(reg,KanbanImageConstants.BACKGROUND_IMAGE);
+		initializeImage(reg,KanbanImageConstants.FILE_LINK_IMAGE);
+		initializeImage(reg,KanbanImageConstants.FILE_GO_IMAGE);
+		initializeImage(reg,KanbanImageConstants.LANE_ICONIZE_IMAGE);
+		initializeImage(reg,KanbanImageConstants.LANE_RESTORE_IMAGE);
+		initializeImage(reg,KanbanImageConstants.USER_IMAGE);
+		initializeImage(reg,KanbanImageConstants.COLOR_IMAGE);
+		initializeImage(reg,KanbanImageConstants.ADD_IMAGE);
+		initializeImage(reg,KanbanImageConstants.EDIT_IMAGE);
+		initializeImage(reg,KanbanImageConstants.KANBANS_IMAGE);
+		initializeImage(reg,KanbanImageConstants.PAGE_IMAGE);
+		initializeImage(reg,KanbanImageConstants.COMPLETED_IMAGE);
+		initializeImage(reg,KanbanImageConstants.INBOX_IMAGE);
+		initializeImage(reg,KanbanImageConstants.CAMERA_IMAGE);
+		initializeImage(reg,KanbanImageConstants.SAVE_IMAGE);
+		initializeImage(reg,KanbanImageConstants.CLOCK_IMAGE);
+		initializeImage(reg,KanbanImageConstants.CLOCK_RED_IMAGE);
+		initializeImage(reg,KanbanImageConstants.DELETE_IMAGE);
+		initializeImage(reg,KanbanImageConstants.OPEN_IMAGE);
+		initializeImage(reg,KanbanImageConstants.MOCK_IMAGE);
+		initializeImage(reg,KanbanImageConstants.FLAG_BLUE_IMAGE);
+		initializeImage(reg,KanbanImageConstants.FLAG_GREEN_IMAGE);
+		initializeImage(reg,KanbanImageConstants.FLAG_ORANGE_IMAGE);
+		initializeImage(reg,KanbanImageConstants.FLAG_RED_IMAGE);
+		initializeImage(reg,KanbanImageConstants.FLAG_WHITE_IMAGE);
+	}
+
+
+	private void initializeImage(ImageRegistry reg,KanbanImageConstants constants) {
 		String PLUGIN_ID = getBundle().getSymbolicName();
-		reg.put(KanbanImageConstants.OPEN_LIST_ACTION_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/table_go.png"));
-		reg.put(KanbanImageConstants.TRASH_FULL_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/recycle-full.png"));
-		reg.put(KanbanImageConstants.TRASH_EMPTY_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/recycle-empty.png"));
-		reg.put(KanbanImageConstants.SEND_ON_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/send72_on.png"));
-		reg.put(KanbanImageConstants.SEND_OFF_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/send72_off.png"));
-		reg.put(KanbanImageConstants.CONNECT_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/connect.png"));
-		reg.put(KanbanImageConstants.DISCONNECT_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/disconnect.png"));		
-		reg.put(KanbanImageConstants.BACKGROUND_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/background/fuzzy-lightgrey.jpg"));
-		reg.put(KanbanImageConstants.FILE_LINK_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/folder_link.png"));
-		reg.put(KanbanImageConstants.FILE_GO_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/folder_go.png"));
-		reg.put(KanbanImageConstants.LANE_ICONIZE_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/application_put.png"));
-		reg.put(KanbanImageConstants.LANE_RESTORE_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/application_get.png"));
-		reg.put(KanbanImageConstants.USER_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/user.png"));
-		reg.put(KanbanImageConstants.COLOR_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/color_wheel.png"));
-		reg.put(KanbanImageConstants.ADD_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/add.png"));
-		reg.put(KanbanImageConstants.EDIT_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/edit.png"));
-		reg.put(KanbanImageConstants.KANBANS_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/kanbans.png"));
-		reg.put(KanbanImageConstants.PAGE_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/page.png"));
-		reg.put(KanbanImageConstants.COMPLETED_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/tick.png"));
-		reg.put(KanbanImageConstants.INBOX_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/inbox.png"));
-		reg.put(KanbanImageConstants.CAMERA_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/camera.png"));
-		reg.put(KanbanImageConstants.SAVE_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/disk.png"));
-		reg.put(KanbanImageConstants.CLOCK_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/clock.png"));
-		reg.put(KanbanImageConstants.CLOCK_RED_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/clock_red.png"));
-		reg.put(KanbanImageConstants.DELETE_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/cross.png"));
-		reg.put(KanbanImageConstants.OPEN_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/door_open.png"));
-		reg.put(KanbanImageConstants.MOCK_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/script_gear.png"));
-		reg.put(KanbanImageConstants.FLAG_BLUE_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/flags/flag_blue.gif"));
-		reg.put(KanbanImageConstants.FLAG_GREEN_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/flags/flag_green.gif"));
-		reg.put(KanbanImageConstants.FLAG_ORANGE_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/flags/flag_orange.gif"));
-		reg.put(KanbanImageConstants.FLAG_RED_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/flags/flag_red.gif"));
-		reg.put(KanbanImageConstants.FLAG_WHITE_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/flags/flag_white.gif"));
+		reg.put(constants.toString(), imageDescriptorFromPlugin(PLUGIN_ID, constants.getPath()));
 	}
 
 	public static KanbanUIActivator getDefault() {
