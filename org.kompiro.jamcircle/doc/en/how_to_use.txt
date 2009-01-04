@@ -4,16 +4,34 @@ How to use JAM Circle
 About Card
 ----------
 
-** How to create card.
+** How to create Card?
+
++ This is simple.Double click on Board,or on Lane.
+
+** How to modify Card?
+
++ 
+
+** How to move Cards between Board and Board?
 
 About Lane
 ----------
 
-** How to create lane.
+** How to create Lane?
+
+** How to modify Lane?
+
+** How to define action using Script?
+
+** How to iconize and reopen Lane?
 
 About Board
 -----------
 
 ** How to create board.
 
-** Context Menu
+** What action is defined menu using Right-Click?
+
+** What Short Cut is supported?
+- Ctrl+A
+  Select All Cards on the board

@@ -3,7 +3,18 @@ JAM Circle
 
 What is JAM Circle
 -------------------
-JAM Circle is a Platform using Card metapha.
+JAM Circle is a Kanban Application Platform using Card(like Sticky note) and Lane(Pane) or Icon.
+
+JAM Circle is supported to connect XMPP service(like GTalk) and send card data to other user.
+Sometimes you use mail to ask to do your Task to someone.You can use JAM Circle to these situations.
+
+JAM Circle is defined Action using scripting language,JRuby or JavaScript(using Rhino).
+You can define action when you open board,and put card to lane(icon),remove card from lane(icon).
+For example ,if you want to plan some tasks in BTS(like Bugzilla,or Trac,or Redmine... these has API to public services.)
+you define script to get some tickets from BTS on board script,
+and you define script to change the priority ,due on lane script.
+
+<a href="../images/JAM_Circle.png"><img src="../images/JAM_Circle.png" style="width:500"/></a>
 
 [Download](download.html)
 [Changelog](changelog.html)
