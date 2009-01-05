@@ -1,0 +1,68 @@
+<html>
+<head>
+<title>JAM Circle</title>
+<script>
+function change_lang(){
+  location.href = "http://dl.getdropbox.com/u/221122/JAMCircle/" + document.getElementById("lang").value + "/index.html";
+}
+</script>
+</head>
+<body>
+<h1>ダウンロード</h1>
+
+<h2>RCP版</h2>
+
+<ul>
+<li><a href="http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-windows-1.1.0.zip">Windows</a></li>
+<li><a href="http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-linux-1.1.0.zip">Linux</a></li>
+<li><a href="http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-macosx-1.1.0.zip">Mac(ビルドしてますが、動作確認していません。)</a></li>
+</ul>
+
+<h2>Eclipseプラグイン版</h2>
+
+<ul>
+<li><a href="http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-plugin-1.1.0.zip">Eclipseプラグイン版</a></li>
+</ul>
+
+<p><strong>Eclipseの要件</strong></p>
+
+<ul>
+<li>Eclipse 3.4</li>
+<li>GEF 3.4</li>
+</ul>
+
+<p><strong>更新サイト</strong></p>
+
+<ul>
+<li>http://dl.getdropbox.com/u/221122/JAMCircle/updatesite/</li>
+</ul>
+
+<h2>インストール方法</h2>
+
+<ol>
+<li>RCP版をお使いになる場合は、お使いのOSにあったものをダウンロードしてください。</li>
+<li><p>ZIP形式での配布ですので、適当なフォルダへ解凍してください。</p></li>
+<li><p>Eclipseプラグイン版をお使いになる場合は、更新サイトに追加いただくか、eclipse/dropinsフォルダへインストールしてください。</p></li>
+</ol>
+
+<h2>アンインストール方法</h2>
+
+<ol>
+<li>お使いになっていたデータを削除される場合は[File] - [Storage Setting]の[Current Store Path]に保存されています。</li>
+<li><p>RCP版をお使いの場合は、フォルダごと削除してください。</p></li>
+<li><p>Eclipseプラグイン版をお使いの場合は[Help] - [Software Updates]から[Kanban Feature]を削除してください。</p></li>
+</ol>
+
+<h2>システム要件</h2>
+
+<ul>
+<li>JRE 1.5以上</li>
+</ul>
+<hr>
+<a href="index.html">JAM Circle</a>&nbsp;<a href="mailto:kompiro@gmail.com">kompiro@gmail.com</a>
+<select id="lang" onchange="change_lang()">
+<option value="en">English</option>
+<option value="ja">Japanese</option>
+</select>
+</body>
+</html>

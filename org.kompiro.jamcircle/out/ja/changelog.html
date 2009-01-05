@@ -1,0 +1,51 @@
+<html>
+<head>
+<title>JAM Circle</title>
+<script>
+function change_lang(){
+  location.href = "http://dl.getdropbox.com/u/221122/JAMCircle/" + document.getElementById("lang").value + "/index.html";
+}
+</script>
+</head>
+<body>
+<h1>更新履歴</h1>
+
+<h2>1.0.0(2008/12/06 リリース)</h2>
+
+<ul>
+<li>XMPPサポート</li>
+<li>カードの詳細をMarkDown形式で記述できるようにした</li>
+<li>カードにファイルを添付</li>
+<li>レーンの作成とJavaScriptによるスクリプト拡張</li>
+<li>ボードの作成</li>
+<li>ズームイン・ズームアウト</li>
+<li>ボードのスナップショット画像の作成</li>
+<li>CSVエクスポート</li>
+<li>CSVインポート(Experimental)
+<ul>
+<li>H2 Databaseのインポート機能をそのまま使用しているため、PK等の制約があります。DB全体のバックアップからの復帰等に利用してください。</li>
+</ul></li>
+</ul>
+
+<h2>1.0.0.1(2008/12/07 リリース)</h2>
+
+<ul>
+<li>パッケージが不完全だったため、再度パッケージを作成</li>
+</ul>
+
+<h2>1.1.0</h2>
+
+<ul>
+<li>ボードの編集・ボードを開いたときのスクリプト拡張</li>
+<li>JRubyサポート</li>
+<li>カード一覧を使ってのボード間のカード受け渡し</li>
+<li>カードに締切・旗を追加</li>
+</ul>
+<hr>
+<a href="index.html">JAM Circle</a>&nbsp;<a href="mailto:kompiro@gmail.com">kompiro@gmail.com</a>
+<select id="lang" onchange="change_lang()">
+<option value="en">English</option>
+<option value="ja">Japanese</option>
+</select>
+</body>
+</html>

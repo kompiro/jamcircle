@@ -4,34 +4,98 @@ How to use JAM Circle
 About Card
 ----------
 
-** How to create Card?
+**How to create Card?**
 
-+ This is simple.Double click on Board,or on Lane.
+1. This is simple.Double click on Board,or on Lane.
 
-** How to modify Card?
+**How to modify Card?**
 
-+ 
+1. If you move cursor on Card,then <img src="../images/icons/edit.png"/> is shown on the Card.
+1. Click <img src="../images/icons/edit.png"/> icon,then open Card Edit Dialog.
 
-** How to move Cards between Board and Board?
+**How to move Cards between Board and Board?**
+
+1. Select Lane or Board and open context menu(Please right-click and so on).
+
+1. Choose "<img src='../images/icons/table_go.png'/> Open Card List",then Card List Dialog is opened.
+1. Double Click "Select" icon,then Board List Dialog is opened,you can choose target board,and you double click target board.
+1. Target Board is opened,and you can put the card in the Card List to the board using drag and drop.
 
 About Lane
 ----------
 
-** How to create Lane?
+**How to create Lane?**
 
-** How to modify Lane?
+1. This is simple,too! Double click "Create Lane" icon.
 
-** How to define action using Script?
+**How to modify Lane?**
 
-** How to iconize and reopen Lane?
+1. If you move cursor on Lane,then <img src="../images/icons/edit.png"/> is shown on the Lane.
+1. Click <img src="../images/icons/edit.png"/> icon,then open Lane Edit Dialog.
+
+**How to define action to the Lane?**
+
+1. Please open Lane Edit Dialog,then you can modify the script at the dialog.
+1. You can choose script language "JavaScript" or "JRuby".
+1. (Sorry,now it is not supported to use rubygems.)
+
+**How to iconize and reopen Lane?**
+
+1. Please double click iconized Lanes. 
 
 About Board
 -----------
 
-** How to create board.
+**How to create board.**
+1. Please open the menu '[File]-[New Wizard]-[New Board wizard]'.
+1. 
 
-** What action is defined menu using Right-Click?
+**How to define action to the Board?**
+1. Open Board List Dialog.(If you want to do that,Please double click on "Select Board" icon.)
 
-** What Short Cut is supported?
+1. Choose the board to define script, and open context menu(Please right-click at the board.) 
+
+**What Short Cut is supported?**
+
 - Ctrl+A
+
   Select All Cards on the board
+
+- Ctrl+Z
+
+  Undo
+  
+- Ctrl+Y
+
+  Redo
+  
+- Ctrl+=
+
+  Zoom-in
+  
+- Ctrl+-
+
+  Zoom-out
+  
+- Ctrl+C,Ctrl+V,Ctrl+X
+
+  Copy,and Paste,and Cut selected objects.
+  
+- Delete
+
+  Delete selected objects.
+  
+- Shift+Ctrl+C,Shift+Ctrl+D
+
+  connect to XMPP(Jabber) Server,or disconnect from XMPP(Jabber) Server.
+
+About Icon
+------------
+**How to create User icon on Boards**
+1. Click Roaster menu and open Roaster perspective,then Roaster View is shown.
+1. Select the menu "[File] - [Connect to XMPP(Jabber) Server]" to set XMPP Setting,and connect to the server.
+1. Some roasters are shown on Roaster View,you can choose to add user icon to board using context menu.
+1. Choose to add the roaster,and right-click, and choose "Create new entry" menu.
+
+1. Sorry,it is not supported now.I would like to support this.But I don't imagine how to act effectively to create icons.
+If you have some ideas,[Please tell me.](mailto:kompiro@gmail.com)

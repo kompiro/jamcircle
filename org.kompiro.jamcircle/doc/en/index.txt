@@ -14,7 +14,39 @@ For example ,if you want to plan some tasks in BTS(like Bugzilla,or Trac,or Redm
 you define script to get some tickets from BTS on board script,
 and you define script to change the priority ,due on lane script.
 
+
 <a href="../images/JAM_Circle.png"><img src="../images/JAM_Circle.png" style="width:500"/></a>
+
+Why did I name this application "JAM Circle"?
+-----------------------------------------------
+Please imagine.You do your work in your office.
+If you do that only you?Does someone help you to do that?
+I think, it is sometimes no,but it is often YES!
+Most tasks you can't do that only you!
+So I imagine, how to help you to ask "Please do the task".
+Sometimes I ask my co-workers to do my task using E-Mail.
+But the mail can't help me when it is done,hum?
+If it isn't done,sometimes I can't be done my work,It is terrible for me!
+So I started to develop this application(using Kanban).
+I think,sending Kanban card is seen like JAM session.
+JAM session is a metapha from music.A music player plays his music,and someone heres the music,
+then she starts her music for his music to be more funny,more interesting,more powerful,more beautiful,and so on!
+We can do like that in work context using Kanban!
+So I started to develop this application,and I called it "JAM Circle".
+
+What is planed to "JAM Circle" in that milestone(release schedule)?
+------------------------------------------------------------------------------
+- support Board definition template.(export and import Board definition)
+- improve to edit script(For example: interact to input script)
+- improve to use script
+  - support rubygems.
+  - support test environment.
+- support to chat using XMPP between connected users.
+- add comment to Card.(add comment to the card that is send to the other member.)
+- publish the board to the other users.
+- support to share the board between some users.
+- make tag crowed from the Cards.
+- support to search Cards.
 
 [Download](download.html)
 [Changelog](changelog.html)
