@@ -48,7 +48,7 @@ About Board
 
 **How to create board.**
 1. Please open the menu '[File]-[New Wizard]-[New Board wizard]'.
-1. 
+1. Input title and choose board type.
 
 **How to define action to the Board?**
 1. Open Board List Dialog.(If you want to do that,Please double click on "Select Board" icon.)
@@ -97,5 +97,13 @@ About Icon
 1. Some roasters are shown on Roaster View,you can choose to add user icon to board using context menu.
 1. Choose to add the roaster,and right-click, and choose "Create new entry" menu.
 
+**How to create new Icon on board**
 1. Sorry,it is not supported now.I would like to support this.But I don't imagine how to act effectively to create icons.
 If you have some ideas,[Please tell me.](mailto:kompiro@gmail.com)
+
+About Store Data
+------------------
+**How to change Store Data directory.**
+1. Select the menu "[File] - [Storage Setting]"
+1. Change Store path and input User Name and Password.If you select the store path at first time,create new db and authorization data.
+(JAM Circle uses H2 Database inside.)

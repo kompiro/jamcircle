@@ -132,7 +132,7 @@ public class StorageSettingWizard extends Wizard {
 			settingGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 			Label usernameLabel = new Label(settingGroup,SWT.NONE);
-			usernameLabel.setText("username:");
+			usernameLabel.setText("User Name:");
 			usernameText = new Text(settingGroup,SWT.BORDER);
 			usernameText.addModifyListener(new ModifyListener(){
 				public void modifyText(ModifyEvent e) {

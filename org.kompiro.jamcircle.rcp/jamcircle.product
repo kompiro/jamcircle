@@ -44,8 +44,8 @@
    </plugins>
 
    <features>
-      <feature id="org.kompiro.jamcircle" version="1.0.0.qualifier"/>
-      <feature id="org.kompiro.jamcircle.kanban.feature" version="1.0.0.qualifier"/>
+      <feature id="org.kompiro.jamcircle" version="1.1.0.qualifier"/>
+      <feature id="org.kompiro.jamcircle.kanban.feature" version="1.1.0.qualifier"/>
    </features>
 
 </product>

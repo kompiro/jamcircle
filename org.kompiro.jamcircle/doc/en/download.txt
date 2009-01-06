@@ -4,13 +4,13 @@ Download
 RCP Package
 -----------
 
-- [Windows](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-windows-1.0.0.1.zip)
-- [Linux](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-linux-1.0.0.1.zip)
-- [Mac(I can't test on Mac because I don't have it.)](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-macosx-1.0.0.1.zip)
+- [Windows](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-windows-1.1.0.zip)
+- [Linux](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-linux-1.1.0.zip)
+- [Mac(I can't test on Mac because I don't have it.)](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-macosx-1.1.0.zip)
 
 Eclipse Plugin Package
 ----------------------
-- [Plugin](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-plugin-1.0.0.zip)
+- [Plugin](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-plugin-1.1.0.zip)
 
 Eclipse Requirement
 
@@ -28,4 +28,4 @@ How to install JAM Circle
 1. Unzip and launch JAMCircle.If you use Windows, double click on the JAMCircle icon.
 
 ** If you choose Eclipse Plugin Package
-1. 
+1. Unzip and put those to eclipse/dropins folder.

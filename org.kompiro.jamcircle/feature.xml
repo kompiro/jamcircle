@@ -2,7 +2,7 @@
 <feature
       id="org.kompiro.jamcircle"
       label="JAM Circle RCP Feature"
-      version="1.0.0.qualifier"
+      version="1.1.0.qualifier"
       provider-name="Kompiro org.">
 
    <description url="http://www.example.com/description">
