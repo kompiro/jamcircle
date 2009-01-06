@@ -1,5 +1,11 @@
 package org.kompiro.jamcircle.kanban.ui;
 
+import java.io.IOException;
+import java.net.URL;
+
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+
 public enum KanbanImageConstants {
 	
 	OPEN_LIST_ACTION_IMAGE("table_go.png"),
@@ -42,5 +48,15 @@ public enum KanbanImageConstants {
 
 	public String getPath(){
 		return "icons/" + this.path;
+	}
+	
+	public URL getFileURL(){
+		URL url = FileLocator.find(KanbanUIActivator.getDefault().getBundle(), new Path(getPath()), null);
+		try {
+			url = FileLocator.toFileURL(url);
+		} catch (IOException e) {
+			KanbanUIStatusHandler.fail(e, "can't get file URL '" + getPath() + "'");
+		}
+		return url;
 	}
 }
