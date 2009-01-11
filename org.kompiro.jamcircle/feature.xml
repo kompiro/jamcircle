@@ -212,6 +212,10 @@ Each party waives its rights to a jury trial in any resulting
 litigation.
    </license>
 
+   <includes
+         id="org.kompiro.jamcircle.kanban.feature"
+         version="0.0.0"/>
+
    <plugin
          id="com.ibm.icu"
          download-size="0"
@@ -253,20 +257,6 @@ litigation.
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
-   <plugin
-         id="org.eclipse.core.runtime.compatibility"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.core.runtime.compatibility.registry"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"/>
 
    <plugin
          id="org.eclipse.equinox.common"
@@ -337,13 +327,6 @@ litigation.
 
    <plugin
          id="org.eclipse.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.core.runtime.compatibility.auth"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -508,6 +491,16 @@ litigation.
          download-size="0"
          install-size="0"
          version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.core.net.linux.x86"
+         os="linux"
+         arch="x86"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
          unpack="false"/>
 
 </feature>
