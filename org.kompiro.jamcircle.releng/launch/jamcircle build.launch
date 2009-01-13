@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launchConfiguration type="org.eclipse.ui.externaltools.ProgramLaunchConfigurationType">
+<stringAttribute key="org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE" value="${workspace_loc:/org.kompiro.jamcircle.releng}/${system_property:eclipse.startTime}.log"/>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.ui.externaltools.launchGroup"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="/usr/bin/java"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-agentlib:jdwp=transport=dt_socket,suspend=y,server=y,address=localhost:44000 -jar org.eclipse.releng.basebuilder/plugins/org.eclipse.equinox.launcher.jar -application org.eclipse.ant.core.antRunner -buildfile build.xml -Dbuilder=${workspace_loc:/org.kompiro.jamcircle.releng}/jamcircle"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${workspace_loc:/org.kompiro.jamcircle.releng}"/>
+</launchConfiguration>
