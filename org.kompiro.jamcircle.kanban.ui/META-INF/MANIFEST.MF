@@ -2,15 +2,15 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Distributed Kanban UI Plug-in
 Bundle-SymbolicName: org.kompiro.jamcircle.kanban.ui;singleton:=true
-Bundle-Version: 1.1.0.qualifier
+Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.kompiro.jamcircle.kanban.ui.KanbanUIActivator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.gef,
- org.kompiro.jamcircle.kanban;bundle-version="1.0.0",
+ org.kompiro.jamcircle.kanban,
  org.apache.commons.lang;bundle-version="2.3.0",
- org.kompiro.jamcircle.xmpp;bundle-version="1.0.0",
+ org.kompiro.jamcircle.xmpp,
  org.eclipse.equinox.security.ui;bundle-version="1.0.0",
  org.mozilla.javascript;bundle-version="1.7.1",
  org.apache.bsf;bundle-version="2.4.0",

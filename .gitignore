@@ -1,2 +1,16 @@
 **/bin/**
 External Plug-in Libraries/
+.metadata
+bytelist/
+jcodings/
+jvyamlb/
+leaning.rhino/
+learning.bsf/
+learning.jvyamlb/
+org.apache.bsf/.settings/
+org.eclipse.pde.build.source/
+org.eclipse.pde.build/
+org.eclipse.releng.basebuilder/
+org.kompiro.eclipseextension.maxscreen/
+xstream/
+

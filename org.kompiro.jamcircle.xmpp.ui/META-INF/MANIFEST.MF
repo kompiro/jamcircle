@@ -2,11 +2,11 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: XMPP UI Plug-in
 Bundle-SymbolicName: org.kompiro.jamcircle.xmpp.ui;singleton:=true
-Bundle-Version: 1.1.0.qualifier
+Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.kompiro.jamcircle.xmpp.ui.XMPPUIActivator
 Bundle-Vendor: Kompiro org.
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.kompiro.jamcircle.xmpp;bundle-version="1.0.0"
+ org.kompiro.jamcircle.xmpp
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy

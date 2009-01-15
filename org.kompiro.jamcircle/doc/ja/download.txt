@@ -4,15 +4,15 @@
 RCP版
 -----
 
-- [Windows](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-windows-1.1.0.zip)
-- [Linux](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-linux-1.1.0.zip)
-- [Mac(ビルドしてますが、動作確認していません。)](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-macosx-1.1.0.zip)
+- [Windows](http://kompiro.org/jamcircle/download/JAMCircle-windows-0.7.0.zip)
+- [Linux](http://kompiro.org/jamcircle/download/JAMCircle-linux-0.7.0.zip)
+- [Mac(ビルドしてますが、動作確認していません。)](http://kompiro.org/jamcircle/download/JAMCircle-macosx-0.7.0.zip)
 
 
 Eclipseプラグイン版
 ------------------
 
-- [Eclipseプラグイン版](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-plugin-1.1.0.zip)
+- [Eclipseプラグイン版](http://kompiro.org/jamcircle/download/JAMCircle-plugin-0.7.0.zip)
 
 **Eclipseの要件**
 
@@ -20,7 +20,7 @@ Eclipseプラグイン版
 - GEF 3.4
 
 **更新サイト**
-- http://dl.getdropbox.com/u/221122/JAMCircle/updatesite/
+- http://kompiro.org/jamcircle/download/updatesite/
 
 インストール方法
 -----------------
