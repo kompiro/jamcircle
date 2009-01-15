@@ -4,7 +4,7 @@ Bundle-Name: XMPP UI Plug-in
 Bundle-SymbolicName: org.kompiro.jamcircle.xmpp.ui;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.kompiro.jamcircle.xmpp.ui.XMPPUIActivator
-Bundle-Vendor: Kompiro org.
+Bundle-Vendor: kompiro.org
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.kompiro.jamcircle.xmpp

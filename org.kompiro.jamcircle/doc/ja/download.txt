@@ -12,14 +12,14 @@ RCP版
 Eclipseプラグイン版
 ------------------
 
-- [Eclipseプラグイン版](http://kompiro.org/jamcircle/download/JAMCircle-plugin-0.7.0.zip)
+- [Eclipseプラグイン版(準備中)](http://kompiro.org/jamcircle/download/JAMCircle-plugin-0.7.0.zip)
 
 **Eclipseの要件**
 
 - Eclipse 3.4
 - GEF 3.4
 
-**更新サイト**
+**更新サイト(準備中)**
 - http://kompiro.org/jamcircle/download/updatesite/
 
 インストール方法

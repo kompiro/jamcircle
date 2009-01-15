@@ -14,7 +14,7 @@
       <update id='org.kompiro.jamcircle.kanban.ui' range='[0.0.0,1.0.0.200812062109)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='Distributed Kanban UI Plug-in'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org..'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org'/>
       </properties>
       <provides size='5'>
         <provided namespace='org.eclipse.equinox.p2.iu' name='org.kompiro.jamcircle.kanban.ui' version='1.0.0.200812062109'/>
@@ -40,7 +40,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Export-Package: org.kompiro.jamcircle.kanban.ui,org.kompiro.jamcircle.kanban.ui.model&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.gef,org.kompiro.jamcircle.kanban;bundle-version=&quot;1.0.0&quot;,org.apache.commons.lang;bundle-version=&quot;2.3.0&quot;,org.kompiro.jamcircle.xmpp;bundle-version=&quot;1.0.0&quot;,org.eclipse.equinox.security.ui;bundle-version=&quot;1.0.0&quot;,org.mozilla.javascript;bundle-version=&quot;1.7.1&quot;&#xA;Bundle-Activator: org.kompiro.jamcircle.kanban.ui.KanbanUIActivator&#xA;Bundle-Name: Distributed Kanban UI Plug-in&#xA;Bundle-Version: 1.0.0.200812062109&#xA;Bundle-Vendor: Kompiro org..&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.kanban.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0
+            Bundle-ManifestVersion: 2&#xA;Export-Package: org.kompiro.jamcircle.kanban.ui,org.kompiro.jamcircle.kanban.ui.model&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.gef,org.kompiro.jamcircle.kanban;bundle-version=&quot;1.0.0&quot;,org.apache.commons.lang;bundle-version=&quot;2.3.0&quot;,org.kompiro.jamcircle.xmpp;bundle-version=&quot;1.0.0&quot;,org.eclipse.equinox.security.ui;bundle-version=&quot;1.0.0&quot;,org.mozilla.javascript;bundle-version=&quot;1.7.1&quot;&#xA;Bundle-Activator: org.kompiro.jamcircle.kanban.ui.KanbanUIActivator&#xA;Bundle-Name: Distributed Kanban UI Plug-in&#xA;Bundle-Version: 1.0.0.200812062109&#xA;Bundle-Vendor: kompiro.org&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.kanban.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0
           </instruction>
         </instructions>
       </touchpointData>
@@ -81,7 +81,7 @@
       <update id='org.kompiro.jamcircle.kanban' range='[0.0.0,1.0.0.200812062109)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='Kanban Core Plug-in'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org..'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org'/>
       </properties>
       <provides size='7'>
         <provided namespace='org.eclipse.equinox.p2.iu' name='org.kompiro.jamcircle.kanban' version='1.0.0.200812062109'/>
@@ -104,7 +104,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-Vendor: Kompiro org..&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: org.kompiro.jamcircle.kanban.KanbanActivator&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Bundle-Name: Kanban Core Plug-in&#xA;Require-Bundle: org.eclipse.core.runtime,org.kompiro.jamcircle.storage;visibility:=reexport,org.apache.commons.lang;bundle-version=&quot;2.3.0&quot;&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.kanban;singleton:=true&#xA;Bundle-Version: 1.0.0.200812062109&#xA;Export-Package: org.kompiro.jamcircle.kanban,org.kompiro.jamcircle.kanban.boardtemplate,org.kompiro.jamcircle.kanban.model,org.kompiro.jamcircle.kanban.service
+            Bundle-Vendor: kompiro.org&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: org.kompiro.jamcircle.kanban.KanbanActivator&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Bundle-Name: Kanban Core Plug-in&#xA;Require-Bundle: org.eclipse.core.runtime,org.kompiro.jamcircle.storage;visibility:=reexport,org.apache.commons.lang;bundle-version=&quot;2.3.0&quot;&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.kanban;singleton:=true&#xA;Bundle-Version: 1.0.0.200812062109&#xA;Export-Package: org.kompiro.jamcircle.kanban,org.kompiro.jamcircle.kanban.boardtemplate,org.kompiro.jamcircle.kanban.model,org.kompiro.jamcircle.kanban.service
           </instruction>
         </instructions>
       </touchpointData>
@@ -354,7 +354,7 @@
       <update id='org.kompiro.jamcircle.xmpp.ui' range='[0.0.0,1.0.0.200812062109)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='XMPP UI Plug-in'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org.,'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org,'/>
       </properties>
       <provides size='3'>
         <provided namespace='org.eclipse.equinox.p2.iu' name='org.kompiro.jamcircle.xmpp.ui' version='1.0.0.200812062109'/>
@@ -373,7 +373,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.kompiro.jamcircle.xmpp;bundle-version=&quot;1.0.0&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-Activator: org.kompiro.jamcircle.xmpp.ui.XMPPUIActivator&#xA;Bundle-Version: 1.0.0.200812062109&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.xmpp.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: XMPP UI Plug-in&#xA;Bundle-Vendor: Kompiro org.,
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.kompiro.jamcircle.xmpp;bundle-version=&quot;1.0.0&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-Activator: org.kompiro.jamcircle.xmpp.ui.XMPPUIActivator&#xA;Bundle-Version: 1.0.0.200812062109&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.xmpp.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: XMPP UI Plug-in&#xA;Bundle-Vendor: kompiro.org,
           </instruction>
         </instructions>
       </touchpointData>
@@ -415,7 +415,7 @@
         <property name='org.eclipse.equinox.p2.name' value='Kanban Feature'/>
         <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
         <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org..'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org'/>
       </properties>
       <provides size='3'>
         <provided namespace='org.eclipse.equinox.p2.iu' name='org.kompiro.jamcircle.kanban.feature.feature.jar' version='1.0.0.200812062109'/>
@@ -503,7 +503,7 @@
       <update id='org.kompiro.jamcircle.storage.ui' range='[0.0.0,1.0.0.200812062109)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='Storage UI Plug-in'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org..'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org'/>
       </properties>
       <provides size='3'>
         <provided namespace='org.eclipse.equinox.p2.iu' name='org.kompiro.jamcircle.storage.ui' version='1.0.0.200812062109'/>
@@ -522,7 +522,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.kompiro.jamcircle.storage;bundle-version=&quot;1.0.0&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-Activator: org.kompiro.jamcircle.storage.ui.StorageUIActivator&#xA;Bundle-Version: 1.0.0.200812062109&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.storage.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Storage UI Plug-in&#xA;Bundle-Vendor: Kompiro org..
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.kompiro.jamcircle.storage;bundle-version=&quot;1.0.0&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-Activator: org.kompiro.jamcircle.storage.ui.StorageUIActivator&#xA;Bundle-Version: 1.0.0.200812062109&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.storage.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Storage UI Plug-in&#xA;Bundle-Vendor: kompiro.org
           </instruction>
         </instructions>
       </touchpointData>
@@ -559,7 +559,7 @@
         <property name='org.eclipse.equinox.p2.name' value='Kanban Feature'/>
         <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
         <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org..'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org'/>
         <property name='org.eclipse.equinox.p2.type.group' value='true'/>
       </properties>
       <provides size='1'>
@@ -1077,7 +1077,7 @@
       <update id='org.kompiro.jamcircle.storage.ui' range='[0.0.0,1.0.0.200812062255)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='Storage UI Plug-in'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org..'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org'/>
       </properties>
       <provides size='3'>
         <provided namespace='org.eclipse.equinox.p2.iu' name='org.kompiro.jamcircle.storage.ui' version='1.0.0.200812062255'/>
@@ -1096,7 +1096,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.kompiro.jamcircle.storage;bundle-version=&quot;1.0.0&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-Activator: org.kompiro.jamcircle.storage.ui.StorageUIActivator&#xA;Bundle-Version: 1.0.0.200812062255&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.storage.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Storage UI Plug-in&#xA;Bundle-Vendor: Kompiro org..
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.kompiro.jamcircle.storage;bundle-version=&quot;1.0.0&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-Activator: org.kompiro.jamcircle.storage.ui.StorageUIActivator&#xA;Bundle-Version: 1.0.0.200812062255&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.storage.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Storage UI Plug-in&#xA;Bundle-Vendor: kompiro.org
           </instruction>
         </instructions>
       </touchpointData>
@@ -1107,7 +1107,7 @@
         <property name='org.eclipse.equinox.p2.name' value='Kanban Feature'/>
         <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
         <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org..'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org'/>
       </properties>
       <provides size='3'>
         <provided namespace='org.eclipse.equinox.p2.iu' name='org.kompiro.jamcircle.kanban.feature.feature.jar' version='1.0.0.200812062255'/>
@@ -1172,7 +1172,7 @@
       <update id='org.kompiro.jamcircle.xmpp.ui' range='[0.0.0,1.0.0.200812062255)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='XMPP UI Plug-in'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org.,'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org,'/>
       </properties>
       <provides size='3'>
         <provided namespace='org.eclipse.equinox.p2.iu' name='org.kompiro.jamcircle.xmpp.ui' version='1.0.0.200812062255'/>
@@ -1191,7 +1191,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.kompiro.jamcircle.xmpp;bundle-version=&quot;1.0.0&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-Activator: org.kompiro.jamcircle.xmpp.ui.XMPPUIActivator&#xA;Bundle-Version: 1.0.0.200812062255&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.xmpp.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: XMPP UI Plug-in&#xA;Bundle-Vendor: Kompiro org.,
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.kompiro.jamcircle.xmpp;bundle-version=&quot;1.0.0&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-Activator: org.kompiro.jamcircle.xmpp.ui.XMPPUIActivator&#xA;Bundle-Version: 1.0.0.200812062255&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.xmpp.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: XMPP UI Plug-in&#xA;Bundle-Vendor: kompiro.org,
           </instruction>
         </instructions>
       </touchpointData>
@@ -1200,7 +1200,7 @@
       <update id='org.kompiro.jamcircle.kanban' range='[0.0.0,1.0.0.200812062255)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='Kanban Core Plug-in'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org..'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org'/>
       </properties>
       <provides size='7'>
         <provided namespace='org.eclipse.equinox.p2.iu' name='org.kompiro.jamcircle.kanban' version='1.0.0.200812062255'/>
@@ -1223,7 +1223,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-Vendor: Kompiro org..&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: org.kompiro.jamcircle.kanban.KanbanActivator&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Bundle-Name: Kanban Core Plug-in&#xA;Require-Bundle: org.eclipse.core.runtime,org.kompiro.jamcircle.storage;visibility:=reexport,org.apache.commons.lang;bundle-version=&quot;2.3.0&quot;&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.kanban;singleton:=true&#xA;Bundle-Version: 1.0.0.200812062255&#xA;Export-Package: org.kompiro.jamcircle.kanban,org.kompiro.jamcircle.kanban.boardtemplate,org.kompiro.jamcircle.kanban.model,org.kompiro.jamcircle.kanban.service
+            Bundle-Vendor: kompiro.org&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: org.kompiro.jamcircle.kanban.KanbanActivator&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Bundle-Name: Kanban Core Plug-in&#xA;Require-Bundle: org.eclipse.core.runtime,org.kompiro.jamcircle.storage;visibility:=reexport,org.apache.commons.lang;bundle-version=&quot;2.3.0&quot;&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.kanban;singleton:=true&#xA;Bundle-Version: 1.0.0.200812062255&#xA;Export-Package: org.kompiro.jamcircle.kanban,org.kompiro.jamcircle.kanban.boardtemplate,org.kompiro.jamcircle.kanban.model,org.kompiro.jamcircle.kanban.service
           </instruction>
         </instructions>
       </touchpointData>
@@ -1234,7 +1234,7 @@
         <property name='org.eclipse.equinox.p2.name' value='Kanban Feature'/>
         <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
         <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org..'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org'/>
         <property name='org.eclipse.equinox.p2.type.group' value='true'/>
       </properties>
       <provides size='1'>
@@ -1274,7 +1274,7 @@
       <update id='org.kompiro.jamcircle.kanban.ui' range='[0.0.0,1.0.0.200812062255)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='Distributed Kanban UI Plug-in'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org..'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org'/>
       </properties>
       <provides size='5'>
         <provided namespace='org.eclipse.equinox.p2.iu' name='org.kompiro.jamcircle.kanban.ui' version='1.0.0.200812062255'/>
@@ -1300,7 +1300,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Export-Package: org.kompiro.jamcircle.kanban.ui,org.kompiro.jamcircle.kanban.ui.model&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.gef,org.kompiro.jamcircle.kanban;bundle-version=&quot;1.0.0&quot;,org.apache.commons.lang;bundle-version=&quot;2.3.0&quot;,org.kompiro.jamcircle.xmpp;bundle-version=&quot;1.0.0&quot;,org.eclipse.equinox.security.ui;bundle-version=&quot;1.0.0&quot;,org.mozilla.javascript;bundle-version=&quot;1.7.1&quot;&#xA;Bundle-Activator: org.kompiro.jamcircle.kanban.ui.KanbanUIActivator&#xA;Bundle-Name: Distributed Kanban UI Plug-in&#xA;Bundle-Version: 1.0.0.200812062255&#xA;Bundle-Vendor: Kompiro org..&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.kanban.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0
+            Bundle-ManifestVersion: 2&#xA;Export-Package: org.kompiro.jamcircle.kanban.ui,org.kompiro.jamcircle.kanban.ui.model&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.gef,org.kompiro.jamcircle.kanban;bundle-version=&quot;1.0.0&quot;,org.apache.commons.lang;bundle-version=&quot;2.3.0&quot;,org.kompiro.jamcircle.xmpp;bundle-version=&quot;1.0.0&quot;,org.eclipse.equinox.security.ui;bundle-version=&quot;1.0.0&quot;,org.mozilla.javascript;bundle-version=&quot;1.7.1&quot;&#xA;Bundle-Activator: org.kompiro.jamcircle.kanban.ui.KanbanUIActivator&#xA;Bundle-Name: Distributed Kanban UI Plug-in&#xA;Bundle-Version: 1.0.0.200812062255&#xA;Bundle-Vendor: kompiro.org&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.kanban.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0
           </instruction>
         </instructions>
       </touchpointData>
@@ -1374,7 +1374,7 @@
         <property name='org.eclipse.equinox.p2.name' value='Kanban Feature'/>
         <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
         <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org..'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org'/>
         <property name='org.eclipse.equinox.p2.type.group' value='true'/>
       </properties>
       <provides size='1'>
@@ -1414,7 +1414,7 @@
       <update id='org.kompiro.jamcircle.kanban' range='[0.0.0,1.0.0.200812062328)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='Kanban Core Plug-in'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org..'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org'/>
       </properties>
       <provides size='7'>
         <provided namespace='org.eclipse.equinox.p2.iu' name='org.kompiro.jamcircle.kanban' version='1.0.0.200812062328'/>
@@ -1437,7 +1437,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-Vendor: Kompiro org..&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: org.kompiro.jamcircle.kanban.KanbanActivator&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Bundle-Name: Kanban Core Plug-in&#xA;Require-Bundle: org.eclipse.core.runtime,org.kompiro.jamcircle.storage;visibility:=reexport,org.apache.commons.lang;bundle-version=&quot;2.3.0&quot;&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.kanban;singleton:=true&#xA;Bundle-Version: 1.0.0.200812062328&#xA;Export-Package: org.kompiro.jamcircle.kanban,org.kompiro.jamcircle.kanban.boardtemplate,org.kompiro.jamcircle.kanban.model,org.kompiro.jamcircle.kanban.service
+            Bundle-Vendor: kompiro.org&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: org.kompiro.jamcircle.kanban.KanbanActivator&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Bundle-Name: Kanban Core Plug-in&#xA;Require-Bundle: org.eclipse.core.runtime,org.kompiro.jamcircle.storage;visibility:=reexport,org.apache.commons.lang;bundle-version=&quot;2.3.0&quot;&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.kanban;singleton:=true&#xA;Bundle-Version: 1.0.0.200812062328&#xA;Export-Package: org.kompiro.jamcircle.kanban,org.kompiro.jamcircle.kanban.boardtemplate,org.kompiro.jamcircle.kanban.model,org.kompiro.jamcircle.kanban.service
           </instruction>
         </instructions>
       </touchpointData>
@@ -1448,7 +1448,7 @@
         <property name='org.eclipse.equinox.p2.name' value='Kanban Feature'/>
         <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
         <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org..'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org'/>
       </properties>
       <provides size='3'>
         <provided namespace='org.eclipse.equinox.p2.iu' name='org.kompiro.jamcircle.kanban.feature.feature.jar' version='1.0.1.200812062328'/>
@@ -1482,7 +1482,7 @@
       <update id='org.kompiro.jamcircle.kanban.ui' range='[0.0.0,1.0.0.200812062328)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='Distributed Kanban UI Plug-in'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org..'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org'/>
       </properties>
       <provides size='5'>
         <provided namespace='org.eclipse.equinox.p2.iu' name='org.kompiro.jamcircle.kanban.ui' version='1.0.0.200812062328'/>
@@ -1508,7 +1508,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Export-Package: org.kompiro.jamcircle.kanban.ui,org.kompiro.jamcircle.kanban.ui.model&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.gef,org.kompiro.jamcircle.kanban;bundle-version=&quot;1.0.0&quot;,org.apache.commons.lang;bundle-version=&quot;2.3.0&quot;,org.kompiro.jamcircle.xmpp;bundle-version=&quot;1.0.0&quot;,org.eclipse.equinox.security.ui;bundle-version=&quot;1.0.0&quot;,org.mozilla.javascript;bundle-version=&quot;1.7.1&quot;&#xA;Bundle-Activator: org.kompiro.jamcircle.kanban.ui.KanbanUIActivator&#xA;Bundle-Name: Distributed Kanban UI Plug-in&#xA;Bundle-Version: 1.0.0.200812062328&#xA;Bundle-Vendor: Kompiro org..&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.kanban.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0
+            Bundle-ManifestVersion: 2&#xA;Export-Package: org.kompiro.jamcircle.kanban.ui,org.kompiro.jamcircle.kanban.ui.model&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.gef,org.kompiro.jamcircle.kanban;bundle-version=&quot;1.0.0&quot;,org.apache.commons.lang;bundle-version=&quot;2.3.0&quot;,org.kompiro.jamcircle.xmpp;bundle-version=&quot;1.0.0&quot;,org.eclipse.equinox.security.ui;bundle-version=&quot;1.0.0&quot;,org.mozilla.javascript;bundle-version=&quot;1.7.1&quot;&#xA;Bundle-Activator: org.kompiro.jamcircle.kanban.ui.KanbanUIActivator&#xA;Bundle-Name: Distributed Kanban UI Plug-in&#xA;Bundle-Version: 1.0.0.200812062328&#xA;Bundle-Vendor: kompiro.org&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.kanban.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0
           </instruction>
         </instructions>
       </touchpointData>
@@ -1517,7 +1517,7 @@
       <update id='org.kompiro.jamcircle.xmpp.ui' range='[0.0.0,1.0.0.200812062328)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='XMPP UI Plug-in'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org.,'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org,'/>
       </properties>
       <provides size='3'>
         <provided namespace='org.eclipse.equinox.p2.iu' name='org.kompiro.jamcircle.xmpp.ui' version='1.0.0.200812062328'/>
@@ -1536,7 +1536,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.kompiro.jamcircle.xmpp;bundle-version=&quot;1.0.0&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-Activator: org.kompiro.jamcircle.xmpp.ui.XMPPUIActivator&#xA;Bundle-Version: 1.0.0.200812062328&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.xmpp.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: XMPP UI Plug-in&#xA;Bundle-Vendor: Kompiro org.,
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.kompiro.jamcircle.xmpp;bundle-version=&quot;1.0.0&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-Activator: org.kompiro.jamcircle.xmpp.ui.XMPPUIActivator&#xA;Bundle-Version: 1.0.0.200812062328&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.xmpp.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: XMPP UI Plug-in&#xA;Bundle-Vendor: kompiro.org,
           </instruction>
         </instructions>
       </touchpointData>
@@ -1545,7 +1545,7 @@
       <update id='org.kompiro.jamcircle.storage.ui' range='[0.0.0,1.0.0.200812062328)' severity='0'/>
       <properties size='2'>
         <property name='org.eclipse.equinox.p2.name' value='Storage UI Plug-in'/>
-        <property name='org.eclipse.equinox.p2.provider' value='Kompiro org..'/>
+        <property name='org.eclipse.equinox.p2.provider' value='kompiro.org'/>
       </properties>
       <provides size='3'>
         <provided namespace='org.eclipse.equinox.p2.iu' name='org.kompiro.jamcircle.storage.ui' version='1.0.0.200812062328'/>
@@ -1564,7 +1564,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.kompiro.jamcircle.storage;bundle-version=&quot;1.0.0&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-Activator: org.kompiro.jamcircle.storage.ui.StorageUIActivator&#xA;Bundle-Version: 1.0.0.200812062328&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.storage.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Storage UI Plug-in&#xA;Bundle-Vendor: Kompiro org..
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.kompiro.jamcircle.storage;bundle-version=&quot;1.0.0&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-Activator: org.kompiro.jamcircle.storage.ui.StorageUIActivator&#xA;Bundle-Version: 1.0.0.200812062328&#xA;Bundle-SymbolicName: org.kompiro.jamcircle.storage.ui;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Storage UI Plug-in&#xA;Bundle-Vendor: kompiro.org
           </instruction>
         </instructions>
       </touchpointData>

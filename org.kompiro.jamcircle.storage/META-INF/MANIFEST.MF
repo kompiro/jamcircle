@@ -19,4 +19,4 @@ Export-Package: net.java.ao,
  org.kompiro.jamcircle.storage.exception,
  org.kompiro.jamcircle.storage.model,
  org.kompiro.jamcircle.storage.service
-Bundle-Vendor: Kompiro org.
+Bundle-Vendor: kompiro.org

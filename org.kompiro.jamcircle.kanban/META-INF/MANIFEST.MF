@@ -4,7 +4,7 @@ Bundle-Name: Kanban Core Plug-in
 Bundle-SymbolicName: org.kompiro.jamcircle.kanban;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.kompiro.jamcircle.kanban.KanbanActivator
-Bundle-Vendor: Kompiro org.
+Bundle-Vendor: kompiro.org
 Require-Bundle: org.eclipse.core.runtime,
  org.kompiro.jamcircle.storage;visibility:=reexport,
  org.apache.commons.lang;bundle-version="2.3.0"

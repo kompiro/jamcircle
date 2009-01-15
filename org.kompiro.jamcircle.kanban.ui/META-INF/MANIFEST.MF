@@ -19,4 +19,4 @@ Bundle-ActivationPolicy: lazy
 Export-Package: org.kompiro.jamcircle.kanban.ui,
  org.kompiro.jamcircle.kanban.ui.model
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Bundle-Vendor: Kompiro org.
+Bundle-Vendor: kompiro.org

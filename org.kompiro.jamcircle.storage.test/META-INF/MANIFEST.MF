@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Storage Test Fragment
 Bundle-SymbolicName: org.kompiro.jamcircle.storage.test
 Bundle-Version: 0.0.1.qualifier
-Bundle-Vendor: Kompiro org.
+Bundle-Vendor: kompiro.org
 Fragment-Host: org.kompiro.jamcircle.storage
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Require-Bundle: org.junit4
