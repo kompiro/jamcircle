@@ -11,6 +11,9 @@
    </aboutInfo>
 
    <configIni use="default">
+      <linux>/org.kompiro.jamcircle.rcp/config.ini</linux>
+      <macosx>/org.kompiro.jamcircle.rcp/config.ini</macosx>
+      <win32>/org.kompiro.jamcircle.rcp/config.ini</win32>
    </configIni>
 
    <launcherArgs>

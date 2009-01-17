@@ -4,20 +4,20 @@ Download
 RCP Package
 -----------
 
-- [Windows](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-windows-1.1.0.zip)
-- [Linux](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-linux-1.1.0.zip)
-- [Mac(I can't test on Mac because I don't have it.)](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-macosx-1.1.0.zip)
+- [Windows](http://kompiro.org/jamcircle/download/JAMCircle-windows-0.7.0.zip)
+- [Linux](http://kompiro.org/jamcircle/download/JAMCircle-linux-0.7.0.zip)
+- [Mac(I can't test on Mac because I don't have it.)](http://kompiro.org/jamcircle/download/JAMCircle-macosx-0.7.0.zip)
 
 Eclipse Plugin Package
 ----------------------
-- [Plugin](http://dl.getdropbox.com/u/221122/JAMCircle/JAMCircle-plugin-1.1.0.zip)
+- [Plugin:construction](http://kompiro.org/jamcircle/download/JAMCircle-plugin-0.7.0.zip)
 
 Eclipse Requirement
 
 - Eclipse 3.4 Ganymede
 - GEF 3.4
 
-UpdateSite
+UpdateSite(construction)
 - http://dl.getdropbox.com/u/221122/JAMCircle/updatesite/
 
 How to install JAM Circle
