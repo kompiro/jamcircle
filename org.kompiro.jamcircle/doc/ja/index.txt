@@ -49,7 +49,7 @@ JAM Circleを使って障害の対応順の計画にお使いいただけます�
 [ダウンロード](download.html)
 [更新履歴](changelog.html)
 [使い方](how_to_use.html)
+[BTS](trac/)
 
-
-バグなどの連絡先
+連絡先
 kompiro@gmail.com
