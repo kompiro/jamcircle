@@ -33,7 +33,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="org.kompiro.jamcircle.kanban.ui.KanbanPerspective"
-            icon="icons/kanbans.png"
+            icon="icons/kanbans_16.png"
             id="org.kompiro.jamcircle.kanban.ui.perspective.kanban"
             name="Kanban">
       </perspective>
