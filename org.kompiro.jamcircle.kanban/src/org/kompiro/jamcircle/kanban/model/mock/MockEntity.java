@@ -49,8 +49,8 @@ class MockEntity implements Entity {
 	}
 
 	
-	protected void fireProperty(String propertyName,Object newValue,Object oldValue){
-		PropertyChangeEvent evt = new PropertyChangeEvent(this, propertyName, newValue, oldValue);
+	protected void fireProperty(String propertyName,Object oldValue,Object newValue){
+		PropertyChangeEvent evt = new PropertyChangeEvent(this, propertyName, oldValue, newValue);
 		for(PropertyChangeListener listener : listeners){
 			listener.propertyChange(evt);
 		}

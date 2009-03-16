@@ -38,6 +38,9 @@ public interface Card extends HasColorTypeEntity{
 	String PROP_DUE_DATE = "dueDate";
 	String PROP_FLAG_TYPE = "flagType";
 	
+	@Ignore
+	void setID(int id);
+	
 	String getSubject();
 	
 	void setSubject(String subject);

@@ -138,6 +138,7 @@ public class CardFigure extends RoundedRectangle {
 		identitySection.add(mockImage);
 		headerSection.add(identitySection,idData);
 		headerSection.add(statusSection,new GridData(GridData.HORIZONTAL_ALIGN_END|GridData.GRAB_HORIZONTAL));
+		mockImage.setVisible(false);
 	}
 
 
@@ -182,12 +183,13 @@ public class CardFigure extends RoundedRectangle {
 
 	public void setId(int id){
 		idLabel.setText("#"+id);
-		mockImage.setVisible(false);
+		IFigure mockIdLabel = new Label("" + id);
+		mockImage.setToolTip(mockIdLabel);
 	}
 	
-	public void setMock(boolean b) {
-		idLabel.setVisible(false);
-		mockImage.setVisible(true);
+	public void setMock(boolean isMock) {
+		mockImage.setVisible(isMock);
+		idLabel.setVisible( ! isMock);
 	}
 	
 

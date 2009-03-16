@@ -28,13 +28,13 @@ public class MockGraphicalEntity extends MockEntity implements GraphicalEntity {
 	public void setX(int x) {
 		int oldX = this.x;
 		this.x = x;
-		fireProperty(PROP_LOCATION_X, x, oldX);
+		fireProperty(PROP_LOCATION_X,oldX, x);
 	}
 
 	public void setY(int y) {
 		int oldY = this.y;
 		this.y = y;
-		fireProperty(PROP_LOCATION_Y, y, oldY);
+		fireProperty(PROP_LOCATION_Y, oldY, y);
 	}
 
 	public void commitLocation() {

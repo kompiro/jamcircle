@@ -3,11 +3,10 @@
  */
 package org.kompiro.jamcircle.kanban.model.mock;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
-import org.apache.commons.lang.NotImplementedException;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.ScriptTypes;
@@ -15,11 +14,11 @@ import org.kompiro.jamcircle.kanban.model.ScriptTypes;
 public class Lane extends MockGraphicalEntity implements org.kompiro.jamcircle.kanban.model.Lane{
 
 	private Board board;
-	private int height;
-	private List<Card> cards;
+	private int height = 500;
+	private List<Card> cards = new ArrayList<Card>();
 	private String status;
 	private String script;
-	private int width;
+	private int width = 200;
 	private Date createDate;
 	private boolean iconized;
 	private ScriptTypes scriptType;
@@ -49,11 +48,15 @@ public class Lane extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 	
 	public boolean addCard(Card card) {
-		return this.cards.add(card);
+		boolean result = this.cards.add(card);
+		fireProperty(PROP_CARD, null, card);
+		return result;
 	}
 	
 	public boolean removeCard(Card card) {
-		return this.cards.remove(card);
+		boolean result = this.cards.remove(card);
+		fireProperty(PROP_CARD, card,null);
+		return result;
 	}
 	
 	public boolean containCard(Card card){
@@ -69,7 +72,7 @@ public class Lane extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 	
 	public void commitConstraint() {
-		throw new NotImplementedException();
+		fireProperty(Lane.PROP_CONSTRAINT,null,null);
 	}
 		
 	public boolean isIconized(){

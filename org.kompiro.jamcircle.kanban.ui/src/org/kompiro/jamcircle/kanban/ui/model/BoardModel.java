@@ -180,4 +180,10 @@ public class BoardModel extends AbstractModel implements UserModelContainer,Card
 		this.icons.add(model);
 		firePropertyChange(PROP_ICON, null, model);
 	}
+
+	public void clearMocks() {
+		board.clearMocks();
+	}
+	
+	
 }

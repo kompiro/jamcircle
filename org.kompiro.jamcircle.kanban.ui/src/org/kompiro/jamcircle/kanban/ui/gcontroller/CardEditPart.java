@@ -191,11 +191,8 @@ public class CardEditPart extends AbstractEditPart {
 		Card model = getCardModel();
 		CardFigure figure = new CardFigure();
 		figure.setSubject(model.getSubject());
-		if(model.isMock()){
-			figure.setMock(true);
-		}else{
-			figure.setId(model.getID());
-		}
+		figure.setMock(model.isMock());
+		figure.setId(model.getID());
 		
 		figure.setColorType(model.getColorType());
 		figure.setOpaque(true);

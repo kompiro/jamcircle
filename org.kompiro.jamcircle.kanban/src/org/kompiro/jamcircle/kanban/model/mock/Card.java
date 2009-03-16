@@ -17,6 +17,7 @@ import org.kompiro.jamcircle.kanban.model.User;
 
 public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.kanban.model.Card {
 	
+	private int id;
 	private String content;
 	private String subject;
 	private Lane lane;
@@ -208,6 +209,15 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 
 	public void setFlagType(FlagTypes flagType) {
 		this.flagType = flagType;
+	}
+
+	public void setID(int id) {
+		this.id = id;
+	}
+	
+	@Override
+	public int getID() {
+		return this.id;
 	}
 
 }

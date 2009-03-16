@@ -84,11 +84,13 @@ import org.jivesoftware.smackx.filetransfer.FileTransferListener;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
+import org.jruby.exceptions.RaiseException;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
 import org.kompiro.jamcircle.kanban.model.CardDTO;
 import org.kompiro.jamcircle.kanban.model.Icon;
+import org.kompiro.jamcircle.kanban.model.ScriptTypes;
 import org.kompiro.jamcircle.kanban.model.User;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.action.CaptureBoardAction;
@@ -374,12 +376,12 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		String taskName = String.format("Openning board '%s' ...",board.getTitle()); 
 		monitor.subTask(taskName);
 		final int id = board.getID();
+		executeScript(monitor);
 		getDisplay().syncExec(new Runnable(){
 			public void run() {
 				viewer.setContents(KanbanView.this.boardModel);
 			}
 		});
-		executeScript(monitor);
 		storeCurrentBoard(id);
 	}
 
@@ -387,20 +389,26 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		Board board = boardModel.getBoard();
 		String script = board.getScript();
 		if(script != null && script.length() != 0){
+			boardModel.clearMocks();
 			BSFManager manager = new BSFManager();
 			try {
 //				Board mock = new org.kompiro.jamcircle.kanban.model.mock.Board();
 				monitor.setTaskName("execute script");
 				manager.registerBean("board", this.boardModel);
 				manager.registerBean("monitor", monitor);
+				manager.registerBean("JRubyType",ScriptTypes.JRuby);
+				manager.registerBean("JavaScriptType",ScriptTypes.JavaScript);
 				String scriptName = String.format("Board '%s' Script",board.getTitle());
 				String templateName = null;
+				int initLines = 0;
 				switch (board.getScriptType()){
 				case JavaScript:
 					templateName = "init.js";
+					initLines = 7;
 					break;
 				case JRuby:
 					templateName = "init.rb";
+					initLines = 4;
 					break;
 				default:
 					String message = String.format("Board's script type is null.Please check the data. id='%d'",board.getID());
@@ -408,11 +416,17 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 				}
 				InputStreamReader reader = new InputStreamReader(getClass().getResource(templateName).openStream());
 				script = IOUtils.getStringFromReader(reader) + script;
-				manager.exec(board.getScriptType().getType(), scriptName, -2, 0, script);
+				manager.exec(board.getScriptType().getType(), scriptName, -initLines, 0, script);
 //				mock.setTitle("(Scripting)" + board.getTitle());
 //				board = mock;
 			} catch (BSFException e) {
-				KanbanUIStatusHandler.fail(e.getTargetException(), "Scripting Exception");
+				Throwable targetException = e.getTargetException();
+				if(targetException instanceof RaiseException){
+					RaiseException ex = (RaiseException) targetException;
+					KanbanUIStatusHandler.fail(targetException, ex.getException().asJavaString());
+					return;
+				}
+				KanbanUIStatusHandler.fail(targetException, "Scripting Exception");
 			} catch (IOException e) {
 				KanbanUIStatusHandler.fail(e, "An Error is occured when reading template script.");
 			}

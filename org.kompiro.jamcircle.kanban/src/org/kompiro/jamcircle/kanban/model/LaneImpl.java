@@ -23,11 +23,13 @@ public class LaneImpl extends GraphicalImpl {
 		card.setTrashed(false);
 		card.setDeletedVisuals(false);
 		card.save();
-		lane.getEntityManager().flush(card);
-		try {
-			lane.getEntityManager().find(Card.class,Card.PROP_ID + " = ?", card.getID());
-		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "SQLException has occured.");
+		if(!card.isMock()){
+			lane.getEntityManager().flush(card);
+			try {
+				lane.getEntityManager().find(Card.class,Card.PROP_ID + " = ?", card.getID());
+			} catch (SQLException e) {
+				KanbanStatusHandler.fail(e, "SQLException has occured.");
+			}
 		}
 		PropertyChangeEvent event = new PropertyChangeEvent(lane,Lane.PROP_CARD,null,card);
 		fireEvent(event);
