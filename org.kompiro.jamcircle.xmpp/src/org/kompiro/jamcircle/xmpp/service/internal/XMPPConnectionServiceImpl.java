@@ -20,6 +20,10 @@ import org.kompiro.jamcircle.xmpp.service.XMPPLoginListener;
 import org.kompiro.jamcircle.xmpp.service.XMPPSettings;
 import org.kompiro.jamcircle.xmpp.util.XMPPUtil;
 
+/**
+ * 
+ * @author Hiroki Kondo<kompiro@gmail.com>
+ */
 public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 
 	public static final String KEY_OF_SYSTEM_PROP_XMPP_CONNECT = XMPPActivator.PLUGIN_ID + ".connect";

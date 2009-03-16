@@ -6,7 +6,7 @@ Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.kompiro.jamcircle.xmpp.XMPPActivator
 Bundle-Vendor: ChangeVision inc.
 Require-Bundle: org.eclipse.core.runtime,
- org.jivesoftware.smack;bundle-version="3.0.4";visibility:=reexport,
+ org.jivesoftware.smack;bundle-version="3.1.0";visibility:=reexport,
  org.eclipse.equinox.security;bundle-version="1.0.0",
  org.kompiro.jamcircle.kanban
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

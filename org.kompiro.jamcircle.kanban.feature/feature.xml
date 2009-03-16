@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.kompiro.jamcircle.kanban.feature"
+      label="Kanban Feature"
+      version="1.1.0.qualifier"
+      provider-name="kompiro.org">
+
+   <description url="http://kompiro.org/jamcircle">
+      JAM Circle&apos;s Kanban Platform main Feature.
+   </description>
+
+   <copyright url="%copyright_url">
+      %copyright
+   </copyright>
+
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+      %license
+   </license>
+
+   <url>
+      <discovery label="JAM Circle Project Page" url="http://kompiro.org/jamcircle"/>
+   </url>
+
+   <includes
+         id="org.eclipse.gef"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.jivesoftware.smack"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.lang"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.mozilla.javascript"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.gef"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.draw2d"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.bsf"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.apache.commons.logging"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.jruby.jruby"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.kompiro.jamcircle.kanban"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.kompiro.jamcircle.kanban.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.kompiro.jamcircle.storage"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.kompiro.jamcircle.storage.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.kompiro.jamcircle.xmpp"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.kompiro.jamcircle.xmpp.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
