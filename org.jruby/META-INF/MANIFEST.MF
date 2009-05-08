@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JRuby 1.1.6
-Bundle-SymbolicName: org.jruby.jruby
+Bundle-SymbolicName: org.jruby
 Bundle-Version: 1.1.6
 Bundle-ClassPath: jruby-complete-1.1.6.jar
 Export-Package: org.jruby.ast.visitor.rewriter;uses:="org.jruby.ast,
