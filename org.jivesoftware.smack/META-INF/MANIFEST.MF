@@ -1,13 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Smack Plug-in
+Bundle-Name: Smack
 Bundle-SymbolicName: org.jivesoftware.smack
-Bundle-Version: 3.0.4
-Bundle-Localization: plugin
-Bundle-ClassPath: lib/jzlib.jar,
- lib/xpp.jar,
- .,
- lib/jstun.jar
+Bundle-Version: 3.1.0
+Bundle-Vendor: Jive Software (packaged by kompiro.org)
+Bundle-ClassPath: lib/smack.jar,
+ lib/smackx-jingle.jar,
+ lib/smackx.jar
 Export-Package: org.jivesoftware.smack,
  org.jivesoftware.smack.debugger,
  org.jivesoftware.smack.filter,
@@ -18,7 +17,6 @@ Export-Package: org.jivesoftware.smack,
  org.jivesoftware.smack.util.collections,
  org.jivesoftware.smackx,
  org.jivesoftware.smackx.bookmark,
- org.jivesoftware.smackx.debugger,
  org.jivesoftware.smackx.filetransfer,
  org.jivesoftware.smackx.muc,
  org.jivesoftware.smackx.packet,
@@ -34,5 +32,5 @@ Export-Package: org.jivesoftware.smack,
  org.jivesoftware.smackx.workgroup.settings,
  org.jivesoftware.smackx.workgroup.user,
  org.jivesoftware.smackx.workgroup.util
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Eclipse-BuddyPolicy: dependent
+Bundle-RequiredExecutionEnvironment: J2SE-1.5,
+ JavaSE-1.6

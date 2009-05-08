@@ -2,10 +2,8 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="src" path="src/main"/>
-	<classpathentry kind="src" path="resource"/>
-	<classpathentry exported="true" kind="lib" path="lib/jzlib.jar" sourcepath="org.jivesoftware.smacksrc.zip"/>
-	<classpathentry exported="true" kind="lib" path="lib/xpp.jar" sourcepath="org.jivesoftware.smacksrc.zip"/>
-	<classpathentry exported="true" kind="lib" path="lib/jstun.jar" sourcepath="org.jivesoftware.smacksrc.zip"/>
+	<classpathentry exported="true" kind="lib" path="lib/smack.jar" sourcepath="smack_src_3_1_0.zip"/>
+	<classpathentry exported="true" kind="lib" path="lib/smackx-jingle.jar" sourcepath="org.jivesoftware.smack-3_1_0src.zip"/>
+	<classpathentry exported="true" kind="lib" path="lib/smackx.jar" sourcepath="org.jivesoftware.smack-3_1_0src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
