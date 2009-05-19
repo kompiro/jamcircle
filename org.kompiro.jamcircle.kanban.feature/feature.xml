@@ -21,10 +21,6 @@
       <discovery label="JAM Circle Project Page" url="http://kompiro.org/jamcircle"/>
    </url>
 
-   <includes
-         id="org.eclipse.gef"
-         version="0.0.0"/>
-
    <plugin
          id="org.jivesoftware.smack"
          download-size="0"
@@ -73,7 +69,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.jruby.jruby"
+         id="org.jruby"
          download-size="0"
          install-size="0"
          version="0.0.0"/>

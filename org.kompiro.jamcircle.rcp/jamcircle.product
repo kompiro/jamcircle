@@ -40,7 +40,6 @@
       </win>
    </launcher>
 
-
    <vm>
    </vm>
 
@@ -50,6 +49,10 @@
 
    <plugins>
    </plugins>
+
+   <features>
+      <feature id="org.kompiro.jamcircle" version="0.8.0.qualifier"/>
+   </features>
 
 
 </product>
