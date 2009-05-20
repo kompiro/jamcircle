@@ -3,9 +3,8 @@ package org.kompiro.jamcircle;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
@@ -64,13 +63,21 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	}
 
 	private void createTray() {
-		Image image = RCPActivator.getDefault().getImageRegistry().get(ImageConstants.APPLICATION_IMAGE.toString());
+		ImageRegistry imageRegistry = RCPActivator.getDefault().getImageRegistry();
+		final Image appImage = imageRegistry.get(ImageConstants.APPLICATION_IMAGE.toString());
+		final Image exitImage = imageRegistry.get(ImageConstants.EXIT_IMAGE.toString());
 		Display display = PlatformUI.getWorkbench().getDisplay();
 		Tray tray = display.getSystemTray();
 		trayItem = new TrayItem(tray, SWT.NONE);
-		trayItem.setImage(image);
+		trayItem.setImage(appImage);
 		trayItem.setText("JAM Circle");
 		trayItem.setToolTipText("JAM Circle");
+		trayItem.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				openWindowInProgress();
+			}
+		});
 		trayItem.addMenuDetectListener(new MenuDetectListener(){
 		
 			public void menuDetected(MenuDetectEvent e) {
@@ -79,27 +86,12 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 				MenuItem open = new MenuItem(menu, SWT.POP_UP);
 				open.addSelectionListener(new SelectionAdapter(){
 					public void widgetSelected(SelectionEvent e) {
-						IWorkbench workbench = PlatformUI.getWorkbench();
-						IProgressService service = (IProgressService) workbench.getService(IProgressService.class);
-						IRunnableContext context = new ProgressMonitorDialog(shell);
-
-						try {
-							service.runInUI(context, new IRunnableWithProgress(){
-
-								public void run(IProgressMonitor monitor)
-										throws InvocationTargetException, InterruptedException {
-									openWindows();
-								}
-								
-							}, null);
-						} catch (InvocationTargetException ex) {
-						} catch (InterruptedException ex) {
-						}
-
+						openWindowInProgress();
 						shell.dispose();
 					}
 				});
 				open.setText("open Boards");
+				open.setImage(appImage);
 				MenuItem exit = new MenuItem(menu, SWT.POP_UP);
 				exit.addSelectionListener(new SelectionAdapter(){
 					public void widgetSelected(SelectionEvent e) {
@@ -108,6 +100,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 					}
 				});
 				exit.setText("exit JAM Circle");
+				exit.setImage(exitImage);
 				menu.setVisible(true);
 			}
 		});
@@ -118,6 +111,26 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		trayItem.dispose();
 		PlatformUI.getWorkbench().getDisplay().getSystemTray().dispose();
 		super.postShutdown();
+	}
+
+	private void openWindowInProgress() {
+		IWorkbench workbench = PlatformUI.getWorkbench();
+		IProgressService service = (IProgressService) workbench.getService(IProgressService.class);
+
+		try {
+			service.busyCursorWhile(new IRunnableWithProgress(){
+
+				public void run(IProgressMonitor monitor)
+						throws InvocationTargetException, InterruptedException {
+					monitor.setTaskName("opening board");
+					openWindows();
+					monitor.done();
+				}
+				
+			});
+		} catch (InvocationTargetException ex) {
+		} catch (InterruptedException ex) {
+		}
 	}
 		
 }
