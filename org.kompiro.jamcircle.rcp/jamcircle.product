@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?pde version="3.4"?>
+<?pde version="3.5"?>
 
-<product name="JAM Circle" id="org.kompiro.jamcircle.rcp.product" application="org.kompiro.jamcircle.rcp.application" version="0.7.0.qualifier" useFeatures="true">
+<product name="JAM Circle" id="org.kompiro.jamcircle.rcp.product" application="org.kompiro.jamcircle.rcp.application" version="0.7.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.kompiro.jamcircle.rcp/icons/about2.png"/>
@@ -43,12 +43,16 @@
    <vm>
    </vm>
 
+   <license>
+        <url>http://kompiro.org/jamcircle/license/</url>
+   </license>
+
    <plugins>
    </plugins>
 
    <features>
-      <feature id="org.kompiro.jamcircle" version="1.1.0.qualifier"/>
-      <feature id="org.kompiro.jamcircle.kanban.feature" version="1.1.0.qualifier"/>
+      <feature id="org.kompiro.jamcircle" version="0.8.0.qualifier"/>
    </features>
+
 
 </product>

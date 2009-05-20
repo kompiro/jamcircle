@@ -25,37 +25,12 @@
          id="org.eclipse.equinox.executable"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.rcp"
+         version="0.0.0"/>
 
    <plugin
          id="com.ibm.icu"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.core.commands"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.core.contenttype"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.core.expressions"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.core.jobs"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -151,13 +126,6 @@
 
    <plugin
          id="org.eclipse.equinox.app"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.core.databinding"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -307,6 +275,5 @@
          install-size="0"
          version="0.0.0"
          fragment="true"/>
-
 
 </feature>
