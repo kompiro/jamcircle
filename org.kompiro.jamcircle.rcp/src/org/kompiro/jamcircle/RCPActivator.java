@@ -37,7 +37,7 @@ public class RCPActivator extends AbstractUIPlugin {
 	
 	@Override
 	protected void initializeImageRegistry(ImageRegistry reg) {
-		reg.put(ImageConstants.WINDOW_TITLE_IMAGE, imageDescriptorFromPlugin(PLUGIN_ID, "icons/kanban.gif"));
+		reg.put(ImageConstants.APPLICATION_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/kanban.gif"));
 	}
 
 }

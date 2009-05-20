@@ -34,7 +34,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	
 	@Override
 	public void createWindowContents(Shell shell) {
-		Image image = RCPActivator.getDefault().getImageRegistry().get(ImageConstants.WINDOW_TITLE_IMAGE);
+		Image image = RCPActivator.getDefault().getImageRegistry().get(ImageConstants.APPLICATION_IMAGE.toString());
 		//		PaintListener listener = new PaintListener(){
 //
 //			public void paintControl(PaintEvent e) {
