@@ -1,8 +1,11 @@
 package org.kompiro.jamcircle;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -39,6 +42,22 @@ public class RCPActivator extends AbstractUIPlugin {
 	protected void initializeImageRegistry(ImageRegistry reg) {
 		reg.put(ImageConstants.APPLICATION_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/kanban.gif"));
 		reg.put(ImageConstants.EXIT_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/door_out.png"));
+	}
+	
+	public void logError(Exception e){
+		logError("error has occured.",e);
+	}
+
+	public void logError(String message,Exception e){
+		log(new Status(IStatus.ERROR, getPluginID(), IStatus.ERROR, message, e));
+	}
+	
+	public String getPluginID() {
+		return PLUGIN_ID;
+	}
+
+	private void log(IStatus status){
+		StatusManager.getManager().handle(status);
 	}
 
 }

@@ -31,7 +31,6 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
     private static final String ID_OF_PERSPECTIVE_KANBAN = "org.kompiro.jamcircle.kanban.ui.perspective.kanban";
     private static final String ID_OF_PERSPECTIVE_FRIENDS = "org.kompiro.jamcircle.xmpp.ui.perspective.friends";
 	private boolean postStarted = false;
-	private TrayItem trayItem;
 
 	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
         return new ApplicationWorkbenchWindowAdvisor(configurer);
@@ -63,13 +62,10 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	}
 
 	private void createTray() {
-		ImageRegistry imageRegistry = RCPActivator.getDefault().getImageRegistry();
-		final Image appImage = imageRegistry.get(ImageConstants.APPLICATION_IMAGE.toString());
-		final Image exitImage = imageRegistry.get(ImageConstants.EXIT_IMAGE.toString());
 		Display display = PlatformUI.getWorkbench().getDisplay();
 		Tray tray = display.getSystemTray();
-		trayItem = new TrayItem(tray, SWT.NONE);
-		trayItem.setImage(appImage);
+		final TrayItem trayItem = new TrayItem(tray, SWT.NONE);
+		trayItem.setImage(getAppImage());
 		trayItem.setText("JAM Circle");
 		trayItem.setToolTipText("JAM Circle");
 		trayItem.addSelectionListener(new SelectionAdapter(){
@@ -91,7 +87,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 					}
 				});
 				open.setText("open Boards");
-				open.setImage(appImage);
+				open.setImage(getAppImage());
 				MenuItem exit = new MenuItem(menu, SWT.POP_UP);
 				exit.addSelectionListener(new SelectionAdapter(){
 					public void widgetSelected(SelectionEvent e) {
@@ -100,17 +96,22 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 					}
 				});
 				exit.setText("exit JAM Circle");
-				exit.setImage(exitImage);
+				exit.setImage(getExitImage());
 				menu.setVisible(true);
 			}
 		});
 	}
+
 	
 	@Override
-	public void postShutdown() {
-		trayItem.dispose();
-		PlatformUI.getWorkbench().getDisplay().getSystemTray().dispose();
-		super.postShutdown();
+	public boolean preShutdown() {
+		Tray tray = PlatformUI.getWorkbench().getDisplay().getSystemTray();
+		TrayItem[] items = tray.getItems();
+		for(TrayItem item : items){
+			item.dispose();
+		}
+		tray.dispose();
+		return super.preShutdown();
 	}
 
 	private void openWindowInProgress() {
@@ -129,8 +130,22 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 				
 			});
 		} catch (InvocationTargetException ex) {
+			RCPActivator.getDefault().logError(ex);
 		} catch (InterruptedException ex) {
+			RCPActivator.getDefault().logError(ex);
 		}
+	}
+	
+	private ImageRegistry getImageRegistry() {
+		return RCPActivator.getDefault().getImageRegistry();
+	}
+
+	private Image getAppImage() {
+		return getImageRegistry().get(ImageConstants.APPLICATION_IMAGE.toString());
+	}
+
+	private Image getExitImage() {
+		return getImageRegistry().get(ImageConstants.EXIT_IMAGE.toString());
 	}
 		
 }
