@@ -25,7 +25,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowPerspectiveBar(true);
 		configurer.setShowMenuBar(true);
 		configurer.setShowCoolBar(false);
-//		configurer.setShowFastViewBars(true);
+		configurer.setShowFastViewBars(true);
 		configurer.setShowStatusLine(true);
 		configurer.setShowProgressIndicator(true);
 		configurer.setTitle("JAM Circle");

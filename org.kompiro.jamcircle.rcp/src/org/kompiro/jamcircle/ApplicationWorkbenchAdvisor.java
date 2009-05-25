@@ -1,9 +1,10 @@
 package org.kompiro.jamcircle;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuDetectEvent;
@@ -25,6 +26,7 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.eclipse.ui.progress.IProgressService;
+import org.eclipse.ui.progress.UIJob;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
@@ -45,6 +47,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		configurer.setExitOnLastWindowClose(false);
 		String defaultPerspective = ID_OF_PERSPECTIVE_KANBAN + "," + ID_OF_PERSPECTIVE_FRIENDS;
 		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.PERSPECTIVE_BAR_EXTRAS, defaultPerspective);
+		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.INITIAL_FAST_VIEW_BAR_LOCATION, IWorkbenchPreferenceConstants.LEFT);
 	}
 
 	@Override
@@ -117,23 +120,65 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	private void openWindowInProgress() {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		IProgressService service = (IProgressService) workbench.getService(IProgressService.class);
+//		final Shell shell = new Shell();
+//		IRunnableContext context = new ProgressMonitorDialog(shell);
 
-		try {
-			service.busyCursorWhile(new IRunnableWithProgress(){
+//		try {
+			String jobName = "open JAM Circle";
+			UIJob job = new UIJob(jobName){
 
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
-					monitor.setTaskName("opening board");
+				@Override
+				public IStatus runInUIThread(IProgressMonitor monitor) {
+					monitor.subTask("open Windows");
 					openWindows();
-					monitor.done();
+					monitor.internalWorked(50.0);
+					return Status.OK_STATUS;
 				}
 				
-			});
-		} catch (InvocationTargetException ex) {
-			RCPActivator.getDefault().logError(ex);
-		} catch (InterruptedException ex) {
-			RCPActivator.getDefault().logError(ex);
-		}
+			};
+			IProgressMonitor group = Job.getJobManager().createProgressGroup();
+			group.beginTask(jobName, 100);
+			job.setProgressGroup(group, 50);
+			job.setProperty(new QualifiedName("org.kompiro.jamcircle", "rcp"), group);
+			job.schedule();
+//			try {
+//				job.join();
+//			} catch (InterruptedException e) {
+//				RCPActivator.getDefault().logError(e);
+//			}
+			service.showInDialog(null, job);
+//			service.runInUI(context, new IRunnableWithProgress(){
+//
+//				public void run(IProgressMonitor monitor)
+//						throws InvocationTargetException, InterruptedException {
+//					monitor.beginTask("opening board",100);
+//					openWindows();
+//					monitor.internalWorked(50);
+//				}
+//				
+//			}, null);
+//		} catch (InvocationTargetException ex) {
+//			RCPActivator.getDefault().logError(ex);
+//		} catch (InterruptedException ex) {
+//			RCPActivator.getDefault().logError(ex);
+//		}
+
+//		try {
+//			service.busyCursorWhile(new IRunnableWithProgress(){
+//
+//				public void run(IProgressMonitor monitor)
+//						throws InvocationTargetException, InterruptedException {
+//					monitor.setTaskName("opening board");
+//					openWindows();
+//					monitor.done();
+//				}
+//				
+//			});
+//		} catch (InvocationTargetException ex) {
+//			RCPActivator.getDefault().logError(ex);
+//		} catch (InterruptedException ex) {
+//			RCPActivator.getDefault().logError(ex);
+//		}
 	}
 	
 	private ImageRegistry getImageRegistry() {

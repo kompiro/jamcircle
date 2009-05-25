@@ -14,7 +14,7 @@
             category="org.kompiro.jamcircle"
             id="org.kompiro.jamcircle.kanban.KanbanView"
             name="Kanban"/>
-   </extension>
+   </extension>   
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaPerspective">

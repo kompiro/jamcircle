@@ -91,4 +91,12 @@
          </property>
       </product>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+	    <view
+           class="org.eclipse.ui.ExtensionFactory:progressView"
+           icon="icons/progress.gif"
+           id="org.eclipse.ui.views.ProgressView"
+           name="Progress"/>
+   </extension>
 </plugin>
