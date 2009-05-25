@@ -3,7 +3,6 @@ package org.kompiro.jamcircle.kanban.ui;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EventObject;
@@ -11,12 +10,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
 import org.apache.bsf.util.IOUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobManager;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
@@ -48,9 +51,6 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableContext;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -68,7 +68,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.part.CellEditorActionHandler;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.progress.IProgressService;
+import org.eclipse.ui.progress.UIJob;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.ChatManagerListener;
@@ -377,7 +377,7 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		monitor.subTask(taskName);
 		final int id = board.getID();
 		executeScript(monitor);
-		getDisplay().syncExec(new Runnable(){
+		getDisplay().asyncExec(new Runnable(){
 			public void run() {
 				viewer.setContents(KanbanView.this.boardModel);
 			}
@@ -456,29 +456,29 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 	}
 
 	private void storageInitialize() {
-		IProgressService service = (IProgressService) getSite().getService(IProgressService.class);
-		IRunnableContext context = new ProgressMonitorDialog(getSite()
-				.getShell());
-
-		try {
-			service.runInUI(context, new IRunnableWithProgress(){
-
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
+			UIJob job = new UIJob("storage initialize"){
+			
+				@Override
+				public IStatus runInUIThread(IProgressMonitor monitor) {
+					monitor.subTask("storage initializing...");
 					KanbanService service = getKanbanService();
 					KanbanUIActivator activator = getActivator();
 					int id = activator.getPluginPreferences().getInt(KanbanPreferenceConstants.BOARD_ID.toString());
 					KanbanUIStatusHandler.debugUI("KanbanView#storageInitialize() id:'%d'", id);
-					Board board = service.findBoard(id);
+					final Board board = service.findBoard(id);
 					setContents(board,monitor);
+					monitor.internalWorked(30.0);
+					return Status.OK_STATUS;
 				}
-				
-			}, null);
-		} catch (InvocationTargetException e) {
-			KanbanUIStatusHandler.fail(e, "Opening Kanban Board is failed.");
-		} catch (InterruptedException e) {
-			KanbanUIStatusHandler.fail(e, "Opening Kanban Board is failed.");
-		}
+			};
+			QualifiedName key = new QualifiedName("org.kompiro.jamcircle", "rcp");
+			IJobManager manager = Job.getJobManager();
+			Object obj = manager.currentJob().getProperty(key);
+			if(obj != null && obj instanceof IProgressMonitor){
+				IProgressMonitor monitor = (IProgressMonitor) obj;
+				job.setProgressGroup(monitor, 50);
+			}
+			job.schedule();
 	}
 
 	private void refreshXmppConnectionStatus() {
@@ -639,7 +639,7 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 			Object data = event.data;
 			EditPart dropTarget = viewer.findObjectAtExcluding(location, Collections.EMPTY_SET,cardCond);
 			KanbanUIStatusHandler.debugUI("KanbanViewDropAdapter#drop target:%s data: %s",dropTarget,data);
-			if (data instanceof List) {
+			if (data instanceof List<?>) {
 				List<?> list = (List<?>) data;
 				CompoundCommand command = new CompoundCommand();
 				for(Object obj : list){
