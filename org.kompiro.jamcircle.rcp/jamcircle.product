@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="JAM Circle" id="org.kompiro.jamcircle.rcp.product" application="org.kompiro.jamcircle.rcp.application" version="0.7.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="JAM Circle" id="org.kompiro.jamcircle.rcp.product" application="org.kompiro.jamcircle.rcp.application" version="0.8.0.qualifier" useFeatures="true" includeLaunchers="false">
 
    <aboutInfo>
       <image path="/org.kompiro.jamcircle.rcp/icons/about2.png"/>
@@ -39,6 +39,7 @@
             winLargeLow="/org.kompiro.jamcircle/icons/windows/kanban_048_8.bmp"/>
       </win>
    </launcher>
+
 
    <vm>
    </vm>

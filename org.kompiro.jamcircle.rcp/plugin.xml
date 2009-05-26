@@ -52,6 +52,14 @@
       </product>
    </extension>
    <extension
+         point="org.eclipse.ui.views">
+	    <view
+           class="org.eclipse.ui.ExtensionFactory:progressView"
+           icon="icons/progress.gif"
+           id="org.eclipse.ui.views.ProgressView"
+           name="Progress"/>
+   </extension>
+   <extension
          id="product"
          point="org.eclipse.core.runtime.products">
       <product
@@ -90,13 +98,5 @@
                value="plugin_customization.ini">
          </property>
       </product>
-   </extension>
-   <extension
-         point="org.eclipse.ui.views">
-	    <view
-           class="org.eclipse.ui.ExtensionFactory:progressView"
-           icon="icons/progress.gif"
-           id="org.eclipse.ui.views.ProgressView"
-           name="Progress"/>
    </extension>
 </plugin>

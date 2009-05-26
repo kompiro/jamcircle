@@ -12,5 +12,7 @@ org.eclipse.pde.build.source/
 org.eclipse.pde.build/
 org.eclipse.releng.basebuilder/
 org.kompiro.eclipseextension.maxscreen/
+org.kompiro.jamcircle.platform/
+org.kompiro.jamcircle.platform.ui/
 xstream/
 
