@@ -133,7 +133,7 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 	public KanbanService getKanbanService(){
 		KanbanService service = (KanbanService)kanbanServiceTracker.getService();
 		service.init();
-		return  service;
+		return service;
 	}
 
 	public Shell getShell(){
