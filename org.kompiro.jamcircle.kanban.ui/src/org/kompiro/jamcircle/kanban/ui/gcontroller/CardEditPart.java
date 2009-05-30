@@ -45,6 +45,7 @@ import org.eclipse.ui.part.CellEditorActionHandler;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.ColorTypes;
 import org.kompiro.jamcircle.kanban.model.HasColorTypeEntity;
+import org.kompiro.jamcircle.kanban.model.ShowdownConverter;
 import org.kompiro.jamcircle.kanban.model.User;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;

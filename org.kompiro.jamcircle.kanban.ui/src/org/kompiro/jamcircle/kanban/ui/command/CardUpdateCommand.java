@@ -13,13 +13,16 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.kompiro.jamcircle.kanban.model.Card;
 
+/**
+ * @TestContext CardUpdateCommandTest
+ */
 public class CardUpdateCommand extends AbstractCommand {
 
 	private Card card;
 	private String subject;
 	private String content;
-	private HashSet<File> deleteTargetFileSet;
-	private HashSet<File> addTargetFileSet;
+	private HashSet<File> deleteTargetFileSet = new HashSet<File>();
+	private HashSet<File> addTargetFileSet = new HashSet<File>();
 	private String oldSubject;
 	private String oldContent;
 	private Date dueDate;
@@ -37,11 +40,10 @@ public class CardUpdateCommand extends AbstractCommand {
 		this.oldContent = card.getContent();
 		this.content = content;
 		this.oldDueDate = card.getDueDate();
-		deleteTargetFileSet = new HashSet<File>();
-		deleteTargetFileSet.addAll(card.getFiles());
+		List<File> oldFiles = card.getFiles();
+		this.deleteTargetFileSet.addAll(oldFiles);
 		this.dueDate = dueDate;
 		if(files != null){
-			addTargetFileSet = new HashSet<File>();
 			for(File file : files){
 				if(file.exists()){
 					deleteTargetFileSet.remove(file);
@@ -65,7 +67,7 @@ public class CardUpdateCommand extends AbstractCommand {
 	
 	@Override
 	public boolean canUndo() {
-		return deleteTargetFileSet.isEmpty();
+		return super.canUndo() && deleteTargetFileSet.isEmpty();
 	}
 	
 	private Shell getShell() {
@@ -88,6 +90,7 @@ public class CardUpdateCommand extends AbstractCommand {
 			card.addFile(addTarget);
 		}
 		card.save();
+		setCanUndo(true);
 	}
 	
 	@Override
@@ -99,6 +102,7 @@ public class CardUpdateCommand extends AbstractCommand {
 			card.deleteFile(addTarget);
 		}
 		card.save();
+		setCanUndo(false);
 	}
 
 }

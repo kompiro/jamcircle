@@ -12,8 +12,10 @@ import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.kompiro.jamcircle.kanban.model.ShowdownConverter;
 
 public class BrowserPopupDialog extends PopupDialog {
+	private static ShowdownConverter converter = ShowdownConverter.getInstance();
 	private Browser browser;
 	private String content;
 
@@ -37,7 +39,7 @@ public class BrowserPopupDialog extends PopupDialog {
 	public BrowserPopupDialog(Shell shell,String title, String info, String content) {
 		super(shell,PopupDialog.INFOPOPUPRESIZE_SHELLSTYLE, true, false,
 		false, true, false, title, info);
-		this.content = content;
+		this.content = converter.convert(content);
 	}
 
 	@Override

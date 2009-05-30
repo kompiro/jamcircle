@@ -39,11 +39,7 @@ public class CardImpl extends GraphicalImpl {
 		if(lane == null) return "";
 		return lane.getStatus();
 	}
-	
-	public String getContent(){
-		return ShowdownConverter.getInstance().convert(card.getContent());
-	}
-	
+		
 	public boolean isDeletedVisuals(){
 		return this.deletedVisuals;
 	}
