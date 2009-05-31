@@ -3,25 +3,18 @@ package org.kompiro.jamcircle.kanban.ui.gcontroller;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-
 import net.java.ao.Entity;
 
-import org.eclipse.draw2d.FreeformLayout;
-import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Layer;
+import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.gef.DragTracker;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.*;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.widgets.Shell;
 import org.kompiro.jamcircle.kanban.model.GraphicalImpl;
 import org.kompiro.jamcircle.kanban.model.Icon;
-import org.kompiro.jamcircle.kanban.model.mock.MockGraphicalEntity;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 import org.kompiro.jamcircle.kanban.ui.model.AbstractModel;
@@ -167,7 +160,9 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 	}
 
 	protected ImageRegistry getImageRegistry() {
-		return KanbanUIActivator.getDefault().getImageRegistry();
+		KanbanUIActivator activator = KanbanUIActivator.getDefault();
+		if(activator == null) return JFaceResources.getImageRegistry();
+		return activator.getImageRegistry();
 	}
 	
 	public BoardModel getBoardModel(){

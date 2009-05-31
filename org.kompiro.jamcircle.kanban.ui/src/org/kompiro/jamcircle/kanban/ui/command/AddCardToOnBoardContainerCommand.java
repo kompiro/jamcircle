@@ -49,4 +49,10 @@ public class AddCardToOnBoardContainerCommand extends AbstractCommand {
 		card.save();
 		container.removeCard(card);
 	}
+	
+	@Override
+	public String getDebugLabel() {
+		String data = String.format("[card=%s,container=%s]",card.toString(),container.toString());
+		return super.getDebugLabel() + data;
+	}
 }

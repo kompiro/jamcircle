@@ -40,7 +40,7 @@ public class UserEditPart extends AbstractEditPart implements IconEditPart{
 	@Override
 	protected IFigure createFigure() {
 		UserModel model = (UserModel) getModel();
-		UserFigure userFigure = new UserFigure(model);
+		UserFigure userFigure = new UserFigure(model,getImageRegistry());
 		userFigure.setLocation(model.getLocation());
 		return userFigure;
 	}

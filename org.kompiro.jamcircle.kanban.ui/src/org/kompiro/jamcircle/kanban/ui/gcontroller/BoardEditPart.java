@@ -1,78 +1,30 @@
 package org.kompiro.jamcircle.kanban.ui.gcontroller;
 
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.FreeformLayout;
-import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.GridData;
-import org.eclipse.draw2d.GridLayout;
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.ImageFigure;
-import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.Layer;
-import org.eclipse.draw2d.LayeredPane;
-import org.eclipse.draw2d.LayoutListener;
-import org.eclipse.draw2d.LineBorder;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.DragTracker;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPartViewer;
-import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.RootEditPart;
+import org.eclipse.draw2d.*;
+import org.eclipse.draw2d.geometry.*;
+import org.eclipse.gef.*;
 import org.eclipse.gef.EditPartViewer.Conditional;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.editpolicies.ContainerEditPolicy;
-import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
-import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
-import org.eclipse.gef.requests.ChangeBoundsRequest;
-import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.gef.editpolicies.*;
+import org.eclipse.gef.requests.*;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.kompiro.jamcircle.kanban.model.Board;
-import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.CardContainer;
-import org.kompiro.jamcircle.kanban.model.Lane;
+import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
-import org.kompiro.jamcircle.kanban.ui.command.AddCardToOnBoardContainerCommand;
-import org.kompiro.jamcircle.kanban.ui.command.CardCloneCommand;
-import org.kompiro.jamcircle.kanban.ui.command.ChangeLaneConstraintCommand;
-import org.kompiro.jamcircle.kanban.ui.command.CreateCardCommand;
-import org.kompiro.jamcircle.kanban.ui.command.CreateLaneCommand;
-import org.kompiro.jamcircle.kanban.ui.command.MoveCardCommand;
-import org.kompiro.jamcircle.kanban.ui.command.MoveIconCommand;
-import org.kompiro.jamcircle.kanban.ui.command.MoveUserCommand;
-import org.kompiro.jamcircle.kanban.ui.command.RemoveCardCommand;
-import org.kompiro.jamcircle.kanban.ui.command.RemoveLaneCommand;
-import org.kompiro.jamcircle.kanban.ui.command.RemoveUserCommand;
-import org.kompiro.jamcircle.kanban.ui.figure.CardFigure;
-import org.kompiro.jamcircle.kanban.ui.figure.LaneFigure;
-import org.kompiro.jamcircle.kanban.ui.figure.UserFigure;
+import org.kompiro.jamcircle.kanban.ui.command.*;
+import org.kompiro.jamcircle.kanban.ui.figure.*;
 import org.kompiro.jamcircle.kanban.ui.figure.LaneFigure.CardArea;
-import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
-import org.kompiro.jamcircle.kanban.ui.model.IconModel;
-import org.kompiro.jamcircle.kanban.ui.model.UserModel;
+import org.kompiro.jamcircle.kanban.ui.model.*;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 public class BoardEditPart extends AbstractEditPart implements CardContainerEditPart{
@@ -318,14 +270,16 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		board = new Layer();
 		board.setLayoutManager(new FreeformLayout());
 		board.setBorder(new LineBorder(ColorConstants.lightGray,1));
-		Image backImage = KanbanUIActivator.getDefault().getImageRegistry().get(KanbanImageConstants.BACKGROUND_IMAGE.toString());
+		Image backImage = getImageRegistry().get(KanbanImageConstants.BACKGROUND_IMAGE.toString());
 		backImageFigure = new ImageFigure(backImage){
 			@Override
 			protected void paintFigure(Graphics graphics) {
-				org.eclipse.swt.graphics.Rectangle rect = getImage().getBounds();
+				Image image = getImage();
+				if(image == null) return;
+				org.eclipse.swt.graphics.Rectangle rect = image.getBounds();
 				for(int x = 0; x < getBounds().width; x = x + rect.width){
 					for(int y = 0; y < getBounds().height; y = y + rect.height){
-						graphics.drawImage(getImage(), x, y);
+						graphics.drawImage(image, x, y);
 					}
 				}
 			}

@@ -169,7 +169,7 @@ public class CardEditPart extends AbstractEditPart {
 	@Override
 	protected IFigure createFigure() {
 		Card model = getCardModel();
-		CardFigure figure = new CardFigure();
+		CardFigure figure = new CardFigure(getImageRegistry());
 		figure.setSubject(model.getSubject());
 		figure.setMock(model.isMock());
 		figure.setId(model.getID());

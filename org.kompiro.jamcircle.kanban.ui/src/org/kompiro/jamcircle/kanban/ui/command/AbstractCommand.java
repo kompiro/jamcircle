@@ -44,11 +44,17 @@ public abstract class AbstractCommand extends Command {
 	public abstract void doExecute();
 	
 	protected KanbanService getKanbanService(){
-		return KanbanUIActivator.getDefault().getKanbanService();
+		return getActivator().getKanbanService();
 	}
 
 	protected XMPPConnectionService getConnectionService(){
-		return KanbanUIActivator.getDefault().getConnectionService();
+		return getActivator().getConnectionService();
+	}
+
+	private KanbanUIActivator getActivator() {
+		KanbanUIActivator activator = KanbanUIActivator.getDefault();
+		if(activator == null) throw new IllegalStateException("Can't get KanbanUIActivator.");
+		return activator;
 	}
 	
 }

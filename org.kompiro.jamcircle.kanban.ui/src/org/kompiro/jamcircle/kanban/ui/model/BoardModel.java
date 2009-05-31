@@ -91,10 +91,9 @@ public class BoardModel extends AbstractModel implements UserModelContainer,Card
 	}
 
 	public void addAllUsers(Collection<? extends UserModel> users) {
-		for(UserModel model : users){
-			this.users.put(model.getUser().getUserId(),model);
+		for(UserModel user : users){
+			addUser(user);
 		}
-		firePropertyChange(PROP_USER, null, users);
 	}
 
 	public UserModel getUser(String user) {

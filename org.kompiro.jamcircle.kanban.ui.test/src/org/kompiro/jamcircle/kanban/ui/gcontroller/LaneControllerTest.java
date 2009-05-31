@@ -61,7 +61,9 @@ public class LaneControllerTest extends AbstractControllerTest{
 		ChangeBoundsRequest request = new ChangeBoundsRequest();
 		request.setEditParts(part);
 		request.setType(RequestConstants.REQ_ADD);
-		todoLanePart.getCommand(request).execute();
+		Command command = todoLanePart.getCommand(request);
+		assertTrue(command instanceof CompoundCommand);
+		command.execute();
 		todoLanePart.refresh();
 		assertEquals(1,todoLanePart.getChildren().size());
 	}

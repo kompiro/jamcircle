@@ -1,39 +1,18 @@
 package org.kompiro.jamcircle.kanban.ui.figure;
 
-
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.eclipse.draw2d.CompoundBorder;
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FlowLayout;
-import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.GridData;
-import org.eclipse.draw2d.GridLayout;
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.ImageFigure;
-import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.RoundedRectangle;
-import org.eclipse.draw2d.StackLayout;
-import org.eclipse.draw2d.ToolbarLayout;
-import org.eclipse.draw2d.XYLayout;
-import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.*;
+import org.eclipse.draw2d.geometry.*;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.draw2d.text.FlowPage;
-import org.eclipse.draw2d.text.ParagraphTextLayout;
-import org.eclipse.draw2d.text.TextFlow;
+import org.eclipse.draw2d.text.*;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontMetrics;
-import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.*;
 import org.kompiro.jamcircle.kanban.model.ColorTypes;
-import org.kompiro.jamcircle.kanban.model.FlagTypes;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
 
 public class CardFigure extends RoundedRectangle {
@@ -63,14 +42,20 @@ public class CardFigure extends RoundedRectangle {
 //	private CardToolTip toolTipFigure;
 	private Figure footerSection;
 	private ColorTypes colorType;
-	private FlagTypes flagType;
+//	private FlagTypes flagType;
 	private Figure middleSection;
 	private Figure actionSection;
 	private Figure statusSection;
 	private Figure headerSection;
 	private ImageFigure mockImage;
+	private ImageRegistry imageRegistry;
 	
 	public CardFigure(){
+		this(null);
+	}
+	
+	public CardFigure(ImageRegistry imageRegisty){
+		this.imageRegistry = imageRegisty;
 		FlowLayout manager = new FlowLayout();
 		manager.setMajorSpacing(0);
 		manager.setMinorSpacing(0);
@@ -128,7 +113,7 @@ public class CardFigure extends RoundedRectangle {
 		idLabel.setFont(getHeaderFont());
 		
 		mockImage = new ImageFigure();
-		mockImage.setImage(KanbanUIActivator.getDefault().getImageRegistry().get(KanbanImageConstants.MOCK_IMAGE.toString()));
+		mockImage.setImage(getImageRegistry().get(KanbanImageConstants.MOCK_IMAGE.toString()));
 		
 		statusSection = new Figure();
 		statusSection.setLayoutManager(new ToolbarLayout(true));
@@ -141,6 +126,10 @@ public class CardFigure extends RoundedRectangle {
 		mockImage.setVisible(false);
 	}
 
+	private ImageRegistry getImageRegistry() {
+		if(this.imageRegistry == null) this.imageRegistry = JFaceResources.getImageRegistry();
+		return this.imageRegistry;
+	}
 
 	private Font getHeaderFont() {
 		return JFaceResources.getFontRegistry().get(KEY_OF_CARD_HEADER);
