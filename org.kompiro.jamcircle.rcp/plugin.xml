@@ -12,46 +12,6 @@
       </application>
    </extension>
    <extension
-         id="jamcircle"
-         point="org.eclipse.core.runtime.products">
-      <product
-            application="org.kompiro.jamcircle.rcp.application"
-            name="JAM Circle">
-         <property
-               name="appName"
-               value="JAM Circle">
-         </property>
-         <property
-               name="windowImages"
-               value="icons/kanban_016.gif,icons/kanban_032.gif,icons/kanban_048.gif,icons/kanban_064.gif,icons/kanban_128.gif">
-         </property>
-         <property
-               name="startupForegroundColor"
-               value="FF8000">
-         </property>
-         <property
-               name="startupMessageRect"
-               value="10,115,300,15">
-         </property>
-         <property
-               name="startupProgressRect"
-               value="3,133,294,15">
-         </property>
-         <property
-               name="preferenceCustomization"
-               value="plugin_customization.ini">
-         </property>
-         <property
-               name="aboutImage"
-               value="icons/about2.png">
-         </property>
-         <property
-               name="aboutText"
-               value="JAM Circle is a kanban platform.">
-         </property>
-      </product>
-   </extension>
-   <extension
          point="org.eclipse.ui.views">
 	    <view
            class="org.eclipse.ui.ExtensionFactory:progressView"
@@ -71,23 +31,11 @@
          </property>
          <property
                name="aboutText"
-               value="JAM Circle is a kanban platform.">
+               value="JAM Circle&#x0A;&#x0A;Version: 0.8.0&#x0A;&#x0A;Visit http://kompiro.org/jamcircle/&#x0A;&#x0A;This product includes software developed by the&#x0A;Apache Software Foundation http://www.apache.org/&#x0A;Mozilla Foundation(Rhino) https://developer.mozilla.org/en/Rhino&#x0A;JRuby Project http://jruby.codehaus.org/">
          </property>
          <property
                name="aboutImage"
                value="icons/about2.png">
-         </property>
-         <property
-               name="startupForegroundColor"
-               value="FF8000">
-         </property>
-         <property
-               name="startupProgressRect"
-               value="3,133,294,15">
-         </property>
-         <property
-               name="startupMessageRect"
-               value="10,115,300,15">
          </property>
          <property
                name="appName"
