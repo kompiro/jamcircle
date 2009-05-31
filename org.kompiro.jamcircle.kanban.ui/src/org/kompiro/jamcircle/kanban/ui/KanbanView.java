@@ -85,13 +85,7 @@ import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jruby.exceptions.RaiseException;
-import org.kompiro.jamcircle.kanban.model.Board;
-import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.CardContainer;
-import org.kompiro.jamcircle.kanban.model.CardDTO;
-import org.kompiro.jamcircle.kanban.model.Icon;
-import org.kompiro.jamcircle.kanban.model.ScriptTypes;
-import org.kompiro.jamcircle.kanban.model.User;
+import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.action.CaptureBoardAction;
 import org.kompiro.jamcircle.kanban.ui.action.CopyAction;
@@ -394,10 +388,28 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 			try {
 //				Board mock = new org.kompiro.jamcircle.kanban.model.mock.Board();
 				monitor.setTaskName("execute script");
+
 				manager.registerBean("board", this.boardModel);
 				manager.registerBean("monitor", monitor);
 				manager.registerBean("JRubyType",ScriptTypes.JRuby);
 				manager.registerBean("JavaScriptType",ScriptTypes.JavaScript);
+
+				manager.registerBean("RED", ColorTypes.RED);
+				manager.registerBean("YELLOW",ColorTypes.YELLOW);
+				manager.registerBean("GREEN",ColorTypes.GREEN);
+				manager.registerBean("LIGHT_GREEN",ColorTypes.LIGHT_GREEN);
+				manager.registerBean("LIGHT_BLUE",ColorTypes.LIGHT_BLUE);
+				manager.registerBean("BLUE",ColorTypes.BLUE);
+				manager.registerBean("PURPLE",ColorTypes.PURPLE);
+				manager.registerBean("RED_PURPLE",ColorTypes.RED_PURPLE);
+
+				manager.registerBean("FLAG_RED", FlagTypes.RED);
+				manager.registerBean("FLAG_WHITE",FlagTypes.WHITE);
+				manager.registerBean("FLAG_GREEN",FlagTypes.GREEN);
+				manager.registerBean("FLAG_BLUE",FlagTypes.BLUE);
+				manager.registerBean("FLAG_ORANGE",FlagTypes.ORANGE);
+
+				
 				String scriptName = String.format("Board '%s' Script",board.getTitle());
 				String templateName = null;
 				int initLines = 0;
