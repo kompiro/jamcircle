@@ -1,17 +1,11 @@
 package org.kompiro.jamcircle.kanban.ui.command;
 
 import java.io.File;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
-
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.kompiro.jamcircle.kanban.model.Card;
+import org.kompiro.jamcircle.kanban.ui.command.provider.ConfirmProvider;
+import org.kompiro.jamcircle.kanban.ui.command.provider.MessageDialogConfirmProvider;
 
 /**
  * @TestContext CardUpdateCommandTest
@@ -22,18 +16,28 @@ public class CardUpdateCommand extends AbstractCommand {
 	private String subject;
 	private String content;
 	private HashSet<File> deleteTargetFileSet = new HashSet<File>();
-	private HashSet<File> addTargetFileSet = new HashSet<File>();
+	private Set<File> addTargetFileSet = new LinkedHashSet<File>();
 	private String oldSubject;
 	private String oldContent;
 	private Date dueDate;
 	private Date oldDueDate;
+	private ConfirmProvider confirmExecution;
 	
 	public CardUpdateCommand(
+			ConfirmProvider confirmExecution,
 			Card card,
 			String subject,
 			String content,
 			Date dueDate,
 			List<File> files) {
+		if(confirmExecution instanceof MessageDialogConfirmProvider){
+			MessageDialogConfirmProvider provider = (MessageDialogConfirmProvider) confirmExecution;
+			String title = "confirmation";
+			String message = "Do you want to delete some files? If you'll select OK.After you can't undo this command.";
+			provider.setTitle(title);
+			provider.setMessage(message);
+		}
+		this.confirmExecution = confirmExecution;
 		this.card = card;
 		this.oldSubject = card.getSubject();
 		this.subject = subject;
@@ -61,21 +65,16 @@ public class CardUpdateCommand extends AbstractCommand {
 		if(deleteTargetFileSet.isEmpty()){
 			return true;
 		}
-		boolean result = MessageDialog.openConfirm(getShell(), "Confirmation", "Do you want to delete some files? If you'll select OK.After you can't undo this command.");
-		return result;
+		return confirm();
+	}
+
+	protected boolean confirm() {
+		return confirmExecution.confirm();
 	}
 	
 	@Override
 	public boolean canUndo() {
 		return super.canUndo() && deleteTargetFileSet.isEmpty();
-	}
-	
-	private Shell getShell() {
-		IWorkbench workbench = PlatformUI.getWorkbench();
-		if(workbench == null) return new Shell();
-		IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-		if(activeWorkbenchWindow == null) return new Shell();
-		return activeWorkbenchWindow.getShell();
 	}
 
 	@Override

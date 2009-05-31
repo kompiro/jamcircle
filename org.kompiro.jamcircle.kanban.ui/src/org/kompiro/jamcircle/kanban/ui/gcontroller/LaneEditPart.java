@@ -35,8 +35,7 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.requests.SelectionRequest;
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.dialogs.*;
 import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -56,16 +55,9 @@ import org.kompiro.jamcircle.kanban.model.ScriptTypes;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
-import org.kompiro.jamcircle.kanban.ui.command.AddCardToOnBoardContainerCommand;
-import org.kompiro.jamcircle.kanban.ui.command.AddLaneTrashCommand;
-import org.kompiro.jamcircle.kanban.ui.command.CardCloneCommand;
-import org.kompiro.jamcircle.kanban.ui.command.CardUpdateCommand;
-import org.kompiro.jamcircle.kanban.ui.command.ChangeLaneConstraintCommand;
-import org.kompiro.jamcircle.kanban.ui.command.CreateCardCommand;
-import org.kompiro.jamcircle.kanban.ui.command.LaneToggleIconizedCommand;
-import org.kompiro.jamcircle.kanban.ui.command.LaneUpdateCommand;
-import org.kompiro.jamcircle.kanban.ui.command.MoveCardCommand;
-import org.kompiro.jamcircle.kanban.ui.command.RemoveCardCommand;
+import org.kompiro.jamcircle.kanban.ui.command.*;
+import org.kompiro.jamcircle.kanban.ui.command.provider.ConfirmProvider;
+import org.kompiro.jamcircle.kanban.ui.command.provider.MessageDialogConfirmProvider;
 import org.kompiro.jamcircle.kanban.ui.dialog.LaneEditDialog;
 import org.kompiro.jamcircle.kanban.ui.figure.CardFigure;
 import org.kompiro.jamcircle.kanban.ui.figure.LaneFigure;
@@ -203,7 +195,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	private Clickable openListIcon;
 	private ActionListener openListListener = new ActionListener(){
 		public void actionPerformed(ActionEvent event) {
-			Shell shell = getViewer().getControl().getShell();
+			final Shell shell = getViewer().getControl().getShell();
 			ApplicationWindow window = new ApplicationWindow(shell){
 				private CardListTableViewer viewer;
 				@Override
@@ -214,7 +206,8 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 					viewer.setEditProvider(new CardListEditProvider(){
 						public void edit(Card card, String subject,
 								String content, Date dueDate, List<File> files) {
-							CardUpdateCommand command = new CardUpdateCommand(card,subject,content,dueDate,files);
+							ConfirmProvider provider = new MessageDialogConfirmProvider(getShell());
+							CardUpdateCommand command = new CardUpdateCommand(provider ,card,subject,content,dueDate,files);
 							getCommandStack().execute(command);
 							viewer.refresh();
 						}

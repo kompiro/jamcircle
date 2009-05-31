@@ -4,20 +4,19 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
-
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IWorkbenchPart;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 import org.kompiro.jamcircle.kanban.ui.command.CardUpdateCommand;
+import org.kompiro.jamcircle.kanban.ui.command.provider.ConfirmProvider;
+import org.kompiro.jamcircle.kanban.ui.command.provider.MessageDialogConfirmProvider;
 import org.kompiro.jamcircle.kanban.ui.gcontroller.CardContainerEditPart;
 import org.kompiro.jamcircle.kanban.ui.gcontroller.TrashEditPart;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListEditProvider;
@@ -59,7 +58,8 @@ public class OpenCardListAction extends SelectionAction {
 					viewer.setEditProvider(new CardListEditProvider(){
 						public void edit(Card card, String subject,
 								String content, Date dueDate, List<File> files) {
-							CardUpdateCommand command = new CardUpdateCommand(card,subject,content,dueDate,files);
+							ConfirmProvider provider = new MessageDialogConfirmProvider(getShell());
+							CardUpdateCommand command = new CardUpdateCommand(provider ,card,subject,content,dueDate,files);
 							CommandStack commandStack = (CommandStack) getWorkbenchPart().getAdapter(CommandStack.class);
 							commandStack.execute(command);
 							viewer.refresh();
