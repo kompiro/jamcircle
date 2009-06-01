@@ -176,7 +176,7 @@ public abstract class AbstractControllerTest {
 		Composite comp = new Composite(shell, SWT.None);
 		comp.setLayout(new FillLayout());
 		viewer.createControl(comp);
-		shell.setSize(300, 300);
+		shell.setAlpha(0);
 		shell.open();
 	}
 

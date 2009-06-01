@@ -180,7 +180,6 @@ public class BoardControllerTest extends AbstractControllerTest{
 
 	@Test
 	public void addUser() throws Exception {
-		shell.setSize(305,300);
 		UserModel model1 = createUserModel("kompiro@localhost");
 		board.addUser(model1);
 //		while(jobSemaphore){}
@@ -191,7 +190,6 @@ public class BoardControllerTest extends AbstractControllerTest{
 	
 	@Test
 	public void addUserTwice() throws Exception {
-		shell.setSize(300,300);
 		UserModel model1 = createUserModel("kompiro@localhost");
 		UserModel model2 = createUserModel("kompiro2@localhost");
 		board.addUser(model1);
@@ -205,7 +203,6 @@ public class BoardControllerTest extends AbstractControllerTest{
 	
 	@Test
 	public void addManyUsers() throws Exception {
-		shell.setSize(305,300);
 		UserModel model1 = createUserModel("kompiro@localhost");
 		UserModel model2 = createUserModel("kompiro2@localhost");
 		ArrayList<UserModel> users = new ArrayList<UserModel>();
