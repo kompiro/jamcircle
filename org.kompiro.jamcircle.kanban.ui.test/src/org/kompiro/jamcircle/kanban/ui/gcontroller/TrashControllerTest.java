@@ -16,11 +16,13 @@ import org.eclipse.gef.requests.GroupRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
+import org.kompiro.jamcircle.kanban.model.mock.Icon;
 import org.kompiro.jamcircle.kanban.ui.command.AddLaneTrashCommand;
 import org.kompiro.jamcircle.kanban.ui.command.RemoveCardCommand;
 import org.kompiro.jamcircle.kanban.ui.command.RemoveLaneCommand;
 import org.kompiro.jamcircle.kanban.ui.gcontroller.CardEditPart;
 import org.kompiro.jamcircle.kanban.ui.gcontroller.LaneEditPart;
+import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 
 public class TrashControllerTest extends AbstractControllerTest{
 	
@@ -56,9 +58,9 @@ public class TrashControllerTest extends AbstractControllerTest{
 		
 		assertEquals(INIT_BOARD_CHIHLDREN_SIZE + INIT_LANE_SIZE +INIT_CARD_SIZE,boardPart.getChildren().size());
 		assertTrue(boardPart.isActive());
+		
 		Map<Object, GraphicalEditPart> partMap = getChildlenPartmap(boardPart);
-
-		trashPart = partMap.get(board.getTrashModel());
+		trashPart = partMap.get(trashMock);
 		assertNotNull(trashPart);
 		
 		GraphicalEditPart gPart = partMap.get(todo);
@@ -104,7 +106,8 @@ public class TrashControllerTest extends AbstractControllerTest{
 		trashCommand.execute();
 		todoLanePart.refresh();
 		assertEquals(0,todoLanePart.getChildren().size());
-		assertEquals(1,board.getTrashModel().getCards().length);
+		TrashModel trashModel = board.getTrashModel();
+		assertEquals(1,trashModel.getCards().length);
 	}
 
 	@Test

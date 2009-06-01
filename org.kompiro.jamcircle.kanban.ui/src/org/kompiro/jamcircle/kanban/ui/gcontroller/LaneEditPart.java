@@ -335,7 +335,9 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	@Override
 	protected List<?> getModelChildren() {
 		Lane laneModel = getLaneModel();
-		if(Platform.isRunning() && !laneModel.isIconized()){
+		if(
+//				Platform.isRunning() &&
+				!laneModel.isIconized()){
 			Card[] cards = laneModel.getCards();
 			KanbanUIStatusHandler.info("LaneEditPart.getModelChildren() lane:'%s' length:'%d'",laneModel.getStatus(),cards.length);
 			return Arrays.asList(cards);

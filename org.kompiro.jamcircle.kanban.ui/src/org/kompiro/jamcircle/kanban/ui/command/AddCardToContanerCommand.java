@@ -17,12 +17,19 @@ public class AddCardToContanerCommand extends AbstractCommand
 	
 	@Override
 	public void doExecute() {
+		assert container != null && card != null;
 		container.addCard(card);
 	}
 	
 	@Override
 	public void undo() {
+		assert container != null && card != null;
 		container.removeCard(card);
+	}
+	
+	@Override
+	public String getDebugLabel() {
+		return String.format("%s container=[%s],card=[%s]",super.getDebugLabel(),container,card);
 	}
 
 //	public String getComfirmMessage() {

@@ -68,7 +68,7 @@ public class TrashEditPart extends AbstractEditPart implements IconEditPart,Card
 	
 	@Override
 	protected IFigure createFigure() {
-		return new TrashFigure(getTrashModel());
+		return new TrashFigure(getTrashModel(),getImageRegistry());
 	}
 
 	TrashModel getTrashModel() {
@@ -82,14 +82,14 @@ public class TrashEditPart extends AbstractEditPart implements IconEditPart,Card
 
 	@Override
 	public void showTargetFeedback(Request request) {
-		// TODO setBackgroundColor isn't available to show because background color is overwritten by board image.
+		// #57 setBackgroundColor isn't available to show because background color is overwritten by board image.
 		getFigure().setBackgroundColor(ColorConstants.yellow);
 		super.showTargetFeedback(request);
 	}
 
 	@Override
 	public void eraseTargetFeedback(Request request) {
-		// TODO setBackgroundColor isn't available to show because background color is overwritten by board image.
+		// #57 setBackgroundColor isn't available to show because background color is overwritten by board image.
 		getFigure().setBackgroundColor(null);
 		super.eraseTargetFeedback(request);
 	}

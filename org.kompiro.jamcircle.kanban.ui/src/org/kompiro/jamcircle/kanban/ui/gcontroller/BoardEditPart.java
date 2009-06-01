@@ -365,7 +365,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		super.propertyChange(evt);
 		if(isPropUser(evt)){
 			if(newValue != null){
-				if(newValue instanceof Collection){
+				if(newValue instanceof Collection<?>){
 					KanbanUIStatusHandler.debugUI("Locating Users '%s'",newValue);
 					evaluateUserLocation((Collection<?>) newValue);
 				}else if(newValue instanceof UserModel){

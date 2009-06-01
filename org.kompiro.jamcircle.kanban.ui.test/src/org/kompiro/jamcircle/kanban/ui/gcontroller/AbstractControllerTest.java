@@ -3,33 +3,20 @@ package org.kompiro.jamcircle.kanban.ui.gcontroller;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.gef.EditDomain;
-import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.RootEditPart;
+import org.eclipse.gef.*;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.*;
 import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.mock.Board;
-import org.kompiro.jamcircle.kanban.model.mock.Icon;
-import org.kompiro.jamcircle.kanban.model.mock.Lane;
-import org.kompiro.jamcircle.kanban.ui.CommandStackEventListenerForDebug;
-import org.kompiro.jamcircle.kanban.ui.KanbanControllerFactory;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
-import org.kompiro.jamcircle.kanban.ui.gcontroller.BoardEditPart;
+import org.kompiro.jamcircle.kanban.model.mock.*;
+import org.kompiro.jamcircle.kanban.ui.*;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 import org.kompiro.jamcircle.storage.IStatusHandler;
@@ -38,7 +25,7 @@ public abstract class AbstractControllerTest {
 
 	private static final int LANE_CREATER_COUNT = 1;
 	private static final int TRACHBOX_COUNT = 1;
-	public static final int INIT_BOARD_CHIHLDREN_SIZE = 0;
+	public static final int INIT_BOARD_CHIHLDREN_SIZE = TRACHBOX_COUNT;
 //		TRACHBOX_COUNT	+ LANE_CREATER_COUNT;
 
 	protected static class TrashMock extends TrashModel {
@@ -124,6 +111,13 @@ public abstract class AbstractControllerTest {
 		}
 
 		@Override
+		public boolean containCard(Card card){
+			return cards.contains(card);
+		}
+		
+
+		
+		@Override
 		public void commitConstraint() {
 		}
 	}
@@ -194,12 +188,8 @@ public abstract class AbstractControllerTest {
 	public void init() throws Exception {
 		board = new BoardModel(new Board()){
 			private static final long serialVersionUID = 4122329778411044605L;
-
-			@Override
-			public TrashModel getTrashModel() {
-				return trashMock;
-			}
 		};
+		board.addIcon(trashMock);
 		KanbanControllerFactory factory = new KanbanControllerFactory(board);
 		viewer.setEditPartFactory(factory);
 		viewer.setContents(board);
@@ -209,7 +199,7 @@ public abstract class AbstractControllerTest {
 		assertTrue(obj instanceof BoardEditPart);
 		boardPart = (BoardEditPart) obj;
 		assertTrue(boardPart.isActive());
-		assertEquals(0, boardPart.getChildren().size());
+		assertEquals(INIT_BOARD_CHIHLDREN_SIZE, boardPart.getChildren().size());
 	}
 
 	protected Map<Object, GraphicalEditPart> getChildlenPartmap(
