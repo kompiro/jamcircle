@@ -5,6 +5,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.packet.Presence;
 import org.kompiro.jamcircle.kanban.model.User;
+import org.kompiro.jamcircle.kanban.ui.util.XMPPUtil;
 
 public class UserModel extends AbstractModel implements Comparable<UserModel>,IconModel{
 	
@@ -36,6 +37,12 @@ public class UserModel extends AbstractModel implements Comparable<UserModel>,Ic
 	public String getPresenceFrom(){
 		if(presence == null) return "";
 		return presence.getFrom();
+	}
+	
+	public String getResource(){
+		String from = getPresenceFrom();
+		if(from == null) return null;
+		return XMPPUtil.getResource(from);
 	}
 	
 	public String getUserId(){

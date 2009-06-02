@@ -36,5 +36,10 @@ public class MoveUserCommand extends AbstractCommand {
 			KanbanUIStatusHandler.fail(new RuntimeException(), "MoveUserCommand:0001:Exception is occured");
 		}
 	}
+	
+	@Override
+	public String getDebugLabel() {
+		return String.format("%s [user=%s]",super.getDebugLabel(),user);
+	}
 		
 }

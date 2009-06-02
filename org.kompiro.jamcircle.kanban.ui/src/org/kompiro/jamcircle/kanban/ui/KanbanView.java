@@ -492,6 +492,8 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 			}
 			job.schedule();
 	}
+	
+	private static Object lock = new Object();
 
 	private void refreshXmppConnectionStatus() {
 		Display display = getDisplay();
@@ -530,14 +532,20 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 					boardModel.clearUsers();
 				}
 				for(User user:userMap.values()){
+					System.out.println(String.format("%s %s",user ,user.getUserId()));
 					Presence presence = roster.getPresence(user.getUserId());
 					UserModel userModel = new UserModel(roster.getEntry(user.getUserId()),presence,user);
 					presence.isAvailable();
 					boardModel.addUser(userModel);
 				}
 			}
-		});
+			});
+		setCardReceiveFileTransferManager();
+	}
+
+	private void setCardReceiveFileTransferManager() {
 		FileTransferManager manager = getConnectionService().getFileTransferManager();
+		manager.removeFileTransferListener(cardReceiveFileTransferListener);
 		cardReceiveFileTransferListener = new CardReceiveFileTransferListener();
 		manager.addFileTransferListener(cardReceiveFileTransferListener);
 	}

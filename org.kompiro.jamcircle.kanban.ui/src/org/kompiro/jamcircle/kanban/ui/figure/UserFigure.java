@@ -24,6 +24,8 @@ public class UserFigure extends Figure {
 			add(new Label(model.getName()));
 			add(new BoldLabel("User ID:"));
 			add(new Label(model.getUserId()));
+			add(new BoldLabel("From:"));
+			add(new Label(model.getPresenceFrom()));
 		}
 	}
 

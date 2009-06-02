@@ -105,7 +105,7 @@ public class StorageServiceImpl implements StorageService {
 	}
 	
 	public String getStoreRoot() {
-		assert storeRoot == null;
+		assert storeRoot == null : "storeRoot isn't initialized.";
 		if(addtionalPath != null && !"".equals(addtionalPath)){
 			return new File(storeRoot).getAbsolutePath() + File.separator + addtionalPath + File.separator;
 		}

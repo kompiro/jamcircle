@@ -67,6 +67,8 @@ import org.kompiro.jamcircle.xmpp.ui.XMPPUIActivator;
 
 
 public class RosterView extends ViewPart implements RosterListener, XMPPLoginListener {
+
+	
 	public class AddUserAction extends Action {
 		
 		private RosterEntry entry;
@@ -283,17 +285,9 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 			this.entry = entry;
 			this.presence = presence;
 		}
-		
-		public RosterEntry getEntry() {
-			return entry;
-		}
-		
-		public Presence getPresence() {
-			return presence;
-		}
 	}
 
-	private class RoasterContentProvider implements IStructuredContentProvider, 
+	private class RosterContentProvider implements IStructuredContentProvider, 
 										   ITreeContentProvider{
 
 		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
@@ -530,7 +524,7 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 	public void createPartControl(Composite parent) {
 		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		drillDownAdapter = new DrillDownAdapter(viewer);
-		viewer.setContentProvider(new RoasterContentProvider());
+		viewer.setContentProvider(new RosterContentProvider());
 		viewer.setLabelProvider(new RosterLabelProvider());
 		makeColumns();
 		makeActions();
@@ -550,12 +544,15 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 		TreeColumn username = new TreeColumn(tree,SWT.NONE);
 		username.setResizable(true);
 		username.setWidth(200);
+		username.setText("User Name");
 		TreeColumn from = new TreeColumn(tree,SWT.NONE);
 		from.setResizable(true);
 		from.setWidth(200);
+		from.setText("From");
 		TreeColumn precenseStatus = new TreeColumn(tree,SWT.NONE);
 		precenseStatus.setResizable(true);
 		precenseStatus.setWidth(200);
+		precenseStatus.setText("status");
 	}
 
 	private void hookContextMenu() {

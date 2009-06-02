@@ -7,4 +7,12 @@ public class XMPPUtil {
 		if(resourceSpritIndex != -1) from = from.substring(0,resourceSpritIndex);
 		return from;
 	}
+	
+	public static String getResource(String from) {
+		if(from == null) return null;
+		int resourceSpritIndex = from.indexOf("/");
+		if(resourceSpritIndex == -1) return null;
+		return from = from.substring(resourceSpritIndex + 1);
+	}
+
 }
