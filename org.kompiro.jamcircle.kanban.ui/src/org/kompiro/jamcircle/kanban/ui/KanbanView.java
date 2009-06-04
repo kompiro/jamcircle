@@ -1,5 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -360,8 +362,19 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 	}
 	
 	public void setContents(Board board,final IProgressMonitor monitor) {
-		this.boardModel = new BoardModel(board);
-		refreshXmppConnectionStatus();
+		if(boardChangeListener != null){
+			getKanbanService().removePropertyChangeListener(boardChangeListener);
+		}
+		boardModel = new BoardModel(board);
+		boardChangeListener = new PropertyChangeListener() {
+			
+			public void propertyChange(PropertyChangeEvent evt) {
+				if(BoardModel.PROP_USER.equals(evt.getPropertyName())){
+					refreshXmppConnectionStatus();
+				}
+			}
+		};
+		getKanbanService().addPropertyChangeListener(boardChangeListener);
 		monitor.internalWorked(1);
 		refreshIcons();
 		monitor.internalWorked(1);
@@ -494,6 +507,7 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 	}
 	
 	private static Object lock = new Object();
+	private PropertyChangeListener boardChangeListener;
 
 	private void refreshXmppConnectionStatus() {
 		Display display = getDisplay();
@@ -553,7 +567,7 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 
 	@Override
 	public void setFocus() {
-		refreshXmppConnectionStatus();
+//		refreshXmppConnectionStatus();
 	}
 	
 	protected void hookGraphicalViewer() {

@@ -44,7 +44,10 @@ public class KanbanActivator extends Plugin {
 		super.start(context);
 		storageTracker = new ServiceTracker(context,StorageService.class.getName(), null);
 		storageTracker.open();
-		service = new KanbanServiceImpl(plugin);
+		service = new KanbanServiceImpl();
+		service.setStorageService(getStorageService());
+		getStorageService().addStorageChangeListener(service);
+
 		kanbanServiceRegistration = context.registerService(KanbanService.class.getName(), service, null);
 		if(KanbanStatusHandler.isDebug()){
 			Logger.getLogger("net.java.ao").setLevel(Level.FINE);

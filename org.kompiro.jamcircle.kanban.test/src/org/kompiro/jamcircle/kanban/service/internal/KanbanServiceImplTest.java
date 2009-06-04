@@ -10,7 +10,6 @@ import java.io.File;
 
 
 import org.junit.Test;
-import org.kompiro.jamcircle.kanban.AbstractKanbanTest;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.Lane;
@@ -19,6 +18,23 @@ import org.kompiro.jamcircle.kanban.service.KanbanService;
 
 public class KanbanServiceImplTest extends AbstractKanbanTest{
 	
+	@Test
+	public void serviceInitialize() throws Exception {
+		KanbanService service = getKanbanService();
+		service.init();
+		Board[] boards = service.findAllBoard();
+		assertEquals(1,boards.length);
+		service.init();
+		boards = service.findAllBoard();
+		assertEquals(1,boards.length);
+		Lane[] allLanes = service.findAllLanes();
+		for(Lane lane: allLanes){
+			System.out.println(lane.getBoard().getID());
+		}
+		Lane[] lanes = boards[0].getLanes();
+		assertEquals(3,lanes.length);
+	}
+
 	@Test
 	public void createCard() throws Exception {
 		KanbanService service = getKanbanService();
@@ -34,6 +50,7 @@ public class KanbanServiceImplTest extends AbstractKanbanTest{
 		User testUser = service.addUser("kompiro@test");
 		card = service.createCard(board,"test for username is null",testUser, 15, 30);
 		cards = service.findAllCards();
+		System.out.println("KanbanServiceImplTest.createCard()");
 		assertEquals(2,cards.length);
 		assertEquals("kompiro@test",cards[1].getCreated());
 		
@@ -49,7 +66,6 @@ public class KanbanServiceImplTest extends AbstractKanbanTest{
 		
 		cards = service.findAllCards();
 		assertEquals(0,cards.length);
-		
 	}
 	
 	@Test
@@ -123,20 +139,4 @@ public class KanbanServiceImplTest extends AbstractKanbanTest{
 		service.importCards(new File("C:/JAMCircle/backup/cards.csv"));
 	}
 	
-	@Test
-	public void serviceInitialize() throws Exception {
-		KanbanService service = getKanbanService();
-		service.init();
-		Board[] boards = service.findAllBoard();
-		assertEquals(1,boards.length);
-		service.init();
-		boards = service.findAllBoard();
-		assertEquals(1,boards.length);
-		Lane[] allLanes = service.findAllLanes();
-		for(Lane lane: allLanes){
-			System.out.println(lane.getBoard().getID());
-		}
-		Lane[] lanes = boards[0].getLanes();
-		assertEquals(3,lanes.length);
-	}
 }

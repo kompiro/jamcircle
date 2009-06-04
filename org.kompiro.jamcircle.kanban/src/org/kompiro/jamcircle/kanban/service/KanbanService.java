@@ -1,5 +1,6 @@
 package org.kompiro.jamcircle.kanban.service;
 
+import java.beans.PropertyChangeListener;
 import java.io.File;
 
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
@@ -109,5 +110,10 @@ public interface KanbanService {
 	void addStorageChangeListener(StorageChageListener listener);
 
 	void removeStorageChangeListener(StorageChageListener listener);
+
+	void addPropertyChangeListener(PropertyChangeListener boardChangeListener);
+
+	void removePropertyChangeListener(PropertyChangeListener boardChangeListener);
+
 	
 }

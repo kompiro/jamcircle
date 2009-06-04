@@ -1,4 +1,4 @@
-package org.kompiro.jamcircle.kanban;
+package org.kompiro.jamcircle.kanban.service.internal;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -8,82 +8,110 @@ import java.io.FilenameFilter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import net.java.ao.EntityManager;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.*;
 import org.kompiro.jamcircle.kanban.KanbanActivator;
-import org.kompiro.jamcircle.kanban.model.Board;
-import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.Icon;
-import org.kompiro.jamcircle.kanban.model.Lane;
-import org.kompiro.jamcircle.kanban.model.User;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
-import org.kompiro.jamcircle.kanban.service.internal.KanbanServiceImpl;
 
 public abstract class AbstractKanbanTest {
 	private static final String FILE = "file:";
-	protected EntityManager entityManager;
+	protected static EntityManager entityManager;
 	
-	@SuppressWarnings("unchecked")
+	@BeforeClass
+	public static void initializeEnvironment() throws Exception{
+		try{
+			KanbanActivator activator = getActivator();
+			if(activator == null){
+				throw new IllegalStateException("Please launch on PDE Environment");
+			}
+			entityManager = activator.getEntityManager();
+			Logger.getLogger("net.java.ao").setLevel(Level.FINE);
+			assertNotNull(entityManager);
+			String storePath = activator.getStorageService().getDBPath();
+			int schemeIndex = storePath.indexOf(FILE);
+			if(schemeIndex != -1){
+				storePath = storePath.substring(FILE.length());
+			}
+			assertTrue(storePath.indexOf("test") != -1);
+			System.out.println(storePath);
+			File file = new File(storePath);
+			File parentFile = file.getParentFile();
+			
+			parentFile.list(new FilenameFilter(){
+
+				public boolean accept(File file, String name) {
+					File target = new File(file,name);
+					Logger.getLogger("net.java.ao").info("deleted : " + target.getAbsolutePath());
+					return target.delete();
+				}
+			
+			});
+			assertNotNull(getKanbanService());
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			throw e;
+		}
+		System.out.println("AbstractKanbanTest.init() end");
+	}
+	
 	@Before
 	public void init() throws Exception{
-		KanbanActivator activator = getActivator();
-		if(activator == null){
-			throw new IllegalStateException("Please launch on PDE Environment");
-		}
-		entityManager = activator.getEntityManager();
-		Logger.getLogger("net.java.ao").setLevel(Level.FINE);
-		assertNotNull(entityManager);
-		String storePath = activator.getStorageService().getDBPath();
-		int schemeIndex = storePath.indexOf(FILE);
-		if(schemeIndex != -1){
-			storePath = storePath.substring(FILE.length());
-		}
-		System.out.println(storePath);
-		assertTrue(storePath.indexOf("test") != -1);
-		System.out.println(storePath);
-		File file = new File(storePath);
-		File parentFile = file.getParentFile();
-		
-		parentFile.list(new FilenameFilter(){
-
-			public boolean accept(File file, String name) {
-				File target = new File(file,name);
-				Logger.getLogger("net.java.ao").info("deleted : " + target.getAbsolutePath());
-				return target.delete();
-			}
-		
-		});
-		assertNotNull(getKanbanService());
-		System.out.println("AbstractKanbanTest.init()");
+		getKanbanService().init();
 	}
 
-	protected KanbanServiceImpl getKanbanService() {
+	protected static KanbanServiceImpl getKanbanService() {
 		KanbanService kanbanService = getActivator().getKanbanService();
 		return (KanbanServiceImpl)kanbanService;
 	}
 
-	private KanbanActivator getActivator() {
+	protected static KanbanActivator getActivator() {
 		return KanbanActivator.getDefault();
 	}
 	
 	@After
 	public void after() throws Exception{
-		assertNotNull(entityManager);
-		Card[] cards = entityManager.find(Card.class);
-		if(cards != null) entityManager.delete(cards);
+		try {
+			getKanbanService().deleteAllCards();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		Lane[] lanes = entityManager.find(Lane.class);
-		if(lanes != null) entityManager.delete(lanes);
+		try {
+			getKanbanService().deleteAllLanes();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-		User[] users = entityManager.find(User.class);
-		if(users != null) entityManager.delete(users);
-		Icon[] icons = entityManager.find(Icon.class);
-		if(icons != null) entityManager.delete(icons);
-		Board[] boards = entityManager.find(Board.class);
-		if(boards != null) entityManager.delete(boards);
+		try {
+			getKanbanService().deleteAllUsers();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			getKanbanService().deleteAllIcons();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		try {
+			getKanbanService().deleteAllBoards();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		KanbanServiceImpl service = getKanbanService();
+		service.setInitialized(false);
+//		DatabaseProvider provider = entityManager.getProvider();
+//		Connection connection = provider.getConnection();
+//		try {
+//			connection.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		provider.dispose();
 	}
 
 }

@@ -17,7 +17,7 @@ import org.kompiro.jamcircle.kanban.KanbanActivator;
 import org.osgi.framework.Bundle;
 
 public class TestUtils {
-	public static final String LONG_TXT = "/jp/changevision/jamcircle/kanban/model/long.txt";
+	public static final String LONG_TXT = "/org/kompiro/jamcircle/kanban/model/long.txt";
 
 	@Test
 	public void testReadFile() throws Exception {

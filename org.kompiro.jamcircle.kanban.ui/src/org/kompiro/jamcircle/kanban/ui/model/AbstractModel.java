@@ -12,12 +12,11 @@ public abstract class AbstractModel implements Serializable{
 	public static final String PROP_NULL = "null";
 	public static String PROP_LOCATION = "location";
 
-	private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
-
 	protected Point location;
 	
 	private boolean removed;
 
+	private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 	
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		listeners.addPropertyChangeListener(listener);

@@ -1,45 +1,43 @@
 package org.kompiro.jamcircle.kanban.service.internal;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.kompiro.jamcircle.kanban.KanbanActivator;
-import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
-import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
-import org.kompiro.jamcircle.kanban.boardtemplate.internal.ColorBoardTemplate;
-import org.kompiro.jamcircle.kanban.boardtemplate.internal.NoLaneBoardTemplate;
-import org.kompiro.jamcircle.kanban.boardtemplate.internal.TaskBoardTemplate;
-import org.kompiro.jamcircle.kanban.model.Board;
-import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.CardDTO;
-import org.kompiro.jamcircle.kanban.model.Icon;
-import org.kompiro.jamcircle.kanban.model.Lane;
-import org.kompiro.jamcircle.kanban.model.User;
-import org.kompiro.jamcircle.kanban.service.KanbanService;
-import org.kompiro.jamcircle.storage.service.StorageChageListener;
-import org.kompiro.jamcircle.storage.service.StorageService;
+import java.util.*;
 
 import net.java.ao.DBParam;
 import net.java.ao.EntityManager;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
+import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
+import org.kompiro.jamcircle.kanban.boardtemplate.internal.*;
+import org.kompiro.jamcircle.kanban.model.*;
+import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.storage.service.StorageChageListener;
+import org.kompiro.jamcircle.storage.service.StorageService;
 
+
+/**
+ * @TestContext org.kompiro.jamcircle.kanban.service.internal.KanbanServiceImplTest
+ */
 public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	
-	private KanbanActivator activator;
+	private static final int ICON_SIZE_Y = 74;
+	private static final String INBOX_ICON_MODEL = "org.kompiro.jamcircle.kanban.ui.model.InboxIconModel";
+	private static final String BOARD_SELECTER_MODEL = "org.kompiro.jamcircle.kanban.ui.model.BoardSelecterModel";
+	private static final String LANE_CREATER_MODEL = "org.kompiro.jamcircle.kanban.ui.model.LaneCreaterModel";
+	private static final String MODEL_TRASH_MODEL = "org.kompiro.jamcircle.kanban.ui.model.TrashModel";
+
 	private List<KanbanBoardTemplate> templates = new ArrayList<KanbanBoardTemplate>();
 	private boolean initialized;
 	private Object lock = new Object();
+	private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
+	private StorageService storageService;
 	
-	public KanbanServiceImpl(KanbanActivator activator) {
-		this.activator = activator; 
+	public KanbanServiceImpl() {
 		initializeTemplate();
-		assert getStorageService() == null;
-		getStorageService().addStorageChangeListener(this);
 	}
 
 	private void initializeTemplate() {
@@ -65,10 +63,10 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 			}
 			Icon[] icons = findIcons();
 			if(icons.length == 0){
-				addIcon("org.kompiro.jamcircle.kanban.ui.model.InboxIconModel",0,74 * 0);
-				addIcon("org.kompiro.jamcircle.kanban.ui.model.BoardSelecterModel",0,74 * 1);
-				addIcon("org.kompiro.jamcircle.kanban.ui.model.LaneCreaterModel",0,74 * 2);
-				addIcon("org.kompiro.jamcircle.kanban.ui.model.TrashModel",0,74 * 3);
+				addIcon(INBOX_ICON_MODEL,0,ICON_SIZE_Y * 0);
+				addIcon(BOARD_SELECTER_MODEL,0,ICON_SIZE_Y * 1);
+				addIcon(LANE_CREATER_MODEL,0,ICON_SIZE_Y * 2);
+				addIcon(MODEL_TRASH_MODEL,0,ICON_SIZE_Y * 3);
 			}
 			initialized = true;
 		}
@@ -100,7 +98,11 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 			params.add(new DBParam(Card.PROP_CONTENT,content));
 		}
 		if(user != null){
-			params.add(new DBParam(Card.PROP_CREATED, user));
+			if(user.getUserName() != null){
+				params.add(new DBParam(Card.PROP_CREATED, user.getUserName()));
+			}else{
+				params.add(new DBParam(Card.PROP_CREATED, user.getUserId()));
+			}
 			params.add(new DBParam(Card.PROP_OWNER, user));
 		}
 		params.add(new DBParam(Card.PROP_CREATEDATE, new Date()));
@@ -124,6 +126,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 			}
 			KanbanStatusHandler.fail(e, "KanbanServiceImpl#createCard() {%s}",paramMessage);
 		}
+		firePropertyChange(Card.class.getSimpleName(), null, card);
 		return card;
 	}
 
@@ -154,14 +157,6 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		}
 	}
 	
-	EntityManager getEntityManager(){
-		return getStorageService().getEntityManager();
-	}
-
-	private StorageService getStorageService() {
-		return activator.getStorageService();
-	}
-
 	public Lane createLane(Board board,String status, int x, int y,
 			int width, int height) {
 		DBParam[] params = new DBParam[]{
@@ -444,6 +439,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		} catch (SQLException e) {
 			KanbanStatusHandler.fail(e, "KanbanServiceImpl#addIcon() type:'%s' x:'%d' y:'%d' ",type,x,y);
 		}
+		
 		return icon;
 	}
 
@@ -494,6 +490,34 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 
 	public Integer getPriority() {
 		return 0;
+	}
+
+	void setInitialized(boolean initialized) {
+		this.initialized = initialized;
+	}
+
+	EntityManager getEntityManager(){
+		return getStorageService().getEntityManager();
+	}
+
+	public void setStorageService(StorageService storageService) {
+		this.storageService = storageService;
+	}
+	
+	private StorageService getStorageService() {
+		return this.storageService;
+	}
+	
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		listeners.addPropertyChangeListener(listener);
+	}
+
+	public void firePropertyChange(String propName, Object oldValue, Object newValue) {
+		listeners.firePropertyChange(propName, oldValue, newValue);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		listeners.removePropertyChangeListener(listener);
 	}
 
 }

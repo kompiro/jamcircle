@@ -18,11 +18,11 @@ import java.util.Date;
 import net.java.ao.DBParam;
 
 import org.junit.Test;
-import org.kompiro.jamcircle.kanban.AbstractKanbanTest;
 import org.kompiro.jamcircle.kanban.KanbanActivator;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.CardImpl;
 import org.kompiro.jamcircle.kanban.model.Lane;
+import org.kompiro.jamcircle.kanban.service.internal.AbstractKanbanTest;
 import org.kompiro.jamcircle.storage.service.StorageService;
 
 public class ModelTest extends AbstractKanbanTest{

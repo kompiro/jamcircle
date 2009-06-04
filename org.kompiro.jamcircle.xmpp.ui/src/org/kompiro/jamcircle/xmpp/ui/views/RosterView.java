@@ -69,7 +69,7 @@ import org.kompiro.jamcircle.xmpp.ui.XMPPUIActivator;
 public class RosterView extends ViewPart implements RosterListener, XMPPLoginListener {
 
 	
-	public class AddUserAction extends Action {
+	public final class AddUserAction extends Action {
 		
 		private RosterEntry entry;
 
@@ -89,7 +89,7 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 	}
 
 	
-	public class DeleteUserAction extends Action {
+	public final class DeleteUserAction extends Action {
 		
 		private RosterEntry entry;
 
