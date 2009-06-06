@@ -100,4 +100,4 @@ public class KanbanStatusHandler {
 		return ENABLE_LOGGING;
 	}
 
-}
+}

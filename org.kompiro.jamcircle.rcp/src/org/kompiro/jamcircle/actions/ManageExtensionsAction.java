@@ -26,4 +26,4 @@ public class ManageExtensionsAction extends Action {
 		});
 	}
 	
-}
+}

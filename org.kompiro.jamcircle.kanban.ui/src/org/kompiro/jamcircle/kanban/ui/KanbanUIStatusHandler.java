@@ -119,4 +119,4 @@ public class KanbanUIStatusHandler {
 		return new Status(IStatus.ERROR, ID_PLUGIN, IStatus.ERROR, e.getMessage(), e);
 	}
 
-}
+}
