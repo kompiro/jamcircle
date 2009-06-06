@@ -10,6 +10,7 @@ import java.io.File;
 
 
 import org.junit.Test;
+
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.Lane;
@@ -50,7 +51,6 @@ public class KanbanServiceImplTest extends AbstractKanbanTest{
 		User testUser = service.addUser("kompiro@test");
 		card = service.createCard(board,"test for username is null",testUser, 15, 30);
 		cards = service.findAllCards();
-		System.out.println("KanbanServiceImplTest.createCard()");
 		assertEquals(2,cards.length);
 		assertEquals("kompiro@test",cards[1].getCreated());
 		

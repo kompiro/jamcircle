@@ -114,9 +114,7 @@ public abstract class AbstractControllerTest {
 		public boolean containCard(Card card){
 			return cards.contains(card);
 		}
-		
 
-		
 		@Override
 		public void commitConstraint() {
 		}

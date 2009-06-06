@@ -439,7 +439,6 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		} catch (SQLException e) {
 			KanbanStatusHandler.fail(e, "KanbanServiceImpl#addIcon() type:'%s' x:'%d' y:'%d' ",type,x,y);
 		}
-		
 		return icon;
 	}
 

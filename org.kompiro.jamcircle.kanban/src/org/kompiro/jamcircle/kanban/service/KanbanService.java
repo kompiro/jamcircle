@@ -114,6 +114,5 @@ public interface KanbanService {
 	void addPropertyChangeListener(PropertyChangeListener boardChangeListener);
 
 	void removePropertyChangeListener(PropertyChangeListener boardChangeListener);
-
 	
 }

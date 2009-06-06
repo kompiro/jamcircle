@@ -98,4 +98,4 @@ public class XMPPStatusHandler {
 		return ENABLE_LOGGING;
 	}
 
-}
+}
