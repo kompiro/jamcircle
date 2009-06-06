@@ -1,12 +1,9 @@
 package org.kompiro.jamcircle.kanban.ui.gcontroller;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Map;
-
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
@@ -14,47 +11,17 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.requests.ChangeBoundsRequest;
-import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.gef.requests.GroupRequest;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.eclipse.gef.requests.*;
+import org.junit.*;
 import org.kompiro.jamcircle.kanban.model.User;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
 import org.kompiro.jamcircle.kanban.ui.command.ChangeLaneConstraintCommand;
-import org.kompiro.jamcircle.kanban.ui.gcontroller.CardCreateRequest;
-import org.kompiro.jamcircle.kanban.ui.gcontroller.CardEditPart;
-import org.kompiro.jamcircle.kanban.ui.gcontroller.LaneCreateRequest;
 import org.kompiro.jamcircle.kanban.ui.model.UserModel;
 
 public class BoardControllerTest extends AbstractControllerTest{
 
 	private Map<Object, GraphicalEditPart> boardChildrenPartMap;
 	
-	@BeforeClass
-	public static void initializeClass() throws Exception{
-//		IJobManager jobManager = Job.getJobManager();
-//		assertNotNull(jobManager);
-//		jobManager.addJobChangeListener(new JobChangeAdapter(){
-//			@Override
-//			public void scheduled(IJobChangeEvent event) {
-//				System.out.println(String.format("'%s' scheduled",event.getJob().getName()));
-//				synchronized (this) {
-//					job = event.getJob();
-//					jobSemaphore = false;
-//				}
-//			}
-//
-//			@Override
-//			public void done(IJobChangeEvent event) {
-//				synchronized (this) {
-//					System.out.println(String.format("'%s' done:",event.getJob().getName()));
-//				}
-//			}
-//		});
-	}
 	@Before
 	public void init() throws Exception {
 		super.init();

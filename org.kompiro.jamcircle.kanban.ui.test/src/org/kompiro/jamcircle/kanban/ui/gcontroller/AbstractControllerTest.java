@@ -175,7 +175,7 @@ public abstract class AbstractControllerTest {
 		comp.setLayout(new FillLayout());
 		viewer.createControl(comp);
 		shell.setAlpha(0);
-		shell.open();
+//		shell.open();
 	}
 
 	protected BoardModel board;
