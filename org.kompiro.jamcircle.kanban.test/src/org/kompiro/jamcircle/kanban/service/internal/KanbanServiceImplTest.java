@@ -1,15 +1,14 @@
 package org.kompiro.jamcircle.kanban.service.internal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 
 
 import org.junit.Test;
+import static org.easymock.EasyMock.*;
 
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Card;
@@ -22,7 +21,6 @@ public class KanbanServiceImplTest extends AbstractKanbanTest{
 	@Test
 	public void serviceInitialize() throws Exception {
 		KanbanService service = getKanbanService();
-		service.init();
 		Board[] boards = service.findAllBoard();
 		assertEquals(1,boards.length);
 		service.init();
@@ -33,13 +31,30 @@ public class KanbanServiceImplTest extends AbstractKanbanTest{
 			System.out.println(lane.getBoard().getID());
 		}
 		Lane[] lanes = boards[0].getLanes();
-		assertEquals(3,lanes.length);
+		assertEquals(3,lanes.length);			
+	}
+	
+	@Test
+	public void callFilePropertiesChangedWhenBoardCreated() throws Exception {
+		KanbanService service = getKanbanService();
+		PropertyChangeListener listnerMock = createMock(PropertyChangeListener.class);
+		;
+		try{
+			service.addPropertyChangeListener(listnerMock);
+			listnerMock.propertyChange((PropertyChangeEvent)notNull());
+			replay(listnerMock);
+			service.createBoard("test kanban");
+		}finally{
+			service.removePropertyChangeListener(listnerMock);
+		}
+		verify(listnerMock);
 	}
 
 	@Test
 	public void createCard() throws Exception {
 		KanbanService service = getKanbanService();
 		service.init();
+		
 		Board board = service.createBoard("test kanban");
 		Card card = service.createCard(board, "test", null, 10, 20);
 		Card[] cards = service.findAllCards();

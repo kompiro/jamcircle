@@ -546,7 +546,6 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 					boardModel.clearUsers();
 				}
 				for(User user:userMap.values()){
-					System.out.println(String.format("%s %s",user ,user.getUserId()));
 					Presence presence = roster.getPresence(user.getUserId());
 					UserModel userModel = new UserModel(roster.getEntry(user.getUserId()),presence,user);
 					presence.isAvailable();

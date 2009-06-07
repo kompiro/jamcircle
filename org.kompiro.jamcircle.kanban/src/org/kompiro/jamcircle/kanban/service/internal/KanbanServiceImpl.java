@@ -392,6 +392,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		} catch (SQLException e) {
 			KanbanStatusHandler.fail(e, "KanbanServiceImpl#createBoard()");			
 		}
+		firePropertyChange(Board.class.getSimpleName(), null, board);
 		return board;
 	}
 

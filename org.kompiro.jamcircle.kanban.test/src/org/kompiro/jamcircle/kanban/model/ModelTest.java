@@ -17,6 +17,7 @@ import java.util.Date;
 
 import net.java.ao.DBParam;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.KanbanActivator;
 import org.kompiro.jamcircle.kanban.model.Card;
@@ -26,6 +27,13 @@ import org.kompiro.jamcircle.kanban.service.internal.AbstractKanbanTest;
 import org.kompiro.jamcircle.storage.service.StorageService;
 
 public class ModelTest extends AbstractKanbanTest{
+	
+	private TestUtils util;
+
+	@Before
+	public void before() throws Exception {
+		util = new TestUtils();
+	}
 
 	@Test
 	public void modelRelation() throws Exception {
@@ -93,14 +101,14 @@ public class ModelTest extends AbstractKanbanTest{
 		
 		DBParam[] params = new DBParam[]{
 				new DBParam(Card.PROP_SUBJECT,"very very long value"),
-				new DBParam(Card.PROP_CONTENT,TestUtils.readFile()),
+				new DBParam(Card.PROP_CONTENT,util.readFile()),
 				new DBParam(Card.PROP_CREATEDATE,new Date()),
 				new DBParam(Card.PROP_TRASHED,false),
 		};
 		entityManager.create(Card.class,params);
 		params = new DBParam[]{
 				new DBParam(Lane.PROP_STATUS,"very very long value"),
-				new DBParam(Lane.PROP_SCRIPT,TestUtils.readFile()),
+				new DBParam(Lane.PROP_SCRIPT,util.readFile()),
 				new DBParam(Lane.PROP_CREATEDATE,new Date()),
 		};
 		entityManager.create(Lane.class,params);
@@ -115,7 +123,7 @@ public class ModelTest extends AbstractKanbanTest{
 				new DBParam(Card.PROP_TRASHED,true),
 		};
 		Card card = entityManager.create(Card.class,params);
-		File target = TestUtils.target();
+		File target = util.target();
 		card.addFile(target);
 		System.out.println(target.getAbsolutePath());
 		StorageService service = KanbanActivator.getDefault().getStorageService();
@@ -123,7 +131,7 @@ public class ModelTest extends AbstractKanbanTest{
 		assertTrue("'" + path +"' is not exist.",service.fileExists(path));
 		assertTrue(card.hasFiles());
 		FileInputStream stream = new FileInputStream(card.getFiles().get(0));
-		assertEquals(TestUtils.readFile(),getString(stream));
+		assertEquals(util.readFile(),getString(stream));
 	}
 	
 	private String getString(InputStream stream) throws IOException{

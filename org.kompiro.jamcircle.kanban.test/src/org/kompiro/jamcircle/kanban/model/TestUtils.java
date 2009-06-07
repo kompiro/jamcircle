@@ -1,28 +1,24 @@
 package org.kompiro.jamcircle.kanban.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.net.URL;
 
-
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Platform;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.KanbanActivator;
 import org.osgi.framework.Bundle;
 
 public class TestUtils {
-	public static final String LONG_TXT = "/org/kompiro/jamcircle/kanban/model/long.txt";
-
+	public static final String LONG_TXT_FILE = "long.txt";
+	public static final String LONG_TXT = "/org/kompiro/jamcircle/kanban/model/" + LONG_TXT_FILE;
+	private static Bundle bundle;
+		
 	@Test
 	public void testReadFile() throws Exception {
-		assertTrue(Platform.isRunning());
-		String stringFromFile = TestUtils.readFile();
+		String stringFromFile = readFile();
 		assertNotNull(stringFromFile);
 		assertNotSame(0,stringFromFile.length());
 		System.out.println(stringFromFile);
@@ -30,15 +26,13 @@ public class TestUtils {
 	
 	@Test
 	public void testTarget() throws Exception {
-		File target = TestUtils.target();
+		File target = target();
 		assertNotNull(target);
 		System.out.println(target.getAbsoluteFile());
 	}
 	
-	public static String readFile() throws Exception{
-		Bundle bundle = KanbanActivator.getDefault().getBundle();
-		assertNotNull(bundle);
-		URL resource = bundle.getResource(LONG_TXT);
+	public String readFile() throws Exception{
+		URL resource = getResource();
 		assertNotNull(resource);
 		InputStream stream= resource.openStream();
 		Reader r = new InputStreamReader(stream);
@@ -51,15 +45,25 @@ public class TestUtils {
 		return builder.toString();
 	}
 	
-	public static File target() throws Exception{
-		Bundle bundle = KanbanActivator.getDefault().getBundle();
-		assertNotNull(bundle);
-		URL resource = bundle.getResource(LONG_TXT);
-		resource = FileLocator.resolve(resource);
+	public File target() throws Exception{
+		URL resource = getResource();
+		if (!resource.getProtocol().equals("file")){
+			resource = FileLocator.resolve(resource);
+		}
 		if ("file".equals(resource.getProtocol())){
 			return new File(resource.getPath());
 		}
 		return null;
+	}
+
+	private URL getResource() {
+		KanbanActivator activator = KanbanActivator.getDefault();
+		if(activator == null){
+			return getClass().getResource(LONG_TXT_FILE);
+		}
+		bundle = activator.getBundle();
+
+		return bundle.getResource(LONG_TXT);
 	}
 
 }
