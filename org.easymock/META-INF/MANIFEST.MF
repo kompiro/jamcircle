@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: 1.6.0_13 (Sun Microsystems Inc.)
+Built-By: Henri
+Build-Jdk: 1.6.0_13
+Specification-Title: EasyMock
+Specification-Version: 2.5
+Implementation-Title: EasyMock
+Implementation-Version: 2.5
+Implementation-Vendor-Id: org.easymock
+Export-Package: org.easymock.internal;poweruser=true;mandatory:=poweru
+ ser;uses:="org.easymock,org.easymock.internal.matchers";version="2.5"
+ ,org.easymock.internal.matchers;poweruser=true;mandatory:=poweruser;u
+ ses:="org.easymock,org.easymock.internal";version="2.5",org.easymock;
+ uses:="org.easymock.internal,org.easymock.internal.matchers";version=
+ "2.5"
+Bundle-Version: 2.5
+Tool: Bnd-0.0.311
+Bundle-Name: EasyMock
+Bnd-LastModified: 1243130624360
+Bundle-ManifestVersion: 2
+Bundle-License: http://www.easymock.org/License.html
+Bundle-Description: EasyMock provides an easy way to create Mock Objec
+ ts for interfaces by generating them on the fly using Java's proxy me
+ chanism
+Bundle-SymbolicName: org.easymock
+Import-Package: org.easymock;version="2.5",org.easymock.internal;power
+ user=true;version="2.5",org.easymock.internal.matchers;poweruser=true
+ ;version="2.5"
+Bundle-ClassPath: easymock-2.5.jar
+

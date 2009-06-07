@@ -1,0 +1,8 @@
+JarIndex-Version: 1.0
+
+easymock-2.5.jar
+org
+org/easymock
+org/easymock/internal
+org/easymock/internal/matchers
+
