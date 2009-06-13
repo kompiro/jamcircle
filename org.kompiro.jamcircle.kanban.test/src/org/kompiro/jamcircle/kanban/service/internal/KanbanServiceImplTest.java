@@ -9,6 +9,7 @@ import static org.junit.Assume.assumeNotNull;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.*;
 
 import net.java.ao.DBParam;
 import net.java.ao.EntityManager;
@@ -64,9 +65,7 @@ public class KanbanServiceImplTest {
 		verify(listener);
 
 		PropertyChangeEvent actual = captured.getValue();
-		assertThat(actual.getPropertyName(), is("Board"));
-		assertThat((Board)actual.getNewValue(), notNullValue(Board.class));
-		assertThat(actual.getNewValue(), notNullValue());
+		assertFirePropertyWhenCreated(actual, Board.class);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -74,14 +73,7 @@ public class KanbanServiceImplTest {
 	public void fireProperiesIsCalledWhenCreateCard() throws Exception {
 		Card cardMock = createNiceMock(Card.class);
 		
-		DBParam[] args = new DBParam[]{
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-		};
+		DBParam[] args = createDBParams(6);
 		expect(managerMock.create((Class<Card>)notNull(),args)).andReturn(cardMock);
 		expect(managerMock.find((Class<Card>)anyObject(),(String)anyObject(),anyInt())).andReturn(new Card[]{cardMock});
 		replay(listener,cardMock,managerMock);
@@ -89,25 +81,49 @@ public class KanbanServiceImplTest {
 		verify(listener);
 		
 		PropertyChangeEvent actual = captured.getValue();
-		assertThat(actual.getPropertyName(), is("Card"));
-		assertThat((Card)actual.getNewValue(), notNullValue(Card.class));
-		assertThat(actual.getNewValue(), notNullValue());
+		assertFirePropertyWhenCreated(actual, Card.class);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Test
+	public void fireProperiesIsCalledWhenCreateCloneCard() throws Exception {
+		Card cardMock = createNiceMock(Card.class);
+		Card cardClonedMock = createNiceMock(Card.class);
+		
+		DBParam[] args = createDBParams(4);
+		expect(managerMock.create((Class<Card>)notNull(),args)).andReturn(cardMock);
+		expect(managerMock.find((Class<Card>)anyObject(),(String)anyObject(),anyInt())).andReturn(new Card[]{cardMock});
+		replay(listener,cardMock,cardClonedMock,managerMock);
+		service.createClonedCard(null, null, cardClonedMock, 0, 0);
+		verify(listener);
+		
+		PropertyChangeEvent actual = captured.getValue();
+		assertFirePropertyWhenCreated(actual, Card.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void fireProperiesIsCalledWhenCopyCard() throws Exception {
+		Card cardMock = createNiceMock(Card.class);
+		CardDTO dtoMock = createNiceMock(CardDTO.class);
+		
+		DBParam[] args = createDBParams(5);
+		expect(managerMock.create((Class<Card>)notNull(),args)).andReturn(cardMock);
+		expect(managerMock.find((Class<Card>)anyObject(),(String)anyObject(),anyInt())).andReturn(new Card[]{cardMock});
+		replay(listener,cardMock,dtoMock,managerMock);
+		service.createReceiveCard(null, dtoMock , null, null);
+		verify(listener);
+		
+		PropertyChangeEvent actual = captured.getValue();
+		assertFirePropertyWhenCreated(actual, Card.class);
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void fireProperiesIsCalledWhenAboutLane() throws Exception {
 		Lane laneMock = createNiceMock(Lane.class);
 		
-		DBParam[] args = new DBParam[]{
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-		};
+		DBParam[] args = createDBParams(7);
 		expect(managerMock.create((Class<Lane>)notNull(),args)).andReturn(laneMock);
 		expect(managerMock.find((Class<Lane>)anyObject(),(String)anyObject(),anyInt())).andReturn(new Lane[]{laneMock});
 		replay(listener,laneMock,managerMock);
@@ -115,9 +131,7 @@ public class KanbanServiceImplTest {
 		verify(listener);
 		
 		PropertyChangeEvent actual = captured.getValue();
-		assertThat(actual.getPropertyName(), is("Lane"));
-		assertThat((Lane)actual.getNewValue(), notNullValue(Lane.class));
-		assertThat(actual.getOldValue(), nullValue());
+		assertFirePropertyWhenCreated(actual, Lane.class);
 	}
 
 
@@ -126,16 +140,14 @@ public class KanbanServiceImplTest {
 	public void fireProperiesIsCalledWhenAboutUser() throws Exception {
 		User userMock = createNiceMock(User.class);
 
-		DBParam[] args = new DBParam[]{
-				(DBParam)anyObject(),
-		};
+		DBParam[] args = createDBParams(1);
 		expect(managerMock.create((Class<User>)notNull(),args)).andReturn(userMock);
 		expect(managerMock.find((Class<User>)anyObject(),(String)anyObject(),(String)anyObject(),anyBoolean())).andReturn(new User[]{userMock});
 		replay(listener,userMock,managerMock);
 		String user = "kompiro@kompiro.org";
 		service.addUser(user);
 		verify(listener);
-		assertFirePropertyWhenCreated(captured.getValue(),"User",User.class);
+		assertFirePropertyWhenCreated(captured.getValue(),User.class);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -158,11 +170,19 @@ public class KanbanServiceImplTest {
 
 	private void assertFirePropertyWhenCreated(
 			PropertyChangeEvent actual,
-			String propertyName,
 			Class<?> clazz) {
-		assertThat(actual.getPropertyName(), is(propertyName));
+		assertThat(actual.getPropertyName(), is(clazz.getSimpleName()));
 		assertThat(actual.getNewValue(), notNullValue());
 		assertTrue(clazz.isInstance(actual.getNewValue()));
 		assertThat(actual.getOldValue(), nullValue());
 	}
+	
+	private DBParam[] createDBParams(int size) {
+		List<DBParam> params = new ArrayList<DBParam>();
+		for(int i = 0; i < size; i++){
+			params.add((DBParam)anyObject());
+		}
+		return params.toArray(new DBParam[]{});
+	}
+
 }
