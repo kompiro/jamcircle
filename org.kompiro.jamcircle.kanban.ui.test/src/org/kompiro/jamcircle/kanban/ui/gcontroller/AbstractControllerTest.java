@@ -23,7 +23,7 @@ import org.kompiro.jamcircle.storage.IStatusHandler;
 
 public abstract class AbstractControllerTest {
 
-	private static final int LANE_CREATER_COUNT = 1;
+//	private static final int LANE_CREATER_COUNT = 1;
 	private static final int TRACHBOX_COUNT = 1;
 	public static final int INIT_BOARD_CHIHLDREN_SIZE = TRACHBOX_COUNT;
 //		TRACHBOX_COUNT	+ LANE_CREATER_COUNT;
@@ -181,12 +181,16 @@ public abstract class AbstractControllerTest {
 	protected BoardModel board;
 	protected BoardEditPart boardPart;
 	protected TrashMock trashMock = new TrashMock();
+	private Board boardEntity;
 
 	@Before
 	public void init() throws Exception {
-		board = new BoardModel(new Board()){
+		boardEntity = new Board();
+		board = new BoardModel(boardEntity){
 			private static final long serialVersionUID = 4122329778411044605L;
 		};
+		boardEntity.addPropertyChangeListener(board);
+
 		board.addIcon(trashMock);
 		KanbanControllerFactory factory = new KanbanControllerFactory(board);
 		viewer.setEditPartFactory(factory);
@@ -200,6 +204,11 @@ public abstract class AbstractControllerTest {
 		assertEquals(INIT_BOARD_CHIHLDREN_SIZE, boardPart.getChildren().size());
 	}
 
+	@After
+	public void after() throws Exception {
+		boardEntity.removePropertyChangeListener(board);		
+	}
+	
 	protected Map<Object, GraphicalEditPart> getChildlenPartmap(
 			GraphicalEditPart parentPart) {
 		Map<Object, GraphicalEditPart> partMap = new HashMap<Object, GraphicalEditPart>();

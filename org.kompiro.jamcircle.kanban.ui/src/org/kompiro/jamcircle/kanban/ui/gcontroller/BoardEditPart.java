@@ -27,6 +27,9 @@ import org.kompiro.jamcircle.kanban.ui.figure.LaneFigure.CardArea;
 import org.kompiro.jamcircle.kanban.ui.model.*;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
+/**
+ * @TestContext BoardEditPartTest
+ */
 public class BoardEditPart extends AbstractEditPart implements CardContainerEditPart{
 	public static final String TITLE_FONT_KEY = "org.kompiro.jamcircle.TITLE_FONT_KEY";
 
@@ -377,7 +380,15 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 			if(newValue != null){
 				boardTitle.setText(newValue.toString());
 			}
+		}else if(isPropUserClear(evt)){
+			for(UserEditPart user : getUserChildren().values()){
+				removeChild(user);
+			}
 		}
+	}
+
+	private boolean isPropUserClear(PropertyChangeEvent evt) {
+		return BoardModel.PROP_USER_CLEAR.equals(evt.getPropertyName());
 	}
 
 	private boolean isPropTitle(PropertyChangeEvent evt) {

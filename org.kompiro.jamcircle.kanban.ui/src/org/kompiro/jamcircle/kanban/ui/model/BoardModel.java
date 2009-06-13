@@ -18,10 +18,11 @@ import org.kompiro.jamcircle.kanban.model.LaneContainer;
 public class BoardModel extends AbstractModel implements UserModelContainer,CardContainer,LaneContainer, PropertyChangeListener{
 	
 	private static final long serialVersionUID = -7710219380100629938L;
-	public static String PROP_CARD = "PROP_CARD";
-	public static String PROP_LANE = "PROP_LANE";
-	public static String PROP_USER = "PROP_USER";
-	public static String PROP_ICON = "PROP_ICON";
+	public static final String PROP_CARD = "PROP_CARD";
+	public static final String PROP_LANE = "PROP_LANE";
+	public static final String PROP_USER = "PROP_USER";
+	public static final String PROP_USER_CLEAR = PROP_USER + "_CLEAR";
+	public static final String PROP_ICON = "PROP_ICON";
 
 	private Map<String,UserModel> users = new LinkedHashMap<String,UserModel>();
 	private List<Object> children = new ArrayList<Object>();
@@ -32,7 +33,6 @@ public class BoardModel extends AbstractModel implements UserModelContainer,Card
 	
 	public BoardModel(Board board){
 		this.board = board;
-		board.addPropertyChangeListener(this);
 	}
 	
 	public boolean addCard(Card card) {
@@ -116,7 +116,7 @@ public class BoardModel extends AbstractModel implements UserModelContainer,Card
 	
 	public void clearUsers(){
 		users.clear();
-		firePropertyChange(PROP_USER, null, null);
+		firePropertyChange(PROP_USER_CLEAR, null, null);
 	}
 	
 	public List<Object> getChildren(){

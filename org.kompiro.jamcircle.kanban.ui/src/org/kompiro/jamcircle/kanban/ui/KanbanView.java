@@ -362,19 +362,17 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 	}
 	
 	public void setContents(Board board,final IProgressMonitor monitor) {
-		if(boardChangeListener != null){
-			getKanbanService().removePropertyChangeListener(boardChangeListener);
+		if(userChangeListener != null){
+			getKanbanService().removePropertyChangeListener(userChangeListener);
+		}
+		if(boardModel != null){
+			board.removePropertyChangeListener(boardModel);
 		}
 		boardModel = new BoardModel(board);
-		boardChangeListener = new PropertyChangeListener() {
-			
-			public void propertyChange(PropertyChangeEvent evt) {
-				if(BoardModel.PROP_USER.equals(evt.getPropertyName())){
-					refreshXmppConnectionStatus();
-				}
-			}
-		};
-		getKanbanService().addPropertyChangeListener(boardChangeListener);
+		board.addPropertyChangeListener(boardModel);
+		
+		userChangeListener = new UserModifiedListener();
+		getKanbanService().addPropertyChangeListener(userChangeListener);
 		monitor.internalWorked(1);
 		refreshIcons();
 		monitor.internalWorked(1);
@@ -506,8 +504,7 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 			job.schedule();
 	}
 	
-	private static Object lock = new Object();
-	private PropertyChangeListener boardChangeListener;
+	private UserModifiedListener userChangeListener;
 
 	private void refreshXmppConnectionStatus() {
 		Display display = getDisplay();
@@ -582,6 +579,15 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		if (synchronizer == null)
 			synchronizer = new SelectionSynchronizer();
 		return synchronizer;
+	}
+
+	private final class UserModifiedListener implements
+			PropertyChangeListener {
+		public void propertyChange(PropertyChangeEvent evt) {
+			if(User.class.getSimpleName().equals(evt.getPropertyName())){
+				refreshXmppConnectionStatus();
+			}
+		}
 	}
 
 	private final class CommandStackImpl extends CommandStack {
