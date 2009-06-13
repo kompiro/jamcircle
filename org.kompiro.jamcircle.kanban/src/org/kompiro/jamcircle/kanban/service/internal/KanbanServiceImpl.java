@@ -174,6 +174,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		} catch (SQLException e) {
 			KanbanStatusHandler.fail(e, "KanbanServiceImpl#createLane()");
 		}
+		firePropertyChange(Lane.class.getSimpleName(), null, lane);
 		return lane;
 	}
 
@@ -319,13 +320,17 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		} catch (SQLException e) {
 			KanbanStatusHandler.fail(e, "KanbanServiceImpl#addUser() '%s'",userId);
 		}
+		firePropertyChange(User.class.getSimpleName(), null, user);
 		return user;
 	}
 
 	public void deleteUser(String userId) {
-		User user = findUser(userId);
+		User user,oldUser;
+		user = findUser(userId);
+		oldUser = user;
 		user.setTrashed(true);
 		user.save();
+		firePropertyChange(User.class.getSimpleName(), oldUser, null);
 	}
 
 	public User[] findAllUsers() {
