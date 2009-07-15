@@ -276,4 +276,24 @@
          version="0.0.0"
          fragment="true"/>
 
+   <plugin
+         id="org.kompiro.jamcircle.rcp.win32"
+         os="win32"
+         ws="win32,wpf"
+         arch="x86,x86_64"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.sf.feeling.swt.win32.extension"
+         os="win32"
+         ws="win32,wpf"
+         arch="x86,x86_64"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
 </feature>

@@ -494,13 +494,13 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 					return Status.OK_STATUS;
 				}
 			};
-			QualifiedName key = new QualifiedName("org.kompiro.jamcircle", "rcp");
-			IJobManager manager = Job.getJobManager();
-			Object obj = manager.currentJob().getProperty(key);
-			if(obj != null && obj instanceof IProgressMonitor){
-				IProgressMonitor monitor = (IProgressMonitor) obj;
-				job.setProgressGroup(monitor, 50);
-			}
+//			QualifiedName key = new QualifiedName("org.kompiro.jamcircle", "rcp");
+//			IJobManager manager = Job.getJobManager();
+//			Object obj = manager.currentJob().getProperty(key);
+//			if(obj != null && obj instanceof IProgressMonitor){
+//				IProgressMonitor monitor = (IProgressMonitor) obj;
+//				job.setProgressGroup(monitor, 50);
+//			}
 			job.schedule();
 	}
 	

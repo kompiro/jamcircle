@@ -8,7 +8,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/activeobjects-0.8.2.jar" sourcepath="lib/activeobjects-0.8.2.zip"/>
 	<classpathentry exported="true" kind="lib" path="lib/h2.jar" sourcepath="lib/h2-2008-04-25.zip"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

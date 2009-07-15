@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.4"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry exported="true" kind="lib" path="org.sf.feeling.swt.win32.extension_1.0.5.v20081205.jar" sourcepath="org.sf.feeling.swt.win32.extension_1.0.5.v20081205.src.zip"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
