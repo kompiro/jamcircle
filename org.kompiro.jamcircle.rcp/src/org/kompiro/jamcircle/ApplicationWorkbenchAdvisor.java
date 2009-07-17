@@ -1,5 +1,7 @@
 package org.kompiro.jamcircle;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.*;
@@ -8,6 +10,7 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.*;
+import org.eclipse.ui.statushandlers.StatusManager;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
@@ -28,9 +31,9 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 			try {
 				Class<?> clazz = Class.forName(className);
 				manager = (IKeyStateManager) clazz.newInstance();
-			} catch (ClassNotFoundException e) {
-			} catch (InstantiationException e) {
-			} catch (IllegalAccessException e) {
+			} catch (Exception e) {
+				IStatus status = new Status(IStatus.ERROR, RCPActivator.PLUGIN_ID, "Error has occured",e);
+				StatusManager.getManager().handle(status);
 			}
 		}
 	}

@@ -50,6 +50,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 //		shell.addPaintListener(listener);
 		shell.setImage(image);
 		shell.setMaximized(true);
+		shell.setFocus();
 		super.createWindowContents(shell);
 	}
 }

@@ -279,8 +279,8 @@
    <plugin
          id="org.kompiro.jamcircle.rcp.win32"
          os="win32"
-         ws="win32,wpf"
-         arch="x86,x86_64"
+         ws="win32"
+         arch="x86"
          download-size="0"
          install-size="0"
          version="0.0.0"

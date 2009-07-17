@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="JAM Circle" uid="I20090531-1900" id="org.kompiro.jamcircle.rcp.product" application="org.kompiro.jamcircle.rcp.application" version="0.8.0.qualifier" useFeatures="true" includeLaunchers="false">
+<product name="JAM Circle" uid="I20090531-1900" id="org.kompiro.jamcircle.rcp.product" application="org.kompiro.jamcircle.rcp.application" version="0.8.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.kompiro.jamcircle.rcp/icons/about2.png"/>
@@ -29,7 +29,6 @@ JRuby Project http://jruby.codehaus.org/
 
    <windowImages i16="/org.kompiro.jamcircle.rcp/icons/kanban_016.gif" i32="/org.kompiro.jamcircle.rcp/icons/kanban_032.gif" i48="/org.kompiro.jamcircle.rcp/icons/kanban_048.gif" i64="/org.kompiro.jamcircle.rcp/icons/kanban_064.gif" i128="/org.kompiro.jamcircle.rcp/icons/kanban_128.gif"/>
 
-
    <launcher name="JAMCircle">
       <linux icon="/org.kompiro.jamcircle.rcp.feature/icons/linux/kanban_048.xpm"/>
       <solaris/>
@@ -43,7 +42,6 @@ JRuby Project http://jruby.codehaus.org/
             winLargeLow="/org.kompiro.jamcircle.rcp.feature/icons/windows/kanban_048_8.bmp"/>
       </win>
    </launcher>
-
 
    <vm>
    </vm>
