@@ -1,8 +1,8 @@
 package org.kompiro.jamcircle.xmpp.exception;
 
-public class TRICHORDXMPPException extends RuntimeException {
+public class XMPPException extends RuntimeException {
 
-	public TRICHORDXMPPException(String message) {
+	public XMPPException(String message) {
 		super(message);
 	}
 
