@@ -3,115 +3,51 @@ package org.kompiro.jamcircle.kanban.ui;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.EventObject;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.bsf.BSFException;
-import org.apache.bsf.BSFManager;
-import org.apache.bsf.util.IOUtils;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.QualifiedName;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.IJobManager;
-import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.*;
 import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditDomain;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPartFactory;
-import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.*;
 import org.eclipse.gef.EditPartViewer.Conditional;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CommandStackListener;
-import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.commands.*;
 import org.eclipse.gef.editparts.ScalableRootEditPart;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
-import org.eclipse.gef.ui.actions.DeleteAction;
-import org.eclipse.gef.ui.actions.RedoAction;
-import org.eclipse.gef.ui.actions.SelectAllAction;
-import org.eclipse.gef.ui.actions.UndoAction;
-import org.eclipse.gef.ui.actions.ZoomInAction;
-import org.eclipse.gef.ui.actions.ZoomOutAction;
+import org.eclipse.gef.ui.actions.*;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuListener;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.IStatusLineManager;
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.action.*;
 import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.dnd.DropTarget;
-import org.eclipse.swt.dnd.DropTargetAdapter;
-import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.jface.viewers.*;
+import org.eclipse.swt.dnd.*;
 import org.eclipse.swt.dnd.FileTransfer;
-import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.part.CellEditorActionHandler;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
-import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.ChatManager;
-import org.jivesoftware.smack.ChatManagerListener;
-import org.jivesoftware.smack.ConnectionListener;
-import org.jivesoftware.smack.MessageListener;
-import org.jivesoftware.smack.Roster;
-import org.jivesoftware.smack.RosterListener;
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
-import org.jivesoftware.smackx.filetransfer.FileTransferListener;
-import org.jivesoftware.smackx.filetransfer.FileTransferManager;
-import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
-import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
-import org.jruby.exceptions.RaiseException;
+import org.jivesoftware.smackx.filetransfer.*;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
-import org.kompiro.jamcircle.kanban.ui.action.CaptureBoardAction;
-import org.kompiro.jamcircle.kanban.ui.action.CopyAction;
-import org.kompiro.jamcircle.kanban.ui.action.CutAction;
-import org.kompiro.jamcircle.kanban.ui.action.OpenCardListAction;
-import org.kompiro.jamcircle.kanban.ui.action.OpenCommandListAction;
-import org.kompiro.jamcircle.kanban.ui.action.PasteAction;
+import org.kompiro.jamcircle.kanban.ui.action.*;
 import org.kompiro.jamcircle.kanban.ui.command.CreateCardCommand;
 import org.kompiro.jamcircle.kanban.ui.command.RemoveCardCommand;
-import org.kompiro.jamcircle.kanban.ui.gcontroller.BoardDragTracker;
-import org.kompiro.jamcircle.kanban.ui.gcontroller.BoardEditPart;
-import org.kompiro.jamcircle.kanban.ui.gcontroller.CardCreateRequest;
-import org.kompiro.jamcircle.kanban.ui.gcontroller.CardEditPart;
-import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
-import org.kompiro.jamcircle.kanban.ui.model.DefaultIconModelFactory;
-import org.kompiro.jamcircle.kanban.ui.model.IconModel;
-import org.kompiro.jamcircle.kanban.ui.model.IconModelFactory;
-import org.kompiro.jamcircle.kanban.ui.model.UserModel;
-import org.kompiro.jamcircle.kanban.ui.util.GraphicalUtil;
-import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
-import org.kompiro.jamcircle.kanban.ui.util.XMPPUtil;
+import org.kompiro.jamcircle.kanban.ui.gcontroller.*;
+import org.kompiro.jamcircle.kanban.ui.model.*;
+import org.kompiro.jamcircle.kanban.ui.util.*;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer;
 import org.kompiro.jamcircle.kanban.ui.widget.CardObjectTransfer;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer.CardWrapper;
+import org.kompiro.jamcircle.scripting.ScriptingService;
+import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 import org.kompiro.jamcircle.storage.service.StorageChageListener;
 import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 import org.kompiro.jamcircle.xmpp.service.XMPPLoginListener;
@@ -138,7 +74,7 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		public void connectionClosedOnError(final Exception e) {
 			getDisplay().asyncExec(new Runnable(){
 				public void run() {
-					KanbanUIStatusHandler.fail(e, "exception is occured when XMPP connection closing.");
+					KanbanUIStatusHandler.info("exception is occured when XMPP connection closing.",e);
 				};
 			});
 		}
@@ -394,66 +330,43 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		Board board = boardModel.getBoard();
 		String script = board.getScript();
 		if(script != null && script.length() != 0){
+			monitor.setTaskName("execute script");
 			boardModel.clearMocks();
-			BSFManager manager = new BSFManager();
+
+			String scriptName = String.format("Board '%s' Script",board.getTitle());
+
+			Map<String,Object> beans= new HashMap<String, Object>();
+			beans.put("board", this.boardModel);
+			beans.put("monitor", monitor);
+			beans.put("JRubyType",ScriptTypes.JRuby);
+			beans.put("JavaScriptType",ScriptTypes.JavaScript);
+
+			beans.put("RED", ColorTypes.RED);
+			beans.put("YELLOW",ColorTypes.YELLOW);
+			beans.put("GREEN",ColorTypes.GREEN);
+			beans.put("LIGHT_GREEN",ColorTypes.LIGHT_GREEN);
+			beans.put("LIGHT_BLUE",ColorTypes.LIGHT_BLUE);
+			beans.put("BLUE",ColorTypes.BLUE);
+			beans.put("PURPLE",ColorTypes.PURPLE);
+			beans.put("RED_PURPLE",ColorTypes.RED_PURPLE);
+
+			beans.put("FLAG_RED", FlagTypes.RED);
+			beans.put("FLAG_WHITE",FlagTypes.WHITE);
+			beans.put("FLAG_GREEN",FlagTypes.GREEN);
+			beans.put("FLAG_BLUE",FlagTypes.BLUE);
+			beans.put("FLAG_ORANGE",FlagTypes.ORANGE);
+
 			try {
-//				Board mock = new org.kompiro.jamcircle.kanban.model.mock.Board();
-				monitor.setTaskName("execute script");
-
-				manager.registerBean("board", this.boardModel);
-				manager.registerBean("monitor", monitor);
-				manager.registerBean("JRubyType",ScriptTypes.JRuby);
-				manager.registerBean("JavaScriptType",ScriptTypes.JavaScript);
-
-				manager.registerBean("RED", ColorTypes.RED);
-				manager.registerBean("YELLOW",ColorTypes.YELLOW);
-				manager.registerBean("GREEN",ColorTypes.GREEN);
-				manager.registerBean("LIGHT_GREEN",ColorTypes.LIGHT_GREEN);
-				manager.registerBean("LIGHT_BLUE",ColorTypes.LIGHT_BLUE);
-				manager.registerBean("BLUE",ColorTypes.BLUE);
-				manager.registerBean("PURPLE",ColorTypes.PURPLE);
-				manager.registerBean("RED_PURPLE",ColorTypes.RED_PURPLE);
-
-				manager.registerBean("FLAG_RED", FlagTypes.RED);
-				manager.registerBean("FLAG_WHITE",FlagTypes.WHITE);
-				manager.registerBean("FLAG_GREEN",FlagTypes.GREEN);
-				manager.registerBean("FLAG_BLUE",FlagTypes.BLUE);
-				manager.registerBean("FLAG_ORANGE",FlagTypes.ORANGE);
-
-				
-				String scriptName = String.format("Board '%s' Script",board.getTitle());
-				String templateName = null;
-				int initLines = 0;
-				switch (board.getScriptType()){
-				case JavaScript:
-					templateName = "init.js";
-					initLines = 7;
-					break;
-				case JRuby:
-					templateName = "init.rb";
-					initLines = 4;
-					break;
-				default:
-					String message = String.format("Board's script type is null.Please check the data. id='%d'",board.getID());
-					throw new IllegalStateException(message);
-				}
-				InputStreamReader reader = new InputStreamReader(getClass().getResource(templateName).openStream());
-				script = IOUtils.getStringFromReader(reader) + script;
-				manager.exec(board.getScriptType().getType(), scriptName, -initLines, 0, script);
-//				mock.setTitle("(Scripting)" + board.getTitle());
-//				board = mock;
-			} catch (BSFException e) {
-				Throwable targetException = e.getTargetException();
-				if(targetException instanceof RaiseException){
-					RaiseException ex = (RaiseException) targetException;
-					KanbanUIStatusHandler.fail(targetException, ex.getException().asJavaString());
-					return;
-				}
-				KanbanUIStatusHandler.fail(targetException, "Scripting Exception");
-			} catch (IOException e) {
-				KanbanUIStatusHandler.fail(e, "An Error is occured when reading template script.");
+				ScriptingService service = getScriptingService();
+				service.exec(board.getScriptType(), scriptName, script,beans);
+			} catch (ScriptingException e) {
+				KanbanUIStatusHandler.fail(e, e.getMessage());
 			}
 		}
+	}
+
+	private ScriptingService getScriptingService() {
+		return KanbanUIActivator.getDefault().getScriptingService();
 	}
 
 	private void storeCurrentBoard(int id) {

@@ -10,6 +10,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.scripting.ScriptingService;
 import org.kompiro.jamcircle.storage.IStatusHandler;
 import org.kompiro.jamcircle.storage.StorageStatusHandler;
 import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
@@ -22,6 +23,8 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 
 	private static final String KEY_OF_KANBAN_SERVICE = "org.kompiro.jamcircle.kanban.service.KanbanService";
 
+	private static final String KEY_OF_SCRIPTING_SERVICE = ScriptingService.class.getName();
+
 	private static KanbanUIActivator plugin;
 
 	private ServiceTracker connectionTracker;
@@ -29,6 +32,8 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 	private IStatusHandler dialogHandler;
 
 	private ServiceTracker kanbanServiceTracker;
+
+	private ServiceTracker scriptingServiceTracker;
 
 
 	public KanbanUIActivator() {
@@ -67,6 +72,8 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 		kanbanServiceTracker.open();
 		connectionTracker = new ServiceTracker(context, KEY_OF_XMPPCONNECTION_SERVICE, null);
 		connectionTracker.open();
+		scriptingServiceTracker = new ServiceTracker(context, KEY_OF_SCRIPTING_SERVICE, null);
+		scriptingServiceTracker.open();
 //		migrate();
 	}
 
@@ -140,6 +147,14 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 		IWorkbench workbench = getWorkbench();
 		IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
 		return activeWorkbenchWindow.getShell();
+	}
+
+
+	public ScriptingService getScriptingService() {
+		ScriptingService service = (ScriptingService)scriptingServiceTracker.getService();
+		if(service == null) throw new IllegalStateException("scripting service is not enabled.");
+		service.init();
+		return service;
 	}
 	
 }

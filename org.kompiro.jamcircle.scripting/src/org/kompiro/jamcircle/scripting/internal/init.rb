@@ -1,7 +1,13 @@
+require "java"
+include_class "org.kompiro.jamcircle.kanban.model.mock.Card"
+include_class "org.kompiro.jamcircle.kanban.model.mock.Lane"
 card = $bsf.lookupBean('card');
 lane = $bsf.lookupBean('lane');
 event = $bsf.lookupBean('event');
+board = $bsf.lookupBean('board');
 monitor = $bsf.lookupBean('monitor');
+JRubyType = $bsf.lookupBean('JRubyType');
+JavaScriptType = $bsf.lookupBean('JavaScriptType');
 RED = $bsf.lookupBean('RED');
 YELLOW = $bsf.lookupBean('YELLOW');
 GREEN = $bsf.lookupBean('GREEN');

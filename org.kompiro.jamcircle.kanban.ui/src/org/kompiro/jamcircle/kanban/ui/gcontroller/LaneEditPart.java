@@ -2,71 +2,44 @@ package org.kompiro.jamcircle.kanban.ui.gcontroller;
 
 import java.beans.PropertyChangeEvent;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
 
-import org.apache.bsf.BSFException;
-import org.apache.bsf.BSFManager;
-import org.apache.bsf.util.IOUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.draw2d.ActionEvent;
-import org.eclipse.draw2d.ActionListener;
-import org.eclipse.draw2d.Clickable;
-import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.*;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.editpolicies.ComponentEditPolicy;
-import org.eclipse.gef.editpolicies.ContainerEditPolicy;
-import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
-import org.eclipse.gef.requests.ChangeBoundsRequest;
-import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.gef.requests.GroupRequest;
-import org.eclipse.gef.requests.SelectionRequest;
-import org.eclipse.jface.dialogs.*;
+import org.eclipse.gef.editpolicies.*;
+import org.eclipse.gef.requests.*;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
-import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.CardContainer;
-import org.kompiro.jamcircle.kanban.model.ColorTypes;
-import org.kompiro.jamcircle.kanban.model.FlagTypes;
-import org.kompiro.jamcircle.kanban.model.Lane;
-import org.kompiro.jamcircle.kanban.model.ScriptTypes;
-import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
+import org.kompiro.jamcircle.kanban.model.*;
+import org.kompiro.jamcircle.kanban.ui.*;
 import org.kompiro.jamcircle.kanban.ui.command.*;
 import org.kompiro.jamcircle.kanban.ui.command.provider.ConfirmProvider;
 import org.kompiro.jamcircle.kanban.ui.command.provider.MessageDialogConfirmProvider;
 import org.kompiro.jamcircle.kanban.ui.dialog.LaneEditDialog;
-import org.kompiro.jamcircle.kanban.ui.figure.CardFigure;
-import org.kompiro.jamcircle.kanban.ui.figure.LaneFigure;
-import org.kompiro.jamcircle.kanban.ui.figure.LaneIconFigure;
+import org.kompiro.jamcircle.kanban.ui.figure.*;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 import org.kompiro.jamcircle.kanban.ui.script.ScriptEvent;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListEditProvider;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer;
+import org.kompiro.jamcircle.scripting.ScriptingService;
+import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 public class LaneEditPart extends AbstractEditPart implements CardContainerEditPart{
 
@@ -469,50 +442,33 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		Lane lane = getLaneModel();
 		String script = lane.getScript();
 		if(Lane.PROP_CARD.equals(evt.getPropertyName()) && script != null){
-			try{
-				Card card = (Card) (evt.getNewValue() != null? evt.getNewValue():evt.getOldValue());
-				BSFManager manager = new BSFManager();
-				manager.registerBean("card", card);
-				manager.registerBean("lane", lane);
-				manager.registerBean("event", new ScriptEvent(evt));
-				manager.registerBean("monitor", monitor);
-				
-				manager.registerBean("RED", ColorTypes.RED);
-				manager.registerBean("YELLOW",ColorTypes.YELLOW);
-				manager.registerBean("GREEN",ColorTypes.GREEN);
-				manager.registerBean("LIGHT_GREEN",ColorTypes.LIGHT_GREEN);
-				manager.registerBean("LIGHT_BLUE",ColorTypes.LIGHT_BLUE);
-				manager.registerBean("BLUE",ColorTypes.BLUE);
-				manager.registerBean("PURPLE",ColorTypes.PURPLE);
-				manager.registerBean("RED_PURPLE",ColorTypes.RED_PURPLE);
+			Card card = (Card) (evt.getNewValue() != null? evt.getNewValue():evt.getOldValue());
+			Map<String,Object> beans= new HashMap<String, Object>();
+			beans.put("card", card);
+			beans.put("lane", lane);
+			beans.put("event", new ScriptEvent(evt));
+			beans.put("monitor", monitor);
+			
+			beans.put("RED", ColorTypes.RED);
+			beans.put("YELLOW",ColorTypes.YELLOW);
+			beans.put("GREEN",ColorTypes.GREEN);
+			beans.put("LIGHT_GREEN",ColorTypes.LIGHT_GREEN);
+			beans.put("LIGHT_BLUE",ColorTypes.LIGHT_BLUE);
+			beans.put("BLUE",ColorTypes.BLUE);
+			beans.put("PURPLE",ColorTypes.PURPLE);
+			beans.put("RED_PURPLE",ColorTypes.RED_PURPLE);
 
-				manager.registerBean("FLAG_RED", FlagTypes.RED);
-				manager.registerBean("FLAG_WHITE",FlagTypes.WHITE);
-				manager.registerBean("FLAG_GREEN",FlagTypes.GREEN);
-				manager.registerBean("FLAG_BLUE",FlagTypes.BLUE);
-				manager.registerBean("FLAG_ORANGE",FlagTypes.ORANGE);
-
-				
-				String scriptName = String.format("Lane '%s' Script",lane.getStatus());
-				String templateName = null;
-				switch (lane.getScriptType()){
-				case JavaScript:
-					templateName = "init.js";
-					break;
-				case JRuby:
-					templateName = "init.rb";
-					break;
-				default:
-					String message = String.format("Lane's script type is null.Please check the data. id='%d'",lane.getID());
-					throw new IllegalStateException(message);
-				}
-				InputStreamReader reader = new InputStreamReader(getClass().getResource(templateName).openStream());
-				script = IOUtils.getStringFromReader(reader) + script;
-				manager.exec(lane.getScriptType().getType(), scriptName, -17, 0, script);
-			} catch (BSFException e) {
-				KanbanUIStatusHandler.fail(e.getTargetException(), String.format("An Error is occured from lane's script. '%s'",e.getTargetException().getMessage()));
-			} catch (IOException e) {
-				KanbanUIStatusHandler.fail(e, "An Error is occured when reading template script.");
+			beans.put("FLAG_RED", FlagTypes.RED);
+			beans.put("FLAG_WHITE",FlagTypes.WHITE);
+			beans.put("FLAG_GREEN",FlagTypes.GREEN);
+			beans.put("FLAG_BLUE",FlagTypes.BLUE);
+			beans.put("FLAG_ORANGE",FlagTypes.ORANGE);
+			
+			String scriptName = String.format("Lane '%s' Script",lane.getStatus());
+			try {
+				getScriptingService().exec(lane.getScriptType(), scriptName, script,beans);
+			} catch (ScriptingException e) {
+				KanbanUIStatusHandler.fail(e, e.getMessage());
 			}
 		}
 	}
@@ -576,5 +532,10 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	public LaneIconFigure getLaneIconFigure() {
 		return laneIconFigure;
 	}
+	
+	private ScriptingService getScriptingService() {
+		return KanbanUIActivator.getDefault().getScriptingService();
+	}
+
 	
 }
