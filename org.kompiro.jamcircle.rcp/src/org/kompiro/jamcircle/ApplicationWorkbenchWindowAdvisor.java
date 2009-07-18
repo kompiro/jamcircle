@@ -2,10 +2,8 @@ package org.kompiro.jamcircle;
 
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.application.ActionBarAdvisor;
-import org.eclipse.ui.application.IActionBarConfigurer;
-import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
-import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.application.*;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
@@ -29,8 +27,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowStatusLine(true);
 		configurer.setShowProgressIndicator(true);
 		configurer.setTitle("JAM Circle");
-		// configurer.setShellStyle(SWT.CLOSE);
 	}
+	
 	
 	@Override
 	public void createWindowContents(Shell shell) {
@@ -49,8 +47,20 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 //		};
 //		shell.addPaintListener(listener);
 		shell.setImage(image);
-		shell.setMaximized(true);
-		shell.setFocus();
+		shell.setAlpha(0);
 		super.createWindowContents(shell);
+	}
+		
+	@Override
+	public void postWindowOpen() {
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setVisible(false);
+	}
+	
+	@Override
+	public boolean preWindowShellClose() {
+		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+		shell.setAlpha(0);
+		shell.setVisible(false);
+		return false;
 	}
 }

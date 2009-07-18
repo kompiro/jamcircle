@@ -84,7 +84,7 @@ public class XMPPActivator extends Plugin {
 						int port = setting.getPort();
 						service.login(monitor, host, resource, serviceName, port, username, password);
 					} catch (XMPPException e) {
-						XMPPStatusHandler.fail(e, "Exception is occured when initialize create Connection.");
+						XMPPStatusHandler.info("Can't create initialize Connection.",e);
 					} finally {
 						monitor.done();
 					}

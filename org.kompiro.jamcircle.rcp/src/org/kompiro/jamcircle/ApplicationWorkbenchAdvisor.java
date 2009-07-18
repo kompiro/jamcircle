@@ -16,7 +16,6 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 	private static final String ID_OF_PERSPECTIVE_KANBAN = "org.kompiro.jamcircle.kanban.ui.perspective.kanban";
     private static final String ID_OF_PERSPECTIVE_FRIENDS = "org.kompiro.jamcircle.xmpp.ui.perspective.friends";
-	private boolean postStarted = false;
 	private IKeyStateManager manager = null;
 	private TrayItem trayItem;
 	private KeyEventListener listener;
@@ -54,20 +53,11 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.PERSPECTIVE_BAR_EXTRAS, defaultPerspective);
 		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.INITIAL_FAST_VIEW_BAR_LOCATION, IWorkbenchPreferenceConstants.LEFT);
 	}
-
-	@Override
-	public boolean openWindows() {
-		if(postStarted){
-			return super.openWindows();
-		}
-		return true;
-	}
 	
 	@Override
 	public void postStartup() {
 		createTray();
 		initalizeManager();
-		postStarted = true;
 	}
 
 	private void initalizeManager() {
@@ -141,80 +131,37 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	}
 
 	private void openWindowInProgress(TrayItem trayItem) {
-//		IWorkbench workbench = PlatformUI.getWorkbench();
-//		IProgressService service = (IProgressService) workbench.getService(IProgressService.class);
-//		final Shell shell = new Shell();
-//		IRunnableContext context = new ProgressMonitorDialog(shell);
-
-//		try {
-//			String jobName = "open JAM Circle";
-//			UIJob job = new UIJob(jobName){
-//
-//				@Override
-//				public IStatus runInUIThread(IProgressMonitor monitor) {
-//					monitor.subTask("open Windows");
-//					openWindows();
-//					monitor.internalWorked(50.0);
-//					return Status.OK_STATUS;
-//				}
-//				
-//			};
-//			IProgressMonitor group = Job.getJobManager().createProgressGroup();
-//			group.beginTask(jobName, 100);
-//			job.setProgressGroup(group, 50);
-//			job.setProperty(new QualifiedName("org.kompiro.jamcircle", "rcp"), group);
-//			job.schedule();
-//			try {
-//				job.join();
-//			} catch (InterruptedException e) {
-//				RCPActivator.getDefault().logError(e);
-//			}
-//			service.showInDialog(null, job);
-//			service.runInUI(context, new IRunnableWithProgress(){
-//
-//				public void run(IProgressMonitor monitor)
-//						throws InvocationTargetException, InterruptedException {
-//					monitor.beginTask("opening board",100);
-//					openWindows();
-//					monitor.internalWorked(50);
-//				}
-//				
-//			}, null);
-//		} catch (InvocationTargetException ex) {
-//			RCPActivator.getDefault().logError(ex);
-//		} catch (InterruptedException ex) {
-//			RCPActivator.getDefault().logError(ex);
-//		}
-
-//		try {
-//			service.busyCursorWhile(new IRunnableWithProgress(){
-//
-//				public void run(IProgressMonitor monitor)
-//						throws InvocationTargetException, InterruptedException {
-//					monitor.setTaskName("opening board");
-//					openWindows();
-//					monitor.done();
-//				}
-//				
-//			});
-//		} catch (InvocationTargetException ex) {
-//			RCPActivator.getDefault().logError(ex);
-//		} catch (InterruptedException ex) {
-//			RCPActivator.getDefault().logError(ex);
-//		}
-			showToolTipForWaitOpeningBoard(trayItem);
+		showToolTipForWaitOpeningBoard(trayItem);
 	}
 	
 	private void showToolTipForWaitOpeningBoard(TrayItem trayItem) {
-		Display display = PlatformUI.getWorkbench().getDisplay();
-		Shell parent = new Shell(display);
-		ToolTip tip = new ToolTip(parent, SWT.ICON_INFORMATION);
+		final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+		ToolTip tip = new ToolTip(shell, SWT.ICON_INFORMATION);
 		tip.setText("Opening Board");
-		tip.setMessage("JAM Circle's board is opening.... Please wait...");
+		tip.setMessage("JAM Circle's board is open.");
 		trayItem.setToolTip(tip);
 		tip.setVisible(true);
-		openWindows();
+		
+		shell.setVisible(true);
+		shell.setFocus();
+		shell.setActive();
+		
+		modifyAlpha(shell, 128);
 		tip.setVisible(false);
+	}
+
+	private void modifyAlpha(final Shell shell, final int alpha) {
+		if(alpha == 0){ 
+			shell.setAlpha(255);
+			return;
+		}
+		shell.getDisplay().timerExec(50, new Runnable() {
+			
+			public void run() {
+				shell.setAlpha(255 - alpha);
+				modifyAlpha(shell, alpha / 2);
+			}
+		});
 	}
 
 	
