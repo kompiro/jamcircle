@@ -7,7 +7,7 @@ Bundle-Activator: org.kompiro.jamcircle.kanban.KanbanActivator
 Bundle-Vendor: kompiro.org
 Require-Bundle: org.eclipse.core.runtime,
  org.kompiro.jamcircle.storage;visibility:=reexport,
- org.apache.commons.lang;bundle-version="2.3.0"
+ org.apache.commons.lang
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: org.kompiro.jamcircle.kanban,

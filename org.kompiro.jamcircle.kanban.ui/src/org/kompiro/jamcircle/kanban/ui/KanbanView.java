@@ -792,4 +792,8 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		return 10;
 	}
 
+	public BoardModel getBoard() {
+		return boardModel;
+	}
+
 }

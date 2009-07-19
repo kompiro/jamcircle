@@ -35,8 +35,15 @@ public class BoardModel extends AbstractModel implements UserModelContainer,Card
 		this.board = board;
 	}
 	
-	public boolean addCard(Card card) {
-		return board.addCard(card);
+	public boolean addCard(final Card card) {
+		final boolean[] result = new boolean[1];
+		getDisplay().asyncExec(new Runnable() {
+			
+			public void run() {
+				result[0] = board.addCard(card);
+			}
+		});
+		return result[0];
 	}
 
 	public boolean containCard(Card o) {
@@ -48,8 +55,15 @@ public class BoardModel extends AbstractModel implements UserModelContainer,Card
 		return board.getCards().length == 0;
 	}
 
-	public boolean removeCard(Card card) {
-		return board.removeCard(card);
+	public boolean removeCard(final Card card) {
+		final boolean[] result = new boolean[1];
+		getDisplay().asyncExec(new Runnable() {
+			
+			public void run() {
+				result[0] = board.removeCard(card);
+			}
+		});
+		return result[0];
 	}
 	
 	public int sizeCard() {

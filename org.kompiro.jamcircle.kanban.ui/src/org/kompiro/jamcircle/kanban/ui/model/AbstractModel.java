@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 
 public abstract class AbstractModel implements Serializable{
 	private static final long serialVersionUID = 649516352865020200L;
@@ -46,6 +48,10 @@ public abstract class AbstractModel implements Serializable{
 	
 	public void setRemoved(boolean removed) {
 		this.removed = removed;
+	}
+	
+	protected Display getDisplay(){
+		return PlatformUI.getWorkbench().getDisplay();
 	}
 
 	@Override

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.console.consoleFactories">
+      <consoleFactory
+            class="org.kompiro.jamcircle.scripting.ui.ScriptingConsoleFactory"
+            icon="icons/script_gear.png"
+            label="Scripting Console">
+      </consoleFactory>
+   </extension>
+   <extension
+         point="org.eclipse.ui.console.consolePageParticipants">
+      <consolePageParticipant
+            class="org.kompiro.jamcircle.scripting.ui.ScriptingConsolePageParticipant"
+            id="org.kompiro.jamcircle.scripting.ui.consolePageParticipant1">
+         <enablement></enablement>
+      </consolePageParticipant>
+   </extension>
+
+</plugin>

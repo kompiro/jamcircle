@@ -8,9 +8,9 @@ Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.gef,
- org.kompiro.jamcircle.kanban,
+ org.kompiro.jamcircle.kanban;visibility:=reexport,
  org.apache.commons.lang;bundle-version="2.3.0",
- org.kompiro.jamcircle.xmpp,
+ org.kompiro.jamcircle.xmpp;visibility:=reexport,
  org.eclipse.equinox.security.ui;bundle-version="1.0.0",
  org.kompiro.jamcircle.scripting;bundle-version="0.1.0"
 Bundle-ActivationPolicy: lazy
