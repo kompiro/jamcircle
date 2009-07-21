@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.kompiro.jamcircle.scripting.feature"
-      label="JAMCircle Scripting Feature"
+      label="JAMCircle Scripting Feature (experimental)"
       version="0.1.0.qualifier"
       provider-name="kompiro.org">
 
@@ -62,5 +62,12 @@
          download-size="0"
          install-size="0"
          version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.core.variables"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>
