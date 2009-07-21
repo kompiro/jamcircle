@@ -19,7 +19,6 @@ import java.util.List;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.WorkbenchEncoding;
 import org.eclipse.ui.console.*;
-import org.eclipse.ui.internal.console.IOConsolePage;
 import org.eclipse.ui.part.IPageBookViewPage;
 
 /**
@@ -29,7 +28,7 @@ import org.eclipse.ui.part.IPageBookViewPage;
  * <p>
  * Clients may instantiate and subclass this class.
  * </p>
- * @since 3.1
+ * Copied from org.eclipse.ui.console 3.4.0 by kompiro
  */
 public class IOConsole extends TextConsole {
 	/**
@@ -45,7 +44,7 @@ public class IOConsole extends TextConsole {
     /**
      * A collection of open streams connected to this console.
      */
-    private List openStreams;
+    private List<Object> openStreams;
 
     /**
      * The encoding used to for displaying console output.
@@ -83,7 +82,7 @@ public class IOConsole extends TextConsole {
         if (encoding != null) {
             fEncoding = encoding;
         }
-        openStreams = new ArrayList();
+        openStreams = new ArrayList<Object>();
         inputStream = new IOConsoleInputStream(this);
         synchronized (openStreams) {
         	openStreams.add(inputStream);	

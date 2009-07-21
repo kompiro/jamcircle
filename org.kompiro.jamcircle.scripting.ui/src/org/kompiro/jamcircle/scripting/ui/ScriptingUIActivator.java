@@ -50,7 +50,9 @@ public class ScriptingUIActivator extends AbstractUIPlugin {
 	
 	@Override
 	protected void initializeImageRegistry(ImageRegistry reg) {
-		initializeImage(reg, ScriptingImageEnum.SCRIPT_GEAR);
+		for(ScriptingImageEnum e :ScriptingImageEnum.values()){
+			initializeImage(reg, e);
+		}
 	}
 	
 	private void initializeImage(ImageRegistry reg,ScriptingImageEnum constants) {

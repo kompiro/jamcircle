@@ -8,6 +8,7 @@ import org.eclipse.ui.console.ConsolePlugin;
  * @since 3.0
  * @noimplement This interface is not intended to be implemented by clients.
  * @noextend This interface is not intended to be extended by clients.
+ * Copied from org.eclipse.ui.console 3.4.0 by kompiro
  */
 public interface IConsoleConstants {
 	

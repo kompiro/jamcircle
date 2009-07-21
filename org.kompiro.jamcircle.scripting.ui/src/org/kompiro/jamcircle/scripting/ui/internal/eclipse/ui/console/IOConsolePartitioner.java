@@ -16,20 +16,20 @@ import org.eclipse.ui.progress.WorkbenchJob;
 /**
  * Partitions an IOConsole's document
  * @since 3.1
- *
+ * Copied from org.eclipse.ui.console 3.4.0 by kompiro
  */
 public class IOConsolePartitioner implements IConsoleDocumentPartitioner, IDocumentPartitionerExtension {
 	private PendingPartition consoleClosedPartition;
 	private IDocument document;
-	private ArrayList partitions;
+	private ArrayList<Object> partitions;
 	/**
 	 * Blocks of data that have not yet been appended to the document.
 	 */
-	private ArrayList pendingPartitions;
+	private ArrayList<PendingPartition> pendingPartitions;
 	/**
 	 * A list of PendingPartitions to be appended by the updateJob
 	 */
-	private ArrayList updatePartitions;
+	private ArrayList<PendingPartition> updatePartitions;
 	/**
 	 * The last partition appended to the document
 	 */
