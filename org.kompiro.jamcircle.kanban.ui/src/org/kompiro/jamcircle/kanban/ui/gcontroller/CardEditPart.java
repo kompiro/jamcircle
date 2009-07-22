@@ -454,11 +454,20 @@ public class CardEditPart extends AbstractEditPart {
 		part.setLayoutConstraint(this, cardFigure, constraint);
 	}
 	
-	public void propertyChange(PropertyChangeEvent evt) {
+	public void propertyChange(final PropertyChangeEvent evt) {
 		KanbanUIStatusHandler.debug("CardEditPart#propertyChange " +
 				"evt.getPropertyName:'" + evt.getPropertyName() + 
 				"' evt.getNewValue:'" + evt.getNewValue() + 
 				"' evt.getSource:'" + evt.getSource() + "'");
+		Display display = getDisplay();
+		display.asyncExec(new Runnable() {
+			public void run() {
+				doPropEvent(evt);
+			}
+		});
+	}
+
+	private void doPropEvent(PropertyChangeEvent evt) {
 		if(isPropLocation(evt)){
 			Object newValue = evt.getNewValue();
 			if(! (newValue instanceof Integer)) return ;

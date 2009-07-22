@@ -79,7 +79,6 @@ public class KanbanServiceImplTest {
 		replay(listener,cardMock,managerMock);
 		service.createCard(null, "test", null, 0, 0);
 		verify(listener);
-		
 		PropertyChangeEvent actual = captured.getValue();
 		assertFirePropertyWhenCreated(actual, Card.class);
 	}

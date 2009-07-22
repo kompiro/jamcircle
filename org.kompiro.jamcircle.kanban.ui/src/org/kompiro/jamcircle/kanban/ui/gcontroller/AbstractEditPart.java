@@ -12,6 +12,7 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.kompiro.jamcircle.kanban.model.GraphicalImpl;
 import org.kompiro.jamcircle.kanban.model.Icon;
@@ -169,4 +170,8 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		return this.boardModel;
 	}
 
+	protected Display getDisplay() {
+		return getViewer().getControl().getDisplay();
+	}
+	
 }
