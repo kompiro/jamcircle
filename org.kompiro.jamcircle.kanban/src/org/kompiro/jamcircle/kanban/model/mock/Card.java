@@ -33,6 +33,7 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	private boolean trashed;
 	private Date dueDate;
 	private FlagTypes flagType;
+	private User to;
 	
 	public Card(){
 		this.createdDate = new Date();
@@ -52,7 +53,9 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public void setContent(String content) {
+		String oldValue = this.content;
 		this.content = content;
+		fireProperty(Card.PROP_CONTENT, oldValue, content);
 	}
 
 	public void setSubject(String subject) {
@@ -66,7 +69,9 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public void setLane(Lane lane) {
+		Lane oldValue = this.lane;
 		this.lane = lane;
+		fireProperty(Card.PROP_LANE,oldValue,lane);
 	}
 
 	public String getStatus() {
@@ -78,7 +83,9 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public void setOwner(User user) {
+		User oldValue = this.owner;
 		this.owner = user;
+		fireProperty(Card.PROP_OWNER, oldValue, user);
 	}
 
 	public String getCreated() {
@@ -86,7 +93,9 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public void setCreated(String user) {
+		String oldValue = this.created;
 		this.created = user;
+		fireProperty(Card.PROP_CREATED, oldValue, user);
 	}
 
 	public Date getCreateDate() {
@@ -94,7 +103,9 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public void setCreateDate(Date date) {
+		Date oldValue = createdDate;
 		this.createdDate = date;
+		fireProperty(Card.PROP_COMPLETED_DATE, oldValue, date);
 	}
 
 	public boolean isTrashed() {
@@ -102,14 +113,19 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public void setTrashed(boolean trashed) {
+		boolean oldValue = this.trashed;
 		this.trashed = trashed;
+		fireProperty(Card.PROP_TRASHED, oldValue, trashed);
 	}
 
 	public User getTo() {
-		return null;
+		return to;
 	}
 
 	public void setTo(User user) {
+		User oldValue = this.to;
+		this.to = user;
+		fireProperty(Card.PROP_TO, oldValue, user);
 	}
 
 	public User getFrom() {

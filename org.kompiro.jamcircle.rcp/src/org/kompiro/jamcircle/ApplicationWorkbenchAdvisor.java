@@ -7,6 +7,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.*;
@@ -21,9 +22,8 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	private KeyEventListener listener;
 
 	public ApplicationWorkbenchAdvisor() {
-		String platform = SWT.getPlatform();
 		String className = null;
-		if ("win32".equals (platform) || "wpf".equals (platform)) {
+		if (isWindows()) {
 			className = "org.kompiro.jamcircle.rcp.win32.internal.KeyStateManagerFowWin32";
 		}
 		if (className != null){
@@ -35,6 +35,11 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 				StatusManager.getManager().handle(status);
 			}
 		}
+	}
+
+	private boolean isWindows() {
+		String platform = SWT.getPlatform();
+		return "win32".equals (platform) || "wpf".equals (platform);
 	}
 	
 	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
@@ -135,19 +140,26 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	}
 	
 	private void showToolTipForWaitOpeningBoard(TrayItem trayItem) {
-		final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-		ToolTip tip = new ToolTip(shell, SWT.ICON_INFORMATION);
-		tip.setText("Opening Board");
-		tip.setMessage("JAM Circle's board is open.");
-		trayItem.setToolTip(tip);
-		tip.setVisible(true);
+		IWorkbench workbench = PlatformUI.getWorkbench();
+		Shell shell = workbench.getActiveWorkbenchWindow().getShell();
+		ToolTip tip = null;
+		if(isWindows()){
+			tip = new ToolTip(shell , SWT.ICON_INFORMATION);
+			tip.setText("Opening Board");
+			tip.setMessage("JAM Circle's board is open.");
+			trayItem.setToolTip(tip);
+			tip.setVisible(true);			
+		}
 		
 		shell.setVisible(true);
-		shell.setFocus();
 		shell.setActive();
-		
+		shell.setFocus();
 		modifyAlpha(shell, 128);
-		tip.setVisible(false);
+		
+		if(isWindows()){
+			tip.setVisible(false);
+			tip.dispose();
+		}
 	}
 
 	private void modifyAlpha(final Shell shell, final int alpha) {
