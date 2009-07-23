@@ -56,7 +56,9 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public void setSubject(String subject) {
+		String oldValue = this.subject;
 		this.subject = subject;
+		fireProperty(Card.PROP_SUBJECT, oldValue, subject);
 	}
 
 	public Lane getLane() {

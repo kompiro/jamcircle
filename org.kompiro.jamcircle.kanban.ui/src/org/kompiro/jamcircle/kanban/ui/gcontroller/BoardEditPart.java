@@ -16,7 +16,6 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
@@ -453,11 +452,11 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		}		
 	}
 
-	private Display getDisplay() {
-		Control control = getViewer().getControl();
-		if(control == null) throw new IllegalStateException();
-		return control.getDisplay();
-	}
+//	private Display getDisplay() {
+//		Control control = getViewer().getControl();
+//		if(control == null) throw new IllegalStateException();
+//		return control.getDisplay();
+//	}
 
 	private GraphicalEditPart findEditPart(Point target) {
 		EditPartViewer viewer = getViewer();
