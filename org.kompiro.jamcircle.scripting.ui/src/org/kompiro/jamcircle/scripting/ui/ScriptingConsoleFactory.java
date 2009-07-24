@@ -1,6 +1,5 @@
 package org.kompiro.jamcircle.scripting.ui;
 
-import java.awt.EventQueue;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
@@ -12,8 +11,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.*;
 import org.eclipse.ui.console.*;
 import org.jruby.*;
-import org.jruby.demo.TextAreaReadline.Channel;
-import org.jruby.ext.Readline;
 import org.jruby.internal.runtime.ValueAccessor;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.Arity;
@@ -27,12 +24,16 @@ import org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console.IOConsoleO
 public class ScriptingConsoleFactory implements IConsoleFactory {
 
 	private static final String OUTPUT_STREAM_COLOR = "ScriptingConsoleFactory.OutputStreamColor";
+	private static final String ERROR_STREAM_COLOR = "ScriptingConsoleFactory.ErrorStreamColor";
+
 	private IOConsole console = null;
 	
 	public ScriptingConsoleFactory(){
         Color outputColor = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_BLUE);
         ColorRegistry colorRegistry = JFaceResources.getColorRegistry();
 		colorRegistry.put(OUTPUT_STREAM_COLOR, outputColor.getRGB());
+        Color errorColor = PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_RED);
+		colorRegistry.put(ERROR_STREAM_COLOR, errorColor.getRGB());
 	}
 	
 	public void openConsole() {
@@ -52,17 +53,26 @@ public class ScriptingConsoleFactory implements IConsoleFactory {
 				protected IStatus run(IProgressMonitor monitor) {
 					ImageDescriptor imageDescriptor = getImageRegistry().getDescriptor(ScriptingImageEnum.SCRIPT_GEAR.toString());
 					console = new IOConsole("JAMCircle Scripting Console", imageDescriptor);
-			        final RubyInstanceConfig config = new RubyInstanceConfig() {{
-			            setInput(console.getInputStream());
-			            IOConsoleOutputStream stream = console.newOutputStream();
-						stream.setColor(JFaceResources.getColorRegistry().get(OUTPUT_STREAM_COLOR));
-						PrintStream newOutput = new PrintStream(stream);
-						setOutput(newOutput);
-			            setError(newOutput);
-			            
-//			            setObjectSpaceEnabled(true); // useful for code completion inside the IRB
-			        }};
-			        config.setArgv(new String[]{"-Ku"});
+			        final RubyInstanceConfig config = new RubyInstanceConfig() {
+			        	{
+				            setInput(console.getInputStream());
+							createOutputStream();
+							createErrorStream();
+							setObjectSpaceEnabled(true); // useful for code completion inside the IRB
+			        	}
+
+				        private void createOutputStream() {
+							IOConsoleOutputStream stream = console.newOutputStream();
+							stream.setColor(JFaceResources.getColorRegistry().get(OUTPUT_STREAM_COLOR));
+							setOutput(new PrintStream(stream));
+						}
+						private void createErrorStream() {
+							IOConsoleOutputStream stream = console.newOutputStream();
+							stream.setColor(JFaceResources.getColorRegistry().get(ERROR_STREAM_COLOR));
+				            setError(new PrintStream(stream));
+						}
+			        };
+					config.setArgv(new String[]{"-Ku"});
 			        final Ruby runtime = JavaEmbedUtils.initialize(new ArrayList<Object>(),config);
 			        final RubyRuntimeAdapter newRuntimeAdapter = JavaEmbedUtils.newRuntimeAdapter();
 			        runtime.getLoadService().require("readline");
