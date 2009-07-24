@@ -34,6 +34,7 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	private Date dueDate;
 	private FlagTypes flagType;
 	private User to;
+	private User from;
 	
 	public Card(){
 		this.createdDate = new Date();
@@ -55,13 +56,13 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	public void setContent(String content) {
 		String oldValue = this.content;
 		this.content = content;
-		fireProperty(Card.PROP_CONTENT, oldValue, content);
+		fireProperty(PROP_CONTENT, oldValue, content);
 	}
 
 	public void setSubject(String subject) {
 		String oldValue = this.subject;
 		this.subject = subject;
-		fireProperty(Card.PROP_SUBJECT, oldValue, subject);
+		fireProperty(PROP_SUBJECT, oldValue, subject);
 	}
 
 	public Lane getLane() {
@@ -71,7 +72,7 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	public void setLane(Lane lane) {
 		Lane oldValue = this.lane;
 		this.lane = lane;
-		fireProperty(Card.PROP_LANE,oldValue,lane);
+		fireProperty(PROP_LANE,oldValue,lane);
 	}
 
 	public String getStatus() {
@@ -85,7 +86,7 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	public void setOwner(User user) {
 		User oldValue = this.owner;
 		this.owner = user;
-		fireProperty(Card.PROP_OWNER, oldValue, user);
+		fireProperty(PROP_OWNER, oldValue, user);
 	}
 
 	public String getCreated() {
@@ -95,7 +96,7 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	public void setCreated(String user) {
 		String oldValue = this.created;
 		this.created = user;
-		fireProperty(Card.PROP_CREATED, oldValue, user);
+		fireProperty(PROP_CREATED, oldValue, user);
 	}
 
 	public Date getCreateDate() {
@@ -105,7 +106,7 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	public void setCreateDate(Date date) {
 		Date oldValue = createdDate;
 		this.createdDate = date;
-		fireProperty(Card.PROP_COMPLETED_DATE, oldValue, date);
+		fireProperty(PROP_COMPLETED_DATE, oldValue, date);
 	}
 
 	public boolean isTrashed() {
@@ -115,7 +116,7 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	public void setTrashed(boolean trashed) {
 		boolean oldValue = this.trashed;
 		this.trashed = trashed;
-		fireProperty(Card.PROP_TRASHED, oldValue, trashed);
+		fireProperty(PROP_TRASHED, oldValue, trashed);
 	}
 
 	public User getTo() {
@@ -125,18 +126,22 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	public void setTo(User user) {
 		User oldValue = this.to;
 		this.to = user;
-		fireProperty(Card.PROP_TO, oldValue, user);
+		fireProperty(PROP_TO, oldValue, user);
 	}
 
 	public User getFrom() {
-		return null;
+		return from;
 	}
 
 	public void setFrom(User user) {
+		User oldValue = this.from;
+		this.from = user;
+		fireProperty(PROP_FROM, oldValue, user);
 	}
 
 	public void addFile(File file) {
 		this.files.add(file);
+		fireProperty(PROP_FILES, null, file);
 	}
 
 	public List<File> getFiles() {
@@ -163,6 +168,7 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 
 	public void deleteFile(File file) {
 		files.remove(file);
+		fireProperty(PROP_FILES, file, null);
 	}
 
 	public String getUUID() {
@@ -170,7 +176,9 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public void setUUID(String uuid) {
+		Object oldValue = this.uuid;		
 		this.uuid = uuid;
+		fireProperty(PROP_UUID, oldValue, uuid);
 	}
 
 	public ColorTypes getColorType() {
@@ -178,7 +186,9 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public void setColorType(ColorTypes colorType) {
+		Object oldValue = this.colorType;
 		this.colorType = colorType;
+		fireProperty(PROP_COLOR_TYPE, oldValue, colorType);
 	}
 	
 	public void setColorType(int colorType){
@@ -194,7 +204,9 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public void setCompleted(boolean completed) {
+		Object oldValue = this.completed;
 		this.completed = completed;
+		fireProperty(PROP_COMPLETED, oldValue, completed);
 	}
 
 	public Board getBoard() {
@@ -202,7 +214,9 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public void setBoard(Board board) {
+		Object oldValue = this.board;
 		this.board = board;
+		fireProperty(PROP_BOARD, oldValue, board);
 	}
 
 	public Date getCompletedDate() {
@@ -210,7 +224,9 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public void setCompletedDate(Date date) {
+		Object oldValue = this.completedDate;
 		this.completedDate = date;
+		fireProperty(PROP_COMPLETED_DATE, oldValue, date);
 	}
 
 	public Date getDueDate() {
@@ -218,7 +234,9 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public void setDueDate(Date date) {
+		Object oldValue = this.dueDate;
 		this.dueDate = date;
+		fireProperty(PROP_DUE_DATE, oldValue, date);
 	}
 
 	public FlagTypes getFlagType() {
@@ -226,7 +244,9 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public void setFlagType(FlagTypes flagType) {
+		Object oldValue = this.flagType;
 		this.flagType = flagType;
+		fireProperty(PROP_FLAG_TYPE, oldValue, flagType);
 	}
 
 	public void setID(int id) {
