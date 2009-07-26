@@ -244,7 +244,6 @@ public class IOConsoleOutputStream extends OutputStream {
 
     private void notifyParitioner(String encodedString) throws IOException {
         try {
-        	System.out.println(encodedString);
             partitioner.streamAppended(this, encodedString);
 
             if (activateOnWrite) {

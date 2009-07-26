@@ -4,16 +4,16 @@
    <extension
          point="org.eclipse.ui.console.consoleFactories">
       <consoleFactory
-            class="org.kompiro.jamcircle.scripting.ui.ScriptingConsoleFactory"
+            class="org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console.ScriptingConsoleFactory"
             icon="icons/script_gear.png"
-            label="Scripting Console">
+            label="Ruby Scripting Console">
       </consoleFactory>
    </extension>
    <extension
          point="org.eclipse.ui.console.consolePageParticipants">
       <consolePageParticipant
-            class="org.kompiro.jamcircle.scripting.ui.ScriptingConsolePageParticipant"
-            id="org.kompiro.jamcircle.scripting.ui.consolePageParticipant1">
+            class="org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console.ScriptingConsolePageParticipant"
+            id="org.kompiro.jamcircle.scripting.ui.consolePageParticipant">
          <enablement></enablement>
       </consolePageParticipant>
    </extension>
