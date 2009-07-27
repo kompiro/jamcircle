@@ -122,6 +122,7 @@ public class IOConsolePage extends TextConsolePage {
             fScrollLockAction = null;
         }
         getConsole().removePropertyChangeListener(fPropertyChangeListener);
+        getViewer().setEditable(false);
         super.dispose();
     }
 

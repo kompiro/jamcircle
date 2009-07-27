@@ -7,7 +7,6 @@ import java.util.*;
 import java.util.List;
 
 import org.eclipse.core.runtime.*;
-import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -22,6 +21,7 @@ import org.eclipse.gef.ui.parts.SelectionSynchronizer;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.*;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.dnd.*;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.graphics.Image;
@@ -452,6 +452,7 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		}
 		display.asyncExec(new Runnable(){
 			public void run() {
+				if(boardModel == null) return;
 				if(boardModel.sizeUsers() != 0){
 					boardModel.clearUsers();
 				}
@@ -506,7 +507,12 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 	private final class CommandStackImpl extends CommandStack {
 		@Override
 		public void execute(final Command command) {
-			getSite().getShell().setCursor(Cursors.WAIT);
+			BusyIndicator.showWhile(getDisplay(), new Runnable() {
+				public void run() {
+					CommandStackImpl.super.execute(command);
+				}
+			});
+//			getSite().getShell().setCursor(Cursors.WAIT);
 //			if(Platform.isRunning()){
 //				IProgressService service = (IProgressService) getSite().getService(IProgressService.class);
 //				IRunnableContext context = new ProgressMonitorDialog(getSite()
@@ -524,9 +530,9 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 //					KanbanUIStatusHandler.fail(e, "Opening Kanban Board is failed.");
 //				}
 //			}else{
-				super.execute(command);
+//				super.execute(command);
 //			}
-				getSite().getShell().setCursor(null);
+//				getSite().getShell().setCursor(null);
 		}
 	}
 
@@ -692,6 +698,7 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		}
 
 		public void presenceChanged(final Presence presence) {
+			if(boardModel == null) return;
 			Runnable runnable = new Runnable(){
 				public void run() {
 					String from = presence.getFrom();
@@ -703,7 +710,7 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 				}
 
 			};
-			getViewSite().getShell().getDisplay().asyncExec(runnable);
+			getDisplay().asyncExec(runnable);
 		}
 	}
 

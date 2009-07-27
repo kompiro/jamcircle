@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchEncoding;
 import org.eclipse.ui.console.*;
 import org.eclipse.ui.part.IPageBookViewPage;
@@ -50,6 +51,8 @@ public class IOConsole extends TextConsole {
      * The encoding used to for displaying console output.
      */
     private String fEncoding = WorkbenchEncoding.getWorkbenchDefaultEncoding();
+
+	private IOConsolePage consolePage;
 
     
     /**
@@ -121,7 +124,8 @@ public class IOConsole extends TextConsole {
      * @see org.eclipse.ui.console.IConsole#createPage(org.eclipse.ui.console.IConsoleView)
      */
     public IPageBookViewPage createPage(IConsoleView view) {
-        return new IOConsolePage(this, view);
+        consolePage = new IOConsolePage(this, view);
+		return consolePage;
     }
     
     /**
@@ -276,6 +280,11 @@ public class IOConsole extends TextConsole {
         	}
         }
         inputStream = null;
+        PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+			public void run() {
+				consolePage.dispose();
+			}
+		});
     }
 
     /**
