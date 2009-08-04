@@ -3,8 +3,8 @@
 	<target name="main">
 		<ant antfile="build.xml" dir="../org.apache.bsf" target="build.jars"/>
 		<ant antfile="build.xml" dir="../org.mozilla.javascript" target="build.jars"/>
-		<ant antfile="build.xml" dir="../org.jruby" target="build.jars"/>
 		<ant antfile="build.xml" dir="../org.kompiro.jamcircle.scripting" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.jruby" target="build.jars"/>
 		<ant antfile="build.xml" dir="../org.kompiro.jamcircle.scripting.ui" target="build.jars"/>
 	</target>
 </project>
