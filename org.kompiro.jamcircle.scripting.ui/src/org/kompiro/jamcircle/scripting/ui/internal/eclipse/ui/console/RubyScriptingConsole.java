@@ -13,14 +13,25 @@
 package org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.WorkbenchEncoding;
+import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.resource.*;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.*;
 import org.eclipse.ui.console.*;
 import org.eclipse.ui.part.IPageBookViewPage;
+import org.jruby.*;
+import org.jruby.internal.runtime.ValueAccessor;
+import org.jruby.javasupport.JavaEmbedUtils;
+import org.jruby.runtime.builtin.IRubyObject;
+import org.kompiro.jamcircle.kanban.ui.KanbanView;
+import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
 
 /**
  * A console that displays text from I/O streams. An I/O console can have multiple
@@ -31,7 +42,11 @@ import org.eclipse.ui.part.IPageBookViewPage;
  * </p>
  * Copied from org.eclipse.ui.console 3.4.0 by kompiro
  */
-public class IOConsole extends TextConsole {
+public class RubyScriptingConsole extends TextConsole {
+
+	private static final String OUTPUT_STREAM_COLOR = "RubyScriptingConsole.OutputStreamColor";
+	private static final String ERROR_STREAM_COLOR = "RubyScriptingConsole.ErrorStreamColor";
+
 	/**
 	 * The document partitioner
 	 */
@@ -54,6 +69,14 @@ public class IOConsole extends TextConsole {
 
 	private IOConsolePage consolePage;
 
+	private Ruby runtime;
+
+	private IOConsoleOutputStream output;
+
+	private IOConsoleOutputStream error;
+
+	private IOConsoleInputStream input;
+
     
     /**
      * Constructs a console with the given name, type, image, and lifecycle, with the
@@ -65,7 +88,7 @@ public class IOConsole extends TextConsole {
      * @param autoLifecycle whether lifecycle methods should be called automatically
      *  when this console is added/removed from the console manager
      */
-    public IOConsole(String name, String consoleType, ImageDescriptor imageDescriptor, boolean autoLifecycle) {
+    public RubyScriptingConsole(String name, String consoleType, ImageDescriptor imageDescriptor, boolean autoLifecycle) {
         this(name, consoleType, imageDescriptor, null, autoLifecycle);
     }
 
@@ -80,7 +103,7 @@ public class IOConsole extends TextConsole {
      * @param autoLifecycle whether lifecycle methods should be called automatically
      *  when this console is added/removed from the console manager
      */
-    public IOConsole(String name, String consoleType, ImageDescriptor imageDescriptor, String encoding, boolean autoLifecycle) {
+    public RubyScriptingConsole(String name, String consoleType, ImageDescriptor imageDescriptor, String encoding, boolean autoLifecycle) {
         super(name, consoleType, imageDescriptor, autoLifecycle);
         if (encoding != null) {
             fEncoding = encoding;
@@ -104,7 +127,7 @@ public class IOConsole extends TextConsole {
      * @param consoleType console type identifier or <code>null</code>
      * @param imageDescriptor image to display for this console or <code>null</code>
      */
-    public IOConsole(String name, String consoleType, ImageDescriptor imageDescriptor) {
+    public RubyScriptingConsole(String name, String consoleType, ImageDescriptor imageDescriptor) {
         this(name, consoleType, imageDescriptor, true);
     }    
     
@@ -116,7 +139,7 @@ public class IOConsole extends TextConsole {
      * @param name name to display for this console
      * @param imageDescriptor image to display for this console or <code>null</code>
      */
-    public IOConsole(String name, ImageDescriptor imageDescriptor) {
+    public RubyScriptingConsole(String name, ImageDescriptor imageDescriptor) {
         this(name, null, imageDescriptor);
     }
     
@@ -298,4 +321,136 @@ public class IOConsole extends TextConsole {
 	public String getEncoding() {
 		return fEncoding;
 	}
+	
+	@Override
+	protected void init() {	
+        input = getInputStream();
+        output = newOutputStream();
+        error = newOutputStream();
+        Display display = getDisplay();
+        display.asyncExec(new Runnable() {
+			public void run() {
+		        init_in_swt_thread();
+			}
+		});
+
+        createJob();
+	}
+	
+	private void createJob() {
+		final Job initJob = new Job("initialize ruby runtime"){
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				RubyInstanceConfig config = new RubyInstanceConfig();
+				config.setArgv(new String[]{"-Ku"});
+		        config.setObjectSpaceEnabled(true);
+				config.setOutput(new PrintStream(output));
+				config.setInput(input);
+				config.setError(new PrintStream(error));
+				runtime = JavaEmbedUtils.initialize(new ArrayList<Object>(),config);
+		        IRubyObject rubyBoard = JavaEmbedUtils.javaToRuby(runtime, new BoardAccessor());
+		        runtime.getGlobalVariables().defineReadonly("$board_accessor", new ValueAccessor(rubyBoard));		        
+		        runtime.getGlobalVariables().defineReadonly("$$", new ValueAccessor(runtime.newFixnum(System.identityHashCode(runtime))));
+				return Status.OK_STATUS;
+			}
+		};
+		initJob.schedule();
+		Job reader = new Job("Run IRB"){
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					initJob.join();
+				} catch (InterruptedException e) {
+					return new Status(Status.WARNING, ScriptingUIActivator.PLUGIN_ID, "", e);
+				}
+
+		        RubyRuntimeAdapter runtimeAdapter = JavaEmbedUtils.newRuntimeAdapter();
+
+		        String script = 
+					"require 'jruby';\n" +
+					"require 'irb';\n" +
+					"require 'irb/completion';\n";
+                runtimeAdapter.eval(runtime, script);
+                script = 
+					"import 'org.kompiro.jamcircle.kanban.model.mock.Card'; \n" +
+					"import 'org.kompiro.jamcircle.kanban.model.mock.Lane'; \n";
+                runtimeAdapter.eval(runtime, script);
+                script = 
+					"def board\n" +
+					"  return $board_accessor.board\n" +
+					"end\n" +
+                	"IRB.setup nil;\n" +
+                	"irb = IRB::Irb.new;\n" +
+                	"irb.context.prompt_mode=:DEFAULT;\n" +
+                	"IRB.conf[:IRB_RC].call(irb.context) if IRB.conf[:IRB_RC];\n" +
+                	"IRB.conf[:MAIN_CONTEXT] = irb.context;\n" +
+                	"trap(\"SIGINT\") do\n" +
+                	"  irb.signal_handle;\n" +
+                	"end;\n" +
+                	"catch(:IRB_EXIT) do\n" +
+                	"  irb.eval_input;\n" +
+                	"end\n";
+				runtimeAdapter.eval(runtime, script);
+				shutdown();
+				return Status.OK_STATUS;
+			}
+			
+        };
+        reader.setSystem(true);
+        reader.schedule();
+	}
+
+	public class BoardAccessor{
+		public Object getBoard() {
+			final Object[] ret = new Object[1];
+			getDisplay().syncExec(new Runnable() {
+				public void run() {
+					IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+					KanbanView view = null;
+					if (window != null) {
+						IWorkbenchPage page = window.getActivePage();
+						if (page != null) {
+							view = (KanbanView) page.findView(KanbanView.ID);
+						}
+					}
+					KanbanView kanbanView = view;
+					ret[0] = kanbanView.getBoard();
+				}
+			});
+			return ret[0];
+		}
+	}
+
+	private void shutdown() {
+		JavaEmbedUtils.terminate(runtime);
+		runtime = null;
+		getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				getConsoleManager().removeConsoles(new IConsole[]{RubyScriptingConsole.this});
+			}
+		});
+		input = null;
+		output = null;
+		error = null;
+	}
+
+	private static Display getDisplay() {
+		return PlatformUI.getWorkbench().getDisplay();
+	}
+
+	private IConsoleManager getConsoleManager() {
+		return ConsolePlugin.getDefault().getConsoleManager();
+	}
+
+	private void init_in_swt_thread() {
+		Display display = getDisplay();
+		Color outputColor = display.getSystemColor(SWT.COLOR_BLUE);
+		ColorRegistry colorRegistry = JFaceResources.getColorRegistry();
+		colorRegistry.put(OUTPUT_STREAM_COLOR, outputColor.getRGB());
+		Color errorColor = display.getSystemColor(SWT.COLOR_RED);
+		colorRegistry.put(ERROR_STREAM_COLOR, errorColor.getRGB());
+		output.setColor(JFaceResources.getColorRegistry().get(OUTPUT_STREAM_COLOR));
+        error.setColor(JFaceResources.getColorRegistry().get(ERROR_STREAM_COLOR));
+	}
+
 }

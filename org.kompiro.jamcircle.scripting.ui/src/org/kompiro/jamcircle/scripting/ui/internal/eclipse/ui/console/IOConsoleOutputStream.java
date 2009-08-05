@@ -47,7 +47,7 @@ public class IOConsoleOutputStream extends OutputStream {
     /**
      * The console this stream is attached to.
      */
-    private IOConsole console;
+    private RubyScriptingConsole console;
     
     /**
      * Flag indicating that the console should be activated when data
@@ -77,7 +77,7 @@ public class IOConsoleOutputStream extends OutputStream {
      * 
      * @param console I/O console
      */
-    IOConsoleOutputStream(IOConsole console) {
+    IOConsoleOutputStream(RubyScriptingConsole console) {
         this.console = console;
         this.partitioner = (IOConsolePartitioner) console.getPartitioner();
     }

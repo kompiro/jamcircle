@@ -23,6 +23,7 @@ public class TrashFigure extends Figure {
 	public TrashFigure(TrashModel trash,ImageRegistry imageRegistry){
 		this.trash = trash;
 		this.imageRegistry = imageRegistry;
+		this.figure = new ImageFigure();
 	}
 
 	public void setImage() {

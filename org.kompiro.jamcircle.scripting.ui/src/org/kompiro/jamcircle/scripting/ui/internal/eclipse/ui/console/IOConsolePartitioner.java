@@ -63,7 +63,7 @@ public class IOConsolePartitioner implements IConsoleDocumentPartitioner, IDocum
 	private int lowWaterMark = -1;
     private boolean connected = false;
 
-    private IOConsole console;
+    private RubyScriptingConsole console;
 	
 	private TrimJob trimJob = new TrimJob();
 	/**
@@ -76,7 +76,7 @@ public class IOConsolePartitioner implements IConsoleDocumentPartitioner, IDocum
     
     private int fBuffer; 
     
-	public IOConsolePartitioner(IOConsoleInputStream inputStream, IOConsole console) {
+	public IOConsolePartitioner(IOConsoleInputStream inputStream, RubyScriptingConsole console) {
 		this.inputStream = inputStream;
 		this.console = console;
 		trimJob.setRule(console.getSchedulingRule());

@@ -18,9 +18,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 
 /**
- * InputStream used to read input from an {@link IOConsole}. 
+ * InputStream used to read input from an {@link RubyScriptingConsole}. 
  * This stream will buffer input that it receives until it has been read.
- * An input stream is available from its {@link IOConsole}.
+ * An input stream is available from its {@link RubyScriptingConsole}.
  * @since 3.1
  * @noinstantiate This class is not intended to be instantiated by clients.
  * @noextend This class is not intended to be subclassed by clients.
@@ -62,7 +62,7 @@ public class IOConsoleInputStream extends InputStream {
     /**
      * The console that this stream is connected to.
      */
-    private IOConsole console;
+    private RubyScriptingConsole console;
     
     /**
      * The color used to display input in the console.
@@ -80,7 +80,7 @@ public class IOConsoleInputStream extends InputStream {
      * 
      * @param console I/O console
      */
-    IOConsoleInputStream(IOConsole console) {
+    IOConsoleInputStream(RubyScriptingConsole console) {
         this.console = console;
     }
     
