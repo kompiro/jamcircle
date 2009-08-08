@@ -14,19 +14,25 @@ package org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.*;
+import org.eclipse.jface.text.*;
+import org.eclipse.jface.text.contentassist.*;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.*;
 import org.eclipse.ui.console.*;
 import org.eclipse.ui.part.IPageBookViewPage;
 import org.jruby.*;
+import org.jruby.ext.Readline;
 import org.jruby.internal.runtime.ValueAccessor;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
@@ -76,7 +82,9 @@ public class RubyScriptingConsole extends TextConsole {
 	private IOConsoleOutputStream error;
 
 	private IOConsoleInputStream input;
-
+	
+	private ControlFromKey keyListener;
+	private ContentAssistant assist;
     
     /**
      * Constructs a console with the given name, type, image, and lifecycle, with the
@@ -148,6 +156,85 @@ public class RubyScriptingConsole extends TextConsole {
      */
     public IPageBookViewPage createPage(IConsoleView view) {
         consolePage = new IOConsolePage(this, view);
+        assist = new ContentAssistant();
+        assist.setContentAssistProcessor(new IContentAssistProcessor() {
+			
+			private String lastError;
+			private ContextInformationValidator contextInfoValidator;
+			{
+				contextInfoValidator = new ContextInformationValidator(this);
+			}
+
+			public String getErrorMessage() {
+				return lastError;
+			}
+			
+			public IContextInformationValidator getContextInformationValidator() {
+				return contextInfoValidator;
+			}
+			
+			public char[] getContextInformationAutoActivationCharacters() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			public char[] getCompletionProposalAutoActivationCharacters() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			public IContextInformation[] computeContextInformation(ITextViewer viewer,
+					int offset) {
+				lastError = "No Context Information available";
+				return null;
+			}
+			
+			public ICompletionProposal[] computeCompletionProposals(
+					ITextViewer textViewer, int documentOffset) {
+				IDocument document = textViewer.getDocument();
+				int currOffset = documentOffset - 1;
+
+				try {
+					String currWord = "";
+					char currChar;
+					while (currOffset > 0
+							&& !Character.isWhitespace(currChar = document
+									.getChar(currOffset))) {
+						currWord = currChar + currWord;
+						currOffset--;
+					}
+			        List<?> suggestions = new LinkedList<String>();
+					IDocument doc = getDocument();
+					Readline.getCompletor(Readline.getHolder(runtime)).complete(doc.get(), doc.getLength(),  suggestions);
+
+					ICompletionProposal[] proposals = null;
+					if (suggestions.size() > 0) {
+						proposals = buildProposals(suggestions, currWord,
+								documentOffset - currWord.length());
+						lastError = null;
+					}
+					return proposals;
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+					lastError = e.getMessage();
+					return null;
+				}
+			}
+
+			private ICompletionProposal[] buildProposals(List<?> suggestions,
+					String replacedWord, int offset) {
+				ICompletionProposal[] proposals = new ICompletionProposal[suggestions
+						.size()];
+				int index = 0;
+				for (Object suggestion : suggestions) {
+					String currSuggestion = suggestion.toString();
+					proposals[index] = new CompletionProposal(currSuggestion, offset,
+							replacedWord.length(), currSuggestion.length());
+					index++;
+				}
+				return proposals;
+			}
+		}, "org.eclipse.ui.console.io_console_input_partition_type");
 		return consolePage;
     }
     
@@ -303,7 +390,9 @@ public class RubyScriptingConsole extends TextConsole {
         	}
         }
         inputStream = null;
-        PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+        Display display = getDisplay();
+        if(display.isDisposed()) return;
+		display.syncExec(new Runnable() {
 			public void run() {
 				consolePage.dispose();
 			}
@@ -400,6 +489,29 @@ public class RubyScriptingConsole extends TextConsole {
         reader.schedule();
 	}
 
+	private final class ControlFromKey extends KeyAdapter implements VerifyListener{
+		@Override
+		public void keyPressed(KeyEvent event) {
+			switch(event.keyCode){
+			case SWT.F5:
+				event.doit = false;
+				System.out.println("F10 key is inputed.");
+				completeAction(event);
+				break;
+			case 9:
+				break;
+			default:
+			}
+		}
+
+		public void verifyText(VerifyEvent event) {
+			if(event.text.equals("\t")){
+				event.doit = false;
+				completeAction(event);
+			}
+		}
+	}
+
 	public class BoardAccessor{
 		public Object getBoard() {
 			final Object[] ret = new Object[1];
@@ -424,17 +536,29 @@ public class RubyScriptingConsole extends TextConsole {
 	private void shutdown() {
 		JavaEmbedUtils.terminate(runtime);
 		runtime = null;
-		getDisplay().asyncExec(new Runnable() {
-			public void run() {
-				getConsoleManager().removeConsoles(new IConsole[]{RubyScriptingConsole.this});
-			}
-		});
 		input = null;
 		output = null;
 		error = null;
+
+		Display display = getDisplay();
+		if(display.isDisposed()) return;
+		display.asyncExec(new Runnable() {
+			public void run() {
+				getConsoleManager().removeConsoles(new IConsole[]{RubyScriptingConsole.this});
+		        TextConsoleViewer viewer = consolePage.getViewer();
+		        Control control = viewer.getControl();
+		        if (control instanceof StyledText) {
+		        	StyledText text = (StyledText) control;
+					keyListener = new ControlFromKey();
+					text.removeKeyListener(keyListener);
+					text.removeVerifyListener(keyListener);
+				}
+				assist.uninstall();
+			}
+		});
 	}
 
-	private static Display getDisplay() {
+	private Display getDisplay() {
 		return PlatformUI.getWorkbench().getDisplay();
 	}
 
@@ -451,6 +575,63 @@ public class RubyScriptingConsole extends TextConsole {
 		colorRegistry.put(ERROR_STREAM_COLOR, errorColor.getRGB());
 		output.setColor(JFaceResources.getColorRegistry().get(OUTPUT_STREAM_COLOR));
         error.setColor(JFaceResources.getColorRegistry().get(ERROR_STREAM_COLOR));
+        assist.install(consolePage.getViewer());
+        TextConsoleViewer viewer = consolePage.getViewer();
+        Control control = viewer.getControl();
+        if (control instanceof StyledText) {
+        	StyledText text = (StyledText) control;
+			keyListener = new ControlFromKey();
+			text.addKeyListener(keyListener);
+			text.addVerifyListener(keyListener);
+		}
 	}
+
+    protected void completeAction(KeyEvent event) {
+        if (Readline.getCompletor(Readline.getHolder(runtime)) == null) return;
+        assist.showPossibleCompletions();
+//        List candidates = new LinkedList();
+//        String bufstr = null;
+//        try {
+//            bufstr = area.getText(startPos, area.getCaretPosition() - startPos);
+//        } catch (BadLocationException e) {
+//            return;
+//        }
+//        
+//        int cursor = area.getCaretPosition() - startPos;
+//        
+//        int position = Readline.getCompletor(Readline.getHolder(runtime)).complete(bufstr, cursor, candidates);
+//        
+//        // no candidates? Fail.
+//        if (candidates.isEmpty())
+//            return;
+//        
+//        if (candidates.size() == 1) {
+//            replaceText(startPos + position, area.getCaretPosition(), (String) candidates.get(0));
+//            return;
+//        }
+//        
+//        start = startPos + position;
+//        end = area.getCaretPosition();
+//        
+//        Point pos = area.getCaret().getMagicCaretPosition();
+//
+//        // bit risky if someone changes completor, but useful for method calls
+//        int cutoff = bufstr.substring(position).lastIndexOf('.') + 1;
+//        start += cutoff;
+//
+//        if (candidates.size() < 10)
+//            completePopup.getList().setVisibleRowCount(candidates.size());
+//        else
+//            completePopup.getList().setVisibleRowCount(10);
+//
+//        completeCombo.removeAllItems();
+//        for (Iterator i = candidates.iterator(); i.hasNext();) {
+//            String item = (String) i.next();
+//            if (cutoff != 0) item = item.substring(cutoff);
+//            completeCombo.addItem(item);
+//        }
+//
+//        completePopup.show(area, pos.x, pos.y + area.getFontMetrics(area.getFont()).getHeight());
+    }
 
 }
