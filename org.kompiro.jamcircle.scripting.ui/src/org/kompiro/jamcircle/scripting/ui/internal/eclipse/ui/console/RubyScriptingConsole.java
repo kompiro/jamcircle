@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.*;
 
+import jline.History;
 
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.Job;
@@ -24,13 +25,16 @@ import org.eclipse.jface.text.*;
 import org.eclipse.jface.text.contentassist.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.*;
+import org.eclipse.swt.custom.VerifyKeyListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.*;
 import org.eclipse.ui.console.*;
 import org.eclipse.ui.part.IPageBookViewPage;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.jruby.*;
 import org.jruby.ext.Readline;
 import org.jruby.internal.runtime.ValueAccessor;
@@ -174,12 +178,10 @@ public class RubyScriptingConsole extends TextConsole {
 			}
 			
 			public char[] getContextInformationAutoActivationCharacters() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			public char[] getCompletionProposalAutoActivationCharacters() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
@@ -489,26 +491,106 @@ public class RubyScriptingConsole extends TextConsole {
         reader.schedule();
 	}
 
-	private final class ControlFromKey extends KeyAdapter implements VerifyListener{
-		@Override
-		public void keyPressed(KeyEvent event) {
+	private final class CaretMoveListener implements
+			IDocumentListener {
+		private final StyledText text;
+
+		private CaretMoveListener(StyledText text) {
+			this.text = text;
+		}
+
+		public void documentChanged(DocumentEvent event) {
+			text.setCaretOffset(event.getDocument().getLength());
+		}
+
+		public void documentAboutToBeChanged(DocumentEvent event) {
+		}
+	}
+
+	private final class ControlFromKey implements VerifyKeyListener{
+
+		public void verifyKey(VerifyEvent event) {
 			switch(event.keyCode){
-			case SWT.F5:
+			case SWT.ARROW_UP:
 				event.doit = false;
-				System.out.println("F10 key is inputed.");
+				upAction();
+				break;
+			case SWT.ARROW_DOWN:
+				event.doit = false;
+				downAction();
+				break;
+			case '\r':
+				IDocument doc = getDocument();
+				try {
+					String text = doc.get(getLastOffset(), doc.getLength()-getLastOffset());
+					Readline.getHistory(Readline.getHolder(runtime)).addToHistory(text);
+				} catch (BadLocationException e) {
+				}
+				break;
+			case '\t':
+				event.doit = false;
 				completeAction(event);
-				break;
-			case 9:
-				break;
 			default:
 			}
 		}
 
-		public void verifyText(VerifyEvent event) {
-			if(event.text.equals("\t")){
-				event.doit = false;
-				completeAction(event);
+		private void downAction() {
+//	        if (!Readline.getHistory(Readline.getHolder(runtime)).next()) return;
+	        
+	        History history = Readline.getHistory(Readline.getHolder(runtime));
+			if (history.next()){ // at end
+//	            history.previous(); // undo check
+	            String oldLine = history.current().trim();
+		        write(oldLine);
+	        }
+		}
+
+		private void upAction() {
+//	        if (!Readline.getHistory(Readline.getHolder(runtime)).next()) // at end
+//	            return;
+//	        else
+//	            Readline.getHistory(Readline.getHolder(runtime)).previous(); // undo check
+	        
+	        History history = Readline.getHistory(Readline.getHolder(runtime));
+			if (!history.previous()) return;
+	        
+	        String oldLine = history.current().trim();
+	        write(oldLine);
+		}
+
+		private void write(String oldLine) {
+			try {
+				int last = getLastestIndex();
+				ITypedRegion partition = getPartitioner().getPartition(last);
+				int lastOffset;
+				if(IOConsolePartition.OUTPUT_PARTITION_TYPE.equals(partition.getType())){
+					lastOffset = last;
+					getDocument().replace(lastOffset, 0, oldLine);
+				}else{
+					lastOffset = partition.getOffset();
+					if(lastOffset == last){
+						getDocument().replace(lastOffset, 0, oldLine);		
+					}else{
+						getDocument().replace(lastOffset, last - lastOffset, "");
+						getDocument().replace(lastOffset, 0, oldLine);
+					}
+				}
+			} catch (BadLocationException e) {
+				IStatus status = ScriptingUIActivator.createErrorStatus(e);
+				StatusManager.getManager().handle(status );
 			}
+		}
+
+		private int getLastOffset() {
+			int last = getLastestIndex();
+			ITypedRegion partition = getPartitioner().getPartition(last);
+			return partition.getOffset();
+		}
+
+		private int getLastestIndex() {
+			IDocument d = getDocument();
+			int last = d.getLength();
+			return last;
 		}
 	}
 
@@ -550,8 +632,7 @@ public class RubyScriptingConsole extends TextConsole {
 		        if (control instanceof StyledText) {
 		        	StyledText text = (StyledText) control;
 					keyListener = new ControlFromKey();
-					text.removeKeyListener(keyListener);
-					text.removeVerifyListener(keyListener);
+					text.removeVerifyKeyListener(keyListener);
 				}
 				assist.uninstall();
 			}
@@ -568,70 +649,33 @@ public class RubyScriptingConsole extends TextConsole {
 
 	private void init_in_swt_thread() {
 		Display display = getDisplay();
-		Color outputColor = display.getSystemColor(SWT.COLOR_BLUE);
 		ColorRegistry colorRegistry = JFaceResources.getColorRegistry();
-		colorRegistry.put(OUTPUT_STREAM_COLOR, outputColor.getRGB());
-		Color errorColor = display.getSystemColor(SWT.COLOR_RED);
-		colorRegistry.put(ERROR_STREAM_COLOR, errorColor.getRGB());
-		output.setColor(JFaceResources.getColorRegistry().get(OUTPUT_STREAM_COLOR));
-        error.setColor(JFaceResources.getColorRegistry().get(ERROR_STREAM_COLOR));
+		Color outputColor = colorRegistry.get(OUTPUT_STREAM_COLOR);
+		if(outputColor == null){
+			outputColor = display.getSystemColor(SWT.COLOR_BLUE);
+			colorRegistry.put(OUTPUT_STREAM_COLOR, outputColor.getRGB());
+		}
+		output.setColor(outputColor);
+        Color errorColor = colorRegistry.get(ERROR_STREAM_COLOR);
+        if(errorColor == null){
+	        errorColor = display.getSystemColor(SWT.COLOR_RED);
+	        colorRegistry.put(ERROR_STREAM_COLOR, errorColor.getRGB());
+        }
+        error.setColor(errorColor);
         assist.install(consolePage.getViewer());
         TextConsoleViewer viewer = consolePage.getViewer();
         Control control = viewer.getControl();
         if (control instanceof StyledText) {
-        	StyledText text = (StyledText) control;
+        	final StyledText text = (StyledText) control;
 			keyListener = new ControlFromKey();
-			text.addKeyListener(keyListener);
-			text.addVerifyListener(keyListener);
+			text.addVerifyKeyListener(keyListener);
+	        getDocument().addDocumentListener(new CaretMoveListener(text));
 		}
 	}
 
     protected void completeAction(KeyEvent event) {
         if (Readline.getCompletor(Readline.getHolder(runtime)) == null) return;
         assist.showPossibleCompletions();
-//        List candidates = new LinkedList();
-//        String bufstr = null;
-//        try {
-//            bufstr = area.getText(startPos, area.getCaretPosition() - startPos);
-//        } catch (BadLocationException e) {
-//            return;
-//        }
-//        
-//        int cursor = area.getCaretPosition() - startPos;
-//        
-//        int position = Readline.getCompletor(Readline.getHolder(runtime)).complete(bufstr, cursor, candidates);
-//        
-//        // no candidates? Fail.
-//        if (candidates.isEmpty())
-//            return;
-//        
-//        if (candidates.size() == 1) {
-//            replaceText(startPos + position, area.getCaretPosition(), (String) candidates.get(0));
-//            return;
-//        }
-//        
-//        start = startPos + position;
-//        end = area.getCaretPosition();
-//        
-//        Point pos = area.getCaret().getMagicCaretPosition();
-//
-//        // bit risky if someone changes completor, but useful for method calls
-//        int cutoff = bufstr.substring(position).lastIndexOf('.') + 1;
-//        start += cutoff;
-//
-//        if (candidates.size() < 10)
-//            completePopup.getList().setVisibleRowCount(candidates.size());
-//        else
-//            completePopup.getList().setVisibleRowCount(10);
-//
-//        completeCombo.removeAllItems();
-//        for (Iterator i = candidates.iterator(); i.hasNext();) {
-//            String item = (String) i.next();
-//            if (cutoff != 0) item = item.substring(cutoff);
-//            completeCombo.addItem(item);
-//        }
-//
-//        completePopup.show(area, pos.x, pos.y + area.getFontMetrics(area.getFont()).getHeight());
     }
 
 }

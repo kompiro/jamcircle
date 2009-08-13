@@ -1,5 +1,7 @@
 package org.kompiro.jamcircle.scripting.ui;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -58,6 +60,10 @@ public class ScriptingUIActivator extends AbstractUIPlugin {
 	private void initializeImage(ImageRegistry reg,ScriptingImageEnum constants) {
 		String PLUGIN_ID = getBundle().getSymbolicName();
 		reg.put(constants.toString(), imageDescriptorFromPlugin(PLUGIN_ID, constants.getPath()));
+	}
+	
+	public static IStatus createErrorStatus(Throwable e){
+		return new Status(IStatus.ERROR, PLUGIN_ID, "error is occured",e);
 	}
 
 
