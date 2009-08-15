@@ -42,6 +42,7 @@ import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.kompiro.jamcircle.kanban.ui.KanbanView;
 import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
+import org.osgi.framework.Version;
 
 /**
  * A console that displays text from I/O streams. An I/O console can have multiple
@@ -434,6 +435,7 @@ public class RubyScriptingConsole extends TextConsole {
 			protected IStatus run(IProgressMonitor monitor) {
 				RubyInstanceConfig config = new RubyInstanceConfig();
 				config.setArgv(new String[]{"-Ku"});
+				config.setJRubyHome(getJRubyHomeFromBundle());
 		        config.setObjectSpaceEnabled(true);
 				config.setOutput(new PrintStream(output));
 				config.setInput(input);
@@ -443,6 +445,14 @@ public class RubyScriptingConsole extends TextConsole {
 		        runtime.getGlobalVariables().defineReadonly("$board_accessor", new ValueAccessor(rubyBoard));		        
 		        runtime.getGlobalVariables().defineReadonly("$$", new ValueAccessor(runtime.newFixnum(System.identityHashCode(runtime))));
 				return Status.OK_STATUS;
+			}
+
+			private String getJRubyHomeFromBundle() {
+				try {
+					return FileLocator.getBundleFile(Platform.getBundle("org.jruby")).getAbsolutePath();
+				} catch (IOException e) {
+				}
+				return null;
 			}
 		};
 		initJob.schedule();
@@ -519,6 +529,12 @@ public class RubyScriptingConsole extends TextConsole {
 				event.doit = false;
 				downAction();
 				break;
+			case SWT.ARROW_LEFT:
+				event.doit = isReadOnly(((StyledText)event.widget).getCaretOffset() - 1);
+				break;
+			case SWT.ARROW_RIGHT:
+				event.doit = isReadOnly(((StyledText)event.widget).getCaretOffset() + 1);
+				break;				
 			case '\r':
 				IDocument doc = getDocument();
 				try {
@@ -532,6 +548,15 @@ public class RubyScriptingConsole extends TextConsole {
 				completeAction(event);
 			default:
 			}
+		}
+
+		private boolean isReadOnly(int nextCaretOffset) {
+			ITypedRegion partition = getPartitioner().getPartition(nextCaretOffset);
+			if (partition instanceof IOConsolePartition) {
+				IOConsolePartition ioPartition = (IOConsolePartition) partition;
+				return !ioPartition.isReadOnly();
+			}
+			return true;
 		}
 
 		private void downAction() {
@@ -670,6 +695,12 @@ public class RubyScriptingConsole extends TextConsole {
 			keyListener = new ControlFromKey();
 			text.addVerifyKeyListener(keyListener);
 	        getDocument().addDocumentListener(new CaretMoveListener(text));
+		}
+        try {
+			Version version = ScriptingUIActivator.getDefault().getBundle().getVersion();
+			String message = String.format("initialing ruby console\nver.%s\n",version);
+			output.write(message);
+		} catch (IOException e) {
 		}
 	}
 
