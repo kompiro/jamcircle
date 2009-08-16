@@ -452,12 +452,6 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		}		
 	}
 
-//	private Display getDisplay() {
-//		Control control = getViewer().getControl();
-//		if(control == null) throw new IllegalStateException();
-//		return control.getDisplay();
-//	}
-
 	private GraphicalEditPart findEditPart(Point target) {
 		EditPartViewer viewer = getViewer();
 		HashSet<IFigure> exclusionSet = new HashSet<IFigure>();
