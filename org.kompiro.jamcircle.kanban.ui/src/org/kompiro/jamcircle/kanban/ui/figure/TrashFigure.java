@@ -2,8 +2,8 @@ package org.kompiro.jamcircle.kanban.ui.figure;
 
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.ImageFigure;
+import org.eclipse.draw2d.*;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Image;
@@ -24,6 +24,12 @@ public class TrashFigure extends Figure {
 		this.trash = trash;
 		this.imageRegistry = imageRegistry;
 		this.figure = new ImageFigure();
+		figure = new ImageFigure();	
+		figure.setSize(72, 72);
+		setImage();
+		setSize(74,74);
+		add(figure,new Rectangle(1,1,72,72));
+		setLocation(trash.getLocation());
 	}
 
 	public void setImage() {
@@ -46,6 +52,12 @@ public class TrashFigure extends Figure {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
+	}
+	
+	@Override
+	public void paint(Graphics graphics) {
+		System.out.println("TrashFigure.paint()");
+		super.paint(graphics);
 	}
 	
 }
