@@ -309,13 +309,16 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		
 		userChangeListener = new UserModifiedListener();
 		getKanbanService().addPropertyChangeListener(userChangeListener);
+		EditPartFactory factory = new KanbanControllerFactory(this.boardModel);
+		
+		String taskName = String.format("Openning board '%s' ...",board.getTitle()); 
+		monitor.subTask(taskName);
+		viewer.setEditPartFactory(factory);
+		
 		monitor.internalWorked(1);
 		refreshIcons();
 		monitor.internalWorked(1);
-		EditPartFactory factory = new KanbanControllerFactory(this.boardModel);
-		viewer.setEditPartFactory(factory);
-		String taskName = String.format("Openning board '%s' ...",board.getTitle()); 
-		monitor.subTask(taskName);
+		
 		final int id = board.getID();
 		executeScript(monitor);
 		getDisplay().asyncExec(new Runnable(){
