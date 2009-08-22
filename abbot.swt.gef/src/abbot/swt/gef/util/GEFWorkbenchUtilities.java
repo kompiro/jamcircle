@@ -9,7 +9,9 @@ import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 
-public class GEFWorkbenchUtilities extends abbot.swt.eclipse.utils.WorkbenchUtilities {
+import abbot.swt.eclipse.utils.WorkbenchUtilities;
+
+public class GEFWorkbenchUtilities extends WorkbenchUtilities {
 
 	/*
 	 * GraphicalViewer-oriented methods.

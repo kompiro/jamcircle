@@ -19,15 +19,20 @@ RCP.
    </license>
 
    <url>
-      <discovery label="JAM Circle Project site" url="http://kompiro.org/jamcircle"/>
+      <discovery label="JAM Circle Project site" url="http://kompiro.org/jamcircle/update/"/>
    </url>
+
+   <includes
+         id="org.kompiro.jamcircle.rcp.feature"
+         version="0.0.0"/>
 
    <includes
          id="org.kompiro.jamcircle.kanban.feature"
          version="0.0.0"/>
 
    <includes
-         id="org.kompiro.jamcircle.rcp.feature"
+         id="org.kompiro.jamcircle.scripting.feature"
          version="0.0.0"/>
+
 
 </feature>
