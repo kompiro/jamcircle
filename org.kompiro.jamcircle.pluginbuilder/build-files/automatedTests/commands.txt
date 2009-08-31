@@ -1,0 +1,4 @@
+./eclipse -application org.eclipse.equinox.p2.director -repository file:///home/kompiro/codes/java/jamcircle/org.kompiro.jamcircle.builder/eclipseextension/eclipse/ -list > list.txt
+./eclipse -application org.eclipse.equinox.p2.director -repository http://download.eclipse.org/releases/galileo/ -installIU org.eclipse.gef.feature.group,org.eclipse.equinox.executable.feature.group
+./eclipse -application org.eclipse.equinox.p2.director -repository file:///tmp/org.kompiro.jamcircle.builder/repo/ -installIU org.kompiro.jamcircle.feature.group
+

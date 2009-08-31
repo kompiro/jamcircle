@@ -1,0 +1,214 @@
+<project name="Generated">
+  <target name="fetch.svn.all">
+    <antcall target="svn.co">
+      <param name="target" value="features"/>
+      <param name="element.id" value="org.kompiro.jamcircle"/>
+      <param name="project.name" value="org.kompiro.jamcircle"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="features"/>
+      <param name="element.id" value="org.kompiro.jamcircle.rcp.feature"/>
+      <param name="project.name" value="org.kompiro.jamcircle.rcp.feature"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.kompiro.jamcircle.rcp"/>
+      <param name="project.name" value="org.kompiro.jamcircle.rcp"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.kompiro.jamcircle.rcp.win32"/>
+      <param name="project.name" value="org.kompiro.jamcircle.rcp.win32"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.sf.feeling.swt.win32.extension"/>
+      <param name="project.name" value="org.sf.feeling.swt.win32.extension"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="features"/>
+      <param name="element.id" value="org.kompiro.jamcircle.kanban.feature"/>
+      <param name="project.name" value="org.kompiro.jamcircle.kanban.feature"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.jivesoftware.smack"/>
+      <param name="project.name" value="org.jivesoftware.smack"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.apache.commons.lang"/>
+      <param name="project.name" value="org.apache.commons.lang"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.mozilla.javascript"/>
+      <param name="project.name" value="org.mozilla.javascript"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.apache.bsf"/>
+      <param name="project.name" value="org.apache.bsf"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.jruby"/>
+      <param name="project.name" value="org.jruby"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.kompiro.jamcircle.kanban"/>
+      <param name="project.name" value="org.kompiro.jamcircle.kanban"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.kompiro.jamcircle.kanban.ui"/>
+      <param name="project.name" value="org.kompiro.jamcircle.kanban.ui"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.kompiro.jamcircle.storage"/>
+      <param name="project.name" value="org.kompiro.jamcircle.storage"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.kompiro.jamcircle.storage.ui"/>
+      <param name="project.name" value="org.kompiro.jamcircle.storage.ui"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.kompiro.jamcircle.xmpp"/>
+      <param name="project.name" value="org.kompiro.jamcircle.xmpp"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.kompiro.jamcircle.xmpp.ui"/>
+      <param name="project.name" value="org.kompiro.jamcircle.xmpp.ui"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.kompiro.jamcircle.scripting"/>
+      <param name="project.name" value="org.kompiro.jamcircle.scripting"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="features"/>
+      <param name="element.id" value="org.kompiro.jamcircle.scripting.feature"/>
+      <param name="project.name" value="org.kompiro.jamcircle.scripting.feature"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.kompiro.jamcircle.scripting"/>
+      <param name="project.name" value="org.kompiro.jamcircle.scripting"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.kompiro.jamcircle.scripting.ui"/>
+      <param name="project.name" value="org.kompiro.jamcircle.scripting.ui"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.jruby"/>
+      <param name="project.name" value="org.jruby"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.apache.bsf"/>
+      <param name="project.name" value="org.apache.bsf"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.mozilla.javascript"/>
+      <param name="project.name" value="org.mozilla.javascript"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="features"/>
+      <param name="element.id" value="org.kompiro.jamcircle.test.feature"/>
+      <param name="project.name" value="org.kompiro.jamcircle.test.feature"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="abbot.swt"/>
+      <param name="project.name" value="abbot.swt"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="abbot.swt.eclipse"/>
+      <param name="project.name" value="abbot.swt.eclipse"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="abbot.swt.gef"/>
+      <param name="project.name" value="abbot.swt.gef"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.easymock"/>
+      <param name="project.name" value="org.easymock"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.kompiro.jamcircle.kanban.test"/>
+      <param name="project.name" value="org.kompiro.jamcircle.kanban.test"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.kompiro.jamcircle.kanban.ui.test"/>
+      <param name="project.name" value="org.kompiro.jamcircle.kanban.ui.test"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.kompiro.jamcircle.scripting.ui.test"/>
+      <param name="project.name" value="org.kompiro.jamcircle.scripting.ui.test"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.kompiro.jamcircle.storage.test"/>
+      <param name="project.name" value="org.kompiro.jamcircle.storage.test"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.kompiro.jamcircle.xmpp.test"/>
+      <param name="project.name" value="org.kompiro.jamcircle.xmpp.test"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+    <antcall target="svn.co">
+      <param name="target" value="plugins"/>
+      <param name="element.id" value="org.mockito"/>
+      <param name="project.name" value="org.mockito"/>
+      <param name="url" value="http://svn.kompiro.org/jamcircle/trunk/"/>
+    </antcall>
+  </target>
+</project>
