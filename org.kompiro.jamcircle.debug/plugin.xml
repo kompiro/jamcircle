@@ -11,5 +11,12 @@
          </view>
       </perspectiveExtension>
    </extension>
+   <extension
+         point="org.eclipse.ui.statusHandlers">
+      <statusHandler
+            class="org.kompiro.jamcircle.debug.internal.DebugStatusHandler"
+            id="org.kompiro.jamcircle.debug.statusHandler">
+      </statusHandler>
+   </extension>
 
 </plugin>

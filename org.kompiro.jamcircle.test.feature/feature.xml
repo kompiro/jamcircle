@@ -5,8 +5,8 @@
       version="0.0.0.qualifier"
       provider-name="kompiro.org">
 
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+   <description url="http://kompiro.org/jamcircle/test/description">
+      This is JAMCircle&apos;s Test Feature.
    </description>
 
    <copyright url="http://www.example.com/copyright">
@@ -92,6 +92,13 @@
 
    <plugin
          id="org.mockito"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.kompiro.jamcircle.debug"
          download-size="0"
          install-size="0"
          version="0.0.0"
