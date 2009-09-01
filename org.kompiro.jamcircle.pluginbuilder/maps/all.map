@@ -33,3 +33,4 @@ fragment@org.kompiro.jamcircle.scripting.ui.test=COPY,/var/hudson/jobs/jamcircle
 fragment@org.kompiro.jamcircle.storage.test=COPY,/var/hudson/jobs/jamcircle-pluginbuilder/workspace,org.kompiro.jamcircle.storage.test
 fragment@org.kompiro.jamcircle.xmpp.test=COPY,/var/hudson/jobs/jamcircle-pluginbuilder/workspace,org.kompiro.jamcircle.xmpp.test
 plugin@org.mockito=COPY,/var/hudson/jobs/jamcircle-pluginbuilder/workspace,org.mockito
+plugin@org.kompiro.jamcircle.debug=COPY,/var/hudson/jobs/jamcircle-pluginbuilder/workspace,org.kompiro.jamcircle.debug
