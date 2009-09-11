@@ -1,11 +1,8 @@
 package org.kompiro.jamcircle.storage;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -15,8 +12,8 @@ import net.java.ao.EntityManager;
 
 import org.eclipse.core.runtime.Platform;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
-import org.kompiro.jamcircle.storage.StorageActivator;
 import org.kompiro.jamcircle.storage.service.StorageService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -31,7 +28,7 @@ public abstract class AbstractStorageTest {
 	@BeforeClass
 	public static void bundleInitialize() throws Exception{
 		Logger.getLogger("net.java.ao").setLevel(Level.FINE);
-		if(!Platform.isRunning()) throw new RuntimeException("This test needs to run OSGi container.");
+		if(!Platform.isRunning()) return;
 		activator = StorageActivator.getDefault();
 		String storePath = activator.getService().getDBPath();
 		int schemeIndex = storePath.indexOf(FILE);
@@ -49,6 +46,11 @@ public abstract class AbstractStorageTest {
 		assertNotNull(manager);
 		assertAutoCommit(manager);
 		Logger.getLogger("net.java.ao").setLevel(Level.FINE);
+	}
+	
+	@Before
+	public void before()throws Exception{
+		if(!Platform.isRunning()) throw new RuntimeException("This test needs to run on OSGi container.");		
 	}
 	
 	@AfterClass

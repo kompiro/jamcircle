@@ -5,6 +5,7 @@ import java.util.Set;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.kompiro.jamcircle.debug.IStatusHandler;
 
 
 public class StorageStatusHandler {

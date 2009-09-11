@@ -3,9 +3,10 @@ package org.kompiro.jamcircle.storage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Plugin;
+import org.kompiro.jamcircle.debug.IStatusHandler;
+import org.kompiro.jamcircle.debug.StandardOutputHandler;
 import org.kompiro.jamcircle.storage.exception.StorageConnectException;
 import org.kompiro.jamcircle.storage.service.StorageService;
 import org.kompiro.jamcircle.storage.service.StorageSetting;

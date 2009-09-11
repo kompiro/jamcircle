@@ -2,11 +2,10 @@ package org.kompiro.jamcircle.xmpp;
 import java.util.HashSet;
 import java.util.Set;
 
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.kompiro.jamcircle.xmpp.IStatusHandler;
+import org.kompiro.jamcircle.debug.IStatusHandler;
 
 
 public class XMPPStatusHandler {

@@ -5,7 +5,8 @@ Bundle-SymbolicName: org.kompiro.jamcircle.storage;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.kompiro.jamcircle.storage.StorageActivator
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.equinox.security
+ org.eclipse.equinox.security,
+ org.kompiro.jamcircle.debug
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: lib/activeobjects-0.8.2.jar,

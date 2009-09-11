@@ -3,23 +3,35 @@ package org.kompiro.jamcircle.kanban.ui.gcontroller;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.gef.*;
+import org.eclipse.gef.EditDomain;
+import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.kompiro.jamcircle.debug.IStatusHandler;
 import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.mock.*;
-import org.kompiro.jamcircle.kanban.ui.*;
+import org.kompiro.jamcircle.kanban.model.mock.Board;
+import org.kompiro.jamcircle.kanban.model.mock.Icon;
+import org.kompiro.jamcircle.kanban.model.mock.Lane;
+import org.kompiro.jamcircle.kanban.ui.CommandStackEventListenerForDebug;
+import org.kompiro.jamcircle.kanban.ui.KanbanControllerFactory;
+import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
-import org.kompiro.jamcircle.storage.IStatusHandler;
 
 public abstract class AbstractControllerTest {
 

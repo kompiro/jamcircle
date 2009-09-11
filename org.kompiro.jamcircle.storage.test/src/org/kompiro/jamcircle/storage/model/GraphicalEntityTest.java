@@ -1,18 +1,10 @@
 package org.kompiro.jamcircle.storage.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.sql.SQLException;
-
-import net.java.ao.Transaction;
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.storage.AbstractStorageTest;
-import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 public class GraphicalEntityTest extends AbstractStorageTest{
 		
@@ -25,31 +17,46 @@ public class GraphicalEntityTest extends AbstractStorageTest{
 	@Test
 	public void assertNotPersistableFieldOfDeleted() throws Exception {
 
-		GraphicalEntity e = new Transaction<GraphicalEntity>(manager){
-			@Override
-			protected GraphicalEntity run() throws SQLException {
-				GraphicalEntity entity = manager.create(GraphicalEntity.class);
-				entity.setDeletedVisuals(true);
-				assertTrue(entity.isDeletedVisuals());
-				entity.setX(100);
-				entity.setY(10);
-				entity.save();
-				return entity;
-			}
-		}.execute();
+		GraphicalEntity entity = manager.create(GraphicalEntity.class);
+		entity.setDeletedVisuals(true);
+		assertTrue(entity.isDeletedVisuals());
+		entity.setX(100);
+		entity.setY(10);
+		entity.save();
 
-		manager.flush(e);
-		e = manager.get(GraphicalEntity.class,1);
-		assertFalse(e.isDeletedVisuals());
-		assertEquals(100,e.getX());
-		assertEquals(10,e.getY());
-		e = manager.get(GraphicalEntity.class,300);
-		assertNotNull(e);
-		assertEquals(300,e.getID());
-		e.setX(100);
-		e.setY(200);
-		// e(id:300) doesn't persistent.
-		e.save();
+		entity = manager.get(GraphicalEntity.class,1);
+		assertFalse(entity.isDeletedVisuals());
+		assertEquals(100,entity.getX());
+		assertEquals(10,entity.getY());
+		entity = manager.get(GraphicalEntity.class,300);
+		assertNotNull(entity);
+		assertEquals(300,entity.getID());
+		entity.setX(100);
+		entity.setY(200);
+		
+		// e(id:300) hasn't persistent. But if it called,then returns old value.
+		entity.save();
+		entity = manager.get(GraphicalEntity.class,300);
+		assertNotNull(entity);
+		assertEquals(300,entity.getID());
+		assertEquals(100,entity.getX());
+		assertEquals(200,entity.getY());
+		
+		// e(id:300) hasn't persistent and call flush.Then accessors are throw NullPointerException
+		manager.flush(entity);
+		entity = manager.get(GraphicalEntity.class,300);
+		assertNotNull(entity);
+		assertEquals(300,entity.getID());
+		try {
+			assertEquals(100,entity.getX());
+			fail();
+		} catch (Exception e) {
+		}
+		try {
+			assertEquals(200,entity.getY());
+			fail();
+		} catch (Exception e) {
+		}
 	}
 	
 }

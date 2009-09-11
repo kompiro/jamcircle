@@ -7,6 +7,7 @@ import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.jivesoftware.smack.XMPPException;
+import org.kompiro.jamcircle.debug.StandardOutputHandler;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 import org.kompiro.jamcircle.xmpp.service.XMPPSettings;
@@ -30,6 +31,8 @@ public class XMPPActivator extends Plugin {
 	
 	private ServiceTracker kanbanTracker;
 
+	private StandardOutputHandler handler;
+
 	
 	public XMPPActivator() {
 	}
@@ -41,26 +44,7 @@ public class XMPPActivator extends Plugin {
 		registerService = context.registerService(XMPPConnectionService.class.getName(),service, null);
 		kanbanTracker = new ServiceTracker(context, KanbanService.class.getName(), null);
 		kanbanTracker.open();
-		IStatusHandler handler = new IStatusHandler(){
-
-			public void displayStatus(String title, IStatus status) {
-				System.out.println(status.getMessage());
-			
-			}
-
-			public void fail(IStatus status, boolean informUser) {
-				System.out.println(status.getMessage());
-				Throwable exception = status.getException();
-				if(exception != null){
-					exception.printStackTrace();
-				}
-			}
-
-			public void info(String message) {
-				System.out.println(message);
-			}
-			
-		};
+		handler = new StandardOutputHandler();
 		XMPPStatusHandler.addStatusHandler(handler);
 	}
 
@@ -96,6 +80,7 @@ public class XMPPActivator extends Plugin {
 	}
 
 	public void stop(BundleContext context) throws Exception {
+		XMPPStatusHandler.removeStatusHandler(handler);
 		plugin = null;
 		if(settings.size() != 0){
 			settings.storeSttings();

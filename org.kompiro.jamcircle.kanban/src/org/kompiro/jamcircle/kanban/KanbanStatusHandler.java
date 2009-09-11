@@ -2,11 +2,11 @@ package org.kompiro.jamcircle.kanban;
 import java.util.HashSet;
 import java.util.Set;
 
-
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.kompiro.jamcircle.storage.IStatusHandler;
+import org.kompiro.jamcircle.debug.IStatusHandler;
 
 
 public class KanbanStatusHandler {
@@ -37,14 +37,14 @@ public class KanbanStatusHandler {
 				handler.info(status.getMessage());
 			}
 			if(Platform.isRunning()){
-				KanbanActivator.getDefault().getLog().log(status);			
+				getLog().log(status);			
 			}
 		}else if(status.getException() != null){
 			for(IStatusHandler handler : handlers){
 				handler.fail(status, true);
 			}
 			if(Platform.isRunning()){
-				KanbanActivator.getDefault().getLog().log(status);			
+				getLog().log(status);			
 			}
 		}
 	}
@@ -99,5 +99,10 @@ public class KanbanStatusHandler {
 	public static boolean isDebug() {
 		return ENABLE_LOGGING;
 	}
+	
+	private static ILog getLog() {
+		return KanbanActivator.getDefault().getLog();
+	}
+
 
 }

@@ -4,11 +4,12 @@ Bundle-Name: XMPP Plug-in
 Bundle-SymbolicName: org.kompiro.jamcircle.xmpp;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.kompiro.jamcircle.xmpp.XMPPActivator
-Bundle-Vendor: ChangeVision inc.
+Bundle-Vendor: kompiro.org
 Require-Bundle: org.eclipse.core.runtime,
- org.jivesoftware.smack;bundle-version="3.1.0";visibility:=reexport,
- org.eclipse.equinox.security;bundle-version="1.0.0",
- org.kompiro.jamcircle.kanban
+ org.jivesoftware.smack;visibility:=reexport,
+ org.eclipse.equinox.security,
+ org.kompiro.jamcircle.kanban,
+ org.kompiro.jamcircle.debug
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: org.kompiro.jamcircle.xmpp,

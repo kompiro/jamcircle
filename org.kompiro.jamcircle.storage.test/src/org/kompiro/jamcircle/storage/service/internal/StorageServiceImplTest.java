@@ -1,8 +1,6 @@
 package org.kompiro.jamcircle.storage.service.internal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.UUID;
@@ -13,16 +11,14 @@ import net.java.ao.EntityManager;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.kompiro.jamcircle.storage.IStatusHandler;
+import org.kompiro.jamcircle.debug.StandardOutputHandler;
 import org.kompiro.jamcircle.storage.StorageStatusHandler;
 import org.kompiro.jamcircle.storage.service.StorageService;
 import org.kompiro.jamcircle.storage.service.StorageSetting;
-import org.kompiro.jamcircle.storage.service.internal.StorageServiceImpl;
 
 public class StorageServiceImplTest {
 
@@ -77,17 +73,7 @@ public class StorageServiceImplTest {
 	
 	@BeforeClass
 	public static void initialize(){
-		StorageStatusHandler.addStatusHandler(new IStatusHandler(){
-			public void displayStatus(String title, IStatus status) {
-				System.out.println(status);
-			}
-			public void fail(IStatus status, boolean informUser) {
-				System.out.println(status);
-			}
-			public void info(String message) {
-				System.out.println(message);
-			}
-		});		
+		StorageStatusHandler.addStatusHandler(new StandardOutputHandler());		
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -5,11 +5,11 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.kompiro.jamcircle.storage.IStatusHandler;
+import org.kompiro.jamcircle.debug.IStatusHandler;
 
 
 public class KanbanUIStatusHandler {
@@ -41,7 +41,7 @@ public class KanbanUIStatusHandler {
 	private static void log(IStatus status) {
 		if(ENABLE_LOGGING){
 			if(Platform.isRunning()){
-				KanbanUIActivator.getDefault().getLog().log(status);			
+				getLog().log(status);			
 			}
 		}
 		if(status.getException() != null){
@@ -54,6 +54,10 @@ public class KanbanUIStatusHandler {
 				handler.info(message);
 			}			
 		}
+	}
+
+	private static ILog getLog() {
+		return KanbanUIActivator.getDefault().getLog();
 	}
 
 	public static void debug(String message,Object ... objects){

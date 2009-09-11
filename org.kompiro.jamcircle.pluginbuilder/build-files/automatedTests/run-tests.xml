@@ -36,6 +36,7 @@
 		<antcall target="-emmaInstrument"/>
 		<unzip dest="${test.eclipseExtensionDirectory}/..">
 			<fileset dir="." includes="eclipse-test-framework*.zip" />
+			<fileset dir="." includes="org.eclipse.swtbot.eclipse-*.zip" />
 		</unzip>
 		<unzip dest="${test.eclipseExtensionDirectory}">
 			<fileset dir="." includes="org.pluginbuilder.autotestsuite*.zip" />
@@ -125,7 +126,7 @@ version=3.1.0</echo>
         <antcall target="-markErrorOrFailure" />        
 	</target>
 
-	<target name="-runAutoTests">
+	<target name="-runAutoTests" depends="umListFeaturesSite">
 		<mkdir dir="${test.result.dir}/xml"/>
 		<BundleFileLocator eclipseInstallationRoot="${test.eclipse.host.eclipse}" bundleId="org.eclipse.equinox.launcher" property="equinoxjar" />
 		<condition property="optJvmArg" else="-DdummyVar=NotOnMac" value="-XstartOnFirstThread">
@@ -134,18 +135,25 @@ version=3.1.0</echo>
 		<condition property="testApplication" else="" value="-testApplication ${autotest.testapplication}">
 			<isset property="autotest.testapplication"/>
 		</condition>
+		<property name="test.configuration" value="${buildDirectory}/configuration"/>
+		<mkdir dir="${buildDirectory}/user"/>
+		<mkdir dir="${test.configuration}"/>
 		<java fork="true" dir="." logError="true" classname="org.eclipse.core.launcher.Main" resultproperty="autotestsuite.result"> 
                         <env key="DISPLAY" value=":99"/>
 			<arg line="-application org.pluginbuilder.autotestsuite.application.autoTestApplication ${testApplication}" />
 			<arg line="-data ${test.workspace}" />
+			<arg line="-configuration ${test.configuration}" />
 			<arg line="-os ${os}" />
 			<arg line="-ws ${ws}" />
 			<arg line="-arch ${arch}" />
+			<!--
 			<arg line="-clean" />
+			-->
 			<arg line="-consolelog" />
 			<arg line="-dev ${basedir}/emma.jar" />
 			
 			<jvmarg value="-Demma.coverage.out.file=${emma.coverage.output}"/>
+			<jvmarg value="-Duser.home=${buildDirectory}/user"/>
 			<jvmarg value="${optJvmArg}"/>
 			<jvmarg value="-Xmx512m"/>
 			
@@ -213,6 +221,11 @@ version=3.1.0</echo>
 			<arg value="${os}" />			
 			<arg value="-application" />
 			<arg value="org.eclipse.update.core.standaloneUpdate" />
+			<!--
+			<arg line="-console 8888" />
+			<arg line="-noExit" />
+			-->
+			<arg line="-clean" />
 			<arg value="-command" />
 			<arg value="${updateManagerCommand}" />
 			<arg value="${updateManagerCommandParam}" />
