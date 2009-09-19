@@ -8,12 +8,10 @@ import java.io.FilenameFilter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import net.java.ao.EntityManager;
 
 import org.junit.After;
 import org.junit.Before;
-import org.kompiro.jamcircle.kanban.KanbanActivator;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.Icon;
@@ -26,7 +24,6 @@ public abstract class AbstractKanbanTest {
 	private static final String FILE = "file:";
 	protected EntityManager entityManager;
 	
-	@SuppressWarnings("unchecked")
 	@Before
 	public void init() throws Exception{
 		KanbanActivator activator = getActivator();
