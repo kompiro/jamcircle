@@ -3,9 +3,9 @@
 	<typedef resource="org/pluginbuilder/anttasks/pluginbuildertypes.properties" classpath="../pluginbuilder-anttasks.jar" />
 
 	<GetHostName />
+	<property file="run-tests.properties" />
 	<property file="../../build_${hostname}.properties" />
 	<property file="../../build_local.properties" />
-	<property file="run-tests.properties" />
 	<property name="test.eclipse.host.eclipse" value="${test.eclipse.host}/eclipse" />
 
 	<import file="../build_shared.xml" />
@@ -46,13 +46,24 @@ name=Eclipse Platform
 version=3.1.0</echo>
 	</target>
 
-        <target name="-createLink">
+    <target name="-createLink">
+    	<!--
+    <target name="-createLink">
 		<echo file="${test.eclipse.host.eclipse}/dropins/jamcircle.link">path=/tmp/org.kompiro.jamcircle.builder/eclipseextension/</echo>
-        </target>
+		-->
+    	<copy todir="${test.eclipse.host.eclipse}/dropins/" >
+    		<fileset dir="/tmp/org.kompiro.jamcircle.builder/eclipseextension/" includes="**/**"/>
+    	</copy>
+    </target>
 
-        <target name="-removeLink">
-		<delete file="${test.eclipse.host.eclipse}/dropins/jamcircle.link"/>
-        </target>
+    <target name="-removeLink">
+    	<!--
+			<delete file="${test.eclipse.host.eclipse}/dropins/jamcircle.link"/>
+		-->
+    	<delete dir="${test.eclipse.host.eclipse}/dropins/eclipse">
+	</delete>
+
+    </target>
 
 	<target name="-unpackEclipse" unless="isEclipseInstallationAvailable">
 	 	<antcall target="unpack.eclipse">
@@ -103,8 +114,11 @@ version=3.1.0</echo>
 				<include name="*.xml" />
 			</fileset>
 		</junitreport>
-
+<!--
 		<BundleFileLocator eclipseInstallationRoot="${test.eclipseExtensionDirectory}" bundleId="org.pluginbuilder.autotestsuite.application" filePath="JUNIT.XSL" property="junit.xsl.file" />
+-->
+		<BundleFileLocator eclipseInstallationRoot="${test.eclipse.host.eclipse}" bundleId="org.pluginbuilder.autotestsuite.application" filePath="JUNIT.XSL" property="junit.xsl.file" />
+
 
 		<style style="${junit.xsl.file}" basedir="${test.result.dir}/xml" includes="${test.aggregated.report}" destdir="${test.result.dir}/html" />
 	</target>
@@ -138,6 +152,7 @@ version=3.1.0</echo>
 		<property name="test.configuration" value="${buildDirectory}/configuration"/>
 		<mkdir dir="${buildDirectory}/user"/>
 		<mkdir dir="${test.configuration}"/>
+		<echoproperties/>
 		<java fork="true" dir="." logError="true" classname="org.eclipse.core.launcher.Main" resultproperty="autotestsuite.result"> 
                         <env key="DISPLAY" value=":99"/>
 			<arg line="-application org.pluginbuilder.autotestsuite.application.autoTestApplication ${testApplication}" />
@@ -147,6 +162,8 @@ version=3.1.0</echo>
 			<arg line="-ws ${ws}" />
 			<arg line="-arch ${arch}" />
 			<!--
+			<arg line="-console 8888" />
+			<arg line="-noExit" />
 			<arg line="-clean" />
 			-->
 			<arg line="-consolelog" />

@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JAMCircle Debug
+Bundle-SymbolicName: org.kompiro.jamcircle.debug.ui;singleton:=true
+Bundle-Version: 0.0.0
+Bundle-Activator: org.kompiro.jamcircle.debug.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.views.log,
+ org.kompiro.jamcircle.debug,
+ org.kompiro.jamcircle.storage,
+ org.kompiro.jamcircle.kanban,
+ org.kompiro.jamcircle.kanban.ui
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

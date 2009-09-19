@@ -2,12 +2,11 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Kanban Core Test Fragment
 Bundle-SymbolicName: org.kompiro.jamcircle.kanban.test
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 0.0.0
 Bundle-Vendor: kompiro.org
 Fragment-Host: org.kompiro.jamcircle.kanban
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Require-Bundle: org.junit4,
  com.ibm.icu,
- org.mockito,
- org.easymock
-Bundle-RegisterBuddy: org.easymock
+ org.mockito
+Bundle-RegisterBuddy: org.mockito

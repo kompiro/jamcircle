@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="*">
+         <view
+               id="org.eclipse.pde.runtime.LogView"
+               relationship="fast">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.statusHandlers">
+      <statusHandler
+            class="org.kompiro.jamcircle.debug.internal.DebugStatusHandler"
+            id="org.kompiro.jamcircle.debug.statusHandler">
+      </statusHandler>
+   </extension>
+
+</plugin>
