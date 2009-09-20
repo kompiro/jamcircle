@@ -26,7 +26,6 @@ feature@org.kompiro.jamcircle.test.feature=COPY,/var/hudson/jobs/jamcircle-plugi
 plugin@abbot.swt=COPY,/var/hudson/jobs/jamcircle-pluginbuilder/workspace,abbot.swt
 plugin@abbot.swt.eclipse=COPY,/var/hudson/jobs/jamcircle-pluginbuilder/workspace,abbot.swt.eclipse
 plugin@abbot.swt.gef=COPY,/var/hudson/jobs/jamcircle-pluginbuilder/workspace,abbot.swt.gef
-plugin@org.easymock=COPY,/var/hudson/jobs/jamcircle-pluginbuilder/workspace,org.easymock
 fragment@org.kompiro.jamcircle.kanban.test=COPY,/var/hudson/jobs/jamcircle-pluginbuilder/workspace,org.kompiro.jamcircle.kanban.test
 fragment@org.kompiro.jamcircle.kanban.ui.test=COPY,/var/hudson/jobs/jamcircle-pluginbuilder/workspace,org.kompiro.jamcircle.kanban.ui.test
 fragment@org.kompiro.jamcircle.scripting.ui.test=COPY,/var/hudson/jobs/jamcircle-pluginbuilder/workspace,org.kompiro.jamcircle.scripting.ui.test
