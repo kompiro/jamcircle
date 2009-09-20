@@ -1,30 +1,45 @@
 package org.kompiro.jamcircle.kanban.service.internal;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.mockito.Mockito.*;
-
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeNotNull;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.notNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.*;
 
 import net.java.ao.DBParam;
 import net.java.ao.EntityManager;
 
-import org.junit.*;
-import org.kompiro.jamcircle.kanban.model.*;
-import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.kompiro.jamcircle.kanban.model.Board;
+import org.kompiro.jamcircle.kanban.model.Card;
+import org.kompiro.jamcircle.kanban.model.CardDTO;
+import org.kompiro.jamcircle.kanban.model.Lane;
+import org.kompiro.jamcircle.kanban.model.User;
 import org.kompiro.jamcircle.storage.service.StorageService;
 import org.mockito.ArgumentCaptor;
+import org.mockito.runners.VerboseMockitoJUnitRunner;
 
-
+@RunWith(VerboseMockitoJUnitRunner.class)
 public class KanbanServiceImplTest {
 
 	private KanbanServiceImpl serviceImpl;
-	private KanbanService service;
 	private EntityManager managerMock;
 	private PropertyChangeListener listener;
 	private ArgumentCaptor<PropertyChangeEvent> captured;
@@ -33,36 +48,32 @@ public class KanbanServiceImplTest {
 	public void initialized() throws Exception {
 		KanbanServiceImpl service1 = new KanbanServiceImpl();
 		StorageService serviceMock = mock(StorageService.class);
-		StorageService serviceSpy = spy(serviceMock);
 		managerMock = mock(EntityManager.class);
-		when(serviceSpy.getEntityManager()).thenReturn(managerMock);
+		when(serviceMock.getEntityManager()).thenReturn(managerMock);
 		service1.setStorageService(serviceMock);
 		serviceImpl = service1;
-		service = serviceImpl;
 		listener = mock(PropertyChangeListener.class);
 		serviceImpl.addPropertyChangeListener(listener);
-//		captured = new Capture<PropertyChangeEvent>();
-//		listener.propertyChange(capture(captured));
+		captured = ArgumentCaptor.forClass(PropertyChangeEvent.class);
 
-		assumeNotNull(service,serviceImpl.getEntityManager());
+		assumeNotNull(serviceImpl.getEntityManager());
 	}
 	
 	@After
 	public void after() throws Exception {
+		assumeNotNull(serviceImpl,listener);
 		serviceImpl.removePropertyChangeListener(listener);
+		reset(managerMock);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void fireProperiesIsCalledWhenCreateBoard() throws Exception {
 		
-//		Board boardMock = mock(Board.class);
-//		expect(managerMock.create((Class<Board>)notNull(),(DBParam)anyObject(),(DBParam)anyObject()))
-//			.andReturn(boardMock);
-//		replay(listener,boardMock,managerMock);
-		
-		service.createBoard("test");
-		verify(listener);
+		Board boardMock = mock(Board.class);
+		when(managerMock.create(eq(Board.class), (DBParam)anyObject(),(DBParam)anyObject())).thenReturn(boardMock);
+
+		serviceImpl.createBoard("test");
+		verify(listener).propertyChange(captured.capture());
 
 		PropertyChangeEvent actual = captured.getValue();
 		assertFirePropertyWhenCreated(actual, Board.class);
@@ -73,12 +84,17 @@ public class KanbanServiceImplTest {
 	public void fireProperiesIsCalledWhenCreateCard() throws Exception {
 		Card cardMock = mock(Card.class);
 		
-		DBParam[] args = createDBParams(6);
-//		expect(managerMock.create((Class<Card>)notNull(),args)).andReturn(cardMock);
-//		expect(managerMock.find((Class<Card>)anyObject(),(String)anyObject(),anyInt())).andReturn(new Card[]{cardMock});
-//		replay(listener,cardMock,managerMock);
-		service.createCard(null, "test", null, 0, 0);
-		verify(listener);
+		when(managerMock.create(eq(Card.class),
+				(DBParam)anyObject(),
+				(DBParam)anyObject(),
+				(DBParam)anyObject(),
+				(DBParam)anyObject(),
+				(DBParam)anyObject(),
+				(DBParam)anyObject()
+				)).thenReturn(cardMock);
+		when(managerMock.find((Class<Card>)anyObject(),(String)anyObject(),anyInt())).thenReturn(new Card[]{cardMock});
+		serviceImpl.createCard(null, "test", null, 0, 0);
+		verify(listener).propertyChange(captured.capture());
 		PropertyChangeEvent actual = captured.getValue();
 		assertFirePropertyWhenCreated(actual, Card.class);
 	}
@@ -89,12 +105,15 @@ public class KanbanServiceImplTest {
 		Card cardMock = mock(Card.class);
 		Card cardClonedMock = mock(Card.class);
 		
-		DBParam[] args = createDBParams(4);
-//		expect(managerMock.create((Class<Card>)notNull(),args)).andReturn(cardMock);
-//		expect(managerMock.find((Class<Card>)anyObject(),(String)anyObject(),anyInt())).andReturn(new Card[]{cardMock});
-//		replay(listener,cardMock,cardClonedMock,managerMock);
-		service.createClonedCard(null, null, cardClonedMock, 0, 0);
-		verify(listener);
+		when(managerMock.create((Class<Card>)notNull(),
+				(DBParam)anyObject(),
+				(DBParam)anyObject(),
+				(DBParam)anyObject(),
+				(DBParam)anyObject()
+				)).thenReturn(cardMock);
+		when(managerMock.find((Class<Card>)anyObject(),(String)anyObject(),anyInt())).thenReturn(new Card[]{cardMock});
+		serviceImpl.createClonedCard(null, null, cardClonedMock, 0, 0);
+		verify(listener).propertyChange(captured.capture());
 		
 		PropertyChangeEvent actual = captured.getValue();
 		assertFirePropertyWhenCreated(actual, Card.class);
@@ -106,12 +125,16 @@ public class KanbanServiceImplTest {
 		Card cardMock = mock(Card.class);
 		CardDTO dtoMock = mock(CardDTO.class);
 		
-		DBParam[] args = createDBParams(5);
-//		expect(managerMock.create((Class<Card>)notNull(),args)).andReturn(cardMock);
-//		expect(managerMock.find((Class<Card>)anyObject(),(String)anyObject(),anyInt())).andReturn(new Card[]{cardMock});
-//		replay(listener,cardMock,dtoMock,managerMock);
-		service.createReceiveCard(null, dtoMock , null, null);
-		verify(listener);
+		when(managerMock.create((Class<Card>)notNull(),
+				(DBParam)anyObject(),
+				(DBParam)anyObject(),
+				(DBParam)anyObject(),
+				(DBParam)anyObject(),
+				(DBParam)anyObject()
+				)).thenReturn(cardMock);
+		when(managerMock.find((Class<Card>)anyObject(),(String)anyObject(),anyInt())).thenReturn(new Card[]{cardMock});
+		serviceImpl.createReceiveCard(null, dtoMock , null, null);
+		verify(listener).propertyChange(captured.capture());
 		
 		PropertyChangeEvent actual = captured.getValue();
 		assertFirePropertyWhenCreated(actual, Card.class);
@@ -122,12 +145,18 @@ public class KanbanServiceImplTest {
 	public void fireProperiesIsCalledWhenAboutLane() throws Exception {
 		Lane laneMock = mock(Lane.class);
 		
-		DBParam[] args = createDBParams(7);
-//		expect(managerMock.create((Class<Lane>)notNull(),args)).andReturn(laneMock);
-//		expect(managerMock.find((Class<Lane>)anyObject(),(String)anyObject(),anyInt())).andReturn(new Lane[]{laneMock});
-//		replay(listener,laneMock,managerMock);
-		service.createLane(null, "test", 0, 0, 100, 100);
-		verify(listener);
+		when(managerMock.create((Class<Lane>)notNull(),
+				(DBParam)anyObject(),
+				(DBParam)anyObject(),
+				(DBParam)anyObject(),
+				(DBParam)anyObject(),
+				(DBParam)anyObject(),
+				(DBParam)anyObject(),
+				(DBParam)anyObject()
+				)).thenReturn(laneMock);
+		when(managerMock.find((Class<Lane>)anyObject(),(String)anyObject(),anyInt())).thenReturn(new Lane[]{laneMock});
+		serviceImpl.createLane(null, "test", 0, 0, 100, 100);
+		verify(listener).propertyChange(captured.capture());
 		
 		PropertyChangeEvent actual = captured.getValue();
 		assertFirePropertyWhenCreated(actual, Lane.class);
@@ -139,13 +168,11 @@ public class KanbanServiceImplTest {
 	public void fireProperiesIsCalledWhenAboutUser() throws Exception {
 		User userMock = mock(User.class);
 
-		DBParam[] args = createDBParams(1);
-//		expect(managerMock.create((Class<User>)notNull(),args)).andReturn(userMock);
-//		expect(managerMock.find((Class<User>)anyObject(),(String)anyObject(),(String)anyObject(),anyBoolean())).andReturn(new User[]{userMock});
-//		replay(listener,userMock,managerMock);
+		when(managerMock.create((Class<User>)notNull(),(DBParam)anyObject())).thenReturn(userMock);
+		when(managerMock.find((Class<User>)anyObject(),(String)anyObject(),(String)anyObject(),anyBoolean())).thenReturn(new User[]{userMock});
 		String user = "kompiro@kompiro.org";
-		service.addUser(user);
-		verify(listener);
+		serviceImpl.addUser(user);
+		verify(listener).propertyChange(captured.capture());
 		assertFirePropertyWhenCreated(captured.getValue(),User.class);
 	}
 
@@ -154,11 +181,10 @@ public class KanbanServiceImplTest {
 	public void firePropertiesIsCalledWhenUserDeleted() throws Exception {
 		User userMock = mock(User.class);
 
-//		expect(managerMock.find((Class<User>)anyObject(),(String)anyObject(),(String)anyObject(),anyBoolean())).andReturn(new User[]{userMock});
-//		replay(userMock,listener,managerMock);
+		when(managerMock.find((Class<User>)anyObject(),(String)anyObject(),(String)anyObject(),anyBoolean())).thenReturn(new User[]{userMock});
 		
-		service.deleteUser("test");
-		verify(listener);
+		serviceImpl.deleteUser("test");
+		verify(listener).propertyChange(captured.capture());
 
 		PropertyChangeEvent actual = captured.getValue();
 		assertThat(actual.getPropertyName(), is("User"));
@@ -176,12 +202,4 @@ public class KanbanServiceImplTest {
 		assertThat(actual.getOldValue(), nullValue());
 	}
 	
-	private DBParam[] createDBParams(int size) {
-		List<DBParam> params = new ArrayList<DBParam>();
-		for(int i = 0; i < size; i++){
-			params.add((DBParam)anyObject());
-		}
-		return params.toArray(new DBParam[]{});
-	}
-
 }

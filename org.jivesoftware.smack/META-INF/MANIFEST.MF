@@ -4,20 +4,37 @@ Bundle-Name: Smack
 Bundle-SymbolicName: org.jivesoftware.smack
 Bundle-Version: 3.1.0
 Bundle-Vendor: Jive Software (packaged by kompiro.org)
+Bundle-RequiredExecutionEnvironment: J2SE-1.5,
+ JavaSE-1.6
 Bundle-ClassPath: lib/smack.jar,
- lib/smackx-jingle.jar,
- lib/smackx.jar
+ lib/smackx-debug.jar,
+ lib/smackx-jingle.jar
 Export-Package: org.jivesoftware.smack,
  org.jivesoftware.smack.debugger,
  org.jivesoftware.smack.filter,
  org.jivesoftware.smack.packet,
  org.jivesoftware.smack.provider,
+ org.jivesoftware.smack.proxy,
  org.jivesoftware.smack.sasl,
  org.jivesoftware.smack.util,
  org.jivesoftware.smack.util.collections,
  org.jivesoftware.smackx,
  org.jivesoftware.smackx.bookmark,
+ org.jivesoftware.smackx.commands,
+ org.jivesoftware.smackx.debugger,
  org.jivesoftware.smackx.filetransfer,
+ org.jivesoftware.smackx.jingle,
+ org.jivesoftware.smackx.jingle.listeners,
+ org.jivesoftware.smackx.jingle.media,
+ org.jivesoftware.smackx.jingle.mediaimpl,
+ org.jivesoftware.smackx.jingle.mediaimpl.demo,
+ org.jivesoftware.smackx.jingle.mediaimpl.jmf,
+ org.jivesoftware.smackx.jingle.mediaimpl.jspeex,
+ org.jivesoftware.smackx.jingle.mediaimpl.multi,
+ org.jivesoftware.smackx.jingle.mediaimpl.sshare,
+ org.jivesoftware.smackx.jingle.mediaimpl.sshare.api,
+ org.jivesoftware.smackx.jingle.mediaimpl.test,
+ org.jivesoftware.smackx.jingle.nat,
  org.jivesoftware.smackx.muc,
  org.jivesoftware.smackx.packet,
  org.jivesoftware.smackx.provider,
@@ -32,5 +49,3 @@ Export-Package: org.jivesoftware.smack,
  org.jivesoftware.smackx.workgroup.settings,
  org.jivesoftware.smackx.workgroup.user,
  org.jivesoftware.smackx.workgroup.util
-Bundle-RequiredExecutionEnvironment: J2SE-1.5,
- JavaSE-1.6

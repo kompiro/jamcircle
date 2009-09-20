@@ -2,7 +2,7 @@
 <feature
       id="org.kompiro.jamcircle.test.feature"
       label="JAMCircle Test Feature"
-      version="0.0.0.qualifier"
+      version="0.0.0"
       provider-name="kompiro.org">
 
    <description url="http://kompiro.org/jamcircle/test/description">
@@ -38,11 +38,6 @@
          version="0.0.0"
          unpack="false"/>
 
-   <plugin
-         id="org.easymock"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
 
    <plugin
          id="org.junit4"

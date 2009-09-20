@@ -6,7 +6,9 @@ Bundle-Version: 1.8.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .,
  mockito-all-1.8.0.jar
-Export-Package: org.mockito,
+Export-Package: org.hamcrest,
+ org.hamcrest.core,
+ org.mockito,
  org.mockito.configuration,
  org.mockito.exceptions,
  org.mockito.exceptions.base,

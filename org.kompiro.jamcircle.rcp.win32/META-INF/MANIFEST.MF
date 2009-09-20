@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: RCP Win32 Extension
 Bundle-SymbolicName: org.kompiro.jamcircle.rcp.win32;singleton:=true
 Bundle-Version: 0.1.0.qualifier
-Bundle-Vendor: Kompiro
+Bundle-Vendor: kompiro.org
 Require-Bundle: org.sf.feeling.swt.win32.extension,
  org.eclipse.swt
 Eclipse-ExtensibleAPI: true 
