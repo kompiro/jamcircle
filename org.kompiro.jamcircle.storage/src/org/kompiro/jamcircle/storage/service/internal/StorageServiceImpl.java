@@ -138,7 +138,7 @@ public class StorageServiceImpl implements StorageService {
 		}
 		monitor.internalWorked(10);
 		monitor.setTaskName("Create database connection...");
-		createEntityManager(uri,setting.getMode(),setting.getUsername(),setting.getPassword());
+		createEntityManager(uri,setting.getUsername(),setting.getPassword());
 		monitor.internalWorked(50);
 		monitor.setTaskName("Store setting...");
 		storeSetting(setting);
@@ -158,7 +158,7 @@ public class StorageServiceImpl implements StorageService {
 		}
 	}
 
-	private void createEntityManager(String uri, String mode, String username, String password) throws StorageConnectException{
+	private void createEntityManager(String uri, String username, String password) throws StorageConnectException{
 		DatabaseProvider provider;
 		provider = new H2DatabaseProvider(uri,username,password);
 		try{
@@ -172,7 +172,27 @@ public class StorageServiceImpl implements StorageService {
 		manager = new EntityManager(provider);
 	}
 	
+	public void recreateEntityManagerForTest() throws StorageConnectException{
+		assert manager == null || !testmode  : "recreateEntityManager is called after manager is created.";
+		DatabaseProvider provider = manager.getProvider();
+		String uri = provider.getURI();
+		String username = provider.getUsername();
+		String password = provider.getPassword();
+		provider.dispose();
+		File db = new File(getStoreRoot());
+		assert db.isDirectory():"db is dirrectory";
+		travasalDelete(db);
+		createEntityManager(uri, username, password);
+	}
 
+	private void travasalDelete(File parent) {
+		for(File file : parent.listFiles()){
+			if(file.isDirectory()){
+				travasalDelete(file);
+			}
+			file.delete();
+		}
+	}
 	
 	public String getDefaultStoreRoot() {
 		String storeRoot = "";
