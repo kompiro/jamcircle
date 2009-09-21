@@ -35,3 +35,4 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.4
 Bundle-ActivationPolicy: lazy
 Eclipse-LazyStart: true
 Bundle-NativeCode: lib/swt-extension-win32.dll;osname=win32;processor=x86_64;processor=x86
+Eclipse-PlatformFilter: (& (osgi.ws=win32) (osgi.os=win32) (osgi.arch=x86))
