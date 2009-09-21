@@ -24,8 +24,13 @@ public class GraphicalEntityTest extends AbstractStorageTest{
 		entity.setY(10);
 		entity.save();
 
-		entity = manager.get(GraphicalEntity.class,1);
-		assertFalse(entity.isDeletedVisuals());
+		entity = manager.get(GraphicalEntity.class, 1);
+		assertFalse("Entity isn't deleted visual because it is reloaded.",entity.isDeletedVisuals());
+		assertEquals(100,entity.getX());
+		assertEquals(10,entity.getY());
+
+		entity = manager.find(GraphicalEntity.class,"id = ?",1)[0];
+		assertFalse("Entity isn't deleted visuals,too using find method",entity.isDeletedVisuals());
 		assertEquals(100,entity.getX());
 		assertEquals(10,entity.getY());
 		entity = manager.get(GraphicalEntity.class,300);
