@@ -27,11 +27,11 @@ RCP.
          version="0.0.0"/>
 
    <includes
-         id="org.kompiro.jamcircle.scripting.feature"
+         id="org.kompiro.jamcircle.kanban.feature"
          version="0.0.0"/>
 
    <includes
-         id="org.kompiro.jamcircle.kanban.feature"
+         id="org.kompiro.jamcircle.scripting.feature"
          version="0.0.0"/>
 
 </feature>
