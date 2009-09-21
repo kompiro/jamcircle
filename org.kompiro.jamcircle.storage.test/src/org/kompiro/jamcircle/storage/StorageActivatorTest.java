@@ -10,7 +10,9 @@ import java.sql.SQLException;
 import net.java.ao.EntityManager;
 import net.java.ao.Transaction;
 
+import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -19,16 +21,14 @@ public class StorageActivatorTest extends AbstractStorageTest{
 	@SuppressWarnings("unchecked")
 	@Before
 	public void init() throws SQLException{
+		try{
+			manager.getProvider().getConnection().prepareStatement("DROP TABLE nonPersistableField,person,deletedModel").execute();			
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
 		manager.migrate(Person.class,DeletedModel.class,NonPersistableField.class);
 	}
 	
-	@Test
-	public void storageData() throws Exception {
-		assertCommit(manager);
-		assertRollback(manager);
-		assertRollbackWhenDontSave(manager);
-		assertUpdateAndCommit(manager);
-	}
 	
 	@Ignore
 	@Test
@@ -67,8 +67,16 @@ public class StorageActivatorTest extends AbstractStorageTest{
 		assertEquals("Hiroki Kondo",model.getPerson().getName());
 	}
 
+	@Test
+	public void storageData() throws Exception {
+		assertCommit(manager);
+		assertRollback(manager);
+		assertRollbackWhenDontSave(manager);
+		assertUpdateAndCommit(manager);
+	}
+
 	private void assertCommit(EntityManager manager) throws SQLException {
-		new Transaction<Person>(manager){
+		Person person = new Transaction<Person>(manager){
 			@Override
 			protected Person run() throws SQLException {
 				EntityManager manager = getEntityManager();
@@ -80,7 +88,9 @@ public class StorageActivatorTest extends AbstractStorageTest{
 			}
 		}.execute();
 		assertEquals(1,manager.count(Person.class));
-		assertTrue(manager.get(Person.class, 1).isFool());
+//		Person person = manager.get(Person.class, 1);
+		assertEquals("Hiroki Kondo",person.getName());
+		assertTrue(person.isFool());
 	}
 
 	private void assertRollback(EntityManager manager) throws SQLException {

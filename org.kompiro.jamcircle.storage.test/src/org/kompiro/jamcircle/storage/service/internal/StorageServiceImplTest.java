@@ -83,7 +83,7 @@ public class StorageServiceImplTest {
 		tempDir = new File(System.getProperty("java.io.tmpdir"));
 		String path = "jdbc:h2:" + tempDir.getAbsolutePath() + File.separator + "test";
 		System.out.println(path);
-		service.loadStorage(new StorageSetting(0,tempDir.getAbsolutePath(),StorageService.MODE.FILE.toString(),"","")
+		service.loadStorage(new StorageSetting(0,tempDir.getAbsolutePath(),StorageService.CONNECTION_MODE.FILE.toString(),"","")
 		, new SysoutProgressMonitor());
 		entityManager = service.getEntityManager();
 		assertNotNull(entityManager);

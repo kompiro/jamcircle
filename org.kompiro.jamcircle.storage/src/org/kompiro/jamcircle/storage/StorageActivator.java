@@ -55,7 +55,7 @@ public class StorageActivator extends Plugin {
 		settings.loadSettings();
 		if(settings.size() == 0){
 			String uri = service.getDefaultStoreRoot();
-			settings.add(-1,uri,StorageServiceImpl.MODE.FILE.toString(), "sa", "");
+			settings.add(-1,uri,StorageServiceImpl.CONNECTION_MODE.FILE.toString(), "sa", "");
 		}
 		StorageSetting setting = settings.get(0);
 		try {

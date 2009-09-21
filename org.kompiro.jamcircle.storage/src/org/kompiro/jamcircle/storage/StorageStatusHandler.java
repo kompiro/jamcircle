@@ -14,8 +14,8 @@ public class StorageStatusHandler {
 
 	private static Set<IStatusHandler> handlers = new HashSet<IStatusHandler>();
 	
-	private static final boolean ENABLE_LOGGING;
-	private static final boolean ENABLE_DEBUG_LEVEL;
+	public static final boolean ENABLE_LOGGING;
+	public static final boolean ENABLE_DEBUG_LEVEL;
 
 	static{
 		ENABLE_LOGGING = !Platform.isRunning() || Boolean.valueOf(Platform.getDebugOption(ID_PLUGIN + "/debug"));

@@ -37,7 +37,7 @@ import org.kompiro.jamcircle.storage.ui.StorageUIActivator;
 public class StorageSettingWizard extends Wizard {
 
 	private String uri;
-	private String mode = StorageService.MODE.FILE.toString();
+	private String mode = StorageService.CONNECTION_MODE.FILE.toString();
 	private String username;
 	private String password;
 	private StorageSettingPage page;

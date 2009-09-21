@@ -35,6 +35,11 @@ import org.kompiro.jamcircle.storage.service.StorageService;
 import org.kompiro.jamcircle.storage.service.StorageSetting;
 import org.kompiro.jamcircle.storage.service.StorageSettings;
 
+/**
+ * FIXME Separated File storage and DB Storage Service
+ * @author kompiro
+ *
+ */
 public class StorageServiceImpl implements StorageService {
 	
 	private final class StorageChageListenerComparator implements
@@ -123,7 +128,7 @@ public class StorageServiceImpl implements StorageService {
 		storeRoot = System.getProperty(KEY_OF_SYSTEM_PROPERTY_STORAGE_STOREROOT);
 		String uri = null;
 		if(storeRoot == null || storeRoot.length() == 0){
-			if(MODE.TCP.toString().equals(setting.getMode())){
+			if(CONNECTION_MODE.TCP.toString().equals(setting.getMode())){
 				storeRoot = getDefaultStoreRoot();
 				uri = "jdbc:h2:" + setting.getUri() + dbName;
 			}else{

@@ -14,7 +14,7 @@ import net.java.ao.EntityManager;
 
 public interface StorageService {
 
-	public enum MODE{
+	public enum CONNECTION_MODE{
 		FILE,TCP
 	}
 	
