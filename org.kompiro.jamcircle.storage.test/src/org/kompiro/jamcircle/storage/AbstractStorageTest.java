@@ -45,13 +45,17 @@ public abstract class AbstractStorageTest {
 		}
 		String path = file.getAbsolutePath();
 		assertNotSame("can't connect Test DB.'" + path + "'", -1 , path.indexOf("test"));
-		BundleContext context = activator.getBundle().getBundleContext();
-		ServiceReference reference = context.getServiceReference(StorageService.class.getName());
-		StorageService service = (StorageService) context.getService(reference);
+		StorageService service = getStorageService();
 		manager = service.getEntityManager();
 		assertNotNull(manager);
 		assertAutoCommit(manager);
 		Logger.getLogger("net.java.ao").setLevel(Level.FINE);
+	}
+
+	public static StorageService getStorageService() {
+		BundleContext context = activator.getBundle().getBundleContext();
+		ServiceReference reference = context.getServiceReference(StorageService.class.getName());
+		return (StorageService) context.getService(reference);
 	}
 	
 	@Before

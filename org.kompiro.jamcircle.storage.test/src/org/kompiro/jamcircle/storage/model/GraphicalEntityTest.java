@@ -1,16 +1,25 @@
 package org.kompiro.jamcircle.storage.model;
 
 import static org.junit.Assert.*;
+import static org.junit.Assume.*;
+
+import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.storage.AbstractStorageTest;
+import org.kompiro.jamcircle.storage.service.internal.StorageServiceImpl;
 
 public class GraphicalEntityTest extends AbstractStorageTest{
 		
 	@SuppressWarnings("unchecked")
 	@Before
 	public void init() throws Exception{
+		try {
+			((StorageServiceImpl)AbstractStorageTest.getStorageService()).recreateEntityManagerForTest();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		manager.migrate(GraphicalEntity.class);
 	}
 
@@ -23,14 +32,14 @@ public class GraphicalEntityTest extends AbstractStorageTest{
 		entity.setX(100);
 		entity.setY(10);
 		entity.save();
-
+		assumeThat(manager.count(GraphicalEntity.class), is(1));
 		entity = manager.get(GraphicalEntity.class, 1);
-		assertFalse("Entity isn't deleted visual because it is reloaded.",entity.isDeletedVisuals());
+		assertTrue("Entity is deleted visual because it isn't reloaded.",entity.isDeletedVisuals());
 		assertEquals(100,entity.getX());
 		assertEquals(10,entity.getY());
 
 		entity = manager.find(GraphicalEntity.class,"id = ?",1)[0];
-		assertFalse("Entity isn't deleted visuals,too using find method",entity.isDeletedVisuals());
+		assertTrue("Entity is deleted visuals,too using find method",entity.isDeletedVisuals());
 		assertEquals(100,entity.getX());
 		assertEquals(10,entity.getY());
 		entity = manager.get(GraphicalEntity.class,300);

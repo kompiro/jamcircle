@@ -10,12 +10,9 @@ import java.sql.SQLException;
 import net.java.ao.EntityManager;
 import net.java.ao.Transaction;
 
-import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.kompiro.jamcircle.storage.exception.StorageConnectException;
 import org.kompiro.jamcircle.storage.service.internal.StorageServiceImpl;
 
 public class StorageActivatorTest extends AbstractStorageTest{
@@ -23,13 +20,8 @@ public class StorageActivatorTest extends AbstractStorageTest{
 	@SuppressWarnings("unchecked")
 	@Before
 	public void init() throws SQLException{
-//		try{
-//			manager.getProvider().getConnection().prepareStatement("DROP TABLE nonPersistableField,person,deletedModel").execute();			
-//		}catch(SQLException e){
-//			e.printStackTrace();
-//		}
 		try {
-			((StorageServiceImpl)activator.getService()).recreateEntityManagerForTest();
+			((StorageServiceImpl)AbstractStorageTest.getStorageService()).recreateEntityManagerForTest();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
