@@ -2,7 +2,7 @@
 <feature
       id="org.kompiro.jamcircle.scripting.feature"
       label="%feature-name"
-      version="0.0.0"
+      version="0.1.0.qualifier"
       provider-name="%provider">
 
    <description url="http://kompiro.org/jamcircle">
@@ -16,10 +16,6 @@
    <license url="http://www.eclipse.org/legal/epl-v10.html">
       %license
    </license>
-
-   <requires>
-      <import feature="org.kompiro.jamcircle.kanban.feature" version="1.1.0.qualifier"/>
-   </requires>
 
    <plugin
          id="org.eclipse.jface.text"
