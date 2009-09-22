@@ -1,9 +1,8 @@
 package org.kompiro.jamcircle.kanban.ui.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.kompiro.jamcircle.kanban.ui.util.XMPPUtil;
 
 
 public class XMPPUtilTest {

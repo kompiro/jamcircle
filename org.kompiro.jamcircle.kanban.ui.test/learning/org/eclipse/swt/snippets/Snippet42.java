@@ -16,7 +16,7 @@ package org.eclipse.swt.snippets;
  * For a list of all SWT example snippets see
  * http://www.eclipse.org/swt/snippets/
  */
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.Display;
 
 public class Snippet42 {
 

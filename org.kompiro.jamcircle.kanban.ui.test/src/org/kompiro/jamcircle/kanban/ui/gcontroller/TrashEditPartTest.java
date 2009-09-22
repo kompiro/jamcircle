@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
-
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
@@ -16,12 +15,9 @@ import org.eclipse.gef.requests.GroupRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
-import org.kompiro.jamcircle.kanban.model.mock.Icon;
 import org.kompiro.jamcircle.kanban.ui.command.AddLaneTrashCommand;
 import org.kompiro.jamcircle.kanban.ui.command.RemoveCardCommand;
 import org.kompiro.jamcircle.kanban.ui.command.RemoveLaneCommand;
-import org.kompiro.jamcircle.kanban.ui.gcontroller.CardEditPart;
-import org.kompiro.jamcircle.kanban.ui.gcontroller.LaneEditPart;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 
 public class TrashEditPartTest extends AbstractControllerTest{

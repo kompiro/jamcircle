@@ -18,28 +18,6 @@
    </license>
 
    <plugin
-         id="abbot.swt"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="abbot.swt.eclipse"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="abbot.swt.gef"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-
-   <plugin
          id="org.junit4"
          download-size="0"
          install-size="0"
