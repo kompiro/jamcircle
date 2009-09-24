@@ -1,6 +1,8 @@
 package org.kompiro.jamcircle.storage.service.internal;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.UUID;
@@ -10,54 +12,18 @@ import net.java.ao.Entity;
 import net.java.ao.EntityManager;
 
 import org.apache.commons.io.FileUtils;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.kompiro.jamcircle.debug.StandardOutputHandler;
+import org.kompiro.jamcircle.debug.SysoutProgressMonitor;
 import org.kompiro.jamcircle.storage.StorageStatusHandler;
 import org.kompiro.jamcircle.storage.service.StorageService;
 import org.kompiro.jamcircle.storage.service.StorageSetting;
 
 public class StorageServiceImplTest {
 
-	public class SysoutProgressMonitor implements IProgressMonitor{
-		
-		private String taskName;
-
-		public void beginTask(String name, int totalWork) {
-			System.out.println(String.format("%s - beginTask[%s]", taskName,name));
-		}
-
-		public void done() {
-			System.out.println("done!");
-		}
-
-		public void internalWorked(double work) {
-		}
-
-		public boolean isCanceled() {
-			return false;
-		}
-
-		public void setCanceled(boolean value) {
-		}
-
-		public void setTaskName(String name) {
-			taskName = name;
-			System.out.println(taskName);
-		}
-
-		public void subTask(String name) {
-			System.out.println(String.format("%s - subTask[%s]", taskName,name));
-		}
-
-		public void worked(int work) {
-		}
-		
-	}
-	
 	public interface TestEntity extends Entity{
 		public String getName();
 		public void setName(String name);

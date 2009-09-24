@@ -30,6 +30,7 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 	private XMPPConnection connection;
 	private List<XMPPLoginListener> listeners = new ArrayList<XMPPLoginListener>();
 	private FileTransferManager manager;
+	private XMPPActivator activator;
 
 	public void login(IProgressMonitor monitor, 
 			String host, String resource,
@@ -152,7 +153,11 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 	}
 		
 	private KanbanService getKanbanService(){
-		return XMPPActivator.getDefault().getKanbanService();
+		return activator.getKanbanService();
+	}
+	
+	public void setActivator(XMPPActivator activator) {
+		this.activator = activator;
 	}
 	
 	void setConnection(XMPPConnection connection) {
