@@ -20,9 +20,9 @@ public class KanbanServiceImplPDETest extends AbstractKanbanTest{
 	@Test
 	public void serviceInitialize() throws Exception {
 		KanbanService service = getKanbanService();
+		service.init();
 		Board[] boards = service.findAllBoard();
 		assertEquals(1,boards.length);
-		service.init();
 		boards = service.findAllBoard();
 		assertEquals(1,boards.length);
 		Lane[] allLanes = service.findAllLanes();
@@ -119,22 +119,16 @@ public class KanbanServiceImplPDETest extends AbstractKanbanTest{
 	}
 	
 	@Test
-	public void exportCards() throws Exception {
+	public void exportAndImportCards() throws Exception {
 		KanbanService service = getKanbanService();
 		service.init();
 
 		Board board = service.createBoard("test board");
 		Card card = service.createCard(board, "test", null, 100, 200);
 		card.save();
-		service.exportCards(new File("C:/temp/test_card.csv"));
-	}
-	
-	@Test
-	public void importCards() throws Exception {
-		KanbanService service = getKanbanService();
-		service.init();
-
-		service.importCards(new File("C:/JAMCircle/backup/cards.csv"));
+		File cards_csv = File.createTempFile("test_card", "csv");
+		service.exportCards(cards_csv);
+		service.importCards(cards_csv);
 	}
 	
 }

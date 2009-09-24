@@ -75,31 +75,31 @@ public abstract class AbstractKanbanTest {
 		try {
 			getKanbanService().deleteAllCards();
 		} catch (Exception e) {
-			e.printStackTrace();
+			showErrorInAfterMethods("AllCards",e.getLocalizedMessage());
 		}
-
+		
 		try {
 			getKanbanService().deleteAllLanes();
 		} catch (Exception e) {
-			e.printStackTrace();
+			showErrorInAfterMethods("AllLanes",e.getLocalizedMessage());
 		}
 		
 		try {
 			getKanbanService().deleteAllUsers();
 		} catch (Exception e) {
-			e.printStackTrace();
+			showErrorInAfterMethods("AllUsers",e.getLocalizedMessage());
 		}
 		
 		try {
 			getKanbanService().deleteAllIcons();
 		} catch (Exception e) {
-			e.printStackTrace();
+			showErrorInAfterMethods("AllIcons",e.getLocalizedMessage());
 		}
 
 		try {
 			getKanbanService().deleteAllBoards();
 		} catch (Exception e) {
-			e.printStackTrace();
+			showErrorInAfterMethods("AllBoards",e.getLocalizedMessage());
 		}
 		
 		KanbanServiceImpl service = getKanbanService();
@@ -112,6 +112,11 @@ public abstract class AbstractKanbanTest {
 //			e.printStackTrace();
 //		}
 //		provider.dispose();
+	}
+
+	private void showErrorInAfterMethods(String methodName,String localizedMessage) {
+		String message = String.format("%s:%s",methodName,localizedMessage);
+		System.err.println(message);
 	}
 
 }
