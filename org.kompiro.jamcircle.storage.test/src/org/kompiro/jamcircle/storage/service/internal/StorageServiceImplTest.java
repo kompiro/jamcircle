@@ -1,21 +1,15 @@
 package org.kompiro.jamcircle.storage.service.internal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.UUID;
 
 import net.java.ao.DBParam;
-import net.java.ao.Entity;
 import net.java.ao.EntityManager;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.kompiro.jamcircle.debug.StandardOutputHandler;
 import org.kompiro.jamcircle.debug.SysoutProgressMonitor;
 import org.kompiro.jamcircle.storage.StorageStatusHandler;
@@ -23,15 +17,6 @@ import org.kompiro.jamcircle.storage.service.StorageService;
 import org.kompiro.jamcircle.storage.service.StorageSetting;
 
 public class StorageServiceImplTest {
-
-	public interface TestEntity extends Entity{
-		public String getName();
-		public void setName(String name);
-		
-		public void setUuid(String uuid);
-		public String getUuid();
-		
-	}
 
 	private StorageServiceImpl service;
 	private EntityManager entityManager;
