@@ -28,13 +28,64 @@ import org.kompiro.jamcircle.storage.service.StorageService;
 
 public class ModelTest extends AbstractKanbanTest{
 	
-	private TestUtils util;
+	private TestUtils util = new TestUtils();
 
-	@Before
-	public void before() throws Exception {
-		util = new TestUtils();
+
+//	@Before
+//	public void before() throws Exception {
+//		super.init();
+//	}
+
+	@Test
+	public void files() throws Exception {
+		DBParam[] params = new DBParam[]{
+				new DBParam(Card.PROP_SUBJECT,"test"),
+				new DBParam(Card.PROP_CREATEDATE,new Date()),
+				new DBParam(Card.PROP_TRASHED,true),
+		};
+		Card card = entityManager.create(Card.class,params);
+		File target = util.target();
+		card.addFile(target);
+		System.out.println(target.getAbsolutePath());
+		StorageService service = KanbanActivator.getDefault().getStorageService();
+		String path = CardImpl.CARD_PATH + card.getID() + File.separator + "long.txt";
+		assertTrue("'" + path +"' is not exist.",service.fileExists(path));
+		assertTrue(card.hasFiles());
+		FileInputStream stream = new FileInputStream(card.getFiles().get(0));
+		assertEquals(util.readFile(),getString(stream));
 	}
+	
+	private String getString(InputStream stream) throws IOException{
+		Reader r = new InputStreamReader(stream);
+		BufferedReader br = new BufferedReader(r);
+		StringBuilder builder = new StringBuilder();
+		String line = null;
+		while((line = br.readLine()) != null){
+			builder.append(line + "\n");
+		}
+		return builder.toString();
 
+	}
+	
+	@Test
+	public void longValue() throws Exception {
+		
+		DBParam[] params = new DBParam[]{
+				new DBParam(Card.PROP_SUBJECT,"very very long value"),
+				new DBParam(Card.PROP_CONTENT,util.readFile()),
+				new DBParam(Card.PROP_CREATEDATE,new Date()),
+				new DBParam(Card.PROP_TRASHED,false),
+		};
+		entityManager.create(Card.class,params);
+		params = new DBParam[]{
+				new DBParam(Lane.PROP_STATUS,"very very long value"),
+				new DBParam(Lane.PROP_SCRIPT,util.readFile()),
+				new DBParam(Lane.PROP_CREATEDATE,new Date()),
+		};
+		entityManager.create(Lane.class,params);
+		
+	}
+	
 	@Test
 	public void modelRelation() throws Exception {
 		Card card = entityManager.create(Card.class,new DBParam(Card.PROP_SUBJECT,"test"));
@@ -94,56 +145,6 @@ public class ModelTest extends AbstractKanbanTest{
 		};
 		entityManager.create(Card.class,params);
 		assertNotNull(entityManager.find(Card.class,Card.PROP_TRASHED + " = true"));
-	}
-	
-	@Test
-	public void longValue() throws Exception {
-		
-		DBParam[] params = new DBParam[]{
-				new DBParam(Card.PROP_SUBJECT,"very very long value"),
-				new DBParam(Card.PROP_CONTENT,util.readFile()),
-				new DBParam(Card.PROP_CREATEDATE,new Date()),
-				new DBParam(Card.PROP_TRASHED,false),
-		};
-		entityManager.create(Card.class,params);
-		params = new DBParam[]{
-				new DBParam(Lane.PROP_STATUS,"very very long value"),
-				new DBParam(Lane.PROP_SCRIPT,util.readFile()),
-				new DBParam(Lane.PROP_CREATEDATE,new Date()),
-		};
-		entityManager.create(Lane.class,params);
-		
-	}
-	
-	@Test
-	public void files() throws Exception {
-		DBParam[] params = new DBParam[]{
-				new DBParam(Card.PROP_SUBJECT,"test"),
-				new DBParam(Card.PROP_CREATEDATE,new Date()),
-				new DBParam(Card.PROP_TRASHED,true),
-		};
-		Card card = entityManager.create(Card.class,params);
-		File target = util.target();
-		card.addFile(target);
-		System.out.println(target.getAbsolutePath());
-		StorageService service = KanbanActivator.getDefault().getStorageService();
-		String path = CardImpl.CARD_PATH + card.getID() + File.separator + "long.txt";
-		assertTrue("'" + path +"' is not exist.",service.fileExists(path));
-		assertTrue(card.hasFiles());
-		FileInputStream stream = new FileInputStream(card.getFiles().get(0));
-		assertEquals(util.readFile(),getString(stream));
-	}
-	
-	private String getString(InputStream stream) throws IOException{
-		Reader r = new InputStreamReader(stream);
-		BufferedReader br = new BufferedReader(r);
-		StringBuilder builder = new StringBuilder();
-		String line = null;
-		while((line = br.readLine()) != null){
-			builder.append(line + "\n");
-		}
-		return builder.toString();
-
 	}
 	
 }

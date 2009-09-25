@@ -3,11 +3,11 @@ package org.kompiro.jamcircle.kanban.service.internal;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.FilenameFilter;
+import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.java.ao.DatabaseProvider;
 import net.java.ao.EntityManager;
 
 import org.junit.*;
@@ -35,18 +35,6 @@ public abstract class AbstractKanbanTest {
 			}
 			assertTrue(storePath.indexOf("test") != -1);
 			System.out.println(storePath);
-			File file = new File(storePath);
-			File parentFile = file.getParentFile();
-			
-			parentFile.list(new FilenameFilter(){
-
-				public boolean accept(File file, String name) {
-					File target = new File(file,name);
-					Logger.getLogger("net.java.ao").info("deleted : " + target.getAbsolutePath());
-					return target.delete();
-				}
-			
-			});
 			assertNotNull(getKanbanService());
 			
 		}catch(Exception e){
@@ -104,14 +92,20 @@ public abstract class AbstractKanbanTest {
 		
 		KanbanServiceImpl service = getKanbanService();
 		service.setInitialized(false);
-//		DatabaseProvider provider = entityManager.getProvider();
-//		Connection connection = provider.getConnection();
-//		try {
-//			connection.close();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		provider.dispose();
+	}
+	
+	@AfterClass
+	public static void afterAll() throws Exception{
+		DatabaseProvider provider = entityManager.getProvider();
+		Connection connection = provider.getConnection();
+		connection.prepareStatement("DROP TABLE card,lane,user,icon,board").execute();
+		try {
+			connection.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		provider.dispose();
+
 	}
 
 	private void showErrorInAfterMethods(String methodName,String localizedMessage) {
