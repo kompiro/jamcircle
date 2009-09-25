@@ -18,7 +18,6 @@ import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.storage.service.StorageService;
 import org.mockito.ArgumentCaptor;
 
-//@RunWith(VerboseMockitoJUnitRunner.class)
 public class KanbanServiceImplTest {
 
 	private KanbanServiceImpl serviceImpl;
