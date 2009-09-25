@@ -41,6 +41,28 @@ public abstract class AbstractControllerTest {
 	public static final int INIT_BOARD_CHIHLDREN_SIZE = TRACHBOX_COUNT;
 //		TRACHBOX_COUNT	+ LANE_CREATER_COUNT;
 
+	/**
+	 * Jump asyncrouns execution because these are not testable.
+	 */
+	private final class JumpAsyncBoardModel extends BoardModel {
+		private static final long serialVersionUID = 4122329778411044605L;
+
+		private JumpAsyncBoardModel(
+				org.kompiro.jamcircle.kanban.model.Board board) {
+			super(board);
+		}
+
+		@Override
+		public boolean addCard(Card card) {
+			return boardEntity.addCard(card);
+		}
+
+		@Override
+		public boolean removeCard(Card card) {
+			return boardEntity.removeCard(card);
+		}
+	}
+
 	protected static class TrashMock extends TrashModel {
 		public TrashMock() {
 			super(new Icon(){
@@ -199,17 +221,7 @@ public abstract class AbstractControllerTest {
 	@Before
 	public void init() throws Exception {
 		boardEntity = new Board();
-		board = new BoardModel(boardEntity){
-			private static final long serialVersionUID = 4122329778411044605L;
-			@Override
-			public boolean addCard(Card card) {
-				return boardEntity.addCard(card);
-			}
-			@Override
-			public boolean removeCard(Card card) {
-				return boardEntity.removeCard(card);
-			}
-		};
+		board = new JumpAsyncBoardModel(boardEntity);
 		boardEntity.addPropertyChangeListener(board);
 
 		board.addIcon(trashMock);
