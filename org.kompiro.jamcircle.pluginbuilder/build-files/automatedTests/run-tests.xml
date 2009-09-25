@@ -17,10 +17,10 @@
 	<target name="-init" depends="-emmaInit">
 		<antcall target="-unpackEclipse"/>
 		<antcall target="-installEclipseExtensionLocation"/>
-		<antcall target="-createLink"/>
-		<!-- Useful for debugging 
 		<antcall target="umAddSite" />
+		<!-- Useful for debugging 
 		<antcall target="umListFeaturesSite" />
+		<antcall target="-createLink"/>
 		-->
 	</target>
 
@@ -31,7 +31,10 @@
 			<equals arg1="${archivePrefix}" arg2="eclipse" />
 		</condition>
 		<unzip dest="${buildResultZipDest}">
+			<fileset dir="${buildDirectory}" includes="${buildType}-**/*.zip"/>
+			<!--
 			<fileset dir="${buildDirectory}" includes="${buildType}-**/*.zip" excludes="**/${archiveNamePrefix}-*"/>
+			-->
 		</unzip>
 		<antcall target="-emmaInstrument"/>
 		<unzip dest="${test.eclipseExtensionDirectory}/..">
@@ -105,21 +108,19 @@ version=3.1.0</echo>
 	-->
 	
 	<target name="run" depends="-init,-runAutoTests,-emmaReport" description="Run all tests using the autotestsuite and create xml and html reports.">
-		<antcall target="-removeLink"/>
 <!--
-		<antcall target="umRemoveSite" />
+		<antcall target="-removeLink"/>
 -->
+		<antcall target="umRemoveSite" />
 		<junitreport todir="${test.result.dir}/xml" tofile="${test.aggregated.report}">
 			<fileset dir="${test.result.dir}/xml">
 				<include name="*.xml" />
 			</fileset>
 		</junitreport>
 <!--
-		<BundleFileLocator eclipseInstallationRoot="${test.eclipseExtensionDirectory}" bundleId="org.pluginbuilder.autotestsuite.application" filePath="JUNIT.XSL" property="junit.xsl.file" />
--->
 		<BundleFileLocator eclipseInstallationRoot="${test.eclipse.host.eclipse}" bundleId="org.pluginbuilder.autotestsuite.application" filePath="JUNIT.XSL" property="junit.xsl.file" />
-
-
+-->
+		<BundleFileLocator eclipseInstallationRoot="${test.eclipseExtensionDirectory}" bundleId="org.pluginbuilder.autotestsuite.application" filePath="JUNIT.XSL" property="junit.xsl.file" />
 		<style style="${junit.xsl.file}" basedir="${test.result.dir}/xml" includes="${test.aggregated.report}" destdir="${test.result.dir}/html" />
 	</target>
 	
@@ -173,6 +174,7 @@ version=3.1.0</echo>
 			<jvmarg value="-Duser.home=${buildDirectory}/user"/>
 			<jvmarg value="${optJvmArg}"/>
 			<jvmarg value="-Xmx512m"/>
+			<jvmarg value="-Dorg.eclipse.update.reconcile=true" />
 			
 			<sysproperty key="autotestsuite.results.directory" value="${test.result.dir}/xml" />
 			<sysproperty key="autotest.debug" value="${autotestsuite.trace}" />
@@ -247,6 +249,7 @@ version=3.1.0</echo>
 			<arg value="${updateManagerCommand}" />
 			<arg value="${updateManagerCommandParam}" />
 			<arg value="${updateManagerCommandSiteUrl}" />
+			<jvmarg value="-Dorg.eclipse.update.reconcile=true" />
 
 			<classpath>
 				<pathelement location="${equinoxjar}" />
