@@ -1,16 +1,13 @@
 package org.kompiro.jamcircle.storage.service;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.util.List;
 
+import net.java.ao.*;
+
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.kompiro.jamcircle.storage.StorageStatusHandler;
 import org.kompiro.jamcircle.storage.exception.StorageConnectException;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
-
-
-import net.java.ao.*;
 
 
 public interface StorageService {
@@ -47,6 +44,6 @@ public interface StorageService {
 
 	public String getStoreRoot();
 
-	public Entity createEntity(Class<? extends Entity> clazz, DBParam[] params);
+	public Entity createEntity(Class<? extends Entity> clazz, DBParam... params);
 
 }

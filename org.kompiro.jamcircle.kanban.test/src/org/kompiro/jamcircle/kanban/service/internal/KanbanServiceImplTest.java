@@ -16,6 +16,7 @@ import net.java.ao.EntityManager;
 import org.junit.*;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.storage.service.StorageService;
+import org.kompiro.jamcircle.storage.service.internal.StorageServiceImpl;
 import org.mockito.ArgumentCaptor;
 
 public class KanbanServiceImplTest {
@@ -24,15 +25,15 @@ public class KanbanServiceImplTest {
 	private EntityManager managerMock;
 	private PropertyChangeListener listener;
 	private ArgumentCaptor<PropertyChangeEvent> captured;
+	private StorageService storageService;
 
 	@Before
 	public void initialized() throws Exception {
-		KanbanServiceImpl service1 = new KanbanServiceImpl();
-		StorageService serviceMock = mock(StorageService.class);
+		storageService = mock(StorageServiceImpl.class);
 		managerMock = mock(EntityManager.class);
-		when(serviceMock.getEntityManager()).thenReturn(managerMock);
-		service1.setStorageService(serviceMock);
-		serviceImpl = service1;
+		when(storageService.getEntityManager()).thenReturn(managerMock);
+		serviceImpl = new KanbanServiceImpl();
+		serviceImpl.setStorageService(storageService);
 		listener = mock(PropertyChangeListener.class);
 		serviceImpl.addPropertyChangeListener(listener);
 		captured = ArgumentCaptor.forClass(PropertyChangeEvent.class);
@@ -172,6 +173,15 @@ public class KanbanServiceImplTest {
 		assertThat(actual.getNewValue(), nullValue());
 		assertThat(actual.getOldValue(), notNullValue());
 		assertThat(actual.getOldValue(),instanceOf(User.class));
+	}
+	
+	@Test
+	public void addUser() throws Exception {
+		String userId = "kompiro@gmail.com";
+		DBParam params = new DBParam(User.PROP_USERID,userId);
+		when(storageService.createEntity(User.class, params)).thenCallRealMethod();
+		serviceImpl.addUser(userId);
+		verify(storageService,times(1)).createEntity(User.class, params);
 	}
 
 	private void assertFirePropertyWhenCreated(
