@@ -25,7 +25,7 @@ public class XMPPActivator extends Plugin {
 
 	private ServiceRegistration registerService;
 	
-	private XMPPConnectionServiceImpl service = new XMPPConnectionServiceImpl();
+	private XMPPConnectionServiceImpl service;
 
 	private XMPPSettings settings = new XMPPSettings();
 	
@@ -35,12 +35,14 @@ public class XMPPActivator extends Plugin {
 
 	
 	public XMPPActivator() {
+		service = new XMPPConnectionServiceImpl();
+		service.setActivator(this);
 	}
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		createConnection();			
+		createConnection();
 		registerService = context.registerService(XMPPConnectionService.class.getName(),service, null);
 		kanbanTracker = new ServiceTracker(context, KanbanService.class.getName(), null);
 		kanbanTracker.open();

@@ -1,13 +1,11 @@
 package org.kompiro.jamcircle.kanban.ui.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.Icon;
-import org.kompiro.jamcircle.kanban.ui.model.DefaultIconModelFactory;
-import org.kompiro.jamcircle.kanban.ui.model.IconModel;
-import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 
 public class DefaultIconModelFactoryTest {
 

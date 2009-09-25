@@ -3,6 +3,7 @@ package org.kompiro.jamcircle.kanban.service.internal;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -53,13 +54,21 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 			KanbanMigrator migrator = new KanbanMigrator(this);
 			migrator.migrate();
 			try {
-				if(getEntityManager().count(Board.class) == 0){
+				int boardCount = 0;
+				try {
+					boardCount = getEntityManager().count(Board.class);
+				} catch (UndeclaredThrowableException e) {
+					KanbanStatusHandler.fail(e, "KanbanServiceImpl#init",true);
+					return;
+				}
+				if(boardCount == 0){
 					Board board = createBoard();
 					KanbanBoardTemplate initializer = new TaskBoardTemplate();
 					initializer.initialize(board);
 				}
 			} catch (SQLException e) {
 				KanbanStatusHandler.fail(e, "KanbanServiceImpl#init",true);
+				return;
 			}
 			Icon[] icons = findIcons();
 			if(icons.length == 0){

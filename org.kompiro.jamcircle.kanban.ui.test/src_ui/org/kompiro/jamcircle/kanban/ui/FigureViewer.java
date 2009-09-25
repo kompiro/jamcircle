@@ -4,7 +4,8 @@ package org.kompiro.jamcircle.kanban.ui;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
-import org.kompiro.jamcircle.kanban.ui.KanbanView;
+import org.kompiro.jamcircle.kanban.model.mock.Board;
+import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
 public class FigureViewer {
 
@@ -31,9 +32,9 @@ public class FigureViewer {
 		Shell shell = new Shell();
 		shell.setLayout(new FillLayout());
 		FigureViewer v = new FigureViewer(shell);
+		BoardModel board = new BoardModel(new Board());
+		v.setContents(board);
 		shell.open();
-//		BoardModel board = new BoardModel();
-//		v.setContents(board);
 		while(!shell.isDisposed()){
 			shell.getDisplay().readAndDispatch();
 		}

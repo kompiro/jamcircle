@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
-
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.RequestConstants;
@@ -17,7 +16,6 @@ import org.eclipse.gef.requests.GroupRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
-import org.kompiro.jamcircle.kanban.ui.gcontroller.CardEditPart;
 
 public class LaneEditPartTest extends AbstractControllerTest{
 

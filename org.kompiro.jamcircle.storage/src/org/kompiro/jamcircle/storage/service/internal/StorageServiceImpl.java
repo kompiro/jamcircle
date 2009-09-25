@@ -17,9 +17,7 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import net.java.ao.DatabaseProvider;
-import net.java.ao.Entity;
-import net.java.ao.EntityManager;
+import net.java.ao.*;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -36,9 +34,9 @@ import org.kompiro.jamcircle.storage.service.StorageSetting;
 import org.kompiro.jamcircle.storage.service.StorageSettings;
 
 /**
- * FIXME Separated File storage and DB Storage Service
+ * TODO Separated File storage and DB Storage Service
  * @author kompiro
- *
+ * @TestContext org.kompiro.jamcircle.storage.service.internal.StorageServiceImplTest
  */
 public class StorageServiceImpl implements StorageService {
 	
@@ -314,5 +312,25 @@ public class StorageServiceImpl implements StorageService {
 	public void removeStorageChangeListener(StorageChageListener listener) {
 		this.listeners.remove(listener);
 		Collections.sort(this.listeners, new StorageChageListenerComparator());
+	}
+
+	public void setEntityManager(EntityManager manager) {
+		this.manager = manager;
+	}
+
+	public Entity createEntity(Class<? extends Entity> clazz, DBParam[] params) {
+		Entity entity = null;
+		try {
+			entity = getEntityManager().create(clazz, params);
+		} catch (SQLException e) {
+			StringBuilder builder = new StringBuilder();
+			for(DBParam param:params){
+				builder.append(String.format("%s:%s",param.getField(),param.getValue()));
+				builder.append("\t");
+			}
+			StorageStatusHandler.fail(e, "StorageServiceImpl#create() '%s'",builder.toString());
+		}
+		return entity;
+
 	}
 }

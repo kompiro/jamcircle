@@ -82,6 +82,10 @@ public class StorageStatusHandler {
 		fail(throwable, message, true, Status.ERROR);
 	}
 
+	public static void fail(Throwable throwable, String message,Object... params) {
+		fail(throwable, String.format(message,params), false, Status.ERROR);
+	}
+	
 	public static void fail(Throwable throwable, String message, boolean informUser) {
 		fail(throwable, message, informUser, Status.ERROR);
 	}
