@@ -1,7 +1,8 @@
 package org.kompiro.jamcircle.kanban.ui.gcontroller;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.*;
+import static org.hamcrest.CoreMatchers.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -200,6 +201,14 @@ public abstract class AbstractControllerTest {
 		boardEntity = new Board();
 		board = new BoardModel(boardEntity){
 			private static final long serialVersionUID = 4122329778411044605L;
+			@Override
+			public boolean addCard(Card card) {
+				return boardEntity.addCard(card);
+			}
+			@Override
+			public boolean removeCard(Card card) {
+				return boardEntity.removeCard(card);
+			}
 		};
 		boardEntity.addPropertyChangeListener(board);
 
@@ -207,13 +216,13 @@ public abstract class AbstractControllerTest {
 		KanbanControllerFactory factory = new KanbanControllerFactory(board);
 		viewer.setEditPartFactory(factory);
 		viewer.setContents(board);
-		assertEquals(1, root.getChildren().size());
+		assumeThat(root.getChildren().size(), is(1));
 
 		Object obj = root.getChildren().get(0);
 		assertTrue(obj instanceof BoardEditPart);
 		boardPart = (BoardEditPart) obj;
-		assertTrue(boardPart.isActive());
-		assertEquals(INIT_BOARD_CHIHLDREN_SIZE, boardPart.getChildren().size());
+		assumeTrue(boardPart.isActive());
+		assumeThat(boardPart.getChildren().size(), is(INIT_BOARD_CHIHLDREN_SIZE));
 	}
 
 	@After

@@ -7,4 +7,8 @@ Bundle-Vendor: kompiro.org
 Fragment-Host: org.kompiro.jamcircle.kanban.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Require-Bundle: org.junit4,
- com.ibm.icu
+ com.ibm.icu,
+ org.mockito,
+ org.eclipse.swtbot.eclipse.finder,
+ org.eclipse.swtbot.junit4_x,
+ org.eclipse.swtbot.swt.finder

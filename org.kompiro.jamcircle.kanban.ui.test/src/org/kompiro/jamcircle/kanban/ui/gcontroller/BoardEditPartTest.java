@@ -3,6 +3,8 @@ package org.kompiro.jamcircle.kanban.ui.gcontroller;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.*;
+import static org.hamcrest.CoreMatchers.*;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -33,7 +35,7 @@ public class BoardEditPartTest extends AbstractControllerTest{
 		super.init();
 //		assertFalse(boardPart.isActive());
 //		boardPart.activate();
-		assertEquals(INIT_BOARD_CHIHLDREN_SIZE,boardPart.getChildren().size());
+		assumeThat(boardPart.getChildren().size(),is(INIT_BOARD_CHIHLDREN_SIZE));
 	}
 	
 	@After
