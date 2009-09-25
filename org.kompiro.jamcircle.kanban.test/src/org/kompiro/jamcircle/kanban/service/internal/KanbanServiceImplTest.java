@@ -1,21 +1,11 @@
 package org.kompiro.jamcircle.kanban.service.internal;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeNotNull;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.notNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -23,20 +13,12 @@ import java.beans.PropertyChangeListener;
 import net.java.ao.DBParam;
 import net.java.ao.EntityManager;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.kompiro.jamcircle.kanban.model.Board;
-import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.CardDTO;
-import org.kompiro.jamcircle.kanban.model.Lane;
-import org.kompiro.jamcircle.kanban.model.User;
+import org.junit.*;
+import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.storage.service.StorageService;
 import org.mockito.ArgumentCaptor;
-import org.mockito.runners.VerboseMockitoJUnitRunner;
 
-@RunWith(VerboseMockitoJUnitRunner.class)
+//@RunWith(VerboseMockitoJUnitRunner.class)
 public class KanbanServiceImplTest {
 
 	private KanbanServiceImpl serviceImpl;
