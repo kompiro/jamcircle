@@ -12,3 +12,4 @@ Require-Bundle: org.junit4,
  org.eclipse.swtbot.eclipse.finder,
  org.eclipse.swtbot.junit4_x,
  org.eclipse.swtbot.swt.finder
+Bundle-RegisterBuddy: org.mockito

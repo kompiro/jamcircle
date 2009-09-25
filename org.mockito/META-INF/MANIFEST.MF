@@ -18,3 +18,4 @@ Export-Package: org.hamcrest,
  org.mockito.invocation,
  org.mockito.runners,
  org.mockito.stubbing
+Bundle-BuddyPolicy: registered
