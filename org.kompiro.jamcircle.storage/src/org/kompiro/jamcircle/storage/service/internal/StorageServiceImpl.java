@@ -318,7 +318,7 @@ public class StorageServiceImpl implements StorageService {
 		this.manager = manager;
 	}
 
-	public Entity createEntity(Class<? extends Entity> clazz, DBParam[] params) {
+	public Entity createEntity(Class<? extends Entity> clazz, DBParam... params) {
 		Entity entity = null;
 		try {
 			entity = getEntityManager().create(clazz, params);

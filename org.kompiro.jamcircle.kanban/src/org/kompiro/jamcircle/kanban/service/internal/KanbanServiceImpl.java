@@ -323,12 +323,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 
 	public User addUser(String userId) {
 		DBParam param = new DBParam(User.PROP_USERID, userId);
-		User user = null;
-		try {
-			user = getEntityManager().create(User.class, param);
-		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#addUser() '%s'",userId);
-		}
+		User user = (User)getStorageService().createEntity(User.class, param);
 		firePropertyChange(User.class.getSimpleName(), null, user);
 		return user;
 	}
