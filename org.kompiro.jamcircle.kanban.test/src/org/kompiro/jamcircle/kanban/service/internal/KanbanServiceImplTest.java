@@ -87,7 +87,7 @@ public class KanbanServiceImplTest {
 		Card cardMock = mock(Card.class);
 		Card cardClonedMock = mock(Card.class);
 		
-		when(managerMock.create((Class<Card>)notNull(),
+		when(managerMock.create(eq(Card.class),
 				(DBParam)anyObject(),
 				(DBParam)anyObject(),
 				(DBParam)anyObject(),
@@ -107,7 +107,7 @@ public class KanbanServiceImplTest {
 		Card cardMock = mock(Card.class);
 		CardDTO dtoMock = mock(CardDTO.class);
 		
-		when(managerMock.create((Class<Card>)notNull(),
+		when(managerMock.create(eq(Card.class),
 				(DBParam)anyObject(),
 				(DBParam)anyObject(),
 				(DBParam)anyObject(),
@@ -127,7 +127,7 @@ public class KanbanServiceImplTest {
 	public void fireProperiesIsCalledWhenAboutLane() throws Exception {
 		Lane laneMock = mock(Lane.class);
 		
-		when(managerMock.create((Class<Lane>)notNull(),
+		when(managerMock.create(eq(Lane.class),
 				(DBParam)anyObject(),
 				(DBParam)anyObject(),
 				(DBParam)anyObject(),
@@ -147,8 +147,8 @@ public class KanbanServiceImplTest {
 	@Test
 	public void fireProperiesIsCalledWhenAboutUser() throws Exception {
 		User userMock = mock(User.class);
-		when(storageService.createEntity((Class<User>)eq(User.class),(DBParam[])anyObject())).thenCallRealMethod();
-		when(managerMock.create((Class<User>)eq(User.class),(DBParam[])anyObject())).thenReturn(userMock);
+		when(storageService.createEntity(eq(User.class),(DBParam[])anyObject())).thenCallRealMethod();
+		when(managerMock.create(eq(User.class),(DBParam[])anyObject())).thenReturn(userMock);
 		String user = "kompiro@kompiro.org";
 		serviceImpl.addUser(user);
 		verify(listener).propertyChange(captured.capture());
@@ -159,7 +159,7 @@ public class KanbanServiceImplTest {
 	public void firePropertiesIsCalledWhenUserDeleted() throws Exception {
 		User userMock = mock(User.class);
 
-		when(managerMock.find((Class<User>)eq(User.class),(String)anyObject(),(String)anyObject(),anyBoolean())).thenReturn(new User[]{userMock});
+		when(managerMock.find(eq(User.class),(String)anyObject(),(String)anyObject(),anyBoolean())).thenReturn(new User[]{userMock});
 		
 		serviceImpl.deleteUser("test");
 		verify(listener).propertyChange(captured.capture());
