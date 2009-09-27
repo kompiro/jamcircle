@@ -1,12 +1,9 @@
 package org.kompiro.jamcircle.kanban.model;
 
 import java.sql.Types;
-import java.util.Date;
+import java.util.*;
 
-import net.java.ao.Entity;
-import net.java.ao.Implementation;
-import net.java.ao.OneToMany;
-import net.java.ao.Preload;
+import net.java.ao.*;
 import net.java.ao.schema.Default;
 import net.java.ao.schema.Ignore;
 import net.java.ao.schema.NotNull;
@@ -77,5 +74,96 @@ public interface Board extends Entity,CardContainer,LaneContainer {
 	@Ignore
 	public  String getContainerName();
 
+	public class Mock extends CardContainer.Mock implements Board{
+
+		private Date createDate;
+		private String script;
+		private ScriptTypes scriptType;
+		private String title;
+		private boolean trashed;
+		private List<Lane> lanes = new ArrayList<Lane>();
+
+		public boolean addLane(Lane lane) {
+			return lanes.add(lane);
+		}
+
+		public void clearMocks() {
+		}
+
+		public Card[] getCardsFromDB() {
+			return null;
+		}
+
+		public Date getCreateDate() {
+			return createDate;
+		}
+
+		public Lane[] getLanes() {
+			return lanes.toArray(new Lane[]{});
+		}
+
+		public Lane[] getLanesFromDB() {
+			return null;
+		}
+
+		public String getScript() {
+			return this.script;
+		}
+
+		public ScriptTypes getScriptType() {
+			return this.scriptType;
+		}
+
+		public String getTitle() {
+			return this.title;
+		}
+
+		public boolean isTrashed() {
+			return this.trashed;
+		}
+
+		public boolean removeLane(Lane lane) {
+			return lanes.remove(lane);
+		}
+
+		public void setCreateDate(Date date) {
+			this.createDate = date;
+		}
+
+		public void setScript(String script) {
+			this.script = script;
+		}
+
+		public void setScriptType(ScriptTypes type) {
+			this.scriptType = type;
+		}
+
+		public void setTitle(String title) {
+			this.title = title;
+		}
+
+		public void setTrashed(boolean trashed) {
+			this.trashed = trashed;
+		}
+
+		public int getID() {
+			return 0;
+		}
+
+		public EntityManager getEntityManager() {
+			return null;
+		}
+
+		public Class<? extends RawEntity<Integer>> getEntityType() {
+			return null;
+		}
+
+		public void init() {
+		}
+
+		public void save() {
+		}
+		
+	}
 
 }
