@@ -7,6 +7,8 @@
 	<property file="../../build_${hostname}.properties" />
 	<property file="../../build_local.properties" />
 	<property name="test.eclipse.host.eclipse" value="${test.eclipse.host}/eclipse" />
+	<property name="test.configuration" value="${buildDirectory}/configuration"/>
+	<property name="test.user_dir" value="${buildDirectory}/user"/>
 
 	<import file="../build_shared.xml" />
 	
@@ -40,6 +42,7 @@
 		<unzip dest="${test.eclipseExtensionDirectory}/..">
 			<fileset dir="." includes="eclipse-test-framework*.zip" />
 			<fileset dir="." includes="org.eclipse.swtbot.eclipse-*.zip" />
+			<fileset dir="." includes="org.kompiro.jamcircle.libralies-*.zip" />
 		</unzip>
 		<unzip dest="${test.eclipseExtensionDirectory}">
 			<fileset dir="." includes="org.pluginbuilder.autotestsuite*.zip" />
@@ -48,25 +51,6 @@
 name=Eclipse Platform
 version=3.1.0</echo>
 	</target>
-
-    <target name="-createLink">
-    	<!--
-    <target name="-createLink">
-		<echo file="${test.eclipse.host.eclipse}/dropins/jamcircle.link">path=/tmp/org.kompiro.jamcircle.builder/eclipseextension/</echo>
-		-->
-    	<copy todir="${test.eclipse.host.eclipse}/dropins/" >
-    		<fileset dir="/tmp/org.kompiro.jamcircle.builder/eclipseextension/" includes="**/**"/>
-    	</copy>
-    </target>
-
-    <target name="-removeLink">
-    	<!--
-			<delete file="${test.eclipse.host.eclipse}/dropins/jamcircle.link"/>
-		-->
-    	<delete dir="${test.eclipse.host.eclipse}/dropins/eclipse">
-	</delete>
-
-    </target>
 
 	<target name="-unpackEclipse" unless="isEclipseInstallationAvailable">
 	 	<antcall target="unpack.eclipse">
@@ -108,9 +92,6 @@ version=3.1.0</echo>
 	-->
 	
 	<target name="run" depends="-init,-runAutoTests,-emmaReport" description="Run all tests using the autotestsuite and create xml and html reports.">
-<!--
-		<antcall target="-removeLink"/>
--->
 		<antcall target="umRemoveSite" />
 		<junitreport todir="${test.result.dir}/xml" tofile="${test.aggregated.report}">
 			<fileset dir="${test.result.dir}/xml">
@@ -150,8 +131,7 @@ version=3.1.0</echo>
 		<condition property="testApplication" else="" value="-testApplication ${autotest.testapplication}">
 			<isset property="autotest.testapplication"/>
 		</condition>
-		<property name="test.configuration" value="${buildDirectory}/configuration"/>
-		<mkdir dir="${buildDirectory}/user"/>
+		<mkdir dir="${test.user_dir}"/>
 		<mkdir dir="${test.configuration}"/>
 		<echoproperties/>
 		<java fork="true" dir="." logError="true" classname="org.eclipse.core.launcher.Main" resultproperty="autotestsuite.result"> 

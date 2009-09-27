@@ -4,7 +4,7 @@
 -->
 <project name="Build Facade" default="main">
 	<taskdef resource="org/pluginbuilder/anttasks/pluginbuildertasks.properties" classpath="build-files/pluginbuilder-anttasks.jar" />
-	
+	<property name="extendArgs" value=""/>	
 	<GetHostName />
 	<property file="build_${hostname}.properties" />
 	<property file="build_local.properties" />
@@ -142,6 +142,7 @@
 			<arg value="-data" />
 			<arg value="${buildDirectory}/workspace" />
 			<arg value="${verboseAnt}"/>
+			<jvmarg line="${extendArgs}"/>
 			<jvmarg value="-Dbasews=${ws}" />
 			<jvmarg value="-Dbaseos=${os}" />
 			<jvmarg value="-Dbasearch=${arch}" />
