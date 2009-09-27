@@ -6,7 +6,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.kompiro.jamcircle.kanban.model.Board;
+import org.kompiro.jamcircle.kanban.model.mock.Board;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
@@ -42,7 +42,7 @@ public class CreateLaneCommandTest {
 	}
 	
 	private void createCommand() {
-		board = new Board.Mock();
+		board = new Board();
 		command = new CreateLaneCommand();
 		BoardModel boardModel = new BoardModel(board);
 		command.setContainer(boardModel);
