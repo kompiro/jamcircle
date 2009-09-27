@@ -87,7 +87,7 @@ public class KanbanServiceImplTest {
 		Card cardMock = mock(Card.class);
 		Card cardClonedMock = mock(Card.class);
 		
-		when(managerMock.create((Class<Card>)notNull(),
+		when(managerMock.create(eq(Card.class),
 				(DBParam)anyObject(),
 				(DBParam)anyObject(),
 				(DBParam)anyObject(),
@@ -107,7 +107,7 @@ public class KanbanServiceImplTest {
 		Card cardMock = mock(Card.class);
 		CardDTO dtoMock = mock(CardDTO.class);
 		
-		when(managerMock.create((Class<Card>)notNull(),
+		when(managerMock.create(eq(Card.class),
 				(DBParam)anyObject(),
 				(DBParam)anyObject(),
 				(DBParam)anyObject(),
@@ -127,7 +127,7 @@ public class KanbanServiceImplTest {
 	public void fireProperiesIsCalledWhenAboutLane() throws Exception {
 		Lane laneMock = mock(Lane.class);
 		
-		when(managerMock.create((Class<Lane>)notNull(),
+		when(managerMock.create(eq(Lane.class),
 				(DBParam)anyObject(),
 				(DBParam)anyObject(),
 				(DBParam)anyObject(),
@@ -144,26 +144,22 @@ public class KanbanServiceImplTest {
 		assertFirePropertyWhenCreated(actual, Lane.class);
 	}
 
-
-	@SuppressWarnings("unchecked")
 	@Test
 	public void fireProperiesIsCalledWhenAboutUser() throws Exception {
 		User userMock = mock(User.class);
-
-		when(managerMock.create((Class<User>)notNull(),(DBParam)anyObject())).thenReturn(userMock);
-		when(managerMock.find((Class<User>)anyObject(),(String)anyObject(),(String)anyObject(),anyBoolean())).thenReturn(new User[]{userMock});
+		when(storageService.createEntity(eq(User.class),(DBParam[])anyObject())).thenCallRealMethod();
+		when(managerMock.create(eq(User.class),(DBParam[])anyObject())).thenReturn(userMock);
 		String user = "kompiro@kompiro.org";
 		serviceImpl.addUser(user);
 		verify(listener).propertyChange(captured.capture());
 		assertFirePropertyWhenCreated(captured.getValue(),User.class);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void firePropertiesIsCalledWhenUserDeleted() throws Exception {
 		User userMock = mock(User.class);
 
-		when(managerMock.find((Class<User>)anyObject(),(String)anyObject(),(String)anyObject(),anyBoolean())).thenReturn(new User[]{userMock});
+		when(managerMock.find(eq(User.class),(String)anyObject(),(String)anyObject(),anyBoolean())).thenReturn(new User[]{userMock});
 		
 		serviceImpl.deleteUser("test");
 		verify(listener).propertyChange(captured.capture());
@@ -178,7 +174,9 @@ public class KanbanServiceImplTest {
 	@Test
 	public void addUser() throws Exception {
 		String userId = "kompiro@gmail.com";
-		DBParam params = new DBParam(User.PROP_USERID,userId);
+		DBParam[] params = new DBParam[]{
+				new DBParam(User.PROP_USERID,userId)
+		};
 		when(storageService.createEntity(User.class, params)).thenCallRealMethod();
 		serviceImpl.addUser(userId);
 		verify(storageService,times(1)).createEntity(User.class, params);

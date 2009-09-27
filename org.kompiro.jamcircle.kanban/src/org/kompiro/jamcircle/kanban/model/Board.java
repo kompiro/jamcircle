@@ -1,12 +1,9 @@
 package org.kompiro.jamcircle.kanban.model;
 
 import java.sql.Types;
-import java.util.Date;
+import java.util.*;
 
-import net.java.ao.Entity;
-import net.java.ao.Implementation;
-import net.java.ao.OneToMany;
-import net.java.ao.Preload;
+import net.java.ao.*;
 import net.java.ao.schema.Default;
 import net.java.ao.schema.Ignore;
 import net.java.ao.schema.NotNull;
@@ -76,6 +73,5 @@ public interface Board extends Entity,CardContainer,LaneContainer {
 	
 	@Ignore
 	public  String getContainerName();
-
 
 }

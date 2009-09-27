@@ -44,6 +44,6 @@ public interface StorageService {
 
 	public String getStoreRoot();
 
-	public Entity createEntity(Class<? extends Entity> clazz, DBParam... params);
+	public Entity createEntity(Class<? extends Entity> clazz, DBParam[] params);
 
 }

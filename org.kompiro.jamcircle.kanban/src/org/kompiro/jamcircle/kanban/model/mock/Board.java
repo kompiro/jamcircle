@@ -23,7 +23,9 @@ public class Board extends MockEntity implements org.kompiro.jamcircle.kanban.mo
 	private ScriptTypes scriptType;
 
 	public boolean addCard(Card card) {
-		return cards.add(card);
+		boolean added = cards.add(card);
+		card.setBoard(this);
+		return added;
 	}
 
 	public boolean addLane(Lane lane) {
