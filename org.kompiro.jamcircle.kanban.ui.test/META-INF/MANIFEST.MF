@@ -8,8 +8,9 @@ Fragment-Host: org.kompiro.jamcircle.kanban.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Require-Bundle: org.junit4,
  com.ibm.icu,
+ org.apache.log4j,
  org.mockito,
  org.eclipse.swtbot.eclipse.finder,
  org.eclipse.swtbot.junit4_x,
  org.eclipse.swtbot.swt.finder
-Bundle-RegisterBuddy: org.mockito
+Bundle-RegisterBuddy: org.mockito,org.apache.log4j
