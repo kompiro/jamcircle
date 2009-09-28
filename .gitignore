@@ -19,3 +19,4 @@ xstream/
 de.spiritlink.jobs/
 org.kompiro.jamcircle.builder/
 *example/
+**/screenshots/**
