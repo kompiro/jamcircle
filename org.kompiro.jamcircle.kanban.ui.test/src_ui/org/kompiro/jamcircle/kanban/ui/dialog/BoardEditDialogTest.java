@@ -22,7 +22,7 @@ public class BoardEditDialogTest {
 				"initialize_title",
 				"initialize_script",
 				ScriptTypes.JRuby);
-		Thread t = new Thread(new Runnable() {
+		new Thread(new Runnable() {
 			
 			public void run() {
 				try {
@@ -40,8 +40,7 @@ public class BoardEditDialogTest {
 				assertThat(dialog.getTitle(),is("modified"));
 				assertThat(dialog.getScript(),is("modified_script"));
 			}
-		});
-		t.start();
+		}).start();
 		dialog.open();
 	}
 	
