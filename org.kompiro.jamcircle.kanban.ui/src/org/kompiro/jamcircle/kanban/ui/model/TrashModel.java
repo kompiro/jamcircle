@@ -51,19 +51,15 @@ public class TrashModel extends AbstractIconModel implements CardContainer,LaneC
 	}
 
 	public boolean addLane(Lane lane) {
-		if(!lane.isMock()){
-			lane.setTrashed(true);
-			lane.save();
-		}
+		lane.setTrashed(true);
+		lane.save();
 		firePropertyChange(PROP_LANE,lane,null);		
 		return false;
 	}
 
 	public boolean removeLane(Lane lane) {
-		if(!lane.isMock()){
-			lane.setTrashed(false);
-			lane.save();
-		}
+		lane.setTrashed(false);
+		lane.save();
 		firePropertyChange(PROP_LANE,null,lane);
 		return false;
 	}
