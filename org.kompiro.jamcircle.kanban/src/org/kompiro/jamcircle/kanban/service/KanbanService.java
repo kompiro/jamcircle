@@ -119,4 +119,8 @@ public interface KanbanService {
 
 	int countInTrash(Class<? extends GraphicalEntity> clazz);
 	
+	void discardToTrash(GraphicalEntity entity);
+
+	void pickupFromTrash(GraphicalEntity entity);
+
 }

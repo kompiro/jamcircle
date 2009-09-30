@@ -18,15 +18,13 @@ public class TrashModel extends AbstractIconModel implements CardContainer,LaneC
 	}
 	
 	public boolean addCard(Card card) {
-		card.setTrashed(true);
-		card.save();
+		kanbanService.discardToTrash(card);
 		firePropertyChange(PROP_CARD,null,card);
 		return false;
 	}
 
 	public boolean removeCard(Card card) {
-		card.setTrashed(false);
-		card.save();
+		kanbanService.pickupFromTrash(card);
 		firePropertyChange(PROP_CARD,card,null);
 		return false;
 	}
@@ -51,15 +49,13 @@ public class TrashModel extends AbstractIconModel implements CardContainer,LaneC
 	}
 
 	public boolean addLane(Lane lane) {
-		lane.setTrashed(true);
-		lane.save();
+		kanbanService.discardToTrash(lane);
 		firePropertyChange(PROP_LANE,lane,null);		
 		return false;
 	}
 
 	public boolean removeLane(Lane lane) {
-		lane.setTrashed(false);
-		lane.save();
+		kanbanService.pickupFromTrash(lane);
 		firePropertyChange(PROP_LANE,null,lane);
 		return false;
 	}
