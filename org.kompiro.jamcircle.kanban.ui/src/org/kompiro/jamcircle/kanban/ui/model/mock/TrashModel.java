@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kompiro.jamcircle.kanban.model.*;
+import org.kompiro.jamcircle.kanban.service.KanbanService;
 
 public class TrashModel extends
 		org.kompiro.jamcircle.kanban.ui.model.TrashModel {
@@ -11,8 +12,8 @@ public class TrashModel extends
 	private static final long serialVersionUID = 2380522436254409149L;
 	private List<Card> cards;
 	private List<Lane> lanes;
-	public TrashModel(Icon icon) {
-		super(icon);
+	public TrashModel(Icon icon,KanbanService kanbanService) {
+		super(icon,kanbanService);
 		cards = new ArrayList<Card>();
 		lanes = new ArrayList<Lane>();
 	}
@@ -29,7 +30,7 @@ public class TrashModel extends
 		return cards.contains(card);
 	}
 	@Override
-	public int getCardCount() {
+	public int countTrashedCard() {
 		return cards.size();
 	}
 	@Override

@@ -13,7 +13,7 @@ public class DefaultIconModelFactoryTest {
 
 	@Before
 	public void init() throws Exception{
-		this.factory = new DefaultIconModelFactory();
+		this.factory = new DefaultIconModelFactory(null);
 	}
 	
 	@Test

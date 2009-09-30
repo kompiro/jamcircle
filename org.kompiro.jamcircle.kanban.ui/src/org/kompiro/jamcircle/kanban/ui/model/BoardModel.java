@@ -189,7 +189,6 @@ public class BoardModel extends AbstractModel implements UserModelContainer,Card
 	public void addIcon(IconModel model) {
 		if(trash == null && model instanceof TrashModel){
 			this.trash = (TrashModel) model;
-			System.out.println(this.trash);
 		}
 		this.icons.add(model);
 		firePropertyChange(PROP_ICON, null, model);

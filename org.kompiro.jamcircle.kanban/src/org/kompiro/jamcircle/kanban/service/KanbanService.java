@@ -10,6 +10,7 @@ import org.kompiro.jamcircle.kanban.model.CardDTO;
 import org.kompiro.jamcircle.kanban.model.Icon;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.model.User;
+import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 import org.kompiro.jamcircle.storage.service.StorageChageListener;
 
 
@@ -114,5 +115,9 @@ public interface KanbanService {
 	void addPropertyChangeListener(PropertyChangeListener boardChangeListener);
 
 	void removePropertyChangeListener(PropertyChangeListener boardChangeListener);
+
+	Card[] cardsInTrash();
+
+	int countInTrash(Class<? extends GraphicalEntity> clazz);
 	
 }

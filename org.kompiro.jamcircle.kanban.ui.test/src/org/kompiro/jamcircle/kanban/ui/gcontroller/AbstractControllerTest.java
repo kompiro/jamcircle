@@ -70,7 +70,7 @@ public abstract class AbstractControllerTest {
 				public String getClassType() {
 					return TrashModel.class.getName();
 				}
-			});
+			},null);
 		}
 
 		private static final long serialVersionUID = 1L;

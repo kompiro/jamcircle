@@ -16,6 +16,7 @@ import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
 import org.kompiro.jamcircle.kanban.boardtemplate.internal.*;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 import org.kompiro.jamcircle.storage.service.StorageChageListener;
 import org.kompiro.jamcircle.storage.service.StorageService;
 
@@ -156,7 +157,12 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		return mock;
 	}
 
-
+	public void trashCard(Card card) {
+		card.setTrashed(true);
+		card.save();
+	}
+	
+	
 	public int countCards() {
 		try {
 			return getEntityManager().count(Card.class,Card.PROP_TRASHED + " = true");
@@ -474,6 +480,21 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 
 	public boolean importIcons(File importFile) {
 		return getStorageService().importEntity(importFile, Icon.class);
+	}
+	
+	public Card[] cardsInTrash() {
+		return null;
+	}
+
+	public int countInTrash(Class<? extends GraphicalEntity> clazz) {
+		GraphicalEntity[] results = null;
+		try {
+			results = getEntityManager().find(clazz,GraphicalEntity.PROP_TRASHED + " = ?",true);
+		} catch (SQLException e) {
+			KanbanStatusHandler.fail(e,"KanbanServiceImpl#countInTrash()",true);
+		}
+		if(results == null) return 0;
+		return results.length;
 	}
 
 	public KanbanBoardTemplate[] getKanbanDataInitializers() {

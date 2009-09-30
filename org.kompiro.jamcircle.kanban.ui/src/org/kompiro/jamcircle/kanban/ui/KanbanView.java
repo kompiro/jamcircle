@@ -120,7 +120,7 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 	private CutAction cutHandler;
 	private CellEditorActionHandler handlers;
 	private CardReceiveFileTransferListener cardReceiveFileTransferListener;
-	private IconModelFactory iconModelFactory = new DefaultIconModelFactory();
+	private IconModelFactory iconModelFactory;
 	private CaptureBoardAction caputureBoardAction;
 	private ScalableRootEditPart rootPart;
 	private ZoomInAction zoomInAction;
@@ -133,6 +133,7 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		}
 		if(getKanbanService() != null){
 			getKanbanService().addStorageChangeListener(this);
+			iconModelFactory = new DefaultIconModelFactory(getKanbanService());
 		}
 	}
 
