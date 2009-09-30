@@ -38,9 +38,9 @@ public interface KanbanService {
 	
 	Card[] findCards(String criteria, Object... parameters);
 	
-	Card createReceiveCard(Board board,CardDTO dto,User current,User fromUser);
+	Card[] findCardsInTrash();
 
-	int countCards();
+	Card createReceiveCard(Board board,CardDTO dto,User current,User fromUser);
 	
 	boolean exportCards(File exportFile);
 
@@ -106,6 +106,7 @@ public interface KanbanService {
 
 	boolean importIcons(File importFile);
 
+	// Others
 	KanbanBoardTemplate[] getKanbanDataInitializers();
 
 	void addStorageChangeListener(StorageChageListener listener);
@@ -115,8 +116,6 @@ public interface KanbanService {
 	void addPropertyChangeListener(PropertyChangeListener boardChangeListener);
 
 	void removePropertyChangeListener(PropertyChangeListener boardChangeListener);
-
-	Card[] cardsInTrash();
 
 	int countInTrash(Class<? extends GraphicalEntity> clazz);
 	

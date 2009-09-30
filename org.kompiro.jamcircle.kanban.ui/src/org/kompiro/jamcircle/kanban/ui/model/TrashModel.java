@@ -36,11 +36,11 @@ public class TrashModel extends AbstractIconModel implements CardContainer,LaneC
 	}
 	
 	public Card[] getCards(){
-		return getKanbanService().cardsInTrash();
+		return getKanbanService().findCardsInTrash();
 	}
 	
 	public int countTrashedCard(){
-		return getKanbanService().countCards();
+		return countTrashed(Card.class);
 	}
 
 	public boolean isEmpty() {
@@ -67,6 +67,11 @@ public class TrashModel extends AbstractIconModel implements CardContainer,LaneC
 		firePropertyChange(PROP_LANE,null,lane);
 		return false;
 	}
+	
+	public int countTrashedLane() {
+		return countTrashed(Lane.class);
+	}
+
 	
 	public Lane[] getLanes() {
 		return getKanbanService().findLanesInTrash();

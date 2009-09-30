@@ -482,7 +482,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		return getStorageService().importEntity(importFile, Icon.class);
 	}
 	
-	public Card[] cardsInTrash() {
+	public Card[] findCardsInTrash() {
 		return null;
 	}
 
