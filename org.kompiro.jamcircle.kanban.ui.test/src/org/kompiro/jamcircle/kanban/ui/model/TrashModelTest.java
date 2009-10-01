@@ -145,7 +145,6 @@ public class TrashModelTest {
 			}
 		}).when(lane).setTrashed(false);
 
-//		assumeThat(trash.countTrashedLane(),is(0));
 		trash.addLane(lane);
 		assertThat(trash.countTrashedLane(),is(1));
 		trash.removeLane(lane);

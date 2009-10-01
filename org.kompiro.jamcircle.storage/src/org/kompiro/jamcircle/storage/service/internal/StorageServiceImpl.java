@@ -293,31 +293,7 @@ public class StorageServiceImpl implements StorageService {
 	public String getDBPath() {
 		return getStoreRoot() + StorageServiceImpl.dbName;
 	}
-
-	public EntityManager getEntityManager() {
-		return manager;
-	}
-
-	public StorageSettings getSettings() {
-		StorageActivator activator = StorageActivator.getDefault();
-		if(activator == null) return null;
-		return activator.getStorageSettings();
-	}
-
-	public void addStorageChangeListener(StorageChageListener listener) {
-		this.listeners.add(listener);
-		Collections.sort(this.listeners, new StorageChageListenerComparator());
-	}
-
-	public void removeStorageChangeListener(StorageChageListener listener) {
-		this.listeners.remove(listener);
-		Collections.sort(this.listeners, new StorageChageListenerComparator());
-	}
-
-	public void setEntityManager(EntityManager manager) {
-		this.manager = manager;
-	}
-
+	
 	public Entity createEntity(Class<? extends Entity> clazz, DBParam[] params) {
 		Entity entity = null;
 		try {
@@ -340,13 +316,44 @@ public class StorageServiceImpl implements StorageService {
 	}
 	
 	public int countInTrash(Class<? extends GraphicalEntity> clazz) {
+		GraphicalEntity[] results = findInTrash(clazz);
+		if(results == null) return 0;
+		return results.length;
+	}
+
+
+	public StorageSettings getSettings() {
+		StorageActivator activator = StorageActivator.getDefault();
+		if(activator == null) return null;
+		return activator.getStorageSettings();
+	}
+
+	public void addStorageChangeListener(StorageChageListener listener) {
+		this.listeners.add(listener);
+		Collections.sort(this.listeners, new StorageChageListenerComparator());
+	}
+
+	public void removeStorageChangeListener(StorageChageListener listener) {
+		this.listeners.remove(listener);
+		Collections.sort(this.listeners, new StorageChageListenerComparator());
+	}
+
+	private GraphicalEntity[] findInTrash(Class<? extends GraphicalEntity> clazz) {
 		GraphicalEntity[] results = null;
 		try {
 			results = getEntityManager().find(clazz,GraphicalEntity.PROP_TRASHED + " = ?",true);
 		} catch (SQLException e) {
 			StorageStatusHandler.fail(e,"StorageServiceImpl#countInTrash()",true);
 		}
-		if(results == null) return 0;
-		return results.length;
+		return results;
 	}
+	
+	public void setEntityManager(EntityManager manager) {
+		this.manager = manager;
+	}
+
+	public EntityManager getEntityManager() {
+		return manager;
+	}
+
 }

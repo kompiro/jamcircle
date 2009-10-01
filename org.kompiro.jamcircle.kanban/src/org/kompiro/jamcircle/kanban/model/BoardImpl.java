@@ -109,7 +109,11 @@ public class BoardImpl extends EntityImpl{
 		allLanes.addAll(Arrays.asList(board.getLanesFromDB()));
 		allLanes.addAll(mockLanes);
 		return allLanes.toArray(new Lane[]{});
-		
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("['#%d':'%s' trashed:'%s']",board.getID(),board.getTitle(),board.isTrashed());
 	}
 	
 }

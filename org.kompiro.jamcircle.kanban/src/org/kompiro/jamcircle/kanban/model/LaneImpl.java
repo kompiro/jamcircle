@@ -71,5 +71,10 @@ public class LaneImpl extends GraphicalImpl {
 	public String getContainerName() {
 		return String.format("Lane[%s]",lane.getStatus());
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("['#%d':'%s' trashed:'%s']", lane.getID(),lane.getStatus(),lane.isTrashed());
+	}
 
 }

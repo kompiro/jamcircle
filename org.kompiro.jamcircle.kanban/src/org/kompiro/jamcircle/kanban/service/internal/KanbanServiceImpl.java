@@ -49,7 +49,19 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	}
 	
 	public void init(){
-		if(initialized) return;
+		if(initialized){
+			System.err.println("This service is initialized. But called init().");
+			return;
+		}
+		doInit();
+	}
+	
+	public void forceInit(){
+		System.out.println("This service is initializing.");
+		doInit();
+	}
+
+	private void doInit() {
 		synchronized (lock) {
 			if(initialized) return;
 			KanbanMigrator migrator = new KanbanMigrator(this);
