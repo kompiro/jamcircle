@@ -1,6 +1,7 @@
 package org.kompiro.jamcircle.storage.service.internal;
 
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 
 import java.io.File;
 import java.util.UUID;
@@ -38,9 +39,10 @@ public class StorageServiceImplTest {
 		, new SysoutProgressMonitor());
 		entityManager = service.getEntityManager();
 		assertNotNull(entityManager);
-		entityManager.migrate(TestEntity.class);
+		entityManager.migrate(TestEntity.class,GraphicalTestEntity.class);
 		TestEntity[] entities = entityManager.find(TestEntity.class);
 		entityManager.delete(entities);
+		entityManager.delete(entityManager.find(GraphicalTestEntity.class));
 	}
 	
 	@After
@@ -76,7 +78,22 @@ public class StorageServiceImplTest {
 		File destFile = new File(tempDir,"test" + File.separator + "test_dir" + File.separator + testFile.getName());
 		System.out.println(destFile.getAbsolutePath());
 		assertTrue(destFile.exists());
+	}
+	
+	@Test
+	public void deleteTrashedEntity() throws Exception {
+		assertEquals(0,entityManager.count(GraphicalTestEntity.class));
+		GraphicalTestEntity entity = service.createEntity(GraphicalTestEntity.class, new DBParam[]{new DBParam("uuid",UUID.randomUUID().toString())});
+		entity.setName("test");
+		entity.save();
 		
+		assertThat(entityManager.count(GraphicalTestEntity.class),is(1));
+		service.deleteTrashedEntity(GraphicalTestEntity.class);
+		assertThat(entityManager.count(GraphicalTestEntity.class),is(1));
+		entity.setTrashed(true);
+		entity.save();
+		service.deleteTrashedEntity(GraphicalTestEntity.class);
+		assertThat(entityManager.count(GraphicalTestEntity.class),is(0));
 	}
 	
 }

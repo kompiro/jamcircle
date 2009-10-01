@@ -294,8 +294,8 @@ public class StorageServiceImpl implements StorageService {
 		return getStoreRoot() + StorageServiceImpl.dbName;
 	}
 	
-	public Entity createEntity(Class<? extends Entity> clazz, DBParam[] params) {
-		Entity entity = null;
+	public <T extends Entity> T createEntity(Class<T> clazz, DBParam[] params) {
+		T entity = null;
 		try {
 			entity = getEntityManager().create(clazz, params);
 		} catch (SQLException e) {
@@ -312,6 +312,11 @@ public class StorageServiceImpl implements StorageService {
 
 	public void discard(GraphicalEntity entity) {
 		entity.setTrashed(true);
+		entity.save();
+	}
+	
+	public void pickup(GraphicalEntity entity) {
+		entity.setTrashed(false);
 		entity.save();
 	}
 	

@@ -562,8 +562,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	}
 
 	public void pickupFromTrash(GraphicalEntity entity) {
-		entity.setTrashed(false);
-		entity.save();
+		getStorageService().pickup(entity);
 	}
 
 }
