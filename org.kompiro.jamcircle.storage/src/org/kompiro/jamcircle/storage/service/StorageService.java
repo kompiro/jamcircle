@@ -46,4 +46,8 @@ public interface StorageService {
 
 	public Entity createEntity(Class<? extends Entity> clazz, DBParam[] params);
 
+	public void discard(GraphicalEntity entity);
+
+	public int countInTrash(Class<? extends GraphicalEntity> clazz);
+
 }

@@ -333,4 +333,20 @@ public class StorageServiceImpl implements StorageService {
 		return entity;
 
 	}
+
+	public void discard(GraphicalEntity entity) {
+		entity.setTrashed(true);
+		entity.save();
+	}
+	
+	public int countInTrash(Class<? extends GraphicalEntity> clazz) {
+		GraphicalEntity[] results = null;
+		try {
+			results = getEntityManager().find(clazz,GraphicalEntity.PROP_TRASHED + " = ?",true);
+		} catch (SQLException e) {
+			StorageStatusHandler.fail(e,"StorageServiceImpl#countInTrash()",true);
+		}
+		if(results == null) return 0;
+		return results.length;
+	}
 }

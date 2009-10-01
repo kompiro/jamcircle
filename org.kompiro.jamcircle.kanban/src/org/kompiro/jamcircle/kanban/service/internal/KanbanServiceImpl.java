@@ -487,14 +487,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	}
 
 	public int countInTrash(Class<? extends GraphicalEntity> clazz) {
-		GraphicalEntity[] results = null;
-		try {
-			results = getEntityManager().find(clazz,GraphicalEntity.PROP_TRASHED + " = ?",true);
-		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e,"KanbanServiceImpl#countInTrash()",true);
-		}
-		if(results == null) return 0;
-		return results.length;
+		return getStorageService().countInTrash(clazz);
 	}
 
 	public KanbanBoardTemplate[] getKanbanDataInitializers() {
@@ -536,7 +529,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		this.storageService = storageService;
 	}
 	
-	private StorageService getStorageService() {
+	public StorageService getStorageService() {
 		return this.storageService;
 	}
 	
@@ -553,8 +546,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	}
 
 	public void discardToTrash(GraphicalEntity entity) {
-		entity.setTrashed(true);
-		entity.save();
+		getStorageService().discard(entity);
 	}
 
 	public void pickupFromTrash(GraphicalEntity entity) {
