@@ -53,11 +53,5 @@ public class TrashFigure extends Figure {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
-	
-	@Override
-	public void paint(Graphics graphics) {
-		System.out.println("TrashFigure.paint()");
-		super.paint(graphics);
-	}
-	
+		
 }
