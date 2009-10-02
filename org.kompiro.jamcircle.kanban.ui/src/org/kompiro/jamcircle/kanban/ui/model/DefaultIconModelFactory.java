@@ -18,6 +18,10 @@ public class DefaultIconModelFactory implements IconModelFactory {
 
 	public IconModel create(Icon icon) {
 		String type = icon.getClassType();
+		if(type == null){
+			String message = String.format("Unsupported icon type:'%s'",type);
+			throw new IllegalArgumentException(message);
+		}
 		type = type.substring(type.lastIndexOf('.') + 1);
 		if(TYPE_OF_BOARD_SELECTER.equals(type)){
 			BoardSelecterModel model = new BoardSelecterModel(icon);
@@ -32,7 +36,8 @@ public class DefaultIconModelFactory implements IconModelFactory {
 			InboxIconModel model = new InboxIconModel(icon);
 			return model;
 		}
-		throw new IllegalArgumentException("");
+		String message = String.format("Unsupported icon type:'%s'",type);
+		throw new IllegalArgumentException(message);
 	}
 
 }
