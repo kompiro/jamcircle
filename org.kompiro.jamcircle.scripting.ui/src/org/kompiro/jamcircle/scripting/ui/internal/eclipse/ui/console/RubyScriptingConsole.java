@@ -717,6 +717,8 @@ public class RubyScriptingConsole extends TextConsole {
         }
         error.setColor(errorColor);
         assist.install(consolePage.getViewer());
+        assist.enableAutoActivation(true);
+        assist.enableAutoInsert(false);
         TextConsoleViewer viewer = consolePage.getViewer();
         Control control = viewer.getControl();
         if (control instanceof StyledText) {
