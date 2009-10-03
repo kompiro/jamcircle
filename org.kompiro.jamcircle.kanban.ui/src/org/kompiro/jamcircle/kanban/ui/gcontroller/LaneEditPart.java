@@ -2,11 +2,10 @@ package org.kompiro.jamcircle.kanban.ui.gcontroller;
 
 import java.beans.PropertyChangeEvent;
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.*;
 import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Point;
@@ -17,15 +16,11 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editpolicies.*;
 import org.eclipse.gef.requests.*;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableContext;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.progress.IProgressService;
+import org.eclipse.ui.progress.UIJob;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.ui.*;
 import org.kompiro.jamcircle.kanban.ui.command.*;
@@ -42,21 +37,6 @@ import org.kompiro.jamcircle.scripting.ScriptingService;
 import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 public class LaneEditPart extends AbstractEditPart implements CardContainerEditPart{
-
-	private class ScriptExcecuteWithProgress implements IRunnableWithProgress {
-
-		private PropertyChangeEvent evt;
-
-		public ScriptExcecuteWithProgress(PropertyChangeEvent evt) {
-			this.evt = evt;
-		}
-
-		public void run(IProgressMonitor monitor)
-				throws InvocationTargetException, InterruptedException {
-			executeScript(evt,monitor);
-		}
-
-	}
 
 	private final class LaneXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		
@@ -385,10 +365,10 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		getCommandStack().execute(new LaneUpdateCommand(getLaneModel(),status,script,type));
 	}
 
-	protected void doPropertyChange(PropertyChangeEvent evt) {
+	protected void doPropertyChange(final PropertyChangeEvent evt) {
 		GraphicalEditPart parentPart = (GraphicalEditPart) getParent();
+		Lane lane = getLaneModel();
 		if(isPropConstraint(evt)){
-			Lane lane = getLaneModel();
 			Rectangle constraint;
 			if(lane.isIconized()){
 				constraint = new Rectangle(lane.getX(),lane.getY(),72,72);
@@ -398,29 +378,34 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			parentPart.setLayoutConstraint(this, getFigure(), constraint);
 		}
 		else if(isPropStatus(evt)){
-			Lane lane = getLaneModel();
 			getLaneFigure().setStatus(lane.getStatus());
 			getLaneIconFigure().setStatus(lane.getStatus());
 		}
 		else if(isChildrenChanged(evt)){
-			if(!getLaneModel().isIconized()){
+			if(!lane.isIconized()){
 				super.doPropertyChange(evt);
 			}
-			IProgressService service = (IProgressService) PlatformUI.getWorkbench().getService(IProgressService.class);
-			IRunnableContext context = new ProgressMonitorDialog(getShell());
-			try {
-				service.runInUI(context,new ScriptExcecuteWithProgress(evt),null);
-			} catch (InvocationTargetException ex) {
-				KanbanUIStatusHandler.fail(ex.getTargetException(), "Moving card is failed.");
-			} catch (InterruptedException ex) {
-				KanbanUIStatusHandler.fail(ex, "Moving Card is failed.");
-			}
+			String message = String.format("Lane \"%s\"'s children is changing", lane.getStatus());
+			new UIJob(message){
+				@Override
+				public IStatus runInUIThread(IProgressMonitor monitor) {
+					return 	executeScript(evt,monitor);
+				}
+			}.schedule();
+//			IProgressService service = (IProgressService) PlatformUI.getWorkbench().getService(IProgressService.class);
+//			IRunnableContext context = new ProgressMonitorDialog(getShell());
+//			try {
+//				service.runInUI(context,new ScriptExcecuteWithProgress(evt),null);
+//			} catch (InvocationTargetException ex) {
+//				KanbanUIStatusHandler.fail(ex.getTargetException(), "Moving card is failed.");
+//			} catch (InterruptedException ex) {
+//				KanbanUIStatusHandler.fail(ex, "Moving Card is failed.");
+//			}
 		}
 		else if(isPropIconized(evt)){
 			IFigure parent = getFigure().getParent();
 			removeNotify();
 			parent.remove(getFigure());
-			Lane lane = getLaneModel();
 			getContentPane().getChildren().clear();
 			if(lane.isIconized()){
 				setFigure(laneIconFigure);
@@ -437,7 +422,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	}
 
 
-	private void executeScript(PropertyChangeEvent evt, IProgressMonitor monitor) {
+	private IStatus executeScript(PropertyChangeEvent evt, IProgressMonitor monitor) {
 		Lane lane = getLaneModel();
 		String script = lane.getScript();
 		if(Lane.PROP_CARD.equals(evt.getPropertyName()) && script != null){
@@ -468,8 +453,10 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 				getScriptingService().exec(lane.getScriptType(), scriptName, script,beans);
 			} catch (ScriptingException e) {
 				KanbanUIStatusHandler.fail(e, e.getMessage());
+				return new Status(Status.ERROR, KanbanUIActivator.ID_PLUGIN, IStatus.OK, e.getMessage(), e);
 			}
 		}
+		return Status.OK_STATUS;
 	}
 	
 	@Override

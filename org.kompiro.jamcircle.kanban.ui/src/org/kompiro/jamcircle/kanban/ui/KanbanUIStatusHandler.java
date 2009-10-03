@@ -14,7 +14,7 @@ import org.kompiro.jamcircle.debug.IStatusHandler;
 
 public class KanbanUIStatusHandler {
 
-	private static final String ID_PLUGIN = "org.kompiro.jamcircle.kanban.ui";
+	private static final String ID_PLUGIN = KanbanUIActivator.ID_PLUGIN;
 
 	private static Set<IStatusHandler> handlers = new HashSet<IStatusHandler>();
 	private static DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd hh:mm:ssSSSS");

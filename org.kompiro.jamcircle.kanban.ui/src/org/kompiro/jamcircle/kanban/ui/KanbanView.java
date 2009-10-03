@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.List;
 
 import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -321,12 +322,14 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		monitor.internalWorked(1);
 		
 		final int id = board.getID();
-		executeScript(monitor);
-		getDisplay().asyncExec(new Runnable(){
-			public void run() {
-				viewer.setContents(KanbanView.this.boardModel);
+		viewer.setContents(KanbanView.this.boardModel);
+		new Job("execute script on board"){
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				executeScript(monitor);
+				return Status.OK_STATUS;
 			}
-		});
+		}.schedule();
 		storeCurrentBoard(id);
 	}
 
@@ -513,9 +516,24 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		public void execute(final Command command) {
 			BusyIndicator.showWhile(getDisplay(), new Runnable() {
 				public void run() {
-					CommandStackImpl.super.execute(command);
+					getDisplay().asyncExec(new Runnable() {
+						public void run() {
+							CommandStackImpl.super.execute(command);
+						}
+					});
 				}
 			});
+//			new UIJob(""){
+//				public IStatus runInUIThread(IProgressMonitor monitor) {
+//					try{
+//						CommandStackImpl.super.execute(command);
+//				}catch(Throwable e){
+//					return UIJob.errorStatus(e);
+//				}
+//				return Status.OK_STATUS;
+//
+//				};
+//			}.schedule();
 //			getSite().getShell().setCursor(Cursors.WAIT);
 //			if(Platform.isRunning()){
 //				IProgressService service = (IProgressService) getSite().getService(IProgressService.class);

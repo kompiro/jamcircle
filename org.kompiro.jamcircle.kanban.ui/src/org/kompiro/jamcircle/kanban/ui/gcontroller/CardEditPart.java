@@ -450,8 +450,12 @@ public class CardEditPart extends AbstractEditPart {
 	private void effectToParentConstraint() {
 		CardFigure cardFigure = getCardFigure();
 		GraphicalEditPart part = (GraphicalEditPart) getParent();
-		Object constraint = cardFigure.getBounds();
-		part.setLayoutConstraint(this, cardFigure, constraint);
+		if(part != null){
+			Object constraint = cardFigure.getBounds();
+			part.setLayoutConstraint(this, cardFigure, constraint);
+		}else{
+			cardFigure.removeAll();
+		}
 	}
 	
 	public void doPropertyChange(final PropertyChangeEvent evt) {

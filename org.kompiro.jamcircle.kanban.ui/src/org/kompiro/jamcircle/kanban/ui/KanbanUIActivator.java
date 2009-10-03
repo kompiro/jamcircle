@@ -13,6 +13,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class KanbanUIActivator extends AbstractUIPlugin {
+	
+	public static final String ID_PLUGIN = "org.kompiro.jamcircle.kanban.ui";
 
 	private static final String KEY_OF_XMPPCONNECTION_SERVICE = "org.kompiro.jamcircle.xmpp.service.XMPPConnectionService";
 

@@ -11,7 +11,15 @@ public class AsyncDisplayDelegator implements IPropertyChangeDelegator {
 	}
 
 	public void run(Runnable runnable){
-		display.asyncExec(runnable);
+		if(isUIThread()){
+			runnable.run();
+		}else{
+			display.asyncExec(runnable);
+		}
+	}
+
+	private boolean isUIThread() {
+		return Display.findDisplay(Thread.currentThread()) != null;
 	}
 
 }

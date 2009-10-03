@@ -5,6 +5,7 @@ import java.beans.PropertyChangeListener;
 
 import net.java.ao.Entity;
 
+import org.eclipse.core.runtime.*;
 import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.*;
@@ -14,6 +15,7 @@ import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.progress.UIJob;
 import org.kompiro.jamcircle.kanban.model.GraphicalImpl;
 import org.kompiro.jamcircle.kanban.model.Icon;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
@@ -24,6 +26,27 @@ import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		implements PropertyChangeListener {
+
+//	public class UIJobDelegator implements IPropertyChangeDelegator {
+//
+//		public void run(final Runnable runner) {
+//			runner.run();
+////			new UIJob(""){
+////
+////				@Override
+////				public IStatus runInUIThread(IProgressMonitor monitor) {
+////					try{
+////						runner.run();
+////					}catch(Throwable e){
+////						return UIJob.errorStatus(e);
+////					}
+////					return Status.OK_STATUS;
+////				}
+////				
+////			}.schedule();
+//		}
+//
+//	}
 
 	private BoardModel boardModel;
 
