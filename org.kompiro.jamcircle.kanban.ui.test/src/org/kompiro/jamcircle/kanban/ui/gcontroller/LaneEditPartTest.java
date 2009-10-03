@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
 
-public class LaneEditPartTest extends AbstractControllerTest{
+public class LaneEditPartTest extends AbstractEditPartTest{
 
 	private GraphicalEditPart todoLanePart;
 	private GraphicalEditPart doingLanePart;

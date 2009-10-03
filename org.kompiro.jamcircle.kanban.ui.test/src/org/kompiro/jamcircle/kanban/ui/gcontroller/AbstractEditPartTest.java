@@ -32,7 +32,7 @@ import org.kompiro.jamcircle.kanban.ui.CommandStackEventListenerForDebug;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
 import org.kompiro.jamcircle.kanban.ui.model.*;
 
-public abstract class AbstractControllerTest {
+public abstract class AbstractEditPartTest {
 
 //	private static final int LANE_CREATER_COUNT = 1;
 	private static final int TRACHBOX_COUNT = 1;
