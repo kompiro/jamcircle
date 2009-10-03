@@ -27,6 +27,8 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 
 	private BoardModel boardModel;
 
+	private IPropertyChangeDelegator delegator;
+	
 	public AbstractEditPart(BoardModel boardModel){
 		this.boardModel = boardModel;
 	}
@@ -130,13 +132,20 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 	}
 
 	public void propertyChange(final PropertyChangeEvent evt){
-		getDisplay().asyncExec(new Runnable() {
+		getDelegator().run(new Runnable() {
 			public void run() {
 				doPropertyChange(evt);
 			}
 		});
 	}
 	
+	private IPropertyChangeDelegator getDelegator() {
+		if(delegator == null){
+			delegator  = new AsyncDisplayDelegator(getDisplay());
+		}
+		return delegator;
+	}
+
 	protected void doPropertyChange(final PropertyChangeEvent evt){
 		final Object newValue = evt.getNewValue();
 		Object oldValue = evt.getOldValue();
@@ -180,6 +189,10 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 
 	protected Display getDisplay() {
 		return getViewer().getControl().getDisplay();
+	}
+	
+	void setDelegator(IPropertyChangeDelegator delegator) {
+		this.delegator = delegator;
 	}
 	
 }

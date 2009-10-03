@@ -29,10 +29,8 @@ import org.kompiro.jamcircle.kanban.model.mock.Board;
 import org.kompiro.jamcircle.kanban.model.mock.Icon;
 import org.kompiro.jamcircle.kanban.model.mock.Lane;
 import org.kompiro.jamcircle.kanban.ui.CommandStackEventListenerForDebug;
-import org.kompiro.jamcircle.kanban.ui.KanbanControllerFactory;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
-import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
-import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
+import org.kompiro.jamcircle.kanban.ui.model.*;
 
 public abstract class AbstractControllerTest {
 
@@ -40,6 +38,13 @@ public abstract class AbstractControllerTest {
 	private static final int TRACHBOX_COUNT = 1;
 	public static final int INIT_BOARD_CHIHLDREN_SIZE = TRACHBOX_COUNT;
 //		TRACHBOX_COUNT	+ LANE_CREATER_COUNT;
+
+	private final class IPropertyChangeDelegatorForTest implements
+			IPropertyChangeDelegator {
+		public void run(Runnable runner) {
+			runner.run();
+		}
+	}
 
 	/**
 	 * Jump asyncrouns execution because these are not testable.
@@ -61,6 +66,7 @@ public abstract class AbstractControllerTest {
 		public boolean removeCard(Card card) {
 			return boardEntity.removeCard(card);
 		}
+		
 	}
 
 	protected static class TrashMock extends TrashModel {
@@ -225,7 +231,7 @@ public abstract class AbstractControllerTest {
 		boardEntity.addPropertyChangeListener(board);
 
 		board.addIcon(trashMock);
-		KanbanControllerFactory factory = new KanbanControllerFactory(board);
+		KanbanControllerFactory factory = new KanbanControllerFactory(board,new IPropertyChangeDelegatorForTest());
 		viewer.setEditPartFactory(factory);
 		viewer.setContents(board);
 		assumeThat(root.getChildren().size(), is(1));
