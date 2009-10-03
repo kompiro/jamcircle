@@ -123,7 +123,8 @@ public class UserEditPart extends AbstractEditPart implements IconEditPart{
 		getFigure().repaint();
 	}
 	
-	public void propertyChange(PropertyChangeEvent prop) {
+	@Override
+	public void doPropertyChange(PropertyChangeEvent prop) {
 		if(isPropLocation(prop)){
 			figure.setLocation((Point) prop.getNewValue());
 			refreshVisuals();			

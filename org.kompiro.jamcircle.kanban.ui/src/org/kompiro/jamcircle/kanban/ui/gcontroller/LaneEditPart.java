@@ -385,8 +385,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		getCommandStack().execute(new LaneUpdateCommand(getLaneModel(),status,script,type));
 	}
 
-
-	public void propertyChange(PropertyChangeEvent evt) {
+	protected void doPropertyChange(PropertyChangeEvent evt) {
 		GraphicalEditPart parentPart = (GraphicalEditPart) getParent();
 		if(isPropConstraint(evt)){
 			Lane lane = getLaneModel();
@@ -405,7 +404,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		}
 		else if(isChildrenChanged(evt)){
 			if(!getLaneModel().isIconized()){
-				super.propertyChange(evt);
+				super.doPropertyChange(evt);
 			}
 			IProgressService service = (IProgressService) PlatformUI.getWorkbench().getService(IProgressService.class);
 			IRunnableContext context = new ProgressMonitorDialog(getShell());

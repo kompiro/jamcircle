@@ -129,8 +129,16 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		return new CancelableDragEditPartsTracker(this);
 	}
 
-	public void propertyChange(PropertyChangeEvent evt){
-		Object newValue = evt.getNewValue();
+	public void propertyChange(final PropertyChangeEvent evt){
+		getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				doPropertyChange(evt);
+			}
+		});
+	}
+	
+	protected void doPropertyChange(final PropertyChangeEvent evt){
+		final Object newValue = evt.getNewValue();
 		Object oldValue = evt.getOldValue();
 
 		if(newValue != null && (newValue instanceof Entity || newValue instanceof AbstractModel)){
@@ -149,7 +157,7 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 			if(target != null){
 				removeChild(target);
 			}
-		}
+		}		
 	}
 	
 	protected Shell getShell() {

@@ -77,7 +77,7 @@ public class BoardSelecterEditPart extends AbstractEditPart implements IconEditP
 	}
 	
 
-	public void propertyChange(PropertyChangeEvent evt) {
+	public void doPropertyChange(PropertyChangeEvent evt) {
 		if(isPropLocation(evt)){
 			figure.setLocation(getBoardSelecterModel().getLocation());
 			figure.repaint();

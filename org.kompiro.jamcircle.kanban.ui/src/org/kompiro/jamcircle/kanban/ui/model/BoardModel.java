@@ -37,12 +37,13 @@ public class BoardModel extends AbstractModel implements UserModelContainer,Card
 	
 	public boolean addCard(final Card card) {
 		final boolean[] result = new boolean[1];
-		getDisplay().asyncExec(new Runnable() {
-			
-			public void run() {
-				result[0] = board.addCard(card);
-			}
-		});
+		result[0] = board.addCard(card);
+//		getDisplay().asyncExec(new Runnable() {
+//			
+//			public void run() {
+//				result[0] = board.addCard(card);
+//			}
+//		});
 		return result[0];
 	}
 
@@ -57,12 +58,13 @@ public class BoardModel extends AbstractModel implements UserModelContainer,Card
 
 	public boolean removeCard(final Card card) {
 		final boolean[] result = new boolean[1];
-		getDisplay().asyncExec(new Runnable() {
-			
-			public void run() {
-				result[0] = board.removeCard(card);
-			}
-		});
+		result[0] = board.removeCard(card);
+//		getDisplay().asyncExec(new Runnable() {
+//			
+//			public void run() {
+//				result[0] = board.removeCard(card);
+//			}
+//		});
 		return result[0];
 	}
 	

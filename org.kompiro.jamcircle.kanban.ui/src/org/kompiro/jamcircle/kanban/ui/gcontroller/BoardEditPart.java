@@ -360,11 +360,11 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
+	public void doPropertyChange(PropertyChangeEvent evt) {
 		Object newValue = evt.getNewValue();
 		Object oldValue = evt.getOldValue();
 		KanbanUIStatusHandler.debug(String.format("BoardEditPart propertyChange %s newValue:'%s' oldValue:'%s'", evt.getPropertyName(),newValue,oldValue));
-		super.propertyChange(evt);
+		super.doPropertyChange(evt);
 		if(isPropUser(evt)){
 			if(newValue != null){
 				if(newValue instanceof Collection<?>){
