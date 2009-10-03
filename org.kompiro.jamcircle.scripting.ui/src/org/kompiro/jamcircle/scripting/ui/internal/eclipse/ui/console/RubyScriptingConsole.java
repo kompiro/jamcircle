@@ -35,13 +35,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.ITypedRegion;
-import org.eclipse.jface.text.contentassist.CompletionProposal;
-import org.eclipse.jface.text.contentassist.ContentAssistant;
-import org.eclipse.jface.text.contentassist.ContextInformationValidator;
-import org.eclipse.jface.text.contentassist.ICompletionProposal;
-import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
-import org.eclipse.jface.text.contentassist.IContextInformation;
-import org.eclipse.jface.text.contentassist.IContextInformationValidator;
+import org.eclipse.jface.text.contentassist.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
@@ -546,16 +540,20 @@ public class RubyScriptingConsole extends TextConsole {
 		}
 	}
 
-	private final class ControlFromKey implements VerifyKeyListener{
+	private final class ControlFromKey implements VerifyKeyListener,ICompletionListener{
+
+		private boolean completing;
 
 		public void verifyKey(VerifyEvent event) {
 			switch(event.keyCode){
 			case SWT.ARROW_UP:
 				event.doit = false;
+				if(completing) break;
 				upAction();
 				break;
 			case SWT.ARROW_DOWN:
 				event.doit = false;
+				if(completing) break;
 				downAction();
 				break;
 			case SWT.ARROW_LEFT:
@@ -568,12 +566,15 @@ public class RubyScriptingConsole extends TextConsole {
 				IDocument doc = getDocument();
 				try {
 					String text = doc.get(getLastOffset(), doc.getLength()-getLastOffset());
-					Readline.getHistory(Readline.getHolder(runtime)).addToHistory(text);
+					if( ! completing){
+						Readline.getHistory(Readline.getHolder(runtime)).addToHistory(text);
+					}
 				} catch (BadLocationException e) {
 				}
 				break;
 			case '\t':
 				event.doit = false;
+				if(completing) break;
 				completeAction(event);
 			default:
 			}
@@ -604,7 +605,6 @@ public class RubyScriptingConsole extends TextConsole {
 //	            return;
 //	        else
 //	            Readline.getHistory(Readline.getHolder(runtime)).previous(); // undo check
-	        
 	        History history = Readline.getHistory(Readline.getHolder(runtime));
 			if (!history.previous()) return;
 	        
@@ -646,6 +646,18 @@ public class RubyScriptingConsole extends TextConsole {
 			int last = d.getLength();
 			return last;
 		}
+
+		public void assistSessionEnded(ContentAssistEvent event) {
+			completing = false;
+		}
+
+		public void assistSessionStarted(ContentAssistEvent event) {
+			completing = true;
+		}
+
+		public void selectionChanged(ICompletionProposal proposal,
+				boolean smartToggle) {
+		}
 	}
 
 	public class BoardAccessor{
@@ -685,8 +697,8 @@ public class RubyScriptingConsole extends TextConsole {
 		        Control control = viewer.getControl();
 		        if (control instanceof StyledText) {
 		        	StyledText text = (StyledText) control;
-					keyListener = new ControlFromKey();
 					text.removeVerifyKeyListener(keyListener);
+					keyListener = null;
 				}
 				assist.uninstall();
 			}
@@ -718,12 +730,13 @@ public class RubyScriptingConsole extends TextConsole {
         error.setColor(errorColor);
         assist.install(consolePage.getViewer());
         assist.enableAutoActivation(true);
-        assist.enableAutoInsert(false);
+        assist.enableAutoInsert(true);
         TextConsoleViewer viewer = consolePage.getViewer();
         Control control = viewer.getControl();
         if (control instanceof StyledText) {
         	final StyledText text = (StyledText) control;
 			keyListener = new ControlFromKey();
+			assist.addCompletionListener(keyListener);
 			text.addVerifyKeyListener(keyListener);
 	        getDocument().addDocumentListener(new CaretMoveListener(text));
 		}
