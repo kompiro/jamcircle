@@ -74,7 +74,11 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 			}
 			System.setProperty(KEY_OF_SYSTEM_PROP_XMPP_CONNECT, String.valueOf(true));
 		} catch (XMPPException e) {
-			connection.disconnect();
+			try {
+				connection.disconnect();
+			} catch (Exception ex) {
+				XMPPStatusHandler.fail(ex, "can't disconnect");
+			}
 			throw e;
 		}
 		monitor.done();
