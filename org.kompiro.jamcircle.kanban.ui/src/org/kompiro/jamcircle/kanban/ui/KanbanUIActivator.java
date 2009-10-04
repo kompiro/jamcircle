@@ -61,7 +61,10 @@ public class KanbanUIActivator extends AbstractUIPlugin {
  				Throwable exception = status.getException();
  				if(informUser){
  					String message = String.format("%s\nException:'%s' reason: %s", status.getMessage(),exception.getClass().getName(),exception.getLocalizedMessage());
- 					MessageDialog.openError(getShell(), "Unexpected error is occured.",message);
+ 					Shell shell = getShell();
+ 					if(shell != null){
+ 						MessageDialog.openError(shell, "Unexpected error is occured.",message);
+ 					}
  				}
  			}
  
@@ -151,6 +154,7 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 
 	public Shell getShell(){
 		IWorkbench workbench = getWorkbench();
+		if(workbench == null) return null;
 		IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
 		return activeWorkbenchWindow.getShell();
 	}
