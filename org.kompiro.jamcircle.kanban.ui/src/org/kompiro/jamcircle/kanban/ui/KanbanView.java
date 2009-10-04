@@ -334,24 +334,6 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 			Map<String,Object> beans= new HashMap<String, Object>();
 			beans.put("board", this.boardModel);
 			beans.put("monitor", monitor);
-			beans.put("JRubyType",ScriptTypes.JRuby);
-			beans.put("JavaScriptType",ScriptTypes.JavaScript);
-
-			beans.put("RED", ColorTypes.RED);
-			beans.put("YELLOW",ColorTypes.YELLOW);
-			beans.put("GREEN",ColorTypes.GREEN);
-			beans.put("LIGHT_GREEN",ColorTypes.LIGHT_GREEN);
-			beans.put("LIGHT_BLUE",ColorTypes.LIGHT_BLUE);
-			beans.put("BLUE",ColorTypes.BLUE);
-			beans.put("PURPLE",ColorTypes.PURPLE);
-			beans.put("RED_PURPLE",ColorTypes.RED_PURPLE);
-
-			beans.put("FLAG_RED", FlagTypes.RED);
-			beans.put("FLAG_WHITE",FlagTypes.WHITE);
-			beans.put("FLAG_GREEN",FlagTypes.GREEN);
-			beans.put("FLAG_BLUE",FlagTypes.BLUE);
-			beans.put("FLAG_ORANGE",FlagTypes.ORANGE);
-
 			try {
 				ScriptingService service = getScriptingService();
 				service.exec(board.getScriptType(), scriptName, script,beans);
@@ -361,7 +343,7 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		}
 	}
 
-	private ScriptingService getScriptingService() {
+	private ScriptingService getScriptingService() throws ScriptingException {
 		return KanbanUIActivator.getDefault().getScriptingService();
 	}
 

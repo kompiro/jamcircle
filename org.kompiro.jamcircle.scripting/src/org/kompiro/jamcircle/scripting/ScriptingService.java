@@ -7,7 +7,7 @@ import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 
 public interface ScriptingService {
 
-	void init();
+	void init(Map<String, Object> beans) throws ScriptingException;
 
 	void exec(ScriptTypes scriptTypes, 
 			String scriptName, 
