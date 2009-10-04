@@ -10,6 +10,7 @@ import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 public abstract class AbstractCommand extends Command {
 
 	private boolean undoable = true;
+	private KanbanUIActivator activator;
 	
 	public AbstractCommand(){
 		setLabel(getClass().getSimpleName());
@@ -52,9 +53,15 @@ public abstract class AbstractCommand extends Command {
 	}
 
 	private KanbanUIActivator getActivator() {
-		KanbanUIActivator activator = KanbanUIActivator.getDefault();
+		if(this.activator == null){
+			this.activator = KanbanUIActivator.getDefault();
+		}
 		if(activator == null) throw new IllegalStateException("Can't get KanbanUIActivator.");
 		return activator;
+	}
+	
+	public void setActivator(KanbanUIActivator activator) {
+		this.activator = activator;
 	}
 	
 }
