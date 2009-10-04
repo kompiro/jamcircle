@@ -8,8 +8,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.*;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.kompiro.jamcircle.debug.IStatusHandler;
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
@@ -153,8 +152,8 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 	}
 
 	public Shell getShell(){
+		if(!PlatformUI.isWorkbenchRunning()) return null;
 		IWorkbench workbench = getWorkbench();
-		if(workbench == null) return null;
 		IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
 		return activeWorkbenchWindow.getShell();
 	}
