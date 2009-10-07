@@ -9,7 +9,7 @@ import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kompiro.jamcircle.kanban.model.ScriptTypes;
+import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 
 @RunWith(SWTBotJunit4ClassRunner.class)

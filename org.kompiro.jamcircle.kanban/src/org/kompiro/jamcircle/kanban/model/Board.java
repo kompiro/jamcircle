@@ -3,6 +3,8 @@ package org.kompiro.jamcircle.kanban.model;
 import java.sql.Types;
 import java.util.*;
 
+import org.kompiro.jamcircle.scripting.ScriptTypes;
+
 import net.java.ao.*;
 import net.java.ao.schema.Default;
 import net.java.ao.schema.Ignore;

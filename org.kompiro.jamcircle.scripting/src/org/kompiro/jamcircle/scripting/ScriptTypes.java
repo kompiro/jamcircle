@@ -1,4 +1,4 @@
-package org.kompiro.jamcircle.kanban.model;
+package org.kompiro.jamcircle.scripting;
 
 public enum ScriptTypes {
 	JavaScript("javascript"),JRuby("ruby");

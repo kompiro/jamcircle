@@ -33,6 +33,7 @@ import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 import org.kompiro.jamcircle.kanban.ui.script.ScriptEvent;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListEditProvider;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer;
+import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.scripting.ScriptingService;
 import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;

@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.sql.SQLException;
 
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
+import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 
 public class LaneImpl extends GraphicalImpl {

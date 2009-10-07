@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.ScriptTypes;
+import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class Lane extends MockGraphicalEntity implements org.kompiro.jamcircle.kanban.model.Lane{
 

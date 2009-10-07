@@ -8,7 +8,7 @@ import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
 import org.apache.bsf.util.IOUtils;
 import org.jruby.exceptions.RaiseException;
-import org.kompiro.jamcircle.kanban.model.ScriptTypes;
+import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.scripting.ScriptingService;
 import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 
