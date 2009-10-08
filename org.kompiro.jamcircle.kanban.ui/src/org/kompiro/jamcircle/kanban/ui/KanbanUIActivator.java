@@ -7,6 +7,7 @@ import java.util.Map;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.*;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -155,7 +156,10 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 		if(!PlatformUI.isWorkbenchRunning()) return null;
 		IWorkbench workbench = getWorkbench();
 		IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-		return activeWorkbenchWindow.getShell();
+		if(activeWorkbenchWindow != null){
+			return activeWorkbenchWindow.getShell();
+		}
+		return workbench.getDisplay().getActiveShell();
 	}
 
 
