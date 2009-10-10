@@ -35,7 +35,7 @@ public class ScriptingServiceImplTest {
 		ScriptingServiceImpl service = new ScriptingServiceImpl();
 		Map<String, Object> beans = new HashMap<String, Object>();
 		service.init(beans);
-		service.exec(ScriptTypes.JavaScript, "test", "print('test\\n')", beans);
+//		service.exec(ScriptTypes.JavaScript, "test", "print('test\\n')", beans);
 		service.exec(ScriptTypes.JRuby, "test", "p 'test'", beans);
 		service.exec(ScriptTypes.JRuby, "test", "card = Card.new", beans);
 	}
