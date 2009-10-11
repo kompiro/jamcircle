@@ -376,7 +376,10 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	
 	public Board findBoard(int id){
 		try {
-			return getEntityManager().find(Board.class, Board.PROP_TRASHED + " = ? and " + Board.PROP_ID + " = ?",false,id)[0];
+			Board[] findBoards = getEntityManager().find(Board.class, Board.PROP_TRASHED + " = ? and " + Board.PROP_ID + " = ?",false,id);
+			if(findBoards.length == 1){
+				return findBoards[0];
+			}
 		} catch (SQLException e) {
 			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findBoard() id='%d'",id);
 		}

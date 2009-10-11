@@ -382,7 +382,10 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 					KanbanService service = getKanbanService();
 					int id = getPreference().getInt(KanbanPreferenceConstants.BOARD_ID.toString(),1);
 					KanbanUIStatusHandler.debugUI("KanbanView#storageInitialize() id:'%d'", id);
-					final Board board = service.findBoard(id);
+					Board board = service.findBoard(id);
+					if(board == null){
+						board = service.findBoard(1);
+					}
 					setContents(board,monitor);
 					monitor.internalWorked(30.0);
 					return Status.OK_STATUS;
@@ -478,15 +481,17 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 	}
 
 	private final class CommandStackImpl extends CommandStack {
+				
 		@Override
 		public void execute(final Command command) {
 			BusyIndicator.showWhile(getDisplay(), new Runnable() {
 				public void run() {
-					getDisplay().asyncExec(new Runnable() {
-						public void run() {
-							CommandStackImpl.super.execute(command);
-						}
-					});
+					CommandStackImpl.super.execute(command);
+//					getDisplay().asyncExec(new Runnable() {
+//						public void run() {
+//							CommandStackImpl.super.execute(command);
+//						}
+//					});
 				}
 			});
 		}

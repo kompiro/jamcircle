@@ -5,10 +5,7 @@ import java.util.List;
 
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.PacketListener;
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.kompiro.jamcircle.kanban.model.User;
@@ -53,7 +50,13 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 			if(resource == null || "".equals(resource)){
 				resource = DEFAULT_RESOURCE_NAME;
 			}
-			connection.login(username, password, resource);
+		    SASLAuthentication.supportSASLMechanism("PLAIN", 0);
+		    // hack : http://www.igniterealtime.org/community/thread/35976
+		    String loginname = username;
+		    if(host.equals("talk.google.com") && username.indexOf("@") != 0){
+		    	loginname += "@" + serviceName;
+		    }
+		    connection.login(loginname, password, resource);
 			monitor.subTask("logged in.");
 			monitor.internalWorked(30);
 			getSettings().add(host,resource,serviceName,username,password,port);
