@@ -1,12 +1,13 @@
 package org.kompiro.jamcircle.scripting.internal;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jruby.Ruby;
 import org.junit.*;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 
@@ -68,6 +69,14 @@ public class ScriptingServiceImplTest {
 				"\";\n" +
 				"$bsf.lookupBean('person').name", instanceBeans);
 		assertThat((String)result,is("テスト太郎"));
+	}
+	
+	@Test
+	public void adapter() throws Exception {
+		service.init(null);
+		Object adapter = service.getAdapter(Ruby.class);
+		assertNotNull(adapter);
+		assertTrue(adapter instanceof Ruby);
 	}
 
 }
