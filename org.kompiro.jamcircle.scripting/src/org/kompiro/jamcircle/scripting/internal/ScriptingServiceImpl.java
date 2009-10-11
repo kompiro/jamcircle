@@ -1,8 +1,7 @@
 package org.kompiro.jamcircle.scripting.internal;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
@@ -23,13 +22,15 @@ public class ScriptingServiceImpl implements ScriptingService{
 	private BSFManager manager;
 	private boolean initialized = false;
 	private Ruby runtime;
-
+	private Map<String,Object> globalValues = new HashMap<String,Object>();
 	
-	public ScriptingServiceImpl(){
+	public ScriptingServiceImpl(Map<String, Object> beans)throws ScriptingException{
+		globalValues = beans;
 		manager = new BSFManager();
+		init();
 	}
 	
-	public void init(Map<String, Object> beans) throws ScriptingException {
+	private void init() throws ScriptingException {
 		if(!initialized){
 			synchronized (this) {
 				RubyInstanceConfig config = new RubyInstanceConfig();
@@ -39,12 +40,12 @@ public class ScriptingServiceImpl implements ScriptingService{
 				runtime = JavaEmbedUtils.initialize(new ArrayList<Object>(),config);
 		        runtime.getGlobalVariables().defineReadonly("$bsf", new ValueAccessor(JavaEmbedUtils.javaToRuby(runtime, manager)));
 		        runtime.getGlobalVariables().defineReadonly("$$", new ValueAccessor(runtime.newFixnum(System.identityHashCode(runtime))));
-				if(beans == null){
+				if(globalValues == null){
 					initialized = true;
 					return;
 				}
 				try{
-					for(Map.Entry<String, Object> entry : beans.entrySet()){
+					for(Map.Entry<String, Object> entry : globalValues.entrySet()){
 						Object value = entry.getValue();
 						String name = entry.getKey();
 						manager.declareBean(name, value,value.getClass());
@@ -140,6 +141,10 @@ public class ScriptingServiceImpl implements ScriptingService{
 	public void terminate() {
 		manager.terminate();
 		JavaEmbedUtils.terminate(runtime);
+	}
+
+	public Map<String, Object> getGlovalValues() {
+		return globalValues;
 	}
 
 }

@@ -77,7 +77,7 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 			try {
 				connection.disconnect();
 			} catch (Exception ex) {
-				XMPPStatusHandler.fail(ex, "can't disconnect");
+				XMPPStatusHandler.fail(ex, "can't disconnect",false);
 			}
 			throw e;
 		}
