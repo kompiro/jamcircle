@@ -7,6 +7,8 @@ import java.util.*;
 import java.util.List;
 
 import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.preferences.*;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -60,7 +62,6 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 
 	private ScrollingGraphicalViewer viewer;
 	private SelectionSynchronizer synchronizer;
-//	private CommandStackEventListener commandStackDebuglistener = new CommandStackEventListenerForDebug();
 	private OpenCardListAction openCardListAction;
 	private IAction openCommandListAction;
 	private BoardModel boardModel;
@@ -107,7 +108,6 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 
 		public void selectionChanged(SelectionChangedEvent event) {
 			deleteHandler.update();
-//			pasteHandler.update();
 			copyHandler.update();
 			cutHandler.update();
 			openCardListAction.update();
@@ -120,7 +120,7 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 	private CutAction cutHandler;
 	private CellEditorActionHandler handlers;
 	private CardReceiveFileTransferListener cardReceiveFileTransferListener;
-	private IconModelFactory iconModelFactory = new DefaultIconModelFactory();
+	private IconModelFactory iconModelFactory;
 	private CaptureBoardAction caputureBoardAction;
 	private ScalableRootEditPart rootPart;
 	private ZoomInAction zoomInAction;
@@ -133,6 +133,7 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		}
 		if(getKanbanService() != null){
 			getKanbanService().addStorageChangeListener(this);
+			iconModelFactory = new DefaultIconModelFactory(getKanbanService());
 		}
 	}
 
@@ -217,18 +218,8 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 	
 
 	private void contributeToActionBars() {
-//		IActionBars bars = getViewSite().getActionBars();
-//		fillToolbarMenu(bars.getToolBarManager());
 	}
 	
-//	private void fillToolbarMenu(IToolBarManager toolBarManager) {
-////		MenuManager editMenu = new MenuManager("Edit", IWorkbenchActionConstants.M_EDIT);
-////		toolBarManager.add(editMenu);
-//		toolBarManager.add(deleteHandler);
-//		toolBarManager.add(undoHandler);
-//		toolBarManager.add(redoHandler);
-//	}
-
 	private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
@@ -320,12 +311,14 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		monitor.internalWorked(1);
 		
 		final int id = board.getID();
-		executeScript(monitor);
-		getDisplay().asyncExec(new Runnable(){
-			public void run() {
-				viewer.setContents(KanbanView.this.boardModel);
+		viewer.setContents(KanbanView.this.boardModel);
+		new Job("execute script on board"){
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				executeScript(monitor);
+				return Status.OK_STATUS;
 			}
-		});
+		}.schedule();
 		storeCurrentBoard(id);
 	}
 
@@ -341,24 +334,6 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 			Map<String,Object> beans= new HashMap<String, Object>();
 			beans.put("board", this.boardModel);
 			beans.put("monitor", monitor);
-			beans.put("JRubyType",ScriptTypes.JRuby);
-			beans.put("JavaScriptType",ScriptTypes.JavaScript);
-
-			beans.put("RED", ColorTypes.RED);
-			beans.put("YELLOW",ColorTypes.YELLOW);
-			beans.put("GREEN",ColorTypes.GREEN);
-			beans.put("LIGHT_GREEN",ColorTypes.LIGHT_GREEN);
-			beans.put("LIGHT_BLUE",ColorTypes.LIGHT_BLUE);
-			beans.put("BLUE",ColorTypes.BLUE);
-			beans.put("PURPLE",ColorTypes.PURPLE);
-			beans.put("RED_PURPLE",ColorTypes.RED_PURPLE);
-
-			beans.put("FLAG_RED", FlagTypes.RED);
-			beans.put("FLAG_WHITE",FlagTypes.WHITE);
-			beans.put("FLAG_GREEN",FlagTypes.GREEN);
-			beans.put("FLAG_BLUE",FlagTypes.BLUE);
-			beans.put("FLAG_ORANGE",FlagTypes.ORANGE);
-
 			try {
 				ScriptingService service = getScriptingService();
 				service.exec(board.getScriptType(), scriptName, script,beans);
@@ -368,7 +343,7 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		}
 	}
 
-	private ScriptingService getScriptingService() {
+	private ScriptingService getScriptingService() throws ScriptingException {
 		return KanbanUIActivator.getDefault().getScriptingService();
 	}
 
@@ -376,8 +351,12 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		KanbanUIStatusHandler.debugUI("KanbanView#storeCurrentBoard() id='%d'", id);
 		KanbanUIActivator activator = getActivator();
 		if(activator != null){
-			activator.getPluginPreferences().setValue(KanbanPreferenceConstants.BOARD_ID.toString(), id);
+			getPreference().putInt(KanbanPreferenceConstants.BOARD_ID.toString(), id);
 		}
+	}
+
+	private IEclipsePreferences getPreference() {
+		return new InstanceScope().getNode(KanbanUIActivator.ID_PLUGIN);
 	}
 
 	private KanbanUIActivator getActivator() {
@@ -401,8 +380,7 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 				public IStatus runInUIThread(IProgressMonitor monitor) {
 					monitor.subTask("storage initializing...");
 					KanbanService service = getKanbanService();
-					KanbanUIActivator activator = getActivator();
-					int id = activator.getPluginPreferences().getInt(KanbanPreferenceConstants.BOARD_ID.toString());
+					int id = getPreference().getInt(KanbanPreferenceConstants.BOARD_ID.toString(),1);
 					KanbanUIStatusHandler.debugUI("KanbanView#storageInitialize() id:'%d'", id);
 					final Board board = service.findBoard(id);
 					setContents(board,monitor);
@@ -410,13 +388,6 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 					return Status.OK_STATUS;
 				}
 			};
-//			QualifiedName key = new QualifiedName("org.kompiro.jamcircle", "rcp");
-//			IJobManager manager = Job.getJobManager();
-//			Object obj = manager.currentJob().getProperty(key);
-//			if(obj != null && obj instanceof IProgressMonitor){
-//				IProgressMonitor monitor = (IProgressMonitor) obj;
-//				job.setProgressGroup(monitor, 50);
-//			}
 			job.schedule();
 	}
 	
@@ -480,7 +451,6 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 
 	@Override
 	public void setFocus() {
-//		refreshXmppConnectionStatus();
 	}
 	
 	protected void hookGraphicalViewer() {
@@ -512,30 +482,13 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		public void execute(final Command command) {
 			BusyIndicator.showWhile(getDisplay(), new Runnable() {
 				public void run() {
-					CommandStackImpl.super.execute(command);
+					getDisplay().asyncExec(new Runnable() {
+						public void run() {
+							CommandStackImpl.super.execute(command);
+						}
+					});
 				}
 			});
-//			getSite().getShell().setCursor(Cursors.WAIT);
-//			if(Platform.isRunning()){
-//				IProgressService service = (IProgressService) getSite().getService(IProgressService.class);
-//				IRunnableContext context = new ProgressMonitorDialog(getSite()
-//						.getShell());
-//				try {
-//					service.runInUI(context, new IRunnableWithProgress(){
-//						public void run(IProgressMonitor monitor)
-//								throws InvocationTargetException, InterruptedException {
-//							CommandStackImpl.super.execute(command);
-//						}
-//					}, null);
-//				} catch (InvocationTargetException e) {
-//					KanbanUIStatusHandler.fail(e, "Opening Kanban Board is failed.");
-//				} catch (InterruptedException e) {
-//					KanbanUIStatusHandler.fail(e, "Opening Kanban Board is failed.");
-//				}
-//			}else{
-//				super.execute(command);
-//			}
-//				getSite().getShell().setCursor(null);
 		}
 	}
 
@@ -731,7 +684,6 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 	
 	@Override
 	public void dispose() {
-//		getCommandStack().removeCommandStackEventListener(commandStackDebuglistener);
 		getCommandStack().removeCommandStackListener(handlerListener);
 		getConnectionService().removeXMPPLoginListener(this);
 		XMPPConnection connection = getConnectionService().getConnection();

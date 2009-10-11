@@ -1,15 +1,15 @@
 package org.kompiro.jamcircle.kanban.ui.command;
 
-import static org.junit.Assert.*;
-import static org.junit.Assume.*;
 import static org.hamcrest.CoreMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeThat;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.junit.Test;
+import org.kompiro.jamcircle.kanban.model.CardContainer;
 import org.kompiro.jamcircle.kanban.model.mock.Board;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
-import org.kompiro.jamcircle.kanban.model.CardContainer;
 
 
 public class AddCardToOnBoardContainerCommandTest {

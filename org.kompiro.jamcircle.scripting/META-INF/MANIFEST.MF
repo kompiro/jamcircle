@@ -8,9 +8,8 @@ Bundle-Vendor: kompiro.org
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Import-Package: org.osgi.framework;version="1.3.0"
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.mozilla.javascript,
- org.apache.bsf,
- org.jruby,
- org.kompiro.jamcircle.kanban
 Export-Package: org.kompiro.jamcircle.scripting,
  org.kompiro.jamcircle.scripting.exception
+Require-Bundle: org.mozilla.javascript,
+ org.jruby,
+ org.apache.bsf

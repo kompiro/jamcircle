@@ -44,6 +44,12 @@ public interface StorageService {
 
 	public String getStoreRoot();
 
-	public Entity createEntity(Class<? extends Entity> clazz, DBParam[] params);
+	public <T extends Entity> T createEntity(Class<T> clazz, DBParam[] params);
+
+	public void discard(GraphicalEntity entity);
+
+	public int countInTrash(Class<? extends GraphicalEntity> clazz);
+
+	public void pickup(GraphicalEntity entity);
 
 }

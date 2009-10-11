@@ -52,7 +52,7 @@ public class LaneCreaterEditPart extends AbstractEditPart implements IconEditPar
 		return (LaneCreaterModel)getModel();
 	}
 
-	public void propertyChange(PropertyChangeEvent evt) {
+	public void doPropertyChange(PropertyChangeEvent evt) {
 		if(isPropLocation(evt)){
 			figure.setLocation(getLaneCreaterModel().getLocation());
 			figure.repaint();

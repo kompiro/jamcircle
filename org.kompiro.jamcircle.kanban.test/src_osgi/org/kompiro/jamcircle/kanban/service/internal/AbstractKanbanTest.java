@@ -26,7 +26,7 @@ public abstract class AbstractKanbanTest {
 				throw new IllegalStateException("Please launch on PDE Environment");
 			}
 			entityManager = activator.getEntityManager();
-			Logger.getLogger("net.java.ao").setLevel(Level.FINE);
+//			Logger.getLogger("net.java.ao").setLevel(Level.FINE);
 			assertNotNull(entityManager);
 			String storePath = activator.getStorageService().getDBPath();
 			int schemeIndex = storePath.indexOf(FILE);
@@ -46,7 +46,7 @@ public abstract class AbstractKanbanTest {
 	
 	@Before
 	public void init() throws Exception{
-		getKanbanService().init();
+		getKanbanService().forceInit();
 	}
 
 	protected static KanbanServiceImpl getKanbanService() {

@@ -1,7 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui.command;
 
 import org.kompiro.jamcircle.kanban.model.Lane;
-import org.kompiro.jamcircle.kanban.model.ScriptTypes;
+import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class LaneUpdateCommand extends AbstractCommand {
 

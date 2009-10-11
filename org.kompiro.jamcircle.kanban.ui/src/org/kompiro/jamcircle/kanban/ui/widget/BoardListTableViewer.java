@@ -46,13 +46,13 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 import org.kompiro.jamcircle.kanban.model.Board;
-import org.kompiro.jamcircle.kanban.model.ScriptTypes;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
 import org.kompiro.jamcircle.kanban.ui.KanbanView;
 import org.kompiro.jamcircle.kanban.ui.dialog.BoardEditDialog;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
+import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class BoardListTableViewer implements PropertyChangeListener {
 

@@ -27,7 +27,7 @@ public class KanbanServiceImplPDETest extends AbstractKanbanTest{
 		assertEquals(1,boards.length);
 		Lane[] allLanes = service.findAllLanes();
 		for(Lane lane: allLanes){
-			System.out.println(lane.getBoard().getID());
+			System.out.println(lane.getBoard().toString());
 		}
 		Lane[] lanes = boards[0].getLanes();
 		assertEquals(3,lanes.length);			

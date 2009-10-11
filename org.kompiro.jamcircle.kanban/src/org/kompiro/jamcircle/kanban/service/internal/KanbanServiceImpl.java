@@ -16,6 +16,7 @@ import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
 import org.kompiro.jamcircle.kanban.boardtemplate.internal.*;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 import org.kompiro.jamcircle.storage.service.StorageChageListener;
 import org.kompiro.jamcircle.storage.service.StorageService;
 
@@ -48,7 +49,18 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	}
 	
 	public void init(){
-		if(initialized) return;
+		if(initialized){
+			return;
+		}
+		doInit();
+	}
+	
+	public void forceInit(){
+		System.out.println("This service is initializing.");
+		doInit();
+	}
+
+	private void doInit() {
 		synchronized (lock) {
 			if(initialized) return;
 			KanbanMigrator migrator = new KanbanMigrator(this);
@@ -156,7 +168,12 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		return mock;
 	}
 
-
+	public void trashCard(Card card) {
+		card.setTrashed(true);
+		card.save();
+	}
+	
+	
 	public int countCards() {
 		try {
 			return getEntityManager().count(Card.class,Card.PROP_TRASHED + " = true");
@@ -475,6 +492,14 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	public boolean importIcons(File importFile) {
 		return getStorageService().importEntity(importFile, Icon.class);
 	}
+	
+	public Card[] findCardsInTrash() {
+		return null;
+	}
+
+	public int countInTrash(Class<? extends GraphicalEntity> clazz) {
+		return getStorageService().countInTrash(clazz);
+	}
 
 	public KanbanBoardTemplate[] getKanbanDataInitializers() {
 		return this.templates.toArray(new KanbanBoardTemplate[]{});
@@ -515,7 +540,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		this.storageService = storageService;
 	}
 	
-	private StorageService getStorageService() {
+	public StorageService getStorageService() {
 		return this.storageService;
 	}
 	
@@ -529,6 +554,14 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		listeners.removePropertyChangeListener(listener);
+	}
+
+	public void discardToTrash(GraphicalEntity entity) {
+		getStorageService().discard(entity);
+	}
+
+	public void pickupFromTrash(GraphicalEntity entity) {
+		getStorageService().pickup(entity);
 	}
 
 }

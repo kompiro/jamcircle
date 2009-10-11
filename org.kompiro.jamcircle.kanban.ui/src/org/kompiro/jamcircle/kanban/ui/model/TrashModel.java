@@ -2,37 +2,29 @@ package org.kompiro.jamcircle.kanban.ui.model;
 
 
 import org.eclipse.core.runtime.Platform;
-import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.CardContainer;
-import org.kompiro.jamcircle.kanban.model.Icon;
-import org.kompiro.jamcircle.kanban.model.Lane;
-import org.kompiro.jamcircle.kanban.model.LaneContainer;
+import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
+import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 public class TrashModel extends AbstractIconModel implements CardContainer,LaneContainer {
 	private static final long serialVersionUID = 33231939397478655L;
 	public static String PROP_CARD = "trash card";
 	public static String PROP_LANE = "trash lane";
+	private KanbanService kanbanService;
 
-	public TrashModel(Icon icon){
+	public TrashModel(Icon icon,KanbanService kanbanService){
 		super(icon);
+		this.kanbanService = kanbanService;
 	}
 	
 	public boolean addCard(Card card) {
-		if(!card.isMock()){
-			card.setTrashed(true);
-			card.save();
-		}
+		kanbanService.discardToTrash(card);
 		firePropertyChange(PROP_CARD,null,card);
 		return false;
 	}
 
 	public boolean removeCard(Card card) {
-		if(!card.isMock()){
-			card.setTrashed(false);
-			card.save();
-		}
+		kanbanService.pickupFromTrash(card);
 		firePropertyChange(PROP_CARD,card,null);
 		return false;
 	}
@@ -42,37 +34,36 @@ public class TrashModel extends AbstractIconModel implements CardContainer,LaneC
 	}
 	
 	public Card[] getCards(){
-		return getKanbanService().findCards(Card.PROP_TRASHED + " = ?", true);
+		return getKanbanService().findCardsInTrash();
 	}
 	
-	public int getCardCount(){
-		return getKanbanService().countCards();
+	public int countTrashedCard(){
+		return countTrashed(Card.class);
 	}
 
 	public boolean isEmpty() {
 		if(Platform.isRunning()){
-			return getCardCount() == 0;
+			return countTrashedCard() == 0;
 		}
 		return true;
 	}
 
 	public boolean addLane(Lane lane) {
-		if(!lane.isMock()){
-			lane.setTrashed(true);
-			lane.save();
-		}
+		kanbanService.discardToTrash(lane);
 		firePropertyChange(PROP_LANE,lane,null);		
 		return false;
 	}
 
 	public boolean removeLane(Lane lane) {
-		if(!lane.isMock()){
-			lane.setTrashed(false);
-			lane.save();
-		}
+		kanbanService.pickupFromTrash(lane);
 		firePropertyChange(PROP_LANE,null,lane);
 		return false;
 	}
+	
+	public int countTrashedLane() {
+		return countTrashed(Lane.class);
+	}
+
 	
 	public Lane[] getLanes() {
 		return getKanbanService().findLanesInTrash();
@@ -83,7 +74,15 @@ public class TrashModel extends AbstractIconModel implements CardContainer,LaneC
 	}
 	
 	private KanbanService getKanbanService(){
-		return KanbanUIActivator.getDefault().getKanbanService();
+		return kanbanService;
+	}
+	
+	public void setKanbanService(KanbanService kanbanService) {
+		this.kanbanService = kanbanService;
+	}
+
+	public int countTrashed(Class<? extends GraphicalEntity> clazz) {
+		return getKanbanService().countInTrash(clazz);
 	}
 
 

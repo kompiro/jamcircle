@@ -95,7 +95,7 @@ public class InboxEditPart extends AbstractEditPart implements IconEditPart,Card
 	}
 	
 	@Override
-	public void propertyChange(PropertyChangeEvent prop) {
+	public void doPropertyChange(PropertyChangeEvent prop) {
 		if(isPropLocation(prop)){
 			figure.setLocation(getInboxIconModel().getLocation());
 			figure.repaint();

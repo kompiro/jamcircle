@@ -22,7 +22,7 @@ import org.kompiro.jamcircle.kanban.ui.command.RemoveCardCommand;
 import org.kompiro.jamcircle.kanban.ui.command.RemoveLaneCommand;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 
-public class TrashEditPartTest extends AbstractControllerTest{
+public class TrashEditPartTest extends AbstractEditPartTest{
 	
 	private static final int INIT_CARD_SIZE = 1;
 	private static final int INIT_LANE_SIZE = 3;

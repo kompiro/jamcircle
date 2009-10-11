@@ -7,8 +7,8 @@ import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 import org.kompiro.jamcircle.kanban.boardtemplate.AbstractBoardTemplate;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Lane;
-import org.kompiro.jamcircle.kanban.model.ScriptTypes;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 
 public class ColorBoardTemplate extends AbstractBoardTemplate {

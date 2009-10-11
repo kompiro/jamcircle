@@ -1,6 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui.model;
 
 import org.kompiro.jamcircle.kanban.model.Icon;
+import org.kompiro.jamcircle.kanban.service.KanbanService;
 
 
 public class DefaultIconModelFactory implements IconModelFactory {
@@ -9,19 +10,18 @@ public class DefaultIconModelFactory implements IconModelFactory {
 	public static final String TYPE_OF_TRASH = "TrashModel";
 	public static final String TYPE_OF_BOARD_SELECTER = "BoardSelecterModel";
 	public static final String TYPE_OF_INBOX = "InboxIconModel";
+	private KanbanService kanbanService;
 	
+	public DefaultIconModelFactory(KanbanService kanbanService) {
+		this.kanbanService = kanbanService;
+	}
+
 	public IconModel create(Icon icon) {
-//		Class<?> clazz = null;
-//		try {
-//			clazz = Class.forName(icon.getClassType());
-//			Constructor<?> constructor = clazz.getConstructor(Icon.class);
-//			return (IconModel)constructor.newInstance(icon);
-//		} catch (Exception e) {
-//			String errorMessage = String.format("can't create icon model '%s'",icon.getClassType());
-//			KanbanUIStatusHandler.fail(e, errorMessage);
-//		}
-//		return null;
 		String type = icon.getClassType();
+		if(type == null){
+			String message = String.format("Unsupported icon type:'%s'",type);
+			throw new IllegalArgumentException(message);
+		}
 		type = type.substring(type.lastIndexOf('.') + 1);
 		if(TYPE_OF_BOARD_SELECTER.equals(type)){
 			BoardSelecterModel model = new BoardSelecterModel(icon);
@@ -30,13 +30,14 @@ public class DefaultIconModelFactory implements IconModelFactory {
 			LaneCreaterModel model = new LaneCreaterModel(icon);
 			return model;
 		}else if(TYPE_OF_TRASH.equals(type)){
-			TrashModel model = new TrashModel(icon);
+			TrashModel model = new TrashModel(icon,kanbanService);
 			return model;
 		}else if(TYPE_OF_INBOX.equals(type)){
 			InboxIconModel model = new InboxIconModel(icon);
 			return model;
 		}
-		throw new IllegalArgumentException("");
+		String message = String.format("Unsupported icon type:'%s'",type);
+		throw new IllegalArgumentException(message);
 	}
 
 }

@@ -5,6 +5,7 @@ import java.beans.PropertyChangeListener;
 
 import net.java.ao.Entity;
 
+import org.eclipse.core.runtime.*;
 import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.*;
@@ -14,6 +15,7 @@ import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.progress.UIJob;
 import org.kompiro.jamcircle.kanban.model.GraphicalImpl;
 import org.kompiro.jamcircle.kanban.model.Icon;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
@@ -25,8 +27,31 @@ import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		implements PropertyChangeListener {
 
+//	public class UIJobDelegator implements IPropertyChangeDelegator {
+//
+//		public void run(final Runnable runner) {
+//			runner.run();
+////			new UIJob(""){
+////
+////				@Override
+////				public IStatus runInUIThread(IProgressMonitor monitor) {
+////					try{
+////						runner.run();
+////					}catch(Throwable e){
+////						return UIJob.errorStatus(e);
+////					}
+////					return Status.OK_STATUS;
+////				}
+////				
+////			}.schedule();
+//		}
+//
+//	}
+
 	private BoardModel boardModel;
 
+	private IPropertyChangeDelegator delegator;
+	
 	public AbstractEditPart(BoardModel boardModel){
 		this.boardModel = boardModel;
 	}
@@ -129,8 +154,23 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		return new CancelableDragEditPartsTracker(this);
 	}
 
-	public void propertyChange(PropertyChangeEvent evt){
-		Object newValue = evt.getNewValue();
+	public void propertyChange(final PropertyChangeEvent evt){
+		getDelegator().run(new Runnable() {
+			public void run() {
+				doPropertyChange(evt);
+			}
+		});
+	}
+	
+	private IPropertyChangeDelegator getDelegator() {
+		if(delegator == null){
+			delegator  = new AsyncDisplayDelegator(getDisplay());
+		}
+		return delegator;
+	}
+
+	protected void doPropertyChange(final PropertyChangeEvent evt){
+		final Object newValue = evt.getNewValue();
 		Object oldValue = evt.getOldValue();
 
 		if(newValue != null && (newValue instanceof Entity || newValue instanceof AbstractModel)){
@@ -149,7 +189,7 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 			if(target != null){
 				removeChild(target);
 			}
-		}
+		}		
 	}
 	
 	protected Shell getShell() {
@@ -172,6 +212,10 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 
 	protected Display getDisplay() {
 		return getViewer().getControl().getDisplay();
+	}
+	
+	void setDelegator(IPropertyChangeDelegator delegator) {
+		this.delegator = delegator;
 	}
 	
 }

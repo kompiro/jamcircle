@@ -293,10 +293,39 @@ public class StorageServiceImpl implements StorageService {
 	public String getDBPath() {
 		return getStoreRoot() + StorageServiceImpl.dbName;
 	}
+	
+	public <T extends Entity> T createEntity(Class<T> clazz, DBParam[] params) {
+		T entity = null;
+		try {
+			entity = getEntityManager().create(clazz, params);
+		} catch (SQLException e) {
+			StringBuilder builder = new StringBuilder();
+			for(DBParam param:params){
+				builder.append(String.format("%s:%s",param.getField(),param.getValue()));
+				builder.append("\t");
+			}
+			StorageStatusHandler.fail(e, "StorageServiceImpl#create() '%s'",builder.toString());
+		}
+		return entity;
 
-	public EntityManager getEntityManager() {
-		return manager;
 	}
+
+	public void discard(GraphicalEntity entity) {
+		entity.setTrashed(true);
+		entity.save();
+	}
+	
+	public void pickup(GraphicalEntity entity) {
+		entity.setTrashed(false);
+		entity.save();
+	}
+	
+	public int countInTrash(Class<? extends GraphicalEntity> clazz) {
+		GraphicalEntity[] results = findInTrash(clazz);
+		if(results == null) return 0;
+		return results.length;
+	}
+
 
 	public StorageSettings getSettings() {
 		StorageActivator activator = StorageActivator.getDefault();
@@ -314,23 +343,22 @@ public class StorageServiceImpl implements StorageService {
 		Collections.sort(this.listeners, new StorageChageListenerComparator());
 	}
 
+	private GraphicalEntity[] findInTrash(Class<? extends GraphicalEntity> clazz) {
+		GraphicalEntity[] results = null;
+		try {
+			results = getEntityManager().find(clazz,GraphicalEntity.PROP_TRASHED + " = ?",true);
+		} catch (SQLException e) {
+			StorageStatusHandler.fail(e,"StorageServiceImpl#countInTrash()",true);
+		}
+		return results;
+	}
+	
 	public void setEntityManager(EntityManager manager) {
 		this.manager = manager;
 	}
 
-	public Entity createEntity(Class<? extends Entity> clazz, DBParam[] params) {
-		Entity entity = null;
-		try {
-			entity = getEntityManager().create(clazz, params);
-		} catch (SQLException e) {
-			StringBuilder builder = new StringBuilder();
-			for(DBParam param:params){
-				builder.append(String.format("%s:%s",param.getField(),param.getValue()));
-				builder.append("\t");
-			}
-			StorageStatusHandler.fail(e, "StorageServiceImpl#create() '%s'",builder.toString());
-		}
-		return entity;
-
+	public EntityManager getEntityManager() {
+		return manager;
 	}
+
 }

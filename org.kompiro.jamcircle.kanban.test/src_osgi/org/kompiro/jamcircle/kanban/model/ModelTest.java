@@ -1,18 +1,10 @@
 package org.kompiro.jamcircle.kanban.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.util.Date;
 
 import net.java.ao.DBParam;
@@ -20,9 +12,6 @@ import net.java.ao.DBParam;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.KanbanActivator;
-import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.CardImpl;
-import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.service.internal.AbstractKanbanTest;
 import org.kompiro.jamcircle.storage.service.StorageService;
 
@@ -30,12 +19,11 @@ public class ModelTest extends AbstractKanbanTest{
 	
 	private TestUtils util = new TestUtils();
 
-
-//	@Before
-//	public void before() throws Exception {
-//		super.init();
-//	}
-
+	@Before
+	public void forceInit() throws Exception{
+		getKanbanService().forceInit();
+	}
+	
 	@Test
 	public void files() throws Exception {
 		DBParam[] params = new DBParam[]{
@@ -49,7 +37,8 @@ public class ModelTest extends AbstractKanbanTest{
 		System.out.println(target.getAbsolutePath());
 		StorageService service = KanbanActivator.getDefault().getStorageService();
 		String path = CardImpl.CARD_PATH + card.getID() + File.separator + "long.txt";
-		assertTrue("'" + path +"' is not exist.",service.fileExists(path));
+		String message = String.format("'%s' is not exist.",path);
+		assertTrue(message,service.fileExists(path));
 		assertTrue(card.hasFiles());
 		FileInputStream stream = new FileInputStream(card.getFiles().get(0));
 		assertEquals(util.readFile(),getString(stream));
@@ -85,14 +74,23 @@ public class ModelTest extends AbstractKanbanTest{
 		entityManager.create(Lane.class,params);
 		
 	}
+		
+	@Test
+	public void trashed() throws Exception {
+		DBParam[] params = new DBParam[]{
+				new DBParam(Card.PROP_SUBJECT,"test"),
+				new DBParam(Card.PROP_CREATEDATE,new Date()),
+				new DBParam(Card.PROP_TRASHED,true),
+		};
+		entityManager.create(Card.class,params);
+		assertNotNull(entityManager.find(Card.class,Card.PROP_TRASHED + " = true"));
+	}
 	
 	@Test
 	public void modelRelation() throws Exception {
 		Card card = entityManager.create(Card.class,new DBParam(Card.PROP_SUBJECT,"test"));
 		Card card2 = entityManager.create(Card.class,new DBParam(Card.PROP_SUBJECT,"test2"));
 		Lane lane = entityManager.create(Lane.class,new DBParam(Lane.PROP_STATUS,"todo"),new DBParam(Lane.PROP_CREATEDATE,new Date()));
-
-		
 		PropertyChangeListener listener = new PropertyChangeListener(){
 
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -109,6 +107,10 @@ public class ModelTest extends AbstractKanbanTest{
 			}
 			
 		};
+		System.out.println(lane);
+		// needs flushAll() Because lane's status is still before value... Why? 
+		entityManager.flushAll();
+		System.out.println(lane);
 		lane2.addPropertyChangeListener(listener2);
 		card.setLane(lane);
 		card.save();
@@ -135,16 +137,5 @@ public class ModelTest extends AbstractKanbanTest{
 		}
 		assertEquals(cardcount,lane.getCards().length);
 	}
-	
-	@Test
-	public void trashed() throws Exception {
-		DBParam[] params = new DBParam[]{
-				new DBParam(Card.PROP_SUBJECT,"test"),
-				new DBParam(Card.PROP_CREATEDATE,new Date()),
-				new DBParam(Card.PROP_TRASHED,true),
-		};
-		entityManager.create(Card.class,params);
-		assertNotNull(entityManager.find(Card.class,Card.PROP_TRASHED + " = true"));
-	}
-	
+
 }

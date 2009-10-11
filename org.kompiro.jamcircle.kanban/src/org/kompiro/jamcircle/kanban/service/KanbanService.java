@@ -10,6 +10,7 @@ import org.kompiro.jamcircle.kanban.model.CardDTO;
 import org.kompiro.jamcircle.kanban.model.Icon;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.model.User;
+import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 import org.kompiro.jamcircle.storage.service.StorageChageListener;
 
 
@@ -37,9 +38,9 @@ public interface KanbanService {
 	
 	Card[] findCards(String criteria, Object... parameters);
 	
-	Card createReceiveCard(Board board,CardDTO dto,User current,User fromUser);
+	Card[] findCardsInTrash();
 
-	int countCards();
+	Card createReceiveCard(Board board,CardDTO dto,User current,User fromUser);
 	
 	boolean exportCards(File exportFile);
 
@@ -105,6 +106,7 @@ public interface KanbanService {
 
 	boolean importIcons(File importFile);
 
+	// Others
 	KanbanBoardTemplate[] getKanbanDataInitializers();
 
 	void addStorageChangeListener(StorageChageListener listener);
@@ -114,5 +116,11 @@ public interface KanbanService {
 	void addPropertyChangeListener(PropertyChangeListener boardChangeListener);
 
 	void removePropertyChangeListener(PropertyChangeListener boardChangeListener);
+
+	int countInTrash(Class<? extends GraphicalEntity> clazz);
 	
+	void discardToTrash(GraphicalEntity entity);
+
+	void pickupFromTrash(GraphicalEntity entity);
+
 }

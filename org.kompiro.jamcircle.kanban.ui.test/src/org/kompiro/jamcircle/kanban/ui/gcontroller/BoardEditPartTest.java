@@ -26,7 +26,7 @@ import org.kompiro.jamcircle.kanban.model.mock.Card;
 import org.kompiro.jamcircle.kanban.ui.command.ChangeLaneConstraintCommand;
 import org.kompiro.jamcircle.kanban.ui.model.UserModel;
 
-public class BoardEditPartTest extends AbstractControllerTest{
+public class BoardEditPartTest extends AbstractEditPartTest{
 
 	private Map<Object, GraphicalEditPart> boardChildrenPartMap;
 	

@@ -3,6 +3,7 @@ package org.kompiro.jamcircle.kanban.model;
 import java.sql.Types;
 import java.util.Date;
 
+import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 import net.java.ao.Implementation;

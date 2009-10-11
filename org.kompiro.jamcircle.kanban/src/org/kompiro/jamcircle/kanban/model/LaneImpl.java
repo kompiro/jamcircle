@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.sql.SQLException;
 
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
+import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 
 public class LaneImpl extends GraphicalImpl {
@@ -70,6 +71,11 @@ public class LaneImpl extends GraphicalImpl {
 
 	public String getContainerName() {
 		return String.format("Lane[%s]",lane.getStatus());
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("['#%d':'%s' trashed:'%s']", lane.getID(),lane.getStatus(),lane.isTrashed());
 	}
 
 }
