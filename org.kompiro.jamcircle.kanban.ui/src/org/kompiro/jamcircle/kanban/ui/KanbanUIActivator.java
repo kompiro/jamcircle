@@ -1,20 +1,14 @@
 package org.kompiro.jamcircle.kanban.ui;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.*;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.kompiro.jamcircle.debug.IStatusHandler;
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
-import org.kompiro.jamcircle.kanban.model.ColorTypes;
-import org.kompiro.jamcircle.kanban.model.FlagTypes;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.scripting.ScriptingService;
 import org.kompiro.jamcircle.scripting.exception.ScriptingException;
@@ -45,11 +39,11 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 
 
 	public KanbanUIActivator() {
-		plugin = this;
 	}
 	
 
 	public void start(BundleContext context) throws Exception {
+		plugin = this;
 		super.start(context);
 		KanbanJFaceResource.initialize();
  		dialogHandler = new IStatusHandler(){

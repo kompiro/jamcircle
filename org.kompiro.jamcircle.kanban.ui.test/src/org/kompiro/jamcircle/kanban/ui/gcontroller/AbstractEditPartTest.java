@@ -27,7 +27,7 @@ import org.kompiro.jamcircle.debug.IStatusHandler;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.mock.Board;
 import org.kompiro.jamcircle.kanban.model.mock.Icon;
-import org.kompiro.jamcircle.kanban.model.mock.Lane;
+import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.ui.CommandStackEventListenerForDebug;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
 import org.kompiro.jamcircle.kanban.ui.model.*;
@@ -81,6 +81,7 @@ public abstract class AbstractEditPartTest {
 
 		private static final long serialVersionUID = 1L;
 		private List<Card> cards = new ArrayList<Card>();
+		private List<Lane> lanes = new ArrayList<Lane>();
 
 		@Override
 		public boolean addCard(Card card) {
@@ -94,17 +95,32 @@ public abstract class AbstractEditPartTest {
 
 		@Override
 		public boolean isEmpty() {
-			return cards.isEmpty();
+			return cards.isEmpty() && lanes.isEmpty();
 		}
 
 		@Override
 		public boolean removeCard(Card card) {
 			return cards.remove(card);
 		}
+		
+		@Override
+		public boolean addLane(org.kompiro.jamcircle.kanban.model.Lane lane) {
+			return lanes.add(lane);
+		}
+		
+		@Override
+		public boolean removeLane(Lane lane) {
+			return lanes.remove(lane);
+		}
+		
+		@Override
+		public Lane[] getLanes() {
+			return lanes.toArray(new Lane[]{});
+		}
 
 	}
 
-	class LaneMock extends Lane {
+	class LaneMock extends org.kompiro.jamcircle.kanban.model.mock.Lane {
 		private String status;
 		private List<Card> cards = new ArrayList<Card>();
 		private int height;
