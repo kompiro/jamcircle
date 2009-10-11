@@ -436,7 +436,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			
 			String scriptName = String.format("Lane '%s' Script",lane.getStatus());
 			try {
-				getScriptingService().exec(lane.getScriptType(), scriptName, script,beans);
+				getScriptingService().eval(lane.getScriptType(), scriptName, script,beans);
 			} catch (ScriptingException e) {
 				KanbanUIStatusHandler.fail(e, e.getMessage());
 				return new Status(Status.ERROR, KanbanUIActivator.ID_PLUGIN, IStatus.OK, e.getMessage(), e);

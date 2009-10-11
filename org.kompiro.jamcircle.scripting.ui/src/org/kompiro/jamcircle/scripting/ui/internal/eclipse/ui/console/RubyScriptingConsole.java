@@ -12,8 +12,7 @@
 
 package org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console;
 
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -112,6 +111,7 @@ public class RubyScriptingConsole extends TextConsole {
 	private IOConsoleInputStream input;
 	
 	private ControlFromKey keyListener;
+	
 	private ContentAssistant assist;
     
     /**
@@ -466,13 +466,13 @@ public class RubyScriptingConsole extends TextConsole {
 				runtime = JavaEmbedUtils.initialize(new ArrayList<Object>(),config);
 		        IRubyObject rubyBoard = JavaEmbedUtils.javaToRuby(runtime, new BoardAccessor());
 		        runtime.getGlobalVariables().defineReadonly("$board_accessor", new ValueAccessor(rubyBoard));		        
-		        runtime.getGlobalVariables().defineReadonly("$$", new ValueAccessor(runtime.newFixnum(System.identityHashCode(runtime))));
 				return Status.OK_STATUS;
 			}
 
 			private String getJRubyHomeFromBundle() {
 				try {
-					return FileLocator.getBundleFile(Platform.getBundle("org.jruby")).getAbsolutePath();
+					String path = new File(FileLocator.getBundleFile(Platform.getBundle("org.jruby")),"META-INF/jruby.home").getAbsolutePath();
+					return path;
 				} catch (IOException e) {
 				}
 				return null;

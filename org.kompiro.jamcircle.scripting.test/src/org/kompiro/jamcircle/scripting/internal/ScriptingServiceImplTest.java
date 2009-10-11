@@ -1,42 +1,73 @@
 package org.kompiro.jamcircle.scripting.internal;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
-
-import org.junit.Test;
+import org.junit.*;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class ScriptingServiceImplTest {
+	
+	private ScriptingServiceImpl service;
+
+	@Before
+	public void initialize() throws Exception{
+		service = new ScriptingServiceImpl();
+	}
+	
+	@After
+	public void afterTest() throws Exception{
+		service.terminate();
+	}
 
 	@Test
-	public void scripting() throws Exception {
-		ScriptEngineManager manager = new ScriptEngineManager();
-		for(ScriptEngineFactory e :manager.getEngineFactories()){
-			System.out.println(e.getEngineName());
-			System.out.println(e.getExtensions());
-		}
-		
-	}
-	
-	@Test
-	public void initScriptingServiceIfNull() throws Exception {
-		ScriptingServiceImpl service = new ScriptingServiceImpl();
+	public void initScriptingServiceIfNullWhenJavaScript() throws Exception {
 		service.init(null);
+		service.eval(ScriptTypes.JavaScript, "test", "java.lang.System.out.println(initScriptingServiceIfNullWhenJavaScript)", null);
+	}
+
+	@Test
+	public void initScriptingServiceIfNullWhenJRuby() throws Exception {
+		service.init(null);
+		service.eval(ScriptTypes.JRuby, "test", "p 'initScriptingServiceIfNullWhenJRuby'", null);
 	}
 	
 	@Test
-	public void initScriptingService() throws Exception {
-		ScriptingServiceImpl service = new ScriptingServiceImpl();
-		Map<String, Object> beans = new HashMap<String, Object>();
-		service.init(beans);
-//		service.exec(ScriptTypes.JavaScript, "test", "print('test\\n')", beans);
-		service.exec(ScriptTypes.JRuby, "test", "p 'test'", beans);
-		service.exec(ScriptTypes.JRuby, "test", "card = Card.new", beans);
+	public void evalJRubyEmptyValue() throws Exception {
+		service.init(null);
+		service.eval(ScriptTypes.JRuby, "test", "p 'evalJRubyEmptyValue is ok.'", null);
 	}
+
+	@Test
+	public void evalJRubyReturnValue() throws Exception {
+		Map<String, Object> globalBeans = new HashMap<String, Object>();
+		globalBeans.put("ONE", 1);
+		globalBeans.put("TWO", 2);
+		service.init(globalBeans);
+		Object actual = service.eval(ScriptTypes.JRuby, "test", "result =  ONE + TWO; p 'evalJrubyReturnValue is testing...'; result", null);
+		assertTrue(actual.getClass().getCanonicalName(),actual instanceof Long);
+		assertThat((Long)actual, is(3L));
+	}
+	
+	@Test
+	public void evalJRubySomeValues() throws Exception {
+		Map<String, Object> instanceBeans = new HashMap<String, Object>();
+		service.init(null);
+		service.eval(ScriptTypes.JRuby, "test", 
+				"p 'empty value'", new HashMap<String, Object>());
+		Person value = new Person();
+		value.setName("テスト太郎");
+		instanceBeans.put("person", value);
+		String name = Person.class.getName();
+		Object result = service.eval(ScriptTypes.JRuby, "test", 
+				"include_class \"" + name + 
+				"\";\n" +
+				"$bsf.lookupBean('person').name", instanceBeans);
+		assertThat((String)result,is("テスト太郎"));
+	}
+
 }

@@ -1,13 +1,19 @@
 package org.kompiro.jamcircle.scripting.internal;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
 import org.apache.bsf.util.IOUtils;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Platform;
+import org.jruby.Ruby;
+import org.jruby.RubyInstanceConfig;
 import org.jruby.exceptions.RaiseException;
+import org.jruby.internal.runtime.ValueAccessor;
+import org.jruby.javasupport.JavaEmbedUtils;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.scripting.ScriptingService;
 import org.kompiro.jamcircle.scripting.exception.ScriptingException;
@@ -16,6 +22,8 @@ public class ScriptingServiceImpl implements ScriptingService{
 
 	private BSFManager manager;
 	private boolean initialized = false;
+	private Ruby runtime;
+
 	
 	public ScriptingServiceImpl(){
 		manager = new BSFManager();
@@ -24,10 +32,23 @@ public class ScriptingServiceImpl implements ScriptingService{
 	public void init(Map<String, Object> beans) throws ScriptingException {
 		if(!initialized){
 			synchronized (this) {
+				RubyInstanceConfig config = new RubyInstanceConfig();
+				config.setArgv(new String[]{"-Ku"});
+				config.setJRubyHome(getJRubyHomeFromBundle());
+		        config.setObjectSpaceEnabled(true);
+				runtime = JavaEmbedUtils.initialize(new ArrayList<Object>(),config);
+		        runtime.getGlobalVariables().defineReadonly("$bsf", new ValueAccessor(JavaEmbedUtils.javaToRuby(runtime, manager)));
+		        runtime.getGlobalVariables().defineReadonly("$$", new ValueAccessor(runtime.newFixnum(System.identityHashCode(runtime))));
+				if(beans == null){
+					initialized = true;
+					return;
+				}
 				try{
 					for(Map.Entry<String, Object> entry : beans.entrySet()){
-						Object bean = entry.getValue();
-						manager.declareBean(entry.getKey(), bean,bean.getClass());
+						Object value = entry.getValue();
+						String name = entry.getKey();
+						manager.declareBean(name, value,value.getClass());
+						runtime.defineGlobalConstant(name, JavaEmbedUtils.javaToRuby(runtime, value));
 					}
 				} catch (BSFException e) {
 					Throwable targetException = e.getTargetException();
@@ -42,16 +63,19 @@ public class ScriptingServiceImpl implements ScriptingService{
 		}
 	}
 
-	public void exec(ScriptTypes type, String scriptName, String script,
+	public Object eval(ScriptTypes type, String scriptName, String script,
 			Map<String, Object> beans
 			) throws ScriptingException {
-		for(Map.Entry<String, Object> entry : beans.entrySet()){
-			manager.registerBean(entry.getKey(), entry.getValue());
+		if(initialized == false) throw new ScriptingException("uninitialized service.");
+		if(beans != null){
+			for(Map.Entry<String, Object> entry : beans.entrySet()){
+				manager.registerBean(entry.getKey(), entry.getValue());
+			}
 		}
 
 		try {
-			String templateName = null;
 			int templateLines = 0;
+			String templateName = null;
 			switch (type) {
 			case JavaScript:
 				templateName = "init.js";
@@ -68,8 +92,9 @@ public class ScriptingServiceImpl implements ScriptingService{
 			}
 			InputStreamReader reader = new InputStreamReader(getClass().getResource(templateName).openStream());
 			String header = IOUtils.getStringFromReader(reader);
-			script = header + script;
-			manager.exec(type.getType(), scriptName, -templateLines, 0, script);
+			script= header + script;
+			return executeScript(type, scriptName, script, templateLines);
+			
 		} catch (BSFException e) {
 			Throwable targetException = e.getTargetException();
 			if(targetException instanceof RaiseException){
@@ -82,5 +107,39 @@ public class ScriptingServiceImpl implements ScriptingService{
 		}
 	}
 
+	private Object executeScript(ScriptTypes type, String scriptName,
+			String script, int templateLines) throws BSFException {
+		Object result = null;
+		switch (type) {
+		case JavaScript:
+			result = manager.eval(type.getType(), scriptName, -templateLines, 0, script);
+			break;
+		case JRuby:
+			result = JavaEmbedUtils.rubyToJava(runtime.evalScriptlet(script));
+			break;
+		}
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Object getAdapter(Class adapter) {
+		if(adapter == null) return null;
+		if(Ruby.class.equals(adapter)) return runtime;
+		return null;
+	}
+
+	private String getJRubyHomeFromBundle() {
+		try {
+			String path = new File(FileLocator.getBundleFile(Platform.getBundle("org.jruby")),"META-INF/jruby.home").getAbsolutePath();
+			return path;
+		} catch (IOException e) {
+		}
+		return null;
+	}
+
+	public void terminate() {
+		manager.terminate();
+		JavaEmbedUtils.terminate(runtime);
+	}
 
 }

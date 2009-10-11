@@ -336,7 +336,7 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 			beans.put("monitor", monitor);
 			try {
 				ScriptingService service = getScriptingService();
-				service.exec(board.getScriptType(), scriptName, script,beans);
+				service.eval(board.getScriptType(), scriptName, script,beans);
 			} catch (ScriptingException e) {
 				KanbanUIStatusHandler.fail(e, e.getMessage());
 			}
