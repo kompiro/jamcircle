@@ -312,7 +312,6 @@ public class KanbanView extends ViewPart implements XMPPLoginListener,StorageCha
 		
 		final int id = board.getID();
 		viewer.setContents(boardModel);
-		boardModel.clearMocks();
 		new Job("execute script on board"){
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
