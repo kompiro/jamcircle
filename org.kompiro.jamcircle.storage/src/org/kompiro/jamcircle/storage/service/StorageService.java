@@ -52,4 +52,8 @@ public interface StorageService {
 
 	public void pickup(GraphicalEntity entity);
 
+//	public <T extends Entity> T[] find(Class<T> clazz, String query, Object... objects);
+
+	public <T extends Entity> T[] findInTrash(Class<T> clazz);
+
 }

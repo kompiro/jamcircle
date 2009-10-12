@@ -24,7 +24,7 @@ public interface Lane extends GraphicalEntity ,CardContainer {
 	String PROP_HEIGHT = "height";
 	String PROP_CARD = "card";
 	String PROP_CONSTRAINT = "constraint";
-	String PROP_CREATEDATE = "createdate";
+	String PROP_CREATE_DATE = "createdate";
 	String PROP_TRASHED = "trashed";
 	String PROP_ICONIZED = "iconized";
 	String PROP_BOARD = "boardid";

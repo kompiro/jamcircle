@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeThat;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import org.eclipse.draw2d.geometry.Dimension;
@@ -15,7 +14,6 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.*;
 import org.junit.*;
-import org.kompiro.jamcircle.kanban.model.User;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
 import org.kompiro.jamcircle.kanban.ui.internal.command.ChangeLaneConstraintCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;

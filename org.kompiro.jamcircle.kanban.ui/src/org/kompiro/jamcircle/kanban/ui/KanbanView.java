@@ -303,7 +303,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 
 	private void refreshIcons() {
 		KanbanService service = getKanbanService();
-		Icon[] icons = service.findIcons();
+		Icon[] icons = service.findAllIcons();
 		for(Icon icon : icons){
 			IconModel model = iconModelFactory.create(icon);
 			this.boardModel.addIcon(model);

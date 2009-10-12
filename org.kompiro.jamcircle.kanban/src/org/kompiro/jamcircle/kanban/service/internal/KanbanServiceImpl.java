@@ -10,7 +10,6 @@ import java.util.*;
 import net.java.ao.DBParam;
 import net.java.ao.EntityManager;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
@@ -84,7 +83,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 				KanbanStatusHandler.fail(e, "KanbanServiceImpl#init",true);
 				return;
 			}
-			Icon[] icons = findIcons();
+			Icon[] icons = findAllIcons();
 			if(icons.length == 0){
 				addIcon(INBOX_ICON_MODEL,0,ICON_SIZE_Y * 0);
 				addIcon(BOARD_SELECTER_MODEL,0,ICON_SIZE_Y * 1);
@@ -192,7 +191,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 				new DBParam(Lane.PROP_BOARD,board),
 				new DBParam(Lane.PROP_LOCATION_X,x),
 				new DBParam(Lane.PROP_LOCATION_Y,y),
-				new DBParam(Lane.PROP_CREATEDATE,new Date()),
+				new DBParam(Lane.PROP_CREATE_DATE,new Date()),
 				new DBParam(Lane.PROP_WIDTH,width),
 				new DBParam(Lane.PROP_HEIGHT,height)
 		};
@@ -339,6 +338,11 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		}
 		return new Card[]{};
 	}
+	
+	public Card[] findCardsInTrash() {
+		return getStorageService().findInTrash(Card.class);
+	}
+
 
 	public User addUser(String userId) {
 		DBParam[] params = new DBParam[]{
@@ -480,7 +484,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		getStorageService().deleteAllEntity(Icon.class);
 	}
 
-	public Icon[] findIcons() {
+	public Icon[] findAllIcons() {
 		Icon[] icons = null;
 		try {
 			icons = getEntityManager().find(Icon.class,Icon.PROP_TRASHED + " = ?", false);
@@ -498,10 +502,6 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		return getStorageService().importEntity(importFile, Icon.class);
 	}
 	
-	public Card[] findCardsInTrash() {
-		throw new NotImplementedException();
-	}
-
 	public int countInTrash(Class<? extends GraphicalEntity> clazz) {
 		return getStorageService().countInTrash(clazz);
 	}

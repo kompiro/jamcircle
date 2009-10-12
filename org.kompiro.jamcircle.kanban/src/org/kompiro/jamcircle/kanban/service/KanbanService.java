@@ -101,7 +101,7 @@ public interface KanbanService {
 	void changeCurrentUser(User user);
 	
 	//Icon Section
-	Icon[] findIcons();
+	Icon[] findAllIcons();
 	
 	Icon addIcon(String type,int x,int y);
 	

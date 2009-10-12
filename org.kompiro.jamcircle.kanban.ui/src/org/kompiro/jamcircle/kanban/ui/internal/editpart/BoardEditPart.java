@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.*;
-import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.geometry.*;
 import org.eclipse.gef.*;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -22,6 +22,8 @@ import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 import org.kompiro.jamcircle.kanban.ui.editpart.*;
 import org.kompiro.jamcircle.kanban.ui.internal.command.*;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.CardArea;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
@@ -65,56 +67,58 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 	private final class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		@Override
 		protected Command createChangeConstraintCommand(EditPart child, Object constraint) {
-			if(child.getParent() != BoardEditPart.this && isNotRectangle(constraint)) return null;
+			if(child.getParent() != BoardEditPart.this 
+					&& isNotRectangle(constraint)){
+				return null;
+			}
 			Object target = child.getModel();
 			Rectangle rect = (Rectangle) constraint;
-			MoveCommand command = (MoveCommand)child.getAdapter(MoveCommand.class);
+			MoveCommand command = (MoveCommand) child.getAdapter(MoveCommand.class);
 			command.setModel(target);
 			command.setRectangle(rect);
+			if (target instanceof Lane) {
+				Lane lane = (Lane) target;
+				CompoundCommand compoundCommand = new CompoundCommand();
+				compoundCommand.add(command);
+				if (child instanceof LaneEditPart && !lane.isIconized()) {
+					LaneEditPart part = (LaneEditPart) child;
+					calculateCardArea(compoundCommand, rect, part);
+				}
+				return compoundCommand;
+			}
 			return command;
-//			if(target instanceof Lane){
-//				Lane lane = (Lane)target;
-//				CompoundCommand command = new CompoundCommand();
-//				command.add(new ChangeLaneConstraintCommand(lane,rect));
-//				if (child instanceof LaneEditPart && ! lane.isIconized()) {
-//					LaneEditPart part = (LaneEditPart) child;
-//					calculateCardArea(command ,rect, part);
-//				}
-//				return command;	
-//			}
 		}
 
-		// FIXME What is this??
-//		private void calculateCardArea(CompoundCommand command, Rectangle rect,LaneEditPart part) {
-//			LaneFigure laneFigure = part.getLaneFigure();
-//			CardArea area = laneFigure.getCardArea();
-//			for(Object o:area.getChildren()){
-//				if (o instanceof CardFigure) {
-//					CardFigure cardFigure = (CardFigure) o;
-//					Dimension size = cardFigure.getSize();
-//					Point translate = cardFigure.getLocation().getCopy().translate(size);
-//					Rectangle localRect = rect.getCopy();
-//					localRect.setLocation(0, 0);
-//					if(!localRect.contains(translate)){
-//						ChangeBoundsRequest request = new ChangeBoundsRequest();
-//						request.setConstrainedMove(true);
-//						EditPart card = (EditPart) part.getViewer().getVisualPartMap().get(cardFigure);
-//						request.setEditParts(card);
-//						Point p = cardFigure.getLocation().getCopy();
-//						if(translate.x + size.width > localRect.width){
-//							p.x = laneFigure.getMaxCardLocationX(rect.getSize(),size); 
-//						}
-//						if(translate.y + size.height > localRect.height){
-//							p.y = laneFigure.getMaxCardLocationY(rect.getSize(),size); 
-//						}
-//						
-//						request.setMoveDelta(cardFigure.getLocation().translate(p.getNegated()).getNegated());
-//						request.setType(RequestConstants.REQ_RESIZE_CHILDREN);
-//						command.add(part.getCommand(request));
-//					}
-//				}
-//			}
-//		}
+		private void calculateCardArea(CompoundCommand command, Rectangle rect,LaneEditPart part) {
+			LaneFigure laneFigure = part.getLaneFigure();
+			CardArea area = laneFigure.getCardArea();
+			for(Object o:area.getChildren()){
+				if (o instanceof CardFigure) {
+					CardFigure cardFigure = (CardFigure) o;
+					Dimension size = cardFigure.getSize();
+					Point translate = cardFigure.getLocation().getCopy().translate(size);
+					Rectangle localRect = rect.getCopy();
+					localRect.setLocation(0, 0);
+					if(!localRect.contains(translate)){
+						ChangeBoundsRequest request = new ChangeBoundsRequest();
+						request.setConstrainedMove(true);
+						EditPart card = (EditPart) part.getViewer().getVisualPartMap().get(cardFigure);
+						request.setEditParts(card);
+						Point p = cardFigure.getLocation().getCopy();
+						if(translate.x + size.width > localRect.width){
+							p.x = laneFigure.getMaxCardLocationX(rect.getSize(),size); 
+						}
+						if(translate.y + size.height > localRect.height){
+							p.y = laneFigure.getMaxCardLocationY(rect.getSize(),size); 
+						}
+						
+						request.setMoveDelta(cardFigure.getLocation().translate(p.getNegated()).getNegated());
+						request.setType(RequestConstants.REQ_RESIZE_CHILDREN);
+						command.add(part.getCommand(request));
+					}
+				}
+			}
+		}
 		
 		private boolean isNotRectangle(Object constraint) {
 			return !(constraint instanceof Rectangle);
