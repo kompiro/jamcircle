@@ -28,3 +28,5 @@ fragment@org.kompiro.jamcircle.xmpp.test=COPY,/var/hudson/jobs/jamcircle-continu
 plugin@org.mockito=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.mockito
 plugin@org.kompiro.jamcircle.debug=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.debug
 plugin@org.kompiro.jamcircle.debug.ui=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.debug.ui
+plugin@org.kompiro.jamcircle.xmpp.kanban.ui=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.xmpp.kanban.ui
+feature@org.kompiro.jamcircle.xmpp.feature=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.xmpp.feature
