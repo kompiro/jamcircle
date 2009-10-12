@@ -32,7 +32,7 @@ public class ChangeLaneConstraintCommand extends MoveCommand {
 	}
 
 	@Override
-	public void doExecute() {
+	public void move() {
 		if (lane != null){
 			lane.setX(rect.getLocation().x);
 			lane.setY(rect.getLocation().y);

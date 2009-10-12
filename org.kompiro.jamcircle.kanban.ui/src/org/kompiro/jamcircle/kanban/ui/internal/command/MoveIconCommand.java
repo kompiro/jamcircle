@@ -16,7 +16,7 @@ public class MoveIconCommand extends MoveCommand {
 	}
 	
 	@Override
-	public void doExecute() {
+	public void move() {
 		moveIcon(location);
 	}
 	

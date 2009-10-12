@@ -16,7 +16,7 @@ public class MoveUserCommand extends MoveCommand {
 	}
 		
 	@Override
-	public void doExecute() {
+	public void move() {
 		moveUser(location);
 	}
 

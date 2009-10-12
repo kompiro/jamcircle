@@ -61,6 +61,7 @@ import org.jruby.ext.Readline;
 import org.jruby.internal.runtime.ValueAccessor;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
+import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.ui.KanbanView;
 import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
 
@@ -684,7 +685,7 @@ public class RubyScriptingConsole extends TextConsole {
 						}
 					}
 					KanbanView kanbanView = view;
-					ret[0] = kanbanView.getBoard();
+					ret[0] = kanbanView.getAdapter(Board.class);
 				}
 			});
 			return ret[0];

@@ -25,6 +25,14 @@ public abstract class MoveCommand extends AbstractCommand{
 		return rect;
 	}
 	
+	@Override
+	public final void doExecute() {
+		initialize();
+		move();
+	}
+	
 	protected abstract void initialize();
+
+	protected abstract void move();
 
 }
