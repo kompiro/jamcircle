@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JAMCircle Kanban XMPP Bridge
+Bundle-SymbolicName: org.kompiro.jamcircle.xmpp.kanban.ui
+Bundle-Version: 0.1.0.qualifier
+Bundle-Activator: org.kompiro.jamcircle.xmpp.kanban.ui.internal.BridgeXMPPActivator
+Bundle-Vendor: kompiro.org
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.kompiro.jamcircle.kanban.ui,
+ org.kompiro.jamcircle.xmpp,
+ org.eclipse.core.runtime,
+ org.eclipse.gef,
+ org.eclipse.ui,
+ org.apache.commons.lang

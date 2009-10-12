@@ -343,8 +343,8 @@ public class StorageServiceImpl implements StorageService {
 		Collections.sort(this.listeners, new StorageChageListenerComparator());
 	}
 
-	private GraphicalEntity[] findInTrash(Class<? extends GraphicalEntity> clazz) {
-		GraphicalEntity[] results = null;
+	public <T extends Entity> T[] findInTrash(Class<T> clazz){
+		T[] results = null;
 		try {
 			results = getEntityManager().find(clazz,GraphicalEntity.PROP_TRASHED + " = ?",true);
 		} catch (SQLException e) {

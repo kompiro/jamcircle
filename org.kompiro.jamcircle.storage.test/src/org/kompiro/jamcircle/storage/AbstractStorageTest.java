@@ -1,14 +1,10 @@
 package org.kompiro.jamcircle.storage;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import net.java.ao.EntityManager;
 
@@ -28,8 +24,10 @@ public abstract class AbstractStorageTest {
 
 	@BeforeClass
 	public static void bundleInitialize() throws Exception{
-		if(!Platform.isRunning()) return;
-		Logger.getLogger("net.java.ao").setLevel(Level.FINE);
+		if(!Platform.isRunning()){
+			throw new IllegalStateException("Please launch on PDE Environment");
+		}
+//		Logger.getLogger("net.java.ao").setLevel(Level.FINE);
 		activator = StorageActivator.getDefault();
 		String storePath = activator.getService().getDBPath();
 		int schemeIndex = storePath.indexOf(FILE);
@@ -49,7 +47,6 @@ public abstract class AbstractStorageTest {
 		manager = service.getEntityManager();
 		assertNotNull(manager);
 		assertAutoCommit(manager);
-		Logger.getLogger("net.java.ao").setLevel(Level.FINE);
 	}
 
 	public static StorageService getStorageService() {

@@ -4,7 +4,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.kompiro.jamcircle.scripting.ScriptingService;
 import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -16,6 +18,8 @@ public class ScriptingUIActivator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static ScriptingUIActivator plugin;
+
+	private ServiceTracker scriptingServiceTracker;
 	
 	/**
 	 * The constructor
@@ -29,6 +33,8 @@ public class ScriptingUIActivator extends AbstractUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		scriptingServiceTracker = new ServiceTracker(context,ScriptingService.class.getName(), null);
+		scriptingServiceTracker.open();
 		plugin = this;
 	}
 
@@ -38,6 +44,7 @@ public class ScriptingUIActivator extends AbstractUIPlugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		scriptingServiceTracker.close();
 		super.stop(context);
 	}
 
@@ -64,6 +71,10 @@ public class ScriptingUIActivator extends AbstractUIPlugin {
 	
 	public static IStatus createErrorStatus(Throwable e){
 		return new Status(IStatus.ERROR, PLUGIN_ID, "error is occured",e);
+	}
+
+	public ScriptingService getScriptingService() {
+		return (ScriptingService) scriptingServiceTracker.getService();
 	}
 
 

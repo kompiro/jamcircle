@@ -28,7 +28,7 @@ import org.eclipse.swt.widgets.Display;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.FlagTypes;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
-import org.kompiro.jamcircle.kanban.ui.command.ChangeFlagCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.command.ChangeFlagCommand;
 
 public class FlagPopUpHelper extends PopUpHelper{
 	private IFigure currentTipSource;

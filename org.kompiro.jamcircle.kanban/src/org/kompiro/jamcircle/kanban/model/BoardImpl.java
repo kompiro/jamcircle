@@ -32,7 +32,7 @@ public class BoardImpl extends EntityImpl{
 		}
 		card.setLane(null);
 		card.setDeletedVisuals(false);
-		if(card instanceof MockGraphicalEntity){
+		if(card.isMock()){
 			mockCards.add(card);
 		}else{
 			card.save();
@@ -51,7 +51,7 @@ public class BoardImpl extends EntityImpl{
 	public boolean removeCard(Card card){
 		card.setBoard(null);
 		card.setDeletedVisuals(true);
-		if(card instanceof MockGraphicalEntity){
+		if(card.isMock()){
 			mockCards.remove(card);
 		}else{
 			card.save();
@@ -74,7 +74,17 @@ public class BoardImpl extends EntityImpl{
 	}
 	
 	public void clearMocks(){
+		for(Card card : mockCards){
+			card.setDeletedVisuals(true);
+			PropertyChangeEvent event = new PropertyChangeEvent(board,Board.PROP_CARD,card,null);
+			fireEvent(event);
+		}
 		mockCards.clear();
+		for(Lane lane : mockLanes){
+			lane.setDeletedVisuals(true);
+			PropertyChangeEvent event = new PropertyChangeEvent(board,Board.PROP_LANE,lane,null);
+			fireEvent(event);
+		}
 		mockLanes.clear();
 	}
 	
@@ -93,7 +103,7 @@ public class BoardImpl extends EntityImpl{
 
 	public  boolean removeLane(Lane lane){
 		lane.setBoard(null);
-		if(lane instanceof MockGraphicalEntity){
+		if(lane.isMock()){
 			mockLanes.remove(lane);
 		}else{
 			lane.save();

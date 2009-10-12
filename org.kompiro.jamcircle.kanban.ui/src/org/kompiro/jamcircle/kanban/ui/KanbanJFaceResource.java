@@ -8,9 +8,9 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
-import org.kompiro.jamcircle.kanban.ui.figure.CardFigure;
-import org.kompiro.jamcircle.kanban.ui.figure.LaneFigure;
-import org.kompiro.jamcircle.kanban.ui.gcontroller.BoardEditPart;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardEditPart;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
 
 public class KanbanJFaceResource {
 	public static final String DARK_COLOR_KEY = "org.kompiro.jamcircle.DARK_COLOR_KEY";

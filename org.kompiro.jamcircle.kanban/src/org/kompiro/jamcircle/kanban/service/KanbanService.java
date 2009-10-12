@@ -16,6 +16,8 @@ import org.kompiro.jamcircle.storage.service.StorageChageListener;
 
 public interface KanbanService {
 	
+	public static final String PROP_CHANGED_CURRENT_USER = "changed_current_user";
+	
 	/**
 	 * Initialized Kanban Service
 	 */
@@ -40,7 +42,7 @@ public interface KanbanService {
 	
 	Card[] findCardsInTrash();
 
-	Card createReceiveCard(Board board,CardDTO dto,User current,User fromUser);
+	Card createReceiveCard(Board board,CardDTO dto,User fromUser);
 	
 	boolean exportCards(File exportFile);
 
@@ -94,9 +96,12 @@ public interface KanbanService {
 
 	boolean importUsers(File importFile);
 
+	User getCurrentUser();
+
+	void changeCurrentUser(User user);
 	
 	//Icon Section
-	Icon[] findIcons();
+	Icon[] findAllIcons();
 	
 	Icon addIcon(String type,int x,int y);
 	
@@ -122,5 +127,6 @@ public interface KanbanService {
 	void discardToTrash(GraphicalEntity entity);
 
 	void pickupFromTrash(GraphicalEntity entity);
+
 
 }

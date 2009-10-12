@@ -1,12 +1,9 @@
 package org.kompiro.jamcircle.kanban.ui.gcontroller;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.*;
+import static org.junit.Assume.assumeThat;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import org.eclipse.draw2d.geometry.Dimension;
@@ -15,16 +12,11 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.requests.ChangeBoundsRequest;
-import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.gef.requests.GroupRequest;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.kompiro.jamcircle.kanban.model.User;
+import org.eclipse.gef.requests.*;
+import org.junit.*;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
-import org.kompiro.jamcircle.kanban.ui.command.ChangeLaneConstraintCommand;
-import org.kompiro.jamcircle.kanban.ui.model.UserModel;
+import org.kompiro.jamcircle.kanban.ui.internal.command.ChangeLaneConstraintCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;
 
 public class BoardEditPartTest extends AbstractEditPartTest{
 
@@ -153,65 +145,64 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 //	private static Job job;
 //	private static boolean jobSemaphore = true;
 
-	@Test
-	public void addUser() throws Exception {
-		UserModel model1 = createUserModel("kompiro@localhost");
-		board.addUser(model1);
-//		while(jobSemaphore){}
-//		job.join();
-		assertEquals(1 + INIT_BOARD_CHIHLDREN_SIZE,boardPart.getChildren().size());
-//		assertEquals(new Point(0,74),model1.getLocation());
-	}
-	
-	@Test
-	public void addUserTwice() throws Exception {
-		UserModel model1 = createUserModel("kompiro@localhost");
-		UserModel model2 = createUserModel("kompiro2@localhost");
-		board.addUser(model1);
-		board.addUser(model2);
-		assertEquals(2 + INIT_BOARD_CHIHLDREN_SIZE,boardPart.getChildren().size());
-//		while(jobSemaphore){}
-//		job.join();
-//		assertEquals(new Point(0,74),model1.getLocation());
-//		assertEquals(new Point(0,148),model2.getLocation());
-	}
-	
-	@Test
-	public void addManyUsers() throws Exception {
-		UserModel model1 = createUserModel("kompiro@localhost");
-		UserModel model2 = createUserModel("kompiro2@localhost");
-		ArrayList<UserModel> users = new ArrayList<UserModel>();
-		users.add(model1);
-		users.add(model2);
-		board.addAllUsers(users);
-		assertEquals(2 + INIT_BOARD_CHIHLDREN_SIZE,boardPart.getChildren().size());
-//		while(jobSemaphore){}
-//		job.join();
-//		assertEquals(new Point(0,74),model1.getLocation());
-//		assertEquals(new Point(0,148),model2.getLocation());
-	}
-	
-	@Test
-	public void cleareUsers() throws Exception {
-		UserModel model1 = createUserModel("kompiro@localhost");
-		UserModel model2 = createUserModel("kompiro2@localhost");
-		ArrayList<UserModel> users = new ArrayList<UserModel>();
-		users.add(model1);
-		users.add(model2);
-		board.addAllUsers(users);
-		board.clearUsers();
-		assertEquals(INIT_BOARD_CHIHLDREN_SIZE,boardPart.getChildren().size());
-	}
-	
-	private UserModel createUserModel(String userId){
-		User user = new org.kompiro.jamcircle.kanban.model.mock.User(){
-			@Override
-			public void commitLocation() {
-			}
-		};
-		user.setUserId(userId);
-		return new UserModel(user);
-	}
-	
+//	@Test
+//	public void addUser() throws Exception {
+//		UserModel model1 = createUserModel("kompiro@localhost");
+//		board.addUser(model1);
+////		while(jobSemaphore){}
+////		job.join();
+//		assertEquals(1 + INIT_BOARD_CHIHLDREN_SIZE,boardPart.getChildren().size());
+////		assertEquals(new Point(0,74),model1.getLocation());
+//	}
+//	
+//	@Test
+//	public void addUserTwice() throws Exception {
+//		UserModel model1 = createUserModel("kompiro@localhost");
+//		UserModel model2 = createUserModel("kompiro2@localhost");
+//		board.addUser(model1);
+//		board.addUser(model2);
+//		assertEquals(2 + INIT_BOARD_CHIHLDREN_SIZE,boardPart.getChildren().size());
+////		while(jobSemaphore){}
+////		job.join();
+////		assertEquals(new Point(0,74),model1.getLocation());
+////		assertEquals(new Point(0,148),model2.getLocation());
+//	}
+//	
+//	@Test
+//	public void addManyUsers() throws Exception {
+//		UserModel model1 = createUserModel("kompiro@localhost");
+//		UserModel model2 = createUserModel("kompiro2@localhost");
+//		ArrayList<UserModel> users = new ArrayList<UserModel>();
+//		users.add(model1);
+//		users.add(model2);
+//		board.addAllUsers(users);
+//		assertEquals(2 + INIT_BOARD_CHIHLDREN_SIZE,boardPart.getChildren().size());
+////		while(jobSemaphore){}
+////		job.join();
+////		assertEquals(new Point(0,74),model1.getLocation());
+////		assertEquals(new Point(0,148),model2.getLocation());
+//	}
+//	
+//	@Test
+//	public void cleareUsers() throws Exception {
+//		UserModel model1 = createUserModel("kompiro@localhost");
+//		UserModel model2 = createUserModel("kompiro2@localhost");
+//		ArrayList<UserModel> users = new ArrayList<UserModel>();
+//		users.add(model1);
+//		users.add(model2);
+//		board.addAllUsers(users);
+//		board.clearUsers();
+//		assertEquals(INIT_BOARD_CHIHLDREN_SIZE,boardPart.getChildren().size());
+//	}
+//	
+//	private UserModel createUserModel(String userId){
+//		User user = new org.kompiro.jamcircle.kanban.model.mock.User(){
+//			@Override
+//			public void commitLocation() {
+//			}
+//		};
+//		user.setUserId(userId);
+//		return new UserModel(user);
+//	}
 	
 }

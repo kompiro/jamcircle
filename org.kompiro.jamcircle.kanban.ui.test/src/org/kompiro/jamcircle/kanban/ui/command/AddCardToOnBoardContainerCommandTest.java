@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
 import org.kompiro.jamcircle.kanban.model.mock.Board;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
+import org.kompiro.jamcircle.kanban.ui.internal.command.AddCardToOnBoardContainerCommand;
 
 
 public class AddCardToOnBoardContainerCommandTest {

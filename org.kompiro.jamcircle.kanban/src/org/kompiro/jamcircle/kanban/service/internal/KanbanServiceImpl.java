@@ -37,6 +37,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	private Object lock = new Object();
 	private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 	private StorageService storageService;
+	private User currentUser;
 	
 	public KanbanServiceImpl() {
 		initializeTemplate();
@@ -82,7 +83,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 				KanbanStatusHandler.fail(e, "KanbanServiceImpl#init",true);
 				return;
 			}
-			Icon[] icons = findIcons();
+			Icon[] icons = findAllIcons();
 			if(icons.length == 0){
 				addIcon(INBOX_ICON_MODEL,0,ICON_SIZE_Y * 0);
 				addIcon(BOARD_SELECTER_MODEL,0,ICON_SIZE_Y * 1);
@@ -190,7 +191,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 				new DBParam(Lane.PROP_BOARD,board),
 				new DBParam(Lane.PROP_LOCATION_X,x),
 				new DBParam(Lane.PROP_LOCATION_Y,y),
-				new DBParam(Lane.PROP_CREATEDATE,new Date()),
+				new DBParam(Lane.PROP_CREATE_DATE,new Date()),
 				new DBParam(Lane.PROP_WIDTH,width),
 				new DBParam(Lane.PROP_HEIGHT,height)
 		};
@@ -314,14 +315,14 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		return null;
 	}
 
-	public Card createReceiveCard(Board board,CardDTO dto, User current, User fromUser) {
+	public Card createReceiveCard(Board board,CardDTO dto, User fromUser) {
 		Card card = createCard(board,dto.getSubject(),null,dto.getX(),dto.getY());
 		card.setUUID(dto.getUUID());
 		card.setX(dto.getX());
 		card.setY(dto.getY());
 		card.setContent(dto.getContent());
 		card.setSubject(dto.getSubject());
-		card.setOwner(current);
+		card.setOwner(getCurrentUser());
 		card.setCreated(dto.getCreated());
 		card.setFrom(fromUser);
 		card.save();
@@ -337,6 +338,11 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		}
 		return new Card[]{};
 	}
+	
+	public Card[] findCardsInTrash() {
+		return getStorageService().findInTrash(Card.class);
+	}
+
 
 	public User addUser(String userId) {
 		DBParam[] params = new DBParam[]{
@@ -376,7 +382,10 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	
 	public Board findBoard(int id){
 		try {
-			return getEntityManager().find(Board.class, Board.PROP_TRASHED + " = ? and " + Board.PROP_ID + " = ?",false,id)[0];
+			Board[] findBoards = getEntityManager().find(Board.class, Board.PROP_TRASHED + " = ? and " + Board.PROP_ID + " = ?",false,id);
+			if(findBoards.length == 1){
+				return findBoards[0];
+			}
 		} catch (SQLException e) {
 			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findBoard() id='%d'",id);
 		}
@@ -475,7 +484,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		getStorageService().deleteAllEntity(Icon.class);
 	}
 
-	public Icon[] findIcons() {
+	public Icon[] findAllIcons() {
 		Icon[] icons = null;
 		try {
 			icons = getEntityManager().find(Icon.class,Icon.PROP_TRASHED + " = ?", false);
@@ -493,10 +502,6 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		return getStorageService().importEntity(importFile, Icon.class);
 	}
 	
-	public Card[] findCardsInTrash() {
-		return null;
-	}
-
 	public int countInTrash(Class<? extends GraphicalEntity> clazz) {
 		return getStorageService().countInTrash(clazz);
 	}
@@ -562,6 +567,16 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 
 	public void pickupFromTrash(GraphicalEntity entity) {
 		getStorageService().pickup(entity);
+	}
+
+	public User getCurrentUser() {
+		return currentUser;
+	}
+
+	public void changeCurrentUser(User user) {
+		User oldValue = this.currentUser;
+		this.currentUser = user;
+		firePropertyChange(PROP_CHANGED_CURRENT_USER, oldValue, user);
 	}
 
 }

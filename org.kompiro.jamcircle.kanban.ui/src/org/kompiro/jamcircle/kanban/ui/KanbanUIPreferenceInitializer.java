@@ -1,6 +1,6 @@
 package org.kompiro.jamcircle.kanban.ui;
 
-import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
+import org.eclipse.core.runtime.preferences.*;
 
 public class KanbanUIPreferenceInitializer extends
 		AbstractPreferenceInitializer {
@@ -9,7 +9,7 @@ public class KanbanUIPreferenceInitializer extends
 	public void initializeDefaultPreferences() {
 		KanbanUIActivator activator = KanbanUIActivator.getDefault();
 		if(activator == null) return;
-		activator.getPluginPreferences().setDefault(KanbanPreferenceConstants.BOARD_ID.toString(),1);
+		new DefaultScope().getNode(KanbanUIActivator.ID_PLUGIN).putInt(KanbanPreferenceConstants.BOARD_ID.toString(),1);
 	}
 
 }

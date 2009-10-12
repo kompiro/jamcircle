@@ -5,7 +5,6 @@ import org.eclipse.gef.commands.Command;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
-import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 
 public abstract class AbstractCommand extends Command {
 
@@ -48,10 +47,6 @@ public abstract class AbstractCommand extends Command {
 		return getActivator().getKanbanService();
 	}
 
-	protected XMPPConnectionService getConnectionService(){
-		return getActivator().getConnectionService();
-	}
-
 	private KanbanUIActivator getActivator() {
 		if(this.activator == null){
 			this.activator = KanbanUIActivator.getDefault();
@@ -63,5 +58,6 @@ public abstract class AbstractCommand extends Command {
 	public void setActivator(KanbanUIActivator activator) {
 		this.activator = activator;
 	}
+	
 	
 }

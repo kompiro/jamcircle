@@ -1,25 +1,18 @@
 package org.kompiro.jamcircle.kanban.ui;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.*;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.kompiro.jamcircle.debug.IStatusHandler;
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
-import org.kompiro.jamcircle.kanban.model.ColorTypes;
-import org.kompiro.jamcircle.kanban.model.FlagTypes;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.scripting.ScriptingService;
 import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 import org.kompiro.jamcircle.storage.StorageStatusHandler;
-import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -27,15 +20,11 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 	
 	public static final String ID_PLUGIN = "org.kompiro.jamcircle.kanban.ui";
 
-	private static final String KEY_OF_XMPPCONNECTION_SERVICE = "org.kompiro.jamcircle.xmpp.service.XMPPConnectionService";
-
 	private static final String KEY_OF_KANBAN_SERVICE = "org.kompiro.jamcircle.kanban.service.KanbanService";
 
 	private static final String KEY_OF_SCRIPTING_SERVICE = ScriptingService.class.getName();
 
 	private static KanbanUIActivator plugin;
-
-	private ServiceTracker connectionTracker;
 	
 	private ServiceTracker kanbanServiceTracker;
 
@@ -45,11 +34,11 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 
 
 	public KanbanUIActivator() {
-		plugin = this;
 	}
 	
 
 	public void start(BundleContext context) throws Exception {
+		plugin = this;
 		super.start(context);
 		KanbanJFaceResource.initialize();
  		dialogHandler = new IStatusHandler(){
@@ -78,8 +67,6 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 
 		kanbanServiceTracker = new ServiceTracker(context, KEY_OF_KANBAN_SERVICE, null);
 		kanbanServiceTracker.open();
-		connectionTracker = new ServiceTracker(context, KEY_OF_XMPPCONNECTION_SERVICE, null);
-		connectionTracker.open();
 		scriptingServiceTracker = new ServiceTracker(context, KEY_OF_SCRIPTING_SERVICE, null);
 		scriptingServiceTracker.open();
 //		migrate();
@@ -91,7 +78,6 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 		KanbanStatusHandler.removeStatusHandler(dialogHandler);
 		KanbanUIStatusHandler.removeStatusHandler(dialogHandler);
 		StorageStatusHandler.removeStatusHandler(dialogHandler);
-		connectionTracker.close();
 		kanbanServiceTracker.close();
 		super.stop(context);
 	}
@@ -142,10 +128,6 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 		return plugin;
 	}
 	
-	public XMPPConnectionService getConnectionService(){
-		return (XMPPConnectionService) connectionTracker.getService();
-	}
-
 	public KanbanService getKanbanService(){
 		KanbanService service = (KanbanService)kanbanServiceTracker.getService();
 		service.init();
@@ -165,24 +147,7 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 
 	public ScriptingService getScriptingService() throws ScriptingException {
 		ScriptingService service = (ScriptingService)scriptingServiceTracker.getService();
-		if(service == null) throw new IllegalStateException("scripting service is not enabled.");
-		Map<String,Object> beans= new HashMap<String, Object>();
-		beans.put("RED", ColorTypes.RED);
-		beans.put("YELLOW",ColorTypes.YELLOW);
-		beans.put("GREEN",ColorTypes.GREEN);
-		beans.put("LIGHT_GREEN",ColorTypes.LIGHT_GREEN);
-		beans.put("LIGHT_BLUE",ColorTypes.LIGHT_BLUE);
-		beans.put("BLUE",ColorTypes.BLUE);
-		beans.put("PURPLE",ColorTypes.PURPLE);
-		beans.put("RED_PURPLE",ColorTypes.RED_PURPLE);
-
-		beans.put("FLAG_RED", FlagTypes.RED);
-		beans.put("FLAG_WHITE",FlagTypes.WHITE);
-		beans.put("FLAG_GREEN",FlagTypes.GREEN);
-		beans.put("FLAG_BLUE",FlagTypes.BLUE);
-		beans.put("FLAG_ORANGE",FlagTypes.ORANGE);
-		
-		service.init(beans);
+		if(service == null) throw new IllegalStateException("scripting service is not enabled.");		
 		return service;
 	}
 	

@@ -25,7 +25,13 @@ public class TrashModelTest {
 	
 	@Before
 	public void before() throws Exception{
-		createModel();
+		Icon icon = new Icon();
+		kanbanService = spy(new KanbanServiceImpl());
+		StorageServiceImpl storageService = spy(new StorageServiceImpl());
+		kanbanService.setStorageService(storageService);
+		card = spy(new Card());
+		lane = spy(new Lane());
+		trash = new TrashModel(icon,kanbanService);
 	}
 
 	@Test
@@ -39,17 +45,16 @@ public class TrashModelTest {
 	
 	@Test
 	public void getCards() throws Exception {
-		assertThat(trash.getCards(),nullValue());
 		doAnswer(new Answer<?>() {
 			public Object answer(InvocationOnMock invocation) throws Throwable {
-				when(kanbanService.findCardsInTrash()).thenReturn(new Card[]{card});
+				doReturn(new Card[]{card}).when(kanbanService).findCardsInTrash();
 				return null;
 			}
 		}).when(card).setTrashed(true);
 		doAnswer(new Answer<?>() {
 
 			public Object answer(InvocationOnMock invocation) throws Throwable {
-				when(kanbanService.findCardsInTrash()).thenReturn(null);
+				doReturn(null).when(kanbanService).findCardsInTrash();
 				return null;
 			}
 		}).when(card).setTrashed(false);
@@ -149,18 +154,6 @@ public class TrashModelTest {
 		assertThat(trash.countTrashedLane(),is(1));
 		trash.removeLane(lane);
 		assertThat(trash.countTrashedLane(),is(0));
-	}
-
-
-	private void createModel() {
-		Icon icon = new Icon();
-		KanbanServiceImpl kanbanServiceImpl = new KanbanServiceImpl();
-		kanbanService = spy(kanbanServiceImpl);
-		StorageServiceImpl storageService = spy(new StorageServiceImpl());
-		kanbanService.setStorageService(storageService);
-		card = spy(new Card());
-		lane = spy(new Lane());
-		trash = new TrashModel(icon,kanbanService);
 	}
 
 }

@@ -13,9 +13,7 @@
 package org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import jline.History;
 
@@ -63,6 +61,7 @@ import org.jruby.ext.Readline;
 import org.jruby.internal.runtime.ValueAccessor;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
+import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.ui.KanbanView;
 import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
 
@@ -464,9 +463,21 @@ public class RubyScriptingConsole extends TextConsole {
 				config.setInput(input);
 				config.setError(new PrintStream(error));
 				runtime = JavaEmbedUtils.initialize(new ArrayList<Object>(),config);
-		        IRubyObject rubyBoard = JavaEmbedUtils.javaToRuby(runtime, new BoardAccessor());
-		        runtime.getGlobalVariables().defineReadonly("$board_accessor", new ValueAccessor(rubyBoard));		        
+				defineGlobalValues();
 				return Status.OK_STATUS;
+			}
+
+			private void defineGlobalValues() {
+				Map<String, Object> glovalValues = ScriptingUIActivator.getDefault().getScriptingService().getGlovalValues();
+				if(glovalValues != null){
+					for(Map.Entry<String, Object> value:glovalValues.entrySet()){
+						IRubyObject rubyObject = JavaEmbedUtils.javaToRuby(runtime, value.getValue());
+						runtime.defineGlobalConstant(value.getKey(), rubyObject);
+					}
+				}
+				IRubyObject rubyBoard = JavaEmbedUtils.javaToRuby(runtime, new BoardAccessor());
+		        runtime.getGlobalVariables().defineReadonly("$board_accessor", new ValueAccessor(rubyBoard));		        
+		        runtime.getGlobalVariables().defineReadonly("$$", new ValueAccessor(runtime.newFixnum(System.identityHashCode(runtime))));
 			}
 
 			private String getJRubyHomeFromBundle() {
@@ -674,7 +685,7 @@ public class RubyScriptingConsole extends TextConsole {
 						}
 					}
 					KanbanView kanbanView = view;
-					ret[0] = kanbanView.getBoard();
+					ret[0] = kanbanView.getAdapter(Board.class);
 				}
 			});
 			return ret[0];
@@ -683,6 +694,7 @@ public class RubyScriptingConsole extends TextConsole {
 
 	private void shutdown() {
 		JavaEmbedUtils.terminate(runtime);
+        runtime.getGlobalVariables().defineReadonly("$board_accessor", null);		        
 		runtime = null;
 		input = null;
 		output = null;

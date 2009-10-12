@@ -5,7 +5,8 @@ Bundle-SymbolicName: org.kompiro.jamcircle.kanban.ui.test
 Bundle-Version: 0.0.0
 Bundle-Vendor: kompiro.org
 Fragment-Host: org.kompiro.jamcircle.kanban.ui
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
+ J2SE-1.5
 Require-Bundle: org.junit4,
  com.ibm.icu,
  org.apache.log4j,

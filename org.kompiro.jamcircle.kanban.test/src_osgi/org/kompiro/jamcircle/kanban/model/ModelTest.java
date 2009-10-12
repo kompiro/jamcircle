@@ -69,7 +69,7 @@ public class ModelTest extends AbstractKanbanTest{
 		params = new DBParam[]{
 				new DBParam(Lane.PROP_STATUS,"very very long value"),
 				new DBParam(Lane.PROP_SCRIPT,util.readFile()),
-				new DBParam(Lane.PROP_CREATEDATE,new Date()),
+				new DBParam(Lane.PROP_CREATE_DATE,new Date()),
 		};
 		entityManager.create(Lane.class,params);
 		
@@ -90,7 +90,9 @@ public class ModelTest extends AbstractKanbanTest{
 	public void modelRelation() throws Exception {
 		Card card = entityManager.create(Card.class,new DBParam(Card.PROP_SUBJECT,"test"));
 		Card card2 = entityManager.create(Card.class,new DBParam(Card.PROP_SUBJECT,"test2"));
-		Lane lane = entityManager.create(Lane.class,new DBParam(Lane.PROP_STATUS,"todo"),new DBParam(Lane.PROP_CREATEDATE,new Date()));
+		Board board = entityManager.create(Board.class,new DBParam(Board.PROP_TITLE,"test_board"),new DBParam(Board.PROP_CREATE_DATE,new Date()));
+		Lane lane = entityManager.create(Lane.class,new DBParam(Lane.PROP_STATUS,"todo"),new DBParam(Lane.PROP_CREATE_DATE,new Date()));
+		lane.setBoard(board);
 		PropertyChangeListener listener = new PropertyChangeListener(){
 
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -99,7 +101,7 @@ public class ModelTest extends AbstractKanbanTest{
 			
 		};
 		lane.addPropertyChangeListener(listener);
-		Lane lane2 = entityManager.create(Lane.class,new DBParam(Lane.PROP_STATUS,"todo"),new DBParam(Lane.PROP_CREATEDATE,new Date()));
+		Lane lane2 = entityManager.create(Lane.class,new DBParam(Lane.PROP_STATUS,"todo"),new DBParam(Lane.PROP_CREATE_DATE,new Date()));
 		PropertyChangeListener listener2 = new PropertyChangeListener(){
 
 			public void propertyChange(PropertyChangeEvent evt) {

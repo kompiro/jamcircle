@@ -38,13 +38,6 @@
    </requires>
 
    <plugin
-         id="org.jivesoftware.smack"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.apache.commons.lang"
          download-size="0"
          install-size="0"
@@ -112,20 +105,6 @@
 
    <plugin
          id="org.kompiro.jamcircle.storage.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.kompiro.jamcircle.xmpp"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.kompiro.jamcircle.xmpp.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"

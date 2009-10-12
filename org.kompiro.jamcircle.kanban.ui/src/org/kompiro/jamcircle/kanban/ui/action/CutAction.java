@@ -13,9 +13,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
-import org.kompiro.jamcircle.kanban.ui.command.CutCardCommand;
-import org.kompiro.jamcircle.kanban.ui.gcontroller.CardContainerEditPart;
-import org.kompiro.jamcircle.kanban.ui.gcontroller.CardEditPart;
+import org.kompiro.jamcircle.kanban.ui.editpart.CardContainerEditPart;
+import org.kompiro.jamcircle.kanban.ui.internal.command.CutCardCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
 
 public class CutAction extends SelectionAction {
 

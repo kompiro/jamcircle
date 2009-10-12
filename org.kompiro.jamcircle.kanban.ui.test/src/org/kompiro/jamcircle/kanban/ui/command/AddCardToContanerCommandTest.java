@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
 import org.kompiro.jamcircle.kanban.model.CardContainer.Mock;
+import org.kompiro.jamcircle.kanban.ui.internal.command.AddCardToContanerCommand;
 
 public class AddCardToContanerCommandTest {
 

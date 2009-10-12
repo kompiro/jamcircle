@@ -23,16 +23,10 @@ public class XMPPConnectionServiceImplTest {
 		when(user.getUserName()).thenReturn("testing_value");
 		XMPPConnectionServiceImpl service = new XMPPConnectionServiceImpl();
 		service.setActivator(activator);
-		service.setConnection(new XMPPConnection("MockService"){
-			@Override
-			public String getUser() {
-				return "kompiro@test";
-			}
-			@Override
-			public boolean isConnected() {
-				return true;
-			}
-		});
+		XMPPConnection mockService = spy(new XMPPConnection("MockService"));
+		when(mockService.getUser()).thenReturn("kompiro@test");
+		when(mockService.isConnected()).thenReturn(true);
+		service.setConnection(mockService);
 		assertNotNull(service.getConnection());
 		User currentUser = service.getCurrentUser();
 		assertNotNull(currentUser);
