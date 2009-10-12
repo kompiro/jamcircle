@@ -1,5 +1,7 @@
 package org.kompiro.jamcircle.kanban.model;
 
+import static java.lang.String.format;
+
 import java.beans.PropertyChangeEvent;
 import java.sql.SQLException;
 
@@ -9,17 +11,23 @@ import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class LaneImpl extends GraphicalImpl {
 
-	private Lane lane;
+	private final Lane lane;
 
-	public LaneImpl(Lane lane){
+	public LaneImpl(Lane lane) throws IllegalArgumentException{
 		super(lane);
 		this.lane = lane;
+		if(lane.getBoard() == null){
+			String message = format("This lane doesn't have parent boardl.:%s",lane);
+			throw new IllegalArgumentException(message);
+		}
 	}
 
 	public boolean addCard(final Card card) {
 		card.setLane(lane);
-		if(card.getBoard() == null || lane.getBoard().getID() != card.getBoard().getID()){
-			card.setBoard(lane.getBoard());
+		Board cardsBoard = card.getBoard();
+		Board lanesBoard = lane.getBoard();
+		if(cardsBoard == null || lanesBoard.getID() != cardsBoard.getID()){
+			card.setBoard(lanesBoard);
 		}
 		card.setTrashed(false);
 		card.setDeletedVisuals(false);
@@ -70,12 +78,12 @@ public class LaneImpl extends GraphicalImpl {
 	}
 
 	public String getContainerName() {
-		return String.format("Lane[%s]",lane.getStatus());
+		return format("Lane[%s]",lane.getStatus());
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("['#%d':'%s' trashed:'%s']", lane.getID(),lane.getStatus(),lane.isTrashed());
+		return format("['#%d':'%s' trashed:'%s']", lane.getID(),lane.getStatus(),lane.isTrashed());
 	}
 
 }
