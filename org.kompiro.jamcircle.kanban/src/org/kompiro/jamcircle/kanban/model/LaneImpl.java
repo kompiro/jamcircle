@@ -16,13 +16,13 @@ public class LaneImpl extends GraphicalImpl {
 	public LaneImpl(Lane lane) throws IllegalArgumentException{
 		super(lane);
 		this.lane = lane;
+	}
+
+	public boolean addCard(final Card card) {
 		if(lane.getBoard() == null){
 			String message = format("This lane doesn't have parent boardl.:%s",lane);
 			throw new IllegalArgumentException(message);
 		}
-	}
-
-	public boolean addCard(final Card card) {
 		card.setLane(lane);
 		Board cardsBoard = card.getBoard();
 		Board lanesBoard = lane.getBoard();
