@@ -1,5 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.*;
 import java.util.List;
 
@@ -19,9 +21,11 @@ import org.eclipse.gef.ui.actions.*;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
 import org.eclipse.jface.action.*;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.dnd.*;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -43,44 +47,18 @@ import org.kompiro.jamcircle.scripting.ScriptingService;
 import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 import org.kompiro.jamcircle.storage.service.StorageChageListener;
 
-public class KanbanView extends ViewPart implements StorageChageListener{
+public class KanbanView extends ViewPart implements StorageChageListener,PropertyChangeListener{
 
 	public static String ID = "org.kompiro.jamcircle.kanban.KanbanView";
 	public static final String PROP_MESSAGE_MODEL = "model";
 
 	private ScrollingGraphicalViewer viewer;
-////	private UserModifiedListener userChangeListener;
 
 	private SelectionSynchronizer synchronizer;
 	private OpenCardListAction openCardListAction;
 	private IAction openCommandListAction;
 	private BoardModel boardModel;
-
-////	private ConnectionListener connectionListener = new ConnectionListener(){
-////		
-////		public void connectionClosed() {
-////			refreshXmppConnectionStatus();
-////		}
-////		
-////		public void connectionClosedOnError(final Exception e) {
-////			getDisplay().asyncExec(new Runnable(){
-////				public void run() {
-////					KanbanUIStatusHandler.info("exception is occured when XMPP connection closing.",e);
-////				};
-////			});
-////		}
-////		
-////		public void reconnectingIn(int seconds) {
-////		}
-////		
-////		public void reconnectionFailed(Exception e) {
-////		}
-////		
-////		public void reconnectionSuccessful() {
-////			refreshXmppConnectionStatus();
-////		}
-////	};
-//	
+	
 	private static final Conditional cardCond = new Conditional(){
 		public boolean evaluate(EditPart editpart) {
 			boolean isCardEditPart = editpart instanceof CardEditPart;
@@ -88,8 +66,6 @@ public class KanbanView extends ViewPart implements StorageChageListener{
 		}
 	};
 
-////	private RosterListener rosterListener;
-////	private CardReceiveListener cardSendListener = new CardReceiveListener();
 	private RedoAction redoHandler;
 	private UndoAction undoHandler;
 	private HandlerListener handlerListener;
@@ -107,7 +83,6 @@ public class KanbanView extends ViewPart implements StorageChageListener{
 	private CopyAction copyHandler;
 	private CutAction cutHandler;
 	private CellEditorActionHandler handlers;
-////	private CardReceiveFileTransferListener cardReceiveFileTransferListener;
 	private IconModelFactory iconModelFactory;
 	private CaptureBoardAction caputureBoardAction;
 	private ScalableRootEditPart rootPart;
@@ -116,11 +91,9 @@ public class KanbanView extends ViewPart implements StorageChageListener{
 
 
 	public KanbanView() {
-////		if(getConnectionService() != null){
-////			getConnectionService().addXMPPLoginListener(this);
-////		}
-		if(getKanbanService() != null){
+		if (getKanbanService() != null) {
 			getKanbanService().addStorageChangeListener(this);
+			getKanbanService().addPropertyChangeListener(this);
 			iconModelFactory = new DefaultIconModelFactory(getKanbanService());
 		}
 	}
@@ -242,33 +215,28 @@ public class KanbanView extends ViewPart implements StorageChageListener{
 			
 		}
 	}
-//
-//	private void fillLocalStatusLine(IStatusLineManager manager) {
-//		Image image;
-//		String message;
-////		if(getConnectionService().isConnecting()){
-////			image = getImageRegistry().get(KanbanImageConstants.CONNECT_IMAGE.toString());
-////			XMPPConnection connection = getConnectionService().getConnection();
-////			message = connection.getUser();
-////			manager.setErrorMessage(null);
-////			manager.setMessage(image,message);
-////		}else{
-//			image= getImageRegistry().get(KanbanImageConstants.DISCONNECT_IMAGE.toString());
-//			message = "Doesn't logged in.";			
-//			manager.setErrorMessage(image,message);
-////		}
-//	}
-//
-//	private ImageRegistry getImageRegistry() {
-//		return getActivator().getImageRegistry();
-//	}
-//
-////	private XMPPConnectionService getConnectionService() {
-////		if( ! Platform.isRunning()) return null;
-////		return getActivator().getConnectionService();
-////	}
-//
-//
+
+	private void fillLocalStatusLine(User currentUser) {
+		IStatusLineManager manager = getActionBars().getStatusLineManager();
+		Image image;
+		String message;
+		if(currentUser != null){
+			image = getImageRegistry().get(KanbanImageConstants.CONNECT_IMAGE.toString());
+			message = currentUser.getUserId();
+			manager.setErrorMessage(null);
+			manager.setMessage(image,message);
+		}else{
+			image= getImageRegistry().get(KanbanImageConstants.DISCONNECT_IMAGE.toString());
+			message = "Doesn't logged in.";			
+			manager.setErrorMessage(image,message);
+		}
+	}
+
+	private ImageRegistry getImageRegistry() {
+		return getActivator().getImageRegistry();
+	}
+
+
 	private void setInintialContents() {
 		if(Platform.isRunning()){
 			storageInitialize();
@@ -276,17 +244,12 @@ public class KanbanView extends ViewPart implements StorageChageListener{
 	}
 	
 	public void setContents(Board board,final IProgressMonitor monitor) {
-////		if(userChangeListener != null){
-////			getKanbanService().removePropertyChangeListener(userChangeListener);
-////		}
 		if(boardModel != null){
 			board.removePropertyChangeListener(boardModel);
 		}
 		boardModel = new BoardModel(board);
 		board.addPropertyChangeListener(boardModel);
 		
-////		userChangeListener = new UserModifiedListener();
-////		getKanbanService().addPropertyChangeListener(userChangeListener);
 		EditPartFactory factory = new KanbanControllerFactory(this.boardModel);
 		
 		String taskName = String.format("Openning board '%s' ...",board.getTitle()); 
@@ -369,13 +332,6 @@ public class KanbanView extends ViewPart implements StorageChageListener{
 	}
 	
 ////	private void refreshXmppConnectionStatus() {
-////		Display display = getDisplay();
-////		if(display == null) return;
-////		display.asyncExec(new Runnable(){
-////			public void run() {
-////				fillLocalStatusLine(getActionBars().getStatusLineManager());
-////			}
-////		});
 ////
 ////		XMPPConnection connection = getConnectionService().getConnection();
 ////		if(!getConnectionService().isConnecting()){
@@ -386,42 +342,6 @@ public class KanbanView extends ViewPart implements StorageChageListener{
 ////			});
 ////			return;
 ////		}
-////		connection.addConnectionListener(connectionListener);
-////		final Roster roster = connection.getRoster();
-////		rosterListener = new RosterListnerForUsers(roster);
-////		roster.addRosterListener(rosterListener);
-////		connection.getChatManager().addChatListener(cardSendListener);
-////		final Map<String,User> userMap = new HashMap<String, User>();
-////		User[] userList = getKanbanService().findUsersOnBoard();
-////		for(User user : userList){
-////			String key = user.getUserId();
-////			if(!userMap.containsKey(key)){
-////				userMap.put(key, user);
-////			}
-////		}
-////		display.asyncExec(new Runnable(){
-////			public void run() {
-////				if(boardModel == null) return;
-////				if(boardModel.sizeUsers() != 0){
-////					boardModel.clearUsers();
-////				}
-////				for(User user:userMap.values()){
-////					Presence presence = roster.getPresence(user.getUserId());
-////					UserModel userModel = new UserModel(roster.getEntry(user.getUserId()),presence,user);
-////					presence.isAvailable();
-////					boardModel.addUser(userModel);
-////				}
-////			}
-////			});
-////		setCardReceiveFileTransferManager();
-////	}
-////
-////	private void setCardReceiveFileTransferManager() {
-////		FileTransferManager manager = getConnectionService().getFileTransferManager();
-////		manager.removeFileTransferListener(cardReceiveFileTransferListener);
-////		cardReceiveFileTransferListener = new CardReceiveFileTransferListener();
-////		manager.addFileTransferListener(cardReceiveFileTransferListener);
-////	}
 
 	@Override
 	public void setFocus() {
@@ -442,17 +362,7 @@ public class KanbanView extends ViewPart implements StorageChageListener{
 		return synchronizer;
 	}
 
-////	private final class UserModifiedListener implements
-////			PropertyChangeListener {
-////		public void propertyChange(PropertyChangeEvent evt) {
-////			if(User.class.getSimpleName().equals(evt.getPropertyName())){
-////				refreshXmppConnectionStatus();
-////			}
-////		}
-////	}
-
 	private final class CommandStackImpl extends CommandStack {
-				
 		@Override
 		public void execute(final Command command) {
 			getDisplay().asyncExec(new Runnable() {
@@ -466,56 +376,9 @@ public class KanbanView extends ViewPart implements StorageChageListener{
 			});
 		}
 	}
+
 //
-////	private final class CardReceiveFileTransferListener implements
-////			FileTransferListener {
-////		public void fileTransferRequest(FileTransferRequest request) {
-////			
-////			String uuid = request.getDescription();
-////			IncomingFileTransfer accept = request.accept();
-////			try {
-////				File tmpFile = new File(System.getProperty("java.io.tmpdir"),request.getFileName());
-////				if(tmpFile.exists()){
-////					tmpFile.delete();
-////				}
-////				accept.recieveFile(tmpFile);
-////				while(!accept.isDone()){
-////				}
-////				Card tmpCard = getCard(uuid);
-////				int time = 0;
-////				while(tmpCard == null){
-////					try {
-////						if(time > 3){
-////							throw new RuntimeException("can't get card data.");
-////						}
-////						Thread.sleep(2000);
-////					} catch (InterruptedException e) {
-////					}
-////					tmpCard = getCard(uuid);
-////					time++;
-////				}
-////				final Card card = tmpCard;
-////				final File file = tmpFile;
-////				getDisplay().asyncExec(new Runnable(){
-////					public void run() {
-////						card.addFile(file);
-////						card.save();
-////					}
-////				});
-////			} catch (XMPPException e) {
-////				KanbanUIStatusHandler.fail(e, "error has occured.");
-////				request.reject();
-////			}
-////		}
-//
-//		private Card getCard(String uuid) {
-//			return getKanbanService().findCards(
-//					Card.PROP_TRASHED + " = ? and" +
-//					Card.PROP_UUID + " = ? and " +
-//					Card.PROP_TO + " is null",false,uuid)[0];
-//		}
-//	}
-//
+
 	private final class KanbanViewDropAdapter extends DropTargetAdapter {
 
 		public void drop(DropTargetEvent event) {
@@ -583,84 +446,9 @@ public class KanbanView extends ViewPart implements StorageChageListener{
 		}
 	}
 
-////	private final class CardReceiveListener implements
-////			ChatManagerListener {
-////		public void chatCreated(Chat chat, boolean createdLocally) {
-////			chat.addMessageListener(new MessageListener(){
-////				public void processMessage(Chat chat, Message message) {
-////					Object obj = message.getProperty(KanbanView.PROP_MESSAGE_MODEL);
-////					String fromUserId = chat.getParticipant();
-////					if (obj instanceof CardDTO) {
-////						CreateCardCommand command = new CreateCardCommand();
-////						BoardModel boardModel = (BoardModel) getGraphicalViewer().getContents().getModel();
-////						command.setContainer(boardModel);
-////						final CardDTO dto = (CardDTO) obj;
-////						User fromUser = null;
-////						if(fromUserId != null){
-////							fromUser = getKanbanService().findUser(fromUserId);
-////						}
-////						Card card = createCard(dto, fromUser);
-////						card.setDeletedVisuals(false);
-////						command.setModel(card);
-////						getViewSite().getShell().getDisplay().asyncExec(new CreateCommandRunnable(command));
-////					}
-////				}
-////
-////				private Card createCard(CardDTO dto, User fromUser){
-////					KanbanService service = getKanbanService();
-////					return service.createReceiveCard(boardModel.getBoard(),dto,getUser(),fromUser);
-////				}
-////			});
-////		}
-////	}
-////	
-////	private final class RosterListnerForUsers implements RosterListener {
-////		
-////		public RosterListnerForUsers(Roster roster) {
-////		}
-////
-////		public void entriesAdded(Collection<String> addresses) {
-////		}
-////
-////		public void entriesDeleted(Collection<String> addresses) {
-////		}
-////
-////		public void entriesUpdated(Collection<String> addresses) {
-////		}
-////
-////		public void presenceChanged(final Presence presence) {
-////			if(boardModel == null) return;
-////			Runnable runnable = new Runnable(){
-////				public void run() {
-////					String from = presence.getFrom();
-////					from = XMPPUtil.getRemovedResourceUser(from);
-////					UserModel user = boardModel.getUser(from);
-////					if(user != null) {
-////						user.setPresence(presence);					
-////					}
-////				}
-////
-////			};
-////			getDisplay().asyncExec(runnable);
-////		}
-////	}
-////
-////	private final class CreateCommandRunnable implements Runnable {
-////		private CreateCardCommand command;
-////
-////		private CreateCommandRunnable(CreateCardCommand command) {
-////			this.command = command;
-////		}
-////
-////		public void run() {
-////			getGraphicalViewer().getEditDomain().getCommandStack().execute(command);
-////		}
-////	}
-////	
 	@Override
 	public void dispose() {
 		getCommandStack().removeCommandStackListener(handlerListener);
-////		getConnectionService().removeXMPPLoginListener(this);
 ////		XMPPConnection connection = getConnectionService().getConnection();
 ////		if(connection != null){
 ////			connection.removeConnectionListener(connectionListener);
@@ -671,6 +459,7 @@ public class KanbanView extends ViewPart implements StorageChageListener{
 ////		}
 		getGraphicalViewer().removeSelectionChangedListener(selectionListenerForHandler);
 		getKanbanService().removeStorageChangeListener(this);
+		getKanbanService().removePropertyChangeListener(this);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -685,7 +474,7 @@ public class KanbanView extends ViewPart implements StorageChageListener{
 		if(CellEditorActionHandler.class.equals(adapter)){
 			return handlers;
 		}
-		if(Board.class.equals(adapter)){
+		if(Board.class.equals(adapter) || BoardModel.class.equals(adapter)){
 			return getBoard();
 		}
 		return super.getAdapter(adapter);
@@ -698,22 +487,7 @@ public class KanbanView extends ViewPart implements StorageChageListener{
 	private Display getDisplay() {
 		return WorkbenchUtil.getDisplay();
 	}
-
-////	public void afterLoggedIn(XMPPConnection connection) {
-////		refreshXmppConnectionStatus();
-////	}
-
-////	public void beforeLoggedOut(XMPPConnection connection) {
-////		refreshXmppConnectionStatus();
-////	}
 	
-//	private User getUser() {
-////		KanbanUIActivator activator = getActivator();
-////		if(activator == null) return null;
-////		XMPPConnectionService connectionService = activator.getConnectionService();
-////		if(connectionService == null) return null;
-//		return getKanbanService().getCurrentUser();
-//	}
 	private KanbanService getKanbanService() {
 		return getActivator().getKanbanService();
 	}
@@ -746,6 +520,18 @@ public class KanbanView extends ViewPart implements StorageChageListener{
 
 	private KanbanUIActivator getActivator() {
 		return KanbanUIActivator.getDefault();
+	}
+
+	public void propertyChange(final PropertyChangeEvent evt) {
+		String propertyName = evt.getPropertyName();
+		if(propertyName != null && propertyName.equals(KanbanService.PROP_CHANGED_CURRENT_USER)){
+			Display display = getDisplay();
+			display.asyncExec(new Runnable() {
+				public void run() {
+					fillLocalStatusLine((User)evt.getNewValue());
+				}
+			});
+		}
 	}
 
 }

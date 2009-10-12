@@ -19,6 +19,7 @@ import org.kompiro.jamcircle.storage.service.StorageService;
 import org.kompiro.jamcircle.storage.service.internal.StorageServiceImpl;
 import org.mockito.ArgumentCaptor;
 
+@SuppressWarnings("restriction")
 public class KanbanServiceImplTest {
 
 	private KanbanServiceImpl serviceImpl;
@@ -115,7 +116,7 @@ public class KanbanServiceImplTest {
 				(DBParam)anyObject()
 				)).thenReturn(cardMock);
 		when(managerMock.find((Class<Card>)anyObject(),(String)anyObject(),anyInt())).thenReturn(new Card[]{cardMock});
-		serviceImpl.createReceiveCard(null, dtoMock , null, null);
+		serviceImpl.createReceiveCard(null, dtoMock ,  null);
 		verify(listener).propertyChange(captured.capture());
 		
 		PropertyChangeEvent actual = captured.getValue();

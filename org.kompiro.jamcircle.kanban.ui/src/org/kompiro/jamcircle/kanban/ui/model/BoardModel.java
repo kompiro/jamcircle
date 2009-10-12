@@ -196,6 +196,10 @@ public class BoardModel extends AbstractModel implements CardContainer,LaneConta
 		firePropertyChange(PROP_ICON, model, null);
 	}
 
+	public IconModel[] getIconModels(){
+		return icons.toArray(new IconModel[]{});
+	}
+	
 	public void clearMocks() {
 		board.clearMocks();
 	}

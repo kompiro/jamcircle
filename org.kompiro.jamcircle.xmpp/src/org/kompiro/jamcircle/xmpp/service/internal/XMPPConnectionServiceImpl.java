@@ -1,20 +1,17 @@
 package org.kompiro.jamcircle.xmpp.service.internal;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.io.File;
+import java.util.*;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.jivesoftware.smack.*;
-import org.jivesoftware.smack.packet.Packet;
-import org.jivesoftware.smackx.filetransfer.FileTransferManager;
-import org.kompiro.jamcircle.kanban.model.User;
+import org.jivesoftware.smack.packet.*;
+import org.jivesoftware.smackx.filetransfer.*;
+import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.xmpp.XMPPActivator;
 import org.kompiro.jamcircle.xmpp.XMPPStatusHandler;
-import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
-import org.kompiro.jamcircle.xmpp.service.XMPPLoginListener;
-import org.kompiro.jamcircle.xmpp.service.XMPPSettings;
+import org.kompiro.jamcircle.xmpp.service.*;
 import org.kompiro.jamcircle.xmpp.util.XMPPUtil;
 
 /**
@@ -26,7 +23,6 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 	public static final String KEY_OF_SYSTEM_PROP_XMPP_CONNECT = XMPPActivator.PLUGIN_ID + ".connect";
 	private XMPPConnection connection;
 	private List<XMPPLoginListener> listeners = new ArrayList<XMPPLoginListener>();
-	private FileTransferManager manager;
 	private XMPPActivator activator;
 
 	public void login(IProgressMonitor monitor, 
@@ -64,7 +60,6 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 			// Master Password is set by call this provider. 
 			getSettings().storeSttings();
 			this.connection = connection;
-			manager = new FileTransferManager(connection);
 			if(XMPPStatusHandler.isDebug()){
 				this.connection.addPacketListener(new PacketListener(){
 					public void processPacket(Packet packet) {
@@ -75,6 +70,8 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 			for (XMPPLoginListener listener : listeners) {
 				listener.afterLoggedIn(connection);
 			}
+			getKanbanService().changeCurrentUser(getCurrentUser());
+			// FIXME system handling
 			System.setProperty(KEY_OF_SYSTEM_PROP_XMPP_CONNECT, String.valueOf(true));
 		} catch (XMPPException e) {
 			XMPPStatusHandler.fail(e, "can't disconnect",false);
@@ -86,17 +83,13 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 			throw e;
 		}
 		monitor.done();
-	}
-
+	}	
+	
 	public XMPPConnection getConnection() {
 		if (connection != null && connection.isConnected()) {
 			return connection;
 		}
 		return null;
-	}
-
-	public FileTransferManager getFileTransferManager() {
-		return manager;
 	}
 	
 	public void addXMPPLoginListener(XMPPLoginListener listener) {
@@ -144,7 +137,7 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 		return getKanbanService().hasUser(user);
 	}
 	
-	public User getCurrentUser(){
+	User getCurrentUser(){
 		XMPPStatusHandler.debug("getCurrentUser()");
 		XMPPConnection connection = getConnection();
 		User user = null;

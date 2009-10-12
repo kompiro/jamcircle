@@ -4,7 +4,6 @@ package org.kompiro.jamcircle.xmpp.service;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.kompiro.jamcircle.kanban.model.User;
 
 public interface XMPPConnectionService {
@@ -18,10 +17,6 @@ public interface XMPPConnectionService {
 	boolean isConnecting();
 	
 	XMPPConnection getConnection();
-
-	User getCurrentUser();
-
-	FileTransferManager getFileTransferManager();
 	
 	User[] getUsers();
 	

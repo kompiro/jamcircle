@@ -10,6 +10,7 @@ import java.util.*;
 import net.java.ao.DBParam;
 import net.java.ao.EntityManager;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
@@ -37,6 +38,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	private Object lock = new Object();
 	private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 	private StorageService storageService;
+	private User currentUser;
 	
 	public KanbanServiceImpl() {
 		initializeTemplate();
@@ -314,14 +316,14 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		return null;
 	}
 
-	public Card createReceiveCard(Board board,CardDTO dto, User current, User fromUser) {
+	public Card createReceiveCard(Board board,CardDTO dto, User fromUser) {
 		Card card = createCard(board,dto.getSubject(),null,dto.getX(),dto.getY());
 		card.setUUID(dto.getUUID());
 		card.setX(dto.getX());
 		card.setY(dto.getY());
 		card.setContent(dto.getContent());
 		card.setSubject(dto.getSubject());
-		card.setOwner(current);
+		card.setOwner(getCurrentUser());
 		card.setCreated(dto.getCreated());
 		card.setFrom(fromUser);
 		card.save();
@@ -497,7 +499,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	}
 	
 	public Card[] findCardsInTrash() {
-		return null;
+		throw new NotImplementedException();
 	}
 
 	public int countInTrash(Class<? extends GraphicalEntity> clazz) {
@@ -568,7 +570,13 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	}
 
 	public User getCurrentUser() {
-		return null;
+		return currentUser;
+	}
+
+	public void changeCurrentUser(User user) {
+		User oldValue = this.currentUser;
+		this.currentUser = user;
+		firePropertyChange(PROP_CHANGED_CURRENT_USER, oldValue, user);
 	}
 
 }
