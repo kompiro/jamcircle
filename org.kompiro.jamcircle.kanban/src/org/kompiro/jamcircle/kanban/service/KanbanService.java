@@ -94,6 +94,7 @@ public interface KanbanService {
 
 	boolean importUsers(File importFile);
 
+	User getCurrentUser();
 	
 	//Icon Section
 	Icon[] findIcons();
@@ -122,5 +123,6 @@ public interface KanbanService {
 	void discardToTrash(GraphicalEntity entity);
 
 	void pickupFromTrash(GraphicalEntity entity);
+
 
 }

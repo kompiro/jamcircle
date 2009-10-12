@@ -1,6 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui;
 
 
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
@@ -24,7 +25,7 @@ public class FigureViewer {
 	}
 	
 	public void setContents(Object object){
-		viewer.getGraphicalViewer().setContents(object);
+		((GraphicalViewer)viewer.getAdapter(GraphicalViewer.class)).setContents(object);
 	}
 	
 	

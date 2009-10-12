@@ -13,7 +13,6 @@ import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.scripting.ScriptingService;
 import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 import org.kompiro.jamcircle.storage.StorageStatusHandler;
-import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -21,15 +20,11 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 	
 	public static final String ID_PLUGIN = "org.kompiro.jamcircle.kanban.ui";
 
-	private static final String KEY_OF_XMPPCONNECTION_SERVICE = "org.kompiro.jamcircle.xmpp.service.XMPPConnectionService";
-
 	private static final String KEY_OF_KANBAN_SERVICE = "org.kompiro.jamcircle.kanban.service.KanbanService";
 
 	private static final String KEY_OF_SCRIPTING_SERVICE = ScriptingService.class.getName();
 
 	private static KanbanUIActivator plugin;
-
-	private ServiceTracker connectionTracker;
 	
 	private ServiceTracker kanbanServiceTracker;
 
@@ -72,8 +67,6 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 
 		kanbanServiceTracker = new ServiceTracker(context, KEY_OF_KANBAN_SERVICE, null);
 		kanbanServiceTracker.open();
-		connectionTracker = new ServiceTracker(context, KEY_OF_XMPPCONNECTION_SERVICE, null);
-		connectionTracker.open();
 		scriptingServiceTracker = new ServiceTracker(context, KEY_OF_SCRIPTING_SERVICE, null);
 		scriptingServiceTracker.open();
 //		migrate();
@@ -85,7 +78,6 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 		KanbanStatusHandler.removeStatusHandler(dialogHandler);
 		KanbanUIStatusHandler.removeStatusHandler(dialogHandler);
 		StorageStatusHandler.removeStatusHandler(dialogHandler);
-		connectionTracker.close();
 		kanbanServiceTracker.close();
 		super.stop(context);
 	}
@@ -136,10 +128,6 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 		return plugin;
 	}
 	
-	public XMPPConnectionService getConnectionService(){
-		return (XMPPConnectionService) connectionTracker.getService();
-	}
-
 	public KanbanService getKanbanService(){
 		KanbanService service = (KanbanService)kanbanServiceTracker.getService();
 		service.init();

@@ -3,28 +3,21 @@ package org.kompiro.jamcircle.kanban.ui.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.kompiro.jamcircle.kanban.model.Board;
-import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.CardContainer;
-import org.kompiro.jamcircle.kanban.model.Lane;
-import org.kompiro.jamcircle.kanban.model.LaneContainer;
+import org.kompiro.jamcircle.kanban.model.*;
 
 
-public class BoardModel extends AbstractModel implements UserModelContainer,CardContainer,LaneContainer, PropertyChangeListener{
+public class BoardModel extends AbstractModel implements CardContainer,LaneContainer, PropertyChangeListener{
 	
 	private static final long serialVersionUID = -7710219380100629938L;
 	public static final String PROP_CARD = "PROP_CARD";
 	public static final String PROP_LANE = "PROP_LANE";
-	public static final String PROP_USER = "PROP_USER";
-	public static final String PROP_USER_CLEAR = PROP_USER + "_CLEAR";
+//	public static final String PROP_USER = "PROP_USER";
+//	public static final String PROP_USER_CLEAR = PROP_USER + "_CLEAR";
 	public static final String PROP_ICON = "PROP_ICON";
 
-	private Map<String,UserModel> users = new LinkedHashMap<String,UserModel>();
+//	private Map<String,UserModel> users = new LinkedHashMap<String,UserModel>();
 	private List<Object> children = new ArrayList<Object>();
 	private TrashModel trash;
 	private Board board;
@@ -100,45 +93,45 @@ public class BoardModel extends AbstractModel implements UserModelContainer,Card
 		return getLanes()[i];
 	}
 	
-	public boolean addUser(UserModel user) {
-		UserModel model = users.put(user.getUserId(),user);
-		firePropertyChange(PROP_USER, null, user);
-		return model != null;
-	}
-
-	public void addAllUsers(Collection<? extends UserModel> users) {
-		for(UserModel user : users){
-			addUser(user);
-		}
-	}
-
-	public UserModel getUser(String user) {
-		return users.get(user);
-	}
-
-	public boolean isEmptyUsers() {
-		return users.isEmpty();
-	}
-
-	public boolean removeUser(UserModel user) {
-		boolean result = users.remove(user.getUserId()) != null;
-		firePropertyChange(PROP_USER, user, null);
-		return result;
-	}
-
-	public int sizeUsers() {
-		return users.size();
-	}
-	
-	public void clearUsers(){
-		users.clear();
-		firePropertyChange(PROP_USER_CLEAR, null, null);
-	}
+//	public boolean addUser(UserModel user) {
+//		UserModel model = users.put(user.getUserId(),user);
+//		firePropertyChange(PROP_USER, null, user);
+//		return model != null;
+//	}
+//
+//	public void addAllUsers(Collection<? extends UserModel> users) {
+//		for(UserModel user : users){
+//			addUser(user);
+//		}
+//	}
+//
+//	public UserModel getUser(String user) {
+//		return users.get(user);
+//	}
+//
+//	public boolean isEmptyUsers() {
+//		return users.isEmpty();
+//	}
+//
+//	public boolean removeUser(UserModel user) {
+//		boolean result = users.remove(user.getUserId()) != null;
+//		firePropertyChange(PROP_USER, user, null);
+//		return result;
+//	}
+//
+//	public int sizeUsers() {
+//		return users.size();
+//	}
+//	
+//	public void clearUsers(){
+//		users.clear();
+//		firePropertyChange(PROP_USER_CLEAR, null, null);
+//	}
 	
 	public List<Object> getChildren(){
 		children.clear();
 		children.addAll(icons);
-		children.addAll(users.values());
+//		children.addAll(users.values());
 		for(Lane lane: getLanes()){
 			children.add(lane);
 		}
@@ -164,9 +157,9 @@ public class BoardModel extends AbstractModel implements UserModelContainer,Card
 		return "Board";
 	}
 
-	public boolean containsUser(UserModel value) {
-		return users.containsValue(value);
-	}
+//	public boolean containsUser(UserModel value) {
+//		return users.containsValue(value);
+//	}
 
 	public Board getBoard() {
 		return this.board;
@@ -192,8 +185,15 @@ public class BoardModel extends AbstractModel implements UserModelContainer,Card
 		if(trash == null && model instanceof TrashModel){
 			this.trash = (TrashModel) model;
 		}
+		// FIXME trash is more specified?
 		this.icons.add(model);
 		firePropertyChange(PROP_ICON, null, model);
+	}
+	
+	public void removeIcon(IconModel model){
+		if(model instanceof TrashModel) return;
+		this.icons.remove(model);
+		firePropertyChange(PROP_ICON, model, null);
 	}
 
 	public void clearMocks() {

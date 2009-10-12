@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.mock.Icon;
 import org.kompiro.jamcircle.kanban.model.mock.Lane;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.kanban.ui.internal.command.AddLaneTrashCommand;
 import org.kompiro.jamcircle.kanban.ui.model.mock.TrashModel;
 
 public class AddLaneTrashCommandTest {

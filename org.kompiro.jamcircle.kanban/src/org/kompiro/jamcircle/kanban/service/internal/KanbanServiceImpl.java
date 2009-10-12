@@ -567,4 +567,8 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		getStorageService().pickup(entity);
 	}
 
+	public User getCurrentUser() {
+		return null;
+	}
+
 }

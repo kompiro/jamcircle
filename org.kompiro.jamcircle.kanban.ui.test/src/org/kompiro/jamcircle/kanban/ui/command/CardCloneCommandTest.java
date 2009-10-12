@@ -1,6 +1,8 @@
 package org.kompiro.jamcircle.kanban.ui.command;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 import org.eclipse.draw2d.geometry.Point;
@@ -13,9 +15,9 @@ import org.kompiro.jamcircle.kanban.model.mock.Card;
 import org.kompiro.jamcircle.kanban.model.mock.Lane;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
-import org.kompiro.jamcircle.kanban.ui.gcontroller.CardEditPart;
+import org.kompiro.jamcircle.kanban.ui.internal.command.CardCloneCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
-import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 
 
 public class CardCloneCommandTest {
@@ -61,7 +63,6 @@ public class CardCloneCommandTest {
 		ChangeBoundsRequest request = createRequest(card);
 		CardCloneCommand command = new CardCloneCommand(request, container);
 		command.setActivator(activatorSpy);
-		createXMPPService();
 		createKanbanService();
 		return command;
 	}
@@ -85,11 +86,6 @@ public class CardCloneCommandTest {
 		KanbanService kanbanService = mock(KanbanService.class);
 		when(kanbanService.createClonedCard((Board)any(), (User)any(), eq(card), eq(0), eq(0))).thenReturn(card);
 		doReturn(kanbanService).when(activatorSpy).getKanbanService();
-	}
-
-	private void createXMPPService() {
-		XMPPConnectionService xmppService = mock(XMPPConnectionService.class);
-		doReturn(xmppService).when(activatorSpy).getConnectionService();
 	}
 
 }

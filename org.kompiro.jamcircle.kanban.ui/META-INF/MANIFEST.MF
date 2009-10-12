@@ -10,12 +10,15 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.gef,
  org.kompiro.jamcircle.kanban;visibility:=reexport,
  org.apache.commons.lang,
- org.kompiro.jamcircle.xmpp;visibility:=reexport,
  org.eclipse.equinox.security.ui,
  org.kompiro.jamcircle.scripting,
  org.kompiro.jamcircle.debug
 Bundle-ActivationPolicy: lazy
 Export-Package: org.kompiro.jamcircle.kanban.ui,
- org.kompiro.jamcircle.kanban.ui.model
+ org.kompiro.jamcircle.kanban.ui.command,
+ org.kompiro.jamcircle.kanban.ui.editpart,
+ org.kompiro.jamcircle.kanban.ui.figure,
+ org.kompiro.jamcircle.kanban.ui.model,
+ org.kompiro.jamcircle.kanban.ui.widget
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: kompiro.org

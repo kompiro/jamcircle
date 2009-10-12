@@ -29,7 +29,7 @@ public class XMPPActivator extends Plugin {
 
 	private XMPPSettings settings = new XMPPSettings();
 	
-	private ServiceTracker kanbanTracker;
+	private ServiceTracker kanbanServiceTracker;
 
 	private StandardOutputHandler handler;
 
@@ -44,8 +44,8 @@ public class XMPPActivator extends Plugin {
 		plugin = this;
 		createConnection();
 		registerService = context.registerService(XMPPConnectionService.class.getName(),service, null);
-		kanbanTracker = new ServiceTracker(context, KanbanService.class.getName(), null);
-		kanbanTracker.open();
+		kanbanServiceTracker = new ServiceTracker(context, KanbanService.class.getName(), null);
+		kanbanServiceTracker.open();
 		handler = new StandardOutputHandler();
 		XMPPStatusHandler.addStatusHandler(handler);
 	}
@@ -98,7 +98,7 @@ public class XMPPActivator extends Plugin {
 	}
 		
 	public KanbanService getKanbanService(){
-		KanbanService service = (KanbanService) kanbanTracker.getService();
+		KanbanService service = (KanbanService) kanbanServiceTracker.getService();
 		return service;
 	}
 

@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
 import org.kompiro.jamcircle.kanban.ui.command.provider.ConfirmProviderMock;
+import org.kompiro.jamcircle.kanban.ui.internal.command.CardUpdateCommand;
 
 public class CardUpdateCommandTest {
 

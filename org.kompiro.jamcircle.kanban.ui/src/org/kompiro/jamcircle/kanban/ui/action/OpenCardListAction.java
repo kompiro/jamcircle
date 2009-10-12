@@ -14,11 +14,11 @@ import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
-import org.kompiro.jamcircle.kanban.ui.command.CardUpdateCommand;
 import org.kompiro.jamcircle.kanban.ui.command.provider.ConfirmProvider;
 import org.kompiro.jamcircle.kanban.ui.command.provider.MessageDialogConfirmProvider;
-import org.kompiro.jamcircle.kanban.ui.gcontroller.CardContainerEditPart;
-import org.kompiro.jamcircle.kanban.ui.gcontroller.TrashEditPart;
+import org.kompiro.jamcircle.kanban.ui.editpart.CardContainerEditPart;
+import org.kompiro.jamcircle.kanban.ui.internal.command.CardUpdateCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.TrashEditPart;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListEditProvider;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer;
 

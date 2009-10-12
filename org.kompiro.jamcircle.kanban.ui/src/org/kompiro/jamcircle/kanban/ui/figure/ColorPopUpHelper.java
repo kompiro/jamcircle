@@ -33,7 +33,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.kompiro.jamcircle.kanban.model.ColorTypes;
 import org.kompiro.jamcircle.kanban.model.HasColorTypeEntity;
-import org.kompiro.jamcircle.kanban.ui.command.ChangeColorCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.command.ChangeColorCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
 
 public class ColorPopUpHelper extends PopUpHelper{
 	private IFigure currentTipSource;

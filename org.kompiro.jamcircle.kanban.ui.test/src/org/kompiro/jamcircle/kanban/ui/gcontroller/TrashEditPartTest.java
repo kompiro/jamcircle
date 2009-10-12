@@ -1,10 +1,8 @@
 package org.kompiro.jamcircle.kanban.ui.gcontroller;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.*;
 import static org.junit.Assume.*;
-import static org.hamcrest.CoreMatchers.*;
 
 import java.util.Map;
 
@@ -17,9 +15,9 @@ import org.eclipse.gef.requests.GroupRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
-import org.kompiro.jamcircle.kanban.ui.command.AddLaneTrashCommand;
-import org.kompiro.jamcircle.kanban.ui.command.RemoveCardCommand;
-import org.kompiro.jamcircle.kanban.ui.command.RemoveLaneCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.command.*;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.LaneEditPart;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 
 public class TrashEditPartTest extends AbstractEditPartTest{

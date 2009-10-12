@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.mock.Board;
 import org.kompiro.jamcircle.kanban.model.Lane;
+import org.kompiro.jamcircle.kanban.ui.internal.command.CreateLaneCommand;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
 public class CreateLaneCommandTest {

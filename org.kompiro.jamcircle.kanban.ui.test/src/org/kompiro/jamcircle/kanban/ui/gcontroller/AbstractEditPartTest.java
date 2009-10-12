@@ -30,6 +30,9 @@ import org.kompiro.jamcircle.kanban.model.mock.Icon;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.ui.CommandStackEventListenerForDebug;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
+import org.kompiro.jamcircle.kanban.ui.editpart.IPropertyChangeDelegator;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardEditPart;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.KanbanControllerFactory;
 import org.kompiro.jamcircle.kanban.ui.model.*;
 
 public abstract class AbstractEditPartTest {
