@@ -1,4 +1,4 @@
-package org.kompiro.jamcircle.kanban.ui.gcontroller;
+package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;

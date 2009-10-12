@@ -1,4 +1,4 @@
-package org.kompiro.jamcircle.kanban.ui.gcontroller;
+package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
