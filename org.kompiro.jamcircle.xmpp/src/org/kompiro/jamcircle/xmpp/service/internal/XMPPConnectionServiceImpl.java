@@ -53,7 +53,7 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 		    SASLAuthentication.supportSASLMechanism("PLAIN", 0);
 		    // hack : http://www.igniterealtime.org/community/thread/35976
 		    String loginname = username;
-		    if(host.equals("talk.google.com") && username.indexOf("@") < 0){
+		    if(host.equals("talk.google.com") && username.indexOf("@") != 0){
 		    	loginname += "@" + serviceName;
 		    }
 		    connection.login(loginname, password, resource);
@@ -77,7 +77,6 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 			}
 			System.setProperty(KEY_OF_SYSTEM_PROP_XMPP_CONNECT, String.valueOf(true));
 		} catch (XMPPException e) {
-			XMPPStatusHandler.fail(e, "can't disconnect",false);
 			try {
 				connection.disconnect();
 			} catch (Exception ex) {
