@@ -80,7 +80,7 @@ public class SendCardCommand extends AbstractCommand implements CancelableComman
 				return;
 			}
 			card.setTo(getUser(target));
-			card.save();
+			card.save(false);
 		}
 
 	}

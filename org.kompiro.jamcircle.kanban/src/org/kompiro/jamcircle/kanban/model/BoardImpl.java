@@ -2,16 +2,17 @@ package org.kompiro.jamcircle.kanban.model;
 
 import java.beans.PropertyChangeEvent;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 import org.kompiro.jamcircle.kanban.model.mock.MockGraphicalEntity;
 
 
 public class BoardImpl extends EntityImpl{
+	
+	private static final ExecutorService executor = Executors.newSingleThreadExecutor();
 	
 	private Board board;
 	
@@ -35,7 +36,7 @@ public class BoardImpl extends EntityImpl{
 		if(card.isMock()){
 			mockCards.add(card);
 		}else{
-			card.save();
+			card.save(false);
 			board.getEntityManager().flush(card);
 			try {
 				board.getEntityManager().find(Card.class,Card.PROP_ID + " = ?", card.getID());
@@ -54,7 +55,7 @@ public class BoardImpl extends EntityImpl{
 		if(card.isMock()){
 			mockCards.remove(card);
 		}else{
-			card.save();
+			card.save(false);
 			board.getEntityManager().flush(card,board);
 		}
 		PropertyChangeEvent event = new PropertyChangeEvent(board,Board.PROP_CARD,card,null);
@@ -93,7 +94,7 @@ public class BoardImpl extends EntityImpl{
 		if(lane instanceof MockGraphicalEntity){
 			mockLanes.add(lane);
 		}else{
-			lane.save();
+			lane.save(false);
 			board.getEntityManager().flush(lane,board);
 		}
 		PropertyChangeEvent event = new PropertyChangeEvent(board,Board.PROP_LANE,null,lane);
@@ -106,7 +107,7 @@ public class BoardImpl extends EntityImpl{
 		if(lane.isMock()){
 			mockLanes.remove(lane);
 		}else{
-			lane.save();
+			lane.save(false);
 			board.getEntityManager().flush(lane,board);
 		}
 		PropertyChangeEvent event = new PropertyChangeEvent(board,Board.PROP_LANE,lane,null);
@@ -120,6 +121,19 @@ public class BoardImpl extends EntityImpl{
 		allLanes.addAll(mockLanes);
 		return allLanes.toArray(new Lane[]{});
 	}
+	
+	public void save(boolean directExecution){
+		if(directExecution){
+			board.save();
+		}
+		Runnable runnable = new Runnable() {
+			public void run() {
+				board.save();
+			}
+		};
+		executor.execute(runnable);
+	}
+
 	
 	@Override
 	public String toString() {

@@ -89,7 +89,7 @@ public class CardUpdateCommand extends AbstractCommand {
 		for(File addTarget : addTargetFileSet){
 			card.addFile(addTarget);
 		}
-		card.save();
+		card.save(false);
 		setCanUndo(true);
 	}
 	
@@ -101,7 +101,7 @@ public class CardUpdateCommand extends AbstractCommand {
 		for(File addTarget : addTargetFileSet){
 			card.deleteFile(addTarget);
 		}
-		card.save();
+		card.save(false);
 		setCanUndo(false);
 	}
 

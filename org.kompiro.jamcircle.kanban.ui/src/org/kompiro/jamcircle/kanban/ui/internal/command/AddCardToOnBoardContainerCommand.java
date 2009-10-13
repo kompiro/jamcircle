@@ -38,7 +38,7 @@ public class AddCardToOnBoardContainerCommand extends AbstractCommand {
 		card.setX(constraint.x);
 		card.setY(constraint.y);
 		card.setTrashed(false);
-		card.save();
+		card.save(false);
 		container.addCard(card);
 	}
 	
@@ -47,7 +47,7 @@ public class AddCardToOnBoardContainerCommand extends AbstractCommand {
 		card.setX(oldLocation.x);
 		card.setY(oldLocation.y);
 		card.setTrashed(trashed);
-		card.save();
+		card.save(false);
 		container.removeCard(card);
 	}
 	

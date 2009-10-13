@@ -115,9 +115,9 @@ public class ModelTest extends AbstractKanbanTest{
 		System.out.println(lane);
 		lane2.addPropertyChangeListener(listener2);
 		card.setLane(lane);
-		card.save();
+		card.save(false);
 		card2.setLane(lane);
-		card2.save();
+		card2.save(false);
 		assertEquals(2,lane.getCards().length);
 		assertEquals(card,lane.getCards()[0]);
 		assertEquals("todo",lane.getStatus());
@@ -128,12 +128,12 @@ public class ModelTest extends AbstractKanbanTest{
 		for(int i = 2; i < cardcount; i++){
 			card = entityManager.create(Card.class,new DBParam(Card.PROP_SUBJECT,"test" + i));
 			card.setLane(lane2);
-			card.save();			
+			card.save(false);			
 			card.setLane(null);
 			card.setDeletedVisuals(true);
 			card.setX(i * 5);
 			card.setY(i * 50);
-			card.save();
+			card.save(false);
 			card.setDeletedVisuals(false);
 			lane.addCard(card);
 		}

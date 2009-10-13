@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.List;
 
 import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Point;
@@ -20,7 +21,6 @@ import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.progress.UIJob;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.ui.*;
 import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
@@ -381,12 +381,13 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 				super.doPropertyChange(evt);
 			}
 			String message = String.format("Lane \"%s\"'s children is changing", lane.getStatus());
-			new UIJob(message){
+			Job scriptJob = new Job(message){
 				@Override
-				public IStatus runInUIThread(IProgressMonitor monitor) {
+				public IStatus run(IProgressMonitor monitor) {
 					return 	executeScript(evt,monitor);
 				}
-			}.schedule();
+			};
+			scriptJob.schedule();
 //			IProgressService service = (IProgressService) PlatformUI.getWorkbench().getService(IProgressService.class);
 //			IRunnableContext context = new ProgressMonitorDialog(getShell());
 //			try {

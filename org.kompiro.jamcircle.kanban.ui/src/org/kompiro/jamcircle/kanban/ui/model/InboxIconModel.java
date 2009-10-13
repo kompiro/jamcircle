@@ -19,7 +19,7 @@ public class InboxIconModel extends AbstractIconModel implements CardContainer{
 	public boolean addCard(Card card) {
 		card.setBoard(null);
 		card.setLane(null);
-		card.save();
+		card.save(false);
 		firePropertyChange(PROP_CARD,null,card);
 		return false;
 	}

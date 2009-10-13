@@ -31,7 +31,7 @@ public class LaneImpl extends GraphicalImpl {
 		}
 		card.setTrashed(false);
 		card.setDeletedVisuals(false);
-		card.save();
+		card.save(false);
 		if(!card.isMock()){
 			lane.getEntityManager().flush(card);
 			try {
@@ -61,7 +61,7 @@ public class LaneImpl extends GraphicalImpl {
 		card.setLane(null);
 		card.setBoard(null);
 		card.setDeletedVisuals(true);
-		card.save();
+		card.save(false);
 		PropertyChangeEvent event = new PropertyChangeEvent(lane,Lane.PROP_CARD,card,null);
 		fireEvent(event);
 		return true;

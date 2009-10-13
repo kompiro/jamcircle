@@ -33,7 +33,7 @@ public class TaskBoardTemplate extends AbstractBoardTemplate {
 	private Lane createDoneLane(Board board) {
 		Lane lane = createLane(board,"Done",500,50,200,500);
 		lane.setScript(readFromResource(getClass().getResource("taskDoneTemplate.txt")));
-		lane.save();
+		lane.save(false);
 		return lane;
 	}
 

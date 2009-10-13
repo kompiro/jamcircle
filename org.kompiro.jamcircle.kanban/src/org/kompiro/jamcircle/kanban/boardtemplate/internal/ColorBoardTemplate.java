@@ -67,7 +67,7 @@ public class ColorBoardTemplate extends AbstractBoardTemplate {
 		Lane lane = kanbanService.createLane(board,status, x, y, width, height);
 		lane.setScriptType(ScriptTypes.JavaScript);
 		lane.setScript(String.format(readFromResource(this.getClass().getResource("colorTemplate.txt")), colorType));
-		lane.save();
+		lane.save(false);
 		return lane;
 	}
 

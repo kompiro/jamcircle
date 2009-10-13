@@ -17,14 +17,14 @@ public class DeleteUserCommand extends AbstractCommand {
 	public void doExecute() {
 		User user = userModel.getUser();
 		user.setTrashed(true);
-		user.save();
+		user.save(false);
 	}
 	
 	@Override
 	public void undo() {
 		User user = userModel.getUser();
 		user.setTrashed(false);
-		user.save();
+		user.save(false);
 	}
 
 }

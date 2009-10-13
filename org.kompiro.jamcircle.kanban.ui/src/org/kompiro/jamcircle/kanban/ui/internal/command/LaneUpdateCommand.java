@@ -29,7 +29,7 @@ public class LaneUpdateCommand extends AbstractCommand {
 		lane.setStatus(this.status);
 		lane.setScript(this.script);
 		lane.setScriptType(this.type);
-		lane.save();
+		lane.save(false);
 	}
 	
 	@Override
@@ -37,7 +37,7 @@ public class LaneUpdateCommand extends AbstractCommand {
 		lane.setStatus(this.oldStatus);
 		lane.setScript(this.oldScript);
 		lane.setScriptType(this.oldType);
-		lane.save();		
+		lane.save(false);		
 	}
 
 }

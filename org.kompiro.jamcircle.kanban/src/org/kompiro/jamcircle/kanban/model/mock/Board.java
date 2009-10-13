@@ -108,4 +108,8 @@ public class Board extends MockEntity implements org.kompiro.jamcircle.kanban.mo
 		// do nothing.
 	}
 	
+	public void save(boolean directExecution) {
+		// do nothing.
+	}
+	
 }

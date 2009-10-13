@@ -48,5 +48,9 @@ public class MockGraphicalEntity extends MockEntity implements GraphicalEntity {
 	public void setTrashed(boolean trashed) {
 		this.trashed = trashed;
 	}
+	
+	public void save(boolean directExecution){
+		save();
+	}
 
 }

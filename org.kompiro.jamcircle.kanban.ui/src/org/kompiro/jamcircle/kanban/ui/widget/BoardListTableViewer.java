@@ -222,7 +222,7 @@ public class BoardListTableViewer implements PropertyChangeListener {
 					board.setScript(script);
 					board.setTitle(title);
 					board.setScriptType(type);
-					board.save();
+					board.save(false);
 					refreshTableViewer();
 				}
 			}

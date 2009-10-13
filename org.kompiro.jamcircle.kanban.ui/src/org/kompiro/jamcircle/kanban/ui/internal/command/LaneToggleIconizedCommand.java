@@ -16,13 +16,13 @@ public class LaneToggleIconizedCommand extends AbstractCommand {
 	public void doExecute() {
 		this.oldIconized = lane.isIconized();
 		lane.setIconized(!oldIconized);
-		lane.save();
+		lane.save(false);
 	}
 	
 	@Override
 	public void undo() {
 		lane.setIconized(oldIconized);
-		lane.save();
+		lane.save(false);
 	}
 
 }

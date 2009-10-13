@@ -30,7 +30,7 @@ public class CardImpl extends GraphicalImpl {
 		if(uuid == null || uuid.length() == 0){
 			uuid = UUID.randomUUID().toString();
 			card.setUUID(uuid);
-			card.save();
+			card.save(false);
 		}
 	}
 	

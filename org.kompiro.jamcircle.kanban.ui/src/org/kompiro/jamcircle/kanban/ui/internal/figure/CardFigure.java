@@ -184,8 +184,16 @@ public class CardFigure extends RoundedRectangle {
 
 	
 	public void setColorType(ColorTypes colorType){
+		colorType = setDefaultColorType(colorType);
 		this.colorType = colorType;
 		setBackgroundColor(JFaceResources.getColorRegistry().get(COLOR_KEY_CARD_BODY + colorType.ordinal()));
+	}
+
+	private ColorTypes setDefaultColorType(ColorTypes colorType) {
+		if(colorType == null){
+			colorType = ColorTypes.YELLOW;
+		}
+		return colorType;
 	}
 	
 	public void setSubject(String subjectText){

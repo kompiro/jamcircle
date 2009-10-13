@@ -53,7 +53,7 @@ public class KanbanServiceImplPDETest extends AbstractKanbanTest{
 		assertEquals("kompiro@test",cards[1].getCreated());
 		
 		testUser.setUserName("Hiroki Kondo");
-		testUser.save();
+		testUser.save(false);
 
 		card = service.createCard(board,"test for username is NOT null",testUser, 45, 130);
 		cards = service.findAllCards();
@@ -93,7 +93,7 @@ public class KanbanServiceImplPDETest extends AbstractKanbanTest{
 		Board board = service.createBoard("test kanban");
 		Card testCard = service.createCard(board,"test sent to kompiro", null, 0, 0);
 		testCard.setTo(testUser);
-		testCard.save();
+		testCard.save(false);
 		Card[] sentcards = service.findCardsSentTo(testUser);
 		assertEquals(1,sentcards.length);
 	}
@@ -125,7 +125,7 @@ public class KanbanServiceImplPDETest extends AbstractKanbanTest{
 
 		Board board = service.createBoard("test board");
 		Card card = service.createCard(board, "test", null, 100, 200);
-		card.save();
+		card.save(false);
 		File cards_csv = File.createTempFile("test_card", "csv");
 		service.exportCards(cards_csv);
 		service.importCards(cards_csv);

@@ -171,7 +171,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 
 	public void trashCard(Card card) {
 		card.setTrashed(true);
-		card.save();
+		card.save(false);
 	}
 	
 	
@@ -325,7 +325,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		card.setOwner(getCurrentUser());
 		card.setCreated(dto.getCreated());
 		card.setFrom(fromUser);
-		card.save();
+		card.save(false);
 		return card;
 	}
 
@@ -358,7 +358,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		user = findUser(userId);
 		oldUser = user;
 		user.setTrashed(true);
-		user.save();
+		user.save(false);
 		firePropertyChange(User.class.getSimpleName(), oldUser, null);
 	}
 

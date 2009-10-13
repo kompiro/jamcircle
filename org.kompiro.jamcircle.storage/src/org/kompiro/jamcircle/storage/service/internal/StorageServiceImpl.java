@@ -312,12 +312,12 @@ public class StorageServiceImpl implements StorageService {
 
 	public void discard(GraphicalEntity entity) {
 		entity.setTrashed(true);
-		entity.save();
+		entity.save(false);
 	}
 	
 	public void pickup(GraphicalEntity entity) {
 		entity.setTrashed(false);
-		entity.save();
+		entity.save(false);
 	}
 	
 	public int countInTrash(Class<? extends GraphicalEntity> clazz) {

@@ -29,7 +29,7 @@ public class EnumLearning extends AbstractStorageTest{
 			protected EnumModel run() throws SQLException {
 				EnumModel model = manager.create(EnumModel.class);
 				model.setState(Niko2State.GOOD);
-				model.save();
+				model.save(false);
 				return model;
 			}
 			
@@ -40,7 +40,7 @@ public class EnumLearning extends AbstractStorageTest{
 			protected EnumModel run() throws SQLException {
 				EnumModel model = manager.create(EnumModel.class);
 				model.setState(Niko2State.NORMAL);
-				model.save();
+				model.save(false);
 				return model;
 			}
 			
@@ -51,7 +51,7 @@ public class EnumLearning extends AbstractStorageTest{
 			protected EnumModel run() throws SQLException {
 				EnumModel model = manager.create(EnumModel.class);
 				model.setState(Niko2State.BAD);
-				model.save();
+				model.save(false);
 				return model;
 			}
 			

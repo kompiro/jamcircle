@@ -41,5 +41,11 @@ public interface GraphicalEntity extends Entity {
 	
 	@Default(value="false")
 	void setTrashed(boolean trashed);
+	
+	/**
+	 * This method calls {@link net.java.ao.RawEntity#save(false)} and run in  Executor.
+	 * @param directExecution set true if you need direct {@link net.java.ao.RawEntity#save(false)}
+	 */
+	void save(boolean directExecution);
 
 }

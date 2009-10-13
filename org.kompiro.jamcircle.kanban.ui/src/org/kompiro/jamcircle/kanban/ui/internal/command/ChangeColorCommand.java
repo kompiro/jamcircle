@@ -19,13 +19,13 @@ public class ChangeColorCommand extends AbstractCommand {
 	@Override
 	public void doExecute() {
 		entity.setColorType(type);
-		entity.save();
+		entity.save(false);
 	}
 	
 	@Override
 	public void undo() {
 		entity.setColorType(oldType);
-		entity.save();
+		entity.save(false);
 	}
 
 }

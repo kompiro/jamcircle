@@ -17,13 +17,13 @@ public class CardSubjectDirectEditCommand extends AbstractCommand {
 	@Override
 	public void doExecute() {
 		card.setSubject(subject);
-		card.save();
+		card.save(false);
 	}
 	
 	@Override
 	public void undo() {
 		card.setSubject(oldSubject);
-		card.save();
+		card.save(false);
 	}
 
 }

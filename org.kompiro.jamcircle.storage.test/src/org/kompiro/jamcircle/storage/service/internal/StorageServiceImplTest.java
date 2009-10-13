@@ -85,13 +85,13 @@ public class StorageServiceImplTest {
 		assertEquals(0,entityManager.count(GraphicalTestEntity.class));
 		GraphicalTestEntity entity = service.createEntity(GraphicalTestEntity.class, new DBParam[]{new DBParam("uuid",UUID.randomUUID().toString())});
 		entity.setName("test");
-		entity.save();
+		entity.save(false);
 		
 		assertThat(entityManager.count(GraphicalTestEntity.class),is(1));
 		service.deleteTrashedEntity(GraphicalTestEntity.class);
 		assertThat(entityManager.count(GraphicalTestEntity.class),is(1));
 		entity.setTrashed(true);
-		entity.save();
+		entity.save(false);
 		service.deleteTrashedEntity(GraphicalTestEntity.class);
 		assertThat(entityManager.count(GraphicalTestEntity.class),is(0));
 	}

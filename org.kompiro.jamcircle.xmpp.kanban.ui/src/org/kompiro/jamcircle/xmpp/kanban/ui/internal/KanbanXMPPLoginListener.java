@@ -79,7 +79,7 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener {
 				final Card card = tmpCard;
 				final File file = tmpFile;
 				card.addFile(file);
-				card.save();
+				card.save(false);
 			} catch (XMPPException e) {
 				XMPPStatusHandler.fail(e, "error has occured.");
 				request.reject();

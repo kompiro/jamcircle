@@ -20,13 +20,13 @@ public class ChangeFlagCommand extends AbstractCommand {
 	@Override
 	public void doExecute() {
 		entity.setFlagType(type);
-		entity.save();
+		entity.save(false);
 	}
 	
 	@Override
 	public void undo() {
 		entity.setFlagType(oldType);
-		entity.save();
+		entity.save(false);
 	}
 
 }

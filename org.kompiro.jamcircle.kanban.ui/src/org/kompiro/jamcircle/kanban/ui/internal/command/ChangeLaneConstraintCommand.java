@@ -41,7 +41,7 @@ public class ChangeLaneConstraintCommand extends MoveCommand {
 				lane.setHeight(rect.height);
 			}
 			lane.commitConstraint();
-			lane.save();
+			lane.save(false);
 		}else{
 			KanbanUIStatusHandler.fail(new RuntimeException(), "ChangeLocationCommand:0001:Exception is occured");
 		}
@@ -57,7 +57,7 @@ public class ChangeLaneConstraintCommand extends MoveCommand {
 			lane.setWidth(oldRect.width);
 			lane.setHeight(oldRect.height);
 			lane.commitConstraint();
-			lane.save();
+			lane.save(false);
 		}else{
 			KanbanUIStatusHandler.fail(new RuntimeException(), "ChangeLocationCommand:0002:Exception is occured");
 		}

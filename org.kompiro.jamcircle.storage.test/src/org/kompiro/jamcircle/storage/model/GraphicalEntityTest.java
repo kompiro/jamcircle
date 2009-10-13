@@ -31,7 +31,7 @@ public class GraphicalEntityTest extends AbstractStorageTest{
 		assertTrue(entity.isDeletedVisuals());
 		entity.setX(100);
 		entity.setY(10);
-		entity.save();
+		entity.save(false);
 		assumeThat(manager.count(GraphicalEntity.class), is(1));
 		entity = manager.get(GraphicalEntity.class, 1);
 		assertTrue("Entity is deleted visual because it isn't reloaded.",entity.isDeletedVisuals());
@@ -49,7 +49,7 @@ public class GraphicalEntityTest extends AbstractStorageTest{
 		entity.setY(200);
 		
 		// e(id:300) hasn't persistent. But if it called,then returns old value.
-		entity.save();
+		entity.save(false);
 		entity = manager.get(GraphicalEntity.class,300);
 		assertNotNull(entity);
 		assertEquals(300,entity.getID());
