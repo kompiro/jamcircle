@@ -1,0 +1,5 @@
+h1. JAM Circle README
+
+written by Hiroki Kondo(a.k.a kompiro)
+
+"Website(Trac)":http://kompiro.org/jamcircle/
