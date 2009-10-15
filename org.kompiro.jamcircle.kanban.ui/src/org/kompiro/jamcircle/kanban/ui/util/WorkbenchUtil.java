@@ -39,6 +39,7 @@ public class WorkbenchUtil {
 				if (foundView instanceof KanbanView) {
 					KanbanView view = (KanbanView) foundView;
 					results[0] = view;
+					return;
 				}
 				results[0] = null;				
 			}
