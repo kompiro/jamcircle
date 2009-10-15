@@ -41,6 +41,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 	private final class CardLayer extends Layer {
 		
 		public CardLayer(){
+			addLayoutListener(LayoutAnimator.getDefault());
 			setLayoutManager(new FreeformLayout());
 			setOpaque(false);
 		}
@@ -487,7 +488,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 				card.setRemoved(true);
 				card.repaint();
 			}
-			if(!child.isShowing()){
+			if(!child.isVisible()){
 				layer.remove(child);
 			}
 		}

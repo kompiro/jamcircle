@@ -27,27 +27,6 @@ import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		implements PropertyChangeListener {
 
-//	public class UIJobDelegator implements IPropertyChangeDelegator {
-//
-//		public void run(final Runnable runner) {
-//			runner.run();
-////			new UIJob(""){
-////
-////				@Override
-////				public IStatus runInUIThread(IProgressMonitor monitor) {
-////					try{
-////						runner.run();
-////					}catch(Throwable e){
-////						return UIJob.errorStatus(e);
-////					}
-////					return Status.OK_STATUS;
-////				}
-////				
-////			}.schedule();
-//		}
-//
-//	}
-
 	private BoardModel boardModel;
 
 	private IPropertyChangeDelegator delegator;
@@ -157,7 +136,9 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 	public void propertyChange(final PropertyChangeEvent evt){
 		getDelegator().run(new Runnable() {
 			public void run() {
+				Animation.markBegin();
 				doPropertyChange(evt);
+				Animation.run();
 			}
 		});
 	}

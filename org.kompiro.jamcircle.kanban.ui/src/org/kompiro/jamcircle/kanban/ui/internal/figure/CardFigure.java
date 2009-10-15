@@ -56,6 +56,14 @@ public class CardFigure extends RoundedRectangle {
 	
 	public CardFigure(ImageRegistry imageRegisty){
 		this.imageRegistry = imageRegisty;
+		GC gc = new GC(getDisplay());
+		FontMetrics fontMetrics = gc.getFontMetrics();
+		int width = gc.stringExtent("xx").x * 10;
+		int height = fontMetrics.getHeight() * 3;
+
+		setSize(width + LINE_WIDTH * 2,
+				HEADER_SECTION_HEIGHT + height + LINE_WIDTH * 2 + FOOTER_SECTION_HEIGHT);
+		setLineWidth(LINE_WIDTH);
 		FlowLayout manager = new FlowLayout();
 		manager.setMajorSpacing(0);
 		manager.setMinorSpacing(0);
@@ -67,19 +75,15 @@ public class CardFigure extends RoundedRectangle {
 		createHeaderSection();
 		createSubjectPage();
 		createFooterSection();
-		GC gc = new GC(getDisplay());
-		FontMetrics fontMetrics = gc.getFontMetrics();
-		int width = gc.stringExtent("xx").x * 10;
-		int height = fontMetrics.getHeight() * 3;
 
-		setSize(width + LINE_WIDTH * 2,
-				HEADER_SECTION_HEIGHT + height + LINE_WIDTH * 2 + FOOTER_SECTION_HEIGHT);
-
-		setLineWidth(LINE_WIDTH);
 //		toolTipFigure = new CardToolTip();
 //		setToolTip(toolTipFigure);
 	}
 	
+	@Override
+	public void setLayoutManager(LayoutManager manager) {
+		super.setLayoutManager(manager);
+	}
 
 	protected void outlineShape(Graphics graphics) {
 		Rectangle f = Rectangle.SINGLETON;
@@ -208,6 +212,11 @@ public class CardFigure extends RoundedRectangle {
 		this.removed = removed;
 	}
 
+	@Override
+	protected void fireFigureMoved() {
+		invalidate();
+		super.fireFigureMoved();
+	}
 	
 	@Override
 	public void paint(Graphics graphics) {
@@ -290,7 +299,5 @@ public class CardFigure extends RoundedRectangle {
 			alpha = 255;
 		}
 	}
-
-
 
 }

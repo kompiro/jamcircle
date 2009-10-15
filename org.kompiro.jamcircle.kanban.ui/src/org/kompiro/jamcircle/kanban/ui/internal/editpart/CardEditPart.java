@@ -455,6 +455,7 @@ public class CardEditPart extends AbstractEditPart {
 		GraphicalEditPart part = (GraphicalEditPart) getParent();
 		if(part != null){
 			Object constraint = cardFigure.getBounds();
+			System.out.println(constraint);
 			part.setLayoutConstraint(this, cardFigure, constraint);
 		}else{
 			cardFigure.removeAll();
@@ -471,8 +472,11 @@ public class CardEditPart extends AbstractEditPart {
 			if(! (newValue instanceof Integer)) return ;
 			Point location = (Point) new Point(getCardModel().getX(),getCardModel().getY());
 			IFigure figure = getFigure();
+//			figure.getParent().invalidate();
+			figure.revalidate();
 			figure.setLocation(location);
-			effectToParentConstraint();
+//			figure.getUpdateManager().performValidation();
+//			effectToParentConstraint();
 		}
 		else if(isPropSubject(evt)){
 			getCardFigure().setSubject(getCardModel().getSubject());
