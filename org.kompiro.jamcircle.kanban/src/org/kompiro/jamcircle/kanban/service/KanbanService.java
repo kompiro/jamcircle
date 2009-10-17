@@ -128,5 +128,6 @@ public interface KanbanService {
 
 	void pickupFromTrash(GraphicalEntity entity);
 
-
+	boolean isTestMode();
+	
 }

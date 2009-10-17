@@ -38,9 +38,13 @@ public class MockGraphicalEntity extends MockEntity implements GraphicalEntity {
 	}
 
 	public void commitLocation() {
-		fireProperty(PROP_LOCATION, null, null);
+		fireProperty(PROP_COMMIT_LOCATION, null, null);
 	}
 	
+	public void prepareLocation() {
+		fireProperty(PROP_PREPARE_LOCATION, null, null);
+	}
+
 	public boolean isTrashed() {
 		return this.trashed;
 	}

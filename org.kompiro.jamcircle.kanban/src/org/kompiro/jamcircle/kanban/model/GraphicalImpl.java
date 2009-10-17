@@ -10,9 +10,13 @@ public class GraphicalImpl extends EntityImpl{
 	public GraphicalImpl(GraphicalEntity entity) {
 		super(entity);
 	}
-		
+
+	public void prepareLocation() {
+		fireEvent(new PropertyChangeEvent(entity,GraphicalEntity.PROP_PREPARE_LOCATION,null,null));
+	}
+	
 	public void commitLocation() {
-		fireEvent(new PropertyChangeEvent(entity,GraphicalEntity.PROP_LOCATION,null,null));
+		fireEvent(new PropertyChangeEvent(entity,GraphicalEntity.PROP_COMMIT_LOCATION,null,null));
 	}
 
 }

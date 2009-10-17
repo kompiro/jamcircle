@@ -7,8 +7,7 @@ import java.lang.reflect.UndeclaredThrowableException;
 import java.sql.SQLException;
 import java.util.*;
 
-import net.java.ao.DBParam;
-import net.java.ao.EntityManager;
+import net.java.ao.*;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
@@ -57,7 +56,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	}
 	
 	public void forceInit(){
-		System.out.println("This service is initializing.");
+		System.out.println("called forceInit.");
 		doInit();
 	}
 
@@ -577,6 +576,14 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		User oldValue = this.currentUser;
 		this.currentUser = user;
 		firePropertyChange(PROP_CHANGED_CURRENT_USER, oldValue, user);
+	}
+	
+	public boolean isTestMode() {
+		return storageService.isTestMode();
+	}
+
+	public void  migrate(Class<? extends Entity>... classes) {
+		storageService.migrate(classes);
 	}
 
 }

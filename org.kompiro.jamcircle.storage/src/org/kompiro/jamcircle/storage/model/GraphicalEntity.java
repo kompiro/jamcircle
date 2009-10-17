@@ -12,7 +12,8 @@ public interface GraphicalEntity extends Entity {
 	String PROP_ID = "id";
 	String PROP_LOCATION_X = "x";
 	String PROP_LOCATION_Y = "y";
-	String PROP_LOCATION = "location";
+	String PROP_PREPARE_LOCATION = "prepare_location";
+	String PROP_COMMIT_LOCATION = "commit_location";
 	String PROP_TRASHED = "trashed";
 
 	@Ignore
@@ -32,6 +33,8 @@ public interface GraphicalEntity extends Entity {
 	@Default(value="0")
 	void setY(int y);
 
+	void prepareLocation();
+	
 	void commitLocation();
 	
 	@Ignore

@@ -1,9 +1,10 @@
 package org.kompiro.jamcircle.kanban.service.internal;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import net.java.ao.DatabaseProvider;
 import net.java.ao.EntityManager;
@@ -18,28 +19,28 @@ public abstract class AbstractKanbanTest {
 	
 	@BeforeClass
 	public static void initializeEnvironment() throws Exception{
-		try{
+//		try{
 			KanbanActivator activator = getActivator();
 			if(activator == null){
 				throw new IllegalStateException("Please launch on PDE Environment");
 			}
 			entityManager = activator.getEntityManager();
-//			Logger.getLogger("net.java.ao").setLevel(Level.FINE);
+			Logger.getLogger("net.java.ao").setLevel(Level.FINE);
 			assertNotNull(entityManager);
-			String storePath = activator.getStorageService().getDBPath();
-			int schemeIndex = storePath.indexOf(FILE);
-			if(schemeIndex != -1){
-				storePath = storePath.substring(FILE.length());
-			}
-			assertTrue(storePath.indexOf("test") != -1);
-			System.out.println(storePath);
-			assertNotNull(getKanbanService());
-			
-		}catch(Exception e){
-			e.printStackTrace();
-			throw e;
-		}
-		System.out.println("AbstractKanbanTest.init() end");
+//			String storePath = activator.getStorageService().getDBPath();
+//			int schemeIndex = storePath.indexOf(FILE);
+//			if(schemeIndex != -1){
+//				storePath = storePath.substring(FILE.length());
+//			}
+//			assertTrue(storePath.indexOf("test") != -1);
+//			System.out.println(storePath);
+//			assertNotNull(getKanbanService());
+//			
+//		}catch(Exception e){
+//			e.printStackTrace();
+//			throw e;
+//		}
+//		System.out.println("AbstractKanbanTest.init() end");
 	}
 	
 	@Before

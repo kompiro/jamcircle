@@ -1,21 +1,9 @@
 package org.kompiro.jamcircle.storage.service.internal;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
-import java.sql.CallableStatement;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.sql.*;
+import java.util.*;
 
 import net.java.ao.*;
 
@@ -23,15 +11,10 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.h2.tools.Csv;
-import org.kompiro.jamcircle.storage.H2DatabaseProvider;
-import org.kompiro.jamcircle.storage.StorageActivator;
-import org.kompiro.jamcircle.storage.StorageStatusHandler;
+import org.kompiro.jamcircle.storage.*;
 import org.kompiro.jamcircle.storage.exception.StorageConnectException;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
-import org.kompiro.jamcircle.storage.service.StorageChageListener;
-import org.kompiro.jamcircle.storage.service.StorageService;
-import org.kompiro.jamcircle.storage.service.StorageSetting;
-import org.kompiro.jamcircle.storage.service.StorageSettings;
+import org.kompiro.jamcircle.storage.service.*;
 
 /**
  * TODO Separated File storage and DB Storage Service
@@ -126,7 +109,10 @@ public class StorageServiceImpl implements StorageService {
 		storeRoot = System.getProperty(KEY_OF_SYSTEM_PROPERTY_STORAGE_STOREROOT);
 		String uri = null;
 		if(storeRoot == null || storeRoot.length() == 0){
-			if(CONNECTION_MODE.TCP.toString().equals(setting.getMode())){
+			if(testmode){
+				storeRoot = getDefaultStoreRoot();
+				uri = "jdbc:h2:mem:TEST;DB_CLOSE_DELAY=-1";				
+			}else if(CONNECTION_MODE.TCP.toString().equals(setting.getMode())){
 				storeRoot = getDefaultStoreRoot();
 				uri = "jdbc:h2:" + setting.getUri() + dbName;
 			}else{
@@ -177,9 +163,6 @@ public class StorageServiceImpl implements StorageService {
 		String username = provider.getUsername();
 		String password = provider.getPassword();
 		provider.dispose();
-		File db = new File(getStoreRoot());
-		assert db.isDirectory():"db is dirrectory";
-		travasalDelete(db);
 		createEntityManager(uri, username, password);
 	}
 
@@ -359,6 +342,18 @@ public class StorageServiceImpl implements StorageService {
 
 	public EntityManager getEntityManager() {
 		return manager;
+	}
+	
+	public boolean isTestMode() {
+		return testmode;
+	}
+
+	public void migrate(Class<? extends Entity>... entities) {
+		try {
+			getEntityManager().migrate(entities);
+		} catch (SQLException e) {
+			StorageStatusHandler.fail(e, "StorageServiceImpl#migrate()",true);
+		}
 	}
 
 }

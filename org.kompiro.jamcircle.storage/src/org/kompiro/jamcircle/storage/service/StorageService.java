@@ -55,5 +55,9 @@ public interface StorageService {
 //	public <T extends Entity> T[] find(Class<T> clazz, String query, Object... objects);
 
 	public <T extends Entity> T[] findInTrash(Class<T> clazz);
+	
+	public boolean isTestMode();
+
+	public void migrate(Class<? extends Entity>... classes);
 
 }

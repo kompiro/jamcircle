@@ -1,10 +1,12 @@
 package org.kompiro.jamcircle.storage;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import net.java.ao.EntityManager;
 
@@ -27,22 +29,22 @@ public abstract class AbstractStorageTest {
 		if(!Platform.isRunning()){
 			throw new IllegalStateException("Please launch on PDE Environment");
 		}
-//		Logger.getLogger("net.java.ao").setLevel(Level.FINE);
+		Logger.getLogger("net.java.ao").setLevel(Level.FINE);
 		activator = StorageActivator.getDefault();
-		String storePath = activator.getService().getDBPath();
-		int schemeIndex = storePath.indexOf(FILE);
-		if(schemeIndex != -1){
-			storePath = storePath.substring(FILE.length());
-		}
-		System.out.println(storePath);
-		File file = new File(storePath);
-		if(file.exists()){
-			if(!file.delete()){
-				System.err.println("can't delete file");
-			}
-		}
-		String path = file.getAbsolutePath();
-		assertNotSame("can't connect Test DB.'" + path + "'", -1 , path.indexOf("test"));
+//		String storePath = activator.getService().getDBPath();
+//		int schemeIndex = storePath.indexOf(FILE);
+//		if(schemeIndex != -1){
+//			storePath = storePath.substring(FILE.length());
+//		}
+//		System.out.println(storePath);
+//		File file = new File(storePath);
+//		if(file.exists()){
+//			if(!file.delete()){
+//				System.err.println("can't delete file");
+//			}
+//		}
+//		String path = file.getAbsolutePath();
+//		assertNotSame("can't connect Test DB.'" + path + "'", -1 , path.indexOf("test"));
 		StorageService service = getStorageService();
 		manager = service.getEntityManager();
 		assertNotNull(manager);

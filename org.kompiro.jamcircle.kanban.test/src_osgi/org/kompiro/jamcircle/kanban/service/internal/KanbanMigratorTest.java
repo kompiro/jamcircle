@@ -17,10 +17,10 @@ public class KanbanMigratorTest extends AbstractKanbanTest{
 		KanbanMigrator migrator = new KanbanMigrator(service);
 		migrator.migrate();
 		// if migrate is OK, then these methods don't throw Exception
+		service.findAllUsers();
 		service.findAllBoard();
 		service.findAllLanes();
 		service.findAllCards();
-		service.findAllUsers();
 		service.findAllIcons();
 	}
 }
