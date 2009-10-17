@@ -27,6 +27,7 @@ public class MoveCardCommand extends MoveCommand {
 
 	private void moveCard(Point location) {
 		if (card != null){
+			card.prepareLocation();
 			card.setX(location.x);
 			card.setY(location.y);
 			card.commitLocation();

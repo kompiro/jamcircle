@@ -163,6 +163,7 @@ public class CardEditPart extends AbstractEditPart {
 		};
 	};
 	private Clickable flagCurrentIcon;
+	private boolean movable = true;
 	
 
 	public CardEditPart(BoardModel board) {
@@ -455,7 +456,6 @@ public class CardEditPart extends AbstractEditPart {
 		GraphicalEditPart part = (GraphicalEditPart) getParent();
 		if(part != null){
 			Object constraint = cardFigure.getBounds();
-			System.out.println(constraint);
 			part.setLayoutConstraint(this, cardFigure, constraint);
 		}else{
 			cardFigure.removeAll();
@@ -472,11 +472,19 @@ public class CardEditPart extends AbstractEditPart {
 			if(! (newValue instanceof Integer)) return ;
 			Point location = (Point) new Point(getCardModel().getX(),getCardModel().getY());
 			IFigure figure = getFigure();
-//			figure.getParent().invalidate();
-			figure.revalidate();
+			if(movable){
+				figure.revalidate();
+				effectToParentConstraint();
+			}
 			figure.setLocation(location);
-//			figure.getUpdateManager().performValidation();
-//			effectToParentConstraint();
+		}
+		else if(isPropPrepareLocation(evt)){
+			movable = false;
+		}
+		else if(isPropCommitLocation(evt)){
+			getCardFigure().revalidate();
+			effectToParentConstraint();
+			movable = true;
 		}
 		else if(isPropSubject(evt)){
 			getCardFigure().setSubject(getCardModel().getSubject());
@@ -503,6 +511,14 @@ public class CardEditPart extends AbstractEditPart {
 		}
 	}
 	
+	private boolean isPropCommitLocation(PropertyChangeEvent evt) {
+		return Card.PROP_COMMIT_LOCATION.equals(evt.getPropertyName());
+	}
+
+	private boolean isPropPrepareLocation(PropertyChangeEvent evt) {
+		return Card.PROP_PREPARE_LOCATION.equals(evt.getPropertyName());
+	}
+
 	private boolean isPropFlag(PropertyChangeEvent evt) {
 		return Card.PROP_FLAG_TYPE.equals(evt.getPropertyName());
 	}

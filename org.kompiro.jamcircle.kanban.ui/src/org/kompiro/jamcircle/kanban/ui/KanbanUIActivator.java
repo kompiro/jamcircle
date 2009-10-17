@@ -18,6 +18,26 @@ import org.osgi.util.tracker.ServiceTracker;
 
 public class KanbanUIActivator extends AbstractUIPlugin {
 	
+	private final class MessageDialogStatusHandler implements IStatusHandler {
+		public void displayStatus(String title, IStatus status) {
+		}
+
+		public void fail(IStatus status, boolean informUser) {
+			Throwable exception = status.getException();
+			if(informUser && ! getKanbanService().isTestMode()){
+				String message = String.format("%s\nException:'%s' reason: %s", status.getMessage(),exception.getClass().getName(),exception.getLocalizedMessage());
+				Shell shell = getShell();
+				if(shell != null){
+					MessageDialog.openError(shell, "Unexpected error is occured.",message);
+				}
+			}
+		}
+
+		public void info(String message) {
+		}
+	}
+
+
 	public static final String ID_PLUGIN = "org.kompiro.jamcircle.kanban.ui";
 
 	private static final String KEY_OF_KANBAN_SERVICE = "org.kompiro.jamcircle.kanban.service.KanbanService";
@@ -41,35 +61,21 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 		plugin = this;
 		super.start(context);
 		KanbanJFaceResource.initialize();
- 		dialogHandler = new IStatusHandler(){
-			 
- 			public void displayStatus(String title, IStatus status) {
- 			}
- 
- 			public void fail(IStatus status, boolean informUser) {
- 				Throwable exception = status.getException();
- 				if(informUser){
- 					String message = String.format("%s\nException:'%s' reason: %s", status.getMessage(),exception.getClass().getName(),exception.getLocalizedMessage());
- 					Shell shell = getShell();
- 					if(shell != null){
- 						MessageDialog.openError(shell, "Unexpected error is occured.",message);
- 					}
- 				}
- 			}
- 
- 			public void info(String message) {
- 			}
- 			
- 		};
- 		StorageStatusHandler.addStatusHandler(dialogHandler);
- 		KanbanStatusHandler.addStatusHandler(dialogHandler);
- 		KanbanUIStatusHandler.addStatusHandler(dialogHandler);
 
 		kanbanServiceTracker = new ServiceTracker(context, KEY_OF_KANBAN_SERVICE, null);
 		kanbanServiceTracker.open();
 		scriptingServiceTracker = new ServiceTracker(context, KEY_OF_SCRIPTING_SERVICE, null);
 		scriptingServiceTracker.open();
+		handleDialogForStatusHandler();
 //		migrate();
+	}
+
+
+	private void handleDialogForStatusHandler() {
+		dialogHandler = new MessageDialogStatusHandler();
+ 		StorageStatusHandler.addStatusHandler(dialogHandler);
+ 		KanbanStatusHandler.addStatusHandler(dialogHandler);
+ 		KanbanUIStatusHandler.addStatusHandler(dialogHandler);
 	}
 
 	public void stop(BundleContext context) throws Exception {
