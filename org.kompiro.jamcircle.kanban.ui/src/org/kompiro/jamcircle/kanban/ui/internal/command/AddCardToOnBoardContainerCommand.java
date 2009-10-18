@@ -22,11 +22,17 @@ public class AddCardToOnBoardContainerCommand extends AbstractCommand {
 		this.constraint = constraint;
 		this.container = container;
 	}
+	
+	@Override
+	protected void initialize() {
+		if(this.card != null && this.constraint != null && this.container != null) setExecute(true);
+	}
 
 	@Override
 	public void doExecute() {
 		try {
 			changeContainer();
+			setUndoable(true);
 		} catch (SQLException e) {
 			KanbanUIStatusHandler.fail(e, "0000:AddCardToContainerCommand");
 		}

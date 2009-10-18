@@ -10,7 +10,6 @@ public class CardSubjectDirectEditCommand extends AbstractCommand {
 	private String subject;
 	public CardSubjectDirectEditCommand(Card card,String subject){
 		this.card = card;
-		this.oldSubject = card.getSubject();
 		this.subject = subject;
 	}
 	
@@ -18,12 +17,21 @@ public class CardSubjectDirectEditCommand extends AbstractCommand {
 	public void doExecute() {
 		card.setSubject(subject);
 		card.save(false);
+		setUndoable(true);
 	}
 	
 	@Override
 	public void undo() {
 		card.setSubject(oldSubject);
 		card.save(false);
+	}
+
+	@Override
+	protected void initialize() {
+		if(card != null){
+			this.oldSubject = card.getSubject();
+			setExecute(true);
+		}
 	}
 
 }

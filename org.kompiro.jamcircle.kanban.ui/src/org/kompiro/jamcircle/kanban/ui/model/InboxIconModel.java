@@ -1,8 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui.model;
 
-import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.CardContainer;
-import org.kompiro.jamcircle.kanban.model.Icon;
+import org.apache.commons.lang.NotImplementedException;
+import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 
@@ -43,6 +42,10 @@ public class InboxIconModel extends AbstractIconModel implements CardContainer{
 	
 	private KanbanService getKanbanService(){
 		return KanbanUIActivator.getDefault().getKanbanService();
+	}
+
+	public Board getBoard() {
+		throw new NotImplementedException();
 	}
 
 	

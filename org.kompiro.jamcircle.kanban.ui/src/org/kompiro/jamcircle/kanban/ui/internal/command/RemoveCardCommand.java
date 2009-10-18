@@ -13,10 +13,16 @@ public class RemoveCardCommand extends AbstractCommand {
 		this.card = card;
 		this.container = container;
 	}
+	
+	@Override
+	protected void initialize() {
+		if(card != null && container != null) setExecute(true);
+	}
 
 	@Override
 	public void doExecute() {
 		removeCardFromBoard();
+		setUndoable(true);
 	}
 
 	private void removeCardFromBoard() {

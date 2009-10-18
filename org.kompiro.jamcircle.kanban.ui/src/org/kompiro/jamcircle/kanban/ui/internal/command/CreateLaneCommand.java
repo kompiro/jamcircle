@@ -12,6 +12,7 @@ public class CreateLaneCommand extends AbstractCommand {
     
     public void doExecute() {
     	board.addLane(model);
+    	setUndoable(true);
     }
     
     @Override
@@ -34,6 +35,11 @@ public class CreateLaneCommand extends AbstractCommand {
 
 	public Lane getModel() {
 		return model;
+	}
+
+	@Override
+	protected void initialize() {
+		if(board != null && getModel() != null) setExecute(true);
 	}
 
 }

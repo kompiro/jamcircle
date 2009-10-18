@@ -17,9 +17,16 @@ public class AddCardToContanerCommand extends AbstractCommand
 	}
 	
 	@Override
+	protected void initialize() {
+		if(container != null && card != null){
+			setExecute(true);
+		}
+	}
+	
+	@Override
 	public void doExecute() {
-		assert container != null && card != null;
 		container.addCard(card);
+		setUndoable(true);
 	}
 	
 	@Override

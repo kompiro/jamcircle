@@ -16,8 +16,14 @@ public class RemoveLaneCommand extends AbstractCommand {
 	}
 
 	@Override
+	protected void initialize() {
+		if(this.lane != null && this.board != null) setExecute(true);
+	}
+	
+	@Override
 	public void doExecute() {
 		board.removeLane(lane);
+		setUndoable(true);
 	}
 	
 	@Override

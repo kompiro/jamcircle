@@ -133,6 +133,10 @@ public class BoardImpl extends EntityImpl{
 		};
 		executor.execute(runnable);
 	}
+	
+	public Board getBoard(){
+		return board;
+	}
 
 	
 	@Override

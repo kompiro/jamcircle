@@ -90,7 +90,7 @@ public class CardUpdateCommand extends AbstractCommand {
 			card.addFile(addTarget);
 		}
 		card.save(false);
-		setCanUndo(true);
+		setUndoable(true);
 	}
 	
 	@Override
@@ -102,7 +102,11 @@ public class CardUpdateCommand extends AbstractCommand {
 			card.deleteFile(addTarget);
 		}
 		card.save(false);
-		setCanUndo(false);
+		setUndoable(false);
+	}
+
+	@Override
+	protected void initialize() {
 	}
 
 }

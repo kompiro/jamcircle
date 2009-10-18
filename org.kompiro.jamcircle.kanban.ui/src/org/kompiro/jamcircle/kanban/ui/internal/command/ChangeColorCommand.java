@@ -12,7 +12,6 @@ public class ChangeColorCommand extends AbstractCommand {
 
 	public ChangeColorCommand(HasColorTypeEntity entity,ColorTypes type){
 		this.entity = entity;
-		this.oldType = entity.getColorType();
 		this.type = type;
 	}
 
@@ -20,12 +19,21 @@ public class ChangeColorCommand extends AbstractCommand {
 	public void doExecute() {
 		entity.setColorType(type);
 		entity.save(false);
+		setUndoable(true);
 	}
 	
 	@Override
 	public void undo() {
 		entity.setColorType(oldType);
 		entity.save(false);
+	}
+
+	@Override
+	protected void initialize() {
+		if(entity != null && type != null){
+			this.oldType = entity.getColorType();
+			setExecute(true);
+		}
 	}
 
 }

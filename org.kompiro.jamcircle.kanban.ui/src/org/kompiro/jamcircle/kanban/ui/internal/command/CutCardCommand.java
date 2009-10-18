@@ -18,12 +18,18 @@ public class CutCardCommand extends AbstractCommand {
 	public void doExecute() {
 		container.removeCard(card);
 		card.setTrashed(true);
+		setUndoable(true);
 	}
 	
 	@Override
 	public void undo() {
 		card.setTrashed(false);
 		container.addCard(card);
+	}
+
+	@Override
+	protected void initialize() {
+		if(card != null && container != null) setExecute(true);
 	}
 
 }

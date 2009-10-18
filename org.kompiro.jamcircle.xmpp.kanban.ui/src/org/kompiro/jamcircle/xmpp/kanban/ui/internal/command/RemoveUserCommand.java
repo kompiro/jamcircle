@@ -17,11 +17,17 @@ public class RemoveUserCommand extends AbstractCommand {
 	@Override
 	public void doExecute() {
 		board.removeIcon(user);
+		setUndoable(true);
 	}
 	
 	@Override
 	public void undo() {
 		board.addIcon(user);
+	}
+
+	@Override
+	protected void initialize() {
+		if(this.user != null && this.board != null)setExecute(true);
 	}
 
 }

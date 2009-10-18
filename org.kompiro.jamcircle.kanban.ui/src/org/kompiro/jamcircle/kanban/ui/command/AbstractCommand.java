@@ -1,5 +1,6 @@
 package org.kompiro.jamcircle.kanban.ui.command;
 
+import static java.lang.String.format;
 
 import org.eclipse.gef.commands.Command;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
@@ -8,13 +9,16 @@ import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
 
 public abstract class AbstractCommand extends Command {
 
-	private boolean undoable = true;
+	private boolean undoable = false;
+	private boolean execute = false;
 	private KanbanUIActivator activator;
 	
 	public AbstractCommand(){
 		setLabel(getClass().getSimpleName());
 	}
 	
+	protected abstract void initialize();
+
 	@Override
 	public String getDebugLabel() {
 		return this.getClass().getSimpleName();
@@ -22,6 +26,12 @@ public abstract class AbstractCommand extends Command {
 		
 	@Override
 	public final void execute() {
+		initialize();
+		if(!canExecute()){
+			String message = format("can't execute:'%s'",getDebugLabel());
+			KanbanUIStatusHandler.info(message);
+			return;
+		}
 		KanbanUIStatusHandler.info("execute:'" + getDebugLabel() + "'");
 		try{
 			doExecute();
@@ -37,9 +47,19 @@ public abstract class AbstractCommand extends Command {
 		return undoable;
 	}
 	
-	public void setCanUndo(boolean undoable){
+	public void setUndoable(boolean undoable){
 		this.undoable = undoable;
 	}
+
+	@Override
+	public boolean canExecute() {
+		return execute;
+	}
+	
+	public void setExecute(boolean execute){
+		this.execute = execute;
+	}
+
 	
 	public abstract void doExecute();
 	
@@ -58,6 +78,5 @@ public abstract class AbstractCommand extends Command {
 	public void setActivator(KanbanUIActivator activator) {
 		this.activator = activator;
 	}
-	
-	
+		
 }

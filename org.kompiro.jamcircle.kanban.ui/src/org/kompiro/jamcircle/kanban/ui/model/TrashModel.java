@@ -1,6 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui.model;
 
 
+import org.apache.commons.lang.NotImplementedException;
 import org.eclipse.core.runtime.Platform;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
@@ -58,6 +59,10 @@ public class TrashModel extends AbstractIconModel implements CardContainer,LaneC
 		kanbanService.pickupFromTrash(lane);
 		firePropertyChange(PROP_LANE,null,lane);
 		return false;
+	}
+	
+	public Board getBoard() {
+		throw new NotImplementedException();
 	}
 	
 	public int countTrashedLane() {

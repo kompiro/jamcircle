@@ -20,12 +20,11 @@ public class AddLaneTrashCommand extends AbstractCommand implements CancelableCo
 
 	@Override
 	public void doExecute() {
-		
-		cards = lane.getCards();
 		for(Card card : cards){
 			trash.addCard(card);
 		}
 		trash.addLane(lane);
+		setUndoable(true);
 	}
 	
 	@Override
@@ -38,6 +37,14 @@ public class AddLaneTrashCommand extends AbstractCommand implements CancelableCo
 
 	public String getComfirmMessage() {
 		return String.format("Do you want to move %s to TrashBox?", lane.toString());
+	}
+
+	@Override
+	protected void initialize() {
+		if(lane != null && trash != null){
+			this.cards = lane.getCards();
+			setExecute(true);
+		}
 	}
 
 }

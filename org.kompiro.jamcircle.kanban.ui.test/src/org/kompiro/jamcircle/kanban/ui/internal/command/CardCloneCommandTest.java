@@ -1,26 +1,24 @@
-package org.kompiro.jamcircle.kanban.ui.command;
+package org.kompiro.jamcircle.kanban.ui.internal.command;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
+import static org.hamcrest.CoreMatchers.*;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
-import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
 import org.kompiro.jamcircle.kanban.model.mock.Lane;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
-import org.kompiro.jamcircle.kanban.ui.internal.command.CardCloneCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
 
-public class CardCloneCommandTest {
+public class CardCloneCommandTest extends AbstractCommandTest{
 	
 	private static final Point TARGET_POINT = new Point(10,10);
 	private KanbanUIActivator activatorSpy;
@@ -48,11 +46,16 @@ public class CardCloneCommandTest {
 		command.undo();
 		command.redo();
 		verify(container,times(2)).addCard(card);
-		
+	}
+	
+	@Override
+	public void initialize() throws Exception {
+		CardCloneCommand command = new CardCloneCommand(null, null);	
+		command.initialize();
+		assertThat(command.canExecute(),is(false));
 	}
 
-	@Before
-	public void createdCommand() {
+	protected void createCommand() {
 		card = new Card();
 		activatorSpy = spy(new KanbanUIActivator());
 		container = mock(Lane.class);

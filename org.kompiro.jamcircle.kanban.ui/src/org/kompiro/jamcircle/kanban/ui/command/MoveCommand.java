@@ -27,12 +27,10 @@ public abstract class MoveCommand extends AbstractCommand{
 	
 	@Override
 	public final void doExecute() {
-		initialize();
 		move();
+		setUndoable(true);
 	}
 	
-	protected abstract void initialize();
-
 	protected abstract void move();
 
 }

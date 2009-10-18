@@ -4,6 +4,8 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.NotImplementedException;
+
 
 public interface CardContainer {
 
@@ -20,6 +22,8 @@ public interface CardContainer {
 	void removePropertyChangeListener(PropertyChangeListener listener);
 	
 	String getContainerName();
+	
+	Board getBoard();
 	
 	public class Mock implements CardContainer{
 		
@@ -46,6 +50,10 @@ public interface CardContainer {
 
 		public boolean removeCard(Card card) {
 			return cards.remove(card);
+		}
+		
+		public Board getBoard() {
+			throw new NotImplementedException();
 		}
 
 		public void removePropertyChangeListener(PropertyChangeListener listener) {

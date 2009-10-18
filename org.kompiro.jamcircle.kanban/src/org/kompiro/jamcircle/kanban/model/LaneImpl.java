@@ -81,6 +81,11 @@ public class LaneImpl extends GraphicalImpl {
 		return format("Lane[%s]",lane.getStatus());
 	}
 	
+	public Board getBoard(){
+		return lane.getBoard();
+	}
+
+	
 	@Override
 	public String toString() {
 		return format("['#%d':'%s' trashed:'%s']", lane.getID(),lane.getStatus(),lane.isTrashed());

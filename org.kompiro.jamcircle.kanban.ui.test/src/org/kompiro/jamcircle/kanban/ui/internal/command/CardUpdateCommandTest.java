@@ -1,10 +1,7 @@
-package org.kompiro.jamcircle.kanban.ui.command;
+package org.kompiro.jamcircle.kanban.ui.internal.command;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.is;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,6 +15,10 @@ import org.kompiro.jamcircle.kanban.model.mock.Card;
 import org.kompiro.jamcircle.kanban.ui.command.provider.ConfirmProviderMock;
 import org.kompiro.jamcircle.kanban.ui.internal.command.CardUpdateCommand;
 
+/**
+ * TODO Recreate Constructor
+ * @author kompiro
+ */
 public class CardUpdateCommandTest {
 
 	private Card card;
@@ -47,7 +48,7 @@ public class CardUpdateCommandTest {
 		expectedSubject = "Test";
 		command = createCommand();
 		
-		assertTrue(command.canUndo());
+		assertThat(command.canUndo(),is(false));
 		command.execute();
 		assertTrue(command.canUndo());
 		command.undo();
@@ -73,7 +74,7 @@ public class CardUpdateCommandTest {
 		expectedContent = "Test";
 		command = createCommand();
 		
-		assertTrue(command.canUndo());
+		assertThat(command.canUndo(),is(false));
 		command.execute();
 		assertEquals(expectedContent,card.getContent());
 		assertTrue(command.canUndo());
@@ -100,7 +101,7 @@ public class CardUpdateCommandTest {
 		expectedDueDate = new Date();
 		command = createCommand();
 		
-		assertTrue(command.canUndo());
+		assertThat(command.canUndo(),is(false));
 		command.execute();
 		assertEquals(expectedDueDate,card.getDueDate());
 		assertTrue(command.canUndo());

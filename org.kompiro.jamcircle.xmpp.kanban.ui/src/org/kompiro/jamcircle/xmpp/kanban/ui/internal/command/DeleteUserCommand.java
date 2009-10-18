@@ -18,6 +18,7 @@ public class DeleteUserCommand extends AbstractCommand {
 		User user = userModel.getUser();
 		user.setTrashed(true);
 		user.save(false);
+		setUndoable(true);
 	}
 	
 	@Override
@@ -25,6 +26,11 @@ public class DeleteUserCommand extends AbstractCommand {
 		User user = userModel.getUser();
 		user.setTrashed(false);
 		user.save(false);
+	}
+
+	@Override
+	protected void initialize() {
+		if(userModel != null && userModel.getUser() != null) setExecute(true);
 	}
 
 }

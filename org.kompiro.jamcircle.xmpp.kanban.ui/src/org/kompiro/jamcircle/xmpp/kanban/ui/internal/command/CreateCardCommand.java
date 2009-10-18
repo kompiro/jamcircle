@@ -11,6 +11,7 @@ public class CreateCardCommand extends AbstractCommand {
     
     public void doExecute() {
     	container.addCard(model);
+    	setUndoable(true);
     }
     
     @Override
@@ -35,6 +36,11 @@ public class CreateCardCommand extends AbstractCommand {
 
 	public Card getModel() {
 		return model;
+	}
+
+	@Override
+	protected void initialize() {
+		if(container != null && model != null) setExecute(true);
 	}
 
 }

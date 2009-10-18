@@ -69,7 +69,9 @@ public class Board extends MockEntity implements org.kompiro.jamcircle.kanban.mo
 	}
 
 	public boolean removeCard(Card card) {
-		return cards.remove(card);
+		boolean remove = cards.remove(card);
+		card.setBoard(null);
+		return remove;
 	}
 
 	public boolean removeLane(Lane lane) {
@@ -110,6 +112,10 @@ public class Board extends MockEntity implements org.kompiro.jamcircle.kanban.mo
 	
 	public void save(boolean directExecution) {
 		// do nothing.
+	}
+
+	public org.kompiro.jamcircle.kanban.model.Board getBoard() {
+		return this;
 	}
 	
 }

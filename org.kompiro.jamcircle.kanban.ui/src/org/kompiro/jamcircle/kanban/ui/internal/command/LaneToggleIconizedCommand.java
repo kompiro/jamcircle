@@ -17,12 +17,18 @@ public class LaneToggleIconizedCommand extends AbstractCommand {
 		this.oldIconized = lane.isIconized();
 		lane.setIconized(!oldIconized);
 		lane.save(false);
+		setUndoable(true);
 	}
 	
 	@Override
 	public void undo() {
 		lane.setIconized(oldIconized);
 		lane.save(false);
+	}
+
+	@Override
+	protected void initialize() {
+		if(lane != null) setExecute(true);
 	}
 
 }
