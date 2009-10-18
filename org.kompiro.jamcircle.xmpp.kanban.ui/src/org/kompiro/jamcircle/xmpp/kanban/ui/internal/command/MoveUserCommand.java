@@ -6,7 +6,7 @@ import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
 import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 import org.kompiro.jamcircle.xmpp.kanban.ui.internal.model.UserModel;
 
-public class MoveUserCommand extends MoveCommand {
+public class MoveUserCommand extends MoveCommand<UserModel> {
 
 	private UserModel user;
 	private Point location ;
@@ -26,11 +26,7 @@ public class MoveUserCommand extends MoveCommand {
 	}
 
 	private void moveUser(Point location) {
-		if (user != null){
-			user.setLocation(location);
-		}else{
-			KanbanUIStatusHandler.fail(new RuntimeException(), "MoveUserCommand:0001:Exception is occured");
-		}
+		user.setLocation(location);
 	}
 	
 	@Override
@@ -41,10 +37,12 @@ public class MoveUserCommand extends MoveCommand {
 	@Override
 	protected void initialize() {
 		this.user = (UserModel)getModel();
-		
-		setLabel("Move User '" + user.getName() + "'");
-		this.oldLocation = user.getLocation();
-		this.location = getRectangle().getLocation();
+		if(user != null && getRectangle() != null){
+			setLabel("Move User '" + user.getName() + "'");
+			this.oldLocation = user.getLocation();
+			this.location = getRectangle().getLocation();
+			setExecute(true);
+		}
 	}
 		
 }

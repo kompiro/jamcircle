@@ -6,7 +6,7 @@ import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
 import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 
-public class MoveCardCommand extends MoveCommand {
+public class MoveCardCommand extends MoveCommand<Card> {
 
 	private Card card;
 	private Point location ;
@@ -39,10 +39,13 @@ public class MoveCardCommand extends MoveCommand {
 
 	@Override
 	protected void initialize() {
-		this.card = (Card) getModel();
-		setLabel("Move Card '" + card.getSubject() + "'");
-		this.oldLocation = new Point(card.getX(),card.getY());
-		this.location = getRectangle().getLocation();
+		this.card = getModel();
+		if(card != null && getRectangle() != null){
+			setExecute(true);
+			this.location = getRectangle().getLocation();
+			this.oldLocation = new Point(card.getX(),card.getY());
+			setLabel("Move Card '" + card.getSubject() + "'");
+		}
 	}
 		
 }

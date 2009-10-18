@@ -10,20 +10,18 @@ import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
  * @author kompiro
  *
  */
-public class ChangeLaneConstraintCommand extends MoveCommand {
+public class ChangeLaneConstraintCommand extends MoveCommand<Lane> {
 
 	private Lane lane;
 	private Rectangle rect;
 	private Rectangle oldRect;
 	
 	public ChangeLaneConstraintCommand() {
-		setUndoable(false);
-		setExecute(false);
 	}
 	
 	@Override
 	protected void initialize() {
-		this.lane = (Lane)getModel();
+		this.lane = getModel();
 		this.oldRect = new Rectangle(lane.getX(),lane.getY(),lane.getWidth(),lane.getHeight());
 		this.rect = getRectangle();
 		if(isChangeSizeMode()){

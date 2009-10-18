@@ -13,7 +13,7 @@ import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 public interface StorageService {
 
 	public enum CONNECTION_MODE{
-		FILE,TCP
+		FILE,TCP,MEM
 	}
 	
 	public EntityManager getEntityManager();

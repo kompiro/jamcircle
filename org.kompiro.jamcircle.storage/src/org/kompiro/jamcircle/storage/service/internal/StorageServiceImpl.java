@@ -109,10 +109,11 @@ public class StorageServiceImpl implements StorageService {
 		storeRoot = System.getProperty(KEY_OF_SYSTEM_PROPERTY_STORAGE_STOREROOT);
 		String uri = null;
 		if(storeRoot == null || storeRoot.length() == 0){
-			if(testmode){
-				storeRoot = getDefaultStoreRoot();
+			if(testmode || CONNECTION_MODE.MEM.toString().equals(setting.getMode())){
+				storeRoot = setting.getUri();
 				uri = "jdbc:h2:mem:TEST;DB_CLOSE_DELAY=-1";				
-			}else if(CONNECTION_MODE.TCP.toString().equals(setting.getMode())){
+			}else
+			if(CONNECTION_MODE.TCP.toString().equals(setting.getMode())){
 				storeRoot = getDefaultStoreRoot();
 				uri = "jdbc:h2:" + setting.getUri() + dbName;
 			}else{
@@ -166,14 +167,14 @@ public class StorageServiceImpl implements StorageService {
 		createEntityManager(uri, username, password);
 	}
 
-	private void travasalDelete(File parent) {
-		for(File file : parent.listFiles()){
-			if(file.isDirectory()){
-				travasalDelete(file);
-			}
-			file.delete();
-		}
-	}
+//	private void travasalDelete(File parent) {
+//		for(File file : parent.listFiles()){
+//			if(file.isDirectory()){
+//				travasalDelete(file);
+//			}
+//			file.delete();
+//		}
+//	}
 	
 	public String getDefaultStoreRoot() {
 		String storeRoot = "";

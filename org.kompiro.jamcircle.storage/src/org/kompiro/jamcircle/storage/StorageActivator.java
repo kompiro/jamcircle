@@ -72,6 +72,9 @@ public class StorageActivator extends Plugin {
 
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		if(StorageServiceImpl.testmode){
+			settings.clear();
+		}
 		settings.storeSttings();
 		StorageStatusHandler.removeStatusHandler(handler);
 		storageServiceRegistration.unregister();

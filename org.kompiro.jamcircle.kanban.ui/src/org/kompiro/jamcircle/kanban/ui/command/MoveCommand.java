@@ -2,17 +2,16 @@ package org.kompiro.jamcircle.kanban.ui.command;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 
-public abstract class MoveCommand extends AbstractCommand{
+public abstract class MoveCommand<T> extends AbstractCommand{
 	
-	private Object model;
+	private T model;
 	private Rectangle rect;
 
-	public void setModel(Object model){
+	public void setModel(T model){
 		this.model = model;
 	}
 	
-	protected Object getModel() throws IllegalStateException{
-		if(model == null) throw new IllegalStateException("This command needs to initialize models.");
+	protected T getModel() throws IllegalStateException{
 		return model;
 	}
 
@@ -21,7 +20,6 @@ public abstract class MoveCommand extends AbstractCommand{
 	}
 	
 	protected Rectangle getRectangle() throws IllegalStateException{
-		if(rect == null) throw new IllegalStateException("This command needs to initialize rectangle.");
 		return rect;
 	}
 	
