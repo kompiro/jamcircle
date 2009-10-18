@@ -74,7 +74,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 			}
 			Object target = child.getModel();
 			Rectangle rect = (Rectangle) constraint;
-			MoveCommand command = (MoveCommand) child.getAdapter(MoveCommand.class);
+			MoveCommand<Object> command = getMoveCommand(child);
 			command.setModel(target);
 			command.setRectangle(rect);
 			if (target instanceof Lane) {
@@ -88,6 +88,11 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 				return compoundCommand;
 			}
 			return command;
+		}
+
+		@SuppressWarnings("unchecked")
+		private MoveCommand<Object> getMoveCommand(EditPart child) {
+			return (MoveCommand<Object>) child.getAdapter(MoveCommand.class);
 		}
 
 		private void calculateCardArea(CompoundCommand command, Rectangle rect,LaneEditPart part) {

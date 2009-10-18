@@ -53,10 +53,15 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			if(child.getParent() != LaneEditPart.this && isNotRectangle(constraint)) return null;
 			Object target = child.getModel();
 			Rectangle rect = (Rectangle) constraint;
-			MoveCommand command = (MoveCommand)child.getAdapter(MoveCommand.class);
+			MoveCommand<Object> command = getMoveCommand(child);
 			command.setModel(target);
 			command.setRectangle(rect);
 			return command;
+		}
+
+		@SuppressWarnings("unchecked")
+		private MoveCommand<Object> getMoveCommand(EditPart child) {
+			return (MoveCommand<Object>)child.getAdapter(MoveCommand.class);
 		}
 
 		private boolean isNotRectangle(Object constraint) {
