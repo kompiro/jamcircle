@@ -16,7 +16,6 @@ import org.eclipse.gef.requests.*;
 import org.junit.*;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
 import org.kompiro.jamcircle.kanban.ui.internal.command.ChangeLaneConstraintCommand;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;
 
 public class BoardEditPartTest extends AbstractEditPartTest{
 
@@ -75,10 +74,105 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 		boardPart.getCommand(request).execute();
 		boardPart.refresh();
 		
-		assertEquals(expect.x,card.getX());
+		assertEquals(expect.x,card.getX());{
+			
+		}
 		assertEquals(expect.y,card.getY());
 	}
+	
+	@Test
+	public void moveLane() throws Exception{
+		LaneMock lane = new LaneMock("test");
+		board.addLane(lane);
+		boardPart.refresh();
+		boardChildrenPartMap = getChildlenPartmap(boardPart);
+		GraphicalEditPart lanePart = boardChildrenPartMap.get(lane);
 
+		ChangeBoundsRequest request = new ChangeBoundsRequest(RequestConstants.REQ_RESIZE_CHILDREN);
+		request.setEditParts(lanePart);
+
+		// location: 100, 100
+		Point expect = new Point(100,100);
+		request.setMoveDelta(expect);
+		Command command = boardPart.getCommand(request);
+		assertNotNull(command);
+		assertTrue(command instanceof CompoundCommand);
+		assertTrue(((CompoundCommand)command).getCommands().get(0) instanceof ChangeLaneConstraintCommand);
+		command.execute();
+		boardPart.refresh();
+		assertEquals(expect.x,lane.getX());
+		assertEquals(expect.y,lane.getY());
+		assertEquals(LaneMock.INIT_WIDTH,lane.getWidth());
+		assertEquals(LaneMock.INIT_HEIGHT,lane.getHeight());		
+	}
+	
+	@Test
+	public void moveLaneWithCard() throws Exception {
+		LaneMock lane = new LaneMock("test");
+		Card card = new Card();
+		card.setSubject("#1 card");
+		card.setX(10);
+		card.setY(10);
+		lane.addCard(card);
+		board.addLane(lane);
+				boardPart.refresh();
+		boardChildrenPartMap = getChildlenPartmap(boardPart);
+		GraphicalEditPart lanePart = boardChildrenPartMap.get(lane);
+
+		ChangeBoundsRequest request = new ChangeBoundsRequest(RequestConstants.REQ_RESIZE_CHILDREN);
+		request.setEditParts(lanePart);
+
+		// location: 100, 100
+		Point expect = new Point(100,100);
+		request.setMoveDelta(expect);
+		Command command = boardPart.getCommand(request);
+		assertNotNull(command);
+		assertTrue(command instanceof CompoundCommand);
+		command.execute();
+		
+		assertEquals(expect.x,lane.getX());
+		assertEquals(expect.y,lane.getY());
+		assertEquals(LaneMock.INIT_WIDTH,lane.getWidth());
+		assertEquals(LaneMock.INIT_HEIGHT,lane.getHeight());		
+	}
+	
+	
+	@Test
+	public void changeSizeLane() throws Exception {
+		LaneMock lane = new LaneMock("test");
+		board.addLane(lane);
+		boardPart.refresh();
+		boardChildrenPartMap = getChildlenPartmap(boardPart);
+		GraphicalEditPart lanePart = boardChildrenPartMap.get(lane);
+		
+		ChangeBoundsRequest request = new ChangeBoundsRequest(RequestConstants.REQ_RESIZE_CHILDREN);
+		request.setEditParts(lanePart);
+		// size: +100, +100
+		Dimension sizeDelta = new Dimension(100,100);
+		request.setSizeDelta(sizeDelta);
+		Command command = boardPart.getCommand(request);
+		assertNotNull(command);
+		assertTrue(command instanceof CompoundCommand);
+		assertTrue(((CompoundCommand)command).getCommands().get(0) instanceof ChangeLaneConstraintCommand);
+		command.execute();
+
+		assertEquals(0,lane.getX());
+		assertEquals(0,lane.getY());
+		assertEquals(LaneMock.INIT_WIDTH + sizeDelta.width,lane.getWidth());
+		assertEquals(LaneMock.INIT_HEIGHT + sizeDelta.height,lane.getHeight());		
+	}
+	
+	
+	@Test
+	public void getLanePart() throws Exception {
+		LaneMock lane = new LaneMock("test");
+		board.addLane(lane);
+		boardPart.refresh();
+		boardChildrenPartMap = getChildlenPartmap(boardPart);
+		GraphicalEditPart lanePart = boardChildrenPartMap.get(lane);
+		assertNotNull(lanePart);
+	}
+	
 	@Test
 	public void changeLaneConstraint() throws Exception {
 		LaneMock lane = new LaneMock("test");
@@ -86,24 +180,25 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 		boardPart.refresh();
 		boardChildrenPartMap = getChildlenPartmap(boardPart);
 		GraphicalEditPart lanePart = boardChildrenPartMap.get(lane);
-		assertNotNull(lanePart);
 		
 		ChangeBoundsRequest request = new ChangeBoundsRequest(RequestConstants.REQ_RESIZE_CHILDREN);
 		request.setEditParts(lanePart);
-		request.setSizeDelta(new Dimension(100,100));
+		// size: +100, +100
+		Dimension sizeDelta = new Dimension(100,100);
+		request.setSizeDelta(sizeDelta);
+		// location: 100, 100
 		Point expect = new Point(100,100);
 		request.setMoveDelta(expect);
 		Command command = boardPart.getCommand(request);
 		assertNotNull(command);
 		assertTrue(command instanceof CompoundCommand);
-		command = (Command)((CompoundCommand) command).getCommands().get(0);
-		assertTrue(command instanceof ChangeLaneConstraintCommand);
+		assertTrue(((CompoundCommand)command).getCommands().get(0) instanceof ChangeLaneConstraintCommand);
 		command.execute();
-		boardPart.refresh();
+
 		assertEquals(expect.x,lane.getX());
 		assertEquals(expect.y,lane.getY());
-		assertEquals(300,lane.getWidth());
-		assertEquals(300,lane.getHeight());		
+		assertEquals(LaneMock.INIT_WIDTH + sizeDelta.width,lane.getWidth());
+		assertEquals(LaneMock.INIT_HEIGHT + sizeDelta.height,lane.getHeight());		
 	}
 	
 	@Test

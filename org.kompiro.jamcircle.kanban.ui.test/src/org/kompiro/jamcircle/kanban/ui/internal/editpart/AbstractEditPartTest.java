@@ -124,6 +124,9 @@ public abstract class AbstractEditPartTest {
 	}
 
 	class LaneMock extends org.kompiro.jamcircle.kanban.model.mock.Lane {
+		static final int INIT_WIDTH = 200;
+		static final int INIT_HEIGHT = 200;
+
 		private String status;
 		private List<Card> cards = new ArrayList<Card>();
 		private int height;
@@ -131,8 +134,8 @@ public abstract class AbstractEditPartTest {
 
 		public LaneMock(String status) {
 			this.status = status;
-			this.width = 200;
-			this.height = 200;
+			this.width = INIT_WIDTH;
+			this.height = INIT_HEIGHT;
 		}
 
 		public String getStatus() {
