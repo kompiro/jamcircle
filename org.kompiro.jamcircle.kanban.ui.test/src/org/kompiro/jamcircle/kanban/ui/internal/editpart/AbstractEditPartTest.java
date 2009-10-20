@@ -32,7 +32,7 @@ import org.kompiro.jamcircle.kanban.ui.CommandStackEventListenerForDebug;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
 import org.kompiro.jamcircle.kanban.ui.editpart.IPropertyChangeDelegator;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardEditPart;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.KanbanControllerFactory;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.KanbanUIEditPartFactory;
 import org.kompiro.jamcircle.kanban.ui.model.*;
 
 public abstract class AbstractEditPartTest {
@@ -253,7 +253,7 @@ public abstract class AbstractEditPartTest {
 		boardEntity.addPropertyChangeListener(board);
 
 		board.addIcon(trashMock);
-		KanbanControllerFactory factory = new KanbanControllerFactory(board,new IPropertyChangeDelegatorForTest());
+		KanbanUIEditPartFactory factory = new KanbanUIEditPartFactory(board,new IPropertyChangeDelegatorForTest());
 		viewer.setEditPartFactory(factory);
 		viewer.setContents(board);
 		assumeThat(root.getChildren().size(), is(1));

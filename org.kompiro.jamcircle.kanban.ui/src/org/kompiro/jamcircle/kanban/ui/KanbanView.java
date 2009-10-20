@@ -250,7 +250,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 		boardModel = new BoardModel(board);
 		board.addPropertyChangeListener(boardModel);
 		
-		EditPartFactory factory = new KanbanControllerFactory(this.boardModel);
+		EditPartFactory factory = new KanbanUIEditPartFactory(this.boardModel);
 		
 		String taskName = String.format("Openning board '%s' ...",board.getTitle()); 
 		monitor.subTask(taskName);
