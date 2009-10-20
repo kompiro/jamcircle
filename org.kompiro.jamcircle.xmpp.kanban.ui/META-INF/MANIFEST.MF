@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JAMCircle Kanban XMPP Bridge
-Bundle-SymbolicName: org.kompiro.jamcircle.xmpp.kanban.ui
+Bundle-SymbolicName: org.kompiro.jamcircle.xmpp.kanban.ui;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-Activator: org.kompiro.jamcircle.xmpp.kanban.ui.internal.BridgeXMPPActivator
 Bundle-Vendor: kompiro.org
