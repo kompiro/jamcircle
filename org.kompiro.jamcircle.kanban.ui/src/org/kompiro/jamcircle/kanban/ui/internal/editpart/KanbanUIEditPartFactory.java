@@ -1,13 +1,10 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.Lane;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
 import org.kompiro.jamcircle.kanban.ui.editpart.IPropertyChangeDelegator;
 import org.kompiro.jamcircle.kanban.ui.model.*;
@@ -15,7 +12,7 @@ import org.kompiro.jamcircle.kanban.ui.model.*;
 public class KanbanUIEditPartFactory implements EditPartFactory{
 	private BoardModel board;
 	private IPropertyChangeDelegator delegator;
-	private EditPartFactory extensionFactory;
+	private KanbanUIExtensionEditPartFactory extensionFactory;
 
 	public KanbanUIEditPartFactory(BoardModel board){
 		this.board = board;
@@ -69,6 +66,13 @@ public class KanbanUIEditPartFactory implements EditPartFactory{
 			return null;
 		}
 		return extensionFactory.createEditPart(context, model);
+	}
+	
+	public void setExtensionFactory(KanbanUIExtensionEditPartFactory extensionFactory) {
+		this.extensionFactory = extensionFactory;
+		if(this.extensionFactory != null){
+			this.extensionFactory.initialize();
+		}
 	}
 
 }
