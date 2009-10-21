@@ -17,6 +17,9 @@
          </appInfo>
       </annotation>
       <complexType>
+         <choice>
+            <element ref="factory"/>
+         </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>

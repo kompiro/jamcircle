@@ -9,7 +9,8 @@ import org.eclipse.core.runtime.*;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.ExtendedEditPartFactory.SupportedClassPair;
+import org.kompiro.jamcircle.kanban.ui.editpart.ExtendedEditPartFactory;
+import org.kompiro.jamcircle.kanban.ui.editpart.ExtendedEditPartFactory.SupportedClassPair;
 
 public class KanbanUIExtensionEditPartFactory implements EditPartFactory {
 	static final String POINT_CALLBACK = "org.kompiro.jamcircle.kanban.ui.editpartfactory";

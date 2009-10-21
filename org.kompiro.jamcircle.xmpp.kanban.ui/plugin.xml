@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.kompiro.jamcircle.kanban.ui.editPartFactory">
+      <factory
+            class="org.kompiro.jamcircle.xmpp.kanban.ui.internal.editpart.XMPPEditPartFactory">
+      </factory>
+   </extension>
+
+</plugin>

@@ -9,7 +9,8 @@ import org.eclipse.gef.EditPart;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.mock.*;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.ExtendedEditPartFactory.SupportedClassPair;
+import org.kompiro.jamcircle.kanban.ui.editpart.ExtendedEditPartFactory;
+import org.kompiro.jamcircle.kanban.ui.editpart.ExtendedEditPartFactory.SupportedClassPair;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
 

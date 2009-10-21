@@ -30,7 +30,7 @@ import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 /**
  * @TestContext BoardEditPartTest
  */
-public class BoardEditPart extends AbstractEditPart implements CardContainerEditPart{
+public class BoardEditPart extends AbstractEditPart implements CardContainerEditPart, IBoardEditPart{
 	public static final String TITLE_FONT_KEY = "org.kompiro.jamcircle.TITLE_FONT_KEY";
 
 	private static final String LAYER_KEY_CARD = "card";

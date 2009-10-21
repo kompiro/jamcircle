@@ -13,3 +13,5 @@ Require-Bundle: org.kompiro.jamcircle.kanban.ui,
  org.eclipse.gef,
  org.eclipse.ui,
  org.apache.commons.lang
+Eclipse-BuddyPolicy: global
+Export-Package: org.kompiro.jamcircle.xmpp.kanban.ui.internal.model
