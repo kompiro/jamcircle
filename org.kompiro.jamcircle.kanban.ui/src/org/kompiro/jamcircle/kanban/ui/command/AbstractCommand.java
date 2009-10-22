@@ -53,6 +53,7 @@ public abstract class AbstractCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
+		initialize();
 		return execute;
 	}
 	
