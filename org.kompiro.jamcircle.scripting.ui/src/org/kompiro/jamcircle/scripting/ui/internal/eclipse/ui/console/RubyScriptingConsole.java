@@ -507,8 +507,9 @@ public class RubyScriptingConsole extends TextConsole {
 					"require 'irb/completion';\n";
                 runtimeAdapter.eval(runtime, script);
                 script = 
-					"import 'org.kompiro.jamcircle.kanban.model.mock.Card'; \n" +
-					"import 'org.kompiro.jamcircle.kanban.model.mock.Lane'; \n";
+					"Card = org.kompiro.jamcircle.kanban.model.mock.Card; \n" +
+					"Lane = org.kompiro.jamcircle.kanban.model.mock.Lane; \n" +
+					"User = org.kompiro.jamcircle.kanban.model.mock.User;";
                 runtimeAdapter.eval(runtime, script);
                 script = 
 					"def board\n" +
