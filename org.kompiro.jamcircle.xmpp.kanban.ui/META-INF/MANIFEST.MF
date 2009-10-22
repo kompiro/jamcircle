@@ -9,7 +9,6 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.kompiro.jamcircle.kanban.ui,
  org.kompiro.jamcircle.xmpp,
- org.kompiro.jamcircle.scripting,
  org.eclipse.core.runtime,
  org.eclipse.gef,
  org.eclipse.ui,
