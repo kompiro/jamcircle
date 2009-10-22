@@ -13,7 +13,7 @@ import org.kompiro.jamcircle.kanban.ui.editpart.ExtendedEditPartFactory;
 import org.kompiro.jamcircle.kanban.ui.editpart.ExtendedEditPartFactory.SupportedClassPair;
 
 public class KanbanUIExtensionEditPartFactory implements EditPartFactory {
-	static final String POINT_CALLBACK = "org.kompiro.jamcircle.kanban.ui.editpartfactory";
+	static final String POINT_CALLBACK = "org.kompiro.jamcircle.kanban.ui.editPartFactory";
 	static final String ATTR_HANDLER_CLASS = "class";
 
 	private static final String PLUGIN_ID = KanbanUIActivator.ID_PLUGIN;
