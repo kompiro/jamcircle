@@ -1,4 +1,4 @@
-package org.kompiro.jamcircle.xmpp.kanban.ui.internal.model;
+package org.kompiro.jamcircle.xmpp.kanban.ui.model;
 
 
 import org.eclipse.draw2d.geometry.Point;

@@ -17,7 +17,7 @@ import org.kompiro.jamcircle.kanban.ui.model.IconModel;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 import org.kompiro.jamcircle.xmpp.XMPPStatusHandler;
 import org.kompiro.jamcircle.xmpp.kanban.ui.internal.command.CreateCardCommand;
-import org.kompiro.jamcircle.xmpp.kanban.ui.internal.model.UserModel;
+import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
 import org.kompiro.jamcircle.xmpp.service.XMPPLoginListener;
 import org.kompiro.jamcircle.xmpp.util.XMPPUtil;
 

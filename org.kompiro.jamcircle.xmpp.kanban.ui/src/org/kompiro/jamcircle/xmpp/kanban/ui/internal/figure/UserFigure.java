@@ -14,7 +14,7 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Image;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.figure.BoldLabel;
-import org.kompiro.jamcircle.xmpp.kanban.ui.internal.model.UserModel;
+import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
 
 public class UserFigure extends Figure {
 

@@ -7,7 +7,7 @@ import static org.mockito.Mockito.*;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.junit.Test;
-import org.kompiro.jamcircle.xmpp.kanban.ui.internal.model.UserModel;
+import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
 
 
 public class MoveUserCommandTest extends AbstractCommandTest{
