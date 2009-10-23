@@ -2,15 +2,14 @@ package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
 import static java.lang.String.format;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.eclipse.core.runtime.*;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 import org.kompiro.jamcircle.kanban.ui.editpart.ExtendedEditPartFactory;
-import org.kompiro.jamcircle.kanban.ui.editpart.ExtendedEditPartFactory.SupportedClassPair;
+import org.kompiro.jamcircle.kanban.ui.editpart.SupportedClassPair;
 
 public class KanbanUIExtensionEditPartFactory implements EditPartFactory {
 	static final String POINT_CALLBACK = "org.kompiro.jamcircle.kanban.ui.editPartFactory";
@@ -58,7 +57,13 @@ public class KanbanUIExtensionEditPartFactory implements EditPartFactory {
 
 	public EditPart createEditPart(EditPart context, Object model) {
 		if(context == null) throw new IllegalArgumentException("Unsupported Object");
-		EditPartFactory factory = factories.get(new SupportedClassPair(context.getClass(), model.getClass()));
+		EditPartFactory factory = null;
+		Set<SupportedClassPair> set = factories.keySet();
+		for(SupportedClassPair pair : set){
+			if(pair.isSupported(context, model)){
+				factory = factories.get(pair);			
+			}
+		}
 		if(factory == null) throw new IllegalArgumentException("Unsupported Object");
 		return factory.createEditPart(context, model);
 	}

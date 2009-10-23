@@ -109,8 +109,6 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener {
 		}
 
 		public void presenceChanged(final Presence presence) {
-			if (getBoardModel() == null)
-				return;
 			Runnable runnable = new Runnable() {
 				public void run() {
 					String from = presence.getFrom();

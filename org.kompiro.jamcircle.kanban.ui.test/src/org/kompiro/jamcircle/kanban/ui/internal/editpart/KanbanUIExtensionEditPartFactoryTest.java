@@ -1,8 +1,11 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.eclipse.core.runtime.*;
 import org.eclipse.gef.EditPart;
@@ -10,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.mock.*;
 import org.kompiro.jamcircle.kanban.ui.editpart.ExtendedEditPartFactory;
-import org.kompiro.jamcircle.kanban.ui.editpart.ExtendedEditPartFactory.SupportedClassPair;
+import org.kompiro.jamcircle.kanban.ui.editpart.SupportedClassPair;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
 
@@ -47,6 +50,16 @@ public class KanbanUIExtensionEditPartFactoryTest {
 		assertThat(editPart.toString(),is(EXPECTED_TOSTRING_1));
 	}
 
+	@Test
+	public void createEditPartWhenSupportedChildClassOnBoard() throws Exception {
+		BoardModel board = new BoardModel(new Board());
+		EditPart part = new BoardEditPart(board);
+		EditPart editPart = factory.createEditPart(part , new org.kompiro.jamcircle.kanban.model.mock.User());
+		assertThat(editPart,not(nullValue()));
+		assertThat(editPart.toString(),is(EXPECTED_TOSTRING_1));
+	}
+
+	
 	@Test
 	public void createEditPartWhenSupportedOnLane() throws Exception {
 		BoardModel board = new BoardModel(new Board());
