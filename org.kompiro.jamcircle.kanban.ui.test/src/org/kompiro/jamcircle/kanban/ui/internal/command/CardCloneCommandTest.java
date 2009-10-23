@@ -28,6 +28,7 @@ public class CardCloneCommandTest extends AbstractCommandTest{
 
 	@Test
 	public void execute() throws Exception {
+		assertFalse(command.canUndo());
 		command.execute();
 		assertTrue(command.canUndo());
 		verify(container,times(1)).addCard(card);

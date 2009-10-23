@@ -12,6 +12,7 @@ public abstract class AbstractCommand extends Command {
 	private boolean undoable = false;
 	private boolean execute = false;
 	private KanbanUIActivator activator;
+	private boolean initialized;
 	
 	public AbstractCommand(){
 		setLabel(getClass().getSimpleName());
@@ -26,7 +27,6 @@ public abstract class AbstractCommand extends Command {
 		
 	@Override
 	public final void execute() {
-		initialize();
 		if(!canExecute()){
 			String message = format("can't execute:'%s'",getDebugLabel());
 			KanbanUIStatusHandler.info(message);
@@ -53,7 +53,10 @@ public abstract class AbstractCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		initialize();
+		if(!initialized){
+			initialize();
+			initialized = true;
+		}
 		return execute;
 	}
 	

@@ -22,10 +22,8 @@ public class ChangeLaneConstraintCommandTest extends AbstractCommandTest{
 	public void initialize() throws Exception {
 		ChangeLaneConstraintCommand command = new ChangeLaneConstraintCommand();
 		assertThat(command.canUndo(),is(false));
-		assertThat(command.canExecute(),is(false));
 		command.setModel(new Lane());
 		command.setRectangle(new Rectangle());
-		command.initialize();
 		assertThat(command.canExecute(),is(true));
 	}
 	

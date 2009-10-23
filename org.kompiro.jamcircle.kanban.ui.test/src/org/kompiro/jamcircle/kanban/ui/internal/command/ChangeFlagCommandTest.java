@@ -20,12 +20,10 @@ public class ChangeFlagCommandTest extends AbstractCommandTest{
 		Card card = null;
 		FlagTypes type = null;
 		ChangeFlagCommand command = new ChangeFlagCommand(card, type);
-		command.initialize();
 		assertThat(command.canExecute(),is(false));
 		card = mock(Card.class);
 		type = FlagTypes.BLUE;
 		command = new ChangeFlagCommand(card, type);
-		command.initialize();
 		assertThat(command.canExecute(),is(true));
 	}
 	
@@ -37,7 +35,6 @@ public class ChangeFlagCommandTest extends AbstractCommandTest{
 	
 	@Override
 	public void undo() throws Exception {
-		assertThat(command.canExecute(), is(false));
 		command.execute();
 		assertThat(command.canExecute(), is(true));
 		command.undo();
