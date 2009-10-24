@@ -2,14 +2,17 @@ package org.kompiro.jamcircle.xmpp.kanban.ui.internal;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.ui.*;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.kanban.ui.KanbanView;
+import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
-public class BridgeXMPPActivator implements BundleActivator {
+public class BridgeXMPPActivator implements BundleActivator, IPartListener {
 	
 	private static final String KEY_OF_XMPPCONNECTION_SERVICE = XMPPConnectionService.class.getName();
 
@@ -49,6 +52,9 @@ public class BridgeXMPPActivator implements BundleActivator {
 			return;
 		}
 		connectionService.addXMPPLoginListener(listener);
+//		IPartService partService = (IPartService)PlatformUI.getWorkbench().getService(IPartService.class);
+//		partService.addPartListener(this);
+		listener.setKanbanView(WorkbenchUtil.findKanbanView());
 	}
 
 	/*
@@ -78,5 +84,25 @@ public class BridgeXMPPActivator implements BundleActivator {
 	public static IStatus createErrorStatus(Throwable e){
 		return new Status(IStatus.ERROR, PLUGIN_ID, "error is occured",e);
 	}
+
+	public void partActivated(IWorkbenchPart part) {
+		if (part instanceof KanbanView) {
+			KanbanView view = (KanbanView) part;
+			listener.setKanbanView(view);
+		}
+	}
+
+	public void partBroughtToTop(IWorkbenchPart part) {}
+
+	public void partClosed(IWorkbenchPart part) {
+		if (part instanceof KanbanView) {
+			listener.setKanbanView(null);
+		}
+	}
+
+	public void partDeactivated(IWorkbenchPart part) {
+	}
+
+	public void partOpened(IWorkbenchPart part) {}
 
 }

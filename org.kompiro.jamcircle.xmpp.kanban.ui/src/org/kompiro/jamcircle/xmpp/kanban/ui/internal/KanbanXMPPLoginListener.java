@@ -17,9 +17,9 @@ import org.kompiro.jamcircle.kanban.ui.model.IconModel;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 import org.kompiro.jamcircle.xmpp.XMPPStatusHandler;
 import org.kompiro.jamcircle.xmpp.kanban.ui.internal.command.CreateCardCommand;
+import org.kompiro.jamcircle.xmpp.kanban.ui.internal.util.XMPPUtil;
 import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
 import org.kompiro.jamcircle.xmpp.service.XMPPLoginListener;
-import org.kompiro.jamcircle.xmpp.util.XMPPUtil;
 
 public class KanbanXMPPLoginListener implements XMPPLoginListener {
 
@@ -47,6 +47,7 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener {
 		public void reconnectionSuccessful() {
 		}
 	};
+	private KanbanView view;
 
 	private final class CardReceiveFileTransferListener implements
 			FileTransferListener {
@@ -93,10 +94,13 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener {
 					uuid)[0];
 		}
 	}
-
+	
 	private final class RosterListnerForUsers implements RosterListener {
 
-		public RosterListnerForUsers(Roster roster) {
+		private BoardModel boardModel;
+		
+		public RosterListnerForUsers(BoardModel boardModel) {
+			this.boardModel = boardModel;
 		}
 
 		public void entriesAdded(Collection<String> addresses) {
@@ -123,8 +127,20 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener {
 			getDisplay().asyncExec(runnable);
 		}
 
-
+		private UserModel getUser(String from) {
+			for(IconModel icon : boardModel.getIconModels()){
+				if (icon instanceof UserModel) {
+					UserModel userModel = (UserModel) icon;
+					if(userModel.getUserId().equals(from)){
+						return userModel;
+					}
+				};
+			}
+			return null;
+		}
+		
 	}
+
 	
 	private final class CardReceiveListener implements ChatManagerListener {
 		public void chatCreated(Chat chat, boolean createdLocally) {
@@ -173,20 +189,27 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener {
 	}
 
 	public void afterLoggedIn(XMPPConnection connection) {
+		if(getKanbanView() == null){
+			view = WorkbenchUtil.findKanbanView();
+		}
 		setUsers(connection);
 	}
 
 	public void beforeLoggedOut(XMPPConnection connection) {
+		BoardModel boardModel = getBoardModel();
+		clearUsers(boardModel);
 	}
 
 	private void setUsers(XMPPConnection connection){
 		connection.addConnectionListener(connectionListener);
 		manager = new FileTransferManager(connection);
 		final Roster roster = connection.getRoster();
-		rosterListener = new RosterListnerForUsers(roster);
+		BoardModel boardModel = getBoardModel();
+		if(boardModel == null) return;
+		rosterListener = new RosterListnerForUsers(boardModel);
 		roster.addRosterListener(rosterListener);
 		connection.getChatManager().addChatListener(cardSendListener);
-		final Map<String,User> userMap = new HashMap<String, User>();
+		Map<String,User> userMap = new HashMap<String, User>();
 		User[] userList = getKanbanService().findUsersOnBoard();
 		for(User user : userList){
 			String key = user.getUserId();
@@ -194,8 +217,6 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener {
 				userMap.put(key, user);
 			}
 		}
-		BoardModel boardModel = getBoardModel();
-		if(boardModel == null) return;
 		clearUsers(boardModel);
 		for(User user:userMap.values()){
 			Presence presence = roster.getPresence(user.getUserId());
@@ -204,22 +225,17 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener {
 			boardModel.addIcon(userModel);
 		}
 		setCardReceiveFileTransferManager();
-		
 	}
 
 	private void clearUsers(BoardModel boardModel) {
-	}
-
-	protected UserModel getUser(String from) {
-		for(IconModel icon : getBoardModel().getIconModels()){
-			if (icon instanceof UserModel) {
-				UserModel userModel = (UserModel) icon;
-				if(userModel.getUserId().equals(from)){
-					return userModel;
-				}
-			};
+		ListIterator<IconModel> listIterator = boardModel.getIconModels().listIterator();
+		while(listIterator.hasNext()){
+			IconModel model = listIterator.next();
+			if (model instanceof UserModel){
+				listIterator.remove();
+				boardModel.firePropertyChange(BoardModel.PROP_ICON, model, null);
+			}
 		}
-		return null;
 	}
 
 	private KanbanService getKanbanService() {
@@ -237,16 +253,21 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener {
 		return manager;
 	}
 
-	private KanbanView getKanbanView() {
-		return WorkbenchUtil.findKanbanView();
+	public void setKanbanView(KanbanView view) {
+		this.view = view;
 	}
+
 	
 	private BoardModel getBoardModel(){
-		return WorkbenchUtil.getCurrentKanbanBoard();
+		return (BoardModel)getKanbanView().getAdapter(Board.class);
 	}
 
 	private CommandStack getCommandStack() {
 		return (CommandStack)getKanbanView().getAdapter(CommandStack.class);
+	}
+
+	private KanbanView getKanbanView() {
+		return this.view;
 	}
 
 	private Display getDisplay() {
