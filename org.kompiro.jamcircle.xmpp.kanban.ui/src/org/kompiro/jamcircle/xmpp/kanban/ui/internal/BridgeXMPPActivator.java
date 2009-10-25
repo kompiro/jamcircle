@@ -2,17 +2,13 @@ package org.kompiro.jamcircle.xmpp.kanban.ui.internal;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.ui.*;
-import org.eclipse.ui.statushandlers.StatusManager;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
-import org.kompiro.jamcircle.kanban.ui.KanbanView;
-import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
-public class BridgeXMPPActivator implements BundleActivator, IPartListener {
+public class BridgeXMPPActivator implements BundleActivator {
 	
 	private static final String KEY_OF_XMPPCONNECTION_SERVICE = XMPPConnectionService.class.getName();
 
@@ -27,7 +23,6 @@ public class BridgeXMPPActivator implements BundleActivator, IPartListener {
 	
 	private static BridgeXMPPActivator activator;
 
-	private KanbanXMPPLoginListener listener;
 
 	/*
 	 * (non-Javadoc)
@@ -39,22 +34,6 @@ public class BridgeXMPPActivator implements BundleActivator, IPartListener {
 		xmppServiceTracker.open();
 		kanbanServiceTracker = new ServiceTracker(context, KEY_OF_KANBAN_SERVICE, null);
 		kanbanServiceTracker.open();
-		initializeListener();
-	}
-
-	private void initializeListener() {
-		listener = new KanbanXMPPLoginListener();
-		XMPPConnectionService connectionService = getConnectionService();
-		if(connectionService == null) {
-			IllegalStateException e = new IllegalStateException("ConnectionService is null when stating BridgeXMPPActivator.");
-			IStatus status = createErrorStatus(e);
-			StatusManager.getManager().handle(status);
-			return;
-		}
-		connectionService.addXMPPLoginListener(listener);
-		IPartService partService = WorkbenchUtil.getWorkbenchWindow().getPartService();
-		partService.addPartListener(this);
-		listener.setKanbanView(WorkbenchUtil.findKanbanView());
 	}
 
 	/*
@@ -62,8 +41,6 @@ public class BridgeXMPPActivator implements BundleActivator, IPartListener {
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
-		getConnectionService().removeXMPPLoginListener(listener);
-		listener = null;
 		xmppServiceTracker.close();
 		kanbanServiceTracker.close();
 		activator = null;
@@ -84,25 +61,5 @@ public class BridgeXMPPActivator implements BundleActivator, IPartListener {
 	public static IStatus createErrorStatus(Throwable e){
 		return new Status(IStatus.ERROR, PLUGIN_ID, "error is occured",e);
 	}
-
-	public void partActivated(IWorkbenchPart part) {
-		if (part instanceof KanbanView) {
-			KanbanView view = (KanbanView) part;
-			listener.setKanbanView(view);
-		}
-	}
-
-	public void partBroughtToTop(IWorkbenchPart part) {}
-
-	public void partClosed(IWorkbenchPart part) {
-		if (part instanceof KanbanView) {
-			listener.setKanbanView(null);
-		}
-	}
-
-	public void partDeactivated(IWorkbenchPart part) {
-	}
-
-	public void partOpened(IWorkbenchPart part) {}
 
 }

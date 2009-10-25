@@ -1,7 +1,9 @@
 package org.kompiro.jamcircle.kanban.ui.util;
 
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.*;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.ui.KanbanView;
@@ -42,21 +44,31 @@ public class WorkbenchUtil {
 	}
 	
 	public static Display getDisplay(){
-		IWorkbench workbench = PlatformUI.getWorkbench();
+		IWorkbench workbench = getWorkbench();
 		if(workbench == null) return null;
 		return workbench.getDisplay();
 	}
 
 	public static IWorkbench getWorkbench() {
-		return PlatformUI.getWorkbench();
+		if(Platform.isRunning()){
+			return PlatformUI.getWorkbench();
+		}
+		return null;
 	}
 	
 	public static IWorkbenchWindow getWorkbenchWindow(){
 		IWorkbench workbench = getWorkbench();
+		if(workbench == null) return null;
 		IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
 		if(window != null) return window;
 		if(workbench.getWorkbenchWindowCount() == 0) return null;
 		return workbench.getWorkbenchWindows()[0];
+	}
+
+	public static Shell getShell() {
+		IWorkbenchWindow window = getWorkbenchWindow();
+		if(window == null) return null;
+		return window.getShell();
 	}
 	
 }

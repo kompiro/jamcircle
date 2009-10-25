@@ -50,7 +50,6 @@ import org.kompiro.jamcircle.storage.service.StorageChageListener;
 public class KanbanView extends ViewPart implements StorageChageListener,PropertyChangeListener{
 
 	public static String ID = "org.kompiro.jamcircle.kanban.KanbanView";
-	public static final String PROP_MESSAGE_MODEL = "model";
 
 	private ScrollingGraphicalViewer viewer;
 

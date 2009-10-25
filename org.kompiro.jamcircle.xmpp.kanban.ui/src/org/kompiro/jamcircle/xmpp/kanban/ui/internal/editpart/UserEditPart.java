@@ -72,8 +72,10 @@ public class UserEditPart extends AbstractEditPart implements IconEditPart{
 			}
 
 			private void createAddCommand(CompoundCommand command, ChangeBoundsRequest request, GraphicalEditPart part, GraphicalEditPart parent) {
-				Shell shell = new Shell(getViewer().getControl().getDisplay());
-				command.add(new SendCardCommand(shell,part, getUserModel().getUser().getUserId()));
+				SendCardCommand sendCommand = new SendCardCommand();
+				sendCommand.setPart(part);
+				sendCommand.setTarget(getUserModel().getUser());
+				command.add(sendCommand);
 			}
 		});
 		

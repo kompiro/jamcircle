@@ -5,6 +5,7 @@ import java.util.*;
 
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.*;
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
@@ -19,15 +20,22 @@ import org.kompiro.jamcircle.xmpp.XMPPStatusHandler;
 import org.kompiro.jamcircle.xmpp.kanban.ui.internal.command.CreateCardCommand;
 import org.kompiro.jamcircle.xmpp.kanban.ui.internal.util.XMPPUtil;
 import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
+import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 import org.kompiro.jamcircle.xmpp.service.XMPPLoginListener;
 
-public class KanbanXMPPLoginListener implements XMPPLoginListener {
+public class KanbanXMPPLoginListener implements XMPPLoginListener, IPartListener {
 
 	private RosterListener rosterListener;
 	private CardReceiveListener cardSendListener = new CardReceiveListener();
 	private FileTransferManager manager;
 	private CardReceiveFileTransferListener cardReceiveFileTransferListener;
 
+	public KanbanXMPPLoginListener() {
+		IPartService partService = WorkbenchUtil.getWorkbenchWindow().getPartService();
+		partService.addPartListener(this);
+		setKanbanView(WorkbenchUtil.findKanbanView());
+	}
+	
 	private ConnectionListener connectionListener = new ConnectionListener() {
 
 		public void connectionClosed() {
@@ -147,7 +155,7 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener {
 			chat.addMessageListener(new MessageListener() {
 				public void processMessage(Chat chat, Message message) {
 					Object obj = message
-							.getProperty(KanbanView.PROP_MESSAGE_MODEL);
+							.getProperty(XMPPConnectionService.PROP_SEND_CARD);
 					String fromUserId = chat.getParticipant();
 					if (obj instanceof CardDTO) {
 						CreateCardCommand command = new CreateCardCommand();
@@ -273,5 +281,26 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener {
 	private Display getDisplay() {
 		return WorkbenchUtil.getDisplay();
 	}
+	
+	public void partActivated(IWorkbenchPart part) {
+		if (part instanceof KanbanView) {
+			KanbanView view = (KanbanView) part;
+			setKanbanView(view);
+		}
+	}
+
+	public void partBroughtToTop(IWorkbenchPart part) {}
+
+	public void partClosed(IWorkbenchPart part) {
+		if (part instanceof KanbanView) {
+			setKanbanView(null);
+		}
+	}
+
+	public void partDeactivated(IWorkbenchPart part) {
+	}
+
+	public void partOpened(IWorkbenchPart part) {}
+
 
 }

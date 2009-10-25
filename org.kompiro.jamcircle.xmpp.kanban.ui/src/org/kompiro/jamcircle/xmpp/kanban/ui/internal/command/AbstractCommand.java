@@ -7,30 +7,13 @@ import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
 import org.kompiro.jamcircle.xmpp.kanban.ui.internal.BridgeXMPPActivator;
 import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 
-public abstract class AbstractCommand extends Command {
+public abstract class AbstractCommand extends org.kompiro.jamcircle.kanban.ui.command.AbstractCommand {
 
 	private boolean undoable = true;
 	private BridgeXMPPActivator activator;
 	
 	public AbstractCommand(){
 		setLabel(getClass().getSimpleName());
-	}
-	
-	@Override
-	public String getDebugLabel() {
-		return this.getClass().getSimpleName();
-	}
-		
-	@Override
-	public final void execute() {
-		KanbanUIStatusHandler.info("execute:'" + getDebugLabel() + "'");
-		try{
-			doExecute();
-		}catch(Exception e){
-			String message = String.format("An Exception has occured. '%s'",e.getLocalizedMessage());
-			KanbanUIStatusHandler.fail(e, message , true);
-			undoable = false;
-		}
 	}
 	
 	@Override
@@ -41,8 +24,6 @@ public abstract class AbstractCommand extends Command {
 	public void setCanUndo(boolean undoable){
 		this.undoable = undoable;
 	}
-	
-	public abstract void doExecute();
 	
 	protected KanbanService getKanbanService(){
 		return getActivator().getKanbanService();
