@@ -3,12 +3,9 @@ package org.kompiro.jamcircle.kanban.ui.command;
 import static java.lang.String.format;
 
 import org.eclipse.gef.commands.Command;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Shell;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
-import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
 public abstract class AbstractCommand extends Command {
 
@@ -60,23 +57,15 @@ public abstract class AbstractCommand extends Command {
 			try {
 				initialize();
 			} catch (IllegalStateException e) {
-				Shell shell = getShell();
-				if(shell != null){
-					String title = String.format("Why doesn't execute the command '%s'",getDebugLabel());
-					MessageDialog.openInformation(shell, title, e.getLocalizedMessage());
-				}else{
-					throw e;
-				}
+				String message = String.format("Why doesn't execute the command '%s'",getDebugLabel());
+				KanbanUIStatusHandler.fail(e, message , true);
+				throw e;
 			}
 			initialized = true;
 		}
 		return execute;
 	}
 	
-	private Shell getShell() {
-		return WorkbenchUtil.getShell();
-	}
-
 	public void setExecute(boolean execute){
 		this.execute = execute;
 	}

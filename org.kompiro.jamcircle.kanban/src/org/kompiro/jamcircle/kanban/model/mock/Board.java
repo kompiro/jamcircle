@@ -117,5 +117,9 @@ public class Board extends MockEntity implements org.kompiro.jamcircle.kanban.mo
 	public org.kompiro.jamcircle.kanban.model.Board getBoard() {
 		return this;
 	}
-	
+
+	public org.kompiro.jamcircle.kanban.model.Board gainBoard() {
+		return getBoard();
+	}
+
 }

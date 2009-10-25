@@ -91,6 +91,10 @@ public class Lane extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 		return board;
 	}
 	
+	public Board gainBoard() {
+		return getBoard();
+	}
+	
 	public String getContainerName() {
 		return "Lane";
 	}

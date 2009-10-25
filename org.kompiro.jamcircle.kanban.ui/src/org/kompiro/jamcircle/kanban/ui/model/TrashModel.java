@@ -60,8 +60,8 @@ public class TrashModel extends AbstractIconModel implements CardContainer,LaneC
 		firePropertyChange(PROP_LANE,null,lane);
 		return false;
 	}
-	
-	public Board getBoard() {
+		
+	public Board gainBoard() {
 		throw new NotImplementedException();
 	}
 	

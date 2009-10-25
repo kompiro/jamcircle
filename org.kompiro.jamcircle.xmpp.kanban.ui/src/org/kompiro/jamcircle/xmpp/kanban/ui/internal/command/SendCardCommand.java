@@ -43,7 +43,12 @@ public class SendCardCommand extends AbstractCommand implements CancelableComman
 			String message = String.format("Target user is null.");
 			throw new IllegalStateException(message);
 		}
-		if(getConnectionService().isAvailable(target) == false){
+		boolean available = false;
+		try {
+			available = getConnectionService().isAvailable(target);
+		} catch (NullPointerException e) {
+		}
+		if(available == false){
 			String message = String.format("The user '%s' is not available.", target.getUserName());
 			throw new IllegalStateException(message);
 		}

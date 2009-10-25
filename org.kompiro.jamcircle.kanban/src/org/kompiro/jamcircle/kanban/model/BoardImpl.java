@@ -138,6 +138,9 @@ public class BoardImpl extends EntityImpl{
 		return board;
 	}
 
+	public Board gainBoard(){
+		return board;
+	}
 	
 	@Override
 	public String toString() {

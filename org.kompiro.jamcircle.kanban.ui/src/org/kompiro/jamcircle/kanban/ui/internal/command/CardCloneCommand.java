@@ -37,7 +37,7 @@ public class CardCloneCommand extends AbstractCommand {
 				targetCard = card;
 			}else{
 				User user = card.getFrom();
-				targetCard = getKanbanService().createClonedCard(container.getBoard(),user , card, locationX, locationY);				
+				targetCard = getKanbanService().createClonedCard(container.gainBoard(),user , card, locationX, locationY);				
 			}
 			
 			container.addCard(targetCard);

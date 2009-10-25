@@ -23,7 +23,8 @@ public interface CardContainer {
 	
 	String getContainerName();
 	
-	Board getBoard();
+	// HACK: if it named getXXX,then ActiveObjects creates index... So I renamed.
+	Board gainBoard();
 	
 	public class Mock implements CardContainer{
 		
@@ -52,7 +53,7 @@ public interface CardContainer {
 			return cards.remove(card);
 		}
 		
-		public Board getBoard() {
+		public Board gainBoard() {
 			throw new NotImplementedException();
 		}
 

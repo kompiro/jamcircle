@@ -44,7 +44,7 @@ public class InboxIconModel extends AbstractIconModel implements CardContainer{
 		return KanbanUIActivator.getDefault().getKanbanService();
 	}
 
-	public Board getBoard() {
+	public Board gainBoard() {
 		throw new NotImplementedException();
 	}
 

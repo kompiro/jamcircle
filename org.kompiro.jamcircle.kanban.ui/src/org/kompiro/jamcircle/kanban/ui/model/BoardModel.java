@@ -165,6 +165,10 @@ public class BoardModel extends AbstractModel implements CardContainer,LaneConta
 		return this.board;
 	}
 
+	public Board gainBoard() {
+		return getBoard();
+	}
+	
 	public TrashModel getTrashModel() {
 		return this.trash;
 	}
