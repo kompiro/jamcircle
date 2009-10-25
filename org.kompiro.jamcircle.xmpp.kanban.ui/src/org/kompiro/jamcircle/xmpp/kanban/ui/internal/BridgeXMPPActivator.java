@@ -52,8 +52,8 @@ public class BridgeXMPPActivator implements BundleActivator, IPartListener {
 			return;
 		}
 		connectionService.addXMPPLoginListener(listener);
-//		IPartService partService = (IPartService)PlatformUI.getWorkbench().getService(IPartService.class);
-//		partService.addPartListener(this);
+		IPartService partService = WorkbenchUtil.getWorkbenchWindow().getPartService();
+		partService.addPartListener(this);
 		listener.setKanbanView(WorkbenchUtil.findKanbanView());
 	}
 

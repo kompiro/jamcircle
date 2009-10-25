@@ -13,7 +13,7 @@ public class WorkbenchUtil {
 		final Object[] results = new Object[1];
 		getDisplay().syncExec(new Runnable() {
 			public void run() {
-				IWorkbench workbench = PlatformUI.getWorkbench();
+				IWorkbench workbench = getWorkbench();
 				if(workbench == null) return;
 				if(workbench.getWorkbenchWindowCount() == 0) return;
 				IWorkbenchPage activePage = null;
@@ -45,6 +45,18 @@ public class WorkbenchUtil {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		if(workbench == null) return null;
 		return workbench.getDisplay();
+	}
+
+	public static IWorkbench getWorkbench() {
+		return PlatformUI.getWorkbench();
+	}
+	
+	public static IWorkbenchWindow getWorkbenchWindow(){
+		IWorkbench workbench = getWorkbench();
+		IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+		if(window != null) return window;
+		if(workbench.getWorkbenchWindowCount() == 0) return null;
+		return workbench.getWorkbenchWindows()[0];
 	}
 	
 }
