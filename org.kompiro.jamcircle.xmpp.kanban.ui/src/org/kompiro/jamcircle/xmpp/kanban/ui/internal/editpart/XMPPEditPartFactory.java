@@ -1,7 +1,6 @@
 package org.kompiro.jamcircle.xmpp.kanban.ui.internal.editpart;
 
 import org.eclipse.gef.EditPart;
-import org.kompiro.jamcircle.kanban.model.User;
 import org.kompiro.jamcircle.kanban.ui.editpart.*;
 import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
 
