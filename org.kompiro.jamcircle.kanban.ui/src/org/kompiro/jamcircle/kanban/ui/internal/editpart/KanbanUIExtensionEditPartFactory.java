@@ -27,7 +27,7 @@ public class KanbanUIExtensionEditPartFactory implements EditPartFactory {
 		if(point == null) return;
 		IExtension[] extensions = point.getExtensions();
 		if(extensions == null) return;
-		MultiStatus statuses = new MultiStatus(PLUGIN_ID, Status.ERROR, "error has occured when initializing scripting engines.", null);
+		MultiStatus statuses = new MultiStatus(PLUGIN_ID, Status.ERROR, "error has occured when initializing editpart factories.", null);
 		for (IExtension extension:extensions) {
 			IConfigurationElement[] confElements = extension.getConfigurationElements();
 			for(IConfigurationElement element : confElements){
@@ -35,14 +35,14 @@ public class KanbanUIExtensionEditPartFactory implements EditPartFactory {
 				try {
 					factory = (ExtendedEditPartFactory) element.createExecutableExtension(ATTR_HANDLER_CLASS);
 				} catch (Exception e) {
-					statuses.addAll(createErrorStatus(e));
+					statuses.add(KanbanUIActivator.createErrorStatus(e));
 				}
 				if(factory != null){
 					for(SupportedClassPair pair : factory.supportedClasses()){
 						if(factories.containsKey(pair)){
 							String message = format("class:'%s' is already registered.",pair.toString());
 							IllegalStateException e = new IllegalStateException(message);
-							statuses.addAll(createErrorStatus(e));
+							statuses.add(KanbanUIActivator.createErrorStatus(e));
 							continue;
 						}
 						factories.put(pair, factory);
@@ -71,9 +71,10 @@ public class KanbanUIExtensionEditPartFactory implements EditPartFactory {
 	void setRegistry(IExtensionRegistry registry) {
 		this.registry = registry;
 	}
-
-	private IStatus createErrorStatus(Throwable e){
-		return new Status(IStatus.ERROR, PLUGIN_ID, e.getLocalizedMessage(),e);
+	
+	IExtensionRegistry getRegistry(){
+		return this.registry;
 	}
+
 
 }

@@ -2,6 +2,7 @@ package org.kompiro.jamcircle.kanban.ui;
 
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.widgets.Shell;
@@ -157,4 +158,8 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 		return service;
 	}
 	
+	public static IStatus createErrorStatus(Throwable e){
+		return new Status(IStatus.ERROR, ID_PLUGIN, e.getLocalizedMessage(),e);
+	}
+
 }
