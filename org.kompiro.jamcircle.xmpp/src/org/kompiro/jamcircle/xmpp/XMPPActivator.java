@@ -9,6 +9,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.jivesoftware.smack.XMPPException;
 import org.kompiro.jamcircle.debug.StandardOutputHandler;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.xmpp.internal.extension.XMPPLoginListenerFactory;
 import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 import org.kompiro.jamcircle.xmpp.service.XMPPSettings;
 import org.kompiro.jamcircle.xmpp.service.XMPPSettings.Setting;
@@ -33,15 +34,19 @@ public class XMPPActivator extends Plugin {
 
 	private StandardOutputHandler handler;
 
+	private XMPPLoginListenerFactory factory;
+
 	
 	public XMPPActivator() {
 		service = new XMPPConnectionServiceImpl();
 		service.setActivator(this);
+		factory = new XMPPLoginListenerFactory();
 	}
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		factory.inject(service);
 		createConnection();
 		registerService = context.registerService(XMPPConnectionService.class.getName(),service, null);
 		kanbanServiceTracker = new ServiceTracker(context, KanbanService.class.getName(), null);
@@ -84,6 +89,7 @@ public class XMPPActivator extends Plugin {
 	public void stop(BundleContext context) throws Exception {
 		XMPPStatusHandler.removeStatusHandler(handler);
 		plugin = null;
+		factory.reject(service);
 		if(settings.size() != 0){
 			settings.storeSttings();
 		}
@@ -105,5 +111,10 @@ public class XMPPActivator extends Plugin {
 	public XMPPSettings getSettings() {
 		return settings;
 	}
+	
+	public static IStatus createErrorStatus(Throwable e){
+		return new Status(IStatus.ERROR, PLUGIN_ID, e.getLocalizedMessage(),e);
+	}
+
 	
 }
