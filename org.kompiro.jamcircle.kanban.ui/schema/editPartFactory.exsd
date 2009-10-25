@@ -3,10 +3,11 @@
 <schema targetNamespace="org.kompiro.jamcircle.kanban.ui" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.kompiro.jamcircle.kanban.ui" id="editpartsfactory" name="EditPartsFactory"/>
+         <meta.schema plugin="org.kompiro.jamcircle.kanban.ui" id="editpartsfactory" name="KanbanView EditPartFactory"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension point provides to extend EditPartFactory for KanbanView.
+
       </documentation>
    </annotation>
 
@@ -17,9 +18,9 @@
          </appInfo>
       </annotation>
       <complexType>
-         <choice>
+         <sequence>
             <element ref="factory"/>
-         </choice>
+         </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>
