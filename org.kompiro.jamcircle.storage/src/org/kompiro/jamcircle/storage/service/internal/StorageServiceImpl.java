@@ -1,13 +1,13 @@
 package org.kompiro.jamcircle.storage.service.internal;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
 import java.net.URL;
 import java.sql.*;
 import java.util.*;
 
 import net.java.ao.*;
 
-import org.apache.commons.io.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.h2.tools.Csv;
@@ -17,7 +17,6 @@ import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 import org.kompiro.jamcircle.storage.service.*;
 
 /**
- * TODO Separated File storage and DB Storage Service
  * @author kompiro
  * @TestContext org.kompiro.jamcircle.storage.service.internal.StorageServiceImplTest
  */
@@ -36,7 +35,7 @@ public class StorageServiceImpl implements StorageService {
 	private static final String KEY_OF_SYSTEM_PROPERTY_STORAGE_STOREROOT = "storage.storeroot";
 	private static final String KEY_OF_SYSTEM_STORAGE_ADDTIONAL_PATH = "storage.addtionalPath";
 	private static final String KEY_OF_SYSTEM_STORAGE_DBNAME = "storage.dbname";
-	private static String dbName = System.getProperty(KEY_OF_SYSTEM_STORAGE_DBNAME,"storage");
+	static String dbName = System.getProperty(KEY_OF_SYSTEM_STORAGE_DBNAME,"storage");
 	/** this property is used for testing. */
 	private static String addtionalPath = "";
 	public static boolean testmode;
@@ -60,34 +59,18 @@ public class StorageServiceImpl implements StorageService {
 
 	private EntityManager manager;
 	private String storeRoot;
+	private FileStorageService fileService = new FileStorageServiceImpl(this);
 	
 	public void addFile(String destDir,File srcFile) {
-		String filePath = getStoreRoot() + destDir + File.separator + srcFile.getName();
-		String message = String.format("StorageServiceImpl#fileExists(filePath:'%s')", filePath);
-		StorageStatusHandler.debug(message);
-		File destFile = new File(filePath);
-		try {
-			FileUtils.copyFile(srcFile, destFile);
-		} catch (IOException e) {
-			String errorMessage = String.format("can't copy file '%s'",srcFile.getName());
-			StorageStatusHandler.fail(e, errorMessage);
-		}
+		fileService.addFile(destDir, srcFile);
 	}
 	
 	public List<File> getFiles(String dir){
-		String filePath = getStoreRoot() + dir + File.separator;
-		File dirFile = new File(filePath);
-		String[] list = dirFile.list();
-		if(list == null || list.length == 0) return null;
-		return Arrays.asList(dirFile.listFiles());
+		return fileService.getFiles(dir);
 	}
 	
 	public boolean fileExists(String path){
-		String filePath = getStoreRoot() + path;
-		String message = String.format("StorageServiceImpl#fileExists(filePath:'%s')", filePath);
-		StorageStatusHandler.debug(message);
-		File file = new File(filePath);
-		return file.exists();
+		return fileService.fileExists(path);
 	}
 	
 	public String getStoreRoot() {
@@ -166,15 +149,6 @@ public class StorageServiceImpl implements StorageService {
 		provider.dispose();
 		createEntityManager(uri, username, password);
 	}
-
-//	private void travasalDelete(File parent) {
-//		for(File file : parent.listFiles()){
-//			if(file.isDirectory()){
-//				travasalDelete(file);
-//			}
-//			file.delete();
-//		}
-//	}
 	
 	public String getDefaultStoreRoot() {
 		String storeRoot = "";
@@ -275,7 +249,7 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	public String getDBPath() {
-		return getStoreRoot() + StorageServiceImpl.dbName;
+		return fileService.getDBPath();
 	}
 	
 	public <T extends Entity> T createEntity(Class<T> clazz, DBParam[] params) {
@@ -336,7 +310,35 @@ public class StorageServiceImpl implements StorageService {
 		}
 		return results;
 	}
-	
+		
+	public boolean isTestMode() {
+		return testmode;
+	}
+
+	public void migrate(Class<? extends Entity>... entities) {
+		try {
+			if(isTestMode()){
+				try {
+					recreateEntityManagerForTest();
+				} catch (StorageConnectException e) {
+					StorageStatusHandler.fail(e, "StorageServiceImpl#migrate()",true);
+				}
+			}
+			getEntityManager().migrate(entities);
+		} catch (SQLException e) {
+			StorageStatusHandler.fail(e, "StorageServiceImpl#migrate()",true);
+		}
+	}
+
+	public int count(Class<? extends Entity> clazz) {
+		try {
+			return getEntityManager().count(clazz);
+		} catch (SQLException e) {
+			StorageStatusHandler.fail(e, "StorageServiceImpl#count()",true);
+			return 0;
+		}
+	}
+
 	public void setEntityManager(EntityManager manager) {
 		this.manager = manager;
 	}
@@ -344,17 +346,13 @@ public class StorageServiceImpl implements StorageService {
 	public EntityManager getEntityManager() {
 		return manager;
 	}
-	
-	public boolean isTestMode() {
-		return testmode;
+
+	public FileStorageService getFileService() {
+		return fileService;
 	}
 
-	public void migrate(Class<? extends Entity>... entities) {
-		try {
-			getEntityManager().migrate(entities);
-		} catch (SQLException e) {
-			StorageStatusHandler.fail(e, "StorageServiceImpl#migrate()",true);
-		}
+	public void setFileService(FileStorageService fileService) {
+		this.fileService = fileService;
 	}
 
 }

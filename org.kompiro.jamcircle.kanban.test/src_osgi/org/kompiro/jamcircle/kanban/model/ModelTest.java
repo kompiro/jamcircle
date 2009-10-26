@@ -9,7 +9,7 @@ import java.util.Date;
 
 import net.java.ao.DBParam;
 
-import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.KanbanActivator;
 import org.kompiro.jamcircle.kanban.service.internal.AbstractKanbanTest;
@@ -18,6 +18,22 @@ import org.kompiro.jamcircle.storage.service.StorageService;
 public class ModelTest extends AbstractKanbanTest{
 	
 	private TestUtils util = new TestUtils();
+	
+	@After
+	public void after() throws Exception {
+		String storeRoot = getKanbanService().getStorageService().getStoreRoot();
+		File file = new File(storeRoot);
+		travasalDelete(file);
+	}
+	
+	private void travasalDelete(File parent) {
+		for(File file : parent.listFiles()){
+			if(file.isDirectory()){
+				travasalDelete(file);
+			}
+			file.delete();
+		}
+	}
 	
 	@Test
 	public void files() throws Exception {

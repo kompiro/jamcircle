@@ -39,7 +39,6 @@ public class TaskBoardTemplate extends AbstractBoardTemplate {
 
 	private Lane createLane(Board board,String status, int x, int y, int width, int height) {
 		KanbanService kanbanService = KanbanActivator.getDefault().getKanbanService();
-		kanbanService.init();
 		Lane lane = kanbanService.createLane(board,status, x, y, width, height);
 		return lane;
 	}

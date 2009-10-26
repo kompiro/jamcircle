@@ -1,7 +1,6 @@
 package org.kompiro.jamcircle.storage.service;
 
 import java.io.File;
-import java.util.List;
 
 import net.java.ao.*;
 
@@ -10,22 +9,15 @@ import org.kompiro.jamcircle.storage.exception.StorageConnectException;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 
-public interface StorageService {
+public interface StorageService extends FileStorageService {
 
 	public enum CONNECTION_MODE{
 		FILE,TCP,MEM
 	}
+	public String getStoreRoot();
 	
 	public EntityManager getEntityManager();
 
-	public void addFile(String destDir, File srcFile);
-	
-	public List<File> getFiles(String dir);
-
-	public boolean fileExists(String path);
-
-	public String getDBPath();
-	
 	public StorageSettings getSettings();
 	
 	public void loadStorage(StorageSetting setting,IProgressMonitor monitor) throws StorageConnectException;
@@ -42,8 +34,6 @@ public interface StorageService {
 
 	public void removeStorageChangeListener(StorageChageListener listener);
 
-	public String getStoreRoot();
-
 	public <T extends Entity> T createEntity(Class<T> clazz, DBParam[] params);
 
 	public void discard(GraphicalEntity entity);
@@ -59,5 +49,7 @@ public interface StorageService {
 	public boolean isTestMode();
 
 	public void migrate(Class<? extends Entity>... classes);
+
+	public int count(Class<? extends Entity> clazz);
 
 }
