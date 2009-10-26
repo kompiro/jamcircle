@@ -1,5 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui.editpart;
 
-public interface IconEditPart {
+import org.eclipse.gef.GraphicalEditPart;
+
+public interface IconEditPart extends GraphicalEditPart{
 
 }

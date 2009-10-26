@@ -1,21 +1,27 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeThat;
+import static org.mockito.Mockito.*;
 
 import java.util.Map;
 
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.*;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.*;
 import org.junit.*;
+import org.kompiro.jamcircle.kanban.model.mock.Board;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
+import org.kompiro.jamcircle.kanban.ui.command.DeleteCommand;
+import org.kompiro.jamcircle.kanban.ui.editpart.IconEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.command.ChangeLaneConstraintCommand;
+import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
+import org.kompiro.jamcircle.kanban.ui.model.IconModel;
 
 public class BoardEditPartTest extends AbstractEditPartTest{
 
@@ -24,8 +30,6 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 	@Before
 	public void init() throws Exception {
 		super.init();
-//		assertFalse(boardPart.isActive());
-//		boardPart.activate();
 		assumeThat(boardPart.getChildren().size(),is(INIT_BOARD_CHIHLDREN_SIZE));
 	}
 	
@@ -202,7 +206,7 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 	}
 	
 	@Test
-	public void removeCardToLane() throws Exception {
+	public void removeCard() throws Exception {
 		Card card = new Card();
 		board.addCard(card);
 		boardPart.refresh();
@@ -220,6 +224,39 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 		command.execute();
 		boardPart.refresh();
 		assertEquals(INIT_BOARD_CHIHLDREN_SIZE,boardPart.getChildren().size());
+	}
+	
+	@Test
+	public void deleteIcon() throws Exception {
+		Board boardMock = new Board();
+		board = new BoardModel(boardMock);
+		IconModel icon = mock(IconModel.class);
+		board.addIcon(icon);
+
+		EditPartFactory factory = mock(EditPartFactory.class);
+		BoardEditPart boardEditPart = new BoardEditPart(board);
+		boardEditPart.setModel(board);
+		when(factory.createEditPart(null, board)).thenReturn(boardEditPart);
+		GraphicalEditPart iconEditPart = mock(IconEditPart.class);
+		when(iconEditPart.getModel()).thenReturn(icon);
+		IFigure figure = mock(IFigure.class);
+		when(iconEditPart.getFigure()).thenReturn(figure );
+		when(factory.createEditPart(boardEditPart, icon)).thenReturn(iconEditPart);
+		viewer.setEditPartFactory(factory);
+		
+		viewer.setContents(board);
+		Object object = viewer.getRootEditPart().getChildren().get(0);
+		assertThat(object,instanceOf(BoardEditPart.class));
+		BoardEditPart actualBoardEditPart = (BoardEditPart) object;
+		boardChildrenPartMap = getChildlenPartmap(actualBoardEditPart);
+		assertThat(boardChildrenPartMap.get(icon),notNullValue());
+		
+		GroupRequest request = new GroupRequest();
+		request.setEditParts(iconEditPart);
+		request.setType(RequestConstants.REQ_ORPHAN_CHILDREN);
+		boardPart.getCommand(request);
+		verify(iconEditPart).getAdapter(DeleteCommand.class);
+		boardEditPart.deactivate();
 	}
 	
 	@Test

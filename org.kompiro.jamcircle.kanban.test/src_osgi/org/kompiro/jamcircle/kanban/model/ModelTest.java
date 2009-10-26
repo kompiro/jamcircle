@@ -18,11 +18,6 @@ import org.kompiro.jamcircle.storage.service.StorageService;
 public class ModelTest extends AbstractKanbanTest{
 	
 	private TestUtils util = new TestUtils();
-
-	@Before
-	public void forceInit() throws Exception{
-		getKanbanService().forceInit();
-	}
 	
 	@Test
 	public void files() throws Exception {

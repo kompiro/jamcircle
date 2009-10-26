@@ -18,6 +18,7 @@ import org.eclipse.swt.graphics.Image;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
+import org.kompiro.jamcircle.kanban.ui.command.DeleteCommand;
 import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 import org.kompiro.jamcircle.kanban.ui.editpart.*;
 import org.kompiro.jamcircle.kanban.ui.internal.command.*;
@@ -152,7 +153,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 				Object container = getHost().getModel();
 				command.setContainer((BoardModel)container);
 				command.setModel(card);
-				return command;				
+				return command;	
 			}
 			return null;
 		}
@@ -172,6 +173,9 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 //					}else if(o instanceof UserEditPart){
 //						UserEditPart child = (UserEditPart) o;
 //						command.add(new RemoveUserCommand(child.getUserModel(),getBoardModel()));
+					}else if(o instanceof IconEditPart){
+						EditPart child = (EditPart) o;
+						command.add((Command)child.getAdapter(DeleteCommand.class));
 					}
 				}
 				return command;

@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.*;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
-import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
+import org.kompiro.jamcircle.kanban.ui.command.*;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
 import org.kompiro.jamcircle.kanban.ui.editpart.IconEditPart;
 import org.kompiro.jamcircle.kanban.ui.model.AbstractModel;
@@ -198,6 +198,16 @@ public class UserEditPart extends AbstractEditPart implements IconEditPart{
 	public Object getAdapter(Class key) {
 		if(MoveCommand.class.equals(key)){
 			return new MoveUserCommand();
+		}
+		if(DeleteCommand.class.equals(key)){
+			CompoundCommand compoundCommand = new CompoundCommand();
+			DeleteIconModelCommand command = new DeleteIconModelCommand();
+			command.setModel(getUserModel());
+			command.setContainer(getBoardModel());
+			compoundCommand.add(command);
+			DeleteUserCommand userCommand = new DeleteUserCommand(getUserModel());
+			compoundCommand.add(userCommand);
+			return compoundCommand;
 		}
 		return super.getAdapter(key);
 	}

@@ -1,39 +1,31 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assume.assumeThat;
+import static org.junit.Assume.assumeTrue;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.gef.EditDomain;
-import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.RootEditPart;
+import org.eclipse.gef.*;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.*;
 import org.kompiro.jamcircle.debug.IStatusHandler;
 import org.kompiro.jamcircle.kanban.model.Card;
+import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.model.mock.Board;
 import org.kompiro.jamcircle.kanban.model.mock.Icon;
-import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.ui.CommandStackEventListenerForDebug;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
 import org.kompiro.jamcircle.kanban.ui.editpart.IPropertyChangeDelegator;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardEditPart;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.KanbanUIEditPartFactory;
-import org.kompiro.jamcircle.kanban.ui.model.*;
+import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
+import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 
 public abstract class AbstractEditPartTest {
 
@@ -183,7 +175,7 @@ public abstract class AbstractEditPartTest {
 		}
 	}
 
-	private static ScrollingGraphicalViewer viewer;
+	protected static ScrollingGraphicalViewer viewer;
 	private static RootEditPart root;
 	protected static Shell shell;
 
@@ -263,6 +255,13 @@ public abstract class AbstractEditPartTest {
 		boardPart = (BoardEditPart) obj;
 		assumeTrue(boardPart.isActive());
 		assumeThat(boardPart.getChildren().size(), is(INIT_BOARD_CHIHLDREN_SIZE));
+	}
+	
+	@Test
+	public void testname() throws Exception {
+		
+		
+		
 	}
 
 	@After

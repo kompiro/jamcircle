@@ -6,14 +6,15 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.kompiro.jamcircle.kanban.ui.command.DeleteIconModelCommand;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
 
-public class RemoveUserCommandTest {
+public class DeleteUserModelCommandTest {
 	
 	private UserModel user;
 	private BoardModel board;
-	private RemoveUserCommand command;
+	private DeleteIconModelCommand<UserModel> command;
 	
 	@Before
 	public void before() throws Exception{
@@ -22,11 +23,13 @@ public class RemoveUserCommandTest {
 
 	@Test
 	public void initialize() throws Exception {
-		RemoveUserCommand command = new RemoveUserCommand(null, null);
-		command.initialize();
+		DeleteIconModelCommand<UserModel> command = new DeleteIconModelCommand<UserModel>();
 		assertThat(command.canExecute(),is(false));
-		command = new RemoveUserCommand(mock(UserModel.class), mock(BoardModel.class));
-		command.initialize();
+		UserModel userModel = mock(UserModel.class);
+		BoardModel boardModel = mock(BoardModel.class);
+		command = new DeleteIconModelCommand<UserModel>();
+		command.setModel(userModel);
+		command.setContainer(boardModel);
 		assertThat(command.canExecute(),is(true));
 	}
 	
@@ -56,6 +59,8 @@ public class RemoveUserCommandTest {
 	private void createCommand() {
 		user = mock(UserModel.class);
 		board = mock(BoardModel.class);
-		command = new RemoveUserCommand(user, board);
+		command = new DeleteIconModelCommand<UserModel>();
+		command.setModel(user);
+		command.setContainer(board);
 	}
 }
