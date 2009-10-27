@@ -4,12 +4,14 @@ import java.lang.reflect.InvocationTargetException;
 
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.progress.UIJob;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
@@ -36,12 +38,18 @@ public class BoardNewWizard extends Wizard implements INewWizard {
 		IRunnableWithProgress op = new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				monitor.beginTask("Create New Board...", 10);
-				Board board = kanbanService.createBoard(page.getBoardTitle());
+				final Board board = kanbanService.createBoard(page.getBoardTitle());
 				monitor.internalWorked(3);
 				KanbanBoardTemplate initializer = page.getInitializer();
 				initializer.initialize(board);
-				KanbanView view = WorkbenchUtil.findKanbanView();
-				if(view != null) view.setContents(board, monitor);
+				UIJob job = new UIJob("set board"){
+					public org.eclipse.core.runtime.IStatus runInUIThread(IProgressMonitor monitor) {
+						KanbanView view = WorkbenchUtil.findKanbanView();
+						if(view != null) view.setContents(board, monitor);
+						return Status.OK_STATUS;
+					};
+				};
+				job.schedule();
 				monitor.done();
 			}
 		};
