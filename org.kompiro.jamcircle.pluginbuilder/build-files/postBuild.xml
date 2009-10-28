@@ -1,9 +1,6 @@
 <project name="Run as part of postBuild" default="main">
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${buildHome}/build-files/ant-contrib.jar" />
 	<taskdef resource="org/pluginbuilder/anttasks/pluginbuildertasks.properties" classpath="${buildHome}/build-files/pluginbuilder-anttasks.jar" />
-	<property name="javancssClassPath" value="${buildHome}/build-files/javancss"/>
-	<echo message="${javancssClassPath}"/>
-	<taskdef name="javancss" classname="javancss.JavancssAntTask" classpath="${javancssClassPath}/javancss.jar"/>
 
 	<target name="main">
 		<property name="UpdateSiteStagingLocation" value="${buildDirectory}/tmpUpdateSite/updateSite"/>
@@ -19,7 +16,6 @@
 		</copy>
 		<delete dir="${UpdateSiteStagingLocation}/../.." includes="tmpUpdateSite/**" includeemptydirs="true"/>
 		<antcall target="-p2"/>
-		<antcall target="javancss"/>
 	</target>
 
 	<target name="deleteSiteXml" unless="isNightlyBuild">
@@ -108,20 +104,5 @@
 		<mkdir dir="${p2updatesite}"/>
 		<unzip src="${p2archive}" dest="${p2updatesite}"/>
 	</target>
-	
-	<!-- ================================= 
-          target: javancss              
-         ================================= -->
-	<target name="javancss" description="report ncss">
-		<javancss 
-			srcdir="/home/kompiro/codes/java/jamcircle/"
-			includes="org.kompiro.jamcircle.*/**/*.java" 
-			ccnPerFuncMax="100" 
-			generateReport="yes"
-			outputfile="${buildResultsDirectory}/javancss.xml"
-			format="xml"
-		/>
-	</target>
-
 
 </project>

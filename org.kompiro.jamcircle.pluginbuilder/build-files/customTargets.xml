@@ -1,4 +1,7 @@
 <project name="Build specific targets and properties" default="noDefault">
+	<property name="javancssClassPath" value="${buildHome}/build-files/javancss"/>
+	<echo message="${javancssClassPath}"/>
+	<taskdef name="javancss" classname="javancss.JavancssAntTask" classpath="${javancssClassPath}/javancss.jar"/>
 	<condition property="isNightlyBuild">
 		<equals arg1="${buildType}" arg2="N" />
 	</condition>
@@ -161,6 +164,7 @@
 		<copy todir="${buildResultsDirectory}" flatten="true">
 			<fileset dir="${buildDirectory}" includes="${buildType}-**/*.zip" />
 		</copy>
+		<antcall target="javancss"/>
 	</target>
 
 	<!-- ===================================================================== -->
@@ -202,6 +206,20 @@
 		<ant antfile="${buildHome}/build-files/postBuild.xml"/>
 	</target>
 	
+	<!-- ================================= 
+          target: javancss              
+         ================================= -->
+	<target name="javancss" description="report ncss">
+		<javancss 
+			srcdir="/home/kompiro/codes/java/jamcircle/"
+			includes="org.kompiro.jamcircle.*/**/*.java" 
+			ccnPerFuncMax="100" 
+			generateReport="yes"
+			outputfile="${buildResultsDirectory}/javancss.xml"
+			format="xml"
+		/>
+	</target>
+
 	<target name="noDefault">
 		<echo message="You must specify a target when invoking this file" />
 	</target>
