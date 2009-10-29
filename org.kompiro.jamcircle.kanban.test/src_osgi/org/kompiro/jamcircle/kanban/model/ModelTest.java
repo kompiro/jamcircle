@@ -27,6 +27,7 @@ public class ModelTest extends AbstractKanbanTest{
 	}
 	
 	private void travasalDelete(File parent) {
+		if(parent == null) return;
 		for(File file : parent.listFiles()){
 			if(file.isDirectory()){
 				travasalDelete(file);
