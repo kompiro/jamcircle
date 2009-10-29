@@ -31,6 +31,9 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener, IPartListener
 	private CardReceiveFileTransferListener cardReceiveFileTransferListener;
 
 	public KanbanXMPPLoginListener() {
+		if(PlatformUI.isWorkbenchRunning() == false){
+			return;
+		}
 		IPartService partService = WorkbenchUtil.getWorkbenchWindow().getPartService();
 		partService.addPartListener(this);
 		setKanbanView(WorkbenchUtil.findKanbanView());

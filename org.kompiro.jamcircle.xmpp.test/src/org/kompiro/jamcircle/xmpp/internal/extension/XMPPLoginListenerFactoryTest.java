@@ -34,6 +34,49 @@ public class XMPPLoginListenerFactoryTest {
 		verify(impl).addXMPPLoginListener(listener);
 	}
 
+	@Test
+	public void throwIllegalStateException() throws Exception {
+		XMPPConnectionServiceImpl impl = spy(new XMPPConnectionServiceImpl());
+
+		XMPPLoginListenerFactory factory = new XMPPLoginListenerFactory();
+		IExtensionRegistry registry = createThrowExceptionExtensionRegistry();
+		factory.setRegistry(registry);
+		
+		try {
+			factory.inject(impl);
+			fail();
+		} catch (Exception e) {
+		}
+		
+	}
+
+	
+	private IExtensionRegistry createThrowExceptionExtensionRegistry() throws CoreException {
+		IExtensionRegistry registry = mock(IExtensionRegistry.class);
+		IExtensionPoint point = mock(IExtensionPoint.class);
+		when(registry.getExtensionPoint(XMPPLoginListenerFactory.POINT_CALLBACK)).thenReturn(point);
+		IConfigurationElement elem1 = createThrowExceptionElement();
+		IConfigurationElement[] elements = new IConfigurationElement[]{
+				elem1,
+		};
+		IExtension extension = mock(IExtension.class);
+		when(extension.getConfigurationElements()).thenReturn(elements);
+		IExtension[] extensions = new IExtension[]{
+				extension
+		};
+		when(point.getExtensions()).thenReturn(extensions);
+		return registry;
+	}
+
+	private IConfigurationElement createThrowExceptionElement() throws CoreException {
+		IConfigurationElement elem = mock(IConfigurationElement.class);
+		IStatus status = mock(IStatus.class);
+		CoreException coreException = new CoreException(status);
+		when(elem.createExecutableExtension(XMPPLoginListenerFactory.ATTR_CLASS)).thenThrow(coreException);
+		return elem;
+	}
+
+	
 	private IExtensionRegistry createExtensionRegistry() throws CoreException {
 		IExtensionRegistry registry = mock(IExtensionRegistry.class);
 		IExtensionPoint point = mock(IExtensionPoint.class);

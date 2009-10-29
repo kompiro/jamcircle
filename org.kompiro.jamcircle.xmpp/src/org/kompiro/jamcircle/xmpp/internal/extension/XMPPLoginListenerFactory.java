@@ -19,7 +19,7 @@ public class XMPPLoginListenerFactory {
 	public void inject(XMPPConnectionServiceImpl impl){
 		IExtensionPoint point = registry.getExtensionPoint(POINT_CALLBACK);
 		IExtension[] extensions = point.getExtensions();
-		MultiStatus statuses = new MultiStatus(XMPPActivator.PLUGIN_ID, Status.ERROR, "error has occured when initializing scripting engines.", null);
+		MultiStatus statuses = new MultiStatus(XMPPActivator.PLUGIN_ID, Status.ERROR, "error has occured when initializing xmpp listeners.", null);
 		for(IExtension extension: extensions){
 			IConfigurationElement[] elements = extension.getConfigurationElements();
 			for(IConfigurationElement elem : elements){
