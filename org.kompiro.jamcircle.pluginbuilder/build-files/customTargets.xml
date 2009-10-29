@@ -1,7 +1,6 @@
 <project name="Build specific targets and properties" default="noDefault">
-	<property name="javancssClassPath" value="${buildHome}/build-files/javancss"/>
-	<echo message="${javancssClassPath}"/>
-	<taskdef name="javancss" classname="javancss.JavancssAntTask" classpath="${javancssClassPath}/javancss.jar"/>
+	<property name="javancss" value="${buildHome}/build-files/javancss"/>
+	<taskdef name="javancss" classname="javancss.JavancssAntTask" classpath="${javancss}/lib/javancss.jar"/>
 	<condition property="isNightlyBuild">
 		<equals arg1="${buildType}" arg2="N" />
 	</condition>
@@ -11,13 +10,13 @@
 			<equals arg1="${buildType}" arg2="I" />
 		</or>
 	</condition>
-	
+
 	<property file="${buildHome}/pluginbuilder.config" />
-	
+
 	<property file="${buildDirectory}/version.properties" />
 	<property name="buildLabel" value="${buildType}-${version.full}" />
 	<property name="buildId" value="${version.full}" />
-	
+
 	<condition property="isCVSOrCopy" value="true">
 		<or>
 			<equals arg1="${pluginbuilder.is.cvs}" arg2="true"/>
@@ -30,27 +29,27 @@
 	<condition property="isRunTests" value="true">
 		<equals arg1="${pluginbuilder.is.runtests}" arg2="true"/>
 	</condition>
-	
-	
+
+
 	<target name="allElements">
 		<condition property="isFetch" value="true">
 			<equals arg1="${target}" arg2="fetchElement"/>
 		</condition>
-	    <condition property="is.svn.fetch" value="true">
-	 		<and>
-		  		<equals arg1="${target}" arg2="fetchElement"/>
+		<condition property="is.svn.fetch" value="true">
+			<and>
+				<equals arg1="${target}" arg2="fetchElement"/>
 				<equals arg1="${pluginbuilder.is.svn}" arg2="true"/>
 			</and>
-	    </condition>
-	
+		</condition>
+
 		<antcall target="allElementsExceptSvnFetch"/>
 		<antcall target="fetchSubversion"/>
 	</target>
-	
+
 	<import file="allElements.xml"/>
 	<import file="subversionSupport.xml"/>
-	
-	
+
+
 	<!-- ===================================================================== -->
 	<!-- Check out map files from correct repository -->
 	<!-- Replace values for cvsRoot, package and mapVersionTag as desired. -->
@@ -58,14 +57,15 @@
 	<target name="getMapFiles" if="isCVSOrCopy">
 		<echo message="Copying map files."/>
 		<copy todir="${buildDirectory}/maps">
-			<fileset dir="${buildHome}/maps" includes="*.map"></fileset>
+			<fileset dir="${buildHome}/maps" includes="*.map">
+			</fileset>
 		</copy>
 	</target>
-	
+
 	<!-- ===================================================================== -->
 	<!-- Steps to do before setup -->
 	<!-- ===================================================================== -->
-	<target name="preSetup">	
+	<target name="preSetup">
 	</target>
 	<!-- ===================================================================== -->
 	<!-- Steps to do after setup but before starting the build proper -->
@@ -85,27 +85,27 @@
 			<available file="${buildDirectory}/plugins"/>
 		</condition>
 		<fail unless="is.fetch" message="There was no plug-in fetched. Was the configuration generated? Is the repository correct?"/>
-		<antcall target="replaceVersions"/>		
+		<antcall target="replaceVersions"/>
 	</target>
-	
+
 	<target name="replaceVersions">
 		<fail unless="version.full" message="Property version.full must be set" />
 		<fail unless="version.qualifier" message="Property version.qualifier must be set" />
-	
+
 		<echo message="Updating versions in feature and plugin manifests. Full version: ${version.full}, qualifier: ${version.qualifier}"/>
 		<replaceregexp
             match="(&lt;feature[^&gt;]*version=)&quot;0.0.0&quot;"
             replace="\1&quot;${version.full}&quot;"
 			byline="false"
 			flags="s">
-			  <fileset dir="${buildDirectory}/features" includes="**/feature.xml"/>
+			<fileset dir="${buildDirectory}/features" includes="**/feature.xml"/>
 		</replaceregexp>
 		<replaceregexp
             match="(&lt;feature[^&gt;]*version=&quot;.*)qualifier&quot;"
             replace="\1${version.qualifier}&quot;"
 			byline="false"
 			flags="s">
-			  <fileset dir="${buildDirectory}/features" includes="**/feature.xml"/>
+			<fileset dir="${buildDirectory}/features" includes="**/feature.xml"/>
 		</replaceregexp>
 		<!-- in a manual build started with export from the feature.xml, there is no
 			need to replace the versions in the plugin.xml files if they are set to 0.0.0,
@@ -118,8 +118,8 @@
 			<include name="**/META-INF/MANIFEST.MF"/>
 			<replacefilter token="Bundle-Version: 0.0.0" value="Bundle-Version: ${version.full}" />
 			<replacefilter token="qualifier" value="${version.qualifier}" />
-		</replace>	
-	</target>	
+		</replace>
+	</target>
 	<!-- ===================================================================== -->
 	<!-- Steps to do before generating the build scripts. -->
 	<!-- ===================================================================== -->
@@ -158,7 +158,7 @@
 	<!-- ===================================================================== -->
 	<target name="prePackage">
 	</target>
-	
+
 	<target name="postPackage">
 		<!-- copy build results for rcp build -->
 		<copy todir="${buildResultsDirectory}" flatten="true">
@@ -190,13 +190,13 @@
 		<ant antfile="${automatedTestsHome}/run-tests.xml" target="run" dir="${automatedTestsHome}">
 			<property name="test.result.dir" value="${buildResultsDirectory}/testresults"/>
 		</ant>
-	</target>	
+	</target>
 	<!--======================================================-->
 	<!-- Gather build results  -->
 	<!-- ==================================================== -->
 	<target name="-prepareBuildResultsDirectory">
 		<echo message="Creating ${buildResultsDirectory}" />
-		<mkdir dir="${buildResultsDirectory}" />	
+		<mkdir dir="${buildResultsDirectory}" />
 	</target>
 
 	<!--======================================================-->
@@ -205,7 +205,7 @@
 	<target name="callExternalPostBuild" if="is.External.Postbuild">
 		<ant antfile="${buildHome}/build-files/postBuild.xml"/>
 	</target>
-	
+
 	<!-- ================================= 
           target: javancss              
          ================================= -->
@@ -213,11 +213,26 @@
 		<javancss 
 			srcdir="/home/kompiro/codes/java/jamcircle/"
 			includes="org.kompiro.jamcircle.*/**/*.java" 
+			excludes="**/learning/**,**/org/eclipse/**"
 			ccnPerFuncMax="100" 
 			generateReport="yes"
 			outputfile="${buildResultsDirectory}/javancss.xml"
 			format="xml"
 		/>
+		<xslt 
+	      in="${buildResultsDirectory}/javancss.xml" 
+	      out="${buildResultsDirectory}/javancss.html" 
+	      style="${javancss}/xslt/javancss2html.xsl" 
+	      classpath="${javancss}/lib/javancss.jar"
+	    />
+		<!--
+		<xslt 
+			in="${buildResultsDirectory}/javancss.xml"
+			out="${buildResultsDirectory}/javancss.svg"
+			style="${javancss}/xslt/svg/chart_ncss.xsl"
+			classpath="${javancss}/lib/javancss.jar" 
+		/>
+		-->
 	</target>
 
 	<target name="noDefault">
