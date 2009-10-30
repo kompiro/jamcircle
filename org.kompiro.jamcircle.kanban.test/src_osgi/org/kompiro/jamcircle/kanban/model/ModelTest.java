@@ -23,19 +23,9 @@ public class ModelTest extends AbstractKanbanTest{
 	public void after() throws Exception {
 		String storeRoot = getKanbanService().getStorageService().getStoreRoot();
 		File file = new File(storeRoot);
-		travasalDelete(file);
+		util.travasalDelete(file);
 	}
-	
-	private void travasalDelete(File parent) {
-		if(parent == null) return;
-		for(File file : parent.listFiles()){
-			if(file.isDirectory()){
-				travasalDelete(file);
-			}
-			file.delete();
-		}
-	}
-	
+		
 	@Test
 	public void files() throws Exception {
 		DBParam[] params = new DBParam[]{

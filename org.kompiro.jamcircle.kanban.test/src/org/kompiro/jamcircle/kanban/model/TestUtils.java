@@ -1,6 +1,9 @@
 package org.kompiro.jamcircle.kanban.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.*;
 import java.net.URL;
@@ -63,5 +66,28 @@ public class TestUtils {
 
 		return bundle.getResource(LONG_TXT);
 	}
+	
+	@Test
+	public void travasalDelteWhenFileListIsNull() throws Exception {
+		File file = mock(File.class);
+		
+		when(file.listFiles()).thenReturn(null);
+		travasalDelete(file);
+	}
+		
+	public void travasalDelete(File parent) {
+		if(parent == null) return;
+		if(parent.isFile() || parent.listFiles() == null){
+			parent.delete();
+			return;
+		}
+		for(File file : parent.listFiles()){
+			if(file.isDirectory()){
+				travasalDelete(file);
+			}
+			file.delete();
+		}
+	}
+
 
 }
