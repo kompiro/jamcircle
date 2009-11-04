@@ -1,15 +1,11 @@
 package org.kompiro.jamcircle.kanban.model;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.io.*;
 import java.net.URL;
 
 import org.eclipse.core.runtime.FileLocator;
-import org.junit.Test;
 import org.kompiro.jamcircle.kanban.KanbanActivator;
 import org.osgi.framework.Bundle;
 
@@ -19,18 +15,6 @@ public class TestUtils {
 			+ LONG_TXT_FILE;
 	private static Bundle bundle;
 
-	@Test
-	public void testReadFile() throws Exception {
-		String stringFromFile = readFile();
-		assertNotNull(stringFromFile);
-		assertNotSame(0, stringFromFile.length());
-	}
-
-	@Test
-	public void testTarget() throws Exception {
-		File target = target();
-		assertNotNull(target);
-	}
 
 	public String readFile() throws Exception {
 		URL resource = getResource();
@@ -66,15 +50,7 @@ public class TestUtils {
 
 		return bundle.getResource(LONG_TXT);
 	}
-	
-	@Test
-	public void travasalDelteWhenFileListIsNull() throws Exception {
-		File file = mock(File.class);
-		
-		when(file.listFiles()).thenReturn(null);
-		travasalDelete(file);
-	}
-		
+			
 	public void travasalDelete(File parent) {
 		if(parent == null) return;
 		if(parent.isFile() || parent.listFiles() == null){
