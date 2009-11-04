@@ -17,5 +17,23 @@
          <enablement></enablement>
       </consolePageParticipant>
    </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.kompiro.jamcircle.kanban.ui.perspective.kanban">
+         <view
+               closeable="false"
+               id="org.eclipse.ui.console.ConsoleView"
+               minimized="false"
+               moveable="true"
+               ratio="0.80f"
+               relationship="bottom"
+               relative="org.kompiro.jamcircle.kanban.KanbanView"
+               showTitle="false"
+               standalone="false"
+               visible="true">
+         </view>
+      </perspectiveExtension>
+   </extension>
 
 </plugin>

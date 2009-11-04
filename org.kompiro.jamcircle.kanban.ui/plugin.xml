@@ -11,8 +11,9 @@
       </category>
       <view
             allowMultiple="false"
-            class="org.kompiro.jamcircle.kanban.ui.KanbanView"
             category="org.kompiro.jamcircle"
+            class="org.kompiro.jamcircle.kanban.ui.KanbanView"
+            icon="icons/kanbans.png"
             id="org.kompiro.jamcircle.kanban.KanbanView"
             name="Kanban"/>
    </extension>   
@@ -28,6 +29,21 @@
                relative="org.eclipse.ui.views.ContentOutline"
                visible="true"/>
          <viewShortcut id="org.kompiro.jamcircle.kanban.KanbanView"/>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.kompiro.jamcircle.kanban.ui.perspective.kanban">
+         <view
+               closeable="false"
+               id="org.kompiro.jamcircle.kanban.KanbanView"
+               minimized="false"
+               moveable="false"
+               ratio="0.95f"
+               relationship="top"
+               relative="org.eclipse.ui.views"
+               showTitle="false"
+               standalone="true"
+               visible="true">
+         </view>
       </perspectiveExtension>
    </extension>
     <extension
