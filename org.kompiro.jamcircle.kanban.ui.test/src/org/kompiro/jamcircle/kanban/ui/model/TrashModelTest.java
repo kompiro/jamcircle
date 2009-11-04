@@ -45,13 +45,13 @@ public class TrashModelTest {
 	
 	@Test
 	public void getCards() throws Exception {
-		doAnswer(new Answer<?>() {
+		doAnswer(new Answer<Object>() {
 			public Object answer(InvocationOnMock invocation) throws Throwable {
 				doReturn(new Card[]{card}).when(kanbanService).findCardsInTrash();
 				return null;
 			}
 		}).when(card).setTrashed(true);
-		doAnswer(new Answer<?>() {
+		doAnswer(new Answer<Object>() {
 
 			public Object answer(InvocationOnMock invocation) throws Throwable {
 				doReturn(null).when(kanbanService).findCardsInTrash();
@@ -79,13 +79,13 @@ public class TrashModelTest {
 	
 	@Test
 	public void countTrashedCard() throws Exception {
-		doAnswer(new Answer<?>() {
+		doAnswer(new Answer<Object>() {
 			public Object answer(InvocationOnMock invocation) throws Throwable {
 				doReturn(1).when(kanbanService).countInTrash(eq(org.kompiro.jamcircle.kanban.model.Card.class));
 				return null;
 			}
 		}).when(card).setTrashed(true);
-		doAnswer(new Answer<?>() {
+		doAnswer(new Answer<Object>() {
 
 			public Object answer(InvocationOnMock invocation) throws Throwable {
 				doReturn(0).when(kanbanService).countInTrash(eq(org.kompiro.jamcircle.kanban.model.Card.class));
@@ -115,13 +115,13 @@ public class TrashModelTest {
 	public void getLanes() throws Exception {
 		doReturn(null).when(kanbanService).findLanesInTrash();
 		assertThat(trash.getLanes(),nullValue());
-		doAnswer(new Answer<?>() {
+		doAnswer(new Answer<Object>() {
 			public Object answer(InvocationOnMock invocation) throws Throwable {
 				when(kanbanService.findLanesInTrash()).thenReturn(new Lane[]{lane});
 				return null;
 			}
 		}).when(lane).setTrashed(true);
-		doAnswer(new Answer<?>() {
+		doAnswer(new Answer<Object>() {
 
 			public Object answer(InvocationOnMock invocation) throws Throwable {
 				when(kanbanService.findLanesInTrash()).thenReturn(null);
@@ -136,13 +136,13 @@ public class TrashModelTest {
 	
 	@Test
 	public void countTrashedLane() throws Exception {
-		doAnswer(new Answer<?>() {
+		doAnswer(new Answer<Object>() {
 			public Object answer(InvocationOnMock invocation) throws Throwable {
 				doReturn(1).when(kanbanService).countInTrash(eq(org.kompiro.jamcircle.kanban.model.Lane.class));
 				return null;
 			}
 		}).when(lane).setTrashed(true);
-		doAnswer(new Answer<?>() {
+		doAnswer(new Answer<Object>() {
 
 			public Object answer(InvocationOnMock invocation) throws Throwable {
 				doReturn(0).when(kanbanService).countInTrash(eq(org.kompiro.jamcircle.kanban.model.Lane.class));
