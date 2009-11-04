@@ -35,6 +35,8 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 	public static final String TITLE_FONT_KEY = "org.kompiro.jamcircle.TITLE_FONT_KEY";
 
 	private static final String LAYER_KEY_CARD = "card";
+	private static final String LAYER_KEY_ICON = "icon";
+	private static final String LAYER_KEY_LANE = "lane";
 	private static final String LAYER_KEY_BOARD = "background";
 	private static final String LAYER_KEY_BOARD_TITLE = "title";
 	
@@ -53,9 +55,25 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		}
 	}
 
+	private final class LaneLayer extends Layer {
+		
+		public LaneLayer(){
+			addLayoutListener(LayoutAnimator.getDefault());
+			setLayoutManager(new FreeformLayout());
+			setOpaque(false);
+		}
+		
+		@Override
+		protected boolean useLocalCoordinates() {
+			return true;
+		}
+	}
+
+	
 	private final class IconLayer extends Layer {
 		
 		public IconLayer(){
+			addLayoutListener(LayoutAnimator.getDefault());
 			setLayoutManager(new FreeformLayout());
 			setOpaque(false);
 		}
@@ -202,6 +220,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 
 	private Layer board;
 	private Layer iconLayer;
+	private Layer laneLayer;
 	private Layer cardLayer;
 	private LayeredPane wallboard;
 	private ImageFigure backImageFigure;
@@ -233,6 +252,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		wallboard.setOpaque(false);
 		createBoardBackground();
 		createStatusLayer();
+		createLaneLayer();
 		createIconLayer();
 		createCardLayer();
 		setPaintBackgroundListener();
@@ -292,17 +312,22 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		wallboard.add(board,LAYER_KEY_BOARD,0);
 	}
 
+	private void createLaneLayer() {
+		laneLayer = new LaneLayer();
+		wallboard.addLayerAfter(laneLayer,LAYER_KEY_LANE,LAYER_KEY_BOARD_TITLE);
+	}
+
 	private void createIconLayer() {
 		iconLayer = new IconLayer();
-		wallboard.add(iconLayer);
-		
+		wallboard.addLayerAfter(iconLayer,LAYER_KEY_ICON,LAYER_KEY_LANE);
 	}
 	
 	private void createCardLayer() {
 		cardLayer = new CardLayer();
-		wallboard.addLayerAfter(cardLayer,LAYER_KEY_CARD,LAYER_KEY_BOARD_TITLE);
-
+		wallboard.addLayerAfter(cardLayer,LAYER_KEY_CARD,LAYER_KEY_ICON);
 	}
+
+
 	
 	@Override
 	public IFigure getContentPane() {
@@ -315,7 +340,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		return new BoardDragTracker(getKanbanService());
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected List getModelChildren() {
 		BoardModel model = (BoardModel) getModel();
@@ -478,10 +503,14 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		if(childEditPart instanceof IconEditPart){
 			IFigure child = ((GraphicalEditPart)childEditPart).getFigure();
 			iconLayer.add(child);
-		}else{
+		}
+		else if(childEditPart instanceof LaneEditPart){
 			IFigure child = ((GraphicalEditPart)childEditPart).getFigure();
-			Layer layer = wallboard.getLayer(LAYER_KEY_CARD);
-			layer.add(child,child.getBounds(),-1);
+			laneLayer.add(child,child.getBounds(),-1);
+		}
+		else{
+			IFigure child = ((GraphicalEditPart)childEditPart).getFigure();
+			cardLayer.add(child,child.getBounds(),-1);
 		}
 	}
 		
@@ -503,6 +532,9 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		}
 		else if(childEditPart instanceof IconEditPart){
 			iconLayer.remove(child);
+		}
+		else if(childEditPart instanceof LaneEditPart){
+			laneLayer.remove(child);
 		}
 		else{
 			layer.remove(child);

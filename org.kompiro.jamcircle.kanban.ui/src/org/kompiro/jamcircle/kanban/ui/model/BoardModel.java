@@ -93,45 +93,9 @@ public class BoardModel extends AbstractModel implements CardContainer,LaneConta
 		return getLanes()[i];
 	}
 	
-//	public boolean addUser(UserModel user) {
-//		UserModel model = users.put(user.getUserId(),user);
-//		firePropertyChange(PROP_USER, null, user);
-//		return model != null;
-//	}
-//
-//	public void addAllUsers(Collection<? extends UserModel> users) {
-//		for(UserModel user : users){
-//			addUser(user);
-//		}
-//	}
-//
-//	public UserModel getUser(String user) {
-//		return users.get(user);
-//	}
-//
-//	public boolean isEmptyUsers() {
-//		return users.isEmpty();
-//	}
-//
-//	public boolean removeUser(UserModel user) {
-//		boolean result = users.remove(user.getUserId()) != null;
-//		firePropertyChange(PROP_USER, user, null);
-//		return result;
-//	}
-//
-//	public int sizeUsers() {
-//		return users.size();
-//	}
-//	
-//	public void clearUsers(){
-//		users.clear();
-//		firePropertyChange(PROP_USER_CLEAR, null, null);
-//	}
-	
 	public List<Object> getChildren(){
 		children.clear();
 		children.addAll(icons);
-//		children.addAll(users.values());
 		for(Lane lane: getLanes()){
 			children.add(lane);
 		}
