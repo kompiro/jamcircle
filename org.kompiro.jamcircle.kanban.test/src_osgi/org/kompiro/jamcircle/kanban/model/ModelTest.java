@@ -17,6 +17,8 @@ import org.kompiro.jamcircle.storage.service.StorageService;
 
 public class ModelTest extends AbstractKanbanTest{
 	
+	private static final int TARGET_CARD_COUNT = 5;
+	private static final int CURRENT_CARD_COUNT_ON_LANE = 2;
 	private TestUtils util = new TestUtils();
 	
 	@After
@@ -120,26 +122,25 @@ public class ModelTest extends AbstractKanbanTest{
 		card.save(false);
 		card2.setLane(lane);
 		card2.save(false);
-		assertEquals(2,lane.getCards().length);
+		assertEquals(CURRENT_CARD_COUNT_ON_LANE,lane.getCards().length);
 		assertEquals(card,lane.getCards()[0]);
 		assertEquals("todo",lane.getStatus());
 		assertEquals("todo",card.getStatus());
 		assertTrue(card2.getFiles().isEmpty());
 		
-		int cardcount = 5;
-		for(int i = 2; i < cardcount; i++){
+		for(int i = 2; i < TARGET_CARD_COUNT; i++){
 			card = entityManager.create(Card.class,new DBParam(Card.PROP_SUBJECT,"test" + i));
 			card.setLane(lane2);
-			card.save(false);			
+			card.save();			
 			card.setLane(null);
 			card.setDeletedVisuals(true);
 			card.setX(i * 5);
 			card.setY(i * 50);
-			card.save(false);
+			card.save();
 			card.setDeletedVisuals(false);
 			lane.addCard(card);
 		}
-		assertEquals(cardcount,lane.getCards().length);
+		assertEquals(TARGET_CARD_COUNT,lane.getCards().length);
 	}
 
 }

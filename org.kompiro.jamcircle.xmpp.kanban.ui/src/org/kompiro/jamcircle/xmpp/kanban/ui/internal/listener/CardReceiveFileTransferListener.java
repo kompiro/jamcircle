@@ -1,4 +1,4 @@
-package org.kompiro.jamcircle.xmpp.kanban.ui.internal;
+package org.kompiro.jamcircle.xmpp.kanban.ui.internal.listener;
 
 import java.io.File;
 
@@ -8,22 +8,23 @@ import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.xmpp.XMPPStatusHandler;
 
-class CardReceiveFileTransferListener implements
-		FileTransferListener {
+class CardReceiveFileTransferListener implements FileTransferListener {
 	
+	static final String QUERY_OF_UUID_NOT_SENT_CARD = Card.PROP_TRASHED + " = ? and" + Card.PROP_UUID
+							+ " = ? and " + Card.PROP_TO + " is null";
 	private KanbanService kanbanService;
 
 	public CardReceiveFileTransferListener(KanbanService kanbanService) {
 		this.kanbanService = kanbanService;
 	}
 	
-	public void fileTransferRequest(FileTransferRequest request) {
+	public void fileTransferRequest(final FileTransferRequest request) {
 
 		String uuid = request.getDescription();
 		IncomingFileTransfer accept = request.accept();
 		try {
-			File tmpFile = new File(System.getProperty("java.io.tmpdir"),
-					request.getFileName());
+			String fileName = request.getFileName();
+			File tmpFile = new File(System.getProperty("java.io.tmpdir"),fileName);
 			if (tmpFile.exists()) {
 				tmpFile.delete();
 			}
@@ -55,8 +56,7 @@ class CardReceiveFileTransferListener implements
 
 	private Card getCard(String uuid) {
 		return kanbanService.findCards(
-				Card.PROP_TRASHED + " = ? and" + Card.PROP_UUID
-						+ " = ? and " + Card.PROP_TO + " is null", false,
+				QUERY_OF_UUID_NOT_SENT_CARD, false,
 				uuid)[0];
 	}
 }

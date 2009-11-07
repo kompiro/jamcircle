@@ -10,7 +10,7 @@
    <extension
          point="org.kompiro.jamcircle.xmpp.xmppLoginListener">
       <listener
-            class="org.kompiro.jamcircle.xmpp.kanban.ui.internal.KanbanXMPPLoginListener">
+            class="org.kompiro.jamcircle.xmpp.kanban.ui.internal.listener.KanbanXMPPLoginListener">
       </listener>
    </extension>
 

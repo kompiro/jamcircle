@@ -1,4 +1,4 @@
-package org.kompiro.jamcircle.xmpp.kanban.ui.internal;
+package org.kompiro.jamcircle.xmpp.kanban.ui.internal.listener;
 
 import java.util.*;
 
@@ -18,6 +18,7 @@ import org.kompiro.jamcircle.kanban.ui.KanbanView;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 import org.kompiro.jamcircle.xmpp.XMPPStatusHandler;
+import org.kompiro.jamcircle.xmpp.kanban.ui.internal.BridgeXMPPActivator;
 import org.kompiro.jamcircle.xmpp.kanban.ui.internal.util.XMPPUtil;
 import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
 import org.kompiro.jamcircle.xmpp.service.XMPPLoginListener;
@@ -29,6 +30,7 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener, IPartListener
 	private FileTransferManager manager;
 	private CardReceiveFileTransferListener cardReceiveFileTransferListener;
 	private KanbanView view;
+	private KanbanService kanbanService;
 
 	public KanbanXMPPLoginListener() {
 		if(PlatformUI.isWorkbenchRunning() == false){
@@ -37,6 +39,7 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener, IPartListener
 		setKanbanView(WorkbenchUtil.findKanbanView());
 		IPartService partService = WorkbenchUtil.getWorkbenchWindow().getPartService();
 		partService.addPartListener(this);
+		kanbanService = BridgeXMPPActivator.getDefault().getKanbanService();
 	}
 	
 	private ConnectionListener connectionListener = new ConnectionListener() {
@@ -110,10 +113,12 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener, IPartListener
 		connection.getChatManager().addChatListener(cardSendListener);
 		Map<String,User> userMap = new HashMap<String, User>();
 		User[] userList = getKanbanService().findUsersOnBoard();
-		for(User user : userList){
-			String key = user.getUserId();
-			if(!userMap.containsKey(key)){
-				userMap.put(key, user);
+		if(isUserListNotEmpty(userList)){
+			for(User user : userList){
+				String key = user.getUserId();
+				if(!userMap.containsKey(key)){
+					userMap.put(key, user);
+				}
 			}
 		}
 		clearUsers();
@@ -129,6 +134,10 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener, IPartListener
 		setCardReceiveFileTransferManager(connection);
 	}
 
+	private boolean isUserListNotEmpty(User[] userList) {
+		return userList != null && userList.length != 0;
+	}
+
 	public void beforeLoggedOut(XMPPConnection connection) {
 		clearUsers();
 	}
@@ -140,8 +149,12 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener, IPartListener
 		}
 	}
 
+	void setKanbanService(KanbanService kanbanService) {
+		this.kanbanService = kanbanService;
+	}
+	
 	KanbanService getKanbanService() {
-		return BridgeXMPPActivator.getDefault().getKanbanService();
+		return kanbanService;
 	}
 
 	private void setCardReceiveFileTransferManager(XMPPConnection connection) {
@@ -151,7 +164,7 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener, IPartListener
 		manager.addFileTransferListener(cardReceiveFileTransferListener);
 	}
 	
-	private void setKanbanView(KanbanView view) {
+	void setKanbanView(KanbanView view) {
 		this.view = view;
 	}
 

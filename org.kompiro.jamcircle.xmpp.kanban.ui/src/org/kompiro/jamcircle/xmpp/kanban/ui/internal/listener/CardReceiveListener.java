@@ -1,4 +1,4 @@
-package org.kompiro.jamcircle.xmpp.kanban.ui.internal;
+package org.kompiro.jamcircle.xmpp.kanban.ui.internal.listener;
 
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.packet.Message;
