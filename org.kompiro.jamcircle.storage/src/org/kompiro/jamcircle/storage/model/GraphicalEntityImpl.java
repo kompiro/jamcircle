@@ -37,6 +37,7 @@ public class GraphicalEntityImpl {
 	public void save(boolean directExecution){
 		if(directExecution || StorageServiceImpl.testmode){
 			entity.save();
+			return;
 		}
 		Runnable runnable = new Runnable() {
 			public void run() {

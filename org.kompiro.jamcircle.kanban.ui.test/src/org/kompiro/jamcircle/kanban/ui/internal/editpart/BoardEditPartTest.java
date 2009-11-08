@@ -119,7 +119,7 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 		card.setY(10);
 		lane.addCard(card);
 		board.addLane(lane);
-				boardPart.refresh();
+		boardPart.refresh();
 		boardChildrenPartMap = getChildlenPartmap(boardPart);
 		GraphicalEditPart lanePart = boardChildrenPartMap.get(lane);
 
