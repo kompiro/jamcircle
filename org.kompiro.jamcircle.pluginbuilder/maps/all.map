@@ -31,3 +31,4 @@ plugin@org.kompiro.jamcircle.debug.ui=COPY,/var/hudson/jobs/jamcircle-continuous
 fragment@org.kompiro.jamcircle.scripting.test=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.scripting.test
 plugin@org.kompiro.jamcircle.xmpp.kanban.ui=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.xmpp.kanban.ui
 feature@org.kompiro.jamcircle.xmpp.feature=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.xmpp.feature
+fragment@org.kompiro.jamcircle.xmpp.kanban.ui.test=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.xmpp.kanban.ui.test
