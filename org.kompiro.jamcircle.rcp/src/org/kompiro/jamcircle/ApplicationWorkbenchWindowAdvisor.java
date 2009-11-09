@@ -47,7 +47,10 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 //		};
 //		shell.addPaintListener(listener);
 		shell.setImage(image);
-		shell.setAlpha(0);
+		if(RCPUtils.isWindows()){
+			shell.setAlpha(0);
+		}
+		shell.setVisible(false);
 		super.createWindowContents(shell);
 	}
 		
@@ -59,8 +62,11 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	@Override
 	public boolean preWindowShellClose() {
 		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-		shell.setAlpha(0);
-		shell.setVisible(false);
+		if(RCPUtils.isWindows()){
+			RCPUtils.modifyAlphaForDropout(shell);
+		}
 		return false;
 	}
+	
+
 }

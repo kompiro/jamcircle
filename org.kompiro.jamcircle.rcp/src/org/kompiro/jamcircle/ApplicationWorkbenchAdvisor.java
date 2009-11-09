@@ -23,7 +23,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 	public ApplicationWorkbenchAdvisor() {
 		String className = null;
-		if (isWindows()) {
+		if (RCPUtils.isWindows()) {
 			className = "org.kompiro.jamcircle.rcp.win32.internal.KeyStateManagerFowWin32";
 		}
 		if (className != null){
@@ -35,11 +35,6 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 				StatusManager.getManager().handle(status);
 			}
 		}
-	}
-
-	private boolean isWindows() {
-		String platform = SWT.getPlatform();
-		return "win32".equals (platform) || "wpf".equals (platform);
 	}
 	
 	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
@@ -67,8 +62,12 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	
 	@Override
 	public void postStartup() {
-		createTray();
-		initalizeManager();
+		getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				createTray();
+				initalizeManager();
+			}
+		});
 	}
 
 	private void initalizeManager() {
@@ -83,12 +82,12 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	}
 
 	private void createTray() {
-		Display display = PlatformUI.getWorkbench().getDisplay();
+		Display display = getDisplay();
 		Tray tray = display.getSystemTray();
 		trayItem = new TrayItem(tray, SWT.NONE);
 		trayItem.setImage(getAppImage());
 		trayItem.setText("JAM Circle");
-		trayItem.setToolTipText("JAM Circle");
+		trayItem.setToolTipText("Double click if you want to open board.");
 		trayItem.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -99,28 +98,35 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		
 			public void menuDetected(MenuDetectEvent e) {
 				final Shell shell = new Shell();
-				Menu menu = new Menu(shell);
+				final Menu menu = new Menu(shell);
 				MenuItem open = new MenuItem(menu, SWT.POP_UP);
 				open.addSelectionListener(new SelectionAdapter(){
 					public void widgetSelected(SelectionEvent e) {
 						openWindowInProgress(trayItem);
+						menu.dispose();
 						shell.dispose();
 					}
 				});
-				open.setText("open Boards");
+				open.setText("&Open Board");
 				open.setImage(getAppImage());
 				MenuItem exit = new MenuItem(menu, SWT.POP_UP);
 				exit.addSelectionListener(new SelectionAdapter(){
 					public void widgetSelected(SelectionEvent e) {
 						PlatformUI.getWorkbench().close();
+						menu.dispose();
 						shell.dispose();
 					}
 				});
-				exit.setText("exit JAM Circle");
+				exit.setText("&Exit JAM Circle");
 				exit.setImage(getExitImage());
 				menu.setVisible(true);
 			}
 		});
+	}
+
+	private Display getDisplay() {
+		Display display = PlatformUI.getWorkbench().getDisplay();
+		return display;
 	}
 	
 	@Override
@@ -149,7 +155,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		Shell shell = workbench.getActiveWorkbenchWindow().getShell();
 		ToolTip tip = null;
-		if(isWindows()){
+		if(RCPUtils.isWindows()){
 			tip = new ToolTip(shell , SWT.ICON_INFORMATION);
 			tip.setText("Opening Board");
 			tip.setMessage("JAM Circle's board is open.");
@@ -157,31 +163,13 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 			tip.setVisible(true);			
 		}
 		
-		shell.setVisible(true);
-		shell.setActive();
-		shell.setFocus();
-		modifyAlpha(shell, 128);
+		RCPUtils.modifyAlphaForSurface(shell);
 		
-		if(isWindows()){
+		if(RCPUtils.isWindows()){
 			tip.setVisible(false);
 			tip.dispose();
 		}
 	}
-
-	private void modifyAlpha(final Shell shell, final int alpha) {
-		if(alpha == 0){ 
-			shell.setAlpha(255);
-			return;
-		}
-		shell.getDisplay().timerExec(50, new Runnable() {
-			
-			public void run() {
-				shell.setAlpha(255 - alpha);
-				modifyAlpha(shell, alpha / 2);
-			}
-		});
-	}
-
 	
 	private ImageRegistry getImageRegistry() {
 		return RCPActivator.getDefault().getImageRegistry();
