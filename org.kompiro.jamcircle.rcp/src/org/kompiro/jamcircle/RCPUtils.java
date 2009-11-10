@@ -58,7 +58,9 @@ public class RCPUtils {
 	}
 
 	private static void modifyAlphaForDropout(final Shell shell,final int alpha) {
-		if(alpha >= 256){ 
+		if(
+//				RCPUtils.isWindows() == false ||
+				alpha >= 256){ 
 			shell.setAlpha(0);
 			shell.setVisible(false);
 			return;

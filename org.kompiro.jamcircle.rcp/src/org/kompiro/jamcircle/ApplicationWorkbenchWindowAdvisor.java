@@ -62,9 +62,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	@Override
 	public boolean preWindowShellClose() {
 		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-		if(RCPUtils.isWindows()){
-			RCPUtils.modifyAlphaForDropout(shell);
-		}
+		RCPUtils.modifyAlphaForDropout(shell);
 		return false;
 	}
 	
