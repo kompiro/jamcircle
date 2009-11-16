@@ -1,5 +1,5 @@
 feature@org.kompiro.jamcircle=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle
-feature@org.kompiro.jamcircle.rcp=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.rcp
+feature@org.kompiro.jamcircle.rcp=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.rcp.feature
 plugin@org.kompiro.jamcircle.rcp.core=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.rcp.core
 fragment@org.kompiro.jamcircle.rcp.win32=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.rcp.win32
 plugin@org.sf.feeling.swt.win32.extension=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.sf.feeling.swt.win32.extension
