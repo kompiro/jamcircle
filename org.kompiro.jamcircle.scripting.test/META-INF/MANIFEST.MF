@@ -4,7 +4,7 @@ Bundle-Name: JAMCircle Scripting Test
 Bundle-SymbolicName: org.kompiro.jamcircle.scripting.test
 Bundle-Version: 0.0.0
 Bundle-Vendor: kompiro.org
-Fragment-Host: org.kompiro.jamcircle.scripting
+Fragment-Host: org.kompiro.jamcircle.scripting.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit4,
  org.mockito

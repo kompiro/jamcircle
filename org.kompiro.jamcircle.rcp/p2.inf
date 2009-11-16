@@ -1,3 +1,0 @@
-instructions.configure=\
-  addRepository(type:0,location:http${#58}//kompiro.org/jamcircle/daily/p2);\
-  addRepository(type:1,location:http${#58}//kompiro.org/jamcircle/daily/p2);

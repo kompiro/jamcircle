@@ -4,7 +4,7 @@ Bundle-Name: RCP Test Fragment
 Bundle-SymbolicName: org.kompiro.jamcircle.rcp.test
 Bundle-Version: 0.0.0
 Bundle-Vendor: kompiro.org
-Fragment-Host: org.kompiro.jamcircle.rcp
+Fragment-Host: org.kompiro.jamcircle.rcp.core
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Require-Bundle: org.junit4,
  org.mockito

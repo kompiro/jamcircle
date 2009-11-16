@@ -106,7 +106,7 @@
     </extension>
     <extension
           id="initializer"
-          point="org.kompiro.jamcircle.scripting.scriptEngineInitializer">
+          point="org.kompiro.jamcircle.scripting.core.scriptEngineInitializer">
        <initializer
              class="org.kompiro.jamcircle.kanban.ui.KanbanUIScriptingEngineInitializer">
        </initializer>
