@@ -1,12 +1,6 @@
 package org.kompiro.jamcircle;
 
-import org.kompiro.jamcircle.actions.UpdateAction;
-import org.kompiro.jamcircle.actions.ManageExtensionsAction;
-
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.action.*;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory;
@@ -31,8 +25,6 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private IWorkbenchAction copyAction;
 	private IWorkbenchAction pasteAction;
 	private IWorkbenchAction deleteAction;
-	private IAction extensionsAction;
-	private IAction updateAction;
 
 	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
@@ -65,10 +57,6 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		register(exportAction);
 		importAction = ActionFactory.IMPORT.create(window);
 		register(importAction);
-        extensionsAction = new ManageExtensionsAction(window);
-        register(extensionsAction);
-        updateAction = new UpdateAction(window);
-        register(updateAction);
 	}
 
 	protected void fillMenuBar(IMenuManager menuBar) {
@@ -80,8 +68,6 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	private void createHelpMenu(IMenuManager menuBar) {
 		MenuManager helpMenu = new MenuManager("&Help", IWorkbenchActionConstants.M_HELP);
-		helpMenu.add(extensionsAction);
-		helpMenu.add(updateAction);
 		helpMenu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 		helpMenu.add(aboutAction);
 		menuBar.add(helpMenu);

@@ -7,8 +7,9 @@ Bundle-Activator: org.kompiro.jamcircle.RCPActivator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.update.ui;bundle-version="3.2.100",
- org.eclipse.update.core;bundle-version="3.2.200"
+ org.eclipse.equinox.p2.ui;bundle-version="1.0.100",
+ org.eclipse.equinox.p2.ui.sdk;bundle-version="1.0.100",
+ org.eclipse.equinox.p2.ui.sdk.scheduler;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: kompiro.org

@@ -17,21 +17,10 @@ import java.util.*;
 
 import jline.History;
 
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.resource.ColorRegistry;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.DocumentEvent;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IDocumentListener;
-import org.eclipse.jface.text.ITextViewer;
-import org.eclipse.jface.text.ITypedRegion;
+import org.eclipse.jface.resource.*;
+import org.eclipse.jface.text.*;
 import org.eclipse.jface.text.contentassist.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -41,22 +30,11 @@ import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.WorkbenchEncoding;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.IConsoleDocumentPartitioner;
-import org.eclipse.ui.console.IConsoleManager;
-import org.eclipse.ui.console.IConsoleView;
-import org.eclipse.ui.console.TextConsole;
-import org.eclipse.ui.console.TextConsoleViewer;
+import org.eclipse.ui.*;
+import org.eclipse.ui.console.*;
 import org.eclipse.ui.part.IPageBookViewPage;
 import org.eclipse.ui.statushandlers.StatusManager;
-import org.jruby.Ruby;
-import org.jruby.RubyInstanceConfig;
-import org.jruby.RubyRuntimeAdapter;
+import org.jruby.*;
 import org.jruby.ext.Readline;
 import org.jruby.internal.runtime.ValueAccessor;
 import org.jruby.javasupport.JavaEmbedUtils;
@@ -72,7 +50,7 @@ import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
  * <p>
  * Clients may instantiate and subclass this class.
  * </p>
- * Copied from org.eclipse.ui.console 3.4.0 by kompiro
+ * Copied from org.eclipse.ui.console.IOConsole 3.4.0 by kompiro
  */
 public class RubyScriptingConsole extends TextConsole {
 
@@ -500,32 +478,7 @@ public class RubyScriptingConsole extends TextConsole {
 				}
 
 		        RubyRuntimeAdapter runtimeAdapter = JavaEmbedUtils.newRuntimeAdapter();
-
-		        String script = 
-					"require 'jruby';\n" +
-					"require 'irb';\n" +
-					"require 'irb/completion';\n";
-                runtimeAdapter.eval(runtime, script);
-                script = 
-					"Card = org.kompiro.jamcircle.kanban.model.mock.Card; \n" +
-					"Lane = org.kompiro.jamcircle.kanban.model.mock.Lane; \n" +
-					"User = org.kompiro.jamcircle.kanban.model.mock.User;";
-                runtimeAdapter.eval(runtime, script);
-                script = 
-					"def board\n" +
-					"  return $board_accessor.board\n" +
-					"end\n" +
-                	"IRB.setup nil;\n" +
-                	"irb = IRB::Irb.new;\n" +
-                	"irb.context.prompt_mode=:DEFAULT;\n" +
-                	"IRB.conf[:IRB_RC].call(irb.context) if IRB.conf[:IRB_RC];\n" +
-                	"IRB.conf[:MAIN_CONTEXT] = irb.context;\n" +
-                	"trap(\"SIGINT\") do\n" +
-                	"  irb.signal_handle;\n" +
-                	"end;\n" +
-                	"catch(:IRB_EXIT) do\n" +
-                	"  irb.eval_input;\n" +
-                	"end\n";
+				String script = IOUtils.getStringFromResource("init.rb");
 				runtimeAdapter.eval(runtime, script);
 				shutdown();
 				return Status.OK_STATUS;
