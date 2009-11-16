@@ -23,7 +23,7 @@ RCP.
    </url>
 
    <includes
-         id="org.kompiro.jamcircle.rcp.feature"
+         id="org.kompiro.jamcircle.rcp"
          version="0.0.0"/>
 
    <includes
@@ -31,11 +31,11 @@ RCP.
          version="0.0.0"/>
 
    <includes
-         id="org.kompiro.jamcircle.scripting.feature"
+         id="org.kompiro.jamcircle.scripting"
          version="0.0.0"/>
 
    <includes
-         id="org.kompiro.jamcircle.xmpp.feature"
+         id="org.kompiro.jamcircle.xmpp"
          version="0.0.0"/>
 
 </feature>
