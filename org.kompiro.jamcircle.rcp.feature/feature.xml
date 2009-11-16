@@ -153,7 +153,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.kompiro.jamcircle.rcp"
+         id="org.kompiro.jamcircle.rcp.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
