@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.kompiro.jamcircle.rcp.feature"
+      id="org.kompiro.jamcircle.rcp"
       label="JAM Circle RCP Base Feature"
       version="0.8.0.qualifier"
       provider-name="kompiro.org">
@@ -23,6 +23,10 @@
 
    <includes
          id="org.eclipse.rcp"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.equinox.p2.user.ui"
          version="0.0.0"/>
 
    <plugin
@@ -114,13 +118,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.update.configurator"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.equinox.app"
          download-size="0"
          install-size="0"
@@ -193,38 +190,6 @@
          install-size="0"
          version="0.0.0"
          fragment="true"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.update.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.update.core.linux"
-         os="linux"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.update.core.win32"
-         os="win32"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.update.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
          unpack="false"/>
 
    <plugin

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.kompiro.jamcircle.kanban.feature"
-      label="JAMCircle Kanban"
+      id="org.kompiro.jamcircle.kanban"
+      label="JAM Circle Kanban  Feature"
       version="1.1.0.qualifier"
       provider-name="kompiro.org">
 
@@ -31,9 +31,7 @@
       <import plugin="org.eclipse.swt" version="3.2.0" match="compatible"/>
       <import plugin="org.apache.commons.logging" version="1.0.4" match="greaterOrEqual"/>
       <import plugin="org.eclipse.osgi"/>
-      <import plugin="org.eclipse.jdt.apt.core"/>
       <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.equinox.security.ui"/>
       <import plugin="org.eclipse.equinox.security"/>
    </requires>
 
