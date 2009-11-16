@@ -32,7 +32,7 @@
       </command>
    </extension>
    <extension
-         point="org.kompiro.jamcircle.storage.core.settingUI">
+         point="org.kompiro.jamcircle.storage.settingUI">
       <provider
             class="org.kompiro.jamcircle.storage.ui.StorageCallbackHandler">
       </provider>

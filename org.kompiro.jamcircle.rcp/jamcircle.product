@@ -28,7 +28,6 @@ JRuby Project http://jruby.codehaus.org/
 
    <windowImages i16="/org.kompiro.jamcircle.rcp/icons/kanban_016.gif" i32="/org.kompiro.jamcircle.rcp/icons/kanban_032.gif" i48="/org.kompiro.jamcircle.rcp/icons/kanban_048.gif" i64="/org.kompiro.jamcircle.rcp/icons/kanban_064.gif" i128="/org.kompiro.jamcircle.rcp/icons/kanban_128.gif"/>
 
-
    <launcher name="JAMCircle">
       <linux icon="/org.kompiro.jamcircle.rcp.feature/icons/linux/kanban_048.xpm"/>
       <solaris/>
@@ -42,7 +41,6 @@ JRuby Project http://jruby.codehaus.org/
             winLargeLow="/org.kompiro.jamcircle.rcp.feature/icons/windows/kanban_048_8.bmp"/>
       </win>
    </launcher>
-
 
    <vm>
    </vm>
@@ -95,14 +93,14 @@ JRuby Project http://jruby.codehaus.org/
       <plugin id="org.jivesoftware.smack" autoStart="false" startLevel="0" />
       <plugin id="org.jruby" autoStart="false" startLevel="0" />
       <plugin id="org.kompiro.jamcircle.debug" autoStart="false" startLevel="0" />
-      <plugin id="org.kompiro.jamcircle.kanban" autoStart="false" startLevel="0" />
+      <plugin id="org.kompiro.jamcircle.kanban.core" autoStart="false" startLevel="0" />
       <plugin id="org.kompiro.jamcircle.kanban.ui" autoStart="false" startLevel="0" />
       <plugin id="org.kompiro.jamcircle.rcp" autoStart="false" startLevel="0" />
-      <plugin id="org.kompiro.jamcircle.scripting" autoStart="false" startLevel="0" />
+      <plugin id="org.kompiro.jamcircle.scripting.core" autoStart="false" startLevel="0" />
       <plugin id="org.kompiro.jamcircle.scripting.ui" autoStart="false" startLevel="0" />
-      <plugin id="org.kompiro.jamcircle.storage" autoStart="false" startLevel="0" />
+      <plugin id="org.kompiro.jamcircle.storage.core" autoStart="false" startLevel="0" />
       <plugin id="org.kompiro.jamcircle.storage.ui" autoStart="false" startLevel="0" />
-      <plugin id="org.kompiro.jamcircle.xmpp" autoStart="false" startLevel="0" />
+      <plugin id="org.kompiro.jamcircle.xmpp.core" autoStart="false" startLevel="0" />
       <plugin id="org.kompiro.jamcircle.xmpp.kanban.ui" autoStart="false" startLevel="0" />
       <plugin id="org.kompiro.jamcircle.xmpp.ui" autoStart="false" startLevel="0" />
       <plugin id="org.mozilla.javascript" autoStart="false" startLevel="0" />

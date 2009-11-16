@@ -7,14 +7,14 @@ feature@org.kompiro.jamcircle.scripting=COPY,/var/hudson/jobs/jamcircle-continuo
 feature@org.kompiro.jamcircle.test=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.test.feature
 
 #plugins
-plugin@org.kompiro.jamcircle.rcp.core=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.rcp.core
-plugin@org.kompiro.jamcircle.kanban.core=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.kanban.core
+plugin@org.kompiro.jamcircle.rcp=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.rcp
+plugin@org.kompiro.jamcircle.kanban=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.kanban
 plugin@org.kompiro.jamcircle.kanban.ui=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.kanban.ui
-plugin@org.kompiro.jamcircle.storage.core=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.storage.core
+plugin@org.kompiro.jamcircle.storage=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.storage
 plugin@org.kompiro.jamcircle.storage.ui=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.storage.ui
-plugin@org.kompiro.jamcircle.xmpp.core=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.xmpp.core
+plugin@org.kompiro.jamcircle.xmpp=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.xmpp
 plugin@org.kompiro.jamcircle.xmpp.ui=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.xmpp.ui
-plugin@org.kompiro.jamcircle.scripting.core=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.scripting.core
+plugin@org.kompiro.jamcircle.scripting=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.scripting
 plugin@org.kompiro.jamcircle.scripting.ui=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.scripting.ui
 plugin@org.kompiro.jamcircle.debug=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.debug
 plugin@org.kompiro.jamcircle.debug.ui=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.debug.ui

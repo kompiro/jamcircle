@@ -8,7 +8,7 @@
       </factory>
    </extension>
    <extension
-         point="org.kompiro.jamcircle.xmpp.core.xmppLoginListener">
+         point="org.kompiro.jamcircle.xmpp.xmppLoginListener">
       <listener
             class="org.kompiro.jamcircle.xmpp.kanban.ui.internal.listener.KanbanXMPPLoginListener">
       </listener>

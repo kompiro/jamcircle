@@ -8,10 +8,10 @@ Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.gef,
- org.kompiro.jamcircle.kanban.core;visibility:=reexport,
+ org.kompiro.jamcircle.kanban;visibility:=reexport,
  org.apache.commons.lang,
  org.eclipse.equinox.security.ui,
- org.kompiro.jamcircle.scripting.core,
+ org.kompiro.jamcircle.scripting,
  org.kompiro.jamcircle.debug
 Bundle-ActivationPolicy: lazy
 Export-Package: org.kompiro.jamcircle.kanban.ui,

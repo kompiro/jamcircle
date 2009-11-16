@@ -1,13 +1,13 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Kanban Core Plug-in
-Bundle-SymbolicName: org.kompiro.jamcircle.kanban.core;singleton:=true
+Bundle-SymbolicName: org.kompiro.jamcircle.kanban;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.kompiro.jamcircle.kanban.KanbanActivator
 Bundle-Vendor: kompiro.org
 Require-Bundle: org.eclipse.core.runtime,
- org.kompiro.jamcircle.storage.core;visibility:=reexport,
- org.kompiro.jamcircle.scripting.core;visibility:=reexport,
+ org.kompiro.jamcircle.storage;visibility:=reexport,
+ org.kompiro.jamcircle.scripting;visibility:=reexport,
  org.apache.commons.lang,
  org.kompiro.jamcircle.debug
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JAMCircle RCP Plug-in
-Bundle-SymbolicName: org.kompiro.jamcircle.rcp.core;singleton:=true
+Bundle-SymbolicName: org.kompiro.jamcircle.rcp;singleton:=true
 Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.kompiro.jamcircle.RCPActivator
 Bundle-Localization: plugin

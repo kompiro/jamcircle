@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JAMCircle Scripting Plugin
-Bundle-SymbolicName: org.kompiro.jamcircle.scripting.core;singleton:=true
+Bundle-SymbolicName: org.kompiro.jamcircle.scripting;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-Activator: org.kompiro.jamcircle.scripting.internal.ScriptingActivator
 Bundle-Vendor: kompiro.org
