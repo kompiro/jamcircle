@@ -82,7 +82,7 @@
          version="0.0.0"/>
 
    <plugin
-         id="org.kompiro.jamcircle.kanban.core"
+         id="org.kompiro.jamcircle.kanban"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -96,7 +96,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.kompiro.jamcircle.storage.core"
+         id="org.kompiro.jamcircle.storage"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
@@ -109,7 +109,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.kompiro.jamcircle.scripting.core"
+         id="org.kompiro.jamcircle.scripting"
          download-size="0"
          install-size="0"
          version="0.0.0"
