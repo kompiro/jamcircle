@@ -39,5 +39,5 @@ fragment@org.kompiro.jamcircle.rcp.win32=COPY,/var/hudson/jobs/jamcircle-continu
 #plugin@org.mozilla.javascript=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.mozilla.javascript
 #plugin@org.apache.bsf=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.apache.bsf
 #plugin@org.jruby=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.jruby
-#plugin@org.mockito=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.mockito
+plugin@org.mockito=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.mockito
 plugin@org.sf.feeling.swt.win32.extension=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.sf.feeling.swt.win32.extension
