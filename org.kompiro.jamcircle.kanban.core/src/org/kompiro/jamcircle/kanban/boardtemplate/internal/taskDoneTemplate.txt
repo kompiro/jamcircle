@@ -1,0 +1,7 @@
+if(event.isAdded()){
+	card.setCompleted(true);
+	card.save();
+}else if(event.isRemoved()){
+	card.setCompleted(false);
+	card.save();
+}
