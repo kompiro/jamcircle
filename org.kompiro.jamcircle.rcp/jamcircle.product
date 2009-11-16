@@ -29,16 +29,16 @@ JRuby Project http://jruby.codehaus.org/
    <windowImages i16="/org.kompiro.jamcircle.rcp/icons/kanban_016.gif" i32="/org.kompiro.jamcircle.rcp/icons/kanban_032.gif" i48="/org.kompiro.jamcircle.rcp/icons/kanban_048.gif" i64="/org.kompiro.jamcircle.rcp/icons/kanban_064.gif" i128="/org.kompiro.jamcircle.rcp/icons/kanban_128.gif"/>
 
    <launcher name="JAMCircle">
-      <linux icon="/org.kompiro.jamcircle.rcp.feature/icons/linux/kanban_048.xpm"/>
+      <linux icon="/org.kompiro.jamcircle.rcp/icons/linux/kanban_048.xpm"/>
       <solaris/>
       <win useIco="false">
          <bmp
-            winSmallHigh="/org.kompiro.jamcircle.rcp.feature/icons/windows/kanban_016.bmp"
-            winSmallLow="/org.kompiro.jamcircle.rcp.feature/icons/windows/kanban_016_8.bmp"
-            winMediumHigh="/org.kompiro.jamcircle.rcp.feature/icons/windows/kanban_032.bmp"
-            winMediumLow="/org.kompiro.jamcircle.rcp.feature/icons/windows/kanban_032_8.bmp"
-            winLargeHigh="/org.kompiro.jamcircle.rcp.feature/icons/windows/kanban_048.bmp"
-            winLargeLow="/org.kompiro.jamcircle.rcp.feature/icons/windows/kanban_048_8.bmp"/>
+            winSmallHigh="/org.kompiro.jamcircle.rcp/icons/windows/kanban_016.bmp"
+            winSmallLow="/org.kompiro.jamcircle.rcp/icons/windows/kanban_016_8.bmp"
+            winMediumHigh="/org.kompiro.jamcircle.rcp/icons/windows/kanban_032.bmp"
+            winMediumLow="/org.kompiro.jamcircle.rcp/icons/windows/kanban_032_8.bmp"
+            winLargeHigh="/org.kompiro.jamcircle.rcp/icons/windows/kanban_048.bmp"
+            winLargeLow="/org.kompiro.jamcircle.rcp/icons/windows/kanban_048_8.bmp"/>
       </win>
    </launcher>
 
