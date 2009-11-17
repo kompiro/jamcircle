@@ -45,6 +45,11 @@
 
 	
 	<!-- assmble targets for RCP build -->	
+	<target name="assemble.org.eclipse.pde.build.container.feature.p2">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-p2.zip"/>
+		</ant>
+	</target>
 	<target name="assemble.org.eclipse.pde.build.container.feature.win32.win32.x86">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
  			<property name="archiveName" value="${archiveNamePrefix}-win32.win32.x86.zip"/>
