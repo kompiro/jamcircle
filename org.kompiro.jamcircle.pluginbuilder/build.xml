@@ -230,6 +230,11 @@
 		<property name="buildTarget" value="assemble"/>
 		<antcall target="-build"/>
 	</target>
+
+	<target name="package" description="Run the package target of customTargets.xml.">
+		<property name="buildTarget" value="package"/>
+		<antcall target="-build"/>
+	</target>
 	
 	<target name="postBuild" description="Run the postBuild target of customTargets.xml.">
 		<property name="buildTarget" value="postBuild"/>
