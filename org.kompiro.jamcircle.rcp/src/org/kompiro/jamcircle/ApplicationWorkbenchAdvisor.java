@@ -20,6 +20,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	private IKeyStateManager manager = null;
 	private TrayItem trayItem;
 	private KeyEventListener listener;
+	private ToolTip tip;
 
 	public ApplicationWorkbenchAdvisor() {
 		String className = null;
@@ -72,6 +73,17 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	
 	@Override
 	public void postStartup() {
+		trayItem.setImage(getAppImage());
+		if(RCPUtils.isWindows()){
+			tip.setVisible(false);
+			tip.dispose();
+			
+			tip = new ToolTip(new Shell(getDisplay()) , SWT.ICON_INFORMATION);
+			tip.setText("Started JAM Circle.");
+			tip.setMessage("Please double click me!");
+			trayItem.setToolTip(tip);
+			tip.setVisible(true);
+		}
 	}
 
 	private void initalizeManager() {
@@ -89,7 +101,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		Display display = getDisplay();
 		Tray tray = display.getSystemTray();
 		trayItem = new TrayItem(tray, SWT.NONE);
-		trayItem.setImage(getAppImage());
+		trayItem.setImage(getAppOffImage());
 		trayItem.setText("JAM Circle");
 		trayItem.setToolTipText("Double click if you want to open board.");
 		trayItem.addSelectionListener(new SelectionAdapter(){
@@ -126,12 +138,15 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 				menu.setVisible(true);
 			}
 		});
-		ToolTip tip = new ToolTip(new Shell(display) , SWT.ICON_INFORMATION);
-		tip.setText("Welcome JAM Circle world.");
-		tip.setMessage("starting JAM Circle.");
-		trayItem.setToolTip(tip);
-		tip.setVisible(true);
+		if(RCPUtils.isWindows()){
+			tip = new ToolTip(new Shell(display) , SWT.ICON_INFORMATION);
+			tip.setText("Welcome JAM Circle world.");
+			tip.setMessage("starting JAM Circle.");
+			trayItem.setToolTip(tip);
+			tip.setVisible(true);
+		}
 	}
+
 
 	private Display getDisplay() {
 		Display display = Display.getDefault();
@@ -186,6 +201,10 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 	private Image getAppImage() {
 		return getImageRegistry().get(ImageConstants.APPLICATION_IMAGE.toString());
+	}
+
+	private Image getAppOffImage() {
+		return getImageRegistry().get(ImageConstants.APPLICATION_OFF_IMAGE.toString());
 	}
 
 	private Image getExitImage() {
