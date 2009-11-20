@@ -215,6 +215,11 @@
  			<property name="archiveName" value="${archiveNamePrefix}-macosx.carbon.x86.zip"/>
 		</ant>
 	</target>
+	<target name="assemble.org.kompiro.jamcircle.test.p2">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-test.p2.zip"/>
+		</ant>
+	</target>
 
 	<property name="assemble.org.eclipse.pde.build.container.feature.group.group.group" value="true" />
  	<target name="assemble.org.eclipse.pde.build.container.feature.group.group.group">
