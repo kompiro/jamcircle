@@ -45,7 +45,7 @@
 
 	
 	<!-- assmble targets for RCP build -->	
-	<target name="assemble.org.kompiro.jamcircle.feature.p2">
+	<target name="assemble.org.kompiro.jamcircle.p2">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
  			<property name="archiveName" value="${archiveNamePrefix}-p2.zip"/>
 		</ant>
