@@ -27,7 +27,10 @@
 		<equals arg1="${pluginbuilder.is.svn}" arg2="true"/>
 	</condition>
 	<condition property="isRunTests" value="true">
-		<equals arg1="${pluginbuilder.is.runtests}" arg2="true"/>
+		<or>
+			<equals arg1="${pluginbuilder.is.runtests}" arg2="true"/>
+			<equals arg1="${rcpBuilding}" arg2=""/>
+		</or>
 	</condition>
 
 
