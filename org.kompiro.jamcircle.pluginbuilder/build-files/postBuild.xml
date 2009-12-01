@@ -3,6 +3,7 @@
 	<taskdef resource="org/pluginbuilder/anttasks/pluginbuildertasks.properties" classpath="${buildHome}/build-files/pluginbuilder-anttasks.jar" />
 
 	<target name="main">
+		<echoproperties/>
 		<property name="UpdateSiteStagingLocation" value="${buildDirectory}/tmpUpdateSite/updateSite"/>
 		<property name="UpdateSiteFinalLocation" value="${buildResultsDirectory}/../updateSite"/>
 		<property name="siteXmlFile" value="${UpdateSiteStagingLocation}/site.xml"/>
