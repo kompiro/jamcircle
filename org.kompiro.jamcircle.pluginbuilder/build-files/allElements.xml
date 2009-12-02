@@ -105,6 +105,11 @@
  			<property name="archiveName" value="${archiveNamePrefix}-macosx.carbon.x86.zip"/>
 		</ant>
 	</target>
+	<target name="assemble.org.kompiro.jamcircle.group.group.group">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-all.zip"/>
+		</ant>
+	</target>
 	<target name="assemble.org.kompiro.jamcircle.win32.win32.x86">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
  			<property name="archiveName" value="${archiveNamePrefix}-win32.win32.x86.zip"/>
