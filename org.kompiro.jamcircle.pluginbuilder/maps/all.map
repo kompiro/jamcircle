@@ -5,7 +5,6 @@ feature@org.kompiro.jamcircle.xmpp=COPY,/var/hudson/jobs/jamcircle-continuous-in
 feature@org.kompiro.jamcircle.kanban=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.kanban.feature
 feature@org.kompiro.jamcircle.scripting=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.scripting.feature
 feature@org.kompiro.jamcircle.test=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.test.feature
-feature@org.eclipse.equinox.executable=COPY,/var/buildbase/eclipse/dropins/delta/eclipse/features,org.eclipse.equinox.executable
 
 #plugins
 plugin@org.kompiro.jamcircle.rcp=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.rcp
