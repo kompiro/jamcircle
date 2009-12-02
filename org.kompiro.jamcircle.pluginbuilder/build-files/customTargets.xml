@@ -29,7 +29,7 @@
 	<condition property="isRunTests" value="true">
 		<and>
 			<equals arg1="${pluginbuilder.is.runtests}" arg2="true"/>
-			<equals arg1="${rcpBuilding}" arg2=""/>
+			<equals arg1="${rcpBuilding}" arg2="false"/>
 		</and>
 	</condition>
 
