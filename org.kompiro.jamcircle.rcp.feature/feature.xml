@@ -25,10 +25,6 @@
          id="org.eclipse.equinox.p2.user.ui"
          version="0.0.0"/>
 
-   <includes
-         id="org.eclipse.equinox.executable"
-         version="0.0.0"/>
-
    <plugin
          id="com.ibm.icu"
          download-size="0"
