@@ -136,8 +136,8 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 		
 		assertEquals(expect.x,lane.getX());
 		assertEquals(expect.y,lane.getY());
-		assertEquals(LaneMock.INIT_WIDTH,lane.getWidth());
-		assertEquals(LaneMock.INIT_HEIGHT,lane.getHeight());		
+		assertEquals(LaneMock.INIT_WIDTH,lane.getWidth(),5);
+		assertEquals(LaneMock.INIT_HEIGHT,lane.getHeight(),5);		
 	}
 	
 	
