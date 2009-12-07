@@ -74,16 +74,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	@Override
 	public void postStartup() {
 		trayItem.setImage(getAppImage());
-		if(RCPUtils.isWindows()){
-			tip.setVisible(false);
-			tip.dispose();
-			
-			tip = new ToolTip(new Shell(getDisplay()) , SWT.ICON_INFORMATION);
-			tip.setText("Started JAM Circle.");
-			tip.setMessage("Please double click me!");
-			trayItem.setToolTip(tip);
-			tip.setVisible(true);
-		}
+		showToolTip("Started JAM Circle.", "Please double click me!");
 	}
 
 	private void initalizeManager() {
@@ -91,7 +82,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		manager.install();
 		listener = new KeyEventListener() {
 			public void fireEvent() {
-				showToolTipForWaitOpeningBoard(trayItem);
+				handleShowOrHideBoard(trayItem);
 			}
 		};
 		manager.addKeyEventListener(listener);
@@ -138,13 +129,8 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 				menu.setVisible(true);
 			}
 		});
-		if(RCPUtils.isWindows()){
-			tip = new ToolTip(new Shell(display) , SWT.ICON_INFORMATION);
-			tip.setText("Welcome JAM Circle world.");
-			tip.setMessage("starting JAM Circle.");
-			trayItem.setToolTip(tip);
-			tip.setVisible(true);
-		}
+		
+		showToolTip("Welcome JAM Circle world.", "starting JAM Circle.");
 	}
 
 
@@ -172,27 +158,46 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	}
 
 	private void openWindowInProgress(TrayItem trayItem) {
-		showToolTipForWaitOpeningBoard(trayItem);
+		handleShowOrHideBoard(trayItem);
 	}
 	
-	private void showToolTipForWaitOpeningBoard(TrayItem trayItem) {
+	private void handleShowOrHideBoard(TrayItem trayItem) {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		Shell shell = workbench.getActiveWorkbenchWindow().getShell();
-		ToolTip tip = null;
-		if(RCPUtils.isWindows()){
-			tip = new ToolTip(shell , SWT.ICON_INFORMATION);
-			tip.setText("Opening Board");
-			tip.setMessage("JAM Circle's board is open.");
-			trayItem.setToolTip(tip);
-			tip.setVisible(true);			
+		if(shell.isVisible()){
+			hideBoard(shell);
+		}else{
+			showBoard(shell);
 		}
-		
+	}
+
+	private void showBoard(Shell shell) {
+		showToolTip("Opening Board","JAM Circle's board is open.");
 		RCPUtils.modifyAlphaForSurface(shell);
-		
-		if(RCPUtils.isWindows()){
-			tip.setVisible(false);
-			tip.dispose();
+		closeToolTip();
+	}
+
+	private void hideBoard(Shell shell) {
+		RCPUtils.modifyAlphaForDropout(shell);
+		closeToolTip();
+	}
+	
+	private void showToolTip(String title, String message){
+		if(tip != null){
+			closeToolTip();
 		}
+		tip = new ToolTip(new Shell(getDisplay()) , SWT.BALLOON | SWT.ICON_INFORMATION);
+		tip.setText(title);
+		tip.setMessage(message);
+		trayItem.setToolTip(tip);
+		tip.setVisible(true);					
+	}
+	
+	private void closeToolTip(){
+		if(tip == null) return;
+		tip.setVisible(false);
+		tip.dispose();
+		tip = null;
 	}
 	
 	private ImageRegistry getImageRegistry() {
