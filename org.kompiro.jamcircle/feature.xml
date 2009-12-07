@@ -23,6 +23,10 @@ RCP.
    </url>
 
    <includes
+         id="org.kompiro.jamcircle.library"
+         version="0.0.0"/>
+
+   <includes
          id="org.kompiro.jamcircle.rcp"
          version="0.0.0"/>
 

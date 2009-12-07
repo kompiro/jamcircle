@@ -107,7 +107,7 @@
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.group.group.group">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-all.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}.zip"/>
 		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.win32.win32.x86">
@@ -155,86 +155,58 @@
  			<property name="archiveName" value="${archiveNamePrefix}-hpux.motif.PA_RISC.zip"/>
 		</ant>
 	</target>
+
 	<target name="assemble.org.kompiro.jamcircle.macosx.carbon.ppc">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
  			<property name="archiveName" value="${archiveNamePrefix}-macosx.carbon.ppc.zip"/>
 		</ant>
 	</target>
+	
 	<target name="assemble.org.kompiro.jamcircle.macosx.carbon.x86">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
  			<property name="archiveName" value="${archiveNamePrefix}-macosx.carbon.x86.zip"/>
 		</ant>
 	</target>
+
 	<target name="assemble.org.kompiro.jamcircle.test.group.group.group">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-test-all.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-test.zip"/>
 		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.test.win32.win32.x86">
- 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-test-win32.win32.x86.zip"/>
-		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.test.linux.gtk.x86">
- 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-test-linux.gtk.x86.zip"/>
-		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.test.linux.gtk.ppc">
- 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-test-linux.gtk.ppc.zip"/>
-		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.test.linux.gtk.x86_64">
- 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-test-linux.gtk.x86_64.zip"/>
-		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.test.linux.motif.x86">
- 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-test-linux.motif.x86.zip"/>
-		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.test.solaris.motif.sparc">
- 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-test-solaris.motif.sparc.zip"/>
-		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.test.solaris.gtk.sparc">
- 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-test-solaris.gtk.sparc.zip"/>
-		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.test.aix.motif.ppc">
- 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-test-aix.motif.ppc.zip"/>
-		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.test.hpux.motif.PA_RISC">
- 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-test-hpux.motif.PA_RISC.zip"/>
-		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.test.macosx.carbon.ppc">
- 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-test-macosx.carbon.ppc.zip"/>
-		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.test.macosx.carbon.x86">
- 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-test-macosx.carbon.x86.zip"/>
-		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.test.p2">
- 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-test-test.p2.zip"/>
-		</ant>
 	</target>
 
 	<property name="assemble.org.eclipse.pde.build.container.feature.group.group.group" value="true" />
  	<target name="assemble.org.eclipse.pde.build.container.feature.group.group.group">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
  			<property name="archiveName" value="${archiveNamePrefix}-group.zip"/>
+		</ant>
+ 	</target>
+ 	<target name="assemble.org.eclipse.pde.build.container.feature.p2">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-p2.zip"/>
 		</ant>
  	</target>
 </project>
