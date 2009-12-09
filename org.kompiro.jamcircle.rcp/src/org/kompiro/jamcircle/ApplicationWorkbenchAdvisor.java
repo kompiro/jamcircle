@@ -174,7 +174,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	private void showBoard(Shell shell) {
 		showToolTip("Opening Board","JAM Circle's board is open.");
 		RCPUtils.modifyAlphaForSurface(shell);
-		closeToolTip();
+//		closeToolTip();
 	}
 
 	private void hideBoard(Shell shell) {
@@ -196,6 +196,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	private void closeToolTip(){
 		if(tip == null) return;
 		tip.setVisible(false);
+		tip.getParent().close();
 		tip.dispose();
 		tip = null;
 	}
