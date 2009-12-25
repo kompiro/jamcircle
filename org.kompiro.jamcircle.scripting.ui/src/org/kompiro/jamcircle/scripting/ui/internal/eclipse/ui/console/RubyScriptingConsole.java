@@ -75,7 +75,7 @@ public class RubyScriptingConsole extends TextConsole {
     /**
      * The encoding used to for displaying console output.
      */
-    private String fEncoding = WorkbenchEncoding.getWorkbenchDefaultEncoding();
+    private String fEncoding = "utf-8";
 
 	private IOConsolePage consolePage;
 
@@ -455,7 +455,7 @@ public class RubyScriptingConsole extends TextConsole {
 				}
 				IRubyObject rubyBoard = JavaEmbedUtils.javaToRuby(runtime, new BoardAccessor());
 		        runtime.getGlobalVariables().defineReadonly("$board_accessor", new ValueAccessor(rubyBoard));		        
-		        runtime.getGlobalVariables().defineReadonly("$$", new ValueAccessor(runtime.newFixnum(System.identityHashCode(runtime))));
+		        runtime.getGlobalVariables().defineReadonly("$$", new ValueAccessor(runtime.newFixnum(System.identityHashCode(runtime))));		        
 			}
 
 			private String getJRubyHomeFromBundle() {
