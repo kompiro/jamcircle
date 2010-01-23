@@ -50,7 +50,6 @@ public class KanbanServiceImplTest {
 	
 	@Test
 	public void fireProperiesIsCalledWhenCreateBoard() throws Exception {
-		
 		Board boardMock = mock(Board.class);
 		when(managerMock.create(eq(Board.class), (DBParam)anyObject(),(DBParam)anyObject())).thenReturn(boardMock);
 
