@@ -20,7 +20,9 @@ public class ScriptingServiceImplTest {
 		globalBeans.put("ONE", 1);
 		globalBeans.put("TWO", 2);
 
-		service = new ScriptingServiceImpl(globalBeans);
+		service = new ScriptingServiceImpl();
+		service.init();
+		service.setGlobalValues(globalBeans);
 	}
 	
 	@After

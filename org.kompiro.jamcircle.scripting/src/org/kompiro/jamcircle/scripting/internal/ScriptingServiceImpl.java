@@ -22,28 +22,38 @@ public class ScriptingServiceImpl implements ScriptingService{
 	private boolean initialized = false;
 	private Ruby runtime;
 	private Map<String,Object> globalValues = new HashMap<String,Object>();
+	private ScriptingEngineInitializerLoader loader;
 	
-	public ScriptingServiceImpl() {
-		manager = new BSFManager();
-		init();
-	}
-	
-	private void init() {
+	public void init() throws ScriptingException{
 		if(!initialized){
 			synchronized (this) {
+				manager = new BSFManager();
 				RubyInstanceConfig config = new RubyInstanceConfig();
 				config.setArgv(new String[]{"-Ku"});
-				config.setJRubyHome(getJRubyHomeFromBundle());
+				setJRubyHome(config);
 		        config.setObjectSpaceEnabled(true);
 				runtime = JavaEmbedUtils.initialize(new ArrayList<Object>(),config);
 		        runtime.getGlobalVariables().defineReadonly("$bsf", new ValueAccessor(JavaEmbedUtils.javaToRuby(runtime, manager)));
 		        runtime.getGlobalVariables().defineReadonly("$$", new ValueAccessor(runtime.newFixnum(System.identityHashCode(runtime))));
-				if(globalValues == null){
-					initialized = true;
-					return;
-				}
-				initialized = true;
+		        if(loader != null){
+		    		setGlobalValues(loader.getGrobalValues());
+		    		loader.loadExtendScript(this);
+		        }
+		        initialized = true;
 			}
+		}
+	}
+
+	private void setJRubyHome(RubyInstanceConfig config) {
+		String home = null;
+		if(Platform.isRunning()){
+			try{
+				home = new File(FileLocator.getBundleFile(Platform.getBundle("org.jruby")),"META-INF/jruby.home").getAbsolutePath();
+			} catch (IOException e) {
+			}
+		}
+		if(home != null){
+			config.setJRubyHome(home);
 		}
 	}
 
@@ -77,7 +87,8 @@ public class ScriptingServiceImpl implements ScriptingService{
 			InputStreamReader reader = new InputStreamReader(getClass().getResource(templateName).openStream());
 			String header = IOUtils.getStringFromReader(reader);
 			script= header + script;
-			return executeScript(type, scriptName, script, templateLines);
+			Object result = executeScript(type, scriptName, script, templateLines);
+			return result;
 			
 		} catch (BSFException e) {
 			Throwable targetException = e.getTargetException();
@@ -88,10 +99,16 @@ public class ScriptingServiceImpl implements ScriptingService{
 			throw new ScriptingException("Scripting Exception", targetException);
 		} catch (IOException e) {
 			throw new ScriptingException("An Error is occured when reading template script.", e);
+		}finally{
+			if(beans != null){
+				for(Map.Entry<String, Object> entry : beans.entrySet()){
+					manager.unregisterBean(entry.getKey());
+				}
+			}			
 		}
 	}
 
-	private Object executeScript(ScriptTypes type, String scriptName,
+	public Object executeScript(ScriptTypes type, String scriptName,
 			String script, int templateLines) throws BSFException {
 		Object result = null;
 		switch (type) {
@@ -109,15 +126,6 @@ public class ScriptingServiceImpl implements ScriptingService{
 	public Object getAdapter(Class adapter) {
 		if(adapter == null) return null;
 		if(Ruby.class.equals(adapter)) return runtime;
-		return null;
-	}
-
-	private String getJRubyHomeFromBundle() {
-		try {
-			String path = new File(FileLocator.getBundleFile(Platform.getBundle("org.jruby")),"META-INF/jruby.home").getAbsolutePath();
-			return path;
-		} catch (IOException e) {
-		}
 		return null;
 	}
 
@@ -145,8 +153,8 @@ public class ScriptingServiceImpl implements ScriptingService{
 		}
 	}
 	
-	public void setScriptingEngineInitializerLoader(ScriptingEngineInitializerLoader loader) throws ScriptingException{
-		setGlobalValues(loader.getGrobalValues());
+	public void setScriptingEngineInitializerLoader(ScriptingEngineInitializerLoader loader){
+		this.loader = loader;
 	}
 
 	public Map<String, Object> getGlovalValues() {

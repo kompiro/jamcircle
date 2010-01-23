@@ -55,13 +55,46 @@ This Initializer provides Scripting Engine Service&apos;s gloval value initializ
          </documentation>
       </annotation>
       <complexType>
-         <attribute name="class" type="string" use="required">
+         <sequence>
+            <element ref="script" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="class" type="string">
             <annotation>
                <documentation>
                   The name of class.
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":org.kompiro.jamcircle.scripting.IScriptingEngineInitializer"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="script">
+      <complexType>
+         <attribute name="type" use="required">
+            <annotation>
+               <documentation>
+                  Choose Script Types(current supports JRuby or JavaScript)
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="JRuby">
+                  </enumeration>
+                  <enumeration value="JavaScript">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
+         <attribute name="file" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Choose script file
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="resource"/>
                </appinfo>
             </annotation>
          </attribute>
