@@ -6,7 +6,7 @@ import org.osgi.framework.*;
 
 public class ScriptingActivator implements BundleActivator {
 
-	private ServiceRegistration scriptingServiceRegistration;
+//	private ServiceRegistration scriptingServiceRegistration;
 	public static String ID = ScriptingActivator.class.getName();
 
 	/*
@@ -14,9 +14,9 @@ public class ScriptingActivator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
-		ScriptingEngineInitializerLoader loader = new ScriptingEngineInitializerLoaderImpl(context);
-		ScriptingServiceImpl service = new ScriptingServiceImpl(loader.getGrobalValues());
-		scriptingServiceRegistration = context.registerService(ScriptingService.class.getName(), service, null);
+//		ScriptingEngineInitializerLoader loader = new ScriptingEngineInitializerLoaderImpl(context);
+//		ScriptingServiceImpl service = new ScriptingServiceImpl();
+//		scriptingServiceRegistration = context.registerService(ScriptingService.class.getName(), service, null);
 	}
 
 	/*
@@ -24,7 +24,7 @@ public class ScriptingActivator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
-		scriptingServiceRegistration.unregister();
+//		scriptingServiceRegistration.unregister();
 	}
 
 }

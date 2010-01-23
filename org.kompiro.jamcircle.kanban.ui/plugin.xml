@@ -104,11 +104,4 @@
              class="org.kompiro.jamcircle.kanban.ui.KanbanUIPreferenceInitializer">
        </initializer>
     </extension>
-    <extension
-          id="initializer"
-          point="org.kompiro.jamcircle.scripting.scriptEngineInitializer">
-       <initializer
-             class="org.kompiro.jamcircle.kanban.ui.KanbanUIScriptingEngineInitializer">
-       </initializer>
-    </extension>
 </plugin>

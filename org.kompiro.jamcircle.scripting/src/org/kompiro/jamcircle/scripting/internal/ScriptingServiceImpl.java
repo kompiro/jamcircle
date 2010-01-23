@@ -13,8 +13,7 @@ import org.jruby.RubyInstanceConfig;
 import org.jruby.exceptions.RaiseException;
 import org.jruby.internal.runtime.ValueAccessor;
 import org.jruby.javasupport.JavaEmbedUtils;
-import org.kompiro.jamcircle.scripting.ScriptTypes;
-import org.kompiro.jamcircle.scripting.ScriptingService;
+import org.kompiro.jamcircle.scripting.*;
 import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 
 public class ScriptingServiceImpl implements ScriptingService{
@@ -24,13 +23,12 @@ public class ScriptingServiceImpl implements ScriptingService{
 	private Ruby runtime;
 	private Map<String,Object> globalValues = new HashMap<String,Object>();
 	
-	public ScriptingServiceImpl(Map<String, Object> beans)throws ScriptingException{
-		globalValues = beans;
+	public ScriptingServiceImpl() {
 		manager = new BSFManager();
 		init();
 	}
 	
-	private void init() throws ScriptingException {
+	private void init() {
 		if(!initialized){
 			synchronized (this) {
 				RubyInstanceConfig config = new RubyInstanceConfig();
@@ -43,21 +41,6 @@ public class ScriptingServiceImpl implements ScriptingService{
 				if(globalValues == null){
 					initialized = true;
 					return;
-				}
-				try{
-					for(Map.Entry<String, Object> entry : globalValues.entrySet()){
-						Object value = entry.getValue();
-						String name = entry.getKey();
-						manager.declareBean(name, value,value.getClass());
-						runtime.defineGlobalConstant(name, JavaEmbedUtils.javaToRuby(runtime, value));
-					}
-				} catch (BSFException e) {
-					Throwable targetException = e.getTargetException();
-					if(targetException instanceof RaiseException){
-						RaiseException ex = (RaiseException) targetException;
-						throw new ScriptingException(ex.getException().asJavaString(), targetException);
-					}
-					throw new ScriptingException("Scripting Exception", targetException);
 				}
 				initialized = true;
 			}
@@ -141,6 +124,29 @@ public class ScriptingServiceImpl implements ScriptingService{
 	public void terminate() {
 		manager.terminate();
 		JavaEmbedUtils.terminate(runtime);
+	}
+	
+	public void setGlobalValues(Map<String, Object> globalValues) throws ScriptingException {
+		this.globalValues = globalValues;
+		try{
+			for(Map.Entry<String, Object> entry : globalValues.entrySet()){
+				Object value = entry.getValue();
+				String name = entry.getKey();
+				manager.declareBean(name, value,value.getClass());
+				runtime.defineGlobalConstant(name, JavaEmbedUtils.javaToRuby(runtime, value));
+			}
+		} catch (BSFException e) {
+			Throwable targetException = e.getTargetException();
+			if(targetException instanceof RaiseException){
+				RaiseException ex = (RaiseException) targetException;
+				throw new ScriptingException(ex.getException().asJavaString(), targetException);
+			}
+			throw new ScriptingException("Scripting Exception", targetException);
+		}
+	}
+	
+	public void setScriptingEngineInitializerLoader(ScriptingEngineInitializerLoader loader) throws ScriptingException{
+		setGlobalValues(loader.getGrobalValues());
 	}
 
 	public Map<String, Object> getGlovalValues() {

@@ -5,16 +5,16 @@ import java.util.*;
 import org.eclipse.core.runtime.*;
 import org.kompiro.jamcircle.scripting.IScriptingEngineInitializer;
 import org.kompiro.jamcircle.scripting.ScriptingEngineInitializerLoader;
-import org.osgi.framework.BundleContext;
+import org.osgi.service.component.ComponentContext;
 
 public class ScriptingEngineInitializerLoaderImpl implements ScriptingEngineInitializerLoader {
 	private static final String PLUGIN_ID = ScriptingActivator.ID;
 	private static final String POINT_CALLBACK = "org.kompiro.jamcircle.scripting.scriptEngineInitializer";
 	private String ATTR_HANDLER_CLASS = "class";
 	private Map<String,Object> result = new HashMap<String, Object>();
-	
-	public ScriptingEngineInitializerLoaderImpl(BundleContext context) throws CoreException{
-		result.put("BUNDLE_CONTEXT", context);
+		
+	public void init(ComponentContext context) throws CoreException{
+		result.put("BUNDLE_CONTEXT", context.getBundleContext());
 		IExtensionRegistry registry = RegistryFactory.getRegistry();
 		IExtensionPoint point = registry.getExtensionPoint(POINT_CALLBACK);
 		if(point == null) return;
@@ -34,7 +34,7 @@ public class ScriptingEngineInitializerLoaderImpl implements ScriptingEngineInit
 		}
 		if(!statuses.isOK()){
 			throw new CoreException(statuses);
-		}		
+		}				
 	}
 	
 	public Map<String,Object> getGrobalValues(){

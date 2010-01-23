@@ -45,13 +45,24 @@ public class WorkbenchUtil {
 	
 	public static Display getDisplay(){
 		IWorkbench workbench = getWorkbench();
-		if(workbench == null) return null;
+		if(workbench == null) return Display.getDefault();
 		return workbench.getDisplay();
+	}
+	
+	public static void async(Runnable runnable){
+		Display display = getDisplay();
+		if(display == null){
+			runnable.run();
+			return;
+		}
+		display.asyncExec(runnable);
 	}
 
 	public static IWorkbench getWorkbench() {
 		if(Platform.isRunning()){
-			return PlatformUI.getWorkbench();
+			if(PlatformUI.isWorkbenchRunning()){
+				return PlatformUI.getWorkbench();
+			}
 		}
 		return null;
 	}
