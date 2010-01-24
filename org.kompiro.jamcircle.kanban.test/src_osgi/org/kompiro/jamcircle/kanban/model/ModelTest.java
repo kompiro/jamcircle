@@ -39,7 +39,7 @@ public class ModelTest extends AbstractKanbanTest{
 		File target = util.target();
 		card.addFile(target);
 		System.out.println(target.getAbsolutePath());
-		StorageService service = KanbanActivator.getDefault().getStorageService();
+		StorageService service = KanbanActivator.getKanbanService().getStorageService();
 		String path = CardImpl.CARD_PATH + card.getID() + File.separator + "long.txt";
 		String message = String.format("'%s' is not exist.",path);
 		assertTrue(message,service.fileExists(path));

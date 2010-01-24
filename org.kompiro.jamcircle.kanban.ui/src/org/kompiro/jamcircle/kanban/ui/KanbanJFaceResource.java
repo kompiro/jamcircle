@@ -3,18 +3,14 @@ package org.kompiro.jamcircle.kanban.ui;
 
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.graphics.*;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
+import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
 public class KanbanJFaceResource {
 	public static final String DARK_COLOR_KEY = "org.kompiro.jamcircle.DARK_COLOR_KEY";
-
 	
 	private KanbanJFaceResource(){
 		
@@ -41,7 +37,7 @@ public class KanbanJFaceResource {
 	private static void tableInitialize() {
 		int shift = "carbon".equals(SWT.getPlatform()) ? -25 : -10;//$NON-NLS-1$ 
 
-		Color lightColor = Display.getDefault().getSystemColor(SWT.COLOR_LIST_BACKGROUND);
+		Color lightColor = WorkbenchUtil.getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND);
 
 		// Determine a dark color by shifting the list color
 		RGB darkRGB = new RGB(Math.max(0, lightColor.getRed() + shift), Math

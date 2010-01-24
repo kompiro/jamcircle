@@ -19,3 +19,4 @@ Export-Package: org.kompiro.jamcircle.kanban,
  org.kompiro.jamcircle.kanban.service,
  org.kompiro.jamcircle.kanban.service.internal;x-friends:="org.kompiro.jamcircle.kanban.ui.test"
 Eclipse-BuddyPolicy: dependent
+Service-Component: OSGI-INF/KanbanService.xml

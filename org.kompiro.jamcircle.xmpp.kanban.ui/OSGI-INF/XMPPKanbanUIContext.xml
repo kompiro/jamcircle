@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.kompiro.jamcircle.xmpp.kanban.ui.XMPPKanbanUIContext">
+   <implementation class="org.kompiro.jamcircle.xmpp.kanban.ui.internal.XMPPKanbanUIContext"/>
+   <reference bind="setXMPPConnectionService" cardinality="1..1" interface="org.kompiro.jamcircle.xmpp.service.XMPPConnectionService" name="XMPPConnectionService" policy="static"/>
+   <reference bind="setKanbanService" cardinality="1..1" interface="org.kompiro.jamcircle.kanban.service.KanbanService" name="KanbanService" policy="static"/>
+</scr:component>

@@ -23,3 +23,4 @@ Export-Package: org.kompiro.jamcircle.kanban.ui,
  org.kompiro.jamcircle.kanban.ui.widget
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: kompiro.org
+Service-Component: OSGI-INF/KanbanUIContext.xml

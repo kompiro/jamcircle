@@ -16,20 +16,16 @@ public class XMPPUIActivator extends AbstractUIPlugin {
 	private static XMPPUIActivator plugin;
 	private IPreferenceStore preferenceStore;
 
-	private ServiceTracker connectionTracker;
-
 	public XMPPUIActivator() {
 	}
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		connectionTracker = new ServiceTracker(context, XMPPConnectionService.class.getName(), null);
-		connectionTracker.open();
 		plugin = this;
 	}
 
 	public XMPPConnectionService getConnectionService(){
-		return (XMPPConnectionService) connectionTracker.getService();
+		return XMPPUIContext.getDefault().getXMPPConnectionService();
 	}
 	
 	@Override
@@ -62,7 +58,6 @@ public class XMPPUIActivator extends AbstractUIPlugin {
 
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-		connectionTracker.close();
 		super.stop(context);
 	}
 

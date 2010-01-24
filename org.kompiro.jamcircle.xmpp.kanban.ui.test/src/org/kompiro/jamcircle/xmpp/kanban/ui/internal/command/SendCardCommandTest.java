@@ -1,14 +1,15 @@
 package org.kompiro.jamcircle.xmpp.kanban.ui.internal.command;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 import org.eclipse.gef.EditPart;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.User;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
-import org.kompiro.jamcircle.xmpp.kanban.ui.internal.BridgeXMPPActivator;
+import org.kompiro.jamcircle.xmpp.kanban.ui.internal.XMPPKanbanUIContext;
 import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 
 public class SendCardCommandTest extends AbstractCommandTest {
@@ -60,12 +61,11 @@ public class SendCardCommandTest extends AbstractCommandTest {
 
 	private void whenSetButNotTargetModel() {
 		SendCardCommand command = new SendCardCommand();
-		BridgeXMPPActivator activator = mock(BridgeXMPPActivator.class);
+		XMPPKanbanUIContext context = new XMPPKanbanUIContext();
 		XMPPConnectionService service = mock(XMPPConnectionService.class);
 		User user = mock(User.class);
 		when(service.isAvailable(user)).thenReturn(true);
-		when(activator.getConnectionService()).thenReturn(service);
-		command.setActivator(activator);
+		context.setXMPPConnectionService(service);
 		try {
 			command.setTarget(user);
 			EditPart part = mock(EditPart.class);
@@ -100,12 +100,11 @@ public class SendCardCommandTest extends AbstractCommandTest {
 	@Override
 	protected void createCommand() {
 		command = new SendCardCommand();
-		BridgeXMPPActivator activator = mock(BridgeXMPPActivator.class);
+		XMPPKanbanUIContext context = new XMPPKanbanUIContext();
 		service = mock(XMPPConnectionService.class);
 		user = mock(User.class);
 		when(service.isAvailable(user)).thenReturn(true);
-		when(activator.getConnectionService()).thenReturn(service);
-		command.setActivator(activator);
+		context.setXMPPConnectionService(service);
 		command.setTarget(user);
 		EditPart part = mock(EditPart.class);
 		card = mock(Card.class);

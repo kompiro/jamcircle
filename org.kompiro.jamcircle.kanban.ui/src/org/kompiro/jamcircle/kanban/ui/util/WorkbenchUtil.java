@@ -45,7 +45,9 @@ public class WorkbenchUtil {
 	
 	public static Display getDisplay(){
 		IWorkbench workbench = getWorkbench();
-		if(workbench == null) return Display.getDefault();
+		if(workbench == null){
+			return PlatformUI.createDisplay();
+		}
 		return workbench.getDisplay();
 	}
 	

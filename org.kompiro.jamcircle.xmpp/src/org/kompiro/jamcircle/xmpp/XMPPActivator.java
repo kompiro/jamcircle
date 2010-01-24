@@ -23,79 +23,40 @@ public class XMPPActivator extends Plugin {
 	public static final String PLUGIN_ID = "org.kompiro.jamcircle.xmpp";
 
 	private static XMPPActivator plugin;
-
-	private ServiceRegistration registerService;
 	
-	private XMPPConnectionServiceImpl service;
-
-	private XMPPSettings settings = new XMPPSettings();
-	
-	private ServiceTracker kanbanServiceTracker;
-
+//	private ServiceRegistration registerService;
+//	
+//	private XMPPConnectionServiceImpl service;
+//
+//	
+//	private ServiceTracker kanbanServiceTracker;
+//
 	private StandardOutputHandler handler;
-
-	private XMPPLoginListenerFactory factory;
+//
+//	private XMPPLoginListenerFactory factory;
 
 	
 	public XMPPActivator() {
-		service = new XMPPConnectionServiceImpl();
-		service.setActivator(this);
-		factory = new XMPPLoginListenerFactory();
 	}
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		factory.inject(service);
-		createConnection();
-		registerService = context.registerService(XMPPConnectionService.class.getName(),service, null);
-		kanbanServiceTracker = new ServiceTracker(context, KanbanService.class.getName(), null);
-		kanbanServiceTracker.open();
+//		factory.setXMPPConnectionService(service);
+//		registerService = context.registerService(XMPPConnectionService.class.getName(),service, null);
+//		kanbanServiceTracker = new ServiceTracker(context, KanbanService.class.getName(), null);
+//		kanbanServiceTracker.open();
 		handler = new StandardOutputHandler();
 		XMPPStatusHandler.addStatusHandler(handler);
-	}
-
-	private void createConnection() {
-		System.setProperty(XMPPConnectionServiceImpl.KEY_OF_SYSTEM_PROP_XMPP_CONNECT, String.valueOf(false));
-		settings.loadSettings();
-		if(service.getSettings().size() != 0) {
-			final Setting setting = service.getSettings().get(0);
-			final String host = setting.getHost();
-			final String message = String.format("Connectiong to %s ...",host);
-			XMPPStatusHandler.debug(message);
-			Job job = new Job(message) {
-				@Override
-				protected IStatus run(IProgressMonitor monitor) {
-					monitor.beginTask(String.format(message,host), 100);
-					try {
-						String resource = setting.getResource();
-						String serviceName = setting.getServiceName();
-						String username =  setting.getUsername();
-						String password = setting.getPassword();
-						int port = setting.getPort();
-						service.login(monitor, host, resource, serviceName, port, username, password);
-					} catch (XMPPException e) {
-						XMPPStatusHandler.debug("Can't create initialize Connection.",e);
-					} finally {
-						monitor.done();
-					}
-					return Status.OK_STATUS;
-				}
-			};
-			job.schedule();	
-		}
 	}
 
 	public void stop(BundleContext context) throws Exception {
 		XMPPStatusHandler.removeStatusHandler(handler);
 		plugin = null;
-		factory.reject(service);
-		if(settings.size() != 0){
-			settings.storeSttings();
-		}
-		registerService.unregister();
-		service = null;
-		registerService = null;
+//		factory.reject(service);
+//		registerService.unregister();
+//		service = null;
+//		registerService = null;
 		super.stop(context);
 	}
 
@@ -103,14 +64,10 @@ public class XMPPActivator extends Plugin {
 		return plugin;
 	}
 		
-	public KanbanService getKanbanService(){
-		KanbanService service = (KanbanService) kanbanServiceTracker.getService();
-		return service;
-	}
-
-	public XMPPSettings getSettings() {
-		return settings;
-	}
+//	public KanbanService getKanbanService(){
+//		KanbanService service = (KanbanService) kanbanServiceTracker.getService();
+//		return service;
+//	}
 	
 	public static IStatus createErrorStatus(Throwable e){
 		return new Status(IStatus.ERROR, PLUGIN_ID, e.getLocalizedMessage(),e);

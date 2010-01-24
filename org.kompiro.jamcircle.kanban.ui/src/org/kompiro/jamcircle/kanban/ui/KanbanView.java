@@ -95,6 +95,8 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 			getKanbanService().addPropertyChangeListener(this);
 			iconModelFactory = new DefaultIconModelFactory(getKanbanService());
 		}
+		KanbanJFaceResource.initialize();
+
 	}
 
 	@Override

@@ -29,6 +29,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	private static final String BOARD_SELECTER_MODEL = "org.kompiro.jamcircle.kanban.ui.model.BoardSelecterModel";
 	private static final String LANE_CREATER_MODEL = "org.kompiro.jamcircle.kanban.ui.model.LaneCreaterModel";
 	private static final String MODEL_TRASH_MODEL = "org.kompiro.jamcircle.kanban.ui.model.TrashModel";
+	public static KanbanServiceImpl service;
 
 	private List<KanbanBoardTemplate> templates = new ArrayList<KanbanBoardTemplate>();
 	private boolean initialized;
@@ -39,6 +40,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	
 	public KanbanServiceImpl() {
 		initializeTemplate();
+		KanbanServiceImpl.service = this;
 	}
 
 	private void initializeTemplate() {
@@ -529,6 +531,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 
 	public void setStorageService(StorageService storageService) {
 		this.storageService = storageService;
+		storageService.addStorageChangeListener(this);
 	}
 	
 	public StorageService getStorageService() {

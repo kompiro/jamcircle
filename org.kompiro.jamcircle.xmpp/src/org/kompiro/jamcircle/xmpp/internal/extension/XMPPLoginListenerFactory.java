@@ -16,7 +16,8 @@ public class XMPPLoginListenerFactory {
 	private IExtensionRegistry registry = RegistryFactory.getRegistry();
 	private List<XMPPLoginListener> listeners = new ArrayList<XMPPLoginListener>();
 
-	public void inject(XMPPConnectionServiceImpl impl){
+	public void bind(XMPPConnectionServiceImpl impl){
+		if(registry == null) return;
 		IExtensionPoint point = registry.getExtensionPoint(POINT_CALLBACK);
 		IExtension[] extensions = point.getExtensions();
 		MultiStatus statuses = new MultiStatus(XMPPActivator.PLUGIN_ID, Status.ERROR, "error has occured when initializing xmpp listeners.", null);
@@ -37,7 +38,7 @@ public class XMPPLoginListenerFactory {
 		}
 	}
 	
-	public void reject(XMPPConnectionServiceImpl impl){
+	public void unbind(XMPPConnectionServiceImpl impl){
 		for(XMPPLoginListener listener : listeners){
 			impl.removeXMPPLoginListener(listener);
 		}

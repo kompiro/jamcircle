@@ -8,8 +8,7 @@ import java.util.*;
 
 import net.java.ao.*;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.*;
 import org.h2.tools.Csv;
 import org.kompiro.jamcircle.storage.*;
 import org.kompiro.jamcircle.storage.exception.StorageConnectException;
@@ -41,6 +40,7 @@ public class StorageServiceImpl implements StorageService {
 	public static boolean testmode;
 	
 	private List<StorageChageListener> listeners = new ArrayList<StorageChageListener>();
+	private StorageSettings settings = new StorageSettings();
 	
 	static{
 		try{
@@ -60,6 +60,36 @@ public class StorageServiceImpl implements StorageService {
 	private EntityManager manager;
 	private String storeRoot;
 	private FileStorageService fileService = new FileStorageServiceImpl(this);
+	private StorageCallbackHandlerLoader loader = new StorageCallbackHandlerLoader();
+
+	public void activate(){
+		loadStorageSetting();	
+	}
+	
+	private void loadStorageSetting() {
+		settings.loadSettings();
+		if(settings.size() == 0){
+			String uri = getDefaultStoreRoot();
+			settings.add(-1,uri,StorageServiceImpl.CONNECTION_MODE.FILE.toString(), "sa", "");
+		}
+		StorageSetting setting = settings.get(0);
+		try {
+			loadStorage(setting,new NullProgressMonitor());
+		} catch (StorageConnectException e) {
+			if(!(StorageServiceImpl.testmode)){
+				loader.setupStorageSetting();
+			}else{
+				System.err.println("can't connect storage. and now it set testmode.");
+			}
+		}
+	}
+
+	public void deactivate(){
+		if(StorageServiceImpl.testmode){
+			settings.clear();
+		}
+		settings.storeSttings();
+	}
 	
 	public void addFile(String destDir,File srcFile) {
 		fileService.addFile(destDir, srcFile);
@@ -288,7 +318,7 @@ public class StorageServiceImpl implements StorageService {
 	public StorageSettings getSettings() {
 		StorageActivator activator = StorageActivator.getDefault();
 		if(activator == null) return null;
-		return activator.getStorageSettings();
+		return this.settings;
 	}
 
 	public void addStorageChangeListener(StorageChageListener listener) {
