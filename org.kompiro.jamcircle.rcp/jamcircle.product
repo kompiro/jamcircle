@@ -72,6 +72,7 @@ JRuby Project http://jruby.codehaus.org/
       <plugin id="org.eclipse.draw2d" autoStart="false" startLevel="0" />
       <plugin id="org.eclipse.equinox.app" autoStart="false" startLevel="0" />
       <plugin id="org.eclipse.equinox.common" autoStart="false" startLevel="0" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="1" />
       <plugin id="org.eclipse.equinox.preferences" autoStart="false" startLevel="0" />
       <plugin id="org.eclipse.equinox.registry" autoStart="false" startLevel="0" />
       <plugin id="org.eclipse.equinox.security" autoStart="false" startLevel="0" />
