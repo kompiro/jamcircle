@@ -4,6 +4,8 @@ import java.util.Map;
 
 public interface ScriptingEngineInitializerLoader {
 
-	public abstract Map<String, Object> getGrobalValues();
+	public Map<String, Object> getGrobalValues();
+
+	public void loadExtendScript(ScriptingService service);
 
 }

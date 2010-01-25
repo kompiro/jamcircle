@@ -1,19 +1,17 @@
-package org.kompiro.jamcircle.kanban.ui;
+package org.kompiro.jamcircle.kanban.model;
 
 import java.util.Map;
 
-import org.kompiro.jamcircle.kanban.model.ColorTypes;
-import org.kompiro.jamcircle.kanban.model.FlagTypes;
 import org.kompiro.jamcircle.scripting.IScriptingEngineInitializer;
 import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 
-public class KanbanUIScriptingEngineInitializer implements
+public class KanbanScriptingEngineInitializer implements
 		IScriptingEngineInitializer {
 
-	public KanbanUIScriptingEngineInitializer() {
+	public KanbanScriptingEngineInitializer() {
 	}
 
-	public void init(Map<String, Object> beans) throws ScriptingException {
+	public void init(final Map<String, Object> beans) throws ScriptingException {
 		beans.put("RED", ColorTypes.RED);
 		beans.put("YELLOW",ColorTypes.YELLOW);
 		beans.put("GREEN",ColorTypes.GREEN);

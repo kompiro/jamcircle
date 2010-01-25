@@ -6,3 +6,5 @@ Bundle-Version: 0.0.0
 Bundle-Vendor: kompiro.org
 Fragment-Host: org.kompiro.jamcircle.scripting.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Require-Bundle: org.junit4
+Import-Package: org.mockito

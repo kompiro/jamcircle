@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.kompiro.jamcircle.storage.service.StorageService">
+   <implementation class="org.kompiro.jamcircle.storage.service.internal.StorageServiceImpl"/>
+   <service>
+      <provide interface="org.kompiro.jamcircle.storage.service.StorageService"/>
+   </service>
+</scr:component>

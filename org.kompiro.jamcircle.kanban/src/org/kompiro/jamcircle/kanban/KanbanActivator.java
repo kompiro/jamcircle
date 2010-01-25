@@ -15,11 +15,11 @@ import org.osgi.util.tracker.ServiceTracker;
 
 public class KanbanActivator extends Plugin {
 
-	private ServiceTracker storageTracker;
+//	private ServiceTracker storageTracker;
 
-	private KanbanServiceImpl service;
+//	private KanbanServiceImpl service;
 
-	private ServiceRegistration kanbanServiceRegistration;
+//	private ServiceRegistration kanbanServiceRegistration;
 	
 	private static KanbanActivator plugin;
 
@@ -31,24 +31,24 @@ public class KanbanActivator extends Plugin {
 		return plugin;
 	}
 	
-	public EntityManager getEntityManager(){
-		StorageService service = getStorageService();
-		return service != null ? service.getEntityManager() : null;
-	}
+//	public EntityManager getEntityManager(){
+//		StorageService service = getStorageService();
+//		return service != null ? service.getEntityManager() : null;
+//	}
 
-	public StorageService getStorageService() {
-		return (StorageService) storageTracker.getService();
-	}
+//	public StorageService getStorageService() {
+//		return (StorageService) storageTracker.getService();
+//	}
 	
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		storageTracker = new ServiceTracker(context,StorageService.class.getName(), null);
-		storageTracker.open();
-		service = new KanbanServiceImpl();
-		service.setStorageService(getStorageService());
-		getStorageService().addStorageChangeListener(service);
+//		storageTracker = new ServiceTracker(context,StorageService.class.getName(), null);
+//		storageTracker.open();
+//		service = new KanbanServiceImpl();
+//		service.setStorageService(getStorageService());
+//		getStorageService().addStorageChangeListener(service);
 
-		kanbanServiceRegistration = context.registerService(KanbanService.class.getName(), service, null);
+//		kanbanServiceRegistration = context.registerService(KanbanService.class.getName(), service, null);
 		if(KanbanStatusHandler.isDebug()){
 			Logger.getLogger("net.java.ao").setLevel(Level.FINE);
 		}else{
@@ -59,14 +59,14 @@ public class KanbanActivator extends Plugin {
 
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-		service.dispose();
-		storageTracker.close();
-		kanbanServiceRegistration.unregister();
+//		service.dispose();
+//		storageTracker.close();
+//		kanbanServiceRegistration.unregister();
 		super.stop(context);
 	}
 
-	public KanbanService getKanbanService(){
-		return service;
+	public static KanbanServiceImpl getKanbanService(){
+		return KanbanServiceImpl.service;
 	}
 	
 

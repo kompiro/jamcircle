@@ -107,7 +107,7 @@ public class CardImpl extends GraphicalImpl {
 	}
 	
 	private StorageService getStorageService() {
-		return KanbanActivator.getDefault().getStorageService();
+		return KanbanActivator.getKanbanService().getStorageService();
 	}
 	
 	@Override

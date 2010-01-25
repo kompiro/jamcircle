@@ -29,7 +29,7 @@ public class XMPPLoginListenerFactoryTest {
 		IExtensionRegistry registry = createExtensionRegistry();
 		factory.setRegistry(registry);
 		
-		factory.inject(impl);
+		factory.bind(impl);
 		
 		verify(impl).addXMPPLoginListener(listener);
 	}
@@ -43,7 +43,7 @@ public class XMPPLoginListenerFactoryTest {
 		factory.setRegistry(registry);
 		
 		try {
-			factory.inject(impl);
+			factory.bind(impl);
 			fail();
 		} catch (Exception e) {
 		}

@@ -14,3 +14,4 @@ Require-Bundle: org.kompiro.jamcircle.kanban.ui,
  org.eclipse.ui,
  org.apache.commons.lang
 Export-Package: org.kompiro.jamcircle.xmpp.kanban.ui.model
+Service-Component: OSGI-INF/XMPPKanbanUIContext.xml

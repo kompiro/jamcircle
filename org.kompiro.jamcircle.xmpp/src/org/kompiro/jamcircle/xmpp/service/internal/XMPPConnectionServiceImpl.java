@@ -3,7 +3,8 @@ package org.kompiro.jamcircle.xmpp.service.internal;
 import java.io.File;
 import java.util.*;
 
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.jobs.Job;
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.packet.*;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
@@ -12,7 +13,9 @@ import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.xmpp.XMPPActivator;
 import org.kompiro.jamcircle.xmpp.XMPPStatusHandler;
+import org.kompiro.jamcircle.xmpp.internal.extension.XMPPLoginListenerFactory;
 import org.kompiro.jamcircle.xmpp.service.*;
+import org.kompiro.jamcircle.xmpp.service.XMPPSettings.Setting;
 import org.kompiro.jamcircle.xmpp.util.XMPPUtil;
 
 /**
@@ -24,15 +27,57 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 	public static final String KEY_OF_SYSTEM_PROP_XMPP_CONNECT = XMPPActivator.PLUGIN_ID + ".connect";
 	private XMPPConnection connection;
 	private List<XMPPLoginListener> listeners = new ArrayList<XMPPLoginListener>();
-	private XMPPActivator activator;
 	private FileTransferManager manager;
-	
+	private KanbanService kanbanService;
+	private XMPPSettings settings = new XMPPSettings();
+
 	static final MessageListener doEmpty = new DoEmptyMessageListener();
+	private XMPPLoginListenerFactory factory;
 	
 	private static final class DoEmptyMessageListener implements
 			MessageListener {
 		public void processMessage(Chat chat, Message message) {
 		}
+	}
+
+	public void activate() {
+		System.setProperty(XMPPConnectionServiceImpl.KEY_OF_SYSTEM_PROP_XMPP_CONNECT, String.valueOf(false));
+		settings.loadSettings();
+		if(getSettings().size() != 0) {
+			final Setting setting = getSettings().get(0);
+			final String host = setting.getHost();
+			final String message = String.format("Connectiong to %s ...",host);
+			XMPPStatusHandler.debug(message);
+			Job job = new Job(message) {
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					monitor.beginTask(String.format(message,host), 100);
+					try {
+						String resource = setting.getResource();
+						String serviceName = setting.getServiceName();
+						String username =  setting.getUsername();
+						String password = setting.getPassword();
+						int port = setting.getPort();
+						login(monitor, host, resource, serviceName, port, username, password);
+					} catch (XMPPException e) {
+						XMPPStatusHandler.debug("Can't create initialize Connection.",e);
+					} finally {
+						monitor.done();
+					}
+					return Status.OK_STATUS;
+				}
+			};
+			job.schedule();	
+			factory = new XMPPLoginListenerFactory();
+			factory.bind(this);
+		}
+	}
+	
+	public void deactivate(){
+		if(settings.size() != 0){
+			settings.storeSttings();
+		}
+		factory.unbind(this);
 	}
 
 
@@ -118,7 +163,7 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 	}
 
 	public XMPPSettings getSettings() {
-		return XMPPActivator.getDefault().getSettings();
+		return this.settings;
 	}
 	
 	public void logout(IProgressMonitor monitor) {
@@ -170,13 +215,17 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 		return user;
 	}
 		
-	private KanbanService getKanbanService(){
-		return activator.getKanbanService();
+	public KanbanService getKanbanService(){
+		return this.kanbanService;
 	}
 	
-	public void setActivator(XMPPActivator activator) {
-		this.activator = activator;
+	public void setKanbanService(KanbanService service){
+		this.kanbanService = service;
 	}
+	
+//	public void setActivator(XMPPActivator activator) {
+//		this.activator = activator;
+//	}
 	
 	void setConnection(XMPPConnection connection) {
 		this.connection = connection;

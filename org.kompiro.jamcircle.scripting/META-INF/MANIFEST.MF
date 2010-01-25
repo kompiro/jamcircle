@@ -3,10 +3,10 @@ Bundle-ManifestVersion: 2
 Bundle-Name: JAMCircle Scripting Plugin
 Bundle-SymbolicName: org.kompiro.jamcircle.scripting;singleton:=true
 Bundle-Version: 0.1.0.qualifier
-Bundle-Activator: org.kompiro.jamcircle.scripting.internal.ScriptingActivator
 Bundle-Vendor: kompiro.org
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Import-Package: org.osgi.framework;version="1.3.0"
+Import-Package: org.osgi.framework;version="1.3.0",
+ org.osgi.service.component;version="1.1.0"
 Bundle-ActivationPolicy: lazy
 Export-Package: org.kompiro.jamcircle.scripting,
  org.kompiro.jamcircle.scripting.exception
@@ -14,3 +14,5 @@ Require-Bundle: org.mozilla.javascript,
  org.jruby,
  org.apache.bsf,
  org.eclipse.core.runtime
+Service-Component:  OSGI-INF/ScriptingEngineInitializerLoader.xml,
+ OSGI-INF/ScriptingService.xml

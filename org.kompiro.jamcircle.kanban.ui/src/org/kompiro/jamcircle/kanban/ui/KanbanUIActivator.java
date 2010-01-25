@@ -6,16 +6,15 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.*;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.kompiro.jamcircle.debug.IStatusHandler;
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 import org.kompiro.jamcircle.scripting.ScriptingService;
 import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 import org.kompiro.jamcircle.storage.StorageStatusHandler;
 import org.osgi.framework.BundleContext;
-import org.osgi.util.tracker.ServiceTracker;
 
 public class KanbanUIActivator extends AbstractUIPlugin {
 	
@@ -38,21 +37,11 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 		}
 	}
 
-
 	public static final String ID_PLUGIN = "org.kompiro.jamcircle.kanban.ui";
 
-	private static final String KEY_OF_KANBAN_SERVICE = "org.kompiro.jamcircle.kanban.service.KanbanService";
-
-	private static final String KEY_OF_SCRIPTING_SERVICE = ScriptingService.class.getName();
-
 	private static KanbanUIActivator plugin;
-	
-	private ServiceTracker kanbanServiceTracker;
-
-	private ServiceTracker scriptingServiceTracker;
 
 	private IStatusHandler dialogHandler;
-
 
 	public KanbanUIActivator() {
 	}
@@ -61,12 +50,7 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		plugin = this;
 		super.start(context);
-		KanbanJFaceResource.initialize();
 
-		kanbanServiceTracker = new ServiceTracker(context, KEY_OF_KANBAN_SERVICE, null);
-		kanbanServiceTracker.open();
-		scriptingServiceTracker = new ServiceTracker(context, KEY_OF_SCRIPTING_SERVICE, null);
-		scriptingServiceTracker.open();
 		handleDialogForStatusHandler();
 //		migrate();
 	}
@@ -85,7 +69,6 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 		KanbanStatusHandler.removeStatusHandler(dialogHandler);
 		KanbanUIStatusHandler.removeStatusHandler(dialogHandler);
 		StorageStatusHandler.removeStatusHandler(dialogHandler);
-		kanbanServiceTracker.close();
 		super.stop(context);
 	}
 	
@@ -136,24 +119,19 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 	}
 	
 	public KanbanService getKanbanService(){
-		KanbanService service = (KanbanService)kanbanServiceTracker.getService();
-		service.init();
+		KanbanService service = KanbanUIContext.getDefault().getKanbanService();
+		if(service == null) throw new IllegalStateException("kanban service is not enabled.");		
+		service .init();
 		return service;
 	}
 
 	public Shell getShell(){
-		if(!PlatformUI.isWorkbenchRunning()) return null;
-		IWorkbench workbench = getWorkbench();
-		IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-		if(activeWorkbenchWindow != null){
-			return activeWorkbenchWindow.getShell();
-		}
-		return workbench.getDisplay().getActiveShell();
+		return WorkbenchUtil.getShell();
 	}
 
 
 	public ScriptingService getScriptingService() throws ScriptingException {
-		ScriptingService service = (ScriptingService)scriptingServiceTracker.getService();
+		ScriptingService service = KanbanUIContext.getDefault().getScriptingService();
 		if(service == null) throw new IllegalStateException("scripting service is not enabled.");		
 		return service;
 	}

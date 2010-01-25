@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.kompiro.jamcircle.scripting.scriptEngineInitializer">
+      <initializer
+            class="org.kompiro.jamcircle.kanban.model.KanbanScriptingEngineInitializer">
+         <script
+               file="script/init.rb"
+               type="JRuby">
+         </script>
+         <script
+               file="script/init.js"
+               type="JavaScript">
+         </script>
+      </initializer>
+   </extension>
+
+</plugin>

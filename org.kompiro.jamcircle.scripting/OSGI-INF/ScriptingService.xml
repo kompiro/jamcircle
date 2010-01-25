@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" enabled="true" immediate="false" name="org.kompiro.jamcircle.scripting.ScriptingService">
+   <implementation class="org.kompiro.jamcircle.scripting.internal.ScriptingServiceImpl"/>
+   <service>
+      <provide interface="org.kompiro.jamcircle.scripting.ScriptingService"/>
+   </service>
+   <reference bind="setScriptingEngineInitializerLoader" cardinality="1..1" interface="org.kompiro.jamcircle.scripting.ScriptingEngineInitializerLoader" name="ScriptingEngineInitializerLoader" policy="static"/>
+</scr:component>

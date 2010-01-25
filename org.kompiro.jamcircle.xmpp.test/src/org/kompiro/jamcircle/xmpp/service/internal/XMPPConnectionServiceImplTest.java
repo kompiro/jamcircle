@@ -168,12 +168,11 @@ public class XMPPConnectionServiceImplTest {
 
 	
 	private void initialize() {
-		XMPPActivator activator = mock(XMPPActivator.class);
 		kanbanService = mock(KanbanService.class);
-		when(activator.getKanbanService()).thenReturn(kanbanService);
 
 		service = new XMPPConnectionServiceImpl();
-		service.setActivator(activator);
+//		service.setActivator(activator);
+		service.setKanbanService(kanbanService);
 		
 		connection = mock(XMPPConnection.class);
 		when(connection.isConnected()).thenReturn(true);
