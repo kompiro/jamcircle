@@ -6,8 +6,10 @@
          <meta.schema plugin="org.kompiro.jamcircle.scripting" id="scriptEngineInitializer" name="Script Engine Initializer"/>
       </appinfo>
       <documentation>
-         This extension point provides Script Engine Initializer.
-This Initializer provides Scripting Engine Service&apos;s gloval value initialize.
+         This extension point provides Script Engine&apos;s Initializer.
+This Initializer provides 
+- Scripting Engine Service&apos;s gloval value initialize.
+- Scripting Engine Service&apos;s initialize scripts.
       </documentation>
    </annotation>
 

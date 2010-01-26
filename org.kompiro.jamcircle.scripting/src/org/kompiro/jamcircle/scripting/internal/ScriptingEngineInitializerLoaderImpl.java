@@ -17,8 +17,9 @@ public class ScriptingEngineInitializerLoaderImpl implements ScriptingEngineInit
 	}
 
 	private static final String PLUGIN_ID = ScriptingActivator.ID;
-	private static final String POINT_CALLBACK = "org.kompiro.jamcircle.scripting.scriptEngineInitializer";
+	static final String POINT_CALLBACK = "org.kompiro.jamcircle.scripting.scriptEngineInitializer";
 	private Map<String,Object> result = new HashMap<String, Object>();
+	private IExtensionRegistry 	registry = RegistryFactory.getRegistry();
 		
 	public void init(ComponentContext context) throws CoreException{
 		result.put("BUNDLE_CONTEXT", context.getBundleContext());
@@ -42,11 +43,12 @@ public class ScriptingEngineInitializerLoaderImpl implements ScriptingEngineInit
 	}
 	
 	private void handle(ElementRunner runner,MultiStatus statuses) {
-		IExtensionRegistry registry = RegistryFactory.getRegistry();
 		IExtensionPoint point = registry.getExtensionPoint(POINT_CALLBACK);
 		IExtension[] extenders = point.getExtensions();
+		if(extenders == null) return;
 		for (int i = 0; i < extenders.length; i++) {
 			IConfigurationElement[] confElements = extenders[i].getConfigurationElements();
+			if(confElements == null) return;
 			for(final IConfigurationElement element : confElements){
 				runner.run(new ScriptingInitializerLoaderDescriptor(element),statuses);
 			}
@@ -83,4 +85,8 @@ public class ScriptingEngineInitializerLoaderImpl implements ScriptingEngineInit
 		handle(runner,statuses);
 	}
 
+	public void setRegistry(IExtensionRegistry registry) {
+		this.registry = registry;
+	}
+	
 }
