@@ -32,7 +32,7 @@
 		<condition property="buildResultZipDest" value="${test.eclipseExtensionDirectory}/.." else="${test.eclipseExtensionDirectory}">
 			<equals arg1="${archivePrefix}" arg2="eclipse" />
 		</condition>
-		<unzip dest="${buildResultZipDest}">
+		<unzip dest="${test.eclipseExtensionDirectory}">
 			<fileset dir="${buildDirectory}" includes="${buildType}-**/*.zip"/>
 			<!--
 			<fileset dir="${buildDirectory}" includes="${buildType}-**/*.zip" excludes="**/${archiveNamePrefix}-*"/>

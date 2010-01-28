@@ -22,7 +22,6 @@
 	<!-- folder ${target.folder}/${projectName}                                 -->
 	<!-- =====================================================================  -->
 	<target name="gather.bin.parts">
-		<echo>gather.bin.barts from kompiro custom</echo>
 	</target>
 	
 	<!-- ===================================================================== -->

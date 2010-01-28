@@ -17,6 +17,46 @@
       [Enter License Description here.]
    </license>
 
+   <requires>
+      <import feature="org.kompiro.jamcircle" version="0.8.0.qualifier"/>
+      <import plugin="org.hamcrest.core" version="1.1.0" match="greaterOrEqual"/>
+      <import plugin="com.ibm.icu"/>
+      <import plugin="org.kompiro.jamcircle.kanban"/>
+      <import plugin="org.kompiro.jamcircle.kanban.ui"/>
+      <import plugin="org.kompiro.jamcircle.scripting.ui"/>
+      <import plugin="org.kompiro.jamcircle.storage"/>
+      <import plugin="org.kompiro.jamcircle.xmpp"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.kompiro.jamcircle.debug"/>
+      <import plugin="org.kompiro.jamcircle.scripting"/>
+      <import plugin="org.kompiro.jamcircle.xmpp.kanban.ui"/>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.eclipse.core.commands"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.workbench"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.core.runtime" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.ui" version="3.3.0" match="compatible"/>
+      <import plugin="org.hamcrest.library" version="1.1.0" match="greaterOrEqual"/>
+      <import plugin="org.hamcrest.integration" version="1.1.0" match="greaterOrEqual"/>
+      <import plugin="org.hamcrest.text" version="1.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources" version="3.5.0" match="compatible"/>
+      <import plugin="org.eclipse.jdt.core" version="3.5.0" match="compatible"/>
+      <import plugin="org.eclipse.debug.core" version="3.5.0" match="compatible"/>
+      <import plugin="org.eclipse.jdt.debug" version="3.5.0" match="compatible"/>
+      <import plugin="org.eclipse.core.variables" version="3.2.0" match="compatible"/>
+      <import plugin="org.eclipse.core.runtime" version="3.5.0" match="compatible"/>
+      <import plugin="org.eclipse.core.expressions" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.core.filesystem" version="1.2.0" match="compatible"/>
+      <import plugin="org.eclipse.core.resources" version="3.3.0" match="compatible"/>
+      <import plugin="org.eclipse.core.runtime" version="3.3.0" match="compatible"/>
+      <import plugin="org.eclipse.core.filesystem" version="1.0.0" match="compatible"/>
+      <import plugin="org.eclipse.text" version="3.1.0" match="compatible"/>
+   </requires>
+
    <plugin
          id="org.junit4"
          download-size="0"
