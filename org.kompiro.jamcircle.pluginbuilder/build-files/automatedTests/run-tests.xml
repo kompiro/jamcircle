@@ -137,7 +137,7 @@ version=3.1.0</echo>
 		<mkdir dir="${test.configuration}"/>
 		<echoproperties/>
 		<java fork="true" dir="." logError="true" classname="org.eclipse.core.launcher.Main" resultproperty="autotestsuite.result"> 
-                        <env key="DISPLAY" value=":99"/>
+            <env key="DISPLAY" value=":0"/>
 			<arg line="-application org.pluginbuilder.autotestsuite.application.autoTestApplication ${testApplication}" />
 			<arg line="-data ${test.workspace}" />
 			<arg line="-configuration ${test.configuration}" />

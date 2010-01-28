@@ -6,6 +6,7 @@ feature@org.kompiro.jamcircle.kanban=COPY,/var/hudson/jobs/jamcircle-continuous-
 feature@org.kompiro.jamcircle.scripting=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.scripting.feature
 feature@org.kompiro.jamcircle.test=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.test.feature
 feature@org.kompiro.jamcircle.library=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.library
+feature@org.kompiro.jamcircle.base=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.base.feature
 
 #plugins
 plugin@org.kompiro.jamcircle.rcp=COPY,/var/hudson/jobs/jamcircle-continuous-integration/workspace,org.kompiro.jamcircle.rcp

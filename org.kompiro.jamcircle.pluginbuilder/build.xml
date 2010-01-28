@@ -118,7 +118,7 @@
 		<fail message="Building an RCP application requires a Product Configuration file to be specified ('product' property)." unless="isProductSet"/>
 	</target>
 	
-	<target name="rcp" depends="-properties,-clean,-prepare.build.host" description="Build RCP only">
+	<target name="rcp" depends="-properties,-prepare.build.host" description="Build RCP only">
 		<fail message="Please enable and configure an RCP build in the Plug-in Builder Editor before calling this target." if="no.rcp.build"/>
 		<antcall target="-build.rcp.internal"/>
 	</target>

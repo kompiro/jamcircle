@@ -1,3 +1,19 @@
 instructions.configure=\
   addRepository(type:0,location:http${#58}//kompiro.org/jamcircle/daily/p2);\
   addRepository(type:1,location:http${#58}//kompiro.org/jamcircle/daily/p2);
+  
+requires.1.namespace = org.eclipse.equinox.p2.iu
+requires.1.name = org.kompiro.jamcircle.kanban.feature.group
+requires.1.range = [1.1.0, 1.2.0)
+
+requires.2.namespace = org.eclipse.equinox.p2.iu
+requires.2.name = org.kompiro.jamcircle.rcp.feature.group
+requires.2.range = [0.8.0, 0.9.0)
+
+requires.3.namespace = org.eclipse.equinox.p2.iu
+requires.3.name = org.kompiro.jamcircle.xmpp.feature.group
+requires.3.range = [0.2.0, 0.3.0)
+
+requires.4.namespace = org.eclipse.equinox.p2.iu
+requires.4.name = org.kompiro.jamcircle.scripting.feature.group
+requires.4.range = [0.1.0, 0.2.0)
