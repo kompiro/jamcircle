@@ -6,7 +6,6 @@ feature@org.kompiro.jamcircle.kanban=COPY,/home/kompiro/codes/java/jamcircle,org
 feature@org.kompiro.jamcircle.scripting=COPY,/home/kompiro/codes/java/jamcircle,org.kompiro.jamcircle.scripting.feature
 feature@org.kompiro.jamcircle.test=COPY,/home/kompiro/codes/java/jamcircle,org.kompiro.jamcircle.test.feature
 feature@org.kompiro.jamcircle.library=COPY,/home/kompiro/codes/java/jamcircle,org.kompiro.jamcircle.library
-feature@org.kompiro.jamcircle.base=COPY,/home/kompiro/codes/java/jamcircle,org.kompiro.jamcircle.base.feature
 
 #plugins
 plugin@org.kompiro.jamcircle.rcp=COPY,/home/kompiro/codes/java/jamcircle,org.kompiro.jamcircle.rcp
