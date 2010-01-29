@@ -63,7 +63,7 @@ public class ScriptingEngineInitializerLoaderImpl implements ScriptingEngineInit
 		return new Status(IStatus.ERROR, PLUGIN_ID, e.getLocalizedMessage(),e);
 	}
 
-	public void loadExtendScript(final ScriptingService service) {
+	public void loadExtendScript(final ScriptingService service) throws CoreException {
 		MultiStatus statuses = new MultiStatus(PLUGIN_ID, Status.ERROR, "error has occured when initializing scripting engines.", null);
 
 		ElementRunner runner = new ElementRunner(){
@@ -74,15 +74,16 @@ public class ScriptingEngineInitializerLoaderImpl implements ScriptingEngineInit
 					try{
 						ScriptingServiceImpl impl = (ScriptingServiceImpl) service;
 						impl.executeScript(script.getType(), script.getScriptName(), script.getScript(), 0);
-					} catch (BSFException e) {
-						statuses.add(createErrorStatus(e));
-					} catch (IOException e) {
+					} catch (Exception e) {
 						statuses.add(createErrorStatus(e));
 					}
 				}
 			}
 		};
 		handle(runner,statuses);
+		if(!statuses.isOK()){
+			throw new CoreException(statuses);
+		}	
 	}
 
 	public void setRegistry(IExtensionRegistry registry) {

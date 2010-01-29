@@ -6,6 +6,7 @@ import java.util.*;
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
 import org.apache.bsf.util.IOUtils;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.jruby.Ruby;
@@ -22,9 +23,9 @@ public class ScriptingServiceImpl implements ScriptingService{
 	private boolean initialized = false;
 	private Ruby runtime;
 	private Map<String,Object> globalValues = new HashMap<String,Object>();
-	private ScriptingEngineInitializerLoader loader;
+	private ScriptingEngineInitializerLoader loader = new ScriptingEngineInitializerLoaderImpl();
 	
-	public void init() throws ScriptingException{
+	public void init() throws ScriptingException, CoreException{
 		if(!initialized){
 			synchronized (this) {
 				manager = new BSFManager();
