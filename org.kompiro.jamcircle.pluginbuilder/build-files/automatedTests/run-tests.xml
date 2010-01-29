@@ -22,16 +22,6 @@
 		<antcall target="-unpackEclipse"/>
 		<antcall target="-installEclipseExtensionLocation"/>
 		<antcall target="umAddSite" />
-		<antcall target="runDirector">
-			<param name="p2.repo" value="${p2.build.repo}"/>
-			<param name="p2.director.iu" value="org.kompiro.jamcircle.feature.group"/>
-			<param name="p2.director.installPath" value="${test.eclipse.host.eclipse}"/>
-		</antcall>
-		<antcall target="runDirector">
-			<param name="p2.repo" value="${p2.build.repo}"/>
-			<param name="p2.director.iu" value="org.kompiro.jamcircle.test.feature.group"/>
-			<param name="p2.director.installPath" value="${test.eclipse.host.eclipse}"/>
-		</antcall>
 		<!-- Useful for debugging 
 		<antcall target="umListFeaturesSite" />
 		<antcall target="-createLink"/>
@@ -194,12 +184,21 @@ version=3.1.0</echo>
 			<param name="updateManagerCommandSiteUrl" value="${test.eclipseExtensionDirectory}"/>
 			<param name="updateManagerCommandFailOnError" value="false"/>
 		</antcall>
+		<antcall target="runDirector">
+			<param name="p2.repo" value="${p2.build.repo}"/>
+			<param name="p2.director.iu" value="org.kompiro.jamcircle.feature.group,org.kompiro.jamcircle.test.feature.group"/>
+			<param name="p2.director.installPath" value="${test.eclipse.host.eclipse}"/>
+		</antcall>
 	</target>
 	
 	<target name="umRemoveSite">
 		<!--  This command might fail if the Extension Site has never been added or was properly removed before. -->
 		<echo message="Removing Extension Site from ${test.eclipse.host}."/>
-		
+		<antcall target="unRunDirector">
+			<param name="p2.repo" value="${p2.build.repo}"/>
+			<param name="p2.director.iu" value="org.kompiro.jamcircle.feature.group,org.kompiro.jamcircle.test.feature.group"/>
+			<param name="p2.director.installPath" value="${test.eclipse.host.eclipse}"/>
+		</antcall>
 		<antcall target="updateManager">	
 			<param name="updateManagerCommand" value="removeSite"/>
 			<param name="updateManagerCommandParam" value="-to"/>
@@ -305,6 +304,55 @@ version=3.1.0</echo>
 			<arg line="-consoleLog" />
 			<arg line="-flavor ${p2.flavor}" />
 			<arg line="-installIU ${p2.director.iu}" />
+			<!-- need to quote os,ws,arch so that '*' does not get expanded -->
+			<arg value="-p2.os" />
+			<arg value="${os}" />
+			<arg value="-p2.ws" />
+			<arg value="${ws}" />
+			<arg value="-p2.arch" />
+			<arg value="${arch}" />
+			<arg line="${p2.director.extraArgs}" />
+			<arg line="-metadataRepository"/>
+			<arg value="${p2.repo}" />
+			<arg line="-artifactRepository"/>
+			<arg value="${p2.repo}" />
+			<arg line="-destination"/>
+			<arg value="${p2.director.installPath}" />
+
+			<jvmarg value="-Declipse.p2.data.area=${p2.director.dataArea}" />
+			<jvmarg line="${p2.director.extraVMArgs}" />
+			
+			<arg line="${p2.director.devMode}"/>
+			<sysproperty key="osgi.configuration.area" value="${p2.director.configArea}" />
+		</java>
+		<echo message="${p2.director.java.output}" />
+		<antcall target="logDirectorCall"/>
+		<condition property="p2.director.error">
+			<isfailure code="${p2.director.return.code}" />
+		</condition>
+		<fail if="p2.director.error" message="A Problem occured while running the director." />
+	</target>
+	
+	<!-- Invoke the p2 director to perform an uninstall  -->
+	<target name="unRunDirector" >
+		<property name="p2.director.bundlepool" value="${p2.director.installPath}"/>
+		<property name="p2.director.dataArea" value="${p2.director.installPath}/p2"/>
+		<property name="p2.director.extraArgs" value="-profileProperties org.eclipse.update.install.features=true" />
+		<property name="p2.director.extraVMArgs" value="-Declipse.p2.MD5Check=false" />
+		<property name="p2.director.profile" value="profile" />
+		<property name="p2.director.version" value="" />
+		<!-- by default, fork using the same config area we are running under -->
+		<property name="p2.director.configArea" value="${osgi.configuration.area}" />
+		<condition property="p2.director.devMode" value="-dev &quot;${osgi.dev}&quot;" else="">
+			<isset property="osgi.dev" />
+		</condition>
+		
+		<java jar="${equinoxjar}" fork="true" failonerror="false" resultproperty="p2.director.return.code" outputproperty="p2.director.java.output">
+			<arg line="-application org.eclipse.equinox.p2.director" />
+			<arg line="-nosplash" />
+			<arg line="-consoleLog" />
+			<arg line="-flavor ${p2.flavor}" />
+			<arg line="-uninstallIU ${p2.director.iu}" />
 			<!-- need to quote os,ws,arch so that '*' does not get expanded -->
 			<arg value="-p2.os" />
 			<arg value="${os}" />
