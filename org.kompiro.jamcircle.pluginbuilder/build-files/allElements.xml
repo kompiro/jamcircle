@@ -167,7 +167,9 @@
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.test.group.group.group">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
+ 			<!--
  			<property name="skipMirroring" value="true"/>
+ 			-->
  			<property name="archiveName" value="${archiveNamePrefix}-test.zip"/>
 		</ant>
 	</target>
@@ -194,6 +196,9 @@
 	<target name="assemble.org.kompiro.jamcircle.test.macosx.carbon.x86">
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.test.p2">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-p2.zip"/>
+		</ant>
 	</target>
 
 	<property name="assemble.org.eclipse.pde.build.container.feature.group.group.group" value="true" />
