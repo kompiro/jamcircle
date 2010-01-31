@@ -1,12 +1,17 @@
 package org.kompiro.jamcircle.scripting.internal;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
 import org.apache.bsf.util.IOUtils;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.jruby.Ruby;
@@ -14,18 +19,32 @@ import org.jruby.RubyInstanceConfig;
 import org.jruby.exceptions.RaiseException;
 import org.jruby.internal.runtime.ValueAccessor;
 import org.jruby.javasupport.JavaEmbedUtils;
-import org.kompiro.jamcircle.scripting.*;
+import org.kompiro.jamcircle.scripting.ScriptTypes;
+import org.kompiro.jamcircle.scripting.ScriptingEngineInitializerLoader;
+import org.kompiro.jamcircle.scripting.ScriptingService;
 import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 
 public class ScriptingServiceImpl implements ScriptingService{
+	private static Boolean testmode;
 
+	static{
+		try{
+			ResourceBundle r = ResourceBundle.getBundle("script");
+			if(r != null){
+				testmode = Boolean.valueOf(r.getString("testmode"));
+			}
+		}catch(MissingResourceException e){
+			// Noting because there wouldn't like to set testmode.
+		}
+	}
 	private BSFManager manager;
 	private boolean initialized = false;
+
 	private Ruby runtime;
 	private Map<String,Object> globalValues = new HashMap<String,Object>();
 	private ScriptingEngineInitializerLoader loader = new ScriptingEngineInitializerLoaderImpl();
 	
-	public void init() throws ScriptingException, CoreException{
+	public void init() throws ScriptingException{
 		if(!initialized){
 			synchronized (this) {
 				manager = new BSFManager();
@@ -38,7 +57,11 @@ public class ScriptingServiceImpl implements ScriptingService{
 		        runtime.getGlobalVariables().defineReadonly("$$", new ValueAccessor(runtime.newFixnum(System.identityHashCode(runtime))));
 		        if(loader != null){
 		    		setGlobalValues(loader.getGrobalValues());
-		    		loader.loadExtendScript(this);
+		    		try {
+						loader.loadExtendScript(this);
+					} catch (Exception e) {
+						throw new ScriptingException(e.getLocalizedMessage(), e);
+					}
 		        }
 		        initialized = true;
 			}
@@ -112,13 +135,17 @@ public class ScriptingServiceImpl implements ScriptingService{
 	public Object executeScript(ScriptTypes type, String scriptName,
 			String script, int templateLines) throws BSFException {
 		Object result = null;
-		switch (type) {
-		case JavaScript:
-			result = manager.eval(type.getType(), scriptName, -templateLines, 0, script);
-			break;
-		case JRuby:
-			result = JavaEmbedUtils.rubyToJava(runtime.evalScriptlet(script));
-			break;
+		if(testmode == false){
+			
+			switch (type) {
+			case JavaScript:
+				result = manager.eval(type.getType(), scriptName, -templateLines, 0, script);
+				break;
+			case JRuby:
+				result = JavaEmbedUtils.rubyToJava(runtime.executeScript(script, scriptName));
+				break;
+			}
+			
 		}
 		return result;
 	}
