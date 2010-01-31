@@ -143,6 +143,7 @@ version=3.1.0</echo>
 			<arg line="-console 8888" />
 			<arg line="-noExit" />
 			<arg line="-clean" />
+			<jvmarg line="-agentlib:jdwp=transport=dt_socket,suspend=y,server=y,address=localhost:44000"/>
 			-->
 			<arg line="-consolelog" />
 			<arg line="-dev ${basedir}/emma.jar" />
