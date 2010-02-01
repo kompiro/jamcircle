@@ -21,11 +21,11 @@ public class SendCardCommandTest extends AbstractCommandTest {
 
 	@Test
 	public void initialize() throws Exception {
+		command.execute();
 		whenAllNull();
 		whenSetOnlyTarget();
 		whenSetButNotAlive();
 		whenSetButNotTargetModel();
-		command.execute();
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class SendCardCommandTest extends AbstractCommandTest {
 		XMPPKanbanUIContext context = new XMPPKanbanUIContext();
 		service = mock(XMPPConnectionService.class);
 		user = mock(User.class);
-		when(service.isAvailable(user)).thenReturn(true);
+		when(service.isAvailable(eq(user))).thenReturn(true);
 		context.setXMPPConnectionService(service);
 		command.setTarget(user);
 		EditPart part = mock(EditPart.class);
