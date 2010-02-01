@@ -22,10 +22,6 @@ public class SendCardCommandTest extends AbstractCommandTest {
 	@Test
 	public void initialize() throws Exception {
 		command.execute();
-		whenAllNull();
-		whenSetOnlyTarget();
-		whenSetButNotAlive();
-		whenSetButNotTargetModel();
 	}
 
 	@Override
@@ -46,7 +42,8 @@ public class SendCardCommandTest extends AbstractCommandTest {
 		// OK
 	}
 
-	private void whenSetButNotAlive() {
+	@Test
+	public void whenSetButNotAlive() {
 		SendCardCommand command = new SendCardCommand();
 		try {
 			User user = mock(User.class);
@@ -59,7 +56,8 @@ public class SendCardCommandTest extends AbstractCommandTest {
 		}
 	}
 
-	private void whenSetButNotTargetModel() {
+	@Test
+	public void whenSetButNotTargetModel() {
 		SendCardCommand command = new SendCardCommand();
 		XMPPKanbanUIContext context = new XMPPKanbanUIContext();
 		XMPPConnectionService service = mock(XMPPConnectionService.class);
@@ -76,7 +74,8 @@ public class SendCardCommandTest extends AbstractCommandTest {
 		}
 	}
 
-	private void whenAllNull() {
+	@Test
+	public void whenAllNull() {
 		SendCardCommand command = new SendCardCommand();
 		try {
 			command.execute();
@@ -85,7 +84,8 @@ public class SendCardCommandTest extends AbstractCommandTest {
 		}
 	}
 
-	private void whenSetOnlyTarget() {
+	@Test
+	public void whenSetOnlyTarget() {
 		SendCardCommand command;
 		command = new SendCardCommand();
 		try {
