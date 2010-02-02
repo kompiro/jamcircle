@@ -67,10 +67,6 @@ public class BoardSelecterEditPart extends AbstractIconEditPart{
 		}
 	}
 	
-	private boolean isPropLocation(PropertyChangeEvent prop) {
-		return AbstractModel.PROP_LOCATION.equals(prop.getPropertyName());
-	}
-	
 	private BoardSelecterModel getBoardSelecterModel(){
 		return (BoardSelecterModel) getModel();
 	}

@@ -199,4 +199,7 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		this.delegator = delegator;
 	}
 	
+	protected boolean isPropLocation(PropertyChangeEvent prop) {
+		return GraphicalEntity.PROP_COMMIT_LOCATION.equals(prop.getPropertyName());
+	}
 }

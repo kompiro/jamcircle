@@ -77,7 +77,6 @@ public class UserModel extends AbstractModel implements Comparable<UserModel>,Ic
 		user.setY(location.y);
 		user.commitLocation();
 		user.save(false);
-		firePropertyChange(PROP_LOCATION, oldLocation, location);
 	}
 
 	

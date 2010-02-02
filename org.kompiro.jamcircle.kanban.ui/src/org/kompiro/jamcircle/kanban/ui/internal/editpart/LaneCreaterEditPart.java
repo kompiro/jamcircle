@@ -63,10 +63,6 @@ public class LaneCreaterEditPart extends AbstractEditPart implements IconEditPar
 		}
 	}
 	
-	private boolean isPropLocation(PropertyChangeEvent prop) {
-		return AbstractModel.PROP_LOCATION.equals(prop.getPropertyName());
-	}
-	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object getAdapter(Class key) {
