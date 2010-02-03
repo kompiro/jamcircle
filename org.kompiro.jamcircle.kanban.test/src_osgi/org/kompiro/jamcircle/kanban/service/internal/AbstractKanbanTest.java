@@ -7,7 +7,9 @@ import java.util.logging.Logger;
 
 import net.java.ao.EntityManager;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.kompiro.jamcircle.kanban.KanbanActivator;
 
 public abstract class AbstractKanbanTest {
@@ -30,7 +32,7 @@ public abstract class AbstractKanbanTest {
 
 	protected static KanbanServiceImpl getKanbanService() {
 		if(kanbanService == null){
-			kanbanService = (KanbanServiceImpl)getActivator().getKanbanService();
+			kanbanService = (KanbanServiceImpl)KanbanActivator.getKanbanService();
 		}
 		return kanbanService;
 	}

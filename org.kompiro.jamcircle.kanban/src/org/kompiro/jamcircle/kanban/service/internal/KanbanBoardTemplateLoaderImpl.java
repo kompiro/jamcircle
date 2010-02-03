@@ -20,6 +20,7 @@ public class KanbanBoardTemplateLoaderImpl {
 	public List<KanbanBoardTemplate> loadBoardTemplates() {
 		ArrayList<KanbanBoardTemplate> result = new ArrayList<KanbanBoardTemplate>();
 		IExtension extension = registry.getExtension(POINT_CALLBACK);
+		if(extension == null) return result;
 		IConfigurationElement[] configurationElements = extension.getConfigurationElements();
 		if(configurationElements == null) return result;
 		for (IConfigurationElement configurationElement : configurationElements) {

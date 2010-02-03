@@ -25,6 +25,7 @@ import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListListener;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer;
+import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 public class TrashEditPart extends AbstractEditPart implements IconEditPart,CardContainerEditPart{
 	
@@ -129,10 +130,6 @@ public class TrashEditPart extends AbstractEditPart implements IconEditPart,Card
 
 	private TrashFigure getTrashFigure() {
 		return (TrashFigure)getFigure();
-	}
-
-	private boolean isPropLocation(PropertyChangeEvent prop) {
-		return AbstractModel.PROP_LOCATION.equals(prop.getPropertyName());
 	}
 	
 	boolean isPropCard(PropertyChangeEvent prop) {

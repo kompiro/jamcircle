@@ -4,5 +4,4 @@
    <service>
       <provide interface="org.kompiro.jamcircle.scripting.ScriptingService"/>
    </service>
-   <reference bind="setScriptingEngineInitializerLoader" cardinality="1..1" interface="org.kompiro.jamcircle.scripting.ScriptingEngineInitializerLoader" name="ScriptingEngineInitializerLoader" policy="static"/>
 </scr:component>

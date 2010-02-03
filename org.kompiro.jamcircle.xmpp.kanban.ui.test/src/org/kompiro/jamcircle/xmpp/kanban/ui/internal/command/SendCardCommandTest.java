@@ -21,10 +21,6 @@ public class SendCardCommandTest extends AbstractCommandTest {
 
 	@Test
 	public void initialize() throws Exception {
-		whenAllNull();
-		whenSetOnlyTarget();
-		whenSetButNotAlive();
-		whenSetButNotTargetModel();
 		command.execute();
 	}
 
@@ -46,7 +42,8 @@ public class SendCardCommandTest extends AbstractCommandTest {
 		// OK
 	}
 
-	private void whenSetButNotAlive() {
+	@Test
+	public void whenSetButNotAlive() {
 		SendCardCommand command = new SendCardCommand();
 		try {
 			User user = mock(User.class);
@@ -59,7 +56,8 @@ public class SendCardCommandTest extends AbstractCommandTest {
 		}
 	}
 
-	private void whenSetButNotTargetModel() {
+	@Test
+	public void whenSetButNotTargetModel() {
 		SendCardCommand command = new SendCardCommand();
 		XMPPKanbanUIContext context = new XMPPKanbanUIContext();
 		XMPPConnectionService service = mock(XMPPConnectionService.class);
@@ -76,7 +74,8 @@ public class SendCardCommandTest extends AbstractCommandTest {
 		}
 	}
 
-	private void whenAllNull() {
+	@Test
+	public void whenAllNull() {
 		SendCardCommand command = new SendCardCommand();
 		try {
 			command.execute();
@@ -85,7 +84,8 @@ public class SendCardCommandTest extends AbstractCommandTest {
 		}
 	}
 
-	private void whenSetOnlyTarget() {
+	@Test
+	public void whenSetOnlyTarget() {
 		SendCardCommand command;
 		command = new SendCardCommand();
 		try {
@@ -103,7 +103,7 @@ public class SendCardCommandTest extends AbstractCommandTest {
 		XMPPKanbanUIContext context = new XMPPKanbanUIContext();
 		service = mock(XMPPConnectionService.class);
 		user = mock(User.class);
-		when(service.isAvailable(user)).thenReturn(true);
+		when(service.isAvailable(eq(user))).thenReturn(true);
 		context.setXMPPConnectionService(service);
 		command.setTarget(user);
 		EditPart part = mock(EditPart.class);

@@ -535,7 +535,7 @@ public class CardEditPart extends AbstractEditPart {
 		return Card.PROP_FILES.equals(evt.getPropertyName());
 	}
 	
-	private boolean isPropLocation(PropertyChangeEvent evt) {
+	protected boolean isPropLocation(PropertyChangeEvent evt) {
 		return Card.PROP_LOCATION_X.equals(evt.getPropertyName())||
 		Card.PROP_LOCATION_Y.equals(evt.getPropertyName());
 	}
