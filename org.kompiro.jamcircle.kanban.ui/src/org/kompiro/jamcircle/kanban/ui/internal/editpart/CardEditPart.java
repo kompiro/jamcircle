@@ -652,4 +652,24 @@ public class CardEditPart extends AbstractEditPart {
 	void setFileIcon(Clickable fileIcon) {
 		this.fileIcon = fileIcon;
 	}
+	
+	void setPageIcon(Clickable pageIcon) {
+		this.pageIcon = pageIcon;
+	}
+	
+	void setCompletedIcon(Clickable completedIcon) {
+		this.completedIcon = completedIcon;
+	}
+	
+	void setDueIcon(Clickable dueIcon) {
+		this.dueIcon = dueIcon;
+	}
+	
+	void setDueDummy(IFigure dueDummy) {
+		this.dueDummy = dueDummy;
+	}
+	
+	void setOverDueIcon(Clickable overDueIcon) {
+		this.overDueIcon = overDueIcon;
+	}
 }

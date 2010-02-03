@@ -1,13 +1,19 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.eclipse.draw2d.Clickable;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.junit.Before;
 import org.junit.Test;
@@ -67,6 +73,51 @@ public class CardEditPartTest {
 
 		card.deleteFile(file);
 		verify(fileIcon).setVisible(eq(false));
+	}
+	
+	@Test
+	public void doPropBody() throws Exception {
+		Clickable pageIcon = mock(Clickable.class);
+		part.setPageIcon(pageIcon);
+		card.setContent("test");
+		
+		verify(pageIcon).setVisible(eq(true));
+		card.setContent("");
+		verify(pageIcon).setVisible(eq(false));
+		card.setContent(null);
+		verify(pageIcon,times(2)).setVisible(eq(false));
+	}
+	
+	@Test
+	public void doPropComplete() throws Exception {
+		Clickable completedIcon = mock(Clickable.class);
+		part.setCompletedIcon(completedIcon);
+
+		card.setCompleted(true);
+		verify(completedIcon).setVisible(eq(true));
+		card.setCompleted(false);
+		verify(completedIcon).setVisible(eq(false));
+	}
+	
+	@Test
+	public void doPropDue() throws Exception {
+		Clickable dueIcon = mock(Clickable.class);
+		part.setDueIcon(dueIcon );
+		IFigure dueDummy = mock(IFigure.class);
+		part.setDueDummy(dueDummy );
+		
+		Clickable overDueIcon = mock(Clickable.class);
+		part.setOverDueIcon(overDueIcon );
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, 1);
+		card.setDueDate(cal.getTime());
+		verify(dueIcon).setVisible(eq(true));
+		cal.add(Calendar.DATE, -1);
+		card.setDueDate(cal.getTime());
+		verify(dueIcon).setVisible(eq(false));
+		// failure
+		card.setDueDate(null);
+		verify(dueIcon,times(2)).setVisible(eq(false));
 	}
 	
 }
