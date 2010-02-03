@@ -14,6 +14,7 @@ public class KanbanBoardTemplateLoaderImpl {
 	
 	static final String POINT_CALLBACK = "org.kompiro.jamcircle.kanban.boardTemplate";
 	static final String ATTR_CLASS = "class";
+	static final String ATTR_ICON = "icon";
 	private IExtensionRegistry registry = RegistryFactory.getRegistry();
 
 	public List<KanbanBoardTemplate> loadBoardTemplates() {

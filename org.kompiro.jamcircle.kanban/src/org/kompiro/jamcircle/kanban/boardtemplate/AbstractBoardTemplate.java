@@ -12,6 +12,8 @@ import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 
 public abstract class AbstractBoardTemplate implements KanbanBoardTemplate {
 
+	private String icon;
+
 	protected String readFromResource(URL resource) {
 		StringBuilder builder = new StringBuilder();
 		try {
@@ -41,6 +43,18 @@ public abstract class AbstractBoardTemplate implements KanbanBoardTemplate {
 	
 	private void fail(Exception e){
 		KanbanStatusHandler.fail(e, getClass().getSimpleName() + "#readFromResource",true);			
+	}
+	
+	public final String getIcon() {
+		return icon;
+	}
+	
+	void setIcon(String icon) {
+		this.icon = icon;
+	}
+
+	public String getName(){
+		return null;
 	}
 
 }

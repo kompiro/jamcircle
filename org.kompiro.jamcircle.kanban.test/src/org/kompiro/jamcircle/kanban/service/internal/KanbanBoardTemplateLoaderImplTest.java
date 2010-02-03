@@ -42,11 +42,13 @@ public class KanbanBoardTemplateLoaderImplTest {
 		IConfigurationElement element = mock(IConfigurationElement.class);
 		when(extension.getConfigurationElements()).thenReturn(new IConfigurationElement[]{element });
 		Object template = mock(KanbanBoardTemplate.class);
-		when(element.createExecutableExtension(ATTR_CLASS)).thenReturn(template );
+		when(element.createExecutableExtension(ATTR_CLASS)).thenReturn(template);
 		
 		impl.setRegistry(registry);
 		List<KanbanBoardTemplate> templates = impl.loadBoardTemplates();
 		assertThat(templates,not(nullValue()));
-		assertThat(templates.size(),is(1));		
+		assertThat(templates.size(),is(1));
+		KanbanBoardTemplate actual = templates.get(0);
+		assertThat(actual.getName(),is("template"));
 	}
 }

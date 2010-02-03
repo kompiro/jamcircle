@@ -15,11 +15,13 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.kompiro.jamcircle.kanban.boardtemplate.AbstractBoardTemplate;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
 
 
@@ -77,7 +79,11 @@ public class BoardNewWizardPage extends WizardPage {
 		typeCombo.setLabelProvider(new LabelProvider(){
 			@Override
 			public String getText(Object element) {
-				return ((KanbanBoardTemplate) element).getName();
+				return ((AbstractBoardTemplate) element).getName();
+			}
+			@Override
+			public Image getImage(Object element) {
+				return super.getImage(element);
 			}
 		});
 		typeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
