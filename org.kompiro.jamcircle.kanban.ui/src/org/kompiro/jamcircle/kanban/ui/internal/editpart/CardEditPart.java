@@ -648,4 +648,8 @@ public class CardEditPart extends AbstractEditPart {
 		}
 		return super.getAdapter(key);
 	}
+	
+	void setFileIcon(Clickable fileIcon) {
+		this.fileIcon = fileIcon;
+	}
 }

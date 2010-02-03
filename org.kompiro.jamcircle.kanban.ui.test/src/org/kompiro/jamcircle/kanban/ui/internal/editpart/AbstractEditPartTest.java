@@ -34,13 +34,6 @@ public abstract class AbstractEditPartTest {
 	public static final int INIT_BOARD_CHIHLDREN_SIZE = TRACHBOX_COUNT;
 //		TRACHBOX_COUNT	+ LANE_CREATER_COUNT;
 
-	private final class IPropertyChangeDelegatorForTest implements
-			IPropertyChangeDelegator {
-		public void run(Runnable runner) {
-			runner.run();
-		}
-	}
-
 	/**
 	 * Jump asyncrouns execution because these are not testable.
 	 */

@@ -149,6 +149,11 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		}
 		return delegator;
 	}
+	
+	@Override
+	public void setFigure(IFigure figure) {
+		super.setFigure(figure);
+	}
 
 	protected void doPropertyChange(final PropertyChangeEvent evt){
 		final Object newValue = evt.getNewValue();
