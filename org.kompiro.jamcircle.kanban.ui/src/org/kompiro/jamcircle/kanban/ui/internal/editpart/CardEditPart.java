@@ -338,6 +338,7 @@ public class CardEditPart extends AbstractEditPart {
 		if(card.getDueDate() == null){
 			dueDummy.setVisible(false);
 			overDueIcon.setToolTip(null);
+			dueIcon.setVisible(false);
 			dueIcon.setToolTip(null);
 		}else{
 			dueDummy.setVisible(true);

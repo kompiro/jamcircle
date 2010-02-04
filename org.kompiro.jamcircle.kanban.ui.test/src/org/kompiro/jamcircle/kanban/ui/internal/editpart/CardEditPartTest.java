@@ -18,6 +18,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.Card;
+import org.kompiro.jamcircle.kanban.model.ColorTypes;
 import org.kompiro.jamcircle.kanban.ui.editpart.IPropertyChangeDelegator;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
@@ -100,14 +101,14 @@ public class CardEditPartTest {
 	}
 	
 	@Test
-	public void doPropDue() throws Exception {
+	public void doPropDueCurrent() throws Exception {
 		Clickable dueIcon = mock(Clickable.class);
 		part.setDueIcon(dueIcon );
 		IFigure dueDummy = mock(IFigure.class);
 		part.setDueDummy(dueDummy );
-		
 		Clickable overDueIcon = mock(Clickable.class);
 		part.setOverDueIcon(overDueIcon );
+
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DATE, 1);
 		card.setDueDate(cal.getTime());
@@ -115,9 +116,31 @@ public class CardEditPartTest {
 		cal.add(Calendar.DATE, -1);
 		card.setDueDate(cal.getTime());
 		verify(dueIcon).setVisible(eq(false));
-		// failure
+	}
+	
+	@Test
+	public void doPropDueSetNull() throws Exception {
+		Clickable dueIcon = mock(Clickable.class);
+		part.setDueIcon(dueIcon );
+		IFigure dueDummy = mock(IFigure.class);
+		part.setDueDummy(dueDummy );
+		Clickable overDueIcon = mock(Clickable.class);
+		part.setOverDueIcon(overDueIcon );
+
+		Calendar cal = Calendar.getInstance();
+		cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, 1);
+		card.setDueDate(cal.getTime());
+		verify(dueIcon).setVisible(eq(true));
+		
 		card.setDueDate(null);
-		verify(dueIcon,times(2)).setVisible(eq(false));
+		verify(dueIcon).setVisible(eq(false));
+	}
+	
+	@Test
+	public void doColorTypeChanged() throws Exception {
+		card.setColorType(ColorTypes.BLUE);
+		verify(figure).setColorType(ColorTypes.BLUE);
 	}
 	
 }
