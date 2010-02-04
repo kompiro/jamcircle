@@ -157,6 +157,7 @@
 			<jvmarg value="-DbuildType=${buildType}"/>
 			<jvmarg value="-DfetchTag=${fetchTag}"/>
 			<jvmarg value="-DbuildProperties=${buildHome}/build-files/build.properties"/>
+			<jvmarg value="-Dmapfile=${mapfile}"/>
 			<classpath>
 				<pathelement location="${equinoxjar}" />
 			</classpath>
