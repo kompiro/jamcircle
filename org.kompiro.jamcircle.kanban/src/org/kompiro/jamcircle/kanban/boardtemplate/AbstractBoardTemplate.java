@@ -13,6 +13,8 @@ import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 public abstract class AbstractBoardTemplate implements KanbanBoardTemplate {
 
 	private String icon;
+	private String name;
+	private String contributor;
 
 	protected String readFromResource(URL resource) {
 		StringBuilder builder = new StringBuilder();
@@ -49,12 +51,24 @@ public abstract class AbstractBoardTemplate implements KanbanBoardTemplate {
 		return icon;
 	}
 	
-	void setIcon(String icon) {
+	public void setIcon(String icon) {
 		this.icon = icon;
 	}
 
 	public String getName(){
-		return null;
+		return this.name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setContributor(String contributor) {
+		this.contributor = contributor;
+	}
+	
+	public String getContributor() {
+		return contributor;
 	}
 
 }

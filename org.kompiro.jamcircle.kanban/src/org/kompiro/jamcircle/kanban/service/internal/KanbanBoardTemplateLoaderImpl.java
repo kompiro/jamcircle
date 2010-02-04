@@ -13,8 +13,6 @@ import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
 public class KanbanBoardTemplateLoaderImpl {
 	
 	static final String POINT_CALLBACK = "org.kompiro.jamcircle.kanban.boardTemplate";
-	static final String ATTR_CLASS = "class";
-	static final String ATTR_ICON = "icon";
 	private IExtensionRegistry registry = RegistryFactory.getRegistry();
 
 	public List<KanbanBoardTemplate> loadBoardTemplates() {
@@ -25,7 +23,8 @@ public class KanbanBoardTemplateLoaderImpl {
 		if(configurationElements == null) return result;
 		for (IConfigurationElement configurationElement : configurationElements) {
 			try {
-				KanbanBoardTemplate template = (KanbanBoardTemplate) configurationElement.createExecutableExtension(ATTR_CLASS);
+				KanbanBoardTemplateDescriptor desc = new KanbanBoardTemplateDescriptor(configurationElement);
+				KanbanBoardTemplate template = desc.createTemplate();
 				result.add(template);
 			} catch (CoreException e) {
 			}

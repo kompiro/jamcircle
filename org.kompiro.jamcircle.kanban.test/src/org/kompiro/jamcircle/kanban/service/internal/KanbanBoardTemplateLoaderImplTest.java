@@ -2,10 +2,12 @@ package org.kompiro.jamcircle.kanban.service.internal;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
-import static org.kompiro.jamcircle.kanban.service.internal.KanbanBoardTemplateLoaderImpl.ATTR_CLASS;
+import static org.kompiro.jamcircle.kanban.service.internal.KanbanBoardTemplateDescriptor.ATTR_CLASS;
+import static org.kompiro.jamcircle.kanban.service.internal.KanbanBoardTemplateDescriptor.ATTR_NAME;
 import static org.kompiro.jamcircle.kanban.service.internal.KanbanBoardTemplateLoaderImpl.POINT_CALLBACK;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 import java.util.List;
 
@@ -24,6 +26,8 @@ public class KanbanBoardTemplateLoaderImplTest {
 	@Before
 	public void before() throws Exception{
 		impl = new KanbanBoardTemplateLoaderImpl();
+		IExtensionRegistry registry = mock(IExtensionRegistry.class);
+		impl.setRegistry(registry);
 	}
 
 	@Test
@@ -41,14 +45,14 @@ public class KanbanBoardTemplateLoaderImplTest {
 		when(registry.getExtension(POINT_CALLBACK)).thenReturn(extension );
 		IConfigurationElement element = mock(IConfigurationElement.class);
 		when(extension.getConfigurationElements()).thenReturn(new IConfigurationElement[]{element });
-		Object template = mock(KanbanBoardTemplate.class);
+		KanbanBoardTemplate template = mock(KanbanBoardTemplate.class);
 		when(element.createExecutableExtension(ATTR_CLASS)).thenReturn(template);
+		when(element.getAttribute(ATTR_NAME)).thenReturn("template");
 		
 		impl.setRegistry(registry);
 		List<KanbanBoardTemplate> templates = impl.loadBoardTemplates();
 		assertThat(templates,not(nullValue()));
 		assertThat(templates.size(),is(1));
-		KanbanBoardTemplate actual = templates.get(0);
-		assertThat(actual.getName(),is("template"));
+		verify(template).setName("template");
 	}
 }
