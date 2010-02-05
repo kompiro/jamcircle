@@ -108,5 +108,5 @@ public class LaneEditPartTest extends AbstractEditPartTest{
 		todoLanePart.refresh();
 		assertEquals(0,todoLanePart.getChildren().size());
 	}
-	
+		
 }
