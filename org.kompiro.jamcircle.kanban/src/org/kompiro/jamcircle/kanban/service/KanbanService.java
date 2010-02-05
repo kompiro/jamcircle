@@ -3,6 +3,8 @@ package org.kompiro.jamcircle.kanban.service;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 
+import net.java.ao.Entity;
+
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Card;
@@ -128,6 +130,8 @@ public interface KanbanService {
 
 	void pickupFromTrash(GraphicalEntity entity);
 
+	void delete(Entity entity);
+	
 	boolean isTestMode();
 	
 }
