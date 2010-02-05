@@ -37,6 +37,8 @@ public interface StorageService extends FileStorageService {
 	public <T extends Entity> T createEntity(Class<T> clazz, DBParam[] params);
 
 	public void discard(GraphicalEntity entity);
+	
+	public void delete(Entity entity);
 
 	public int countInTrash(Class<? extends GraphicalEntity> clazz);
 

@@ -1,7 +1,7 @@
 package org.kompiro.jamcircle.storage.service.internal;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
 
 import java.io.File;
 import java.util.UUID;
@@ -22,6 +22,7 @@ public class StorageServiceImplTest {
 	private StorageServiceImpl service;
 	private EntityManager entityManager;
 	private File tempDir;
+	private GraphicalTestEntity entity;
 	
 	@BeforeClass
 	public static void initialize(){
@@ -94,6 +95,23 @@ public class StorageServiceImplTest {
 		entity.save(false);
 		service.deleteTrashedEntity(GraphicalTestEntity.class);
 		assertThat(entityManager.count(GraphicalTestEntity.class),is(0));
+	}
+	
+	@Test
+	public void create() throws Exception {
+		assertEquals(0,entityManager.count(GraphicalTestEntity.class));
+		entity = service.createEntity(GraphicalTestEntity.class, new DBParam[]{new DBParam("uuid",UUID.randomUUID().toString())});
+		entity.setName("test");
+		entity.save(false);
+		assertEquals(1,entityManager.count(GraphicalTestEntity.class));
+	}
+	
+	@Test
+	public void delete() throws Exception {
+		create();
+		service.delete(entity );
+		assertThat(entityManager.count(GraphicalTestEntity.class),is(0));
+		
 	}
 	
 }

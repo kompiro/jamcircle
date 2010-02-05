@@ -303,6 +303,14 @@ public class StorageServiceImpl implements StorageService {
 		entity.save(false);
 	}
 	
+	public void delete(Entity entity){
+		try {
+			getEntityManager().delete(entity);
+		} catch (SQLException e) {
+			StorageStatusHandler.fail(e, "StorageServiceImpl#delete()");
+		}
+	}
+	
 	public void pickup(GraphicalEntity entity) {
 		entity.setTrashed(false);
 		entity.save(false);
