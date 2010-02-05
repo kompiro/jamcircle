@@ -37,6 +37,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 	private StorageService storageService;
 	private User currentUser;
+	private static KanbanBoardTemplateLoaderImpl loader = new KanbanBoardTemplateLoaderImpl();
 	
 	public KanbanServiceImpl() {
 	}
@@ -45,6 +46,9 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		templates.add(new NoLaneBoardTemplate());
 		templates.add(new TaskBoardTemplate());
 		templates.add(new ColorBoardTemplate());
+		if(loader != null){
+			templates.addAll(loader.loadBoardTemplates());
+		}
 	}
 	
 	public void init(){
@@ -559,6 +563,10 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 
 	public void discardToTrash(GraphicalEntity entity) {
 		getStorageService().discard(entity);
+	}
+	
+	public void delete(Entity entity){
+		getStorageService().delete(entity);
 	}
 
 	public void pickupFromTrash(GraphicalEntity entity) {

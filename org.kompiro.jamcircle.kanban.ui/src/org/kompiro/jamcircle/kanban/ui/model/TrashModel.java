@@ -12,6 +12,7 @@ public class TrashModel extends AbstractIconModel implements CardContainer,LaneC
 	public static String PROP_CARD = "trash card";
 	public static String PROP_LANE = "trash lane";
 	private KanbanService kanbanService;
+	private ConfirmStrategy confirmStrategy = new MessageDialogConfirmStrategy();
 
 	public TrashModel(Icon icon,KanbanService kanbanService){
 		super(icon);
@@ -60,7 +61,7 @@ public class TrashModel extends AbstractIconModel implements CardContainer,LaneC
 		firePropertyChange(PROP_LANE,null,lane);
 		return false;
 	}
-		
+			
 	public Board gainBoard() {
 		throw new NotImplementedException();
 	}
@@ -81,14 +82,46 @@ public class TrashModel extends AbstractIconModel implements CardContainer,LaneC
 	private KanbanService getKanbanService(){
 		return kanbanService;
 	}
-	
-	public void setKanbanService(KanbanService kanbanService) {
-		this.kanbanService = kanbanService;
-	}
 
 	public int countTrashed(Class<? extends GraphicalEntity> clazz) {
 		return getKanbanService().countInTrash(clazz);
 	}
 
+	/**
+	 * Delete cards and lanes on board and itself.
+	 * @param board target board
+	 */
+	public void addBoard(Board board) {
+		String message = String.format("Do you really want to delete the board '%s'?\n(Can't undo this command.)",board.getTitle());
+		if(confirm(message)){
+			Lane[] lanes = board.getLanes();
+			if(lanes != null){
+				for (Lane lane : lanes) {
+					Card[] cards = lane.getCards();
+					addCards(cards);
+					addLane(lane);
+				}				
+			}
+			Card[] cards = board.getCards();
+			addCards(cards);
+			getKanbanService().delete(board);
+		}
+	}
+
+	private void addCards(Card[] cards) {
+		if(cards != null){
+			for (Card card : cards) {
+				addCard(card);
+			}
+		}
+	}
+
+	private boolean confirm(String message) {
+		return confirmStrategy .confirm(message);
+	}
+	
+	public void setConfirmStrategy(ConfirmStrategy confirmStrategy) {
+		this.confirmStrategy = confirmStrategy;
+	}
 
 }

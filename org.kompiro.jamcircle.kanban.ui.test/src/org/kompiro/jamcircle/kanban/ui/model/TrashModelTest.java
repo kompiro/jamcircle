@@ -1,7 +1,6 @@
 package org.kompiro.jamcircle.kanban.ui.model;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeThat;
 import static org.mockito.Matchers.eq;
@@ -9,6 +8,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.mock.*;
 import org.kompiro.jamcircle.kanban.service.internal.KanbanServiceImpl;
 import org.kompiro.jamcircle.storage.service.internal.StorageServiceImpl;
@@ -22,12 +22,13 @@ public class TrashModelTest {
 	private KanbanServiceImpl kanbanService;
 	private Card card;
 	private Lane lane;
+	private StorageServiceImpl storageService;
 	
 	@Before
 	public void before() throws Exception{
 		Icon icon = new Icon();
 		kanbanService = spy(new KanbanServiceImpl());
-		StorageServiceImpl storageService = spy(new StorageServiceImpl());
+		storageService = spy(new StorageServiceImpl());
 		kanbanService.setStorageService(storageService);
 		card = spy(new Card());
 		lane = spy(new Lane());
@@ -154,6 +155,67 @@ public class TrashModelTest {
 		assertThat(trash.countTrashedLane(),is(1));
 		trash.removeLane(lane);
 		assertThat(trash.countTrashedLane(),is(0));
+	}
+	
+	@Test
+	public void addBoard_BoardOnly() throws Exception {
+		ConfirmStrategy confirmStrategy = createConfirm(true);
+		trash.setConfirmStrategy(confirmStrategy );
+		Board board = mock(Board.class);
+		doAnswer(new Answer<Boolean>() {
+			public Boolean answer(InvocationOnMock invocation) throws Throwable {
+				return true;
+			}
+		}).when(storageService).delete(eq(board));
+		trash.addBoard(board);
+		verify(storageService).delete(eq(board));
+	}
+	
+	@Test
+	public void addBoard_not_confirmed() throws Exception {
+		ConfirmStrategy confirmStrategy = createConfirm(false);
+		trash.setConfirmStrategy(confirmStrategy );
+		Board board = mock(Board.class);
+		trash.addBoard(board);
+		verify(kanbanService,never()).delete(eq(board));
+		verify(storageService,never()).delete(eq(board));
+	}
+	
+	@Test
+	public void addBoard_some_cards_and_some_lanes() throws Exception {
+		
+		ConfirmStrategy confirmStrategy = createConfirm(true);
+		trash.setConfirmStrategy(confirmStrategy);
+		Board board = mock(Board.class);
+		doAnswer(new Answer<Boolean>() {
+			public Boolean answer(InvocationOnMock invocation) throws Throwable {
+				return true;
+			}
+		}).when(storageService).delete(eq(board));
+		Card[] cards = new Card[]{
+				mock(Card.class),
+				mock(Card.class),
+		};
+		when(board.getCards()).thenReturn(cards);
+		Lane laneMock = mock(Lane.class);
+		Lane[] lanes = new Lane[]{
+				laneMock,
+				laneMock,
+				laneMock,
+		};
+		when(board.getLanes()).thenReturn(lanes);
+		trash.addBoard(board);
+		verify(kanbanService).delete(eq(board));
+		verify(kanbanService,times(3)).discardToTrash(eq(laneMock));
+	}
+
+	private ConfirmStrategy createConfirm(final boolean result) {
+		ConfirmStrategy confirmStrategy = new ConfirmStrategy() {
+			public boolean confirm(String message) {
+				return result;
+			}
+		};
+		return confirmStrategy;
 	}
 
 }
