@@ -6,7 +6,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.Dialog;
@@ -14,43 +13,20 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.DragSource;
-import org.eclipse.swt.dnd.DragSourceEvent;
-import org.eclipse.swt.dnd.DragSourceListener;
-import org.eclipse.swt.dnd.DropTarget;
-import org.eclipse.swt.dnd.DropTargetAdapter;
-import org.eclipse.swt.dnd.DropTargetEvent;
-import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.dnd.*;
+import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 import org.kompiro.jamcircle.kanban.model.Board;
-import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
-import org.kompiro.jamcircle.kanban.ui.KanbanView;
+import org.kompiro.jamcircle.kanban.ui.*;
 import org.kompiro.jamcircle.kanban.ui.dialog.BoardEditDialog;
+import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 
@@ -135,6 +111,7 @@ public class BoardListTableViewer implements PropertyChangeListener {
 	private TableViewer viewer;
 	private TableViewerColumn titleColumn;
 	private TableViewerColumn idColumn;
+	private TrashModel trashModel;
 
 	public static int OPERATIONS = DND.DROP_MOVE;
 
@@ -155,21 +132,11 @@ public class BoardListTableViewer implements PropertyChangeListener {
 		table.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				IProgressService service = (IProgressService) PlatformUI.getWorkbench().getService(IProgressService.class);
-				IRunnableContext context = new ProgressMonitorDialog(viewer.getControl().getShell());
-				try {
-					service.runInUI(context,new OpenBoardRunnableWithProgress(),null);
-				} catch (InvocationTargetException ex) {
-					KanbanUIStatusHandler.fail(ex.getTargetException(), "Opening Kanban Board is failed.");
-				} catch (InterruptedException ex) {
-					KanbanUIStatusHandler.fail(ex, "Opening Kanban Board is failed.");
-				}
+				openBoard();
 			}
 		});
 		
 		createMenu();
-
-		
 		Transfer[] types = new Transfer[] {CardObjectTransfer.getTransfer()};
 		configurateDragSource(table,types);
 	 	configureDropTarget(table, types);
@@ -179,41 +146,39 @@ public class BoardListTableViewer implements PropertyChangeListener {
 		final Control control = viewer.getControl();
 		Menu menu = new Menu(control);
 		control.setMenu(menu);
-		MenuItem openItem = new MenuItem(menu,SWT.PUSH);
-		openItem.setText("Open");
-		openItem.addSelectionListener(new SelectionAdapter(){
+		createOpenMenu(menu);
+		createEditMenu(menu);
+		createDeleteMenu(menu);
+	}
+
+	private void createDeleteMenu(Menu menu) {
+		MenuItem item = new MenuItem(menu,SWT.PUSH);
+		item.setText("Delete");
+		item.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				widgetDefaultSelected(e);
 			}
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				IProgressService service = (IProgressService) PlatformUI.getWorkbench().getService(IProgressService.class);
-				IRunnableContext context = new ProgressMonitorDialog(viewer.getControl().getShell());
-				try {
-					service.runInUI(context,new OpenBoardRunnableWithProgress(),null);
-				} catch (InvocationTargetException ex) {
-					KanbanUIStatusHandler.fail(ex.getTargetException(), "Opening Kanban Board is failed.");
-				} catch (InterruptedException ex) {
-					KanbanUIStatusHandler.fail(ex, "Opening Kanban Board is failed.");
-				}
+				StructuredSelection selection = (StructuredSelection)viewer.getSelection();
+				Board board = getBoard(selection.getFirstElement());
+				trashModel.addBoard(board);
+				refreshTableViewer();
 			}
 		});
-		
-		MenuItem editItem = new MenuItem(menu,SWT.PUSH);
-		editItem.setText("Edit");
-		if(Platform.isRunning()){
-			Image openImage = KanbanUIActivator.getDefault().getImageRegistry().get(KanbanImageConstants.OPEN_IMAGE.toString());
-			openItem.setImage(openImage);
-			Image editImage = KanbanUIActivator.getDefault().getImageRegistry().get(KanbanImageConstants.EDIT_IMAGE.toString());
-			editItem.setImage(editImage);
-		}
-		editItem.addSelectionListener(new SelectionAdapter(){
+		Image image = getImage(KanbanImageConstants.DELETE_IMAGE);
+		item.setImage(image);
+	}
 
+	private void createEditMenu(Menu menu) {
+		MenuItem item = new MenuItem(menu,SWT.PUSH);
+		item.setText("Edit");
+		item.addSelectionListener(new SelectionAdapter(){
 			public void widgetDefaultSelected(SelectionEvent e) {
 				StructuredSelection selection = (StructuredSelection)viewer.getSelection();
-				BoardWrapper wrapper = (BoardWrapper) selection.getFirstElement();
-				Board board = wrapper.board;
-				BoardEditDialog dialog = new BoardEditDialog(control.getShell(),board.getTitle(),board.getScript(),board.getScriptType());
+				Board board = getBoard(selection.getFirstElement());
+				final Shell shell = getShell();
+				BoardEditDialog dialog = new BoardEditDialog(shell,board.getTitle(),board.getScript(),board.getScriptType());
 				int returnCode = dialog.open();
 				if(Dialog.OK == returnCode){
 					String script = dialog.getScript();
@@ -222,18 +187,43 @@ public class BoardListTableViewer implements PropertyChangeListener {
 					board.setScript(script);
 					board.setTitle(title);
 					board.setScriptType(type);
-					board.save(false);
+					board.save();
 					refreshTableViewer();
 				}
 			}
-
 			public void widgetSelected(SelectionEvent e) {
 				widgetDefaultSelected(e);
 			}
-			
 		});
+		Image image = getImage(KanbanImageConstants.EDIT_IMAGE);
+		item.setImage(image);
 	}
 
+	private void createOpenMenu(Menu menu) {
+		MenuItem item = new MenuItem(menu,SWT.PUSH);
+		item.setText("Open");
+		item.addSelectionListener(new SelectionAdapter(){
+			public void widgetSelected(SelectionEvent e) {
+				widgetDefaultSelected(e);
+			}
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				openBoard();
+			}
+		});
+		Image image = getImage(KanbanImageConstants.OPEN_IMAGE);
+		item.setImage(image);
+	}
+
+	private Image getImage(KanbanImageConstants image) {
+		if(!Platform.isRunning()) return null;
+		return KanbanUIActivator.getDefault().getImageRegistry().get(image.toString());
+	}
+
+	private Shell getShell() {
+		return viewer.getControl().getShell();
+	}
+	
 	private void configureDropTarget(Table table, Transfer[] types) {
 		DropTarget target = new DropTarget(table, OPERATIONS);
 		target.setTransfer(types);
@@ -363,6 +353,23 @@ public class BoardListTableViewer implements PropertyChangeListener {
 		Board[] boards = KanbanUIActivator.getDefault().getKanbanService()
 				.findAllBoard();
 		viewer.setInput(boards);
+	}
+
+
+	public void setTrashModel(TrashModel trashModel) {
+		this.trashModel = trashModel;
+	}
+
+	private void openBoard() {
+		IProgressService service = (IProgressService) PlatformUI.getWorkbench().getService(IProgressService.class);
+		IRunnableContext context = new ProgressMonitorDialog(viewer.getControl().getShell());
+		try {
+			service.runInUI(context,new OpenBoardRunnableWithProgress(),null);
+		} catch (InvocationTargetException ex) {
+			KanbanUIStatusHandler.fail(ex.getTargetException(), "Opening Kanban Board is failed.");
+		} catch (InterruptedException ex) {
+			KanbanUIStatusHandler.fail(ex, "Opening Kanban Board is failed.");
+		}
 	}
 
 }

@@ -38,12 +38,11 @@ public class BoardSelecterEditPart extends AbstractIconEditPart{
 				private BoardListTableViewer viewer;
 				@Override
 				protected Control createContents(Composite parent) {
-					
 					this.viewer = new BoardListTableViewer(parent);
 					viewer.setInput(getKanbanService().findAllBoard());
+					viewer.setTrashModel(getBoardModel().getTrashModel());
 					return parent;
 				}
-				
 				
 				@Override
 				protected void configureShell(Shell shell) {
