@@ -245,10 +245,18 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 	}
 	
 	public void setContents(Board board,final IProgressMonitor monitor) {
+		BoardModel oldBoardModel = null;
 		if(boardModel != null){
+			oldBoardModel = boardModel;
 			board.removePropertyChangeListener(boardModel);
 		}
 		boardModel = new BoardModel(board);
+		if(oldBoardModel != null){
+			List<IconModel> iconModels = oldBoardModel.getIconModels();
+			for (IconModel iconModel : iconModels) {
+				boardModel.addIcon(iconModel);
+			}			
+		}
 		board.addPropertyChangeListener(boardModel);
 		
 		KanbanUIEditPartFactory factory = new KanbanUIEditPartFactory(this.boardModel);
