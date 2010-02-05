@@ -3,11 +3,7 @@ package org.kompiro.jamcircle.kanban.service.internal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.RegistryFactory;
+import org.eclipse.core.runtime.*;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
 
 public class KanbanBoardTemplateLoaderImpl {
@@ -17,7 +13,7 @@ public class KanbanBoardTemplateLoaderImpl {
 
 	public List<KanbanBoardTemplate> loadBoardTemplates() {
 		ArrayList<KanbanBoardTemplate> result = new ArrayList<KanbanBoardTemplate>();
-		IExtension extension = registry.getExtension(POINT_CALLBACK);
+		IExtensionPoint extension = registry.getExtensionPoint(POINT_CALLBACK);
 		if(extension == null) return result;
 		IConfigurationElement[] configurationElements = extension.getConfigurationElements();
 		if(configurationElements == null) return result;

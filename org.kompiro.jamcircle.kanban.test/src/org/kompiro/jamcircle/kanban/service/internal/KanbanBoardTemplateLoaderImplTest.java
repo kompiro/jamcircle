@@ -2,8 +2,7 @@ package org.kompiro.jamcircle.kanban.service.internal;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
-import static org.kompiro.jamcircle.kanban.service.internal.KanbanBoardTemplateDescriptor.ATTR_CLASS;
-import static org.kompiro.jamcircle.kanban.service.internal.KanbanBoardTemplateDescriptor.ATTR_NAME;
+import static org.kompiro.jamcircle.kanban.service.internal.KanbanBoardTemplateDescriptor.*;
 import static org.kompiro.jamcircle.kanban.service.internal.KanbanBoardTemplateLoaderImpl.POINT_CALLBACK;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -48,11 +47,13 @@ public class KanbanBoardTemplateLoaderImplTest {
 		KanbanBoardTemplate template = mock(KanbanBoardTemplate.class);
 		when(element.createExecutableExtension(ATTR_CLASS)).thenReturn(template);
 		when(element.getAttribute(ATTR_NAME)).thenReturn("template");
+		when(element.getAttribute(ATTR_ICON)).thenReturn("template.png");
 		
 		impl.setRegistry(registry);
 		List<KanbanBoardTemplate> templates = impl.loadBoardTemplates();
 		assertThat(templates,not(nullValue()));
 		assertThat(templates.size(),is(1));
 		verify(template).setName("template");
+		verify(template).setIcon("template.png");
 	}
 }
