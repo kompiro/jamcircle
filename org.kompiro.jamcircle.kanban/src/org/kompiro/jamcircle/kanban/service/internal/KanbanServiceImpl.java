@@ -15,6 +15,7 @@ import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
 import org.kompiro.jamcircle.kanban.boardtemplate.internal.*;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.kanban.service.internal.loader.KanbanBoardScriptTemplateLoaderImpl;
 import org.kompiro.jamcircle.kanban.service.internal.loader.KanbanBoardTemplateLoaderImpl;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 import org.kompiro.jamcircle.storage.service.StorageChageListener;
@@ -40,6 +41,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	private StorageService storageService;
 	private User currentUser;
 	private static KanbanBoardTemplateLoaderImpl loader = new KanbanBoardTemplateLoaderImpl();
+	private static KanbanBoardScriptTemplateLoaderImpl scriptLoader = new KanbanBoardScriptTemplateLoaderImpl();
 	
 	public KanbanServiceImpl() {
 	}
@@ -52,6 +54,15 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 			List<KanbanBoardTemplate> loadedTemplates = null;
 			try {
 				loadedTemplates = loader.loadBoardTemplates();
+			} catch (CoreException e) {
+				KanbanStatusHandler.fail(e, "failed when loading templates.", false);
+			}
+			templates.addAll(loadedTemplates);
+		}
+		if(scriptLoader != null){
+			List<KanbanBoardTemplate> loadedTemplates = null;
+			try {
+				loadedTemplates = scriptLoader.loadBoardTemplates();
 			} catch (CoreException e) {
 				KanbanStatusHandler.fail(e, "failed when loading templates.", false);
 			}

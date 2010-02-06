@@ -89,7 +89,7 @@ public class ScriptingServiceImpl implements ScriptingService{
 			for(Map.Entry<String, Object> entry : beans.entrySet()){
 				manager.registerBean(entry.getKey(), entry.getValue());
 			}
-	        runtime.getGlobalVariables().defineReadonly("$bsf", new ValueAccessor(JavaEmbedUtils.javaToRuby(runtime, manager)));
+//	        runtime.getGlobalVariables().defineReadonly("$bsf", new ValueAccessor(JavaEmbedUtils.javaToRuby(runtime, manager)));
 		}
 
 		try {
