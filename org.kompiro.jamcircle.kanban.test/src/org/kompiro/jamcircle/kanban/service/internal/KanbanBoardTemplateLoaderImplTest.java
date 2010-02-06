@@ -10,9 +10,7 @@ import static org.mockito.Mockito.verify;
 
 import java.util.List;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
@@ -39,11 +37,11 @@ public class KanbanBoardTemplateLoaderImplTest {
 	@Test
 	public void loadBoardTemplates() throws Exception {
 		IExtensionRegistry registry = mock(IExtensionRegistry.class);
-		IExtension extension = mock(IExtension.class);
 		
-		when(registry.getExtension(POINT_CALLBACK)).thenReturn(extension );
+		IExtensionPoint point = mock(IExtensionPoint.class);
+		when(registry.getExtensionPoint(POINT_CALLBACK)).thenReturn(point);
 		IConfigurationElement element = mock(IConfigurationElement.class);
-		when(extension.getConfigurationElements()).thenReturn(new IConfigurationElement[]{element });
+		when(point.getConfigurationElements()).thenReturn(new IConfigurationElement[]{element });
 		KanbanBoardTemplate template = mock(KanbanBoardTemplate.class);
 		when(element.createExecutableExtension(ATTR_CLASS)).thenReturn(template);
 		when(element.getAttribute(ATTR_NAME)).thenReturn("template");
