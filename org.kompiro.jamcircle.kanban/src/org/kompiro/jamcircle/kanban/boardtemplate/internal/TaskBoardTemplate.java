@@ -32,13 +32,13 @@ public class TaskBoardTemplate extends AbstractBoardTemplate {
 
 	private Lane createDoneLane(Board board) {
 		Lane lane = createLane(board,"Done",500,50,200,500);
-		lane.setScript(readFromResource(getClass().getResource("taskDoneTemplate.txt")));
+		lane.setScript(readFromResourceString(getClass().getResource("taskDoneTemplate.txt")));
 		lane.save(false);
 		return lane;
 	}
 
 	private Lane createLane(Board board,String status, int x, int y, int width, int height) {
-		KanbanService kanbanService = KanbanActivator.getDefault().getKanbanService();
+		KanbanService kanbanService = KanbanActivator.getKanbanService();
 		Lane lane = kanbanService.createLane(board,status, x, y, width, height);
 		return lane;
 	}

@@ -8,12 +8,14 @@ import java.util.*;
 
 import net.java.ao.*;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
 import org.kompiro.jamcircle.kanban.boardtemplate.internal.*;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.kanban.service.internal.loader.KanbanBoardTemplateLoaderImpl;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 import org.kompiro.jamcircle.storage.service.StorageChageListener;
 import org.kompiro.jamcircle.storage.service.StorageService;
@@ -47,7 +49,13 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		templates.add(new TaskBoardTemplate());
 		templates.add(new ColorBoardTemplate());
 		if(loader != null){
-			templates.addAll(loader.loadBoardTemplates());
+			List<KanbanBoardTemplate> loadedTemplates = null;
+			try {
+				loadedTemplates = loader.loadBoardTemplates();
+			} catch (CoreException e) {
+				KanbanStatusHandler.fail(e, "failed when loading templates.", false);
+			}
+			templates.addAll(loadedTemplates);
 		}
 	}
 	

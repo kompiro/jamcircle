@@ -60,13 +60,12 @@ public class ColorBoardTemplate extends AbstractBoardTemplate {
 		return createLane(board,"RED PURPLE",700,300,200,250,7);
 	}
 
-
 	private Lane createLane(Board board,String status, int x, int y, int width, int height, int colorType) {
-		KanbanService kanbanService = KanbanActivator.getDefault().getKanbanService();
+		KanbanService kanbanService = KanbanActivator.getKanbanService();
 		kanbanService.init();
 		Lane lane = kanbanService.createLane(board,status, x, y, width, height);
 		lane.setScriptType(ScriptTypes.JavaScript);
-		lane.setScript(String.format(readFromResource(this.getClass().getResource("colorTemplate.txt")), colorType));
+		lane.setScript(String.format(readFromResourceString(this.getClass().getResource("colorTemplate.txt")), colorType));
 		lane.save(false);
 		return lane;
 	}
@@ -75,5 +74,8 @@ public class ColorBoardTemplate extends AbstractBoardTemplate {
 		return "Color Board";
 	}
 	
+	public String getIcon(){
+		return "icons/color_wheel.png";
+	}
 
 }

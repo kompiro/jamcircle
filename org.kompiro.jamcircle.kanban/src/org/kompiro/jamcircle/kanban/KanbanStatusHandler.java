@@ -11,7 +11,7 @@ import org.kompiro.jamcircle.debug.IStatusHandler;
 
 public class KanbanStatusHandler {
 
-	private static final String ID_PLUGIN = "org.kompiro.jamcircle.kanban";
+	private static final String ID_PLUGIN = KanbanActivator.ID;
 
 	private static Set<IStatusHandler> handlers = new HashSet<IStatusHandler>();
 	

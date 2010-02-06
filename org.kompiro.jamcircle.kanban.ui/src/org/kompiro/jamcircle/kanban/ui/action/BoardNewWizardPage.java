@@ -1,16 +1,13 @@
 package org.kompiro.jamcircle.kanban.ui.action;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.text.DateFormat;
 import java.util.Date;
 
-
-import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -18,18 +15,17 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.*;
 import org.kompiro.jamcircle.kanban.boardtemplate.AbstractBoardTemplate;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
+import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
 
 public class BoardNewWizardPage extends WizardPage {
 	private Text boardTitleText;
 	private String boardTitle;
 	private KanbanBoardTemplate[] initializers;
-	private ComboViewer typeCombo;
+	private TableViewer typeViewer;
 	private KanbanBoardTemplate selectedInitializer;
 
 	public BoardNewWizardPage(KanbanBoardTemplate[] kanbanDataInitializers) {
@@ -59,10 +55,11 @@ public class BoardNewWizardPage extends WizardPage {
 		});
 		
 		Label typeLabel = new Label(container,SWT.None);
-		typeLabel.setText("&Board Type:");
+		typeLabel.setText("&Template Type:");
+		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.BEGINNING).applyTo(typeLabel);
 		
-		typeCombo = new ComboViewer(container);
-		typeCombo.setContentProvider(new IStructuredContentProvider(){
+		typeViewer = new TableViewer(container);
+		typeViewer.setContentProvider(new IStructuredContentProvider(){
 			public Object[] getElements(Object inputElement) {
 				return (Object[])inputElement;
 			}
@@ -76,17 +73,26 @@ public class BoardNewWizardPage extends WizardPage {
 			}
 			
 		});
-		typeCombo.setLabelProvider(new LabelProvider(){
+		typeViewer.setLabelProvider(new LabelProvider(){
 			@Override
 			public String getText(Object element) {
 				return ((AbstractBoardTemplate) element).getName();
 			}
 			@Override
 			public Image getImage(Object element) {
-				return super.getImage(element);
+				Image image = null;
+				Display display = WorkbenchUtil.getDisplay();
+				URL resource = ((AbstractBoardTemplate) element).getIconFromResource();
+				if(resource == null) return null;
+				try {
+					InputStream stream = resource.openStream();
+					image = new Image(display, stream);
+				} catch (IOException e) {
+				}
+				return image;
 			}
 		});
-		typeCombo.addSelectionChangedListener(new ISelectionChangedListener(){
+		typeViewer.addSelectionChangedListener(new ISelectionChangedListener(){
 
 			public void selectionChanged(SelectionChangedEvent event) {
 				selectedInitializer = (KanbanBoardTemplate)((IStructuredSelection)event.getSelection()).getFirstElement();
@@ -100,8 +106,8 @@ public class BoardNewWizardPage extends WizardPage {
 	private void initialize() {
 		String initializeTitle = DateFormat.getDateInstance().format(new Date());
 		boardTitleText.setText(String.format("%s's Board",initializeTitle));
-		typeCombo.setInput(initializers);
-		typeCombo.getCombo().select(0);
+		typeViewer.setInput(initializers);
+		typeViewer.getTable().select(0);
 	}
 
 	String getBoardTitle(){
