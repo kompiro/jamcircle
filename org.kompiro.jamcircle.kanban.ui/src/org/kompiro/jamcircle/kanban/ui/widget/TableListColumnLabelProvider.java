@@ -14,7 +14,7 @@ public abstract class TableListColumnLabelProvider extends
 	@Override
 	public Color getBackground(Object element) {
 		if (!(element instanceof TableListWrapper))
-			throw new IllegalArgumentException();
+			return null;
 		TableListWrapper wrapper = (TableListWrapper) element;
 		if (wrapper.isEven()) {
 			return JFaceResources.getColorRegistry().get(

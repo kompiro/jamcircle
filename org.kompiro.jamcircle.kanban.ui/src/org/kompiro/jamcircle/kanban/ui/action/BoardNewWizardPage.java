@@ -19,12 +19,31 @@ import org.eclipse.swt.widgets.*;
 import org.kompiro.jamcircle.kanban.boardtemplate.AbstractBoardTemplate;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
+import org.kompiro.jamcircle.kanban.ui.widget.TableListColumnLabelProvider;
+import org.kompiro.jamcircle.kanban.ui.widget.TableListWrapper;
 
 
 public class BoardNewWizardPage extends WizardPage {
+	
+	private class TemplateWrapper implements TableListWrapper{
+
+		private boolean even;
+		private KanbanBoardTemplate template;
+
+		TemplateWrapper(KanbanBoardTemplate template,boolean even){
+			this.template = template;
+			this.even = even;
+		}
+		
+		public boolean isEven() {
+			return even;
+		}
+		
+	}
+	
 	private Text boardTitleText;
 	private String boardTitle;
-	private KanbanBoardTemplate[] initializers;
+	private TemplateWrapper[] initializers;
 	private TableViewer typeViewer;
 	private KanbanBoardTemplate selectedInitializer;
 
@@ -32,7 +51,15 @@ public class BoardNewWizardPage extends WizardPage {
 		super("wizardPage");
 		setTitle("Create New Board");
 		setDescription("This wizard creates a new board.");
-		this.initializers = kanbanDataInitializers;
+		this.initializers = trans(kanbanDataInitializers);
+	}
+
+	private TemplateWrapper[] trans(KanbanBoardTemplate[] inits) {
+		TemplateWrapper[] wrappers = new TemplateWrapper[inits.length];
+		for(int i = 0; i < wrappers.length;i++){
+			wrappers[i] = new TemplateWrapper(inits[i], i % 2 == 0);
+		}
+		return wrappers;
 	}
 
 	public void createControl(Composite parent) {
@@ -53,11 +80,16 @@ public class BoardNewWizardPage extends WizardPage {
 				boardTitle = boardTitleText.getText();
 			}
 		});
-		
+		createTemplateTypeSelection(container);
+		initialize();
+		setControl(container);
+	}
+
+	private void createTemplateTypeSelection(Composite container) {
 		Label typeLabel = new Label(container,SWT.None);
 		typeLabel.setText("&Template Type:");
 		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.BEGINNING).applyTo(typeLabel);
-		
+
 		typeViewer = new TableViewer(container);
 		typeViewer.setContentProvider(new IStructuredContentProvider(){
 			public Object[] getElements(Object inputElement) {
@@ -68,21 +100,27 @@ public class BoardNewWizardPage extends WizardPage {
 			public void inputChanged(Viewer viewer, Object oldInput,
 					Object newInput) {
 				if(newInput != null){
-					selectedInitializer = ((KanbanBoardTemplate[]) newInput)[0];
+					selectedInitializer = ((TemplateWrapper[]) newInput)[0].template;
 				}
 			}
 			
 		});
-		typeViewer.setLabelProvider(new LabelProvider(){
+		
+		TableViewerColumn nameColumn = new TableViewerColumn(typeViewer, SWT.LEAD);
+		nameColumn.getColumn().setText("Name");
+		nameColumn.getColumn().setWidth(200);
+		nameColumn.setLabelProvider(new TableListColumnLabelProvider(){
+
 			@Override
 			public String getText(Object element) {
-				return ((AbstractBoardTemplate) element).getName();
+				return getTemplate(element).getName();
 			}
+
 			@Override
 			public Image getImage(Object element) {
 				Image image = null;
 				Display display = WorkbenchUtil.getDisplay();
-				URL resource = ((AbstractBoardTemplate) element).getIconFromResource();
+				URL resource = getTemplate(element).getIconFromResource();
 				if(resource == null) return null;
 				try {
 					InputStream stream = resource.openStream();
@@ -91,7 +129,21 @@ public class BoardNewWizardPage extends WizardPage {
 				}
 				return image;
 			}
+						
 		});
+
+		TableViewerColumn column = new TableViewerColumn(typeViewer, SWT.LEAD);
+		column.getColumn().setText("Description");
+		column.getColumn().setWidth(200);
+		column.setLabelProvider(new TableListColumnLabelProvider(){
+
+			@Override
+			public String getText(Object element) {
+				return getTemplate(element).getDescription();
+			}
+
+		});
+
 		typeViewer.addSelectionChangedListener(new ISelectionChangedListener(){
 
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -99,9 +151,15 @@ public class BoardNewWizardPage extends WizardPage {
 			}
 			
 		});
-		initialize();
-		setControl(container);
+		Table table = typeViewer.getTable();
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
 	}
+	
+	private AbstractBoardTemplate getTemplate(Object element) {
+		return (AbstractBoardTemplate)((TemplateWrapper) element).template;
+	}
+
 
 	private void initialize() {
 		String initializeTitle = DateFormat.getDateInstance().format(new Date());

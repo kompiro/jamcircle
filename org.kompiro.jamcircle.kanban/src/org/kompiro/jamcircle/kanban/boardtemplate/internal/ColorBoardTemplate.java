@@ -77,5 +77,10 @@ public class ColorBoardTemplate extends AbstractBoardTemplate {
 	public String getIcon(){
 		return "icons/color_wheel.png";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "8 color lanes are defined.These lane have script to change card color.";
+	}
 
 }

@@ -16,7 +16,7 @@ public abstract class AbstractBoardTemplate implements KanbanBoardTemplate {
 
 	private String icon;
 	private String name;
-	private String description;
+	private String description = "";
 	private String contributor;
 
 	protected String readFromResourceString(URL resource) {

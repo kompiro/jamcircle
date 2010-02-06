@@ -11,5 +11,10 @@ public class NoLaneBoardTemplate extends AbstractBoardTemplate {
 
 	public void initialize(Board board) {
 	}
+	
+	@Override
+	public String getDescription() {
+		return "no lanes and no script on board.";
+	}
 
 }

@@ -46,4 +46,9 @@ public class TaskBoardTemplate extends AbstractBoardTemplate {
 	public String getName(){
 		return "Task Board";
 	}
+	
+	@Override
+	public String getDescription() {
+		return "This board has 3 lanes.Todo,Doing,Done.";
+	}
 }
