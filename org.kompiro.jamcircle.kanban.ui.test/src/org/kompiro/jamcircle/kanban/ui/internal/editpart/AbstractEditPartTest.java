@@ -23,7 +23,6 @@ import org.kompiro.jamcircle.kanban.model.mock.Board;
 import org.kompiro.jamcircle.kanban.model.mock.Icon;
 import org.kompiro.jamcircle.kanban.ui.CommandStackEventListenerForDebug;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
-import org.kompiro.jamcircle.kanban.ui.editpart.IPropertyChangeDelegator;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 

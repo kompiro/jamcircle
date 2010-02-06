@@ -1,16 +1,11 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 import java.io.File;
 import java.util.Calendar;
-import java.util.Date;
 
 import org.eclipse.draw2d.Clickable;
 import org.eclipse.draw2d.IFigure;

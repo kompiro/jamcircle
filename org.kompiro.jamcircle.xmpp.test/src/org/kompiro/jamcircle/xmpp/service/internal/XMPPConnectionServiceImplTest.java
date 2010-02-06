@@ -15,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
-import org.kompiro.jamcircle.xmpp.XMPPActivator;
 import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 import org.mockito.ArgumentCaptor;
 import org.mockito.invocation.InvocationOnMock;

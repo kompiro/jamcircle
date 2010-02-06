@@ -340,7 +340,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		return new BoardDragTracker(getKanbanService());
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings("unchecked")
 	@Override
 	protected List getModelChildren() {
 		BoardModel model = (BoardModel) getModel();

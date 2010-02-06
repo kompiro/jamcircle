@@ -151,7 +151,7 @@ public class ScriptingServiceImpl implements ScriptingService{
 		return result;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings("unchecked")
 	public Object getAdapter(Class adapter) {
 		if(adapter == null) return null;
 		if(Ruby.class.equals(adapter)) return runtime;

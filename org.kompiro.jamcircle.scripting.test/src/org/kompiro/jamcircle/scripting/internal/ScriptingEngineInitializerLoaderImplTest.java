@@ -1,25 +1,20 @@
 package org.kompiro.jamcircle.scripting.internal;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertThat;
 import static org.kompiro.jamcircle.scripting.internal.ScriptingEngineInitializerLoaderImpl.POINT_CALLBACK;
-import static org.kompiro.jamcircle.scripting.internal.ScriptingInitializerLoaderDescriptor.ScriptExtendDescriptor.*;
 import static org.kompiro.jamcircle.scripting.internal.ScriptingInitializerLoaderDescriptor.ATTR_HANDLER_CLASS;
-import static org.mockito.Matchers.anyObject;
+import static org.kompiro.jamcircle.scripting.internal.ScriptingInitializerLoaderDescriptor.ScriptExtendDescriptor.FILE;
+import static org.kompiro.jamcircle.scripting.internal.ScriptingInitializerLoaderDescriptor.ScriptExtendDescriptor.TYPE;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Map;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.kompiro.jamcircle.scripting.IScriptingEngineInitializer;
-import org.kompiro.jamcircle.scripting.ScriptTypes;
-import org.kompiro.jamcircle.scripting.ScriptingService;
+import org.kompiro.jamcircle.scripting.*;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.osgi.service.component.ComponentContext;

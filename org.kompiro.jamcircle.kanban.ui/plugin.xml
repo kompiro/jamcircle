@@ -39,7 +39,7 @@
                moveable="false"
                ratio="0.95f"
                relationship="top"
-               relative="org.eclipse.ui.views"
+               relative="org.eclipse.ui.views.ProblemView"
                showTitle="false"
                standalone="true"
                visible="true">

@@ -1,8 +1,7 @@
 package org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 

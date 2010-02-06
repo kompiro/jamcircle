@@ -18,6 +18,7 @@ import org.eclipse.ui.progress.WorkbenchJob;
  * @since 3.1
  * Copied from org.eclipse.ui.console 3.4.0 by kompiro
  */
+@SuppressWarnings("unchecked")
 public class IOConsolePartitioner implements IConsoleDocumentPartitioner, IDocumentPartitionerExtension {
 	private PendingPartition consoleClosedPartition;
 	private IDocument document;

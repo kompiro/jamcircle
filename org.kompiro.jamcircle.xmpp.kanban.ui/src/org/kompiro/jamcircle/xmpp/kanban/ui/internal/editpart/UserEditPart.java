@@ -20,7 +20,6 @@ import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.command.*;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
 import org.kompiro.jamcircle.kanban.ui.editpart.IconEditPart;
-import org.kompiro.jamcircle.kanban.ui.model.AbstractModel;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListListener;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer;

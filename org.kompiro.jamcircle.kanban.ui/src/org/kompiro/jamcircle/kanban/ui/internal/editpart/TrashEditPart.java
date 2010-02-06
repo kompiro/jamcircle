@@ -2,12 +2,9 @@ package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
 import java.beans.PropertyChangeEvent;
 
-
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.Request;
+import org.eclipse.gef.*;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
@@ -20,12 +17,10 @@ import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 import org.kompiro.jamcircle.kanban.ui.editpart.*;
 import org.kompiro.jamcircle.kanban.ui.internal.command.*;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.TrashFigure;
-import org.kompiro.jamcircle.kanban.ui.model.AbstractModel;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListListener;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer;
-import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 public class TrashEditPart extends AbstractEditPart implements IconEditPart,CardContainerEditPart{
 	

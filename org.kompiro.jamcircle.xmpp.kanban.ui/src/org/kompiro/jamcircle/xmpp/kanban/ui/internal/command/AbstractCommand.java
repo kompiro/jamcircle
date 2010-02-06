@@ -2,7 +2,6 @@ package org.kompiro.jamcircle.xmpp.kanban.ui.internal.command;
 
 
 import org.kompiro.jamcircle.kanban.service.KanbanService;
-import org.kompiro.jamcircle.xmpp.kanban.ui.internal.BridgeXMPPActivator;
 import org.kompiro.jamcircle.xmpp.kanban.ui.internal.XMPPKanbanUIContext;
 import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 

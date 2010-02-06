@@ -8,7 +8,6 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.RegistryFactory;
 
 public class StorageCallbackHandlerLoader {
-	private static final String PROVIDER = "provider";
 	private static final String POINT_CALLBACK = StorageActivator.ID + "." +"settingUI";
 	private String ATTR_HANDLER_CLASS = "class";
 

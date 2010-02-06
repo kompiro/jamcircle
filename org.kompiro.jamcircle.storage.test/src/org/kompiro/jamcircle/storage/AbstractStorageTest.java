@@ -18,12 +18,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 public abstract class AbstractStorageTest {
-	private static final String FILE = "file:";
 	protected static StorageActivator activator;
 	protected static EntityManager manager;
 	
-//	public abstract void init() throws Exception;
-
 	@BeforeClass
 	public static void bundleInitialize() throws Exception{
 		if(!Platform.isRunning()){
@@ -31,20 +28,6 @@ public abstract class AbstractStorageTest {
 		}
 		Logger.getLogger("net.java.ao").setLevel(Level.FINE);
 		activator = StorageActivator.getDefault();
-//		String storePath = activator.getService().getDBPath();
-//		int schemeIndex = storePath.indexOf(FILE);
-//		if(schemeIndex != -1){
-//			storePath = storePath.substring(FILE.length());
-//		}
-//		System.out.println(storePath);
-//		File file = new File(storePath);
-//		if(file.exists()){
-//			if(!file.delete()){
-//				System.err.println("can't delete file");
-//			}
-//		}
-//		String path = file.getAbsolutePath();
-//		assertNotSame("can't connect Test DB.'" + path + "'", -1 , path.indexOf("test"));
 		StorageService service = getStorageService();
 		manager = service.getEntityManager();
 		assertNotNull(manager);

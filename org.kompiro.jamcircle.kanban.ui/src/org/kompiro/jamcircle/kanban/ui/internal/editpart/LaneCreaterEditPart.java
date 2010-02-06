@@ -2,7 +2,6 @@ package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
 import java.beans.PropertyChangeEvent;
 
-
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ImageFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -17,7 +16,6 @@ import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
 import org.kompiro.jamcircle.kanban.ui.editpart.IconEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.command.MoveIconCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneIconFigure;
-import org.kompiro.jamcircle.kanban.ui.model.AbstractModel;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.LaneCreaterModel;
 

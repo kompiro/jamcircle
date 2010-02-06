@@ -38,6 +38,7 @@ public class LeaningActiveObjects {
 		assertNull(p);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void learningEntityManager_create_learn_about_generator() throws Exception {
 		String learningStoreDirectory = "/tmp/learning/";

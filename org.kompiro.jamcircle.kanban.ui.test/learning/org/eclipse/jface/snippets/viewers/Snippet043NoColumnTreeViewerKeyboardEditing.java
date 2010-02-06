@@ -41,6 +41,7 @@ import org.eclipse.swt.widgets.Shell;
  * @author Tom Schindl <tom.schindl@bestsolution.at>
  * 
  */
+@SuppressWarnings("unchecked")
 public class Snippet043NoColumnTreeViewerKeyboardEditing {
 	public Snippet043NoColumnTreeViewerKeyboardEditing(final Shell shell) {
 		Button b = new Button(shell, SWT.PUSH);

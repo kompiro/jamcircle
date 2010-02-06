@@ -1,9 +1,7 @@
 package org.kompiro.jamcircle.scripting.internal;
 
-import java.io.IOException;
 import java.util.*;
 
-import org.apache.bsf.BSFException;
 import org.eclipse.core.runtime.*;
 import org.kompiro.jamcircle.scripting.*;
 import org.kompiro.jamcircle.scripting.internal.ScriptingInitializerLoaderDescriptor.ScriptExtendDescriptor;
@@ -16,7 +14,7 @@ public class ScriptingEngineInitializerLoaderImpl implements ScriptingEngineInit
 
 	}
 
-	private static final String PLUGIN_ID = ScriptingActivator.ID;
+	private static final String PLUGIN_ID = "org.kompiro.jamcircle.scripting";
 	static final String POINT_CALLBACK = "org.kompiro.jamcircle.scripting.scriptEngineInitializer";
 	private Map<String,Object> result = new HashMap<String, Object>();
 	private IExtensionRegistry 	registry = RegistryFactory.getRegistry();

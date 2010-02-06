@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.TreeItem;
  * @author Tom Schindl <tom.schindl@bestsolution.at>
  * 
  */
+@SuppressWarnings("unchecked")
 public class Snippet023TreeViewerCustomTooltips {
 	private class MyContentProvider implements ITreeContentProvider {
 

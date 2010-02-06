@@ -8,7 +8,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 import org.osgi.framework.BundleContext;
-import org.osgi.util.tracker.ServiceTracker;
 
 public class XMPPUIActivator extends AbstractUIPlugin {
 
