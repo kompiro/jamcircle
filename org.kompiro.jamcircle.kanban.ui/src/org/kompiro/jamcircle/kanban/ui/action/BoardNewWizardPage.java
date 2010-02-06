@@ -106,10 +106,25 @@ public class BoardNewWizardPage extends WizardPage {
 			
 		});
 		
-		TableViewerColumn nameColumn = new TableViewerColumn(typeViewer, SWT.LEAD);
-		nameColumn.getColumn().setText("Name");
-		nameColumn.getColumn().setWidth(200);
-		nameColumn.setLabelProvider(new TableListColumnLabelProvider(){
+		createNameColumn();
+		createDescriptionColumn();
+		typeViewer.addSelectionChangedListener(new ISelectionChangedListener(){
+
+			public void selectionChanged(SelectionChangedEvent event) {
+				selectedInitializer = getTemplate(((IStructuredSelection)event.getSelection()).getFirstElement());
+			}
+			
+		});
+		Table table = typeViewer.getTable();
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
+	}
+
+	private void createNameColumn() {
+		TableViewerColumn column = new TableViewerColumn(typeViewer, SWT.LEAD);
+		column.getColumn().setText("Name");
+		column.getColumn().setWidth(100);
+		column.setLabelProvider(new TableListColumnLabelProvider(){
 
 			@Override
 			public String getText(Object element) {
@@ -131,10 +146,12 @@ public class BoardNewWizardPage extends WizardPage {
 			}
 						
 		});
+	}
 
+	private void createDescriptionColumn() {
 		TableViewerColumn column = new TableViewerColumn(typeViewer, SWT.LEAD);
 		column.getColumn().setText("Description");
-		column.getColumn().setWidth(200);
+		column.getColumn().setWidth(300);
 		column.setLabelProvider(new TableListColumnLabelProvider(){
 
 			@Override
@@ -143,17 +160,6 @@ public class BoardNewWizardPage extends WizardPage {
 			}
 
 		});
-
-		typeViewer.addSelectionChangedListener(new ISelectionChangedListener(){
-
-			public void selectionChanged(SelectionChangedEvent event) {
-				selectedInitializer = (KanbanBoardTemplate)((IStructuredSelection)event.getSelection()).getFirstElement();
-			}
-			
-		});
-		Table table = typeViewer.getTable();
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
 	}
 	
 	private AbstractBoardTemplate getTemplate(Object element) {

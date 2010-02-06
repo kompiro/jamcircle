@@ -14,9 +14,10 @@ import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 
 public abstract class AbstractBoardTemplate implements KanbanBoardTemplate {
 
+	public static final String DEFAULT_ICONS_PATH = "icons/kanban.gif";
 	private String icon;
 	private String name;
-	private String description = "";
+	private String description;
 	private String contributor;
 
 	protected String readFromResourceString(URL resource) {
@@ -54,7 +55,7 @@ public abstract class AbstractBoardTemplate implements KanbanBoardTemplate {
 	}
 	
 	public String getIcon() {
-		if(icon == null) return "icons/kanban.gif";
+		if(icon == null) return DEFAULT_ICONS_PATH;
 		return icon;
 	}
 	

@@ -51,7 +51,7 @@ public class KanbanBoardTemplateDescriptorTest {
 		when(element.createExecutableExtension(ATTR_CLASS)).thenReturn(value);
 		KanbanBoardTemplate template = desc.createTemplate(element);
 		assertThat(template.getName(),is(nullValue()));
-		assertThat(template.getIcon(),is(nullValue()));
+		assertThat(template.getIcon(),is(AbstractBoardTemplate.DEFAULT_ICONS_PATH));
 		assertThat(template.getDescription(),is(nullValue()));
 	}
 	
