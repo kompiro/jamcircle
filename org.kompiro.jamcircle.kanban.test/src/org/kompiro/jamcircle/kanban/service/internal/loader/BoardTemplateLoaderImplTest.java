@@ -2,8 +2,8 @@ package org.kompiro.jamcircle.kanban.service.internal.loader;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
-import static org.kompiro.jamcircle.kanban.service.internal.loader.KanbanBoardTemplateDescriptor.*;
-import static org.kompiro.jamcircle.kanban.service.internal.loader.KanbanBoardTemplateLoaderImpl.POINT_CALLBACK;
+import static org.kompiro.jamcircle.kanban.service.internal.loader.BoardTemplateDescriptor.*;
+import static org.kompiro.jamcircle.kanban.service.internal.loader.BoardTemplateLoaderImpl.POINT_CALLBACK;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
@@ -14,16 +14,16 @@ import org.eclipse.core.runtime.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
-import org.kompiro.jamcircle.kanban.service.internal.loader.KanbanBoardTemplateLoaderImpl;
+import org.kompiro.jamcircle.kanban.service.internal.loader.BoardTemplateLoaderImpl;
 
 
-public class KanbanBoardTemplateLoaderImplTest {
+public class BoardTemplateLoaderImplTest {
 	
-	private KanbanBoardTemplateLoaderImpl impl;
+	private BoardTemplateLoaderImpl impl;
 
 	@Before
 	public void before() throws Exception{
-		impl = new KanbanBoardTemplateLoaderImpl();
+		impl = new BoardTemplateLoaderImpl();
 		IExtensionRegistry registry = mock(IExtensionRegistry.class);
 		impl.setRegistry(registry);
 	}

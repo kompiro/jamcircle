@@ -3,7 +3,7 @@ package org.kompiro.jamcircle.kanban.service.internal.loader;
 import org.eclipse.core.runtime.*;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
 
-public class KanbanBoardTemplateDescriptor {
+public class BoardTemplateDescriptor {
 
 	static final String ATTR_CLASS = "class";
 	static final String ATTR_ICON = "icon";

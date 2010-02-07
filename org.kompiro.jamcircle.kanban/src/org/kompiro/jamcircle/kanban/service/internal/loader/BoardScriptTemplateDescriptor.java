@@ -8,7 +8,7 @@ import org.kompiro.jamcircle.kanban.boardtemplate.internal.ScriptBoardTemplate;
 import org.kompiro.jamcircle.kanban.internal.util.StreamUtil;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 
-public class KanbanBoardScriptTemplateDescriptor {
+public class BoardScriptTemplateDescriptor {
 	
 	static final String ATTR_TYPE = "type";
 	static final String ATTR_ICON = "icon";
@@ -25,14 +25,14 @@ public class KanbanBoardScriptTemplateDescriptor {
 		template.setIcon(icon);
 		String description = element.getAttribute(ATTR_DESCRIPTION);
 		template.setDescription(description);
-
+		String typeName = element.getAttribute(ATTR_TYPE);
+		if(typeName == null) throw new IllegalArgumentException("type is required value.");
+		template.setType(ScriptTypes.valueOf(typeName));
 
 		IContributor contributor = element.getContributor();
 		if(contributor == null) return template;
 		String contributorName = contributor.getName();
 		template.setContributor(contributorName);
-		String typeName = element.getAttribute(ATTR_TYPE);
-		template.setType(ScriptTypes.valueOf(typeName));
 		String sourcePath = element.getAttribute(ATTR_SOURCE);
 		URL resource = null;
 		if(Platform.isRunning()){

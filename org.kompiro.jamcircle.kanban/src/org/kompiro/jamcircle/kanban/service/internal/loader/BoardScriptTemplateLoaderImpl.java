@@ -5,10 +5,11 @@ import java.util.List;
 
 import org.eclipse.core.runtime.*;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
+import org.kompiro.jamcircle.kanban.service.loader.BoardTemplateLoader;
 
-public class KanbanBoardTemplateLoaderImpl {
+public class BoardScriptTemplateLoaderImpl implements BoardTemplateLoader{
 	
-	static final String POINT_CALLBACK = "org.kompiro.jamcircle.kanban.boardTemplate";
+	static final String POINT_CALLBACK = "org.kompiro.jamcircle.kanban.boardScriptTemplate";
 	private IExtensionRegistry registry = RegistryFactory.getRegistry();
 
 	public List<KanbanBoardTemplate> loadBoardTemplates() throws CoreException {
@@ -18,7 +19,7 @@ public class KanbanBoardTemplateLoaderImpl {
 		IConfigurationElement[] configurationElements = extension.getConfigurationElements();
 		if(configurationElements == null) return result;
 		for (IConfigurationElement element : configurationElements) {
-			KanbanBoardTemplateDescriptor desc = new KanbanBoardTemplateDescriptor();
+			BoardScriptTemplateDescriptor desc = new BoardScriptTemplateDescriptor();
 			KanbanBoardTemplate template = desc.createTemplate(element);
 			result.add(template);
 		}

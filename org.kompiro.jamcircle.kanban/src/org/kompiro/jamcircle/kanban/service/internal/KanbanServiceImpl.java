@@ -15,8 +15,8 @@ import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
 import org.kompiro.jamcircle.kanban.boardtemplate.internal.*;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
-import org.kompiro.jamcircle.kanban.service.internal.loader.KanbanBoardScriptTemplateLoaderImpl;
-import org.kompiro.jamcircle.kanban.service.internal.loader.KanbanBoardTemplateLoaderImpl;
+import org.kompiro.jamcircle.kanban.service.internal.loader.*;
+import org.kompiro.jamcircle.kanban.service.loader.BoardTemplateLoader;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 import org.kompiro.jamcircle.storage.service.StorageChageListener;
 import org.kompiro.jamcircle.storage.service.StorageService;
@@ -40,8 +40,10 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 	private StorageService storageService;
 	private User currentUser;
-	private static KanbanBoardTemplateLoaderImpl loader = new KanbanBoardTemplateLoaderImpl();
-	private static KanbanBoardScriptTemplateLoaderImpl scriptLoader = new KanbanBoardScriptTemplateLoaderImpl();
+	private static BoardTemplateLoader[] loaders = new BoardTemplateLoader[]{
+		new BoardTemplateLoaderImpl(),
+		new BoardScriptTemplateLoaderImpl()
+	};
 	
 	public KanbanServiceImpl() {
 	}
@@ -50,23 +52,16 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		templates.add(new NoLaneBoardTemplate());
 		templates.add(new TaskBoardTemplate());
 		templates.add(new ColorBoardTemplate());
-		if(loader != null){
-			List<KanbanBoardTemplate> loadedTemplates = null;
-			try {
-				loadedTemplates = loader.loadBoardTemplates();
-			} catch (CoreException e) {
-				KanbanStatusHandler.fail(e, "failed when loading templates.", false);
+		if(loaders != null){
+			for (BoardTemplateLoader loader : loaders) {
+				List<KanbanBoardTemplate> loadedTemplates = null;
+				try {
+					loadedTemplates = loader.loadBoardTemplates();
+				} catch (CoreException e) {
+					KanbanStatusHandler.fail(e, "failed when loading templates.", false);
+				}
+				templates.addAll(loadedTemplates);
 			}
-			templates.addAll(loadedTemplates);
-		}
-		if(scriptLoader != null){
-			List<KanbanBoardTemplate> loadedTemplates = null;
-			try {
-				loadedTemplates = scriptLoader.loadBoardTemplates();
-			} catch (CoreException e) {
-				KanbanStatusHandler.fail(e, "failed when loading templates.", false);
-			}
-			templates.addAll(loadedTemplates);
 		}
 	}
 	
