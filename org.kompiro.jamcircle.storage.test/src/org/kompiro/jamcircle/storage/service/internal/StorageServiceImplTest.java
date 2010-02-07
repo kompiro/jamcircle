@@ -34,9 +34,7 @@ public class StorageServiceImplTest {
 	public void init() throws Exception{
 		service = new StorageServiceImpl();
 		tempDir = new File(System.getProperty("java.io.tmpdir"));
-//		String path = "jdbc:h2:" + tempDir.getAbsolutePath() + File.separator + "test";
-//		System.out.println(path);
-		service.loadStorage(new StorageSetting(0,tempDir.getAbsolutePath(),StorageService.CONNECTION_MODE.MEM.toString(),"sa","")
+		service.loadStorage(new StorageSetting(0,tempDir.getAbsolutePath(),StorageService.ConnectionMode.MEM.toString(),"sa","")
 		, new SysoutProgressMonitor());
 		entityManager = service.getEntityManager();
 		assertNotNull(entityManager);
@@ -75,7 +73,7 @@ public class StorageServiceImplTest {
 		File testFile = File.createTempFile("test",".txt");
 		long current = System.currentTimeMillis();
 		FileUtils.writeStringToFile(testFile, "" + current);
-		service.addFile("test_dir", testFile);
+		service.getFileService().addFile("test_dir", testFile);
 		File destFile = new File(tempDir,"test" + File.separator + "test_dir" + File.separator + testFile.getName());
 		System.out.println(destFile.getAbsolutePath());
 		assertTrue(destFile.exists());

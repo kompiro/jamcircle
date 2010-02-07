@@ -2,13 +2,13 @@ package org.kompiro.jamcircle.storage.service.internal;
 
 import java.io.File;
 import java.io.FileReader;
-import java.net.URL;
 import java.sql.*;
 import java.util.*;
 
 import net.java.ao.*;
 
-import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.h2.tools.Csv;
 import org.kompiro.jamcircle.storage.*;
 import org.kompiro.jamcircle.storage.exception.StorageConnectException;
@@ -18,6 +18,7 @@ import org.kompiro.jamcircle.storage.service.*;
 /**
  * @author kompiro
  * @TestContext org.kompiro.jamcircle.storage.service.internal.StorageServiceImplTest
+ * @TestContext org.kompiro.jamcircle.storage.service.internal.StorageServiceImplInitializeTest
  */
 public class StorageServiceImpl implements StorageService {
 	
@@ -28,38 +29,28 @@ public class StorageServiceImpl implements StorageService {
 		}
 	}
 
-	private static final String JAM_CIRCLE = "JAM_CIRCLE";
-	private static final String APPLICATION_DATA = "Application Data";
-
 	private static final String KEY_OF_SYSTEM_PROPERTY_STORAGE_STOREROOT = "storage.storeroot";
-	private static final String KEY_OF_SYSTEM_STORAGE_ADDTIONAL_PATH = "storage.addtionalPath";
 	private static final String KEY_OF_SYSTEM_STORAGE_DBNAME = "storage.dbname";
 	static String dbName = System.getProperty(KEY_OF_SYSTEM_STORAGE_DBNAME,"storage");
-	/** this property is used for testing. */
-	private static String addtionalPath = "";
-	public static boolean testmode;
 	
 	private List<StorageChageListener> listeners = new ArrayList<StorageChageListener>();
 	private StorageSettings settings = new StorageSettings();
+	public static boolean testmode = FileStorageServiceImpl.testmode;
 	
 	static{
 		try{
 			ResourceBundle r = ResourceBundle.getBundle("storage");
 			if(r != null){
 				dbName = r.getString("dbname");
-				addtionalPath = r.getString("addtionalPath");
-				testmode = Boolean.valueOf(r.getString("testmode"));
 			}
 		}catch(MissingResourceException e){
 			// Noting because there wouldn't like to set default dbname.
 		}
 		dbName = System.getProperty(KEY_OF_SYSTEM_STORAGE_DBNAME,dbName);
-		addtionalPath = System.getProperty(KEY_OF_SYSTEM_STORAGE_ADDTIONAL_PATH,addtionalPath);
 	}
 
 	private EntityManager manager;
-	private String storeRoot;
-	private FileStorageService fileService = new FileStorageServiceImpl(this);
+	private FileStorageService fileService;
 	private StorageCallbackHandlerLoader loader = new StorageCallbackHandlerLoader();
 
 	public void activate(){
@@ -69,8 +60,8 @@ public class StorageServiceImpl implements StorageService {
 	private void loadStorageSetting() {
 		settings.loadSettings();
 		if(settings.size() == 0){
-			String uri = getDefaultStoreRoot();
-			settings.add(-1,uri,StorageServiceImpl.CONNECTION_MODE.FILE.toString(), "sa", "");
+			fileService = new FileStorageServiceImpl();
+			settings.add(-1,fileService.getStoreRoot(),ConnectionMode.FILE.toString(), "sa", "");
 		}
 		StorageSetting setting = settings.get(0);
 		try {
@@ -79,7 +70,7 @@ public class StorageServiceImpl implements StorageService {
 			if(!(StorageServiceImpl.testmode)){
 				loader.setupStorageSetting();
 			}else{
-				System.err.println("can't connect storage. and now it set testmode.");
+				System.err.println("can't connect storage. and now it is set testmode.");
 			}
 		}
 	}
@@ -90,27 +81,7 @@ public class StorageServiceImpl implements StorageService {
 		}
 		settings.storeSttings();
 	}
-	
-	public void addFile(String destDir,File srcFile) {
-		fileService.addFile(destDir, srcFile);
-	}
-	
-	public List<File> getFiles(String dir){
-		return fileService.getFiles(dir);
-	}
-	
-	public boolean fileExists(String path){
-		return fileService.fileExists(path);
-	}
-	
-	public String getStoreRoot() {
-		assert storeRoot == null : "storeRoot isn't initialized.";
-		if(addtionalPath != null && !"".equals(addtionalPath)){
-			return new File(storeRoot).getAbsolutePath() + File.separator + addtionalPath + File.separator;
-		}
-		return new File(storeRoot).getAbsolutePath() + File.separator;
-	}
-	
+			
 	public void loadStorage(StorageSetting setting,IProgressMonitor monitor) throws StorageConnectException{
 		monitor.beginTask("Connect to Database...", 110);
 		if(manager != null){
@@ -119,18 +90,20 @@ public class StorageServiceImpl implements StorageService {
 		}
 		monitor.internalWorked(10);
 		monitor.setTaskName("Load Settings...");
-		storeRoot = System.getProperty(KEY_OF_SYSTEM_PROPERTY_STORAGE_STOREROOT);
+		String storeRoot = System.getProperty(KEY_OF_SYSTEM_PROPERTY_STORAGE_STOREROOT);
 		String uri = null;
-		if(storeRoot == null || storeRoot.length() == 0){
-			if(testmode || CONNECTION_MODE.MEM.toString().equals(setting.getMode())){
-				storeRoot = setting.getUri();
+		if(storeRoot != null){
+			fileService = new FileStorageServiceImpl(storeRoot);
+		}else if(storeRoot == null || storeRoot.length() == 0){
+			if(testmode || ConnectionMode.MEM.toString().equals(setting.getMode())){
+				fileService = new FileStorageServiceImpl(setting.getUri());
 				uri = "jdbc:h2:mem:TEST;DB_CLOSE_DELAY=-1";				
 			}else
-			if(CONNECTION_MODE.TCP.toString().equals(setting.getMode())){
-				storeRoot = getDefaultStoreRoot();
+			if(ConnectionMode.TCP.toString().equals(setting.getMode())){
+				fileService = new FileStorageServiceImpl();
 				uri = "jdbc:h2:" + setting.getUri() + dbName;
 			}else{
-				storeRoot = setting.getUri();
+				fileService = new FileStorageServiceImpl(setting.getUri());
 				uri = "jdbc:h2:" + getDBPath();
 			}
 		}
@@ -180,33 +153,6 @@ public class StorageServiceImpl implements StorageService {
 		createEntityManager(uri, username, password);
 	}
 	
-	public String getDefaultStoreRoot() {
-		String storeRoot = "";
-		URL userHome = null;
-		if(Platform.isRunning()){
-			userHome = Platform.getUserLocation().getURL();
-			storeRoot = userHome.getPath();
-			if(isWin32()){
-				File file = new File(userHome.getFile() + File.separator
-						+ APPLICATION_DATA + File.separator
-						+ JAM_CIRCLE + File.separator);
-				storeRoot = file.getAbsolutePath() + File.separator;
-			}else{
-				storeRoot = storeRoot + JAM_CIRCLE + File.separator;
-			}
-		}else{
-			String tempDir = System.getProperty("java.io.tmpdir");
-			File testDir = new File(tempDir,JAM_CIRCLE);
-			testDir.mkdir();
-			storeRoot = testDir.getAbsolutePath() + File.separator;
-		}
-		return storeRoot;
-	}
-
-	private boolean isWin32() {
-		return Platform.OS_WIN32.equals(Platform.getOS());
-	}
-
 	private String[] getEntityColumnsFromCSV(File csvFile) {
 		Csv csv = Csv.getInstance();
 		List<String> result = new ArrayList<String>();
@@ -279,7 +225,7 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	public String getDBPath() {
-		return fileService.getDBPath();
+		return fileService.getStoreRoot() + StorageServiceImpl.dbName;
 	}
 	
 	public <T extends Entity> T createEntity(Class<T> clazz, DBParam[] params) {
@@ -324,9 +270,11 @@ public class StorageServiceImpl implements StorageService {
 
 
 	public StorageSettings getSettings() {
-		StorageActivator activator = StorageActivator.getDefault();
-		if(activator == null) return null;
 		return this.settings;
+	}
+	
+	public void setSettings(StorageSettings settings) {
+		this.settings = settings;
 	}
 
 	public void addStorageChangeListener(StorageChageListener listener) {

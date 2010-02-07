@@ -9,12 +9,11 @@ import org.kompiro.jamcircle.storage.exception.StorageConnectException;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 
-public interface StorageService extends FileStorageService {
+public interface StorageService {
 
-	public enum CONNECTION_MODE{
+	public enum ConnectionMode{
 		FILE,TCP,MEM
 	}
-	public String getStoreRoot();
 	
 	public EntityManager getEntityManager();
 
@@ -53,5 +52,7 @@ public interface StorageService extends FileStorageService {
 	public void migrate(Class<? extends Entity>... classes);
 
 	public int count(Class<? extends Entity> clazz);
+	
+	public FileStorageService getFileService();
 
 }

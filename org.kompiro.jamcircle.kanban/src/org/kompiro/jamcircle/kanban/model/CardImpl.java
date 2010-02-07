@@ -49,7 +49,7 @@ public class CardImpl extends GraphicalImpl {
 	}
 	
 	public List<File> getFiles(){
-		List<File> files = getStorageService().getFiles(getPath());
+		List<File> files = getStorageService().getFileService().getFiles(getPath());
 		if(files != null) return files;
 		return Collections.emptyList();
 	}
@@ -60,7 +60,7 @@ public class CardImpl extends GraphicalImpl {
 	}
 
 	public void addFile(File srcFile){
-		getStorageService().addFile(getPath(), srcFile);
+		getStorageService().getFileService().addFile(getPath(), srcFile);
 		PropertyChangeEvent event = new PropertyChangeEvent(card,Card.PROP_FILES,null,srcFile);
 		fireEvent(event);
 	}

@@ -11,6 +11,6 @@ public interface FileStorageService {
 
 	public boolean fileExists(String path);
 
-	public String getDBPath();
+	public String getStoreRoot();
 
 }

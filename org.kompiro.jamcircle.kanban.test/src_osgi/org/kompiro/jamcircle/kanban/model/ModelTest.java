@@ -29,7 +29,7 @@ public class ModelTest extends AbstractKanbanTest{
 	
 	@After
 	public void after() throws Exception {
-		String storeRoot = getKanbanService().getStorageService().getStoreRoot();
+		String storeRoot = getKanbanService().getStorageService().getFileService().getStoreRoot();
 		File file = new File(storeRoot);
 		util.travasalDelete(file);
 	}
@@ -48,7 +48,7 @@ public class ModelTest extends AbstractKanbanTest{
 		StorageService service = KanbanActivator.getKanbanService().getStorageService();
 		String path = CardImpl.CARD_PATH + card.getID() + File.separator + "long.txt";
 		String message = String.format("'%s' is not exist.",path);
-		assertTrue(message,service.fileExists(path));
+		assertTrue(message,service.getFileService().fileExists(path));
 		assertTrue(card.hasFiles());
 		FileInputStream stream = new FileInputStream(card.getFiles().get(0));
 		assertEquals(util.readFile(),getString(stream));

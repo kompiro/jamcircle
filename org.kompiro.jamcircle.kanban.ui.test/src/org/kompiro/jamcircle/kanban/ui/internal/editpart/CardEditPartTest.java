@@ -7,8 +7,7 @@ import static org.mockito.Mockito.*;
 import java.io.File;
 import java.util.Calendar;
 
-import org.eclipse.draw2d.Clickable;
-import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.geometry.Point;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,8 +27,13 @@ public class CardEditPartTest {
 	public void before() {
 		BoardModel board = mock(BoardModel.class);
 		figure = mock(CardFigure.class);
+		Figure actionSection = mock(Figure.class);
+		when(figure.getActionSection()).thenReturn(actionSection);
+		when(figure.getStatusSection()).thenReturn(actionSection);
 		part = new CardEditPart(board);
 		part.setFigure(figure);
+		IFigure dueDummy = mock(IFigure.class);
+		part.setDueDummy(dueDummy);
 		IPropertyChangeDelegator delegator = new IPropertyChangeDelegatorForTest();
 		part.setDelegator(delegator );
 		card = new org.kompiro.jamcircle.kanban.model.mock.Card();
