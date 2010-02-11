@@ -1,11 +1,9 @@
 package org.kompiro.jamcircle;
 
-import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.*;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
@@ -30,7 +28,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowStatusLine(true);
 		configurer.setShowProgressIndicator(true);
 		configurer.setTitle("JAM Circle");
-		configurer.getWindow().getShell().setVisible(false);
 	}
 	
 	
@@ -51,20 +48,20 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 //		};
 //		shell.addPaintListener(listener);
 		shell.setImage(image);
-		if(RCPUtils.isWindows()){
-			shell.setAlpha(0);
-		}
-		shell.setVisible(false);
 		super.createWindowContents(shell);
 	}
 		
 	@Override
-	public void postWindowOpen() {
+	public void postWindowCreate() {
 		hideMenus();
+		getShell().setMinimized(true);
+	}
+	
+	@Override
+	public void postWindowOpen() {
+		getShell().setAlpha(0);
 		getShell().setVisible(false);
 	}
-
-
 	
 	private void hideMenus() {
 		IMenuManager menuManager = getWindowConfigurer().getActionBarConfigurer().getMenuManager();

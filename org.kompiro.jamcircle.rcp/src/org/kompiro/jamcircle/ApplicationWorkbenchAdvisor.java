@@ -164,16 +164,17 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	private void handleShowOrHideBoard(TrayItem trayItem) {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		Shell shell = workbench.getActiveWorkbenchWindow().getShell();
-		if(shell.isVisible()){
-			hideBoard(shell);
-		}else{
+		if(shell.isVisible() == false || shell.getMinimized()){
 			showBoard(shell);
+		}else{
+			hideBoard(shell);
 		}
 	}
 
 	private void showBoard(Shell shell) {
 		showToolTip("Opening Board","JAM Circle's board is open.");
 		RCPUtils.modifyAlphaForSurface(shell);
+		shell.setMinimized(false);
 //		closeToolTip();
 	}
 
