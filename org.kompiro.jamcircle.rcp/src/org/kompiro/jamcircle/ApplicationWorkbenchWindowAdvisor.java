@@ -1,7 +1,10 @@
 package org.kompiro.jamcircle;
 
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.*;
 
@@ -27,6 +30,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowStatusLine(true);
 		configurer.setShowProgressIndicator(true);
 		configurer.setTitle("JAM Circle");
+		configurer.getWindow().getShell().setVisible(false);
 	}
 	
 	
@@ -56,15 +60,32 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		
 	@Override
 	public void postWindowOpen() {
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setVisible(false);
+		hideMenus();
+		getShell().setVisible(false);
 	}
+
+
 	
+	private void hideMenus() {
+		IMenuManager menuManager = getWindowConfigurer().getActionBarConfigurer().getMenuManager();
+		IMenuManager fileMenu = menuManager.findMenuUsingPath("file");
+		fileMenu.remove("org.eclipse.ui.openLocalFile");
+		fileMenu.remove("converstLineDelimitersTo");
+	}
+
 	@Override
 	public boolean preWindowShellClose() {
-		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+		Shell shell = getShell();
 		RCPUtils.modifyAlphaForDropout(shell);
 		return false;
 	}
 	
+	private Shell getShell() {
+		return getWindow().getShell();
+	}
+	
+	private IWorkbenchWindow getWindow() {
+		return getWindowConfigurer().getWindow();
+	}
 
 }
