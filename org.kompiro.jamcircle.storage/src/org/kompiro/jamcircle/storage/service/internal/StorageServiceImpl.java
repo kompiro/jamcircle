@@ -85,11 +85,10 @@ public class StorageServiceImpl implements StorageService {
 	public void loadStorage(StorageSetting setting,IProgressMonitor monitor) throws StorageConnectException{
 		monitor.beginTask("Connect to Database...", 110);
 		if(manager != null){
-			monitor.setTaskName("Begin dispose database connection.");
+			monitor.subTask("Disposed database connection.");
 			manager.getProvider().dispose();
 		}
-		monitor.internalWorked(10);
-		monitor.setTaskName("Load Settings...");
+		progress(monitor,10,"Load Settings...");
 		String storeRoot = System.getProperty(KEY_OF_SYSTEM_PROPERTY_STORAGE_STOREROOT);
 		String uri = null;
 		if(storeRoot != null){
@@ -107,18 +106,20 @@ public class StorageServiceImpl implements StorageService {
 				uri = "jdbc:h2:" + getDBPath();
 			}
 		}
-		monitor.internalWorked(10);
-		monitor.setTaskName("Create database connection...");
+		
+		progress(monitor, 10, "Create database connection...");
 		createEntityManager(uri,setting.getUsername(),setting.getPassword());
-		monitor.internalWorked(50);
-		monitor.setTaskName("Store setting...");
+		progress(monitor, 60, "Store setting...");
 		storeSetting(setting);
-		monitor.internalWorked(10);
-		monitor.setTaskName("notified listeners.");
 		for(StorageChageListener listener : listeners){
 			listener.changedStorage(monitor);
 		}
 		monitor.done();
+	}
+	
+	private void progress(IProgressMonitor monitor,int worked,String task){
+		monitor.internalWorked(worked);
+		monitor.subTask(task);
 	}
 	
 	private void storeSetting(StorageSetting setting) {
