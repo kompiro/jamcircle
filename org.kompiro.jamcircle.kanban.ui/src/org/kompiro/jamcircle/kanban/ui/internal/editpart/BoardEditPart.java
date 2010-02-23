@@ -5,26 +5,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.*;
-import org.eclipse.draw2d.geometry.*;
 import org.eclipse.gef.*;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.editpolicies.*;
-import org.eclipse.gef.requests.*;
+import org.eclipse.gef.editpolicies.ContainerEditPolicy;
+import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
-import org.kompiro.jamcircle.kanban.model.*;
+import org.kompiro.jamcircle.kanban.model.Board;
+import org.kompiro.jamcircle.kanban.model.CardContainer;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
-import org.kompiro.jamcircle.kanban.ui.command.DeleteCommand;
-import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 import org.kompiro.jamcircle.kanban.ui.editpart.*;
-import org.kompiro.jamcircle.kanban.ui.internal.command.*;
+import org.kompiro.jamcircle.kanban.ui.internal.command.CardCloneCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.policy.BoardXYLayoutEditPolicy;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.CardArea;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
@@ -84,141 +82,8 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 
 	}
 
-	private final class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
-		@Override
-		protected Command createChangeConstraintCommand(EditPart child, Object constraint) {
-			if(child.getParent() != BoardEditPart.this 
-					&& isNotRectangle(constraint)){
-				return null;
-			}
-			Object target = child.getModel();
-			Rectangle rect = (Rectangle) constraint;
-			MoveCommand<Object> command = getMoveCommand(child);
-			command.setModel(target);
-			command.setRectangle(rect);
-			if (target instanceof Lane) {
-				Lane lane = (Lane) target;
-				CompoundCommand compoundCommand = new CompoundCommand();
-				compoundCommand.add(command);
-				if (child instanceof LaneEditPart && !lane.isIconized()) {
-					LaneEditPart part = (LaneEditPart) child;
-					calculateCardArea(compoundCommand, rect, part);
-				}
-				return compoundCommand;
-			}
-			return command;
-		}
 
-		@SuppressWarnings("unchecked")
-		private MoveCommand<Object> getMoveCommand(EditPart child) {
-			return (MoveCommand<Object>) child.getAdapter(MoveCommand.class);
-		}
-
-		private void calculateCardArea(CompoundCommand command, Rectangle rect,LaneEditPart part) {
-			LaneFigure laneFigure = part.getLaneFigure();
-			CardArea area = laneFigure.getCardArea();
-			for(Object o:area.getChildren()){
-				if (o instanceof CardFigure) {
-					CardFigure cardFigure = (CardFigure) o;
-					Dimension size = cardFigure.getSize();
-					Point translate = cardFigure.getLocation().getCopy().translate(size);
-					Rectangle localRect = rect.getCopy();
-					localRect.setLocation(0, 0);
-					if(!localRect.contains(translate)){
-						ChangeBoundsRequest request = new ChangeBoundsRequest();
-						request.setConstrainedMove(true);
-						EditPart card = (EditPart) part.getViewer().getVisualPartMap().get(cardFigure);
-						request.setEditParts(card);
-						Point p = cardFigure.getLocation().getCopy();
-						if(translate.x + size.width > localRect.width){
-							p.x = laneFigure.getMaxCardLocationX(rect.getSize(),size); 
-						}
-						if(translate.y + size.height > localRect.height){
-							p.y = laneFigure.getMaxCardLocationY(rect.getSize(),size); 
-						}
-						
-						request.setMoveDelta(cardFigure.getLocation().translate(p.getNegated()).getNegated());
-						request.setType(RequestConstants.REQ_RESIZE_CHILDREN);
-						command.add(part.getCommand(request));
-					}
-				}
-			}
-		}
-		
-		private boolean isNotRectangle(Object constraint) {
-			return !(constraint instanceof Rectangle);
-		}
-
-		@Override
-		protected EditPolicy createChildEditPolicy(final EditPart child) {
-			if(child instanceof LaneEditPart) return new ResizableEditPolicyFeedbackFigureExtension(child);
-			return new NonResizableEditPolicyFeedbackFigureExtension(child);
-		}
-
-		@Override
-		protected Command getCreateCommand(CreateRequest request) {
-			Object object = request.getNewObject();
-			if(object instanceof Card){
-				Card card = (Card) object;
-				CreateCardCommand command = new CreateCardCommand();
-				Object container = getHost().getModel();
-				command.setContainer((CardContainer)container);
-				command.setModel(card);
-				return command;				
-			}else if(object instanceof Lane){
-				Lane card = (Lane) object;
-				CreateLaneCommand command = new CreateLaneCommand();
-				Object container = getHost().getModel();
-				command.setContainer((BoardModel)container);
-				command.setModel(card);
-				return command;	
-			}
-			return null;
-		}
-		
-		@Override
-		protected Command getOrphanChildrenCommand(Request request) {
-			if(request instanceof GroupRequest){
-				CompoundCommand command = new CompoundCommand();
-				GroupRequest req = (GroupRequest) request;
-				for(Object o : req.getEditParts()){
-					if (o instanceof CardEditPart) {
-						CardEditPart child = (CardEditPart) o;
-						command.add(new RemoveCardCommand(child.getCardModel(),getBoardModel()));
-					}else if(o instanceof LaneEditPart){
-						LaneEditPart child = (LaneEditPart) o;
-						command.add(new RemoveLaneCommand(child.getLaneModel(),getBoardModel()));
-//					}else if(o instanceof UserEditPart){
-//						UserEditPart child = (UserEditPart) o;
-//						command.add(new RemoveUserCommand(child.getUserModel(),getBoardModel()));
-					}else if(o instanceof IconEditPart){
-						EditPart child = (EditPart) o;
-						command.add((Command)child.getAdapter(DeleteCommand.class));
-					}
-				}
-				return command;
-			}
-			return null;
-		}
-		
-		@Override
-		protected Command createAddCommand(EditPart child, Object constraint) {
-			if (!(constraint instanceof Rectangle)) {
-				return null;
-			}
-			Rectangle rect = (Rectangle) constraint;
-			if(!(child instanceof CardEditPart)){
-				return null;
-			}
-			CardEditPart cardPart = (CardEditPart) child;
-			CompoundCommand command = new CompoundCommand();
-			command.add(new AddCardToOnBoardContainerCommand(cardPart.getCardModel(), rect, getBoardModel()));
-			return command;
-		}
-
-	}
-
-	private Layer board;
+	private Layer boardLayer;
 	private Layer iconLayer;
 	private Layer laneLayer;
 	private Layer cardLayer;
@@ -231,12 +96,8 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 	
 	public BoardEditPart(BoardModel board) {
 		super(board);
-//		userEditPartCondition = new Conditional(){
-//			public boolean evaluate(EditPart editPart) {
-//				KanbanUIStatusHandler.debugUI("userEditPartCondition#evaluate '%s'",editPart.getClass().getName());
-//				return isIconEditPart(editPart);
-//			}
-//		};
+		setModel(board);
+		createFigure();
 	}
 	
 	@Override
@@ -260,7 +121,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 	}
 
 	private void setPaintBackgroundListener() {
-		board.addLayoutListener(new LayoutListener.Stub(){
+		boardLayer.addLayoutListener(new LayoutListener.Stub(){
 			public void postLayout(IFigure container) {
 				backImageFigure.setBounds(container.getBounds());
 			}
@@ -280,7 +141,8 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		};
 		Font font = JFaceResources.getFontRegistry().get(TITLE_FONT_KEY);
 		boardTitle.setFont(font);
-		boardTitle.setText(getBoardModel().getBoard().getTitle());
+		Board board = getBoard();
+		if(board != null) boardTitle.setText(board.getTitle());
 		GridData constraint = new GridData();
 		constraint.grabExcessHorizontalSpace = true;
 		constraint.grabExcessVerticalSpace = true;
@@ -290,10 +152,15 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		wallboard.add(boardStatus,LAYER_KEY_BOARD_TITLE, 1);
 	}
 
+	private Board getBoard() {
+		if(getBoardModel() == null) return null;
+		return getBoardModel().getBoard();
+	}
+
 	private void createBoardBackground() {
-		board = new Layer();
-		board.setLayoutManager(new FreeformLayout());
-		board.setBorder(new LineBorder(ColorConstants.lightGray,1));
+		boardLayer = new Layer();
+		boardLayer.setLayoutManager(new FreeformLayout());
+		boardLayer.setBorder(new LineBorder(ColorConstants.lightGray,1));
 		Image backImage = getImageRegistry().get(KanbanImageConstants.BACKGROUND_IMAGE.toString());
 		backImageFigure = new ImageFigure(backImage){
 			@Override
@@ -308,8 +175,8 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 				}
 			}
 		};
-		board.add(backImageFigure);
-		wallboard.add(board,LAYER_KEY_BOARD,0);
+		boardLayer.add(backImageFigure);
+		wallboard.add(boardLayer,LAYER_KEY_BOARD,0);
 	}
 
 	private void createLaneLayer() {
@@ -331,7 +198,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 	
 	@Override
 	public IFigure getContentPane() {
-		return board;
+		return boardLayer;
 	}
 	
 	@Override
@@ -370,7 +237,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new BoardXYLayoutEditPolicy());
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new BoardXYLayoutEditPolicy(this));
 		installEditPolicy(EditPolicy.CONTAINER_ROLE, new ContainerEditPolicy(){
 
 			@Override
