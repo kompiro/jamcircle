@@ -29,7 +29,7 @@ public class LaneFigure extends RectangleFigure {
 
 	public static final String KEY_OF_LANE_HEADER = "LANE_HEADER";
 	
-	public final class CardArea extends Figure {
+	public class CardArea extends Figure {
 		@Override
 		protected boolean useLocalCoordinates() {
 			return true;

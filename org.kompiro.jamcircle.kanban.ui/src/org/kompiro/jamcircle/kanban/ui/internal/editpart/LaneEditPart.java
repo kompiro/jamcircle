@@ -303,7 +303,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		return getLaneFigure().getCardArea();
 	}
 	
-	LaneFigure getLaneFigure(){
+	public LaneFigure getLaneFigure(){
 		return laneFigure;
 	}
 	
@@ -467,7 +467,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		return Lane.PROP_CONSTRAINT.equals(evt.getPropertyName());
 	}	
 	
-	Lane getLaneModel(){
+	public Lane getLaneModel(){
 		return (Lane) getModel();
 	}
 

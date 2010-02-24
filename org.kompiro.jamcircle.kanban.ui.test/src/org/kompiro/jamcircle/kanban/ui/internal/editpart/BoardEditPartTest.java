@@ -8,8 +8,7 @@ import static org.mockito.Mockito.*;
 import java.util.Map;
 
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.*;
 import org.eclipse.gef.*;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -261,10 +260,8 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 	
 	@Test
 	public void addCard() throws Exception {
-		Card card = new Card();
-		card.setSubject("card on board.");
-		CardEditPart part = new CardEditPart(board);
-		part.setModel(card);
+		CardEditPart part = createCardEtitPart();
+		
 		ChangeBoundsRequest request = new ChangeBoundsRequest();
 		request.setEditParts(part);
 		request.setType(RequestConstants.REQ_ADD);
@@ -272,69 +269,38 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 		boardPart.refresh();
 		assertEquals(INIT_BOARD_CHIHLDREN_SIZE + 1,boardPart.getChildren().size());
 	}
-	
-	
-//	private static Job job;
-//	private static boolean jobSemaphore = true;
 
-//	@Test
-//	public void addUser() throws Exception {
-//		UserModel model1 = createUserModel("kompiro@localhost");
-//		board.addUser(model1);
-////		while(jobSemaphore){}
-////		job.join();
-//		assertEquals(1 + INIT_BOARD_CHIHLDREN_SIZE,boardPart.getChildren().size());
-////		assertEquals(new Point(0,74),model1.getLocation());
-//	}
-//	
-//	@Test
-//	public void addUserTwice() throws Exception {
-//		UserModel model1 = createUserModel("kompiro@localhost");
-//		UserModel model2 = createUserModel("kompiro2@localhost");
-//		board.addUser(model1);
-//		board.addUser(model2);
-//		assertEquals(2 + INIT_BOARD_CHIHLDREN_SIZE,boardPart.getChildren().size());
-////		while(jobSemaphore){}
-////		job.join();
-////		assertEquals(new Point(0,74),model1.getLocation());
-////		assertEquals(new Point(0,148),model2.getLocation());
-//	}
-//	
-//	@Test
-//	public void addManyUsers() throws Exception {
-//		UserModel model1 = createUserModel("kompiro@localhost");
-//		UserModel model2 = createUserModel("kompiro2@localhost");
-//		ArrayList<UserModel> users = new ArrayList<UserModel>();
-//		users.add(model1);
-//		users.add(model2);
-//		board.addAllUsers(users);
-//		assertEquals(2 + INIT_BOARD_CHIHLDREN_SIZE,boardPart.getChildren().size());
-////		while(jobSemaphore){}
-////		job.join();
-////		assertEquals(new Point(0,74),model1.getLocation());
-////		assertEquals(new Point(0,148),model2.getLocation());
-//	}
-//	
-//	@Test
-//	public void cleareUsers() throws Exception {
-//		UserModel model1 = createUserModel("kompiro@localhost");
-//		UserModel model2 = createUserModel("kompiro2@localhost");
-//		ArrayList<UserModel> users = new ArrayList<UserModel>();
-//		users.add(model1);
-//		users.add(model2);
-//		board.addAllUsers(users);
-//		board.clearUsers();
-//		assertEquals(INIT_BOARD_CHIHLDREN_SIZE,boardPart.getChildren().size());
-//	}
-//	
-//	private UserModel createUserModel(String userId){
-//		User user = new org.kompiro.jamcircle.kanban.model.mock.User(){
-//			@Override
-//			public void commitLocation() {
-//			}
-//		};
-//		user.setUserId(userId);
-//		return new UserModel(user);
-//	}
+	@Test
+	public void addTwoCard() throws Exception {
+		CardEditPart partA = createCardEtitPart();
+		ChangeBoundsRequest request = new ChangeBoundsRequest();
+		request.setEditParts(partA);
+		request.setType(RequestConstants.REQ_ADD);
+		boardPart.getCommand(request).execute();
+		boardPart.refresh();
+
+		CardEditPart partB = createCardEtitPart();
+		request = new ChangeBoundsRequest();
+		request.setEditParts(partB);
+		request.setType(RequestConstants.REQ_ADD);
+		boardPart.getCommand(request).execute();
+		boardPart.refresh();
+		
+		assertEquals(INIT_BOARD_CHIHLDREN_SIZE + 2,boardPart.getChildren().size());
+		
+	}
+
+	private CardEditPart createCardEtitPart() {
+		CardEditPart part = mock(CardEditPart.class);
+		Card card = mock(Card.class);
+		when(part.getCardModel()).thenReturn(card);
+
+		IFigure figure = mock(IFigure.class);
+		when(part.getFigure()).thenReturn(figure);
+		
+		Rectangle rect = new Rectangle();
+		when(figure.getBounds()).thenReturn(rect);
+		return part;
+	}
 	
 }

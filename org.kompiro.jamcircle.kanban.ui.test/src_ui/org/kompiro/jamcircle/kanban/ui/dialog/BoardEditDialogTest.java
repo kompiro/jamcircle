@@ -33,6 +33,10 @@ public class BoardEditDialogTest {
 				SWTBotText titleTextWidget = bot.textInGroup("Title");
 				assertThat(titleTextWidget.getText(),is("initialize_title"));
 				titleTextWidget.setText("modified");
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+				}
 
 				SWTBotText scriptTextWidget = bot.textInGroup("script");
 				scriptTextWidget.setText("modified_script");

@@ -8,11 +8,11 @@ import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
 
-class NonResizableEditPolicyFeedbackFigureExtension extends
+public class NonResizableEditPolicyFeedbackFigureExtension extends
 		NonResizableEditPolicy {
 	private final EditPart child;
 
-	NonResizableEditPolicyFeedbackFigureExtension(EditPart child) {
+	public NonResizableEditPolicyFeedbackFigureExtension(EditPart child) {
 		this.child = child;
 	}
 
