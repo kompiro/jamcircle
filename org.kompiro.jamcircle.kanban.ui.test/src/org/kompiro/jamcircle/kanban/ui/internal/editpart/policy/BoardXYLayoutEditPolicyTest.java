@@ -1,8 +1,13 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart.policy;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LayoutManager;
@@ -11,7 +16,8 @@ import org.eclipse.gef.*;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.*;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
 import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
@@ -81,6 +87,8 @@ public class BoardXYLayoutEditPolicyTest {
 
 	@Test
 	public void getMoveLaneCommand() throws Exception {
+		CardAreaCalcurator calc = mock(CardAreaCalcurator.class);
+		policy.setCalc(calc);
 		Command command = policy.getCommand(createRequest(RequestConstants.REQ_RESIZE_CHILDREN,createLaneEditPart()));
 		assertThat(command,is(notNullValue()));
 		assertThat(command,instanceOf(CompoundCommand.class));
@@ -88,8 +96,9 @@ public class BoardXYLayoutEditPolicyTest {
 		assertThat(c.size(),is(1));
 		command = (Command)c.getCommands().get(0);
 		assertThat(command,instanceOf(MoveCommand.class));
+		verify(calc).calc((LaneEditPart)any(),(Rectangle)any(), (Map<?, ?>)any(), (CompoundCommand)any());
 	}
-
+	
 	private Request createRequest(String key) {
 		CardEditPart part = createCardEditPart();
 		return createRequest(key,part);
@@ -133,11 +142,18 @@ public class BoardXYLayoutEditPolicyTest {
 		return part;
 	}
 	
-	private EditPart createLaneEditPart() {
+	private LaneEditPart createLaneEditPart() {
 		LaneEditPart part = mock(LaneEditPart.class);
 		Lane lane = mock(Lane.class);
 		when(part.getLaneModel()).thenReturn(lane);
 		when(part.getModel()).thenReturn(lane);
+		when(lane.isIconized()).thenReturn(false);
+		
+		GraphicalViewer viewer = mock(GraphicalViewer.class);
+		when(part.getViewer()).thenReturn(viewer);
+		Map<?,?> partMap = new HashMap<IFigure, EditPart>();
+		when(viewer.getVisualPartMap()).thenReturn(partMap );
+		
 		LaneFigure laneFigure = mock(LaneFigure.class);
 		when(part.getLaneFigure()).thenReturn(laneFigure);
 		CardArea cardArea = mock(CardArea.class);

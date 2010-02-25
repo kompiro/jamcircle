@@ -195,7 +195,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 
 
 	@Override
-	protected IFigure createFigure() {
+	public IFigure createFigure() {
 		Lane lane = getLaneModel();
 		LaneFigure laneFigure = new LaneFigure();
 		laneFigure.setSize(lane.getWidth(), lane.getHeight());

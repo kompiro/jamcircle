@@ -1,25 +1,25 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart.policy;
 
-import org.eclipse.draw2d.geometry.*;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.*;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
-import org.eclipse.gef.requests.*;
+import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.gef.requests.GroupRequest;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.ui.command.DeleteCommand;
 import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 import org.kompiro.jamcircle.kanban.ui.editpart.IconEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.command.*;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.CardArea;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
 public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	
 	private BoardEditPart part;
+	
+	private CardAreaCalcurator calc = new CardAreaCalcurator();
 
 	public BoardXYLayoutEditPolicy(BoardEditPart part){
 		this.part = part;
@@ -43,7 +43,7 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			compoundCommand.add(command);
 			if (child instanceof LaneEditPart && !lane.isIconized()) {
 				LaneEditPart part = (LaneEditPart) child;
-				calculateCardArea(compoundCommand, rect, part);
+				calc.calc(part,rect,part.getViewer().getVisualPartMap(),compoundCommand);
 			}
 			return compoundCommand;
 		}
@@ -53,43 +53,6 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@SuppressWarnings("unchecked")
 	private MoveCommand<Object> getMoveCommand(EditPart child) {
 		return (MoveCommand<Object>) child.getAdapter(MoveCommand.class);
-	}
-
-	private void calculateCardArea(CompoundCommand command, Rectangle rect,
-			LaneEditPart part) {
-		LaneFigure laneFigure = part.getLaneFigure();
-		CardArea area = laneFigure.getCardArea();
-		for (Object o : area.getChildren()) {
-			if (o instanceof CardFigure) {
-				CardFigure cardFigure = (CardFigure) o;
-				Dimension size = cardFigure.getSize();
-				Point translate = cardFigure.getLocation().getCopy().translate(
-						size);
-				Rectangle localRect = rect.getCopy();
-				localRect.setLocation(0, 0);
-				if (!localRect.contains(translate)) {
-					ChangeBoundsRequest request = new ChangeBoundsRequest();
-					request.setConstrainedMove(true);
-					EditPart card = (EditPart) part.getViewer()
-							.getVisualPartMap().get(cardFigure);
-					request.setEditParts(card);
-					Point p = cardFigure.getLocation().getCopy();
-					if (translate.x + size.width > localRect.width) {
-						p.x = laneFigure.getMaxCardLocationX(rect.getSize(),
-								size);
-					}
-					if (translate.y + size.height > localRect.height) {
-						p.y = laneFigure.getMaxCardLocationY(rect.getSize(),
-								size);
-					}
-
-					request.setMoveDelta(cardFigure.getLocation().translate(
-							p.getNegated()).getNegated());
-					request.setType(RequestConstants.REQ_RESIZE_CHILDREN);
-					command.add(part.getCommand(request));
-				}
-			}
-		}
 	}
 
 	private boolean isNotRectangle(Object constraint) {
@@ -170,4 +133,8 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return part.getBoardModel();
 	}
 
+	void setCalc(CardAreaCalcurator calc) {
+		this.calc = calc;
+	}
+	
 }
