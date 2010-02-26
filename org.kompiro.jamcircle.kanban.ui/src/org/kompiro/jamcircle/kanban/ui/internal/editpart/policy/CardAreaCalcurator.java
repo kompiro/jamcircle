@@ -20,37 +20,38 @@ public class CardAreaCalcurator {
 		for (Object o : area.getChildren()) {
 			if (o instanceof CardFigure) {
 				CardFigure cardFigure = (CardFigure) o;
-				translateCard(visualPartMap,command, rect, part, laneFigure, cardFigure);
+				EditPart card = (EditPart) visualPartMap.get(cardFigure);
+				ChangeBoundsRequest request = translateCard(card,rect, laneFigure, cardFigure);
+				if(request == null) continue;
+				command.add(part.getCommand(request));
 			}
 		}		
 	}
 
-	private void translateCard(Map<?, ?> visualPartMap, CompoundCommand command, Rectangle rect,
-			LaneEditPart part, LaneFigure laneFigure, CardFigure cardFigure) {
+	private ChangeBoundsRequest translateCard(EditPart card, Rectangle rect,
+			LaneFigure laneFigure, CardFigure cardFigure) {
 		Dimension size = cardFigure.getSize();
 		Point translate = cardFigure.getLocation().getCopy().translate(size);
 		Rectangle localRect = rect.getCopy();
 		localRect.setLocation(0, 0);
-		if (!localRect.contains(translate)) {
-			ChangeBoundsRequest request = new ChangeBoundsRequest();
-			request.setConstrainedMove(true);
-			EditPart card = (EditPart) visualPartMap.get(cardFigure);
-			request.setEditParts(card);
-			Point p = cardFigure.getLocation().getCopy();
-			if (translate.x + size.width > localRect.width) {
-				p.x = laneFigure.getMaxCardLocationX(rect.getSize(),
-						size);
-			}
-			if (translate.y + size.height > localRect.height) {
-				p.y = laneFigure.getMaxCardLocationY(rect.getSize(),
-						size);
-			}
-
-			request.setMoveDelta(cardFigure.getLocation().translate(
-					p.getNegated()).getNegated());
-			request.setType(RequestConstants.REQ_RESIZE_CHILDREN);
-			command.add(part.getCommand(request));
+		if (localRect.contains(translate)) return null;
+		ChangeBoundsRequest request = new ChangeBoundsRequest();
+		request.setConstrainedMove(true);
+		request.setEditParts(card);
+		Point p = cardFigure.getLocation().getCopy();
+		if (translate.x + size.width > localRect.width) {
+			p.x = laneFigure.getMaxCardLocationX(rect.getSize(),
+					size);
 		}
+		if (translate.y + size.height > localRect.height) {
+			p.y = laneFigure.getMaxCardLocationY(rect.getSize(),
+					size);
+		}
+
+		request.setMoveDelta(cardFigure.getLocation().translate(
+				p.getNegated()).getNegated());
+		request.setType(RequestConstants.REQ_RESIZE_CHILDREN);
+		return request;
 	}
 	
 }

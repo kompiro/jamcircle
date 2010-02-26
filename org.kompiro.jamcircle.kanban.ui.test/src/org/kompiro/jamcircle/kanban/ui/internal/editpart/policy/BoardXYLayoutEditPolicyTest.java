@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LayoutManager;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.*;
 import org.eclipse.gef.commands.Command;
@@ -18,6 +19,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
 import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
@@ -25,32 +27,66 @@ import org.kompiro.jamcircle.kanban.ui.internal.command.*;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.CardArea;
+import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
 
 public class BoardXYLayoutEditPolicyTest {
 	
 	private BoardXYLayoutEditPolicy policy;
+	private BoardModel boardModel;
 	
 	@Before
 	public void before() throws Exception {
-		BoardEditPart part = new BoardEditPart(null);
+		Board board = new org.kompiro.jamcircle.kanban.model.mock.Board();
+		boardModel = new BoardModel(board );
+		BoardEditPart part = new BoardEditPart(boardModel);
 		policy = new BoardXYLayoutEditPolicy(part);
 		policy.setHost(part);
 	}
 
 	@Test
 	public void getAddCardCommand() throws Exception {
-		Command command = policy.getCommand(createRequest(RequestConstants.REQ_ADD,createCardEditPart()));
+		CardEditPart cardPart = createCardEditPartMock();
+		Command command = policy.getCommand(createRequest(RequestConstants.REQ_ADD,cardPart));
 		assertThat(command,instanceOf(CompoundCommand.class));
 		CompoundCommand c = (CompoundCommand) command;
 		assertThat(c.size(),is(1));
 		command = (Command)c.getCommands().get(0);
 		assertThat(command,instanceOf(AddCardToOnBoardContainerCommand.class));
+		BoardLocalLayout boardLocalLayout = mock(BoardLocalLayout.class);
+		policy.setBoardLocalLayout(boardLocalLayout );
+		verify(boardLocalLayout,never()).calc(eq(cardPart), (Rectangle)any(), (Rectangle)any());
 	}
 
 	@Test
+	public void getAddCardCommandNeedToMove() throws Exception {
+		CardEditPart cardPart = createCardEditPart();
+		org.kompiro.jamcircle.kanban.model.Card card = cardPart.getCardModel();
+		BoardLocalLayout boardLocalLayout = mock(BoardLocalLayout.class);
+		policy.setBoardLocalLayout(boardLocalLayout );
+		ChangeBoundsRequest request = createMoveCardRequest(cardPart);
+		Command command = policy.getCommand(request);
+		
+		assertThat(command,instanceOf(CompoundCommand.class));
+		CompoundCommand c = (CompoundCommand) command;
+		assertThat(c.size(),is(1));
+		command = (Command)c.getCommands().get(0);
+		assertThat(command,instanceOf(AddCardToOnBoardContainerCommand.class));
+		assertThat(command.canExecute(),is(true));
+		command.execute();
+		verify(boardLocalLayout).calc(eq(cardPart), (Rectangle)any(), (Rectangle)any());
+	}
+
+	private ChangeBoundsRequest createMoveCardRequest(CardEditPart cardPart) {
+		ChangeBoundsRequest request = createRequest(RequestConstants.REQ_ADD,cardPart);
+		request.setMoveDelta(new Point(1000,1000));
+		return request;
+	}
+
+
+	@Test
 	public void getCreateCardCommand() throws Exception {
-		Command command = policy.getCommand(createCreateRequest(RequestConstants.REQ_CREATE,createCardEditPart()));
+		Command command = policy.getCommand(createCreateRequest(RequestConstants.REQ_CREATE,createCardEditPartMock()));
 		assertThat(command,instanceOf(CreateCardCommand.class));
 	}
 
@@ -88,7 +124,7 @@ public class BoardXYLayoutEditPolicyTest {
 	@Test
 	public void getMoveLaneCommand() throws Exception {
 		CardAreaCalcurator calc = mock(CardAreaCalcurator.class);
-		policy.setCalc(calc);
+		policy.setLaneLocalLayout(calc);
 		Command command = policy.getCommand(createRequest(RequestConstants.REQ_RESIZE_CHILDREN,createLaneEditPart()));
 		assertThat(command,is(notNullValue()));
 		assertThat(command,instanceOf(CompoundCommand.class));
@@ -100,12 +136,12 @@ public class BoardXYLayoutEditPolicyTest {
 	}
 	
 	private Request createRequest(String key) {
-		CardEditPart part = createCardEditPart();
+		CardEditPart part = createCardEditPartMock();
 		return createRequest(key,part);
 	}
 	
-	private Request createRequest(String key,EditPart part){
-		GroupRequest request = new ChangeBoundsRequest(key);
+	private ChangeBoundsRequest createRequest(String key,EditPart part){
+		ChangeBoundsRequest request = new ChangeBoundsRequest(key);
 		request.setEditParts(part);
 		return request;		
 	}
@@ -121,9 +157,9 @@ public class BoardXYLayoutEditPolicyTest {
 	}
 
 
-	private CardEditPart createCardEditPart() {
+	private CardEditPart createCardEditPartMock() {
 		CardEditPart part = mock(CardEditPart.class);
-		Card card = mock(Card.class);
+		Card card = new Card();
 		when(part.getCardModel()).thenReturn(card);
 		when(part.getModel()).thenReturn(card);
 		Object command = mock(MoveCommand.class);
@@ -139,6 +175,13 @@ public class BoardXYLayoutEditPolicyTest {
 		Rectangle rect = new Rectangle();
 		when(figure.getBounds()).thenReturn(rect);
 		when(manager.getConstraint(eq(figure))).thenReturn(rect);
+		return part;
+	}
+	
+	private CardEditPart createCardEditPart(){
+		CardEditPart part = new CardEditPart(boardModel);
+		Card card = new Card();
+		part.setModel(card);
 		return part;
 	}
 	

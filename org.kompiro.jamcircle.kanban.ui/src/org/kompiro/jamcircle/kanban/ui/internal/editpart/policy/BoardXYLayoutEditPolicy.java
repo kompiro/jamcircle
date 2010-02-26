@@ -19,7 +19,9 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	
 	private BoardEditPart part;
 	
-	private CardAreaCalcurator calc = new CardAreaCalcurator();
+	private CardAreaCalcurator cardAreaCalcurator = new CardAreaCalcurator();
+
+	private BoardLocalLayout boardLocalLayout = new BoardLocalLayout();
 
 	public BoardXYLayoutEditPolicy(BoardEditPart part){
 		this.part = part;
@@ -43,7 +45,7 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			compoundCommand.add(command);
 			if (child instanceof LaneEditPart && !lane.isIconized()) {
 				LaneEditPart part = (LaneEditPart) child;
-				calc.calc(part,rect,part.getViewer().getVisualPartMap(),compoundCommand);
+				cardAreaCalcurator.calc(part,rect,part.getViewer().getVisualPartMap(),compoundCommand);
 			}
 			return compoundCommand;
 		}
@@ -103,9 +105,8 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 							getBoardModel()));
 				} else if (o instanceof IconEditPart) {
 					EditPart child = (EditPart) o;
-					command
-							.add((Command) child
-									.getAdapter(DeleteCommand.class));
+					Command deleteCommand = (Command) child.getAdapter(DeleteCommand.class);
+					command.add(deleteCommand);
 				}
 			}
 			return command;
@@ -123,6 +124,10 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			return null;
 		}
 		CardEditPart cardPart = (CardEditPart) child;
+		Rectangle containerRect = getLayoutContainer().getBounds();
+		if(!containerRect.contains(rect.getLocation())){
+			boardLocalLayout.calc(cardPart,rect,containerRect);
+		}
 		CompoundCommand command = new CompoundCommand();
 		command.add(new AddCardToOnBoardContainerCommand(cardPart
 				.getCardModel(), rect, getBoardModel()));
@@ -133,8 +138,13 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return part.getBoardModel();
 	}
 
-	void setCalc(CardAreaCalcurator calc) {
-		this.calc = calc;
+	void setLaneLocalLayout(CardAreaCalcurator calc) {
+		this.cardAreaCalcurator = calc;
 	}
+	
+	void setBoardLocalLayout(BoardLocalLayout boardLocalLayout) {
+		this.boardLocalLayout = boardLocalLayout;
+	}
+	
 	
 }

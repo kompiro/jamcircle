@@ -49,7 +49,7 @@ public class CardAreaCalcuratorTest {
 	}
 
 	@Test
-	public void calc_no_change() throws Exception {
+	public void calcNoChange() throws Exception {
 		calc.calc(part, rect , visualPartMap , command);
 		assertThat(command.size(),is(0));
 	}
@@ -89,6 +89,10 @@ public class CardAreaCalcuratorTest {
 		calc.calc(part, rect , visualPartMap , command);
 		assertThat(command.size(),is(1));
 		assertThat(command.getChildren()[0],instanceOf(MoveCardCommand.class));
+		MoveCardCommand c = (MoveCardCommand) command.getChildren()[0];
+		c.execute();
+		assertThat(card.getX(),is(not(1000)));
+		assertThat(card.getY(),is(not(1000)));
 	}
 
 	
