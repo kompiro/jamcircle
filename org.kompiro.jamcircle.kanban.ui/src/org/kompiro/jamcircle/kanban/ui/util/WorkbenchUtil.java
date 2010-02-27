@@ -45,10 +45,22 @@ public class WorkbenchUtil {
 	
 	public static Display getDisplay(){
 		IWorkbench workbench = getWorkbench();
+		Display defDisplay = Display.getDefault();
 		if(workbench == null){
-			return PlatformUI.createDisplay();
+			return defDisplay;
 		}
-		return workbench.getDisplay();
+		try{
+			if(workbench == null) return defDisplay;
+			Display display = workbench.getDisplay();
+			if(display != null) return display;
+			IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+			if(activeWorkbenchWindow == null) return defDisplay;
+			display = activeWorkbenchWindow.getShell().getDisplay();
+			return display;
+		}catch(IllegalStateException e){
+			return defDisplay;
+		}
+
 	}
 	
 	public static void async(Runnable runnable){

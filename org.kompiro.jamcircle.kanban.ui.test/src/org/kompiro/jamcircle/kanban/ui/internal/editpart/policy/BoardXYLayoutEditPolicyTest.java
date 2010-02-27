@@ -55,13 +55,11 @@ public class BoardXYLayoutEditPolicyTest {
 		assertThat(command,instanceOf(AddCardToOnBoardContainerCommand.class));
 		BoardLocalLayout boardLocalLayout = mock(BoardLocalLayout.class);
 		policy.setBoardLocalLayout(boardLocalLayout );
-		verify(boardLocalLayout,never()).calc(eq(cardPart), (Rectangle)any(), (Rectangle)any());
 	}
 
 	@Test
 	public void getAddCardCommandNeedToMove() throws Exception {
 		CardEditPart cardPart = createCardEditPart();
-		org.kompiro.jamcircle.kanban.model.Card card = cardPart.getCardModel();
 		BoardLocalLayout boardLocalLayout = mock(BoardLocalLayout.class);
 		policy.setBoardLocalLayout(boardLocalLayout );
 		ChangeBoundsRequest request = createMoveCardRequest(cardPart);
@@ -74,7 +72,6 @@ public class BoardXYLayoutEditPolicyTest {
 		assertThat(command,instanceOf(AddCardToOnBoardContainerCommand.class));
 		assertThat(command.canExecute(),is(true));
 		command.execute();
-		verify(boardLocalLayout).calc(eq(cardPart), (Rectangle)any(), (Rectangle)any());
 	}
 
 	private ChangeBoundsRequest createMoveCardRequest(CardEditPart cardPart) {

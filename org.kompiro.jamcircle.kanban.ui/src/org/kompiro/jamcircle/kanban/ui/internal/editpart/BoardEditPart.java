@@ -193,8 +193,6 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		cardLayer = new CardLayer();
 		wallboard.addLayerAfter(cardLayer,LAYER_KEY_CARD,LAYER_KEY_ICON);
 	}
-
-
 	
 	@Override
 	public IFigure getContentPane() {

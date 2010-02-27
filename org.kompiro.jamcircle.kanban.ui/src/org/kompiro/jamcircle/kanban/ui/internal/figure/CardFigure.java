@@ -10,10 +10,10 @@ import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.*;
 import org.kompiro.jamcircle.kanban.model.ColorTypes;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
+import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
 public class CardFigure extends RoundedRectangle {
 	
@@ -50,19 +50,24 @@ public class CardFigure extends RoundedRectangle {
 	private ImageFigure mockImage;
 	private ImageRegistry imageRegistry;
 	
+	public static final int CARD_WIDTH;
+	public static final int CARD_HEIGHT;
+	static {
+		GC gc = new GC(getDisplay());
+		FontMetrics fontMetrics = gc.getFontMetrics();
+		int width = gc.stringExtent("xx").x * 10;
+		int height = fontMetrics.getHeight() * 3;
+		CARD_WIDTH = width + LINE_WIDTH * 2;
+		CARD_HEIGHT = HEADER_SECTION_HEIGHT + height + LINE_WIDTH * 2 + FOOTER_SECTION_HEIGHT;
+	}
 	public CardFigure(){
 		this(null);
 	}
 	
 	public CardFigure(ImageRegistry imageRegisty){
 		this.imageRegistry = imageRegisty;
-		GC gc = new GC(getDisplay());
-		FontMetrics fontMetrics = gc.getFontMetrics();
-		int width = gc.stringExtent("xx").x * 10;
-		int height = fontMetrics.getHeight() * 3;
 
-		setSize(width + LINE_WIDTH * 2,
-				HEADER_SECTION_HEIGHT + height + LINE_WIDTH * 2 + FOOTER_SECTION_HEIGHT);
+		setSize(CARD_WIDTH,	CARD_HEIGHT);
 		setLineWidth(LINE_WIDTH);
 		FlowLayout manager = new FlowLayout();
 		manager.setMajorSpacing(0);
@@ -265,18 +270,8 @@ public class CardFigure extends RoundedRectangle {
 		display.timerExec(ANIMATION_TIME / FRAMES,runnable);
 	}
 
-	private Display getDisplay() {
-		Display defDisplay = Display.getDefault();
-		try{
-			IWorkbench workbench = PlatformUI.getWorkbench();
-			if(workbench == null) return defDisplay;
-			IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-			if(activeWorkbenchWindow == null) return defDisplay;
-			Display display = activeWorkbenchWindow.getShell().getDisplay();
-			return display;
-		}catch(IllegalStateException e){
-			return defDisplay;
-		}
+	private static Display getDisplay() {
+		return WorkbenchUtil.getDisplay();
 	}
 
 	
