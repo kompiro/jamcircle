@@ -260,7 +260,7 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 	
 	@Test
 	public void addCard() throws Exception {
-		CardEditPart part = createCardEtitPart();
+		CardEditPart part = createCardEditPart();
 		
 		ChangeBoundsRequest request = new ChangeBoundsRequest();
 		request.setEditParts(part);
@@ -272,14 +272,14 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 
 	@Test
 	public void addTwoCard() throws Exception {
-		CardEditPart partA = createCardEtitPart();
+		CardEditPart partA = createCardEditPart();
 		ChangeBoundsRequest request = new ChangeBoundsRequest();
 		request.setEditParts(partA);
 		request.setType(RequestConstants.REQ_ADD);
 		boardPart.getCommand(request).execute();
 		boardPart.refresh();
 
-		CardEditPart partB = createCardEtitPart();
+		CardEditPart partB = createCardEditPart();
 		request = new ChangeBoundsRequest();
 		request.setEditParts(partB);
 		request.setType(RequestConstants.REQ_ADD);
@@ -290,7 +290,7 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 		
 	}
 
-	private CardEditPart createCardEtitPart() {
+	private CardEditPart createCardEditPart() {
 		CardEditPart part = mock(CardEditPart.class);
 		Card card = mock(Card.class);
 		when(part.getCardModel()).thenReturn(card);
