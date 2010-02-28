@@ -8,10 +8,14 @@ def board
   return $board_accessor.board
 end
 
+def board_part
+  return $board_part_accessor.part
+end
+
 def create_card(subject=nil)
   card = Card.new
   card.subject = subject
-  board.add_card card
+  board_part.add_card card
   return card
 end
 

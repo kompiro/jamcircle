@@ -35,6 +35,7 @@ import org.eclipse.ui.progress.UIJob;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.action.*;
+import org.kompiro.jamcircle.kanban.ui.editpart.IBoardEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.command.RemoveCardCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;
 import org.kompiro.jamcircle.kanban.ui.model.*;
@@ -487,6 +488,9 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 		}
 		if(Board.class.equals(adapter) || BoardModel.class.equals(adapter)){
 			return getBoard();
+		}
+		if(IBoardEditPart.class.equals(adapter)){
+			return getGraphicalViewer().getContents();
 		}
 		return super.getAdapter(adapter);
 	}

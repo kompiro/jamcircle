@@ -41,6 +41,7 @@ import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.ui.KanbanView;
+import org.kompiro.jamcircle.kanban.ui.editpart.IBoardEditPart;
 import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
 
 /**
@@ -455,6 +456,8 @@ public class RubyScriptingConsole extends TextConsole {
 				}
 				IRubyObject rubyBoard = JavaEmbedUtils.javaToRuby(runtime, new BoardAccessor());
 		        runtime.getGlobalVariables().defineReadonly("$board_accessor", new ValueAccessor(rubyBoard));		        
+				IRubyObject rubyBoardPart = JavaEmbedUtils.javaToRuby(runtime, new BoardPartAccessor());
+		        runtime.getGlobalVariables().defineReadonly("$board_part_accessor", new ValueAccessor(rubyBoardPart));		        
 		        runtime.getGlobalVariables().defineReadonly("$$", new ValueAccessor(runtime.newFixnum(System.identityHashCode(runtime))));		        
 			}
 
@@ -630,15 +633,7 @@ public class RubyScriptingConsole extends TextConsole {
 			final Object[] ret = new Object[1];
 			getDisplay().syncExec(new Runnable() {
 				public void run() {
-					IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-					KanbanView view = null;
-					if (window != null) {
-						IWorkbenchPage page = window.getActivePage();
-						if (page != null) {
-							view = (KanbanView) page.findView(KanbanView.ID);
-						}
-					}
-					KanbanView kanbanView = view;
+					KanbanView kanbanView = getKanbanView();
 					ret[0] = kanbanView.getAdapter(Board.class);
 				}
 			});
@@ -646,6 +641,20 @@ public class RubyScriptingConsole extends TextConsole {
 		}
 	}
 
+	public class BoardPartAccessor{
+		public Object getPart() {
+			final Object[] ret = new Object[1];
+			getDisplay().syncExec(new Runnable() {
+				public void run() {
+					KanbanView kanbanView = getKanbanView();
+					ret[0] = kanbanView.getAdapter(IBoardEditPart.class);
+				}
+			});
+			return ret[0];
+		}
+	}
+
+	
 	private void shutdown() {
 		JavaEmbedUtils.terminate(runtime);
         runtime.getGlobalVariables().defineReadonly("$board_accessor", null);		        
@@ -718,5 +727,18 @@ public class RubyScriptingConsole extends TextConsole {
         if (Readline.getCompletor(Readline.getHolder(runtime)) == null) return;
         assist.showPossibleCompletions();
     }
+
+	private KanbanView getKanbanView() {
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		KanbanView view = null;
+		if (window != null) {
+			IWorkbenchPage page = window.getActivePage();
+			if (page != null) {
+				view = (KanbanView) page.findView(KanbanView.ID);
+			}
+		}
+		KanbanView kanbanView = view;
+		return kanbanView;
+	}
 
 }

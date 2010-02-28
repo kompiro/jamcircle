@@ -5,18 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.*;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.*;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ContainerEditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
-import org.eclipse.gef.requests.ChangeBoundsRequest;
-import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.gef.requests.*;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
-import org.kompiro.jamcircle.kanban.model.Board;
-import org.kompiro.jamcircle.kanban.model.CardContainer;
+import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
 import org.kompiro.jamcircle.kanban.ui.editpart.*;
@@ -45,6 +44,11 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 			addLayoutListener(LayoutAnimator.getDefault());
 			setLayoutManager(new FreeformLayout());
 			setOpaque(false);
+		}
+		
+		@Override
+		public IFigure findFigureAt(int x, int y, TreeSearch search) {
+			return super.findFigureAt(x, y, search);
 		}
 		
 		@Override
@@ -416,6 +420,27 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 
 	public CardContainer getCardContainer() {
 		return getBoardModel();
+	}
+	
+	public void addCard(final Card card) {
+		CreateRequest request = new CreateRequest();
+		request.setType(RequestConstants.REQ_CREATE);
+		request.setFactory(new CreationFactory() {
+			public Object getObjectType() {
+				return null;
+			}
+			
+			public Object getNewObject() {
+				return card;
+			}
+		});
+		Command command = getCommand(request);
+		getCommandStack().execute(command);
+	}
+	
+	public void removeCard(Card card) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
