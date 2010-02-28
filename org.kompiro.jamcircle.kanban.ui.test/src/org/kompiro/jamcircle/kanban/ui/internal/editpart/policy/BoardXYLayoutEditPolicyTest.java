@@ -40,6 +40,12 @@ public class BoardXYLayoutEditPolicyTest {
 		Board board = new org.kompiro.jamcircle.kanban.model.mock.Board();
 		boardModel = new BoardModel(board );
 		BoardEditPart part = new BoardEditPart(boardModel);
+		EditPart parent = mock(EditPart.class);
+		RootEditPart root = mock(RootEditPart.class);
+		EditPartViewer viewer = mock(EditPartViewer.class);
+		when(root.getViewer()).thenReturn(viewer);
+		when(parent.getRoot()).thenReturn(root);
+		part.setParent(parent );
 		policy = new BoardXYLayoutEditPolicy(part);
 		policy.setHost(part);
 	}
