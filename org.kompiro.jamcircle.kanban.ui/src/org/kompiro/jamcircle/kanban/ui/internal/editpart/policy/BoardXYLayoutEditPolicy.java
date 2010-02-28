@@ -25,7 +25,7 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	public BoardXYLayoutEditPolicy(BoardEditPart part){
 		this.part = part;
-		boardLocalLayout = new BoardLocalLayout(part);
+		boardLocalLayout = new BoardLocalLayout(part.getViewer());
 	}
 
 	@Override

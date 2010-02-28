@@ -3,39 +3,41 @@ package org.kompiro.jamcircle.kanban.ui.internal.editpart.policy;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.*;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
-import org.eclipse.gef.EditPartViewer.Conditional;
 import org.junit.Before;
 import org.junit.Test;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 
 public class BoardLocalLayoutTest {
 	private BoardLocalLayout layout;
-	private final Dimension cardSize = new Dimension(150,100);
-	private BoardEditPart part;
-	private EditPartViewer viewer;
+	@Mock private EditPartViewer viewer;
+	private Map<IFigure,EditPart> partMap = new HashMap<IFigure, EditPart>();
 
 	@Before
 	public void before() {
-		part = mock(BoardEditPart.class);
-		viewer = mock(EditPartViewer.class);
-		when(part.getViewer()).thenReturn(viewer);
-		layout = new BoardLocalLayout(part);
+		MockitoAnnotations.initMocks(this);
+		when(viewer.getVisualPartMap()).thenReturn(partMap);
+		layout = new BoardLocalLayout(viewer);
 	}
 
 	@Test
 	public void normalCase() throws Exception {
-		Rectangle targetRect = new Rectangle(new Point(20,20),cardSize);
+		Rectangle targetRect = new Rectangle(new Point(20,20),CardFigure.CARD_SIZE);
 		Rectangle expect = targetRect.getCopy();
 		Rectangle containerRect = new Rectangle(new Point(0,0),new Dimension(500, 500));
 		layout.calc(targetRect , containerRect);
@@ -44,7 +46,7 @@ public class BoardLocalLayoutTest {
 	
 	@Test
 	public void moveWhenOutOfBounds() throws Exception {
-		Rectangle targetRect = new Rectangle(new Point(450,20),cardSize);
+		Rectangle targetRect = new Rectangle(new Point(450,20),CardFigure.CARD_SIZE);
 		Rectangle expect = targetRect.getCopy();
 		Rectangle containerRect = new Rectangle(new Point(0,0),new Dimension(500, 500));
 		layout.calc(targetRect , containerRect);
@@ -53,19 +55,23 @@ public class BoardLocalLayoutTest {
 
 	@Test
 	public void moveWhenOutOfBoundsAndOnOneEditPart() throws Exception {
-		when(viewer.findObjectAtExcluding((Point)any(), (Set<?>)any(), (Conditional)any())).thenAnswer(new Answer<EditPart>() {
-			private int count = 0;
-			public EditPart answer(InvocationOnMock invocation)
-					throws Throwable {
-				CardEditPart mock = mock(CardEditPart.class);
+		IFigure cardFigure = mock(IFigure.class);
+		Rectangle mRect = mock(Rectangle.class);
+		doAnswer(new Answer<Boolean>(){
+			int count = 0;
+			public Boolean answer(InvocationOnMock invocation) throws Throwable {
 				if(count < 1){
 					count++;
-					return mock;
+					return true;
 				}
-				return mock(BoardEditPart.class);
+				return false;
 			}
-		});
-		Rectangle targetRect = new Rectangle(new Point(450,20),cardSize);
+		}).when(mRect).contains((Point)any());
+		when(cardFigure.getBounds()).thenReturn(mRect );
+		EditPart cardPart = mock(CardEditPart.class);
+		partMap.put(cardFigure , cardPart);
+
+		Rectangle targetRect = new Rectangle(new Point(450,20),CardFigure.CARD_SIZE);
 		Rectangle expect = targetRect.getCopy();
 		Rectangle containerRect = new Rectangle(new Point(0,0),new Dimension(500, 500));
 		layout.calc(targetRect , containerRect);
@@ -74,19 +80,22 @@ public class BoardLocalLayoutTest {
 
 	@Test
 	public void moveWhenOutOfBoundsAndOnSomeEditParts() throws Exception {
-		when(viewer.findObjectAtExcluding((Point)any(), (Set<?>)any(), (Conditional)any())).thenAnswer(new Answer<EditPart>() {
-			private int count = 0;
-			public EditPart answer(InvocationOnMock invocation)
-					throws Throwable {
-				CardEditPart mock = mock(CardEditPart.class);
-				if(count < 4){
+		IFigure cardFigure = mock(IFigure.class);
+		Rectangle mRect = mock(Rectangle.class);
+		doAnswer(new Answer<Boolean>(){
+			int count = 0;
+			public Boolean answer(InvocationOnMock invocation) throws Throwable {
+				if(count < 5){
 					count++;
-					return mock;
+					return true;
 				}
-				return mock(BoardEditPart.class);
+				return false;
 			}
-		});
-		Rectangle targetRect = new Rectangle(new Point(450,20),cardSize);
+		}).when(mRect).contains((Point)any());
+		when(cardFigure.getBounds()).thenReturn(mRect );
+		EditPart cardPart = mock(CardEditPart.class);
+		partMap.put(cardFigure , cardPart );
+		Rectangle targetRect = new Rectangle(new Point(450,20),CardFigure.CARD_SIZE);
 		Rectangle expect = targetRect.getCopy();
 		Rectangle containerRect = new Rectangle(new Point(0,0),new Dimension(500, 500));
 		layout.calc(targetRect , containerRect);

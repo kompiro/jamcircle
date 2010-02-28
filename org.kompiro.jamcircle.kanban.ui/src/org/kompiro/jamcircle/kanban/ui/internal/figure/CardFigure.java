@@ -52,6 +52,7 @@ public class CardFigure extends RoundedRectangle {
 	
 	public static final int CARD_WIDTH;
 	public static final int CARD_HEIGHT;
+	public static final Dimension CARD_SIZE;
 	static {
 		GC gc = new GC(getDisplay());
 		FontMetrics fontMetrics = gc.getFontMetrics();
@@ -59,6 +60,7 @@ public class CardFigure extends RoundedRectangle {
 		int height = fontMetrics.getHeight() * 3;
 		CARD_WIDTH = width + LINE_WIDTH * 2;
 		CARD_HEIGHT = HEADER_SECTION_HEIGHT + height + LINE_WIDTH * 2 + FOOTER_SECTION_HEIGHT;
+		CARD_SIZE  = new Dimension(CardFigure.CARD_WIDTH,CardFigure.CARD_HEIGHT);
 	}
 	public CardFigure(){
 		this(null);
