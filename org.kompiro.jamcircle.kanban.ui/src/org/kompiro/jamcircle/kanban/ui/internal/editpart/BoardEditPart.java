@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.*;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.*;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editpolicies.ContainerEditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.requests.*;
@@ -224,6 +224,15 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		return results;
 	}
 
+	public List<LaneEditPart> getLaneChildren(){
+		List<LaneEditPart> results = new ArrayList<LaneEditPart>();
+		for(Object o : getChildren()){
+			if(o instanceof LaneEditPart) results.add((LaneEditPart)o);
+		}
+		return results;
+	}
+
+	
 //	public Map<UserModel,UserEditPart> getUserChildren(){
 //		Map<UserModel,UserEditPart> results = new HashMap<UserModel,UserEditPart>();
 //		for(Object o : getChildren()){
@@ -422,25 +431,9 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		return getBoardModel();
 	}
 	
-	public void addCard(final Card card) {
-		CreateRequest request = new CreateRequest();
-		request.setType(RequestConstants.REQ_CREATE);
-		request.setFactory(new CreationFactory() {
-			public Object getObjectType() {
-				return null;
-			}
-			
-			public Object getNewObject() {
-				return card;
-			}
-		});
-		Command command = getCommand(request);
-		getCommandStack().execute(command);
+	protected CommandStack getCommandStack(){
+		return super.getCommandStack();
 	}
-	
-	public void removeCard(Card card) {
-		// TODO Auto-generated method stub
-		
-	}
+
 	
 }

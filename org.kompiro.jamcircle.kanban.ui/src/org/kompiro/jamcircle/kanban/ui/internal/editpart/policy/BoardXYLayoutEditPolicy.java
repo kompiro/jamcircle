@@ -81,7 +81,7 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			card.setY(rect.y);
 			CreateCardCommand command = new CreateCardCommand();
 			Object container = getHost().getModel();
-			command.setContainer((CardContainer) container);
+			command.setContainer((BoardModel) container);
 			
 			command.setModel(card);
 			return command;
