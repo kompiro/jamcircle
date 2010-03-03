@@ -35,6 +35,7 @@ import org.eclipse.ui.progress.UIJob;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.action.*;
+import org.kompiro.jamcircle.kanban.ui.editpart.IBoardCommandExecuter;
 import org.kompiro.jamcircle.kanban.ui.editpart.IBoardEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.command.RemoveCardCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;
@@ -296,6 +297,8 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 			Map<String,Object> beans= new HashMap<String, Object>();
 			beans.put("board", this.boardModel);
 			beans.put("monitor", monitor);
+			beans.put("boardPart", getBoardEditPart());
+			beans.put("boardCommandExecuter", new BoardCommandExecuter(getBoardEditPart()));
 			try {
 				ScriptingService service = getScriptingService();
 				service.eval(board.getScriptType(), scriptName, script,beans);
@@ -367,6 +370,10 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 	private ScrollingGraphicalViewer getGraphicalViewer() {
 		return viewer;
 	}
+	
+	private BoardEditPart getBoardEditPart(){
+		return (BoardEditPart)getGraphicalViewer().getContents();
+	}
 
 	protected SelectionSynchronizer getSelectionSynchronizer() {
 		if (synchronizer == null)
@@ -377,7 +384,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 	private final class CommandStackImpl extends CommandStack {
 		@Override
 		public void execute(final Command command) {
-			getDisplay().asyncExec(new Runnable() {
+			getDisplay().syncExec(new Runnable() {
 				public void run() {
 					BusyIndicator.showWhile(getDisplay(), new Runnable() {
 						public void run() {
@@ -490,7 +497,10 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 			return getBoard();
 		}
 		if(IBoardEditPart.class.equals(adapter)){
-			return getGraphicalViewer().getContents();
+			return getBoardEditPart();
+		}
+		if(IBoardCommandExecuter.class.equals(adapter)){
+			return new BoardCommandExecuter(getBoardEditPart());
 		}
 		return super.getAdapter(adapter);
 	}

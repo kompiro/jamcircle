@@ -8,22 +8,33 @@ def board
   return $board_accessor.board
 end
 
-def board_part
-  return $board_part_accessor.part
+def board_command_executer
+  board_command_executer = $board_command_executer_accessor.executer;
+  return board_command_executer
 end
 
 def create_card(subject=nil)
-  card = Card.new
-  card.subject = subject
-  board_part.add_card card
-  return card
+  created = Card.new
+  created.subject = subject
+  board_command_executer.add created
+  return created
+end
+
+def remove_card(target)
+  board_command_executer.remove target
+  return target
 end
 
 def create_lane(status=nil)
-  lane = Lane.new
-  lane.status = status
-  board.add_lane lane
-  return lane
+  created = Lane.new
+  created.status = status
+  board_command_executer.add created
+  return created
+end
+
+def remove_lane(target)
+  board_command_executer.remove target
+  return target
 end
 
 IRB.setup nil;

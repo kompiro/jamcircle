@@ -19,7 +19,7 @@ public class CardFigure extends RoundedRectangle {
 	
 	private static final int HEADER_SECTION_HEIGHT = 16;
 	private static final int FOOTER_SECTION_HEIGHT = 16;
-	private static final int ANIMATION_TIME = 500;
+	private static final int ANIMATION_TIME = 100;
 	private static final int LINE_WIDTH = 4;
 	private static final int FRAMES = 8;
 	

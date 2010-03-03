@@ -41,6 +41,7 @@ import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.ui.KanbanView;
+import org.kompiro.jamcircle.kanban.ui.editpart.IBoardCommandExecuter;
 import org.kompiro.jamcircle.kanban.ui.editpart.IBoardEditPart;
 import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
 
@@ -456,8 +457,8 @@ public class RubyScriptingConsole extends TextConsole {
 				}
 				IRubyObject rubyBoard = JavaEmbedUtils.javaToRuby(runtime, new BoardAccessor());
 		        runtime.getGlobalVariables().defineReadonly("$board_accessor", new ValueAccessor(rubyBoard));		        
-				IRubyObject rubyBoardPart = JavaEmbedUtils.javaToRuby(runtime, new BoardPartAccessor());
-		        runtime.getGlobalVariables().defineReadonly("$board_part_accessor", new ValueAccessor(rubyBoardPart));		        
+				IRubyObject rubyBoardPart = JavaEmbedUtils.javaToRuby(runtime, new BoardCommandExecuterAccessor());
+		        runtime.getGlobalVariables().defineReadonly("$board_command_executer_accessor", new ValueAccessor(rubyBoardPart));		        
 		        runtime.getGlobalVariables().defineReadonly("$$", new ValueAccessor(runtime.newFixnum(System.identityHashCode(runtime))));		        
 			}
 
@@ -641,13 +642,13 @@ public class RubyScriptingConsole extends TextConsole {
 		}
 	}
 
-	public class BoardPartAccessor{
-		public Object getPart() {
+	public class BoardCommandExecuterAccessor{
+		public Object getExecuter() {
 			final Object[] ret = new Object[1];
 			getDisplay().syncExec(new Runnable() {
 				public void run() {
 					KanbanView kanbanView = getKanbanView();
-					ret[0] = kanbanView.getAdapter(IBoardEditPart.class);
+					ret[0] = kanbanView.getAdapter(IBoardCommandExecuter.class);
 				}
 			});
 			return ret[0];

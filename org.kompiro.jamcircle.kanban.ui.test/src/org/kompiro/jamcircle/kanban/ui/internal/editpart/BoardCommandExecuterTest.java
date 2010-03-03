@@ -1,11 +1,9 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
-
-import java.util.Arrays;
-import java.util.List;
 
 import org.eclipse.gef.*;
 import org.eclipse.gef.commands.*;
