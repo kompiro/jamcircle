@@ -103,6 +103,11 @@
  			<property name="archiveName" value="${archiveNamePrefix}-macosx.carbon.x86.zip"/>
 		</ant>
 	</target>
+	<target name="assemble.org.eclipse.pde.build.container.feature.macosx.cocoa.x86">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-macosx.cocoa.x86.zip"/>
+		</ant>
+	</target>
 	<target name="assemble.org.kompiro.jamcircle.group.group.group">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
  			<property name="archiveName" value="${archiveNamePrefix}.zip"/>
@@ -165,6 +170,11 @@
  			<property name="archiveName" value="${archiveNamePrefix}-macosx.carbon.x86.zip"/>
 		</ant>
 	</target>
+	<target name="assemble.org.kompiro.jamcircle.macosx.cocoa.x86">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
+ 			<property name="archiveName" value="${archiveNamePrefix}-macosx.cocoa.x86.zip"/>
+		</ant>
+	</target>	
 	<target name="assemble.org.kompiro.jamcircle.test.group.group.group">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
  			<!--
@@ -194,6 +204,8 @@
 	<target name="assemble.org.kompiro.jamcircle.test.macosx.carbon.ppc">
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.test.macosx.carbon.x86">
+	</target>
+	<target name="assemble.org.kompiro.jamcircle.test.macosx.cocoa.x86">
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.test.p2">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
