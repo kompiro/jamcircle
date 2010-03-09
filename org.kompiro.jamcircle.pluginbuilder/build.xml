@@ -123,6 +123,12 @@
 		<antcall target="-build.rcp.internal"/>
 	</target>
 
+	<target name="no.rcp" depends="-properties,-prepare.build.host" description="Build Plugins only">
+		<property name="no.rcp.build" value="true"/>
+		<antcall target="-build"/>
+	</target>
+
+
 	<target name="-build.internal">
 		<property name="buildResultsDirectory" value="${buildDirectory}/results" />
 		<condition property="baseLocation" value="${targetPlatform}" else="${eclipseDir}">
@@ -158,7 +164,10 @@
 			<jvmarg value="-DfetchTag=${fetchTag}"/>
 			<jvmarg value="-DbuildProperties=${buildHome}/build-files/build.properties"/>
 			<jvmarg value="-Dmapfile=${mapfile}"/>
-			<classpath>
+                        <!--
+			<jvmarg line="-agentlib:jdwp=transport=dt_socket,suspend=y,server=y,address=localhost:44000"/>
+			-->
+                        <classpath>
 				<pathelement location="${equinoxjar}" />
 			</classpath>
 			
