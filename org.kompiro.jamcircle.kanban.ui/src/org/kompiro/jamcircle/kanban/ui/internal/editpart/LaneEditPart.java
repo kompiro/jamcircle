@@ -259,8 +259,8 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	@Override
 	protected void addChildVisual(EditPart childEditPart, int index) {
 		IFigure child = ((GraphicalEditPart)childEditPart).getFigure();
-		if (child instanceof CardFigure) {
-			CardFigure card = (CardFigure) child;
+		if (child instanceof CardFigureLayer) {
+			CardFigureLayer card = (CardFigureLayer) child;
 			GraphicalEntity model = (GraphicalEntity) childEditPart.getModel();
 			model.setDeletedVisuals(false);
 			card.setRemoved(false);
@@ -271,8 +271,8 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	@Override
 	protected void removeChildVisual(EditPart childEditPart) {
 		IFigure child = ((GraphicalEditPart)childEditPart).getFigure();
-		if (child instanceof CardFigure) {
-			CardFigure card = (CardFigure) child;
+		if (child instanceof CardFigureLayer) {
+			CardFigureLayer card = (CardFigureLayer) child;
 			GraphicalEntity model = (GraphicalEntity) childEditPart.getModel();
 			if(model.isDeletedVisuals()){
 				card.setRemoved(true);
