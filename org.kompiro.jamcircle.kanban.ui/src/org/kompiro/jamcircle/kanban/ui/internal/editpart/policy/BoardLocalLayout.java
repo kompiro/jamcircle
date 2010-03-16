@@ -7,7 +7,7 @@ import org.eclipse.draw2d.geometry.*;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
 
 public class BoardLocalLayout {
 
@@ -25,10 +25,11 @@ public class BoardLocalLayout {
 		}
 		EditPart editPart = getCardEditPart(start);
 		while(editPart != null) {
-			start.x += CardFigure.CARD_WIDTH + 5;
-			Rectangle localRect = new Rectangle(start,CardFigure.CARD_SIZE);
+			start.x += CardFigureLayer.CARD_WIDTH + 5;
+			Dimension cardSize = new Dimension(CardFigureLayer.CARD_WIDTH,CardFigureLayer.CARD_HEIGHT + CardFigureLayer.FOOTER_SECTION_HEIGHT);
+			Rectangle localRect = new Rectangle(start,cardSize);
 			if(!containerRect.contains(localRect)){
-				start.y += CardFigure.CARD_HEIGHT + 5;
+				start.y += CardFigureLayer.CARD_HEIGHT + CardFigureLayer.FOOTER_SECTION_HEIGHT;
 				start.x = 0;
 			}
 			editPart = getCardEditPart(start);

@@ -5,7 +5,7 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.*;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardEditPart;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
@@ -68,15 +68,15 @@ public class KanbanJFaceResource {
 	}
 
 	private static void cardInitialize() {
-		for(int i = 0; i < CardFigure.maxColorCount; i++){
-			float h = CardFigure.theta * i;
+		for(int i = 0; i < CardFigureLayer.maxColorCount; i++){
+			float h = CardFigureLayer.theta * i;
 			float s = 0.1f;
 			float b = 1f;
 			RGB rgb = new RGB(h,s,b);
-			JFaceResources.getColorRegistry().put(CardFigure.COLOR_KEY_CARD_BODY + i, rgb);
+			JFaceResources.getColorRegistry().put(CardFigureLayer.COLOR_KEY_CARD_BODY + i, rgb);
 			s = 0.8f;
 			rgb = new RGB(h,s,b);
-			JFaceResources.getColorRegistry().put(CardFigure.COLOR_KEY_CARD_BORDER + i, rgb);			
+			JFaceResources.getColorRegistry().put(CardFigureLayer.COLOR_KEY_CARD_BORDER + i, rgb);			
 		}
 		Font fo = JFaceResources.getFontRegistry().defaultFont();
 		FontData[] defaultFontData = fo.getFontData();
@@ -85,7 +85,7 @@ public class KanbanJFaceResource {
 			FontData fontData = defaultFontData[i];
 			cardFontData[i] = new FontData(fontData.getName(),10,SWT.BOLD);
 		}
-		JFaceResources.getFontRegistry().put(CardFigure.KEY_OF_CARD_HEADER, cardFontData);
+		JFaceResources.getFontRegistry().put(CardFigureLayer.KEY_OF_CARD_HEADER, cardFontData);
 	}
 
 }

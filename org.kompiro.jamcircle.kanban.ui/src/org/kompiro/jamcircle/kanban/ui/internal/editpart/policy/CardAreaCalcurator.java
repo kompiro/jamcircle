@@ -8,7 +8,7 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.LaneEditPart;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.CardArea;
 
@@ -18,8 +18,8 @@ public class CardAreaCalcurator {
 		LaneFigure laneFigure = part.getLaneFigure();
 		CardArea area = laneFigure.getCardArea();
 		for (Object o : area.getChildren()) {
-			if (o instanceof CardFigure) {
-				CardFigure cardFigure = (CardFigure) o;
+			if (o instanceof CardFigureLayer) {
+				CardFigureLayer cardFigure = (CardFigureLayer) o;
 				EditPart card = (EditPart) visualPartMap.get(cardFigure);
 				ChangeBoundsRequest request = translateCard(card,rect, laneFigure, cardFigure);
 				if(request == null) continue;
@@ -29,7 +29,7 @@ public class CardAreaCalcurator {
 	}
 
 	private ChangeBoundsRequest translateCard(EditPart card, Rectangle rect,
-			LaneFigure laneFigure, CardFigure cardFigure) {
+			LaneFigure laneFigure, CardFigureLayer cardFigure) {
 		Dimension size = cardFigure.getSize();
 		Point translate = cardFigure.getLocation().getCopy().translate(size);
 		Rectangle localRect = rect.getCopy();

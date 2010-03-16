@@ -13,6 +13,7 @@ import org.eclipse.gef.handles.MoveHandle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
 public class NonResizableEditPolicyFeedbackFigureExtension extends
@@ -25,19 +26,31 @@ public class NonResizableEditPolicyFeedbackFigureExtension extends
 		@Override
 		public void paint(Graphics graphics) {
 			Rectangle f = Rectangle.SINGLETON;
-			Rectangle r = getOwnerFigure().getBounds();
+			IFigure ownerFigure = getOwnerFigure();
+			if(ownerFigure instanceof CardFigureLayer){
+				ownerFigure = ((CardFigureLayer)ownerFigure).getCardFigure();
+			}
+			Rectangle r = ownerFigure.getBounds();
 			f.x = r.x - 4;
 			f.y = r.y - 4;
 			f.width = r.width + 8;
 			f.height = r.height + 8;
 			graphics.setClip(f);
 			graphics.setLineWidth(2);
+			drawBoundary(graphics, r);
+			fillArea(graphics, r);
+		}
+
+		private void drawBoundary(Graphics graphics, Rectangle r) {
 			Color color = WorkbenchUtil.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
 			graphics.setForegroundColor(color);
 			graphics.setAlpha(140);
 			graphics.drawRoundRectangle(r, 8, 8);
+		}
+
+		private void fillArea(Graphics graphics, Rectangle r) {
+			Color color = WorkbenchUtil.getDisplay().getSystemColor(SWT.COLOR_BLUE);
 			graphics.setAlpha(5);
-			color = WorkbenchUtil.getDisplay().getSystemColor(SWT.COLOR_BLUE);
 			graphics.setBackgroundColor(color);
 			graphics.fillRoundRectangle(r, 8, 8);
 		}

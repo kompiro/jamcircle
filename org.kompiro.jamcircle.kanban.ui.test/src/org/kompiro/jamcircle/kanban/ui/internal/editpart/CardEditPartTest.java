@@ -14,19 +14,19 @@ import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.ColorTypes;
 import org.kompiro.jamcircle.kanban.ui.editpart.IPropertyChangeDelegator;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
 
 public class CardEditPartTest {
-	private CardFigure figure;
+	private CardFigureLayer figure;
 	private Card card;
 	private CardEditPart part;
 
 	@Before
 	public void before() {
 		BoardModel board = mock(BoardModel.class);
-		figure = mock(CardFigure.class);
+		figure = mock(CardFigureLayer.class);
 		Figure actionSection = mock(Figure.class);
 		when(figure.getActionSection()).thenReturn(actionSection);
 		when(figure.getStatusSection()).thenReturn(actionSection);

@@ -38,7 +38,7 @@ import org.kompiro.jamcircle.kanban.ui.dialog.CardEditDialog;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
 import org.kompiro.jamcircle.kanban.ui.figure.*;
 import org.kompiro.jamcircle.kanban.ui.internal.command.*;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
@@ -173,13 +173,12 @@ public class CardEditPart extends AbstractEditPart {
 	@Override
 	protected IFigure createFigure() {
 		Card model = getCardModel();
-		CardFigure figure = new CardFigure(getImageRegistry());
+		CardFigureLayer figure = new CardFigureLayer(getImageRegistry());
 		figure.setSubject(model.getSubject());
 		figure.setMock(model.isMock());
 		figure.setId(model.getID());
 		
 		figure.setColorType(model.getColorType());
-		figure.setOpaque(true);
 		figure.setLocation(new Point(model.getX(),model.getY()));
 		boolean animated = getBoardModel().isAnimated();
 		if(!animated){
@@ -453,7 +452,7 @@ public class CardEditPart extends AbstractEditPart {
 	}
 
 	private void effectToParentConstraint() {
-		CardFigure cardFigure = getCardFigure();
+		CardFigureLayer cardFigure = getCardFigure();
 		GraphicalEditPart part = (GraphicalEditPart) getParent();
 		if(part != null){
 			Object constraint = cardFigure.getBounds();
@@ -557,8 +556,8 @@ public class CardEditPart extends AbstractEditPart {
 		return (Card) getModel();
 	}
 
-	private CardFigure getCardFigure(){
-		return (CardFigure) getFigure();
+	private CardFigureLayer getCardFigure(){
+		return (CardFigureLayer) getFigure();
 	}
 	
 	private void setFiles(List<File> files){
