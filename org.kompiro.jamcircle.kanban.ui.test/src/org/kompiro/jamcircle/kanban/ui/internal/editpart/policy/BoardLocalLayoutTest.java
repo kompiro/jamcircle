@@ -67,7 +67,8 @@ public class BoardLocalLayoutTest {
 				return false;
 			}
 		}).when(mRect).contains((Point)any());
-		when(cardFigure.getBounds()).thenReturn(mRect );
+		when(cardFigure.getBounds()).thenReturn(mRect);
+		when(mRect.getCopy()).thenReturn(mRect);
 		EditPart cardPart = mock(CardEditPart.class);
 		partMap.put(cardFigure , cardPart);
 
@@ -92,7 +93,8 @@ public class BoardLocalLayoutTest {
 				return false;
 			}
 		}).when(mRect).contains((Point)any());
-		when(cardFigure.getBounds()).thenReturn(mRect );
+		when(cardFigure.getBounds()).thenReturn(mRect);
+		when(mRect.getCopy()).thenReturn(mRect);
 		EditPart cardPart = mock(CardEditPart.class);
 		partMap.put(cardFigure , cardPart );
 		Rectangle targetRect = new Rectangle(new Point(450,20),CardFigureLayer.CARD_SIZE);
