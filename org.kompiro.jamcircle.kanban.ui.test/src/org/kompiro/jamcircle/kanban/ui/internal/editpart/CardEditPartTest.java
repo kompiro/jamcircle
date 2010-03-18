@@ -14,19 +14,20 @@ import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.ColorTypes;
 import org.kompiro.jamcircle.kanban.ui.editpart.IPropertyChangeDelegator;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
+import org.kompiro.jamcircle.kanban.ui.figure.StatusIcon;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
 
 public class CardEditPartTest {
-	private CardFigure figure;
+	private CardFigureLayer figure;
 	private Card card;
 	private CardEditPart part;
 
 	@Before
 	public void before() {
 		BoardModel board = mock(BoardModel.class);
-		figure = mock(CardFigure.class);
+		figure = mock(CardFigureLayer.class);
 		Figure actionSection = mock(Figure.class);
 		when(figure.getActionSection()).thenReturn(actionSection);
 		when(figure.getStatusSection()).thenReturn(actionSection);
@@ -90,7 +91,7 @@ public class CardEditPartTest {
 	
 	@Test
 	public void doPropComplete() throws Exception {
-		Clickable completedIcon = mock(Clickable.class);
+		StatusIcon completedIcon = mock(StatusIcon.class);
 		part.setCompletedIcon(completedIcon);
 
 		card.setCompleted(true);
@@ -101,11 +102,11 @@ public class CardEditPartTest {
 	
 	@Test
 	public void doPropDueCurrent() throws Exception {
-		Clickable dueIcon = mock(Clickable.class);
+		StatusIcon dueIcon = mock(StatusIcon.class);
 		part.setDueIcon(dueIcon );
 		IFigure dueDummy = mock(IFigure.class);
 		part.setDueDummy(dueDummy );
-		Clickable overDueIcon = mock(Clickable.class);
+		StatusIcon overDueIcon = mock(StatusIcon.class);
 		part.setOverDueIcon(overDueIcon );
 
 		Calendar cal = Calendar.getInstance();
@@ -119,11 +120,11 @@ public class CardEditPartTest {
 	
 	@Test
 	public void doPropDueSetNull() throws Exception {
-		Clickable dueIcon = mock(Clickable.class);
+		StatusIcon dueIcon = mock(StatusIcon.class);
 		part.setDueIcon(dueIcon );
 		IFigure dueDummy = mock(IFigure.class);
 		part.setDueDummy(dueDummy );
-		Clickable overDueIcon = mock(Clickable.class);
+		StatusIcon overDueIcon = mock(StatusIcon.class);
 		part.setOverDueIcon(overDueIcon );
 
 		Calendar cal = Calendar.getInstance();

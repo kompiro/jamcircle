@@ -16,7 +16,7 @@ import org.eclipse.gef.EditPartViewer;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
@@ -37,7 +37,7 @@ public class BoardLocalLayoutTest {
 
 	@Test
 	public void normalCase() throws Exception {
-		Rectangle targetRect = new Rectangle(new Point(20,20),CardFigure.CARD_SIZE);
+		Rectangle targetRect = new Rectangle(new Point(20,20),CardFigureLayer.CARD_SIZE);
 		Rectangle expect = targetRect.getCopy();
 		Rectangle containerRect = new Rectangle(new Point(0,0),new Dimension(500, 500));
 		layout.calc(targetRect , containerRect);
@@ -46,7 +46,7 @@ public class BoardLocalLayoutTest {
 	
 	@Test
 	public void moveWhenOutOfBounds() throws Exception {
-		Rectangle targetRect = new Rectangle(new Point(450,20),CardFigure.CARD_SIZE);
+		Rectangle targetRect = new Rectangle(new Point(450,20),CardFigureLayer.CARD_SIZE);
 		Rectangle expect = targetRect.getCopy();
 		Rectangle containerRect = new Rectangle(new Point(0,0),new Dimension(500, 500));
 		layout.calc(targetRect , containerRect);
@@ -67,11 +67,12 @@ public class BoardLocalLayoutTest {
 				return false;
 			}
 		}).when(mRect).contains((Point)any());
-		when(cardFigure.getBounds()).thenReturn(mRect );
+		when(cardFigure.getBounds()).thenReturn(mRect);
+		when(mRect.getCopy()).thenReturn(mRect);
 		EditPart cardPart = mock(CardEditPart.class);
 		partMap.put(cardFigure , cardPart);
 
-		Rectangle targetRect = new Rectangle(new Point(450,20),CardFigure.CARD_SIZE);
+		Rectangle targetRect = new Rectangle(new Point(450,20),CardFigureLayer.CARD_SIZE);
 		Rectangle expect = targetRect.getCopy();
 		Rectangle containerRect = new Rectangle(new Point(0,0),new Dimension(500, 500));
 		layout.calc(targetRect , containerRect);
@@ -92,10 +93,11 @@ public class BoardLocalLayoutTest {
 				return false;
 			}
 		}).when(mRect).contains((Point)any());
-		when(cardFigure.getBounds()).thenReturn(mRect );
+		when(cardFigure.getBounds()).thenReturn(mRect);
+		when(mRect.getCopy()).thenReturn(mRect);
 		EditPart cardPart = mock(CardEditPart.class);
 		partMap.put(cardFigure , cardPart );
-		Rectangle targetRect = new Rectangle(new Point(450,20),CardFigure.CARD_SIZE);
+		Rectangle targetRect = new Rectangle(new Point(450,20),CardFigureLayer.CARD_SIZE);
 		Rectangle expect = targetRect.getCopy();
 		Rectangle containerRect = new Rectangle(new Point(0,0),new Dimension(500, 500));
 		layout.calc(targetRect , containerRect);
