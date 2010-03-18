@@ -17,7 +17,6 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
@@ -44,6 +43,26 @@ import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
 public class CardEditPart extends AbstractEditPart {
 	
+	private final class FlagActionIcon extends
+			ClickableActionIcon {
+		private FlagActionIcon(Image image) {
+			super(image);
+		}
+
+		public void actionPerformed(ActionEvent event) {
+			Object source = event.getSource();
+			if (source instanceof Clickable) {
+				Clickable colorIcon = (Clickable) source;
+				Control control = getViewer().getControl();
+				CommandStack stack = getCommandStack();
+				FlagPopUpHelper helper = new FlagPopUpHelper(control,stack,getCardModel());
+				org.eclipse.swt.graphics.Point target = control.getDisplay().getCursorLocation();
+				
+				helper.displayToolTipNear(colorIcon,target.x,target.y);
+			}
+		}
+	}
+
 	private class SubjectDirectEditManager extends DirectEditManager{
 
 		public SubjectDirectEditManager(CellEditorLocator locator) {
@@ -66,102 +85,22 @@ public class CardEditPart extends AbstractEditPart {
 		
 	}
 		
-	private Clickable userIcon;
+	private StatusIcon userIcon;
 	private Clickable pageIcon;
 	private Clickable fileIcon;
-	private ActionListener fileIconListener = new ActionListener(){
-
-		public void actionPerformed(ActionEvent event) {
-			String filePath = getCardModel().getFilePath();
-			Program.launch(filePath);
-		}
-		
-	};
-
 	private Clickable colorIcon;
-	private ActionListener colorIconListener = new ActionListener(){
-		public void actionPerformed(ActionEvent event) {
-			Object source = event.getSource();
-			if (source instanceof Clickable) {
-				Clickable colorIcon = (Clickable) source;
-				Control control = getViewer().getControl();
-				CommandStack stack = getCommandStack();
-				ColorPopUpHelper helper = new ColorPopUpHelper(control,stack,getCardModel());
-				org.eclipse.swt.graphics.Point target = control.getDisplay().getCursorLocation();
-				
-				helper.displayToolTipNear(colorIcon,target.x,target.y);
-			}
-		}
-		
-	};
-	
 	private Clickable editIcon;
-	private ActionListener editIconListener = new ActionListener(){
-		public void actionPerformed(ActionEvent event) {
-			Shell shell = getShell();
-			Card card = getCardModel();
-			CardEditDialog dialog = new CardEditDialog(shell,card);
-			int returnCode = dialog.open();
-			if(Dialog.OK == returnCode){
-				String subject = dialog.getSubjectText();
-				String content = dialog.getBodyText();
-				Date dueDate = dialog.getDueDate();
-				List<File> files = dialog.getFiles();
-				ConfirmProvider provider = new MessageDialogConfirmProvider(getShell());
-				CardUpdateCommand command = new CardUpdateCommand(provider,card,subject,content,dueDate,files);
-				getCommandStack().execute(command);
-			}
-		}
-	};
 	
-	private Clickable dueIcon;
-	private Clickable overDueIcon;
+	private StatusIcon dueIcon;
+	private StatusIcon overDueIcon;
 
 	private SubjectDirectEditManager directManager;
-	private ActionListener pageIconListener = new ActionListener(){
 
-		public void actionPerformed(ActionEvent event) {
-			Shell shell = getShell();
-			Card card = getCardModel();
-			String title = String.format("#%d %s", card.getID(),card.getSubject());
-			String content = card.getContent();
-			BrowserPopupDialog dialog = new BrowserPopupDialog(shell,title,"show card contents",content);
-			dialog.create();
-			dialog.open();
-		}
-		
-	};
 	private Clickable deleteIcon;
-	private ActionListener deleteIconListener = new ActionListener(){
-		public void actionPerformed(ActionEvent event) {
-			GroupRequest deleteReq =
-				new GroupRequest(RequestConstants.REQ_DELETE);
-			deleteReq.setEditParts(CardEditPart.this);
-
-			CompoundCommand compoundCmd = new CompoundCommand();
-			Command cmd = CardEditPart.this.getCommand(deleteReq);
-			if (cmd != null) compoundCmd.add(cmd);
-			getCommandStack().execute(compoundCmd);
-		};
-	};
-	private Clickable completedIcon;
+	private StatusIcon completedIcon;
 	private IFigure dueDummy;
 	private Figure flagSection;
 	private Clickable flagEditIcon, flagWhiteIcon, flagBlueIcon, flagOrangeIcon, flagGreenIcon, flagRedIcon;
-	private ActionListener flagIconListener = new ActionListener(){
-		public void actionPerformed(ActionEvent event) {
-			Object source = event.getSource();
-			if (source instanceof Clickable) {
-				Clickable colorIcon = (Clickable) source;
-				Control control = getViewer().getControl();
-				CommandStack stack = getCommandStack();
-				FlagPopUpHelper helper = new FlagPopUpHelper(control,stack,getCardModel());
-				org.eclipse.swt.graphics.Point target = control.getDisplay().getCursorLocation();
-				
-				helper.displayToolTipNear(colorIcon,target.x,target.y);
-			}
-		};
-	};
 	private Clickable flagCurrentIcon;
 	private boolean movable = true;
 	
@@ -191,70 +130,105 @@ public class CardEditPart extends AbstractEditPart {
 	}
 
 	private void createIcons() {
-		ImageRegistry imageRegistry = getImageRegistry();
+//		ImageRegistry imageRegistry = getImageRegistry();
 		
-		Image flagWhiteIconImage = imageRegistry.get(KanbanImageConstants.FLAG_WHITE_IMAGE.toString());
-		flagWhiteIcon = new Clickable(new Label(flagWhiteIconImage));
-		flagWhiteIcon.setSize(16, 16);
-		flagEditIcon = new Clickable(new Label(flagWhiteIconImage));
-		flagEditIcon.setSize(16, 16);
+		createFlagSection();
+		createEditIcon();
+		createColorIcon();
+		createDeleteAction();
+		createFileIcon();
 
-		Image flagBlueIconImage = imageRegistry.get(KanbanImageConstants.FLAG_BLUE_IMAGE.toString());
-		flagBlueIcon = new Clickable(new Label(flagBlueIconImage));
-		flagBlueIcon.setSize(16, 16);
+		userIcon = new StatusIcon(KanbanImageConstants.USER_IMAGE.getIamge());
+		pageIcon = new ClickableActionIcon(KanbanImageConstants.PAGE_IMAGE.getIamge()){
 
-		Image flagOrangeIconImage = imageRegistry.get(KanbanImageConstants.FLAG_ORANGE_IMAGE.toString());
-		flagOrangeIcon = new Clickable(new Label(flagOrangeIconImage));
-		flagOrangeIcon.setSize(16, 16);
+			public void actionPerformed(ActionEvent event) {
+				Shell shell = getShell();
+				Card card = getCardModel();
+				String title = String.format("#%d %s", card.getID(),card.getSubject());
+				String content = card.getContent();
+				BrowserPopupDialog dialog = new BrowserPopupDialog(shell,title,"show card contents",content);
+				dialog.create();
+				dialog.open();
+			}
+			
+		};
+		completedIcon = new StatusIcon(KanbanImageConstants.COMPLETED_IMAGE.getIamge());
+		dueIcon = new StatusIcon(KanbanImageConstants.CLOCK_IMAGE.getIamge());
+		overDueIcon = new StatusIcon(KanbanImageConstants.CLOCK_RED_IMAGE.getIamge());
+	}
 
-		Image flagRedIconImage = imageRegistry.get(KanbanImageConstants.FLAG_RED_IMAGE.toString());
-		flagRedIcon = new Clickable(new Label(flagRedIconImage));
-		flagRedIcon.setSize(16, 16);
+	private void createFileIcon() {
+		fileIcon = new ClickableActionIcon(KanbanImageConstants.FILE_LINK_IMAGE.getIamge()){
+			public void actionPerformed(ActionEvent event) {
+				String filePath = getCardModel().getFilePath();
+				Program.launch(filePath);
+			}
+		};
+	}
 
-		Image flagGreenIconImage = imageRegistry.get(KanbanImageConstants.FLAG_GREEN_IMAGE.toString());
-		flagGreenIcon = new Clickable(new Label(flagGreenIconImage));
-		flagGreenIcon.setSize(16, 16);
-		
+	private void createColorIcon() {
+		colorIcon = new ClickableActionIcon(KanbanImageConstants.COLOR_IMAGE.getIamge()){
+			public void actionPerformed(ActionEvent event) {
+				Object source = event.getSource();
+				if (source instanceof Clickable) {
+					Clickable colorIcon = (Clickable) source;
+					Control control = getViewer().getControl();
+					CommandStack stack = getCommandStack();
+					ColorPopUpHelper helper = new ColorPopUpHelper(control,stack,getCardModel());
+					org.eclipse.swt.graphics.Point target = control.getDisplay().getCursorLocation();
+					
+					helper.displayToolTipNear(colorIcon,target.x,target.y);
+				}
+			}
+		};
+	}
+
+	private void createDeleteAction() {
+		deleteIcon = new ClickableActionIcon(KanbanImageConstants.DELETE_IMAGE.getIamge()){
+			public void actionPerformed(ActionEvent event) {
+				GroupRequest deleteReq =
+					new GroupRequest(RequestConstants.REQ_DELETE);
+				deleteReq.setEditParts(CardEditPart.this);
+
+				CompoundCommand compoundCmd = new CompoundCommand();
+				Command cmd = CardEditPart.this.getCommand(deleteReq);
+				if (cmd != null) compoundCmd.add(cmd);
+				getCommandStack().execute(compoundCmd);
+			};
+		};
+	}
+
+	private void createEditIcon() {
+		editIcon = new ClickableActionIcon(KanbanImageConstants.EDIT_IMAGE.getIamge()){
+			public void actionPerformed(ActionEvent event) {
+				Shell shell = getShell();
+				Card card = getCardModel();
+				CardEditDialog dialog = new CardEditDialog(shell,card);
+				int returnCode = dialog.open();
+				if(Dialog.OK == returnCode){
+					String subject = dialog.getSubjectText();
+					String content = dialog.getBodyText();
+					Date dueDate = dialog.getDueDate();
+					List<File> files = dialog.getFiles();
+					ConfirmProvider provider = new MessageDialogConfirmProvider(getShell());
+					CardUpdateCommand command = new CardUpdateCommand(provider,card,subject,content,dueDate,files);
+					getCommandStack().execute(command);
+				}
+			}
+		};
+	}
+
+	private void createFlagSection() {
+		flagWhiteIcon = new FlagActionIcon(KanbanImageConstants.FLAG_WHITE_IMAGE.getIamge());
+		flagEditIcon = new FlagActionIcon(KanbanImageConstants.FLAG_WHITE_IMAGE.getIamge());
+		flagBlueIcon = new FlagActionIcon(KanbanImageConstants.FLAG_BLUE_IMAGE.getIamge());
+		flagOrangeIcon = new FlagActionIcon(KanbanImageConstants.FLAG_ORANGE_IMAGE.getIamge());
+		flagRedIcon = new FlagActionIcon(KanbanImageConstants.FLAG_RED_IMAGE.getIamge());
+		flagGreenIcon = new FlagActionIcon(KanbanImageConstants.FLAG_GREEN_IMAGE.getIamge());
+
 		flagSection = new Figure();
 		flagSection.setLayoutManager(new StackLayout());
 		flagSection.add(flagEditIcon);
-		
-		Image editIconImage = imageRegistry.get(KanbanImageConstants.EDIT_IMAGE.toString());
-		editIcon = new Clickable(new Label(editIconImage));
-		editIcon.setSize(16, 16);
-		
-		Image colorIconImage = imageRegistry.get(KanbanImageConstants.COLOR_IMAGE.toString());
-		colorIcon = new Clickable(new Label(colorIconImage));
-		colorIcon.setSize(16, 16);
-	
-		Image deleteIconImage = imageRegistry.get(KanbanImageConstants.DELETE_IMAGE.toString());
-		deleteIcon = new Clickable(new Label(deleteIconImage));
-		deleteIcon.setSize(16, 16);
-		
-		Image fileIconImage = imageRegistry.get(KanbanImageConstants.FILE_LINK_IMAGE.toString());
-		fileIcon = new Clickable(new Label(fileIconImage));
-		fileIcon.setSize(16, 16);
-		
-		Image userIconImage = imageRegistry.get(KanbanImageConstants.USER_IMAGE.toString());
-		userIcon = new Clickable(new Label(userIconImage));
-		userIcon.setSize(16, 16);
-		
-		Image pageIconImage = imageRegistry.get(KanbanImageConstants.PAGE_IMAGE.toString());
-		pageIcon = new Clickable(new Label(pageIconImage));
-		pageIcon.setSize(16, 16);
-
-		Image completedIconImage = imageRegistry.get(KanbanImageConstants.COMPLETED_IMAGE.toString());
-		completedIcon = new Clickable(new Label(completedIconImage));
-		completedIcon.setSize(16, 16);
-		
-		Image dueIconImage = imageRegistry.get(KanbanImageConstants.CLOCK_IMAGE.toString());
-		dueIcon = new Clickable(new Label(dueIconImage));
-		dueIcon.setSize(16,16);
-
-		Image overDueIconImage = imageRegistry.get(KanbanImageConstants.CLOCK_RED_IMAGE.toString());
-		overDueIcon = new Clickable(new Label(overDueIconImage));
-		overDueIcon.setSize(16,16);
-
 	}
 	
 	@Override
@@ -262,23 +236,6 @@ public class CardEditPart extends AbstractEditPart {
 		super.activate();
 		if( ! PlatformUI.isWorkbenchRunning()) return;
 		createIcons();
-
-		fileIcon.addActionListener(fileIconListener);
-
-		pageIcon.addActionListener(pageIconListener);
-		
-		deleteIcon.addActionListener(deleteIconListener);
-		
-		editIcon.addActionListener(editIconListener);
-		
-		colorIcon.addActionListener(colorIconListener);
-		flagEditIcon.addActionListener(flagIconListener);
-		flagWhiteIcon.addActionListener(flagIconListener);
-		flagRedIcon.addActionListener(flagIconListener);
-		flagBlueIcon.addActionListener(flagIconListener);
-		flagGreenIcon.addActionListener(flagIconListener);
-		flagOrangeIcon.addActionListener(flagIconListener);
-
 		hideActionIcons();
 		IFigure actionSection = getCardFigure().getActionSection();
 		actionSection.add(flagSection);
@@ -375,24 +332,10 @@ public class CardEditPart extends AbstractEditPart {
 	@Override
 	public void deactivate() {
 		if(PlatformUI.isWorkbenchRunning()){
-			removeActionListener(flagEditIcon,flagIconListener);
-			removeActionListener(flagWhiteIcon,flagIconListener);
-			removeActionListener(flagRedIcon,flagIconListener);
-			removeActionListener(flagBlueIcon,flagIconListener);
-			removeActionListener(flagGreenIcon,flagIconListener);
-			removeActionListener(flagOrangeIcon,flagIconListener);
-			removeActionListener(fileIcon,fileIconListener);
-			removeActionListener(pageIcon,pageIconListener);
-			removeActionListener(deleteIcon,deleteIconListener);
-			removeActionListener(editIcon,editIconListener);
-			removeActionListener(colorIcon,colorIconListener);
 		}
 		super.deactivate();
 	}
 
-	private void removeActionListener(Clickable clickable,ActionListener listener) {
-		if(clickable != null) clickable.removeActionListener(listener);
-	}
 
 	/**
 	 * Lane and Board needs command when request type is REQ_ADD.
@@ -657,11 +600,11 @@ public class CardEditPart extends AbstractEditPart {
 		this.pageIcon = pageIcon;
 	}
 	
-	void setCompletedIcon(Clickable completedIcon) {
+	void setCompletedIcon(StatusIcon completedIcon) {
 		this.completedIcon = completedIcon;
 	}
 	
-	void setDueIcon(Clickable dueIcon) {
+	void setDueIcon(StatusIcon dueIcon) {
 		this.dueIcon = dueIcon;
 	}
 	
@@ -669,7 +612,7 @@ public class CardEditPart extends AbstractEditPart {
 		this.dueDummy = dueDummy;
 	}
 	
-	void setOverDueIcon(Clickable overDueIcon) {
+	void setOverDueIcon(StatusIcon overDueIcon) {
 		this.overDueIcon = overDueIcon;
 	}
 }

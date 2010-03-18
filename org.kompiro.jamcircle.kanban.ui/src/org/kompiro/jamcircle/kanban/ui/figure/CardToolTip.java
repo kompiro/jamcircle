@@ -1,10 +1,11 @@
 package org.kompiro.jamcircle.kanban.ui.figure;
 
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FlowLayout;
+import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.text.*;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.*;
+import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
 
 public class CardToolTip extends Figure {
@@ -23,7 +24,8 @@ public class CardToolTip extends Figure {
 	}
 
 
-	public CardToolTip(){
+	public CardToolTip(ImageRegistry imageRegistry){
+		add(new BoldLabel("subject:"));
 		body = new TextFlow();
 		ParagraphTextLayout layout = new ParagraphTextLayout(body,ParagraphTextLayout.WORD_WRAP_TRUNCATE);
 		body.setLayoutManager(layout);
@@ -34,11 +36,12 @@ public class CardToolTip extends Figure {
 		GC gc = new GC(getBackgroundColor().getDevice());
 		FontMetrics fontMetrics = gc.getFontMetrics();
 		int width = gc.stringExtent("xx").x * CardFigureLayer.CARD_CHARS_OF_LINES * 2;
-		int height = fontMetrics.getHeight() * CardFigureLayer.CARD_LINES * 2;
+		int height = fontMetrics.getHeight() * ( CardFigureLayer.CARD_LINES * 2 + 1 ) ;
 		add(bodyPage,new Rectangle(0,0,width,height));
+		Image pageIconImage = imageRegistry.get(KanbanImageConstants.PAGE_IMAGE.toString());
+
 		setLayoutManager(new FlowLayout());
 		setPreferredSize(width,height);
-
 	}
 	
 	public void setBody(String body){

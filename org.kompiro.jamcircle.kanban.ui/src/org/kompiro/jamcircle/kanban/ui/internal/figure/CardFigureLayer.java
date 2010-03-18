@@ -106,7 +106,7 @@ public class CardFigureLayer extends Layer {
 		add(figure);
 
 		createFooterSection();
-		toolTipFigure = new CardToolTip();
+		toolTipFigure = new CardToolTip(imageRegisty);
 		setToolTip(toolTipFigure);
 	}
 	
