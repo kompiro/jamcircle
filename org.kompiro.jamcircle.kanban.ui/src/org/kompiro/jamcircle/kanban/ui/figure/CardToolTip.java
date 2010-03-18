@@ -2,13 +2,9 @@ package org.kompiro.jamcircle.kanban.ui.figure;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FlowLayout;
-import org.eclipse.draw2d.text.FlowPage;
-import org.eclipse.draw2d.text.ParagraphTextLayout;
-import org.eclipse.draw2d.text.TextFlow;
+import org.eclipse.draw2d.text.*;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.swt.graphics.FontMetrics;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.graphics.*;
 
 public class CardToolTip extends Figure {
 
@@ -27,24 +23,20 @@ public class CardToolTip extends Figure {
 
 
 	public CardToolTip(){
-		FlowLayout manager = new FlowLayout();
-		manager.setMajorSpacing(0);
-		manager.setMinorSpacing(0);
-		setLayoutManager(manager);
-		
 		body = new TextFlow();
-		ParagraphTextLayout layout = new ParagraphTextLayout(body,ParagraphTextLayout.WORD_WRAP_SOFT);
+		ParagraphTextLayout layout = new ParagraphTextLayout(body,ParagraphTextLayout.WORD_WRAP_TRUNCATE);
 		body.setLayoutManager(layout);
 		bodyPage = new FlowPage();
 		bodyPage.add(body);
 		body.setOpaque(true);
-		add(bodyPage);
 		setBackgroundColor(JFaceResources.getColorRegistry().get(COLOR_KEY_CARD_TOOLTIP));
 		GC gc = new GC(getBackgroundColor().getDevice());
 		FontMetrics fontMetrics = gc.getFontMetrics();
-		int width = gc.stringExtent("xx").x * 10;
-		int height = fontMetrics.getHeight() * 4;
-		setSize(width, height);
+		int width = gc.stringExtent("xx").x * 20;
+		int height = fontMetrics.getHeight() * 8;
+		add(bodyPage,new Rectangle(0,0,width,height));
+		setLayoutManager(new FlowLayout());
+		setPreferredSize(width,height);
 
 	}
 	

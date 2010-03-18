@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Display;
 import org.kompiro.jamcircle.kanban.model.ColorTypes;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
+import org.kompiro.jamcircle.kanban.ui.figure.CardToolTip;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
 public class CardFigureLayer extends Layer {
@@ -39,7 +40,7 @@ public class CardFigureLayer extends Layer {
 	private FlowPage subjectPage;
 
 	private Dimension subjectSize;
-//	private CardToolTip toolTipFigure;
+	private CardToolTip toolTipFigure;
 	private Figure footerSection;
 	private ColorTypes colorType;
 //	private FlagTypes flagType;
@@ -58,7 +59,7 @@ public class CardFigureLayer extends Layer {
 		GC gc = new GC(getDisplay());
 		FontMetrics fontMetrics = gc.getFontMetrics();
 		int width = gc.stringExtent("xx").x * 10;
-		int height = fontMetrics.getHeight() * 4;
+		int height = (fontMetrics.getHeight() + 1) * 4 ;
 		CARD_WIDTH = width + LINE_WIDTH * 2;
 		CARD_HEIGHT = HEADER_SECTION_HEIGHT + height + LINE_WIDTH * 2;
 		CARD_SIZE  = new Dimension(CardFigureLayer.CARD_WIDTH,CardFigureLayer.CARD_HEIGHT);
@@ -102,8 +103,8 @@ public class CardFigureLayer extends Layer {
 		add(figure);
 
 		createFooterSection();
-//		toolTipFigure = new CardToolTip();
-//		setToolTip(toolTipFigure);
+		toolTipFigure = new CardToolTip();
+		setToolTip(toolTipFigure);
 	}
 	
 	
@@ -217,8 +218,10 @@ public class CardFigureLayer extends Layer {
 	public void setSubject(String subjectText){
 		if(subjectText != null){
 			subject.setText(subjectText);
+			toolTipFigure.setBody(subjectText);
 		}else{
 			subject.setText("");
+			toolTipFigure.setBody(null);
 		}
 	}
 			
