@@ -5,6 +5,7 @@ import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.text.*;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.*;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
 
 public class CardToolTip extends Figure {
 
@@ -32,8 +33,8 @@ public class CardToolTip extends Figure {
 		setBackgroundColor(JFaceResources.getColorRegistry().get(COLOR_KEY_CARD_TOOLTIP));
 		GC gc = new GC(getBackgroundColor().getDevice());
 		FontMetrics fontMetrics = gc.getFontMetrics();
-		int width = gc.stringExtent("xx").x * 20;
-		int height = fontMetrics.getHeight() * 8;
+		int width = gc.stringExtent("xx").x * CardFigureLayer.CARD_CHARS_OF_LINES * 2;
+		int height = fontMetrics.getHeight() * CardFigureLayer.CARD_LINES * 2;
 		add(bodyPage,new Rectangle(0,0,width,height));
 		setLayoutManager(new FlowLayout());
 		setPreferredSize(width,height);

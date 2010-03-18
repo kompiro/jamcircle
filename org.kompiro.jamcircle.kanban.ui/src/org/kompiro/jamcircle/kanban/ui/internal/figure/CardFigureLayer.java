@@ -20,6 +20,9 @@ public class CardFigureLayer extends Layer {
 	
 	public static final int HEADER_SECTION_HEIGHT = 16;
 	public static final int FOOTER_SECTION_HEIGHT = 16;
+	public static final int CARD_CHARS_OF_LINES = 10;
+	public static final int CARD_LINES = 4;
+	
 	private static final int ANIMATION_TIME = 100;
 	private static final int LINE_WIDTH = 4;
 	private static final int FRAMES = 8;
@@ -58,8 +61,8 @@ public class CardFigureLayer extends Layer {
 	static {
 		GC gc = new GC(getDisplay());
 		FontMetrics fontMetrics = gc.getFontMetrics();
-		int width = gc.stringExtent("xx").x * 10;
-		int height = (fontMetrics.getHeight() + 1) * 4 ;
+		int width = gc.stringExtent("xx").x * CARD_CHARS_OF_LINES;
+		int height = (fontMetrics.getHeight() + 1) * CARD_LINES ;
 		CARD_WIDTH = width + LINE_WIDTH * 2;
 		CARD_HEIGHT = HEADER_SECTION_HEIGHT + height + LINE_WIDTH * 2;
 		CARD_SIZE  = new Dimension(CardFigureLayer.CARD_WIDTH,CardFigureLayer.CARD_HEIGHT);
