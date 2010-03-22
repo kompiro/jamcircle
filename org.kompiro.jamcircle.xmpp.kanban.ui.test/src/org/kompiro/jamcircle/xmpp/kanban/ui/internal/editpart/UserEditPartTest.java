@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.swt.widgets.Display;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.Board;
@@ -46,11 +47,12 @@ public class UserEditPartTest {
 	}
 	
 	@Test
-	public void performCommitLocation() throws Exception {
+	public void performLocation() throws Exception {
 		User user = mock(User.class);
 		UserModel model = new UserModel(user );
 		part.setModel(model);
 		part.activate();
+		part.getFigure();
 		IPropertyChangeDelegator delegator = new IPropertyChangeDelegator(){
 			public void run(Runnable runner) {
 				runner.run();
