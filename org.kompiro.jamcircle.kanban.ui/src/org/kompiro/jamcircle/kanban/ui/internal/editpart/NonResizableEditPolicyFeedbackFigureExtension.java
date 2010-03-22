@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.*;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
@@ -30,7 +31,9 @@ public class NonResizableEditPolicyFeedbackFigureExtension extends
 			if(ownerFigure instanceof CardFigureLayer){
 				ownerFigure = ((CardFigureLayer)ownerFigure).getCardFigure();
 			}
-			Rectangle r = ownerFigure.getBounds();
+			Dimension ownerR = ownerFigure.getBounds().getSize();
+			Rectangle r = getBounds();
+			r.setSize(ownerR);
 			f.x = r.x - 4;
 			f.y = r.y - 4;
 			f.width = r.width + 8;
