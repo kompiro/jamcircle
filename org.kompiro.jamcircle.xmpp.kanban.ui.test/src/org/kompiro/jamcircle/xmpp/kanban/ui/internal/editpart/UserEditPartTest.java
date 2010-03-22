@@ -6,7 +6,6 @@ import static org.mockito.Mockito.mock;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.swt.widgets.Display;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.Board;
