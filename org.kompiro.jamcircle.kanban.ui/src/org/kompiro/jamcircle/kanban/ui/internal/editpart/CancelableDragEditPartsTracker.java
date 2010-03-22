@@ -6,7 +6,6 @@ package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.tools.DragEditPartsTracker;

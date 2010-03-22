@@ -2,7 +2,6 @@ package org.kompiro.jamcircle.kanban.ui.model;
 
 import java.beans.PropertyChangeListener;
 
-
 import org.eclipse.draw2d.geometry.Point;
 import org.kompiro.jamcircle.kanban.model.Icon;
 

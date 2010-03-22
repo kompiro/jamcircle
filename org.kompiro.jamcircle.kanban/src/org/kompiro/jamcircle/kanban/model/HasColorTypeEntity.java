@@ -1,9 +1,9 @@
 package org.kompiro.jamcircle.kanban.model;
 
-import org.kompiro.jamcircle.storage.model.GraphicalEntity;
-
 import net.java.ao.schema.Default;
 import net.java.ao.schema.Ignore;
+
+import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 public interface HasColorTypeEntity extends GraphicalEntity{
 	

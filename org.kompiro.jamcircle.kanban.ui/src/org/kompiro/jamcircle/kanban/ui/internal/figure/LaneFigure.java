@@ -1,28 +1,12 @@
 package org.kompiro.jamcircle.kanban.ui.internal.figure;
 
-import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.CompoundBorder;
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.GridData;
-import org.eclipse.draw2d.GridLayout;
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.LineBorder;
-import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.draw2d.RectangleFigure;
-import org.eclipse.draw2d.SchemeBorder;
-import org.eclipse.draw2d.StackLayout;
-import org.eclipse.draw2d.ToolbarLayout;
-import org.eclipse.draw2d.XYLayout;
+import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontMetrics;
-import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.*;
 
 public class LaneFigure extends RectangleFigure {
 

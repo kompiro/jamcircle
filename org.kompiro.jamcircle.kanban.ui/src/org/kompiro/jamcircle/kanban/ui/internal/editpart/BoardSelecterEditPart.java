@@ -12,7 +12,8 @@ import org.eclipse.swt.widgets.*;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractIconEditPart;
-import org.kompiro.jamcircle.kanban.ui.model.*;
+import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
+import org.kompiro.jamcircle.kanban.ui.model.BoardSelecterModel;
 import org.kompiro.jamcircle.kanban.ui.widget.BoardListTableViewer;
 
 public class BoardSelecterEditPart extends AbstractIconEditPart{

@@ -1,8 +1,6 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.Map;
 
@@ -16,7 +14,6 @@ import org.eclipse.gef.requests.GroupRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
 
 public class LaneEditPartTest extends AbstractEditPartTest{
 

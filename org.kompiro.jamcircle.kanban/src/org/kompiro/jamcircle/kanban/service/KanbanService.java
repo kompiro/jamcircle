@@ -6,12 +6,7 @@ import java.io.File;
 import net.java.ao.Entity;
 
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
-import org.kompiro.jamcircle.kanban.model.Board;
-import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.CardDTO;
-import org.kompiro.jamcircle.kanban.model.Icon;
-import org.kompiro.jamcircle.kanban.model.Lane;
-import org.kompiro.jamcircle.kanban.model.User;
+import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 import org.kompiro.jamcircle.storage.service.StorageChageListener;
 

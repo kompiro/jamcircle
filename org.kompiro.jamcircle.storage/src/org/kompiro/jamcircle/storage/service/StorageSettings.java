@@ -1,17 +1,9 @@
 package org.kompiro.jamcircle.storage.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-
-import org.eclipse.equinox.security.storage.EncodingUtils;
-import org.eclipse.equinox.security.storage.ISecurePreferences;
-import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
-import org.eclipse.equinox.security.storage.StorageException;
+import org.eclipse.equinox.security.storage.*;
 import org.kompiro.jamcircle.storage.StorageStatusHandler;
 
 public class StorageSettings implements Iterable<StorageSetting>{

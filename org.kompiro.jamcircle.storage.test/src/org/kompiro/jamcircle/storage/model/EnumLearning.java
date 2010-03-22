@@ -1,6 +1,6 @@
 package org.kompiro.jamcircle.storage.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.sql.SQLException;
 
@@ -9,7 +9,6 @@ import net.java.ao.Transaction;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.storage.AbstractStorageTest;
-import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 
 public class EnumLearning extends AbstractStorageTest{

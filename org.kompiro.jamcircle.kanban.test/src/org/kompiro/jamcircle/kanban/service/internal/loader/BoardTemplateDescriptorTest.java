@@ -1,9 +1,12 @@
 package org.kompiro.jamcircle.kanban.service.internal.loader;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.kompiro.jamcircle.kanban.service.internal.loader.BoardTemplateDescriptor.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.eclipse.core.runtime.*;
 import org.junit.Before;

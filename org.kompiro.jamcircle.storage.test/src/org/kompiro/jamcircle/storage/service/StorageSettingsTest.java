@@ -1,11 +1,10 @@
 package org.kompiro.jamcircle.storage.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.kompiro.jamcircle.storage.service.StorageSetting;
-import org.kompiro.jamcircle.storage.service.StorageSettings;
 
 public class StorageSettingsTest {
 	

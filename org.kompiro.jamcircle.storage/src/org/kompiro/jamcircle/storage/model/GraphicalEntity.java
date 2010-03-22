@@ -2,9 +2,7 @@ package org.kompiro.jamcircle.storage.model;
 
 import net.java.ao.Entity;
 import net.java.ao.Implementation;
-import net.java.ao.schema.Default;
-import net.java.ao.schema.Ignore;
-import net.java.ao.schema.NotNull;
+import net.java.ao.schema.*;
 
 @Implementation(GraphicalEntityImpl.class)
 public interface GraphicalEntity extends Entity {

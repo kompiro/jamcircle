@@ -7,9 +7,7 @@ import java.util.logging.Logger;
 
 import net.java.ao.EntityManager;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.*;
 import org.kompiro.jamcircle.kanban.KanbanActivator;
 
 public abstract class AbstractKanbanTest {

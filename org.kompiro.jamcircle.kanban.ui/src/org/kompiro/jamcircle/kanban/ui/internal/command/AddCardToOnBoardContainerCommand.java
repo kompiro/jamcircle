@@ -2,7 +2,6 @@ package org.kompiro.jamcircle.kanban.ui.internal.command;
 
 import java.sql.SQLException;
 
-
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.kompiro.jamcircle.kanban.model.Card;

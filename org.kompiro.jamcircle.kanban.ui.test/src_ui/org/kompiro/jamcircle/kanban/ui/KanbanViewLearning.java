@@ -3,11 +3,7 @@ package org.kompiro.jamcircle.kanban.ui;
 import static org.junit.Assert.assertNotNull;
 
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.*;
 import org.junit.Ignore;
 import org.junit.Test;
 

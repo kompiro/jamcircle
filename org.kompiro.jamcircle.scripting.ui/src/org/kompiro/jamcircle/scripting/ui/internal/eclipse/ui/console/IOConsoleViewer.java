@@ -1,16 +1,10 @@
 package org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console;
 
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.DocumentEvent;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IDocumentListener;
+import org.eclipse.jface.text.*;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsoleDocumentPartitioner;
-import org.eclipse.ui.console.TextConsole;
-import org.eclipse.ui.console.TextConsoleViewer;
+import org.eclipse.ui.console.*;
 
 /**
  * Viewer used to display an IOConsole

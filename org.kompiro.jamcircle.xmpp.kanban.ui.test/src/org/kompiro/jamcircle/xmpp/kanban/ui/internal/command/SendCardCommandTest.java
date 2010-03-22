@@ -3,6 +3,7 @@ package org.kompiro.jamcircle.xmpp.kanban.ui.internal.command;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 import org.eclipse.gef.EditPart;

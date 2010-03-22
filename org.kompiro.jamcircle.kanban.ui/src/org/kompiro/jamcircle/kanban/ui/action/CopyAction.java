@@ -2,12 +2,9 @@ package org.kompiro.jamcircle.kanban.ui.action;
 
 import java.util.List;
 
-
 import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.gef.ui.actions.SelectionAction;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.*;
 import org.eclipse.ui.actions.ActionFactory;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
 

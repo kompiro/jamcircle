@@ -3,15 +3,11 @@ package org.kompiro.jamcircle.kanban.model;
 import java.sql.Types;
 import java.util.Date;
 
+import net.java.ao.*;
+import net.java.ao.schema.*;
+
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
-
-import net.java.ao.Implementation;
-import net.java.ao.OneToMany;
-import net.java.ao.Preload;
-import net.java.ao.schema.Default;
-import net.java.ao.schema.NotNull;
-import net.java.ao.schema.SQLType;
 
 
 @Preload

@@ -1,8 +1,6 @@
 package org.kompiro.jamcircle;
 
-import net.java.ao.Entity;
-import net.java.ao.Generator;
-import net.java.ao.Implementation;
+import net.java.ao.*;
 import net.java.ao.schema.NotNull;
 
 @Implementation(PersonImpl.class)

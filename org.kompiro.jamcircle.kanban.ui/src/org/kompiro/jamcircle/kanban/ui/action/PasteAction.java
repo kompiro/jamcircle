@@ -3,22 +3,16 @@ package org.kompiro.jamcircle.kanban.ui.action;
 import java.util.Collections;
 import java.util.List;
 
-
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.*;
 import org.eclipse.gef.EditPartViewer.Conditional;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.gef.ui.actions.WorkbenchPartAction;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.*;
 import org.eclipse.ui.actions.ActionFactory;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
 

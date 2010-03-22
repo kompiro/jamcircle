@@ -5,12 +5,10 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-
-import net.java.ao.Entity;
-import net.java.ao.EntityManager;
-import net.java.ao.RawEntity;
+import net.java.ao.*;
 import net.java.ao.schema.PrimaryKey;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 
 class MockEntity implements Entity {

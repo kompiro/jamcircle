@@ -1,18 +1,11 @@
 package org.kompiro.jamcircle.kanban.service.internal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 
 import org.junit.Test;
-import org.kompiro.jamcircle.kanban.model.Board;
-import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.Lane;
-import org.kompiro.jamcircle.kanban.model.User;
+import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 
 public class KanbanServiceImplPDETest extends AbstractKanbanTest{

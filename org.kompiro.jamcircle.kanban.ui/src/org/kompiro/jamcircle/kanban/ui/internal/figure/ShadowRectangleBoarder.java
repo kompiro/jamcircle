@@ -1,12 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui.internal.figure;
 
-import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.SchemeBorder;
-import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.*;
+import org.eclipse.draw2d.geometry.*;
 import org.eclipse.swt.graphics.Color;
 
 public class ShadowRectangleBoarder extends SchemeBorder {

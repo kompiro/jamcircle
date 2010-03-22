@@ -15,7 +15,8 @@ import org.kompiro.jamcircle.kanban.model.CardContainer;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractIconEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.command.AddCardToContanerCommand;
-import org.kompiro.jamcircle.kanban.ui.model.*;
+import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
+import org.kompiro.jamcircle.kanban.ui.model.InboxIconModel;
 
 public class InboxEditPart extends AbstractIconEditPart {
 

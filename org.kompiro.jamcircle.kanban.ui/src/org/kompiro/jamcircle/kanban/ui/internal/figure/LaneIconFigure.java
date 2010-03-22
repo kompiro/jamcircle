@@ -1,11 +1,6 @@
 package org.kompiro.jamcircle.kanban.ui.internal.figure;
 
-import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.RectangleFigure;
-import org.eclipse.draw2d.SchemeBorder;
-import org.eclipse.draw2d.XYLayout;
+import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.JFaceResources;
 

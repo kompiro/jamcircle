@@ -1,7 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart.policy;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;

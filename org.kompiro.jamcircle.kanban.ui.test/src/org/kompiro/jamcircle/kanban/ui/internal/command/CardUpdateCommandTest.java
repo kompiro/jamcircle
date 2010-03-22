@@ -1,19 +1,16 @@
 package org.kompiro.jamcircle.kanban.ui.internal.command;
 
-import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.*;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.eclipse.gef.commands.Command;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
 import org.kompiro.jamcircle.kanban.ui.command.provider.ConfirmProviderMock;
-import org.kompiro.jamcircle.kanban.ui.internal.command.CardUpdateCommand;
 
 /**
  * TODO Recreate Constructor

@@ -4,13 +4,10 @@
 package org.kompiro.jamcircle.kanban.model.mock;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
+import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.model.Board;
-import org.kompiro.jamcircle.kanban.model.ColorTypes;
-import org.kompiro.jamcircle.kanban.model.FlagTypes;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.model.User;
 

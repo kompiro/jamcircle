@@ -1,10 +1,12 @@
 package org.kompiro.jamcircle.kanban.service.internal.loader;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-import static org.kompiro.jamcircle.kanban.service.internal.loader.BoardScriptTemplateLoaderImpl.*;
-import static org.kompiro.jamcircle.kanban.service.internal.loader.BoardScriptTemplateDescriptor.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertThat;
+import static org.kompiro.jamcircle.kanban.service.internal.loader.BoardScriptTemplateDescriptor.ATTR_NAME;
+import static org.kompiro.jamcircle.kanban.service.internal.loader.BoardScriptTemplateDescriptor.ATTR_TYPE;
+import static org.kompiro.jamcircle.kanban.service.internal.loader.BoardScriptTemplateLoaderImpl.POINT_CALLBACK;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 

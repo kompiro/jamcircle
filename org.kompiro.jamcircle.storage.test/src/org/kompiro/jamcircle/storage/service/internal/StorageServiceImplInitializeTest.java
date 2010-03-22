@@ -1,9 +1,5 @@
 package org.kompiro.jamcircle.storage.service.internal;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.kompiro.jamcircle.debug.StandardOutputHandler;

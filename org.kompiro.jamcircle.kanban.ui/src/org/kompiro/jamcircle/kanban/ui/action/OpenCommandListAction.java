@@ -6,9 +6,7 @@ import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
-import org.kompiro.jamcircle.kanban.ui.KanbanView;
+import org.kompiro.jamcircle.kanban.ui.*;
 import org.kompiro.jamcircle.kanban.ui.widget.CommandListTableViewer;
 
 public class OpenCommandListAction extends Action {

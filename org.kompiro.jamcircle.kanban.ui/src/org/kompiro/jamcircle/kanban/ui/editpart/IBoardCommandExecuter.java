@@ -1,6 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui.editpart;
 
-import org.kompiro.jamcircle.kanban.model.*;
+import org.kompiro.jamcircle.kanban.model.Card;
+import org.kompiro.jamcircle.kanban.model.Lane;
 
 public interface IBoardCommandExecuter {
 	public void add(Card card);

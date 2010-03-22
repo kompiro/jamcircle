@@ -5,12 +5,9 @@ import java.sql.Types;
 import java.util.Date;
 import java.util.List;
 
-
 import net.java.ao.Implementation;
 import net.java.ao.Preload;
-import net.java.ao.schema.Default;
-import net.java.ao.schema.Ignore;
-import net.java.ao.schema.SQLType;
+import net.java.ao.schema.*;
 
 @Preload
 @Implementation(CardImpl.class)

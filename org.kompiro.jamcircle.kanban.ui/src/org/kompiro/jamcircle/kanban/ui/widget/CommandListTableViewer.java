@@ -1,37 +1,19 @@
 package org.kompiro.jamcircle.kanban.ui.widget;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EventObject;
+import java.util.*;
 import java.util.List;
-
 
 import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CommandStackListener;
+import org.eclipse.gef.commands.*;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.viewers.ColumnPixelData;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.OwnerDrawLabelProvider;
-import org.eclipse.jface.viewers.TableLayout;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.swt.widgets.*;
+import org.eclipse.ui.*;
 import org.kompiro.jamcircle.kanban.ui.KanbanView;
 
 public class CommandListTableViewer {

@@ -1,6 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui.model;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeThat;
 import static org.mockito.Matchers.eq;

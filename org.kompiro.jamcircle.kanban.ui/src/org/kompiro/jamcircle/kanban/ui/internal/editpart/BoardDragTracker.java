@@ -3,15 +3,11 @@ package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 import java.util.Collection;
 import java.util.Collections;
 
-
 import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPartViewer;
-import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.*;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.tools.MarqueeDragTracker;

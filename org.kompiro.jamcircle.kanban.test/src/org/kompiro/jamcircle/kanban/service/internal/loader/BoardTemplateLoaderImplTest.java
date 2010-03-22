@@ -4,9 +4,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static org.kompiro.jamcircle.kanban.service.internal.loader.BoardTemplateDescriptor.*;
 import static org.kompiro.jamcircle.kanban.service.internal.loader.BoardTemplateLoaderImpl.POINT_CALLBACK;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 
@@ -14,7 +12,6 @@ import org.eclipse.core.runtime.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
-import org.kompiro.jamcircle.kanban.service.internal.loader.BoardTemplateLoaderImpl;
 
 
 public class BoardTemplateLoaderImplTest {

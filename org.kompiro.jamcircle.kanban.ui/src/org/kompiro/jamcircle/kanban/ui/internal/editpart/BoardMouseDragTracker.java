@@ -3,18 +3,9 @@ package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 import java.util.HashMap;
 import java.util.Map;
 
-
-import org.eclipse.draw2d.Cursors;
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Viewport;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.DragTracker;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.gef.Request;
+import org.eclipse.draw2d.*;
+import org.eclipse.draw2d.geometry.*;
+import org.eclipse.gef.*;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.tools.SelectionTool;
 import org.kompiro.jamcircle.kanban.service.KanbanService;

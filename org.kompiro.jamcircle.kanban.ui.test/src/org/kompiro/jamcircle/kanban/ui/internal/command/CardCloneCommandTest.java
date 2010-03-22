@@ -1,9 +1,10 @@
 package org.kompiro.jamcircle.kanban.ui.internal.command;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
-import static org.hamcrest.CoreMatchers.*;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPart;

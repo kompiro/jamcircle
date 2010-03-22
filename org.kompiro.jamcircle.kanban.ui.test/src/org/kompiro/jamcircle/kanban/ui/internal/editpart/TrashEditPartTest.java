@@ -16,8 +16,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
 import org.kompiro.jamcircle.kanban.ui.internal.command.*;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.LaneEditPart;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 
 public class TrashEditPartTest extends AbstractEditPartTest{

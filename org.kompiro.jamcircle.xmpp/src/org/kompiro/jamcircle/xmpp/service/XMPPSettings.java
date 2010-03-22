@@ -1,15 +1,9 @@
 package org.kompiro.jamcircle.xmpp.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-
-import org.eclipse.equinox.security.storage.EncodingUtils;
-import org.eclipse.equinox.security.storage.ISecurePreferences;
-import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
-import org.eclipse.equinox.security.storage.StorageException;
+import org.eclipse.equinox.security.storage.*;
 import org.kompiro.jamcircle.xmpp.XMPPStatusHandler;
 
 public class XMPPSettings implements Iterable<XMPPSettings.Setting>{

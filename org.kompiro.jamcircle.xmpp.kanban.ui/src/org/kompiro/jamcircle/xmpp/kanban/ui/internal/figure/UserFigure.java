@@ -2,12 +2,7 @@ package org.kompiro.jamcircle.xmpp.kanban.ui.internal.figure;
 
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.GridLayout;
-import org.eclipse.draw2d.ImageFigure;
-import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.XYLayout;
+import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;

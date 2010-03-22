@@ -1,8 +1,9 @@
 package org.kompiro.jamcircle.kanban.ui.internal.command;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.mock.Lane;

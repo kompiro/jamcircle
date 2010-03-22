@@ -2,9 +2,7 @@ package org.kompiro.jamcircle.storage;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.*;
 import org.kompiro.jamcircle.debug.IStatusHandler;
 
 

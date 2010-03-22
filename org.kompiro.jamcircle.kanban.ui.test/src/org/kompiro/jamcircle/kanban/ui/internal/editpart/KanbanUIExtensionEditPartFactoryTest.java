@@ -1,9 +1,11 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.isA;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.eclipse.core.runtime.*;
 import org.eclipse.gef.EditPart;

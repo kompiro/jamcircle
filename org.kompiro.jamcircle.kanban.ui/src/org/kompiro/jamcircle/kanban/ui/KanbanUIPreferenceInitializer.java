@@ -1,6 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui;
 
-import org.eclipse.core.runtime.preferences.*;
+import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
+import org.eclipse.core.runtime.preferences.DefaultScope;
 
 public class KanbanUIPreferenceInitializer extends
 		AbstractPreferenceInitializer {

@@ -3,9 +3,7 @@
  */
 package org.kompiro.jamcircle.kanban.model.mock;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Card;

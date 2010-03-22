@@ -9,7 +9,8 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.text.*;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.console.*;
+import org.eclipse.ui.console.ConsolePlugin;
+import org.eclipse.ui.console.IConsoleDocumentPartitioner;
 import org.eclipse.ui.progress.UIJob;
 import org.eclipse.ui.progress.WorkbenchJob;
 

@@ -42,7 +42,6 @@ import org.jruby.runtime.builtin.IRubyObject;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.ui.KanbanView;
 import org.kompiro.jamcircle.kanban.ui.editpart.IBoardCommandExecuter;
-import org.kompiro.jamcircle.kanban.ui.editpart.IBoardEditPart;
 import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
 
 /**

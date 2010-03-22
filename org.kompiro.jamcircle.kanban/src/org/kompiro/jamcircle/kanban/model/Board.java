@@ -1,15 +1,12 @@
 package org.kompiro.jamcircle.kanban.model;
 
 import java.sql.Types;
-import java.util.*;
-
-import org.kompiro.jamcircle.scripting.ScriptTypes;
+import java.util.Date;
 
 import net.java.ao.*;
-import net.java.ao.schema.Default;
-import net.java.ao.schema.Ignore;
-import net.java.ao.schema.NotNull;
-import net.java.ao.schema.SQLType;
+import net.java.ao.schema.*;
+
+import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 @Preload
 @Implementation(BoardImpl.class)

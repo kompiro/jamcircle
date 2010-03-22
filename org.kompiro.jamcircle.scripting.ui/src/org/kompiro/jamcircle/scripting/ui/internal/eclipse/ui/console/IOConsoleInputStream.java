@@ -10,9 +10,7 @@
  *******************************************************************************/
 package org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;

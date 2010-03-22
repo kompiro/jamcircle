@@ -1,8 +1,8 @@
 package org.kompiro.jamcircle.kanban.model;
 
-import org.kompiro.jamcircle.storage.model.GraphicalEntity;
-
 import net.java.ao.Preload;
+
+import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 @Preload
 public interface User extends GraphicalEntity{

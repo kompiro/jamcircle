@@ -1,8 +1,6 @@
 package org.kompiro.jamcircle.storage;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -10,9 +8,7 @@ import java.sql.SQLException;
 import net.java.ao.EntityManager;
 import net.java.ao.Transaction;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 import org.kompiro.jamcircle.storage.service.internal.StorageServiceImpl;
 
 public class StorageActivatorTest extends AbstractStorageTest{

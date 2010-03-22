@@ -2,10 +2,7 @@ package org.kompiro.jamcircle.kanban.model;
 
 import java.beans.PropertyChangeEvent;
 import java.io.File;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import org.kompiro.jamcircle.kanban.KanbanActivator;
 import org.kompiro.jamcircle.storage.service.StorageService;

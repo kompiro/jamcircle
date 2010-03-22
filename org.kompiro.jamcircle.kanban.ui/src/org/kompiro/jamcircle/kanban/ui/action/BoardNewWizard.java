@@ -2,7 +2,6 @@ package org.kompiro.jamcircle.kanban.ui.action;
 
 import java.lang.reflect.InvocationTargetException;
 
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;

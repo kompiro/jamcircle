@@ -1,9 +1,6 @@
 package org.kompiro.jamcircle.kanban.ui;
 
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStackEvent;
-import org.eclipse.gef.commands.CommandStackEventListener;
-import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.commands.*;
 
 public class CommandStackEventListenerForDebug implements
 		CommandStackEventListener {

@@ -1,8 +1,8 @@
 package org.kompiro.jamcircle.kanban.ui.editpart;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
 import org.eclipse.gef.EditPart;
 import org.junit.Test;

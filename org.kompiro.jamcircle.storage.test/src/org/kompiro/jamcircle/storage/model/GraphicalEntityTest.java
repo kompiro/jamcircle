@@ -1,9 +1,8 @@
 package org.kompiro.jamcircle.storage.model;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
-import static org.junit.Assume.*;
-
-import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assume.assumeThat;
 
 import org.junit.Before;
 import org.junit.Test;
