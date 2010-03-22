@@ -1,8 +1,8 @@
 package org.kompiro.jamcircle.xmpp.kanban.ui.internal.editpart;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -46,11 +46,12 @@ public class UserEditPartTest {
 	}
 	
 	@Test
-	public void performCommitLocation() throws Exception {
+	public void performLocation() throws Exception {
 		User user = mock(User.class);
 		UserModel model = new UserModel(user );
 		part.setModel(model);
 		part.activate();
+		part.getFigure();
 		IPropertyChangeDelegator delegator = new IPropertyChangeDelegator(){
 			public void run(Runnable runner) {
 				runner.run();

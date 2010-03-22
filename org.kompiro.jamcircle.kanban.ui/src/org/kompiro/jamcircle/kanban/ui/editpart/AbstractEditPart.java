@@ -22,6 +22,7 @@ import org.kompiro.jamcircle.kanban.ui.internal.editpart.AsyncDisplayDelegator;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.CancelableDragEditPartsTracker;
 import org.kompiro.jamcircle.kanban.ui.model.AbstractModel;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
+import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 public abstract class AbstractEditPart extends AbstractGraphicalEditPart
@@ -188,7 +189,10 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 
 	protected ImageRegistry getImageRegistry() {
 		KanbanUIActivator activator = KanbanUIActivator.getDefault();
-		if(activator == null) return JFaceResources.getImageRegistry();
+		if(activator == null) {
+			WorkbenchUtil.getDisplay();
+			return JFaceResources.getImageRegistry();
+		}
 		return activator.getImageRegistry();
 	}
 	
