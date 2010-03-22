@@ -100,8 +100,9 @@ public class CardEditPart extends AbstractEditPart {
 	private StatusIcon completedIcon;
 	private IFigure dueDummy;
 	private Figure flagSection;
-	private Clickable flagEditIcon, flagWhiteIcon, flagBlueIcon, flagOrangeIcon, flagGreenIcon, flagRedIcon;
-	private Clickable flagCurrentIcon;
+	private Clickable flagEditIcon;
+	private StatusIcon flagWhiteIcon, flagBlueIcon, flagOrangeIcon, flagGreenIcon, flagRedIcon;
+	private Figure flagCurrentIcon;
 	private boolean movable = true;
 	
 
@@ -126,11 +127,11 @@ public class CardEditPart extends AbstractEditPart {
 		dueDummy = new Figure();
 		dueDummy.setLayoutManager(new StackLayout());
 		dueDummy.setSize(16,16);
+
 		return figure;
 	}
 
 	private void createIcons() {
-//		ImageRegistry imageRegistry = getImageRegistry();
 		
 		createFlagSection();
 		createEditIcon();
@@ -219,16 +220,15 @@ public class CardEditPart extends AbstractEditPart {
 	}
 
 	private void createFlagSection() {
-		flagWhiteIcon = new FlagActionIcon(KanbanImageConstants.FLAG_WHITE_IMAGE.getIamge());
+		flagWhiteIcon = new StatusIcon(KanbanImageConstants.FLAG_WHITE_IMAGE.getIamge());
 		flagEditIcon = new FlagActionIcon(KanbanImageConstants.FLAG_WHITE_IMAGE.getIamge());
-		flagBlueIcon = new FlagActionIcon(KanbanImageConstants.FLAG_BLUE_IMAGE.getIamge());
-		flagOrangeIcon = new FlagActionIcon(KanbanImageConstants.FLAG_ORANGE_IMAGE.getIamge());
-		flagRedIcon = new FlagActionIcon(KanbanImageConstants.FLAG_RED_IMAGE.getIamge());
-		flagGreenIcon = new FlagActionIcon(KanbanImageConstants.FLAG_GREEN_IMAGE.getIamge());
+		flagBlueIcon = new StatusIcon(KanbanImageConstants.FLAG_BLUE_IMAGE.getIamge());
+		flagOrangeIcon = new StatusIcon(KanbanImageConstants.FLAG_ORANGE_IMAGE.getIamge());
+		flagRedIcon = new StatusIcon(KanbanImageConstants.FLAG_RED_IMAGE.getIamge());
+		flagGreenIcon = new StatusIcon(KanbanImageConstants.FLAG_GREEN_IMAGE.getIamge());
 
 		flagSection = new Figure();
 		flagSection.setLayoutManager(new StackLayout());
-		flagSection.add(flagEditIcon);
 	}
 	
 	@Override
@@ -238,11 +238,12 @@ public class CardEditPart extends AbstractEditPart {
 		createIcons();
 		hideActionIcons();
 		IFigure actionSection = getCardFigure().getActionSection();
-		actionSection.add(flagSection);
+		actionSection.add(flagEditIcon);
 		actionSection.add(editIcon);
 		actionSection.add(colorIcon);
 		actionSection.add(deleteIcon);
 		IFigure statusSection = getCardFigure().getStatusSection();
+		statusSection.add(flagSection);
 		statusSection.add(dueDummy);
 		statusSection.add(fileIcon);
 		statusSection.add(userIcon);
@@ -268,7 +269,6 @@ public class CardEditPart extends AbstractEditPart {
 		if(card.getFlagType() == null){
 			flagCurrentIcon = null;
 		}else{
-			flagEditIcon.setVisible(false);
 			switch (getCardModel().getFlagType()){
 			case RED:
 				flagCurrentIcon = flagRedIcon;
@@ -286,8 +286,8 @@ public class CardEditPart extends AbstractEditPart {
 				flagCurrentIcon = flagWhiteIcon;
 				break;
 			}
-			flagSection.add(flagCurrentIcon,0);
 		}
+		if(flagCurrentIcon != null) flagSection.add(flagCurrentIcon,0);
 	}
 
 	private void setDue(Card card) {
@@ -568,9 +568,7 @@ public class CardEditPart extends AbstractEditPart {
 	}
 
 	private void showActionIcons() {
-		if(getCardModel().getFlagType() == null){
-			flagEditIcon.setVisible(true);
-		}
+		flagEditIcon.setVisible(true);
 		colorIcon.setVisible(true);
 		editIcon.setVisible(true);
 		deleteIcon.setVisible(true);

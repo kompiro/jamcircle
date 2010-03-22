@@ -33,6 +33,14 @@ public class ChangeFlagCommandTest extends AbstractCommandTest{
 		verify(card).setFlagType(FlagTypes.BLUE);
 	}
 	
+	@Test
+	public void executeNull() throws Exception {
+		command.execute();
+		command = new ChangeFlagCommand(card, null);
+		command.execute();
+		verify(card).setFlagType(null);
+	}
+	
 	@Override
 	public void undo() throws Exception {
 		command.execute();

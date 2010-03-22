@@ -30,7 +30,7 @@ public class ChangeFlagCommand extends AbstractCommand {
 
 	@Override
 	protected void initialize() {
-		if(card != null && type != null){
+		if(card != null){
 			this.oldType = card.getFlagType();
 			setExecute(true);
 		}

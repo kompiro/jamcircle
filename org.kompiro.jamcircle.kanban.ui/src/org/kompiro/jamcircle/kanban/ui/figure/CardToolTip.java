@@ -6,7 +6,6 @@ import org.eclipse.draw2d.text.*;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.*;
-import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
 
 public class CardToolTip extends Figure {
@@ -39,8 +38,6 @@ public class CardToolTip extends Figure {
 		int width = gc.stringExtent("xx").x * CardFigureLayer.CARD_CHARS_OF_LINES * 2;
 		int height = fontMetrics.getHeight() * ( CardFigureLayer.CARD_LINES * 2 + 1 ) ;
 		add(bodyPage,new Rectangle(0,0,width,height));
-		Image pageIconImage = imageRegistry.get(KanbanImageConstants.PAGE_IMAGE.toString());
-
 		setLayoutManager(new FlowLayout());
 		setPreferredSize(width,height);
 	}

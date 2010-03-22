@@ -13,6 +13,7 @@ import org.kompiro.jamcircle.kanban.model.User;
 import org.kompiro.jamcircle.kanban.ui.command.*;
 import org.kompiro.jamcircle.kanban.ui.editpart.IPropertyChangeDelegator;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
+import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 import org.kompiro.jamcircle.xmpp.kanban.ui.internal.command.DeleteUserCommand;
 import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
 
@@ -51,7 +52,11 @@ public class UserEditPartTest {
 		UserModel model = new UserModel(user );
 		part.setModel(model);
 		part.activate();
-		part.getFigure();
+		WorkbenchUtil.getDisplay().syncExec(new Runnable(){
+			public void run() {
+				part.getFigure();
+			}
+		});
 		IPropertyChangeDelegator delegator = new IPropertyChangeDelegator(){
 			public void run(Runnable runner) {
 				runner.run();
