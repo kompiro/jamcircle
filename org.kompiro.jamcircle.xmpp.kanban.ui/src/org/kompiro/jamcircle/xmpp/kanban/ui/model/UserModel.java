@@ -1,6 +1,8 @@
 package org.kompiro.jamcircle.xmpp.kanban.ui.model;
 
 
+import java.beans.PropertyChangeListener;
+
 import org.eclipse.draw2d.geometry.Point;
 import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.packet.Presence;
@@ -75,7 +77,6 @@ public class UserModel extends AbstractModel implements Comparable<UserModel>,Ic
 		this.location = location;
 		user.setX(location.x);
 		user.setY(location.y);
-		user.commitLocation();
 		user.save(false);
 		firePropertyChange(PROP_LOCATION, oldLocation, location);
 	}
@@ -84,5 +85,16 @@ public class UserModel extends AbstractModel implements Comparable<UserModel>,Ic
 	public int compareTo(UserModel o) {
 		return getPresenceFrom().compareTo(o.getPresenceFrom());
 	}
+	
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		super.addPropertyChangeListener(listener);
+		user.addPropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		super.addPropertyChangeListener(listener);
+		user.removePropertyChangeListener(listener);
+	}
+
 
 }

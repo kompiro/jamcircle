@@ -32,10 +32,6 @@ public interface GraphicalEntity extends Entity {
 	@NotNull
 	@Default(value="0")
 	void setY(int y);
-
-	void prepareLocation();
-	
-	void commitLocation();
 	
 	@Ignore
 	boolean isMock();

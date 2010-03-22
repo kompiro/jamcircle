@@ -128,6 +128,10 @@ public class UserEditPart extends AbstractEditPart implements IconEditPart{
 		}
 	}
 
+	protected boolean isPropLocation(PropertyChangeEvent prop) {
+		return UserModel.PROP_LOCATION.equals(prop.getPropertyName());
+	}
+
 	private boolean isPropPresence(PropertyChangeEvent prop) {
 		return UserModel.PROP_PRESENCE.equals(prop.getPropertyName());
 	}

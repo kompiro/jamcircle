@@ -257,5 +257,15 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	public int getID() {
 		return this.id;
 	}
+	
+
+	public void commitLocation() {
+		fireProperty(PROP_COMMIT_LOCATION, null, null);
+	}
+	
+	public void prepareLocation() {
+		fireProperty(PROP_PREPARE_LOCATION, null, null);
+	}
+
 
 }

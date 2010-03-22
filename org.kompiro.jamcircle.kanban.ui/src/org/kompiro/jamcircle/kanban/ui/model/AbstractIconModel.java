@@ -21,10 +21,11 @@ public abstract class AbstractIconModel extends AbstractModel implements IconMod
 	
 	@Override
 	public void setLocation(Point location) {
+		Point oldLocation = getLocation();
 		icon.setX(location.x);
 		icon.setY(location.y);
 		icon.save(false);
-		icon.commitLocation();
+		firePropertyChange(PROP_LOCATION, oldLocation, location);
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener listener) {

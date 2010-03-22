@@ -60,7 +60,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 	private final class LaneLayer extends Layer {
 		
 		public LaneLayer(){
-			addLayoutListener(LayoutAnimator.getDefault());
+//			addLayoutListener(LayoutAnimator.getDefault());
 			setLayoutManager(new FreeformLayout());
 			setOpaque(false);
 		}
@@ -75,7 +75,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 	private final class IconLayer extends Layer {
 		
 		public IconLayer(){
-			addLayoutListener(LayoutAnimator.getDefault());
+//			addLayoutListener(LayoutAnimator.getDefault());
 			setLayoutManager(new FreeformLayout());
 			setOpaque(false);
 		}
