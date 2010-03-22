@@ -181,7 +181,6 @@
 		<copy todir="${buildResultsDirectory}" flatten="true">
 			<fileset dir="${buildDirectory}" includes="${buildType}-**/*.zip" />
 		</copy>
-		<antcall target="javancss"/>
 	</target>
 
 	<!-- ===================================================================== -->
@@ -189,6 +188,7 @@
 	<!-- ===================================================================== -->
 	<property name="buildResultsDirectory" value="${buildDirectory}/results" />
 	<target name="postBuild" depends="-prepareBuildResultsDirectory" unless="no.postBuild">
+		<antcall target="javancss"/>
 		<antcall target="runTests"/>
 		<copy todir="${buildResultsDirectory}" flatten="true">
 			<fileset dir="${buildDirectory}" includes="${buildType}-**/*.zip" />
