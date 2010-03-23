@@ -1,10 +1,17 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.LayerConstants;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.draw2d.*;
+import org.eclipse.gef.*;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
+import org.eclipse.gef.handles.AbstractHandle;
+import org.eclipse.gef.handles.ResizeHandle;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
+import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
 public class ResizableEditPolicyFeedbackFigureExtension extends
 		ResizableEditPolicy {
@@ -35,6 +42,40 @@ public class ResizableEditPolicyFeedbackFigureExtension extends
 			part.reorder(getHost());
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected List createSelectionHandles() {
+		List<AbstractHandle> handles = new ArrayList<AbstractHandle>();
+		GraphicalEditPart part = (GraphicalEditPart) getHost();
+		handles.add(new RoundedMoveHandle(part));
+		handles.add(createHandle(part, PositionConstants.EAST));
+		handles.add(createHandle(part, PositionConstants.SOUTH_EAST));
+		handles.add(createHandle(part, PositionConstants.SOUTH));
+		handles.add(createHandle(part, PositionConstants.SOUTH_WEST));
+		handles.add(createHandle(part, PositionConstants.WEST));
+		handles.add(createHandle(part, PositionConstants.NORTH_WEST));
+		handles.add(createHandle(part, PositionConstants.NORTH));
+		handles.add(createHandle(part, PositionConstants.NORTH_EAST));
+
+		return handles;
+	}
+
+	private AbstractHandle createHandle(GraphicalEditPart owner, int direction) {
+		ResizeHandle handle = new ResizeHandle(owner, direction){
+			@Override
+			protected Color getFillColor() {
+				return WorkbenchUtil.getDisplay().getSystemColor(SWT.COLOR_GRAY);
+			}
+			@Override
+			public void paintFigure(Graphics g) {
+				g.setAlpha(140);
+				super.paintFigure(g);
+			}
+		};
+		return handle;
+	}
+
 	
 	@Override
 	protected IFigure getFeedbackLayer() {
