@@ -152,6 +152,18 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 			params.add(new DBParam(Card.PROP_BOARD,board ));
 		}
 		Card card = getStorageService().createEntity(Card.class,params.toArray(new DBParam[]{}));
+		try{
+			int id = card.getID();
+			EntityManager entityManager = getEntityManager();
+			Card[] results = entityManager.find(Card.class,Card.PROP_ID + " = ?", id);
+			card = results[0];
+		} catch (SQLException e) {
+			StringBuilder paramMessage = new StringBuilder(); 
+			for (DBParam param : params){
+				paramMessage.append(String.format("[%s:'%s'] ", param.getField(),param.getValue()));
+			}
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#createCard() {%s}",paramMessage);
+		}
 		firePropertyChange(Card.class.getSimpleName(), null, card);
 		return card;
 	}

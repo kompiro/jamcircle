@@ -66,14 +66,8 @@ public class KanbanServiceImplTest {
 	public void fireProperiesIsCalledWhenCreateCard() throws Exception {
 		Card cardMock = mock(Card.class);
 		
-		when(managerMock.create(eq(Card.class),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject()
-				)).thenReturn(cardMock);
+		when(storageService.createEntity(eq(Card.class), (DBParam[])any())).thenReturn(cardMock);
+
 		when(managerMock.find((Class<Card>)anyObject(),(String)anyObject(),anyInt())).thenReturn(new Card[]{cardMock});
 		serviceImpl.createCard(null, "test", null, 0, 0);
 		verify(listener).propertyChange(captured.capture());
@@ -87,12 +81,7 @@ public class KanbanServiceImplTest {
 		Card cardMock = mock(Card.class);
 		Card cardClonedMock = mock(Card.class);
 		
-		when(managerMock.create(eq(Card.class),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject()
-				)).thenReturn(cardMock);
+		when(storageService.createEntity(eq(Card.class), (DBParam[])any())).thenReturn(cardMock);
 		when(managerMock.find((Class<Card>)anyObject(),(String)anyObject(),anyInt())).thenReturn(new Card[]{cardMock});
 		serviceImpl.createClonedCard(null, null, cardClonedMock, 0, 0);
 		verify(listener).propertyChange(captured.capture());
@@ -107,13 +96,7 @@ public class KanbanServiceImplTest {
 		Card cardMock = mock(Card.class);
 		CardDTO dtoMock = mock(CardDTO.class);
 		
-		when(managerMock.create(eq(Card.class),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject(),
-				(DBParam)anyObject()
-				)).thenReturn(cardMock);
+		when(storageService.createEntity(eq(Card.class), (DBParam[])any())).thenReturn(cardMock);
 		when(managerMock.find((Class<Card>)anyObject(),(String)anyObject(),anyInt())).thenReturn(new Card[]{cardMock});
 		serviceImpl.createReceiveCard(null, dtoMock ,  null);
 		verify(listener).propertyChange(captured.capture());
@@ -190,28 +173,14 @@ public class KanbanServiceImplTest {
 		Board board = new org.kompiro.jamcircle.kanban.model.mock.Board();
 		User user = new org.kompiro.jamcircle.kanban.model.mock.User();
 		user.setUserId("test");
-		when(storageService.createEntity(eq(Card.class), (DBParam[])any())).thenCallRealMethod();
-		when(managerMock.create(eq(Card.class), (DBParam[])any())).thenCallRealMethod();
+		when(storageService.createEntity(eq(Card.class), (DBParam[])any())).thenReturn(card);
+		when(managerMock.find(eq(Card.class),(String)any(),anyInt())).thenReturn(new Card[]{card});
 		serviceImpl.createClonedCard(board, user, card , 10, 10);
-		ArgumentCaptor<DBParam> arg1 = ArgumentCaptor.forClass(DBParam.class);
-		ArgumentCaptor<DBParam> arg2 = ArgumentCaptor.forClass(DBParam.class);
-		ArgumentCaptor<DBParam> arg3 = ArgumentCaptor.forClass(DBParam.class);
-		ArgumentCaptor<DBParam> arg4 = ArgumentCaptor.forClass(DBParam.class);
-		ArgumentCaptor<DBParam> arg5 = ArgumentCaptor.forClass(DBParam.class);
-		ArgumentCaptor<DBParam> arg6 = ArgumentCaptor.forClass(DBParam.class);
-		ArgumentCaptor<DBParam> arg7 = ArgumentCaptor.forClass(DBParam.class);
-		ArgumentCaptor<DBParam> arg8 = ArgumentCaptor.forClass(DBParam.class);
-		verify(managerMock).create(eq(Card.class),
-				arg1.capture(),
-				arg2.capture(),
-				arg3.capture(),
-				arg4.capture(),
-				arg5.capture(),
-				arg6.capture(),
-				arg7.capture(),
-				arg8.capture()
+		ArgumentCaptor<DBParam[]> arg1 = ArgumentCaptor.forClass(DBParam[].class);
+		verify(storageService).createEntity(eq(Card.class),
+				arg1.capture()
 		);
-		assertThat(arg1.getValue().getValue().toString(),is("card_1"));
+		assertThat(arg1.getValue()[0].getValue().toString(),is("card_1"));
 	}
 
 	private void assertFirePropertyWhenCreated(
