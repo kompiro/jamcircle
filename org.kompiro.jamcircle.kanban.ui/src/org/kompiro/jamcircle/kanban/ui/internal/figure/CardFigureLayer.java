@@ -52,7 +52,6 @@ public class CardFigureLayer extends Layer {
 	private Figure statusSection;
 	private Figure headerSection;
 	private ImageFigure mockImage;
-	private ImageRegistry imageRegistry;
 	private RoundedRectangle figure;
 	
 	public static final int CARD_WIDTH;
@@ -67,12 +66,12 @@ public class CardFigureLayer extends Layer {
 		CARD_HEIGHT = HEADER_SECTION_HEIGHT + height + LINE_WIDTH * 2;
 		CARD_SIZE  = new Dimension(CardFigureLayer.CARD_WIDTH,CardFigureLayer.CARD_HEIGHT);
 	}
+	
 	public CardFigureLayer(){
 		this(null);
 	}
 	
 	public CardFigureLayer(ImageRegistry imageRegisty){
-		this.imageRegistry = imageRegisty;
 		this.figure = new RoundedRectangle(){
 			protected void outlineShape(Graphics graphics) {
 				Rectangle f = Rectangle.SINGLETON;
@@ -130,7 +129,7 @@ public class CardFigureLayer extends Layer {
 		idLabel.setFont(getHeaderFont());
 		
 		mockImage = new ImageFigure();
-		mockImage.setImage(getImageRegistry().get(KanbanImageConstants.MOCK_IMAGE.toString()));
+		mockImage.setImage(KanbanImageConstants.MOCK_IMAGE.getIamge());
 		
 		statusSection = new Figure();
 		statusSection.setLayoutManager(new ToolbarLayout(true));
@@ -141,11 +140,6 @@ public class CardFigureLayer extends Layer {
 		headerSection.add(identitySection,idData);
 		headerSection.add(statusSection,new GridData(GridData.HORIZONTAL_ALIGN_END|GridData.GRAB_HORIZONTAL));
 		mockImage.setVisible(false);
-	}
-
-	private ImageRegistry getImageRegistry() {
-		if(this.imageRegistry == null) this.imageRegistry = JFaceResources.getImageRegistry();
-		return this.imageRegistry;
 	}
 
 	private Font getHeaderFont() {
@@ -194,16 +188,14 @@ public class CardFigureLayer extends Layer {
 
 	public void setId(int id){
 		idLabel.setText("#"+id);
-		IFigure mockIdLabel = new Label("" + id);
-		mockImage.setToolTip(mockIdLabel);
 	}
 	
 	public void setMock(boolean isMock) {
 		mockImage.setVisible(isMock);
+		IFigure mockIdLabel = new Label("create from script");
+		mockImage.setToolTip(mockIdLabel);
 		idLabel.setVisible( ! isMock);
 	}
-	
-
 	
 	public void setColorType(ColorTypes colorType){
 		colorType = setDefaultColorType(colorType);

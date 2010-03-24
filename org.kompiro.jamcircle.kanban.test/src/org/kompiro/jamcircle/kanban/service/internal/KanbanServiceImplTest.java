@@ -1,14 +1,14 @@
 package org.kompiro.jamcircle.kanban.service.internal;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.junit.Assume.assumeNotNull;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Date;
 
 import net.java.ao.DBParam;
 import net.java.ao.EntityManager;
@@ -180,6 +180,38 @@ public class KanbanServiceImplTest {
 		when(storageService.createEntity(User.class, params)).thenCallRealMethod();
 		serviceImpl.addUser(userId);
 		verify(storageService,times(1)).createEntity(User.class, params);
+	}
+	
+	@Test
+	public void createCloneCard() throws Exception {
+		
+		Card card = new org.kompiro.jamcircle.kanban.model.mock.Card();
+		card.setSubject("card_1");
+		Board board = new org.kompiro.jamcircle.kanban.model.mock.Board();
+		User user = new org.kompiro.jamcircle.kanban.model.mock.User();
+		user.setUserId("test");
+		when(storageService.createEntity(eq(Card.class), (DBParam[])any())).thenCallRealMethod();
+		when(managerMock.create(eq(Card.class), (DBParam[])any())).thenCallRealMethod();
+		serviceImpl.createClonedCard(board, user, card , 10, 10);
+		ArgumentCaptor<DBParam> arg1 = ArgumentCaptor.forClass(DBParam.class);
+		ArgumentCaptor<DBParam> arg2 = ArgumentCaptor.forClass(DBParam.class);
+		ArgumentCaptor<DBParam> arg3 = ArgumentCaptor.forClass(DBParam.class);
+		ArgumentCaptor<DBParam> arg4 = ArgumentCaptor.forClass(DBParam.class);
+		ArgumentCaptor<DBParam> arg5 = ArgumentCaptor.forClass(DBParam.class);
+		ArgumentCaptor<DBParam> arg6 = ArgumentCaptor.forClass(DBParam.class);
+		ArgumentCaptor<DBParam> arg7 = ArgumentCaptor.forClass(DBParam.class);
+		ArgumentCaptor<DBParam> arg8 = ArgumentCaptor.forClass(DBParam.class);
+		verify(managerMock).create(eq(Card.class),
+				arg1.capture(),
+				arg2.capture(),
+				arg3.capture(),
+				arg4.capture(),
+				arg5.capture(),
+				arg6.capture(),
+				arg7.capture(),
+				arg8.capture()
+		);
+		assertThat(arg1.getValue().getValue().toString(),is("card_1"));
 	}
 
 	private void assertFirePropertyWhenCreated(

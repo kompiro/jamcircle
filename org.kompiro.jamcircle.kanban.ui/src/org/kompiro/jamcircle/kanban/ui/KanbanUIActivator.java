@@ -101,6 +101,7 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 		initializeImage(reg,KanbanImageConstants.DELETE_IMAGE);
 		initializeImage(reg,KanbanImageConstants.OPEN_IMAGE);
 		initializeImage(reg,KanbanImageConstants.MOCK_IMAGE);
+		initializeImage(reg,KanbanImageConstants.DB_ADD_IMAGE);
 		initializeImage(reg,KanbanImageConstants.FLAG_BLUE_IMAGE);
 		initializeImage(reg,KanbanImageConstants.FLAG_GREEN_IMAGE);
 		initializeImage(reg,KanbanImageConstants.FLAG_ORANGE_IMAGE);

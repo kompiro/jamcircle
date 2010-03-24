@@ -90,6 +90,7 @@ public class CardEditPart extends AbstractEditPart {
 	private Clickable fileIcon;
 	private Clickable colorIcon;
 	private Clickable editIcon;
+	private Clickable storeIcon;
 	
 	private StatusIcon dueIcon;
 	private StatusIcon overDueIcon;
@@ -138,10 +139,31 @@ public class CardEditPart extends AbstractEditPart {
 		createColorIcon();
 		createDeleteAction();
 		createFileIcon();
+		createPageIcon();
+		createStoreIcon();
 
 		userIcon = new StatusIcon(KanbanImageConstants.USER_IMAGE.getIamge());
-		pageIcon = new ClickableActionIcon(KanbanImageConstants.PAGE_IMAGE.getIamge()){
+		completedIcon = new StatusIcon(KanbanImageConstants.COMPLETED_IMAGE.getIamge());
+		dueIcon = new StatusIcon(KanbanImageConstants.CLOCK_IMAGE.getIamge());
+		overDueIcon = new StatusIcon(KanbanImageConstants.CLOCK_RED_IMAGE.getIamge());
+	}
+	
+	private void createStoreIcon() {
+		storeIcon = new ClickableActionIcon(KanbanImageConstants.DB_ADD_IMAGE.getIamge()){
+			public void actionPerformed(ActionEvent event) {
+				Card card = getCardModel();
+				CardContainer container = (CardContainer)CardEditPart.this.getParent().getModel();
+				CompoundCommand command = new CompoundCommand();
+				command.add(new CardStoreCommand((org.kompiro.jamcircle.kanban.model.mock.Card) card, container));
+				command.add(new RemoveCardCommand(card, container));
+				getCommandStack().execute(command);
+			}
+		};
+	}
 
+
+	private void createPageIcon() {
+		pageIcon = new ClickableActionIcon(KanbanImageConstants.PAGE_IMAGE.getIamge()){
 			public void actionPerformed(ActionEvent event) {
 				Shell shell = getShell();
 				Card card = getCardModel();
@@ -151,11 +173,7 @@ public class CardEditPart extends AbstractEditPart {
 				dialog.create();
 				dialog.open();
 			}
-			
 		};
-		completedIcon = new StatusIcon(KanbanImageConstants.COMPLETED_IMAGE.getIamge());
-		dueIcon = new StatusIcon(KanbanImageConstants.CLOCK_IMAGE.getIamge());
-		overDueIcon = new StatusIcon(KanbanImageConstants.CLOCK_RED_IMAGE.getIamge());
 	}
 
 	private void createFileIcon() {
@@ -238,6 +256,9 @@ public class CardEditPart extends AbstractEditPart {
 		createIcons();
 		hideActionIcons();
 		IFigure actionSection = getCardFigure().getActionSection();
+		if(getCardModel().isMock()){
+			actionSection.add(storeIcon);
+		}
 		actionSection.add(flagEditIcon);
 		actionSection.add(editIcon);
 		actionSection.add(colorIcon);
@@ -328,14 +349,6 @@ public class CardEditPart extends AbstractEditPart {
 			completedIcon.setToolTip(null);
 		}
 	}
-
-	@Override
-	public void deactivate() {
-		if(PlatformUI.isWorkbenchRunning()){
-		}
-		super.deactivate();
-	}
-
 
 	/**
 	 * Lane and Board needs command when request type is REQ_ADD.
@@ -568,6 +581,7 @@ public class CardEditPart extends AbstractEditPart {
 	}
 
 	private void showActionIcons() {
+		storeIcon.setVisible(true);
 		flagEditIcon.setVisible(true);
 		colorIcon.setVisible(true);
 		editIcon.setVisible(true);
@@ -575,6 +589,7 @@ public class CardEditPart extends AbstractEditPart {
 	}
 
 	private void hideActionIcons() {
+		storeIcon.setVisible(false);
 		flagEditIcon.setVisible(false);
 		editIcon.setVisible(false);
 		colorIcon.setVisible(false);

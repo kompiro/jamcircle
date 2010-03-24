@@ -38,6 +38,7 @@ public enum KanbanImageConstants {
 	DELETE_IMAGE("cross.png"),
 	OPEN_IMAGE("door_open.png"),
 	MOCK_IMAGE("script_gear.png"),
+	DB_ADD_IMAGE("database_add.png"),
 	FLAG_BLUE_IMAGE("flags/flag_blue.gif"),
 	FLAG_GREEN_IMAGE("flags/flag_green.gif"),
 	FLAG_ORANGE_IMAGE("flags/flag_orange.gif"),
