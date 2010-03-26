@@ -7,7 +7,6 @@ import org.kompiro.jamcircle.kanban.ui.command.AbstractCommand;
 /**
  * This command store card to Database from Mock.
  * @author kompiro
- *
  */
 public class CardStoreCommand extends AbstractCommand{
 	
