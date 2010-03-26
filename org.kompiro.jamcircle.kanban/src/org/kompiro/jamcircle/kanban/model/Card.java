@@ -127,8 +127,4 @@ public interface Card extends HasColorTypeEntity{
 	@Ignore
 	String getFilePath();
 
-	void prepareLocation();
-	
-	void commitLocation();
-
 }

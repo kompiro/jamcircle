@@ -85,10 +85,12 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 	private CutAction cutHandler;
 	private CellEditorActionHandler handlers;
 	private IconModelFactory iconModelFactory;
-	private CaptureBoardAction caputureBoardAction;
+	private IAction caputureBoardAction;
 	private ScalableRootEditPart rootPart;
 	private ZoomInAction zoomInAction;
 	private ZoomOutAction zoomOutAction;
+
+	private IAction editBoardAction;
 
 
 	public KanbanView() {
@@ -165,6 +167,8 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 		openCommandListAction = new OpenCommandListAction(this);
 		
 		caputureBoardAction = new CaptureBoardAction(this);
+		editBoardAction = new EditBoardAction(this,getImageRegistry());
+		
 		zoomInAction = new ZoomInAction(rootPart.getZoomManager());
 		grobalActivateAction(zoomInAction);
 		zoomOutAction = new ZoomOutAction(rootPart.getZoomManager());
@@ -199,6 +203,8 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 	private void fillContextMenu(IMenuManager menuManager) {
 		if(getGraphicalViewer().getProperty(BoardDragTracker.PROPERTY_DRAG_TO_MOVE_VIEWPOINT) == null){
 			menuManager.add(caputureBoardAction);
+			menuManager.add(editBoardAction);
+			menuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 			menuManager.add(zoomInAction);
 			menuManager.add(zoomOutAction);
 			menuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
@@ -212,6 +218,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 			copyHandler.update();
 			menuManager.add(copyHandler);
 			menuManager.add(pasteHandler);
+			menuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 			menuManager.add(openCardListAction);
 			menuManager.add(openCommandListAction);
 			menuManager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));

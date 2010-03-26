@@ -6,13 +6,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.operation.IRunnableContext;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.*;
@@ -26,35 +24,11 @@ import org.eclipse.ui.progress.IProgressService;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.ui.*;
 import org.kompiro.jamcircle.kanban.ui.dialog.BoardEditDialog;
+import org.kompiro.jamcircle.kanban.ui.internal.OpenBoardRunnableWithProgress;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
-import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class BoardListTableViewer implements PropertyChangeListener {
-
-	private final class OpenBoardRunnableWithProgress implements
-			IRunnableWithProgress {
-		public void run(IProgressMonitor monitor)
-		throws InvocationTargetException,
-		InterruptedException {
-			monitor.beginTask("change board", 21);
-			monitor.subTask("get KanbanView");
-			ISelection sel = viewer.getSelection();
-			if (!(sel instanceof StructuredSelection))return;
-			StructuredSelection selection = (StructuredSelection) sel;
-			if(selection.size() != 1) return;
-			Object obj = selection.getFirstElement();
-			if (!(obj instanceof BoardWrapper)) return;
-			BoardWrapper wrapper = (BoardWrapper) obj;
-			Board board = wrapper.getBoard();
-			KanbanView view = WorkbenchUtil.findKanbanView();
-			if(view == null) throw new IllegalStateException("can't find KanbanView");
-			monitor.internalWorked(3);
-			view.setContents(board,monitor);
-			monitor.done();
-		}
-
-	}
 
 	public final class BoardWrapper implements TableListWrapper {
 		private Board board;
@@ -361,10 +335,19 @@ public class BoardListTableViewer implements PropertyChangeListener {
 	}
 
 	private void openBoard() {
+		ISelection sel = viewer.getSelection();
+		if (!(sel instanceof StructuredSelection))return;
+		StructuredSelection selection = (StructuredSelection) sel;
+		if(selection.size() != 1) return;
+		Object obj = selection.getFirstElement();
+		if (!(obj instanceof BoardWrapper)) return;
+		BoardWrapper wrapper = (BoardWrapper) obj;
+		Board board = wrapper.getBoard();
+		if(board == null) return;
 		IProgressService service = (IProgressService) PlatformUI.getWorkbench().getService(IProgressService.class);
 		IRunnableContext context = new ProgressMonitorDialog(viewer.getControl().getShell());
 		try {
-			service.runInUI(context,new OpenBoardRunnableWithProgress(),null);
+			service.runInUI(context,new OpenBoardRunnableWithProgress(board),null);
 		} catch (InvocationTargetException ex) {
 			KanbanUIStatusHandler.fail(ex.getTargetException(), "Opening Kanban Board is failed.");
 		} catch (InterruptedException ex) {

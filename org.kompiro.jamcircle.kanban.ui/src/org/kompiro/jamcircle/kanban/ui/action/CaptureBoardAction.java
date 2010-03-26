@@ -7,7 +7,6 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.parts.GraphicalViewerImpl;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.*;
@@ -16,7 +15,6 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 
 public class CaptureBoardAction extends Action{
 
@@ -24,7 +22,7 @@ public class CaptureBoardAction extends Action{
 		private Shell parentShell;
 		public SaveImageAction(Shell parentShell) {
 			super("&Save");
-			setImageDescriptor(getImageRegistry().getDescriptor(KanbanImageConstants.SAVE_IMAGE.toString()));
+			setImageDescriptor(KanbanImageConstants.SAVE_IMAGE.getImageDescriptor());
 			this.parentShell = parentShell;
 		}
 		
@@ -56,7 +54,7 @@ public class CaptureBoardAction extends Action{
 		protected void configureShell(Shell shell) {
 			super.configureShell(shell);
 			shell.setText("Captured Board");
-			shell.setImage(getImageRegistry().get(KanbanImageConstants.CAMERA_IMAGE.toString()));
+			shell.setImage(KanbanImageConstants.CAMERA_IMAGE.getIamge());
 		}
 
 		@Override
@@ -86,7 +84,7 @@ public class CaptureBoardAction extends Action{
 	public CaptureBoardAction(IWorkbenchPart part) {
 		super("Capture Board");
 		setText("Capture Board");
-		setImageDescriptor(getImageRegistry().getDescriptor(KanbanImageConstants.CAMERA_IMAGE.toString()));
+		setImageDescriptor(KanbanImageConstants.CAMERA_IMAGE.getImageDescriptor());
 		this.part = part;
 	}
 	
@@ -110,10 +108,6 @@ public class CaptureBoardAction extends Action{
 		window.getToolBarManager().add(saveAction);
 		window.open();
 		shown.dispose();
-	}
-
-	private ImageRegistry getImageRegistry() {
-		return KanbanUIActivator.getDefault().getImageRegistry();
 	}
 
 }

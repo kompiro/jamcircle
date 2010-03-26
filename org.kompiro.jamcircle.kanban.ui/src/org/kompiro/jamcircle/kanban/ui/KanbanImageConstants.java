@@ -5,8 +5,7 @@ import java.net.URL;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.resource.*;
 import org.eclipse.swt.graphics.Image;
 
 public enum KanbanImageConstants {
@@ -72,6 +71,10 @@ public enum KanbanImageConstants {
 		KanbanUIActivator activator = KanbanUIActivator.getDefault();
 		if(activator == null) return JFaceResources.getImageRegistry();
 		return activator.getImageRegistry();
+	}
+
+	public ImageDescriptor getImageDescriptor() {
+		return getImageRegistry().getDescriptor(name());
 	}
 
 }

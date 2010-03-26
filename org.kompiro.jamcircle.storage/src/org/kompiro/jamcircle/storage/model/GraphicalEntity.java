@@ -31,6 +31,18 @@ public interface GraphicalEntity extends Entity {
 	@Default(value="0")
 	void setY(int y);
 	
+	/**
+	 * prepared to move location
+	 */
+	@Ignore
+	void prepareLocation();
+	
+	/**
+	 * commited the location of this model
+	 */
+	@Ignore
+	void commitLocation();
+	
 	@Ignore
 	boolean isMock();
 
