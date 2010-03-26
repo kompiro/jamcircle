@@ -167,7 +167,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 		openCommandListAction = new OpenCommandListAction(this);
 		
 		caputureBoardAction = new CaptureBoardAction(this);
-		editBoardAction = new EditBoardAction(this,getImageRegistry());
+		editBoardAction = new EditBoardAction(this);
 		
 		zoomInAction = new ZoomInAction(rootPart.getZoomManager());
 		grobalActivateAction(zoomInAction);

@@ -6,7 +6,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableContext;
-import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
@@ -21,7 +20,7 @@ public class EditBoardAction extends Action{
 
 	private KanbanView view;
 
-	public EditBoardAction(KanbanView kanbanView, ImageRegistry imageRegistry) {
+	public EditBoardAction(KanbanView kanbanView) {
 		setText("Edit Board");
 		setToolTipText("Open board dialog to edit.");
 		setImageDescriptor(KanbanImageConstants.EDIT_IMAGE.getImageDescriptor());
