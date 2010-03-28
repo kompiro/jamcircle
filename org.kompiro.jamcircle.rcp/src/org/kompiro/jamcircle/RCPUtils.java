@@ -30,7 +30,7 @@ public class RCPUtils {
 	
 	public static boolean isWindows(){
 		String platform = SWT.getPlatform();
-		return "win32".equals (platform) || "wpf".equals (platform);
+		return "win32".equals (platform) || "wpf".equals (platform); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	public static void modifyAlphaForSurface(Shell shell) {
@@ -59,7 +59,7 @@ public class RCPUtils {
 
 	private static void modifyAlphaForDropout(final Shell shell,final int alpha) {
 		if(
-				RCPUtils.isWindows() == false ||
+//				RCPUtils.isWindows() == false ||
 				alpha >= 256){ 
 			shell.setAlpha(0);
 			shell.setVisible(false);

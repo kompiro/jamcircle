@@ -13,7 +13,7 @@ import org.osgi.framework.BundleContext;
  */
 public class RCPActivator extends AbstractUIPlugin {
 
-	public static final String PLUGIN_ID = "org.kompiro.jamcircle.rcp";
+	public static final String PLUGIN_ID = "org.kompiro.jamcircle.rcp"; //$NON-NLS-1$
 
 	private static RCPActivator plugin;
 	
@@ -40,13 +40,13 @@ public class RCPActivator extends AbstractUIPlugin {
 	
 	@Override
 	protected void initializeImageRegistry(ImageRegistry reg) {
-		reg.put(ImageConstants.APPLICATION_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/kanban.gif"));
-		reg.put(ImageConstants.APPLICATION_OFF_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/kanban_off.gif"));
-		reg.put(ImageConstants.EXIT_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/door_out.png"));
+		reg.put(ImageConstants.APPLICATION_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/kanban.gif")); //$NON-NLS-1$
+		reg.put(ImageConstants.APPLICATION_OFF_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/kanban_off.gif")); //$NON-NLS-1$
+		reg.put(ImageConstants.EXIT_IMAGE.toString(), imageDescriptorFromPlugin(PLUGIN_ID, "icons/door_out.png")); //$NON-NLS-1$
 	}
 	
 	public void logError(Exception e){
-		logError("error has occured.",e);
+		logError(Messages.RCPActivator_error,e);
 	}
 
 	public void logError(String message,Exception e){

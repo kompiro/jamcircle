@@ -10,6 +10,11 @@ import org.kompiro.jamcircle.rcp.internal.preferences.PreferenceConstants;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
+	public static final String APP_NAME = "JAM Circle"; //$NON-NLS-1$
+	private static final String CONVERST_LINE_DELIMITERS_TO = "converstLineDelimitersTo";//$NON-NLS-1$
+	private static final String ORG_ECLIPSE_UI_OPEN_LOCAL_FILE = "org.eclipse.ui.openLocalFile"; //$NON-NLS-1$
+	private static final String FILE = "file"; //$NON-NLS-1$
+
 	public ApplicationWorkbenchWindowAdvisor(
 			IWorkbenchWindowConfigurer configurer) {
 		super(configurer);
@@ -29,7 +34,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowFastViewBars(true);
 		configurer.setShowStatusLine(true);
 		configurer.setShowProgressIndicator(true);
-		configurer.setTitle("JAM Circle");
+		configurer.setTitle(APP_NAME);
 	}
 	
 	
@@ -79,9 +84,10 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	
 	private void hideMenus() {
 		IMenuManager menuManager = getWindowConfigurer().getActionBarConfigurer().getMenuManager();
-		IMenuManager fileMenu = menuManager.findMenuUsingPath("file");
-		fileMenu.remove("org.eclipse.ui.openLocalFile");
-		fileMenu.remove("converstLineDelimitersTo");
+		IMenuManager fileMenu = menuManager.findMenuUsingPath(FILE);
+		fileMenu.remove(ORG_ECLIPSE_UI_OPEN_LOCAL_FILE);
+		fileMenu.remove(CONVERST_LINE_DELIMITERS_TO);
+		
 	}
 
 	@Override

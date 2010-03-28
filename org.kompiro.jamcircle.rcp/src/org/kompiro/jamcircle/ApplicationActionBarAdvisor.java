@@ -67,21 +67,21 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	private void createHelpMenu(IMenuManager menuBar) {
-		MenuManager helpMenu = new MenuManager("&Help", IWorkbenchActionConstants.M_HELP);
+		MenuManager helpMenu = new MenuManager(Messages.ApplicationActionBarAdvisor_Help, IWorkbenchActionConstants.M_HELP);
 		helpMenu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 		helpMenu.add(aboutAction);
 		menuBar.add(helpMenu);
 	}
 
 	private void createWindowMenu(IMenuManager menuBar) {
-		MenuManager windowMenu = new MenuManager("&Window", IWorkbenchActionConstants.M_WINDOW);
+		MenuManager windowMenu = new MenuManager(Messages.ApplicationActionBarAdvisor_Window, IWorkbenchActionConstants.M_WINDOW);
 		windowMenu.add(new Separator(IWorkbenchActionConstants.ADD_EXT));
 		windowMenu.add(preferenceAction);
 		menuBar.add(windowMenu);
 	}
 
 	private void createEditMenu(IMenuManager menuBar) {
-		MenuManager editMenu = new MenuManager("&Edit", IWorkbenchActionConstants.M_EDIT);
+		MenuManager editMenu = new MenuManager(Messages.ApplicationActionBarAdvisor_Edit, IWorkbenchActionConstants.M_EDIT);
 		editMenu.add(undoAction);
 		editMenu.add(redoAction);
 		editMenu.add(new Separator(IWorkbenchActionConstants.UNDO_EXT));
@@ -97,7 +97,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	private void createFileMenu(IMenuManager menuBar) {
-		MenuManager fileMenu = new MenuManager("&File", IWorkbenchActionConstants.M_FILE);
+		MenuManager fileMenu = new MenuManager(Messages.ApplicationActionBarAdvisor_File, IWorkbenchActionConstants.M_FILE);
 		fileMenu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 		fileMenu.add(newAction);
 		fileMenu.add(new Separator(IWorkbenchActionConstants.LAUNCH_EXT));

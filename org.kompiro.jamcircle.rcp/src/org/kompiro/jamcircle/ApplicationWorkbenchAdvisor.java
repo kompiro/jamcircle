@@ -13,8 +13,10 @@ import org.eclipse.ui.statushandlers.StatusManager;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
-	private static final String ID_OF_PERSPECTIVE_KANBAN = "org.kompiro.jamcircle.kanban.ui.perspective.kanban";
-    private static final String ID_OF_PERSPECTIVE_FRIENDS = "org.kompiro.jamcircle.xmpp.ui.perspective.friends";
+	private static final String WIN32_KEY_STATE_MANAGER = "org.kompiro.jamcircle.rcp.win32.internal.KeyStateManagerFowWin32"; //$NON-NLS-1$
+	private static final String ID_SEPARATOR = ","; //$NON-NLS-1$
+	private static final String ID_OF_PERSPECTIVE_KANBAN = "org.kompiro.jamcircle.kanban.ui.perspective.kanban"; //$NON-NLS-1$
+    private static final String ID_OF_PERSPECTIVE_FRIENDS = "org.kompiro.jamcircle.xmpp.ui.perspective.friends"; //$NON-NLS-1$
 	private IKeyStateManager manager = null;
 	private TrayItem trayItem;
 	private KeyEventListener listener;
@@ -23,14 +25,14 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	public ApplicationWorkbenchAdvisor() {
 		String className = null;
 		if (RCPUtils.isWindows()) {
-			className = "org.kompiro.jamcircle.rcp.win32.internal.KeyStateManagerFowWin32";
+			className = WIN32_KEY_STATE_MANAGER;
 		}
 		if (className != null){
 			try {
 				Class<?> clazz = Class.forName(className);
 				manager = (IKeyStateManager) clazz.newInstance();
 			} catch (Exception e) {
-				IStatus status = new Status(IStatus.ERROR, RCPActivator.PLUGIN_ID, "Error has occured",e);
+				IStatus status = new Status(IStatus.ERROR, RCPActivator.PLUGIN_ID, Messages.ApplicationWorkbenchAdvisor_error,e);
 				StatusManager.getManager().handle(status);
 			}
 		}
@@ -47,7 +49,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	@Override
 	public void initialize(IWorkbenchConfigurer configurer) {
 		configurer.setExitOnLastWindowClose(false);
-		String defaultPerspective = ID_OF_PERSPECTIVE_KANBAN + "," + ID_OF_PERSPECTIVE_FRIENDS;
+		String defaultPerspective = ID_OF_PERSPECTIVE_KANBAN + ID_SEPARATOR + ID_OF_PERSPECTIVE_FRIENDS;
 		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.SHOW_PROGRESS_ON_STARTUP, false);
 		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.PERSPECTIVE_BAR_EXTRAS, defaultPerspective);
 		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.INITIAL_FAST_VIEW_BAR_LOCATION, IWorkbenchPreferenceConstants.LEFT);
@@ -72,7 +74,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	@Override
 	public void postStartup() {
 		trayItem.setImage(getAppImage());
-		showToolTip("Started JAM Circle.", "Please double click me!");
+		showToolTip(Messages.ApplicationWorkbenchAdvisor_started_title, Messages.ApplicationWorkbenchAdvisor_started_message);
 	}
 
 	private void initalizeManager() {
@@ -91,8 +93,8 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		Tray tray = display.getSystemTray();
 		trayItem = new TrayItem(tray, SWT.NONE);
 		trayItem.setImage(getAppOffImage());
-		trayItem.setText("JAM Circle");
-		trayItem.setToolTipText("Double click if you want to open board.");
+		trayItem.setText(ApplicationWorkbenchWindowAdvisor.APP_NAME);
+		trayItem.setToolTipText(Messages.ApplicationWorkbenchAdvisor_icon_tooltip);
 		trayItem.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -112,7 +114,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 						shell.dispose();
 					}
 				});
-				open.setText("&Open Board");
+				open.setText(Messages.ApplicationWorkbenchAdvisor_open_menu);
 				open.setImage(getAppImage());
 //				MenuItem separator = 
 					new MenuItem(menu, SWT.SEPARATOR);
@@ -124,7 +126,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 						shell.dispose();
 					}
 				});
-				exit.setText("&Exit JAM Circle");
+				exit.setText(Messages.ApplicationWorkbenchAdvisor_exit_menu);
 				exit.setImage(getExitImage());
 				menu.setVisible(true);
 			}
@@ -170,7 +172,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	}
 
 	private void showBoard(Shell shell) {
-		showToolTip("Open Board");
+		showToolTip(Messages.ApplicationWorkbenchAdvisor_open_message);
 		RCPUtils.modifyAlphaForSurface(shell);
 		shell.setMinimized(false);
 //		closeToolTip();
