@@ -114,6 +114,8 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 				});
 				open.setText("&Open Board");
 				open.setImage(getAppImage());
+//				MenuItem separator = 
+					new MenuItem(menu, SWT.SEPARATOR);
 				MenuItem exit = new MenuItem(menu, SWT.POP_UP);
 				exit.addSelectionListener(new SelectionAdapter(){
 					public void widgetSelected(SelectionEvent e) {
@@ -127,8 +129,6 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 				menu.setVisible(true);
 			}
 		});
-		
-		showToolTip("Welcome JAM Circle world.", "starting JAM Circle.");
 	}
 
 
@@ -170,7 +170,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	}
 
 	private void showBoard(Shell shell) {
-		showToolTip("Opening Board","JAM Circle's board is open.");
+		showToolTip("Open Board");
 		RCPUtils.modifyAlphaForSurface(shell);
 		shell.setMinimized(false);
 //		closeToolTip();
@@ -181,13 +181,17 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		closeToolTip();
 	}
 	
+	private void showToolTip(String title){
+		showToolTip(title, null);
+	}
+	
 	private void showToolTip(String title, String message){
 		if(tip != null){
 			closeToolTip();
 		}
 		tip = new ToolTip(new Shell(getDisplay()) , SWT.BALLOON | SWT.ICON_INFORMATION);
 		tip.setText(title);
-		tip.setMessage(message);
+		if(message != null)	tip.setMessage(message);
 		trayItem.setToolTip(tip);
 		tip.setVisible(true);					
 	}

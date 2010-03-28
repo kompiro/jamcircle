@@ -47,4 +47,18 @@
          </property>
       </product>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.kompiro.jamcircle.rcp.internal.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.kompiro.jamcircle.rcp.internal.preferences.RCPPreferencePage"
+            id="org.kompiro.jamcircle.preference"
+            name="JAMCircle">
+      </page>
+   </extension>
 </plugin>

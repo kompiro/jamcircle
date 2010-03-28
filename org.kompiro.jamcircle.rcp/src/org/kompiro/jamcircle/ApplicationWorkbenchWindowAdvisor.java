@@ -1,10 +1,12 @@
 package org.kompiro.jamcircle;
 
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.application.*;
+import org.kompiro.jamcircle.rcp.internal.preferences.PreferenceConstants;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
@@ -53,14 +55,26 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		
 	@Override
 	public void postWindowCreate() {
-		hideMenus();
-		getShell().setMinimized(true);
+		if(isMinimized()){
+			hideMenus();
+			getShell().setMinimized(true);
+		}
 	}
 	
 	@Override
 	public void postWindowOpen() {
-		getShell().setAlpha(0);
-		getShell().setVisible(false);
+		if(isMinimized()){
+			getShell().setAlpha(0);
+			getShell().setVisible(false);
+		}
+	}
+
+	private boolean isMinimized() {
+		RCPActivator activator = RCPActivator.getDefault();
+		if(activator == null ) return false;
+		IPreferenceStore preferenceStore = activator.getPreferenceStore();
+		if(preferenceStore == null) return false;
+		return preferenceStore.getBoolean(PreferenceConstants.MINIMIZED);
 	}
 	
 	private void hideMenus() {
