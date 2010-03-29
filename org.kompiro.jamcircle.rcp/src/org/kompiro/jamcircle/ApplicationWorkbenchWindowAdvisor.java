@@ -4,6 +4,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.application.*;
 import org.kompiro.jamcircle.rcp.internal.preferences.PreferenceConstants;
@@ -13,7 +14,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	public static final String APP_NAME = "JAM Circle"; //$NON-NLS-1$
 	private static final String CONVERST_LINE_DELIMITERS_TO = "converstLineDelimitersTo";//$NON-NLS-1$
 	private static final String ORG_ECLIPSE_UI_OPEN_LOCAL_FILE = "org.eclipse.ui.openLocalFile"; //$NON-NLS-1$
-	private static final String FILE = "file"; //$NON-NLS-1$
 
 	public ApplicationWorkbenchWindowAdvisor(
 			IWorkbenchWindowConfigurer configurer) {
@@ -60,10 +60,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		
 	@Override
 	public void postWindowCreate() {
-		if(isMinimized()){
-			hideMenus();
-			getShell().setMinimized(true);
-		}
+		hideMenus();
+		getShell().setMinimized(isMinimized());
 	}
 	
 	@Override
@@ -84,7 +82,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	
 	private void hideMenus() {
 		IMenuManager menuManager = getWindowConfigurer().getActionBarConfigurer().getMenuManager();
-		IMenuManager fileMenu = menuManager.findMenuUsingPath(FILE);
+		IMenuManager fileMenu = menuManager.findMenuUsingPath(IWorkbenchActionConstants.M_FILE);
 		fileMenu.remove(ORG_ECLIPSE_UI_OPEN_LOCAL_FILE);
 		fileMenu.remove(CONVERST_LINE_DELIMITERS_TO);
 		
