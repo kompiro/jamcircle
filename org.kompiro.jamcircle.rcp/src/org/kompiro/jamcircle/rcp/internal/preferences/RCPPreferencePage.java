@@ -12,14 +12,14 @@ public class RCPPreferencePage
 	public RCPPreferencePage() {
 		super(GRID);
 		setPreferenceStore(RCPActivator.getDefault().getPreferenceStore());
-		setDescription("JAMCircle preference");
+		setDescription(Messages.RCPPreferencePage_description);
 	}
 	
 	public void createFieldEditors() {
 		addField(
 			new BooleanFieldEditor(
 				PreferenceConstants.MINIMIZED,
-				"&Minimized when launch JAMCircle",
+				Messages.RCPPreferencePage_minimized_message,
 				getFieldEditorParent()));
 
 	}

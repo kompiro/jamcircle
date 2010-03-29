@@ -5,6 +5,6 @@ package org.kompiro.jamcircle.rcp.internal.preferences;
  */
 public class PreferenceConstants {
 
-	public static final String MINIMIZED = "minimized";
+	public static final String MINIMIZED = "minimized"; //$NON-NLS-1$
 	
 }
