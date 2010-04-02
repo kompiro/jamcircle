@@ -7,7 +7,9 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPart;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.eclipse.gef.view.finder.widgets.*;
+import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferenceConstants;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.kompiro.jamcircle.kanban.ui.KanbanPerspective;
@@ -22,7 +24,14 @@ public class EditPartBotSmokeTest{
 
 	@Before
 	public void before() throws Exception {
+		System.setProperty(SWTBotPreferenceConstants.KEY_TIMEOUT,"1000");
 		SWTGefViewBot bot = new SWTGefViewBot();
+		SWTBotView viewById;
+		try {
+			viewById = bot.viewById("org.eclipse.ui.internal.introview");
+			viewById.close();
+		} catch (WidgetNotFoundException e) {
+		}
 		bot.perspectiveById(KanbanPerspective.ID).activate();
 		SWTBotView activeView = bot.viewById(KanbanView.ID);
 		activeView.show();
