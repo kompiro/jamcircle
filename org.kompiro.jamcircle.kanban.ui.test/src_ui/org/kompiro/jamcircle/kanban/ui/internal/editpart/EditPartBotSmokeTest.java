@@ -10,6 +10,7 @@ import org.eclipse.swtbot.eclipse.gef.view.finder.widgets.*;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.junit.*;
 import org.junit.runner.RunWith;
+import org.kompiro.jamcircle.kanban.ui.KanbanPerspective;
 import org.kompiro.jamcircle.kanban.ui.KanbanView;
 import org.kompiro.jamcircle.kanban.ui.model.BoardSelecterModel;
 import org.kompiro.jamcircle.kanban.ui.model.InboxIconModel;
@@ -22,8 +23,11 @@ public class EditPartBotSmokeTest{
 	@Before
 	public void before() throws Exception {
 		SWTGefViewBot bot = new SWTGefViewBot();
+		bot.perspectiveById(KanbanPerspective.ID).activate();
 		SWTBotView activeView = bot.viewById(KanbanView.ID);
-		view = bot.createView(activeView.getReference(),bot);		
+		activeView.show();
+		
+		view = bot.createView(activeView.getReference(),bot);
 	}
 	
 	@After
