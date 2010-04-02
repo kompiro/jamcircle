@@ -37,8 +37,8 @@
 		<antcall target="-emmaInstrument"/>
 		<unzip dest="${test.eclipseExtensionDirectory}/..">
 			<fileset dir="." includes="eclipse-test-framework*.zip" />
-			<fileset dir="." includes="org.eclipse.swtbot.eclipse-*.zip" />
 			<!--
+			<fileset dir="." includes="org.eclipse.swtbot.eclipse*.zip" />
 			<fileset dir="." includes="org.kompiro.jamcircle.libralies-*.zip" />
 			-->
 		</unzip>
