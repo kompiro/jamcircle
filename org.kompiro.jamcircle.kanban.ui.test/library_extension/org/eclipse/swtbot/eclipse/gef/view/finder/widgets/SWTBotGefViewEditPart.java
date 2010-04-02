@@ -159,6 +159,12 @@ public class SWTBotGefViewEditPart {
 		graphicalEditorView.getCanvas().mouseMoveDoubleClick(bounds.x, bounds.y);
 		return this;
 	}
+	
+	public SWTBotGefViewEditPart doubleClick(Point location) {
+		graphicalEditorView.getCanvas().mouseMoveDoubleClick(location.x, location.y);
+		return this;
+	}
+
 
 	private Rectangle getBounds() {
 		final IFigure figure = ((GraphicalEditPart) part).getFigure();
