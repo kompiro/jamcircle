@@ -60,6 +60,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.DISABLE_NEW_FAST_VIEW, true);
 		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.SHOW_TRADITIONAL_STYLE_TABS, false);
 		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.SHOW_INTRO, false);
+		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.DEFAULT_PERSPECTIVE_ID, ID_OF_PERSPECTIVE_KANBAN);
 	}
 	
 	@Override
