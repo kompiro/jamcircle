@@ -28,7 +28,7 @@ public class LaneCreaterEditPart extends AbstractEditPart implements IconEditPar
 	@Override
 	protected IFigure createFigure() {
 		LaneIconFigure laneIconFigure = new LaneIconFigure();
-		laneIconFigure.setStatus("Create");
+		laneIconFigure.setStatus(getLaneCreaterModel().getName());
 		Image addImage = KanbanUIActivator.getDefault().getImageRegistry().get(KanbanImageConstants.ADD_IMAGE.toString());
 		ImageFigure addFigure = new ImageFigure(addImage);
 		laneIconFigure.add(addFigure, new Rectangle(72-20,72-20,16,16));

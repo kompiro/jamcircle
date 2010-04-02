@@ -28,6 +28,9 @@ public class MoveIconCommandTest extends AbstractCommandTest {
 		icon = mock(Icon.class);
 		model = new AbstractIconModel(icon){
 			private static final long serialVersionUID = 1L;
+			public String getName() {
+				return "mock";
+			}
 		};
 		command.setModel(model);
 		command.initialize();
@@ -73,6 +76,10 @@ public class MoveIconCommandTest extends AbstractCommandTest {
 		icon = mock(Icon.class);
 		model = new AbstractIconModel(icon){
 			private static final long serialVersionUID = 1L;
+			public String getName() {
+				return "mock";
+			}
+			
 		};
 		command.setModel(model);
 		Rectangle rect = new Rectangle(EXPECTED_X, EXPECTED_Y, 70, 70);

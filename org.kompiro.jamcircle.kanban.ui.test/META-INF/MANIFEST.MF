@@ -14,3 +14,9 @@ Require-Bundle: org.junit4,
  org.eclipse.swtbot.junit4_x,
  org.eclipse.swtbot.swt.finder
 Bundle-RegisterBuddy: org.mockito,org.apache.log4j
+Import-Package: org.eclipse.swtbot.eclipse.gef.finder,
+ org.eclipse.swtbot.eclipse.gef.finder.finders,
+ org.eclipse.swtbot.eclipse.gef.finder.matchers,
+ org.eclipse.swtbot.eclipse.gef.finder.widgets,
+ org.eclipse.swtbot.eclipse.gef.view.finder.widgets
+Export-Package: org.eclipse.swtbot.eclipse.gef.view.finder.widgets

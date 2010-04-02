@@ -8,6 +8,8 @@ import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 
 public class InboxIconModel extends AbstractIconModel implements CardContainer{
 
+	public static final String NAME = "INBOX";
+
 	private static final long serialVersionUID = -6517334594320763535L;
 	private static final String PROP_CARD = "inbox card";
 
@@ -32,7 +34,11 @@ public class InboxIconModel extends AbstractIconModel implements CardContainer{
 	}
 
 	public String getContainerName() {
-		return "INBOX";
+		return NAME;
+	}
+	
+	public String getName(){
+		return NAME;
 	}
 
 	public boolean removeCard(Card card) {

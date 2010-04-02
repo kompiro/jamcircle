@@ -78,7 +78,7 @@ public class BoardSelecterEditPart extends AbstractIconEditPart{
 
 	@Override
 	protected String getImageLabel() {
-		return "Select";
+		return getBoardSelecterModel().getName();
 	}
 
 	@Override

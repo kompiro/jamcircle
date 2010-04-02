@@ -8,11 +8,13 @@ import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 public class TrashModel extends AbstractIconModel implements CardContainer,LaneContainer {
-	private static final long serialVersionUID = 33231939397478655L;
+	public static final String NAME = "Trash";
+
 	public static String PROP_CARD = "trash card";
 	public static String PROP_LANE = "trash lane";
 	private KanbanService kanbanService;
 	private ConfirmStrategy confirmStrategy = new MessageDialogConfirmStrategy();
+	private static final long serialVersionUID = 33231939397478655L;
 
 	public TrashModel(Icon icon,KanbanService kanbanService){
 		super(icon);
@@ -122,6 +124,10 @@ public class TrashModel extends AbstractIconModel implements CardContainer,LaneC
 	
 	public void setConfirmStrategy(ConfirmStrategy confirmStrategy) {
 		this.confirmStrategy = confirmStrategy;
+	}
+
+	public String getName() {
+		return NAME;
 	}
 
 }
