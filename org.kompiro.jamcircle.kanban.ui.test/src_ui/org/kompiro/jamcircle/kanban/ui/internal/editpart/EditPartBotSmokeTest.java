@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.eclipse.gef.view.finder.widgets.*;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
@@ -23,11 +25,12 @@ import org.kompiro.jamcircle.kanban.ui.model.*;
 public class EditPartBotSmokeTest{
 	
 	private SWTBotGefView view;
+	private SWTGefViewBot bot;
 
 	@Before
 	public void before() throws Exception {
 		System.setProperty(SWTBotPreferenceConstants.KEY_TIMEOUT,"1000");
-		SWTGefViewBot bot = new SWTGefViewBot();
+		bot = new SWTGefViewBot();
 		SWTBotView viewById;
 		try {
 			viewById = bot.viewById("org.eclipse.ui.internal.introview");
@@ -89,21 +92,38 @@ public class EditPartBotSmokeTest{
 	@Test
 	public void cardTest() throws Exception {
 		createCard();
+		assertThat(getCardViewParts().size(),is(1));
+		
+		// simulated Delete Request 
+		// (why: can't execute any shortcut request during test stage.it'll execute after test stage like these command)
+		// bot.activeShell().pressShortcut(KeyStroke.getInstance(IKeyLookup.DEL_NAME));
+		GroupRequest request = new GroupRequest();
+		request.setType(RequestConstants.REQ_ORPHAN_CHILDREN);
+		request.setEditParts(getCardViewParts().get(0).part());
+		((BoardEditPart)getViewBoardPart().part()).getCommand(request).execute();
+		assertThat(getCardViewParts().size(),is(0));
+
+		createCard();
+		assertThat(getCardViewParts().size(),is(1));
 		view.drag(getCardViewParts().get(0), 100, 200);
 		createCardOnLane();
+		assertThat(getCardViewParts().size(),is(2));
 	}
 	
 	public void createCard() throws Exception {
-		SWTBotGefViewEditPart viewBoardPart = view.editParts(editPartOfType(BoardEditPart.class)).get(0);
+		SWTBotGefViewEditPart viewBoardPart = getViewBoardPart();
 		assertThat(viewBoardPart.part(),instanceOf(BoardEditPart.class));
-		viewBoardPart.doubleClick(new Point(1000,500));
-		assertThat(getCardViewParts().size(),is(1));
+		viewBoardPart.doubleClick(new Point(1000,200));
+	}
+
+	private SWTBotGefViewEditPart getViewBoardPart() {
+		SWTBotGefViewEditPart viewBoardPart = view.editParts(editPartOfType(BoardEditPart.class)).get(0);
+		return viewBoardPart;
 	}
 
 	public void createCardOnLane() throws Exception {
 		SWTBotGefViewEditPart viewBoardPart = getLaneViewParts().get(0);
 		viewBoardPart.doubleClick();
-		assertThat(getCardViewParts().size(),is(2));
 	}
 
 	
