@@ -12,8 +12,7 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IWorkbenchPart;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
-import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
+import org.kompiro.jamcircle.kanban.ui.*;
 import org.kompiro.jamcircle.kanban.ui.command.provider.ConfirmProvider;
 import org.kompiro.jamcircle.kanban.ui.command.provider.MessageDialogConfirmProvider;
 import org.kompiro.jamcircle.kanban.ui.editpart.CardContainerEditPart;
@@ -30,8 +29,8 @@ public class OpenCardListAction extends SelectionAction {
 	public OpenCardListAction(IWorkbenchPart part){
 		super(part);
 		setImageDescriptor(KanbanUIActivator.getDefault().getImageRegistry().getDescriptor(KanbanImageConstants.OPEN_LIST_ACTION_IMAGE.toString()));
-		setText("Open Card List");
-		setToolTipText("Open Card List Window");
+		setText(Messages.OpenCardListAction_text);
+		setToolTipText(Messages.OpenCardListAction_tooltip);
 	}
 	
 	@Override
@@ -80,7 +79,7 @@ public class OpenCardListAction extends SelectionAction {
 			@Override
 			protected void configureShell(Shell shell) {
 				super.configureShell(shell);
-				String title = String.format("Card List: %s",getContainer().getContainerName());
+				String title = String.format(Messages.OpenCardListAction_title,getContainer().getContainerName());
 				shell.setText(title);
 				Image image = KanbanUIActivator.getDefault().getImageRegistry().get(KanbanImageConstants.KANBANS_IMAGE.toString());
 				shell.setImage(image);

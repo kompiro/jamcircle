@@ -21,8 +21,8 @@ public class EditBoardAction extends Action{
 	private KanbanView view;
 
 	public EditBoardAction(KanbanView kanbanView) {
-		setText("Edit Board");
-		setToolTipText("Open board dialog to edit.");
+		setText(Messages.EditBoardAction_text);
+		setToolTipText(Messages.EditBoardAction_tooltip);
 		setImageDescriptor(KanbanImageConstants.EDIT_IMAGE.getImageDescriptor());
 		this.view = kanbanView;
 	}
@@ -51,9 +51,9 @@ public class EditBoardAction extends Action{
 		try {
 			service.runInUI(context,new OpenBoardRunnableWithProgress(board),null);
 		} catch (InvocationTargetException ex) {
-			KanbanUIStatusHandler.fail(ex.getTargetException(), "Opening Kanban Board is failed.");
+			KanbanUIStatusHandler.fail(ex.getTargetException(), Messages.EditBoardAction_error_message);
 		} catch (InterruptedException ex) {
-			KanbanUIStatusHandler.fail(ex, "Opening Kanban Board is failed.");
+			KanbanUIStatusHandler.fail(ex, Messages.EditBoardAction_error_message);
 		}
 	}
 

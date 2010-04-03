@@ -10,7 +10,7 @@ import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
 public class KanbanJFaceResource {
-	public static final String DARK_COLOR_KEY = "org.kompiro.jamcircle.DARK_COLOR_KEY";
+	public static final String DARK_COLOR_KEY = "org.kompiro.jamcircle.DARK_COLOR_KEY"; //$NON-NLS-1$
 	
 	private KanbanJFaceResource(){
 		

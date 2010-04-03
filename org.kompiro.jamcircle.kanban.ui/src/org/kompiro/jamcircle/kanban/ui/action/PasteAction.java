@@ -14,6 +14,7 @@ import org.eclipse.gef.ui.actions.WorkbenchPartAction;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.*;
 import org.eclipse.ui.actions.ActionFactory;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
 
 public class PasteAction extends
@@ -31,8 +32,8 @@ public class PasteAction extends
 
 	@Override
 	protected void init() {
-		setText("Paste");
-		setToolTipText("Paste");
+		setText(Messages.PasteAction_text);
+		setToolTipText(Messages.PasteAction_tooltip);
 		setId(ActionFactory.PASTE.getId());
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));

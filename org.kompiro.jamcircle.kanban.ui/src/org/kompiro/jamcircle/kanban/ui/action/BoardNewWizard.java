@@ -14,8 +14,7 @@ import org.eclipse.ui.progress.UIJob;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
-import org.kompiro.jamcircle.kanban.ui.KanbanView;
+import org.kompiro.jamcircle.kanban.ui.*;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
 public class BoardNewWizard extends Wizard implements INewWizard {
@@ -36,12 +35,12 @@ public class BoardNewWizard extends Wizard implements INewWizard {
 	public boolean performFinish() {
 		IRunnableWithProgress op = new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
-				monitor.beginTask("Create New Board...", 10);
+				monitor.beginTask(Messages.BoardNewWizard_create_board_task_message, 10);
 				final Board board = kanbanService.createBoard(page.getBoardTitle());
 				monitor.internalWorked(3);
 				KanbanBoardTemplate initializer = page.getInitializer();
 				initializer.initialize(board);
-				UIJob job = new UIJob("set board"){
+				UIJob job = new UIJob(Messages.BoardNewWizard_create_ui_job_title){
 					public org.eclipse.core.runtime.IStatus runInUIThread(IProgressMonitor monitor) {
 						KanbanView view = WorkbenchUtil.findKanbanView();
 						if(view != null) view.setContents(board, monitor);
@@ -58,7 +57,7 @@ public class BoardNewWizard extends Wizard implements INewWizard {
 			return false;
 		} catch (InvocationTargetException e) {
 			Throwable realException = e.getTargetException();
-			MessageDialog.openError(getShell(), "Error", realException.getMessage());
+			MessageDialog.openError(getShell(), Messages.BoardNewWizard_error_title, realException.getMessage());
 			return false;
 		}
 		return true;

@@ -164,7 +164,7 @@ public class CardListTableViewer implements PropertyChangeListener{
 								int returnCode = dialog.open();
 								if(Dialog.OK == returnCode){
 									String subject = dialog.getSubjectText();
-									String content = dialog.getBodyText();
+									String content = dialog.getContentText();
 									Date dueDate = dialog.getDueDate();
 									List<File> files = dialog.getFiles();
 									editProvider.edit(card,subject,content,dueDate,files);

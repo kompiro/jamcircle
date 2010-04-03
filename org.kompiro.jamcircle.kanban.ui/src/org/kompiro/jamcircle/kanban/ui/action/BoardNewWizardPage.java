@@ -18,6 +18,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 import org.kompiro.jamcircle.kanban.boardtemplate.AbstractBoardTemplate;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 import org.kompiro.jamcircle.kanban.ui.widget.TableListColumnLabelProvider;
 import org.kompiro.jamcircle.kanban.ui.widget.TableListWrapper;
@@ -48,9 +49,9 @@ public class BoardNewWizardPage extends WizardPage {
 	private KanbanBoardTemplate selectedInitializer;
 
 	public BoardNewWizardPage(KanbanBoardTemplate[] kanbanDataInitializers) {
-		super("wizardPage");
-		setTitle("Create New Board");
-		setDescription("This wizard creates a new board.");
+		super(Messages.BoardNewWizardPage_wizard_page_title);
+		setTitle(Messages.BoardNewWizardPage_title);
+		setDescription(Messages.BoardNewWizardPage_description);
 		this.initializers = trans(kanbanDataInitializers);
 	}
 
@@ -69,7 +70,7 @@ public class BoardNewWizardPage extends WizardPage {
 		layout.numColumns = 2;
 		layout.verticalSpacing = 9;
 		Label titleLabel = new Label(container, SWT.None);
-		titleLabel.setText("&Title:");
+		titleLabel.setText(Messages.BoardNewWizardPage_title_label);
 
 		boardTitleText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -87,7 +88,7 @@ public class BoardNewWizardPage extends WizardPage {
 
 	private void createTemplateTypeSelection(Composite container) {
 		Label typeLabel = new Label(container,SWT.None);
-		typeLabel.setText("&Template Type:");
+		typeLabel.setText(Messages.BoardNewWizardPage_template_type_label);
 		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.BEGINNING).applyTo(typeLabel);
 
 		typeViewer = new TableViewer(container);
@@ -122,7 +123,7 @@ public class BoardNewWizardPage extends WizardPage {
 
 	private void createNameColumn() {
 		TableViewerColumn column = new TableViewerColumn(typeViewer, SWT.LEAD);
-		column.getColumn().setText("Name");
+		column.getColumn().setText(Messages.BoardNewWizardPage_board_name_label);
 		column.getColumn().setWidth(100);
 		column.setLabelProvider(new TableListColumnLabelProvider(){
 
@@ -150,7 +151,7 @@ public class BoardNewWizardPage extends WizardPage {
 
 	private void createDescriptionColumn() {
 		TableViewerColumn column = new TableViewerColumn(typeViewer, SWT.LEAD);
-		column.getColumn().setText("Description");
+		column.getColumn().setText(Messages.BoardNewWizardPage_board_description_label);
 		column.getColumn().setWidth(300);
 		column.setLabelProvider(new TableListColumnLabelProvider(){
 
@@ -169,7 +170,7 @@ public class BoardNewWizardPage extends WizardPage {
 
 	private void initialize() {
 		String initializeTitle = DateFormat.getDateInstance().format(new Date());
-		boardTitleText.setText(String.format("%s's Board",initializeTitle));
+		boardTitleText.setText(String.format(Messages.BoardNewWizardPage_initialize_board_name,initializeTitle));
 		typeViewer.setInput(initializers);
 		typeViewer.getTable().select(0);
 	}

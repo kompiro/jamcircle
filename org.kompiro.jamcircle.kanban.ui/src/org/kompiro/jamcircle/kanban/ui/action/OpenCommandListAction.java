@@ -17,8 +17,8 @@ public class OpenCommandListAction extends Action {
 		this.part = part;
 		ImageRegistry imageRegistry = KanbanUIActivator.getDefault().getImageRegistry();
 		setImageDescriptor(imageRegistry.getDescriptor(KanbanImageConstants.OPEN_LIST_ACTION_IMAGE.toString()));
-		setText("Open Command List");
-		setToolTipText("Open Command List Window");
+		setText(Messages.OpenCommandListAction_text);
+		setToolTipText(Messages.OpenCommandListAction_tooltip);
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class OpenCommandListAction extends Action {
 			}
 		};
 		window.create();
-		window.getShell().setText("Command List");
+		window.getShell().setText(Messages.OpenCommandListAction_title);
 		window.open();
 	}
 

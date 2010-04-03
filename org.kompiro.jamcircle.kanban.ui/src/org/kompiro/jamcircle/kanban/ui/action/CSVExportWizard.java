@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 
 public class CSVExportWizard extends Wizard implements IExportWizard {
 	
@@ -25,9 +26,9 @@ public class CSVExportWizard extends Wizard implements IExportWizard {
 		private Text fileText;
 
 		protected CSVExportPage() {
-			super("wizardPage");
-			setTitle("Export CSV");
-			setDescription("This wizard export some types to CSV.");
+			super("CSVExportPage"); //$NON-NLS-1$
+			setTitle(Messages.CSVExportWizard_title);
+			setDescription(Messages.CSVExportWizard_description);
 		}
 
 		public void createControl(Composite parent) {
@@ -36,22 +37,22 @@ public class CSVExportWizard extends Wizard implements IExportWizard {
 			
 			Group fileGroup = new Group(composite,SWT.None);
 			GridDataFactory.fillDefaults().grab(true, false).applyTo(fileGroup);
-			fileGroup.setText("File");
+			fileGroup.setText(Messages.CSVExportWizard_file_label);
 			GridLayout layout = new GridLayout();
 			fileGroup.setLayout(layout);
 			layout.numColumns = 3;
 			layout.verticalSpacing = 9;
 			Label fileLabel = new Label(fileGroup,SWT.None);
 			// TODO Select Directory or File and Model Type.
-			fileLabel.setText("&Output Directory:");
+			fileLabel.setText(Messages.CSVExportWizard_output_label);
 			fileText = new Text(fileGroup,SWT.BORDER);
 			Button fileBrowseButton = new Button(fileGroup,SWT.None);
-			fileBrowseButton.setText("Browse");
+			fileBrowseButton.setText(Messages.CSVExportWizard_browse);
 			fileBrowseButton.addSelectionListener(new SelectionAdapter(){
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					DirectoryDialog dialog = new DirectoryDialog(getShell());
-					dialog.setMessage("Select CSV output directory.");
+					dialog.setMessage(Messages.CSVExportWizard_dialog_message);
 					String path = dialog.open();
 					if(path != null){
 						fileText.setText(path);
@@ -90,12 +91,12 @@ public class CSVExportWizard extends Wizard implements IExportWizard {
 		final String path =  page.getFileText().getText();
 		IRunnableWithProgress op = new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
-				monitor.beginTask("Export CSV Data...", 10);
+				monitor.beginTask(Messages.CSVExportWizard_export_task_name, 10);
 				File exportFile = new File(path);
-				File exportCardFile = new File(exportFile,"cards.csv");
-				File exportLaneFile = new File(exportFile,"lanes.csv");
-				File exportUserFile = new File(exportFile,"users.csv");
-				File exportBoardFile = new File(exportFile,"boards.csv");
+				File exportCardFile = new File(exportFile,"cards.csv"); //$NON-NLS-1$
+				File exportLaneFile = new File(exportFile,"lanes.csv"); //$NON-NLS-1$
+				File exportUserFile = new File(exportFile,"users.csv"); //$NON-NLS-1$
+				File exportBoardFile = new File(exportFile,"boards.csv"); //$NON-NLS-1$
 				monitor.internalWorked(2);
 				KanbanUIActivator.getDefault().getKanbanService().exportCards(exportCardFile);
 				monitor.internalWorked(2);
@@ -113,7 +114,7 @@ public class CSVExportWizard extends Wizard implements IExportWizard {
 			return false;
 		} catch (InvocationTargetException e) {
 			Throwable realException = e.getTargetException();
-			MessageDialog.openError(getShell(), "Error", realException.getMessage());
+			MessageDialog.openError(getShell(), Messages.CSVExportWizard_error_title, realException.getMessage());
 			return false;
 		}
 

@@ -18,13 +18,14 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 
 public class CSVImportWizard extends Wizard implements IExportWizard {
 	
-	private static final String TYPE_CARD = "Card";
-	private static final String TYPE_BOARD = "Board";
-	private static final String TYPE_LANE = "Lane";
-	private static final String TYPE_USER = "User";
+	private static final String TYPE_CARD = "Card"; //$NON-NLS-1$
+	private static final String TYPE_BOARD = "Board"; //$NON-NLS-1$
+	private static final String TYPE_LANE = "Lane"; //$NON-NLS-1$
+	private static final String TYPE_USER = "User"; //$NON-NLS-1$
 
 	public class CSVImportPage  extends WizardPage{
 
@@ -32,10 +33,9 @@ public class CSVImportWizard extends Wizard implements IExportWizard {
 		private CCombo typeCombo;
 
 		protected CSVImportPage() {
-			super("wizardPage");
-			setTitle("Import CSV");
-			setDescription("This wizard import a type from CSV.This wizard is only used for insert batch." +
-					"(Experimental: this wizard doesn't care about data relations.)");
+			super("CSVImportPage"); //$NON-NLS-1$
+			setTitle(Messages.CSVImportWizard_title);
+			setDescription(Messages.CSVImportWizard_description);
 		}
 
 		public void createControl(Composite parent) {
@@ -44,16 +44,16 @@ public class CSVImportWizard extends Wizard implements IExportWizard {
 			
 			Group fileGroup = new Group(composite,SWT.None);
 			GridDataFactory.fillDefaults().grab(true, false).applyTo(fileGroup);
-			fileGroup.setText("File");
+			fileGroup.setText(Messages.CSVImportWizard_file_text);
 			GridLayout layout = new GridLayout();
 			fileGroup.setLayout(layout);
 			layout.numColumns = 3;
 			layout.verticalSpacing = 9;
 			Label fileLabel = new Label(fileGroup,SWT.None);
-			fileLabel.setText("&File:");
+			fileLabel.setText(Messages.CSVImportWizard_file_label);
 			fileText = new Text(fileGroup,SWT.BORDER);
 			Button fileBrowseButton = new Button(fileGroup,SWT.None);
-			fileBrowseButton.setText("Browse");
+			fileBrowseButton.setText(Messages.CSVImportWizard_browse_label);
 			fileBrowseButton.addSelectionListener(new SelectionAdapter(){
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -69,7 +69,7 @@ public class CSVImportWizard extends Wizard implements IExportWizard {
 			
 			Label typeLabel = new Label(fileGroup,SWT.None);
 			GridDataFactory.fillDefaults().applyTo(typeLabel);
-			typeLabel.setText("&Type:");
+			typeLabel.setText(Messages.CSVImportWizard_type_label);
 			typeCombo = new CCombo(fileGroup,SWT.BORDER);
 			typeCombo.add(TYPE_CARD);
 			typeCombo.add(TYPE_BOARD);
@@ -111,7 +111,7 @@ public class CSVImportWizard extends Wizard implements IExportWizard {
 		final String type =  page.getTypeCombo().getText();
 		IRunnableWithProgress op = new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
-				monitor.beginTask("Import CSV Data...", 10);
+				monitor.beginTask(Messages.CSVImportWizard_import_task_name, 10);
 				File importFile = new File(path);
 				if(TYPE_CARD.equals(type)){
 					KanbanUIActivator.getDefault().getKanbanService().importCards(importFile);
@@ -131,7 +131,7 @@ public class CSVImportWizard extends Wizard implements IExportWizard {
 			return false;
 		} catch (InvocationTargetException e) {
 			Throwable realException = e.getTargetException();
-			MessageDialog.openError(getShell(), "Error", realException.getMessage());
+			MessageDialog.openError(getShell(), Messages.CSVImportWizard_error_title, realException.getMessage());
 			return false;
 		}
 

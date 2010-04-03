@@ -137,8 +137,8 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			LaneEditDialog dialog = new LaneEditDialog(shell,lane.getStatus(),lane.getScript(),lane.getScriptType());
 			int returnCode = dialog.open();
 			if(Dialog.OK == returnCode){
-				String status = dialog.getStatusText();
-				String script = dialog.getScriptText();
+				String status = dialog.getStatus();
+				String script = dialog.getScript();
 				ScriptTypes type = dialog.getScriptType();
 				doUpdateLaneCommand(status,script,type);
 			}

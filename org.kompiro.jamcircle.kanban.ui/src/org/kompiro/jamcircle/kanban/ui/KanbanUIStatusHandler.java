@@ -9,10 +9,14 @@ import org.kompiro.jamcircle.debug.IStatusHandler;
 
 public class KanbanUIStatusHandler {
 
+	private static final String DATE_FORMATTER = "yyyy/MM/dd hh:mm:ssSSSS"; //$NON-NLS-1$
+
+	private static final String LINE_BREAK = System.getProperty("line.separator"); //$NON-NLS-1$
+
 	private static final String ID_PLUGIN = KanbanUIActivator.ID_PLUGIN;
 
 	private static Set<IStatusHandler> handlers = new HashSet<IStatusHandler>();
-	private static DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd hh:mm:ssSSSS");
+	private static DateFormat formatter = new SimpleDateFormat(DATE_FORMATTER);
 
 	
 	private static final boolean ENABLE_LOGGING;
@@ -20,9 +24,9 @@ public class KanbanUIStatusHandler {
 	private static final boolean ENABLE_UI_DEBUG;
 
 	static{
-		ENABLE_LOGGING = !Platform.isRunning() || Boolean.valueOf(Platform.getDebugOption(ID_PLUGIN + "/debug"));
-		ENABLE_UI_DEBUG = !Platform.isRunning() || Boolean.valueOf(Platform.getDebugOption(ID_PLUGIN + "/debug/ui"));
-		ENABLE_DEBUG_LEVEL = !Platform.isRunning() || Boolean.valueOf(Platform.getDebugOption(ID_PLUGIN + "/debug/debug"));
+		ENABLE_LOGGING = !Platform.isRunning() || Boolean.valueOf(Platform.getDebugOption(ID_PLUGIN + "/debug")); //$NON-NLS-1$
+		ENABLE_UI_DEBUG = !Platform.isRunning() || Boolean.valueOf(Platform.getDebugOption(ID_PLUGIN + "/debug/ui")); //$NON-NLS-1$
+		ENABLE_DEBUG_LEVEL = !Platform.isRunning() || Boolean.valueOf(Platform.getDebugOption(ID_PLUGIN + "/debug/debug")); //$NON-NLS-1$
 	}
 
 	public static void addStatusHandler(IStatusHandler handler) {
@@ -44,7 +48,7 @@ public class KanbanUIStatusHandler {
 				handler.fail(status, true);
 			}
 		}else{
-			String message = String.format("%s %s",formatter.format(new Date()),status.getMessage());
+			String message = String.format("%s %s",formatter.format(new Date()),status.getMessage()); //$NON-NLS-1$
 			for(IStatusHandler handler : handlers){
 				handler.info(message);
 			}			
@@ -74,7 +78,7 @@ public class KanbanUIStatusHandler {
 	
 	public static void info(String message, Object source,boolean informUser) {
 		if (source != null)
-			message += ", source: " + source.getClass().getName();
+			message += ", source: " + source.getClass().getName(); //$NON-NLS-1$
 		if(informUser){
 			for(IStatusHandler handler : handlers){
 				handler.info(message);
@@ -93,8 +97,8 @@ public class KanbanUIStatusHandler {
 
 	public static void fail(Throwable throwable, String message, boolean informUser, int severity) {
 		if (message == null)
-			message = "no message";
-		message += "\n";
+			message = "no message"; //$NON-NLS-1$
+		message += LINE_BREAK;
 
 		final Status status = new Status(severity, ID_PLUGIN, IStatus.OK, message, throwable);
 

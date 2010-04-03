@@ -1,5 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui.dialog;
 
+import static org.kompiro.jamcircle.kanban.ui.dialog.DialogConstants.KEY_OF_DATA_ID;
+
 import java.io.File;
 import java.util.*;
 import java.util.List;
@@ -26,10 +28,22 @@ import org.kompiro.jamcircle.kanban.ui.*;
 
 public class CardEditDialog extends Dialog{
 
+	private static final String EMPTY = ""; //$NON-NLS-1$
+
+	public static final String ID_SUBJECT = "subject"; //$NON-NLS-1$
+	public static final String ID_CONTENT = "contents";
+	public static final String ID_CONTENTS_BROWSER = "contents_browser"; //$NON-NLS-1$
+	public static final String ID_CONTENTS_BROWSER_TAB = "contents_browser_tab"; //$NON-NLS-1$
+	public static final String ID_DUE_DATE = "due_date"; //$NON-NLS-1$
+	public static final String ID_DUE_TAB = "due_tab"; //$NON-NLS-1$
+	public static final String ID_FILES_TAB = "files_tab"; //$NON-NLS-1$
+	public static final String ID_FILE_LIST = "file_list"; //$NON-NLS-1$
+	public static final String ID_DELETE_BUTTON = "delete_button"; //$NON-NLS-1$
+
 	private Text subjectText;
 	private Text bodyText;
 	private String subject;
-	private String body;
+	private String content;
 	private Date due;
 	private Button addButton;
 	private ListViewer fileList;
@@ -41,10 +55,12 @@ public class CardEditDialog extends Dialog{
 	
 	private static final ShowdownConverter converter = ShowdownConverter.getInstance();
 
+	public static final String ID_CONTENT_TAB = "content_tab"; //$NON-NLS-1$
+
 	public CardEditDialog(Shell parentShell,Card card) {
 		super(parentShell);
 		this.subject = card.getSubject();
-		this.body = card.getContent();
+		this.content = card.getContent();
 		this.files.addAll(card.getFiles());
 		this.dueDate = card.getDueDate();
 		if(Platform.isRunning()){
@@ -55,7 +71,7 @@ public class CardEditDialog extends Dialog{
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Card Edit");
+		newShell.setText(Messages.CardEditDialog_title);
 	}
 	
 	@Override
@@ -71,15 +87,15 @@ public class CardEditDialog extends Dialog{
 
 	private void createSubjectArea(Composite comp) {
 		Group subjectGroup = new Group(comp,SWT.NONE);
-		subjectGroup.setText("subject");
+		subjectGroup.setText(Messages.CardEditDialog_subject_group_name);
 		subjectGroup.setLayout(new GridLayout());
 		subjectText = new Text(subjectGroup,SWT.BORDER);
+		subjectText.setData(KEY_OF_DATA_ID, ID_SUBJECT);
 		if(subject != null){
 			subjectText.setText(subject);
 		}
-		subjectText.addKeyListener(new KeyAdapter(){
-			@Override
-			public void keyReleased(KeyEvent e) {
+		subjectText.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
 				CardEditDialog.this.subject = CardEditDialog.this.subjectText.getText();
 			}
 		});
@@ -89,34 +105,40 @@ public class CardEditDialog extends Dialog{
 
 	private void createBodyArea(Composite comp) {
 		Group contentGroup = new Group(comp,SWT.NONE);
-		contentGroup.setText("content");
+		contentGroup.setText(Messages.CardEditDialog_content_group_name);
 		contentGroup.setLayout(new FillLayout());
 
 		CTabFolder folder = new CTabFolder(contentGroup,SWT.BOTTOM);
 		GridDataFactory.fillDefaults().hint(400, 200).applyTo(contentGroup);
-		CTabItem textArea = new CTabItem(folder,SWT.NONE);
+
+		CTabItem contentTabItem = new CTabItem(folder,SWT.NONE);
+		contentTabItem.setData(KEY_OF_DATA_ID,ID_CONTENT_TAB);
+
 		bodyText = new Text(folder,SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.WRAP);
-		if(body != null){
-			bodyText.setText(body);
+		if(content != null){
+			bodyText.setText(content);
 		}
-		bodyText.addKeyListener(new KeyAdapter(){
-			@Override
-			public void keyReleased(KeyEvent e) {
+		bodyText.setData(KEY_OF_DATA_ID, ID_CONTENT);
+		bodyText.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
 				String body = CardEditDialog.this.bodyText.getText();
-				CardEditDialog.this.body = body;
+				CardEditDialog.this.content = body;
 			}
 		});
-		textArea.setControl(bodyText);
-		textArea.setText("Text(Markdown/HTML)");
+		contentTabItem.setControl(bodyText);
+		contentTabItem.setText(Messages.CardEditDialog_content_tab_name);
 		final CTabItem browserArea = new CTabItem(folder,SWT.NONE);
 		bodyBrowser = new Browser(folder,SWT.BORDER);
 		browserArea.setControl(bodyBrowser);
-		browserArea.setText("Browser");
+		browserArea.setText(Messages.CardEditDialog_browser_name);
+		browserArea.setData(KEY_OF_DATA_ID, ID_CONTENTS_BROWSER_TAB);
+		bodyBrowser.setData(KEY_OF_DATA_ID, ID_CONTENTS_BROWSER);
+
 		folder.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(e.item == browserArea){
-					String converted = converter.convert(body);
+					String converted = converter.convert(content);
 					bodyBrowser.setText(converted);
 				}
 			}
@@ -126,7 +148,7 @@ public class CardEditDialog extends Dialog{
 	
 	private void createAtributeArea(Composite comp) {
 		Group attributeGroup = new Group(comp,SWT.None);
-		attributeGroup.setText("attribute");
+		attributeGroup.setText(Messages.CardEditDialog_attribute_group_name);
 		attributeGroup.setLayout(new FillLayout());
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(attributeGroup);
 		
@@ -139,13 +161,15 @@ public class CardEditDialog extends Dialog{
 	}
 
 	private void createDueArea(CTabFolder folder) {
-		CTabItem dueArea = new CTabItem(folder,SWT.NONE);
-		dueArea.setText("Due");
+		CTabItem dueTabItem = new CTabItem(folder,SWT.NONE);
+		dueTabItem.setText(Messages.CardEditDialog_due_label);
+		dueTabItem.setData(KEY_OF_DATA_ID,ID_DUE_TAB);
 		Composite dueComp = new Composite(folder,SWT.BORDER);
 		dueComp.setBackground(ColorConstants.white);
 		dueComp.setLayout(new GridLayout(2,false));
 		
 		final DateTime dueDateWidget = new DateTime(dueComp,SWT.CALENDAR);
+		dueDateWidget.setData(KEY_OF_DATA_ID, ID_DUE_DATE);
 		final Text dueText = new Text(dueComp,SWT.BORDER|SWT.READ_ONLY);
 		dueDateWidget.addSelectionListener(new SelectionAdapter(){
 			@Override
@@ -155,7 +179,7 @@ public class CardEditDialog extends Dialog{
 				cal.set(Calendar.MONTH, dueDateWidget.getMonth());
 				cal.set(Calendar.DATE, dueDateWidget.getDay());
 				due = cal.getTime();
-				String date = String.format("%04d/%02d/%02d", dueDateWidget.getYear(),dueDateWidget.getMonth() + 1,dueDateWidget.getDay());
+				String date = String.format(Messages.CardEditDialog_due_format, dueDateWidget.getYear(),dueDateWidget.getMonth() + 1,dueDateWidget.getDay());
 				dueText.setText(date);
 			}
 		});
@@ -163,7 +187,7 @@ public class CardEditDialog extends Dialog{
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(this.dueDate);
 			dueDateWidget.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE));
-			String date = String.format("%04d/%02d/%02d", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE));
+			String date = String.format(Messages.CardEditDialog_due_format, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE));
 			dueText.setText(date);
 		}
 		
@@ -175,7 +199,7 @@ public class CardEditDialog extends Dialog{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				due = null;
-				dueText.setText("");
+				dueText.setText(EMPTY);
 			}
 		});
 		Image image = null;
@@ -185,19 +209,21 @@ public class CardEditDialog extends Dialog{
 		if(image != null){
 			deleteDueButton.setImage(image);
 		}else{
-			deleteDueButton.setText("Delete");
+			deleteDueButton.setText(Messages.CardEditDialog_delete_button_label);
 		}
-		dueArea.setControl(dueComp);
+		dueTabItem.setControl(dueComp);
 	}
 
 	private void createFileTab(CTabFolder folder) {
-		CTabItem fileArea = new CTabItem(folder,SWT.NONE);
-		fileArea.setText("File");
+		CTabItem fileTabItem = new CTabItem(folder,SWT.NONE);
+		fileTabItem.setData(KEY_OF_DATA_ID, ID_FILES_TAB);
+		fileTabItem.setText(Messages.CardEditDialog_file_label);
 		
 		Composite fileComp = new Composite(folder,SWT.None);
 		fileComp.setLayout(new GridLayout(2,false));
 		fileComp.setBackground(ColorConstants.white);
 		fileList = new ListViewer(fileComp);
+		fileList.getList().setData(KEY_OF_DATA_ID,ID_FILE_LIST);
 		fileList.setLabelProvider(new LabelProvider(){
 			@Override
 			public String getText(Object element) {
@@ -205,7 +231,7 @@ public class CardEditDialog extends Dialog{
 					File file = (File) element;
 					return file.getName();
 				}
-				return "";
+				return EMPTY;
 			}
 		});
 		fileList.setContentProvider(new ArrayContentProvider());
@@ -213,28 +239,23 @@ public class CardEditDialog extends Dialog{
 		Menu popupFileList = new Menu(fileList.getList());
 		fileList.getList().setMenu(popupFileList);
 		MenuItem openFile = new MenuItem(popupFileList,SWT.PUSH);
-		openFile.setText("Open");
+		openFile.setText(Messages.CardEditDialog_open_label);
 		openFile.setImage(fileImage);
 		openFile.addSelectionListener(new SelectionListener(){
-
 			public void widgetDefaultSelected(SelectionEvent e) {
 				StructuredSelection sel = (StructuredSelection)fileList.getSelection();
 				launchFile(sel);
 			}
-
 			public void widgetSelected(SelectionEvent e) {
 				widgetDefaultSelected(e);
 			}
 			
 		});
 		fileList.addOpenListener(new IOpenListener(){
-
 			public void open(OpenEvent event) {
 				StructuredSelection sel = (StructuredSelection)event.getSelection();
 				launchFile(sel);
 			}
-
-			
 		});
 		
 		GridDataFactory.fillDefaults().hint(300,80).grab(true,true).applyTo(fileList.getList());
@@ -247,12 +268,13 @@ public class CardEditDialog extends Dialog{
 		createAddFileButton(fileBtnComp);
 
 		createDeleteFileButton(fileBtnComp);
-		fileArea.setControl(fileComp);
+		fileTabItem.setControl(fileComp);
 	}
 
 	private void createDeleteFileButton(Composite fileBtnComp) {
 		deleteButton = new Button(fileBtnComp,SWT.PUSH);
-		deleteButton.setText("Delete Files");
+		deleteButton.setText(Messages.CardEditDialog_delete_file_label);
+		deleteButton.setData(KEY_OF_DATA_ID,ID_DELETE_BUTTON);
 		deleteButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -274,7 +296,7 @@ public class CardEditDialog extends Dialog{
 
 	private void createAddFileButton(Composite fileBtnComp) {
 		addButton = new Button(fileBtnComp,SWT.PUSH);
-		addButton.setText("Add File");
+		addButton.setText(Messages.CardEditDialog_add_file_label);
 		addButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -283,15 +305,15 @@ public class CardEditDialog extends Dialog{
 				if(filePath != null) {
 					File file = new File(filePath);
 					if( ! file.exists()){
-						KanbanUIStatusHandler.info("The file is not exist.",file,true);
+						KanbanUIStatusHandler.info(Messages.CardEditDialog_info_file_not_exist,file,true);
 						return;
 					}else if( ! file.isFile()){
-						KanbanUIStatusHandler.info("Please select a file.",file,true);
+						KanbanUIStatusHandler.info(Messages.CardEditDialog_info_selection_is_not_file,file,true);
 						return;
 					}
 					for(File target : files){
 						if(target.getAbsolutePath().equals(file.getAbsolutePath())){
-							KanbanUIStatusHandler.info("The file is already selected.",file,true);							
+							KanbanUIStatusHandler.info(Messages.CardEditDialog_info_already_selected,file,true);							
 							return;
 						}
 					}
@@ -312,38 +334,14 @@ public class CardEditDialog extends Dialog{
 		return subject;
 	}
 	
-	public String getBodyText(){
-		return body;
+	public String getContentText(){
+		return content;
 	}
 	
 	public Date getDueDate(){
 		return due;
 	}
 	
-	
-	public static void main(String[] args) {
-		Shell shell = new Shell();
-		List<File> files = new ArrayList<File>();
-		files.add(new File(System.getProperty("user.home")));
-		files.add(new File(System.getProperty("user.home")));
-		files.add(new File(System.getProperty("user.home")));
-		files.add(new File(System.getProperty("user.home")));
-		files.add(new File(System.getProperty("user.home")));
-		files.add(new File(System.getProperty("user.home")));
-		Card card = new org.kompiro.jamcircle.kanban.model.mock.Card();
-		card.setSubject("testtesttesttesttesttesttesttesttesttesttesttesttesttesttest" +
-				"testtesttesttesttesttesttesttesttesttesttesttesttesttesttest");
-		card.setContent("testtesttesttesttesttesttesttesttesttesttesttesttesttesttest" +
-				"testtesttesttesttesttesttesttesttesttesttesttesttesttesttest" +
-				"testtesttesttesttesttesttesttesttesttesttesttesttesttesttest");
-		for(File file : files){
-			card.addFile(file);
-		}
-		card.setDueDate(new Date());
-		CardEditDialog dialog = new CardEditDialog(shell,card);
-		dialog.open();
-		System.out.println(dialog.getFiles());
-	}
 
 	public List<File> getFiles() {
 		return files;

@@ -1,6 +1,6 @@
 package org.kompiro.jamcircle.kanban.ui;
 
-
+import static java.lang.String.format;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -25,10 +25,10 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 		public void fail(IStatus status, boolean informUser) {
 			Throwable exception = status.getException();
 			if(informUser && ! getKanbanService().isTestMode()){
-				String message = String.format("%s\nException:'%s' reason: %s", status.getMessage(),exception.getClass().getName(),exception.getLocalizedMessage());
+				String message = format(Messages.KanbanUIActivator_error_message, status.getMessage(),exception.getClass().getName(),exception.getLocalizedMessage());
 				Shell shell = getShell();
 				if(shell != null){
-					MessageDialog.openError(shell, "Unexpected error is occured.",message);
+					MessageDialog.openError(shell, Messages.KanbanUIActivator_error_title,message);
 				}
 			}
 		}
@@ -37,7 +37,7 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 		}
 	}
 
-	public static final String ID_PLUGIN = "org.kompiro.jamcircle.kanban.ui";
+	public static final String ID_PLUGIN = "org.kompiro.jamcircle.kanban.ui"; //$NON-NLS-1$
 
 	private static KanbanUIActivator plugin;
 
@@ -121,7 +121,7 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 	
 	public KanbanService getKanbanService(){
 		KanbanService service = KanbanUIContext.getDefault().getKanbanService();
-		if(service == null) throw new IllegalStateException("kanban service is not enabled.");		
+		if(service == null) throw new IllegalStateException(Messages.KanbanUIActivator_error_kanban_service);		
 		service .init();
 		return service;
 	}
@@ -133,7 +133,7 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 
 	public ScriptingService getScriptingService() throws ScriptingException {
 		ScriptingService service = KanbanUIContext.getDefault().getScriptingService();
-		if(service == null) throw new IllegalStateException("scripting service is not enabled.");		
+		if(service == null) throw new IllegalStateException(Messages.KanbanUIActivator_error_scripting_service);		
 		return service;
 	}
 	

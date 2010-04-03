@@ -4,13 +4,15 @@ import org.eclipse.gef.commands.*;
 
 public class CommandStackEventListenerForDebug implements
 		CommandStackEventListener {
+	private static final String LINE_BREAK = System.getProperty("line.separator"); //$NON-NLS-1$
+
 	public void stackChanged(CommandStackEvent event) {
 		Command command = event.getCommand();
-		StringBuilder builder = new StringBuilder("CommandStack is changed. ");
+		StringBuilder builder = new StringBuilder("CommandStack is changed."); //$NON-NLS-1$
 		if(event.isPostChangeEvent()){
-			builder.append("POST EVENT \n");
+			builder.append("POST EVENT" + LINE_BREAK); //$NON-NLS-1$
 		}else{
-			builder.append("PRE EVENT \n");
+			builder.append("PRE EVENT" + LINE_BREAK); //$NON-NLS-1$
 		}
 		extractDebugLabel(command, builder);
 		KanbanUIStatusHandler.debug(builder.toString());			
@@ -24,7 +26,7 @@ public class CommandStackEventListenerForDebug implements
 			}
 		}else{
 			builder.append(command.getClass().getSimpleName());
-			builder.append("\n");				
+			builder.append(LINE_BREAK);				
 		}
 	}
 }

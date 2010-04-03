@@ -5,11 +5,11 @@ import org.eclipse.ui.IPerspectiveFactory;
 
 public class KanbanPerspective implements IPerspectiveFactory {
 
-	public static String ID = "org.kompiro.jamcircle.kanban.ui.perspective.kanban";
+	public static String ID = "org.kompiro.jamcircle.kanban.ui.perspective.kanban"; //$NON-NLS-1$
 
-	private static final String BOARD_NEW_WIZARD = "org.kompiro.jamcircle.kanban.ui.action.BoardNewWizard";
+	private static final String BOARD_NEW_WIZARD = "org.kompiro.jamcircle.kanban.ui.action.BoardNewWizard"; //$NON-NLS-1$
 	
-	private static final String PROGRESS_VIEW = "org.eclipse.ui.views.ProgressView";
+	private static final String PROGRESS_VIEW = "org.eclipse.ui.views.ProgressView"; //$NON-NLS-1$
 
 	private static final boolean EDITOR_AREA_VISIBLED = false;
 	

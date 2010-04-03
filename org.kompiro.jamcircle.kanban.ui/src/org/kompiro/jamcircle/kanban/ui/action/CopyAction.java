@@ -6,6 +6,7 @@ import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.*;
 import org.eclipse.ui.actions.ActionFactory;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
 
 public class CopyAction extends SelectionAction{
@@ -13,8 +14,8 @@ public class CopyAction extends SelectionAction{
 	public CopyAction(IWorkbenchPart editor) {
 		super(editor);
 		setId(ActionFactory.COPY.getId());
-		setText("Copy");
-		setToolTipText("Copy");
+		setText(Messages.CopyAction_title);
+		setToolTipText(Messages.CopyAction_tooltip);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(

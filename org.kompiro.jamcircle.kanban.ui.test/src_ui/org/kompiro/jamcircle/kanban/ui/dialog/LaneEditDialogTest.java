@@ -2,25 +2,22 @@ package org.kompiro.jamcircle.kanban.ui.dialog;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.kompiro.jamcircle.kanban.ui.dialog.BoardEditDialog.*;
+import static org.kompiro.jamcircle.kanban.ui.dialog.LaneEditDialog.*;
 
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.swt.finder.SWTBot;
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotCombo;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class BoardEditDialogTest {
-	
+public class LaneEditDialogTest  {
+
 	@Test
 	public void show() throws Throwable {
 		Shell shell = null;
-		final BoardEditDialog dialog = new BoardEditDialog(shell,
+		final LaneEditDialog dialog = new LaneEditDialog(shell,
 				"initialize_title",
 				"initialize_script",
 				ScriptTypes.JRuby);
@@ -33,7 +30,7 @@ public class BoardEditDialogTest {
 				} catch (InterruptedException e) {
 				}
 				SWTBot bot = new SWTBot(dialog.getShell());
-				SWTBotText titleTextWidget = bot.textWithId(ID_TITLE);
+				SWTBotText titleTextWidget = bot.textWithId(ID_STATUS);
 				assertThat(titleTextWidget.getText(),is("initialize_title"));
 				titleTextWidget.setText("modified");
 				try {
@@ -53,14 +50,15 @@ public class BoardEditDialogTest {
 		dialog.open();
 		if(ex[0] != null) throw ex[0];
 
-		assertThat(dialog.getTitle(),is("modified"));
+		assertThat(dialog.getStatus(),is("modified"));
 		assertThat(dialog.getScript(),is("modified_script"));
 		assertThat(dialog.getScriptType(),is(ScriptTypes.JavaScript));
 	}
+
 	
 	public static void main(String[] args) {
 		Shell shell = new Shell();
-		BoardEditDialog dialog = new BoardEditDialog(shell,
+		LaneEditDialog dialog = new LaneEditDialog(shell,
 				"testtesttesttesttesttesttesttesttesttesttesttesttesttesttest" +
 				"testtesttesttesttesttesttesttesttesttesttesttesttesttesttest",
 				"testtesttesttesttesttesttesttesttesttesttesttesttesttesttest" +
@@ -70,5 +68,4 @@ public class BoardEditDialogTest {
 		dialog.open();
 	}
 
-	
 }

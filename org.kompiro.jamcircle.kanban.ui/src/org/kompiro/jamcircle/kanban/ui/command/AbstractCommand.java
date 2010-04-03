@@ -4,8 +4,7 @@ import static java.lang.String.format;
 
 import org.eclipse.gef.commands.Command;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
+import org.kompiro.jamcircle.kanban.ui.*;
 
 public abstract class AbstractCommand extends Command {
 
@@ -28,15 +27,15 @@ public abstract class AbstractCommand extends Command {
 	@Override
 	public final void execute() {
 		if(!canExecute()){
-			String message = format("can't execute:'%s'",getDebugLabel());
+			String message = format(Messages.AbstractCommand_can_not_execute_message,getDebugLabel());
 			KanbanUIStatusHandler.info(message);
 			return;
 		}
-		KanbanUIStatusHandler.info("execute:'" + getDebugLabel() + "'");
+		KanbanUIStatusHandler.info(format(Messages.AbstractCommand_execute_message,getDebugLabel()));
 		try{
 			doExecute();
 		}catch(Exception e){
-			String message = String.format("An Exception has occured. '%s'",e.getLocalizedMessage());
+			String message = format(Messages.AbstractCommand_error_message,e.getLocalizedMessage());
 			KanbanUIStatusHandler.fail(e, message , true);
 			undoable = false;
 		}
@@ -57,7 +56,7 @@ public abstract class AbstractCommand extends Command {
 			try {
 				initialize();
 			} catch (IllegalStateException e) {
-				String message = String.format("Why doesn't execute the command '%s'",getDebugLabel());
+				String message = format(Messages.AbstractCommand_error_message,getDebugLabel());
 				KanbanUIStatusHandler.fail(e, message , true);
 				throw e;
 			}
@@ -81,7 +80,7 @@ public abstract class AbstractCommand extends Command {
 		if(this.activator == null){
 			this.activator = KanbanUIActivator.getDefault();
 		}
-		if(activator == null) throw new IllegalStateException("Can't get KanbanUIActivator.");
+		if(activator == null) throw new IllegalStateException(Messages.AbstractCommand_activator_error_message);
 		return activator;
 	}
 	

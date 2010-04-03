@@ -51,7 +51,14 @@ import org.kompiro.jamcircle.storage.service.StorageChageListener;
 
 public class KanbanView extends ViewPart implements StorageChageListener,PropertyChangeListener{
 
-	public static String ID = "org.kompiro.jamcircle.kanban.KanbanView";
+
+	// TODO extract ScriptConstants
+	private static final String BEAN_NAME_BOARD_COMMAND_EXECUTER = "boardCommandExecuter";//$NON-NLS-1$
+	private static final String BEAN_NAME_BOARD = "board";//$NON-NLS-1$
+	private static final String BEAN_NAME_MONITOR = "monitor";//$NON-NLS-1$
+	private static final String BEAN_NAME_BOARD_PART = "boardPart";//$NON-NLS-1$
+
+	public static String ID = "org.kompiro.jamcircle.kanban.KanbanView"; //$NON-NLS-1$
 
 	private ScrollingGraphicalViewer viewer;
 
@@ -188,7 +195,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 	}
 	
 	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
@@ -237,7 +244,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 			manager.setMessage(image,message);
 		}else{
 			image= getImageRegistry().get(KanbanImageConstants.DISCONNECT_IMAGE.toString());
-			message = "Doesn't logged in.";			
+			message = Messages.KanbanView_not_log_in_message;			
 			manager.setErrorMessage(image,message);
 		}
 	}
@@ -272,7 +279,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 		KanbanUIExtensionEditPartFactory extensionFactory = new KanbanUIExtensionEditPartFactory();
 		factory.setExtensionFactory(extensionFactory);
 		
-		String taskName = String.format("Openning board '%s' ...",board.getTitle()); 
+		String taskName = String.format(Messages.KanbanView_open_message,board.getTitle()); 
 		monitor.subTask(taskName);
 		getGraphicalViewer().setEditPartFactory(factory);
 		
@@ -282,7 +289,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 		
 		final int id = board.getID();
 		getGraphicalViewer().setContents(boardModel);
-		new Job("execute script on board"){
+		new Job(Messages.KanbanView_execute_script_message){
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				executeScript(monitor);
@@ -296,16 +303,16 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 		Board board = boardModel.getBoard();
 		String script = board.getScript();
 		if(script != null && script.length() != 0){
-			monitor.setTaskName("execute script");
+			monitor.setTaskName(Messages.KanbanView_execute_script_task_name);
 			boardModel.clearMocks();
 
-			String scriptName = String.format("Board '%s' Script",board.getTitle());
+			String scriptName = String.format(Messages.KanbanView_target_board_message,board.getTitle());
 
 			Map<String,Object> beans= new HashMap<String, Object>();
-			beans.put("board", this.boardModel);
-			beans.put("monitor", monitor);
-			beans.put("boardPart", getBoardEditPart());
-			beans.put("boardCommandExecuter", new BoardCommandExecuter(getBoardEditPart()));
+			beans.put(BEAN_NAME_BOARD, this.boardModel);
+			beans.put(BEAN_NAME_MONITOR, monitor);
+			beans.put(BEAN_NAME_BOARD_PART, getBoardEditPart());
+			beans.put(BEAN_NAME_BOARD_COMMAND_EXECUTER, new BoardCommandExecuter(getBoardEditPart()));
 			try {
 				ScriptingService service = getScriptingService();
 				service.eval(board.getScriptType(), scriptName, script,beans);
@@ -316,7 +323,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 	}
 
 	private void storeCurrentBoard(int id) {
-		KanbanUIStatusHandler.debugUI("KanbanView#storeCurrentBoard() id='%d'", id);
+		KanbanUIStatusHandler.debugUI("KanbanView#storeCurrentBoard() id='%d'", id); //$NON-NLS-1$
 		KanbanUIActivator activator = getActivator();
 		if(activator != null){
 			getPreference().putInt(KanbanPreferenceConstants.BOARD_ID.toString(), id);
@@ -333,14 +340,14 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 	}
 
 	private void storageInitialize() {
-		UIJob job = new UIJob("storage initialize"){
+		UIJob job = new UIJob(Messages.KanbanView_storage_initialize_message){
 		
 			@Override
 			public IStatus runInUIThread(IProgressMonitor monitor) {
-				monitor.subTask("storage initializing...");
+				monitor.subTask(Messages.KanbanView_storage_initialize_task_message);
 				KanbanService service = getKanbanService();
 				int id = getPreference().getInt(KanbanPreferenceConstants.BOARD_ID.toString(),1);
-				KanbanUIStatusHandler.debugUI("KanbanView#storageInitialize() id:'%d'", id);
+				KanbanUIStatusHandler.debugUI("KanbanView#storageInitialize() id:'%d'", id); //$NON-NLS-1$
 				Board board = service.findBoard(id);
 				if(board == null){
 					board = service.findBoard(1);
@@ -408,7 +415,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 	private final class KanbanViewDropAdapter extends DropTargetAdapter {
 
 		public void drop(DropTargetEvent event) {
-			KanbanUIStatusHandler.debugUI("KanbanViewDropAdapter#drop widget[%s] x:%d y:%d",event.widget,event.x,event.y);
+			KanbanUIStatusHandler.debugUI("KanbanViewDropAdapter#drop widget[%s] x:%d y:%d",event.widget,event.x,event.y); //$NON-NLS-1$
 			Point location = new Point(
 					getGraphicalViewer().getControl().toControl(
 						Display.getCurrent().getCursorLocation()));
@@ -416,7 +423,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 			location.translate(viewLocation);
 			Object data = event.data;
 			EditPart dropTarget = getGraphicalViewer().findObjectAtExcluding(location, Collections.EMPTY_SET,cardCond);
-			KanbanUIStatusHandler.debugUI("KanbanViewDropAdapter#drop target:%s data: %s",dropTarget,data);
+			KanbanUIStatusHandler.debugUI("KanbanViewDropAdapter#drop target:%s data: %s",dropTarget,data); //$NON-NLS-1$
 			if (data instanceof List<?>) {
 				List<?> list = (List<?>) data;
 				CompoundCommand command = new CompoundCommand();
@@ -424,7 +431,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 					if (obj instanceof CardWrapper) {
 						CardWrapper wrapper = (CardWrapper) obj;
 						Card card = wrapper.getCard();
-						KanbanUIStatusHandler.debugUI("KanbanViewDropAdapter#drop %s", card);
+						KanbanUIStatusHandler.debugUI("KanbanViewDropAdapter#drop %s", card); //$NON-NLS-1$
 						command.add(removeCardFromParent(card,wrapper.getContainer()));
 						command.add(addCardFromDialog(dropTarget, location, card));
 					}
@@ -525,7 +532,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 	}
 
 	public void changedStorage(IProgressMonitor monitor) {
-		monitor.setTaskName("Refresh Board...");
+		monitor.setTaskName(Messages.KanbanView_refresh_board_message);
 		getDisplay().syncExec(new Runnable(){
 			public void run() {
 				setInintialContents();

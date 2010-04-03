@@ -1,17 +1,22 @@
 package org.kompiro.jamcircle.kanban.ui.dialog;
 
+import static org.kompiro.jamcircle.kanban.ui.dialog.DialogConstants.KEY_OF_DATA_ID;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.*;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class BoardEditDialog extends Dialog{
+
+	static final String ID_SCRIPT_TYPE = "script_type";
+	static final String ID_SCRIPT = "script";
+	static final String ID_TITLE = "title";
 
 	private Text titleText;
 	private Text scriptText;
@@ -30,22 +35,22 @@ public class BoardEditDialog extends Dialog{
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Board Edit");
+		newShell.setText(Messages.BoardEditDialog_title);
 	}
 	
 	@Override
 	protected Control createContents(Composite parent) {
 		Group statusGroup = new Group(parent,SWT.None);
-		statusGroup.setText("Title");
+		statusGroup.setText(Messages.BoardEditDialog_board_title_label);
 		statusGroup.setLayout(new GridLayout());
 		
 		titleText = new Text(statusGroup,SWT.BORDER);
 		if(title != null){
 			titleText.setText(title);
 		}
-		titleText.addKeyListener(new KeyAdapter(){
-			@Override
-			public void keyReleased(KeyEvent e) {
+		titleText.setData(KEY_OF_DATA_ID, ID_TITLE);
+		titleText.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
 				BoardEditDialog.this.title = BoardEditDialog.this.titleText.getText();
 			}
 		});
@@ -54,21 +59,23 @@ public class BoardEditDialog extends Dialog{
 				
 
 		Group scriptGroup = new Group(parent,SWT.None);
-		scriptGroup.setText("script");
+		scriptGroup.setText(Messages.BoardEditDialog_board_script_label);
 		scriptGroup.setLayout(new GridLayout());
 		scriptText = new Text(scriptGroup,SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL);
+		scriptText.setData(KEY_OF_DATA_ID, ID_SCRIPT);
 		if(script != null){
 			scriptText.setText(script);
 		}
-		scriptText.addKeyListener(new KeyAdapter(){
-			@Override
-			public void keyReleased(KeyEvent e) {
+		scriptText.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
 				BoardEditDialog.this.script = BoardEditDialog.this.scriptText.getText();
 			}
 		});
 		GridDataFactory.fillDefaults().hint(400, 200).grab(true,true).applyTo(scriptText);
 
 		scriptTypeCombo = new ComboViewer(scriptGroup);
+		scriptTypeCombo.getCombo().setData(KEY_OF_DATA_ID, ID_SCRIPT_TYPE);
+
 		scriptTypeCombo.setContentProvider(new IStructuredContentProvider(){
 			public Object[] getElements(Object inputElement) {
 				return (Object[])inputElement;
@@ -110,18 +117,5 @@ public class BoardEditDialog extends Dialog{
 	public ScriptTypes getScriptType() {
 		return type;
 	}
-	
-	public static void main(String[] args) {
-		Shell shell = new Shell();
-		BoardEditDialog dialog = new BoardEditDialog(shell,
-				"testtesttesttesttesttesttesttesttesttesttesttesttesttesttest" +
-				"testtesttesttesttesttesttesttesttesttesttesttesttesttesttest",
-				"testtesttesttesttesttesttesttesttesttesttesttesttesttesttest" +
-				"testtesttesttesttesttesttesttesttesttesttesttesttesttesttest" +
-				"testtesttesttesttesttesttesttesttesttesttesttesttesttesttest",
-				ScriptTypes.JRuby);
-		dialog.open();
-	}
-
 	
 }

@@ -9,6 +9,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.*;
 import org.kompiro.jamcircle.kanban.model.ShowdownConverter;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 
 public class BrowserPopupDialog extends PopupDialog {
 	private static ShowdownConverter converter = ShowdownConverter.getInstance();
@@ -17,7 +18,7 @@ public class BrowserPopupDialog extends PopupDialog {
 
 	private class CloseDialogAction extends Action{
 		CloseDialogAction(){
-			super("close",IAction.AS_PUSH_BUTTON);
+			super(Messages.BrowserPopupDialog_close,IAction.AS_PUSH_BUTTON);
 		}
 		
 		@Override

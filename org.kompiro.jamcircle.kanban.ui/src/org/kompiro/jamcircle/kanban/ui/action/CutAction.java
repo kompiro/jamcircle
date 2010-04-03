@@ -10,6 +10,7 @@ import org.eclipse.ui.*;
 import org.eclipse.ui.actions.ActionFactory;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.editpart.CardContainerEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.command.CutCardCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
@@ -19,8 +20,8 @@ public class CutAction extends SelectionAction {
 	public CutAction(IWorkbenchPart part) {
 		super(part);
 		setId(ActionFactory.CUT.getId());
-		setText("Cut");
-		setToolTipText("Cut");
+		setText(Messages.CutAction_text);
+		setToolTipText(Messages.CutAction_tooltip);
 		ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 		setDisabledImageDescriptor(sharedImages.getImageDescriptor(
