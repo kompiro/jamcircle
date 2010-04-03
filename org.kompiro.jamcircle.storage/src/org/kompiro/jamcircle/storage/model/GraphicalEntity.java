@@ -7,12 +7,12 @@ import net.java.ao.schema.*;
 @Implementation(GraphicalEntityImpl.class)
 public interface GraphicalEntity extends Entity {
 
-	String PROP_ID = "id";
-	String PROP_LOCATION_X = "x";
-	String PROP_LOCATION_Y = "y";
-	String PROP_PREPARE_LOCATION = "prepare_location";
-	String PROP_COMMIT_LOCATION = "commit_location";
-	String PROP_TRASHED = "trashed";
+	String PROP_ID = "id"; //$NON-NLS-1$
+	String PROP_LOCATION_X = "x"; //$NON-NLS-1$
+	String PROP_LOCATION_Y = "y"; //$NON-NLS-1$
+	String PROP_PREPARE_LOCATION = "prepare_location"; //$NON-NLS-1$
+	String PROP_COMMIT_LOCATION = "commit_location"; //$NON-NLS-1$
+	String PROP_TRASHED = "trashed"; //$NON-NLS-1$
 
 	@Ignore
 	public void setDeletedVisuals(boolean deleted);

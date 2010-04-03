@@ -3,6 +3,7 @@ package org.kompiro.jamcircle.kanban.service.internal.loader;
 import java.net.URL;
 
 import org.eclipse.core.runtime.*;
+import org.kompiro.jamcircle.kanban.Messages;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
 import org.kompiro.jamcircle.kanban.boardtemplate.internal.ScriptBoardTemplate;
 import org.kompiro.jamcircle.kanban.internal.util.StreamUtil;
@@ -10,11 +11,11 @@ import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class BoardScriptTemplateDescriptor {
 	
-	static final String ATTR_TYPE = "type";
-	static final String ATTR_ICON = "icon";
-	static final String ATTR_NAME = "name";
-	static final String ATTR_SOURCE = "source";
-	static final String ATTR_DESCRIPTION = "description";
+	static final String ATTR_TYPE = "type"; //$NON-NLS-1$
+	static final String ATTR_ICON = "icon"; //$NON-NLS-1$
+	static final String ATTR_NAME = "name"; //$NON-NLS-1$
+	static final String ATTR_SOURCE = "source"; //$NON-NLS-1$
+	static final String ATTR_DESCRIPTION = "description"; //$NON-NLS-1$
 
 	public KanbanBoardTemplate createTemplate(IConfigurationElement element) {
 		if(element == null) throw new IllegalArgumentException();
@@ -26,7 +27,7 @@ public class BoardScriptTemplateDescriptor {
 		String description = element.getAttribute(ATTR_DESCRIPTION);
 		template.setDescription(description);
 		String typeName = element.getAttribute(ATTR_TYPE);
-		if(typeName == null) throw new IllegalArgumentException("type is required value.");
+		if(typeName == null) throw new IllegalArgumentException(Messages.BoardScriptTemplateDescriptor_error_message);
 		template.setType(ScriptTypes.valueOf(typeName));
 
 		IContributor contributor = element.getContributor();

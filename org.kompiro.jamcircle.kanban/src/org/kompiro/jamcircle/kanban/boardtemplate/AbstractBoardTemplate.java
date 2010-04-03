@@ -10,7 +10,7 @@ import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 
 public abstract class AbstractBoardTemplate implements KanbanBoardTemplate {
 
-	public static final String DEFAULT_ICONS_PATH = "icons/kanban.gif";
+	public static final String DEFAULT_ICONS_PATH = "icons/kanban.gif"; //$NON-NLS-1$
 	private String icon;
 	private String name;
 	private String description;
@@ -26,7 +26,7 @@ public abstract class AbstractBoardTemplate implements KanbanBoardTemplate {
 				String line = null;
 				try {
 					while((line = br.readLine()) != null){
-						builder.append(line + System.getProperty("line.separator"));
+						builder.append(line + System.getProperty("line.separator")); //$NON-NLS-1$
 					}
 				} catch (IOException e) {
 					fail(e);
@@ -47,7 +47,7 @@ public abstract class AbstractBoardTemplate implements KanbanBoardTemplate {
 	}
 	
 	void fail(Exception e){
-		KanbanStatusHandler.fail(e, getClass().getSimpleName() + "#readFromResource",false);			
+		KanbanStatusHandler.fail(e, getClass().getSimpleName() + "#readFromResource",false);			 //$NON-NLS-1$
 	}
 	
 	public String getIcon() {

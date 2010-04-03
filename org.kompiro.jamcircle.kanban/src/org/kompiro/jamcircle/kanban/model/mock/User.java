@@ -1,8 +1,9 @@
-/**
- * 
- */
 package org.kompiro.jamcircle.kanban.model.mock;
 
+/**
+ * This implementation describes User of Mock and isn't able to store any persistence.
+ * @author kompiro
+ */
 public class User extends MockGraphicalEntity implements org.kompiro.jamcircle.kanban.model.User{
 
 	private String userId;

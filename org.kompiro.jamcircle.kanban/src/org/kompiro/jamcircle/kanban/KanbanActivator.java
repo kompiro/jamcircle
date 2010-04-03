@@ -9,7 +9,8 @@ import org.osgi.framework.BundleContext;
 
 public class KanbanActivator extends Plugin {
 
-	public static final String ID = "org.kompiro.jamcircle.kanban";
+	private static final String LIB_NET_JAVA_AO = "net.java.ao"; //$NON-NLS-1$
+	public static final String ID = "org.kompiro.jamcircle.kanban"; //$NON-NLS-1$
 	private static KanbanActivator plugin;
 
 	public KanbanActivator() {
@@ -23,9 +24,9 @@ public class KanbanActivator extends Plugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		if(KanbanStatusHandler.isDebug()){
-			Logger.getLogger("net.java.ao").setLevel(Level.FINE);
+			Logger.getLogger(LIB_NET_JAVA_AO).setLevel(Level.FINE);
 		}else{
-			Logger.getLogger("net.java.ao").setLevel(Level.OFF);
+			Logger.getLogger(LIB_NET_JAVA_AO).setLevel(Level.OFF);
 		}
 
 	}

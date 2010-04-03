@@ -11,6 +11,10 @@ import net.java.ao.schema.PrimaryKey;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
 
+/**
+ * This implementation describes Entity of Mock and isn't able to store any persistence.
+ * @author kompiro
+ */
 class MockEntity implements Entity {
 	
 	private List<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import org.kompiro.jamcircle.kanban.KanbanActivator;
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
+import org.kompiro.jamcircle.kanban.Messages;
 import org.kompiro.jamcircle.kanban.boardtemplate.AbstractBoardTemplate;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Lane;
@@ -13,6 +14,22 @@ import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class ColorBoardTemplate extends AbstractBoardTemplate {
 	
+	private static final String BOARD_NAME = Messages.ColorBoardTemplate_board_name;
+	private static final String DESCRIPTION = Messages.ColorBoardTemplate_description;
+
+	private static final String ICON_PATH = "icons/color_wheel.png"; //$NON-NLS-1$
+	private static final String READ_TEMPLATE_NAME = "colorTemplate.txt"; //$NON-NLS-1$
+
+	private static final String LANE_NAME_RED = "RED"; //$NON-NLS-1$
+	private static final String LANE_NAME_YELLOW = "YELLOW"; //$NON-NLS-1$
+	private static final String LANE_NAME_GREEN = "GREEN"; //$NON-NLS-1$
+	private static final String LANE_NAME_LIGHT_GREEN = "LIGHT GREEN"; //$NON-NLS-1$
+	private static final String LANE_NAME_LIGHT_BLUE = "LIGHT BLUE"; //$NON-NLS-1$
+	private static final String LANE_NAME_BLUE = "BLUE"; //$NON-NLS-1$
+	private static final String LANE_NAME_PURPLE = "PURPLE"; //$NON-NLS-1$
+	private static final String LANE_NAME_RED_PURPLE = "RED PURPLE"; //$NON-NLS-1$
+	
+
 	public void initialize(Board board) {
 		try {
 			createRedLane(board);
@@ -24,40 +41,40 @@ public class ColorBoardTemplate extends AbstractBoardTemplate {
 			createPurpleLane(board);
 			createRedPurpleLane(board);
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e,"error has occured.");
+			KanbanStatusHandler.fail(e,Messages.ColorBoardTemplate_error_message);
 		}
 	}
 	
 	private Lane createRedLane(Board board) throws SQLException{
-		return createLane(board,"RED",100,50,200,250,0);
+		return createLane(board,LANE_NAME_RED,100,50,200,250,0);
 	}
 
 	private Lane createYellowLane(Board board) throws SQLException{
-		return createLane(board,"YELLOW",300,50,200,250,1);
+		return createLane(board,LANE_NAME_YELLOW,300,50,200,250,1);
 	}
 
 	private Lane createGreenLane(Board board) throws SQLException{
-		return createLane(board,"GREEN",500,50,200,250,2);
+		return createLane(board,LANE_NAME_GREEN,500,50,200,250,2);
 	}
 
 	private Lane createLightGreenLane(Board board) throws SQLException{
-		return createLane(board,"LIGHT GREEN",700,50,200,250,3);
+		return createLane(board,LANE_NAME_LIGHT_GREEN,700,50,200,250,3);
 	}
 
 	private Lane createLightBlueLane(Board board) throws SQLException{
-		return createLane(board,"LIGHT BLUE",100,300,200,250,4);
+		return createLane(board,LANE_NAME_LIGHT_BLUE,100,300,200,250,4);
 	}
 
 	private Lane createBlueLane(Board board) throws SQLException{
-		return createLane(board,"BLUE",300,300,200,250,5);
+		return createLane(board,LANE_NAME_BLUE,300,300,200,250,5);
 	}
 
 	private Lane createPurpleLane(Board board) throws SQLException{
-		return createLane(board,"PURPLE",500,300,200,250,6);
+		return createLane(board,LANE_NAME_PURPLE,500,300,200,250,6);
 	}
 
 	private Lane createRedPurpleLane(Board board) throws SQLException{
-		return createLane(board,"RED PURPLE",700,300,200,250,7);
+		return createLane(board,LANE_NAME_RED_PURPLE,700,300,200,250,7);
 	}
 
 	private Lane createLane(Board board,String status, int x, int y, int width, int height, int colorType) {
@@ -65,22 +82,22 @@ public class ColorBoardTemplate extends AbstractBoardTemplate {
 		kanbanService.init();
 		Lane lane = kanbanService.createLane(board,status, x, y, width, height);
 		lane.setScriptType(ScriptTypes.JavaScript);
-		lane.setScript(String.format(readFromResourceString(this.getClass().getResource("colorTemplate.txt")), colorType));
+		lane.setScript(String.format(readFromResourceString(this.getClass().getResource(READ_TEMPLATE_NAME)), colorType));
 		lane.save(false);
 		return lane;
 	}
 
 	public String getName(){
-		return "Color Board";
+		return BOARD_NAME;
 	}
 	
 	public String getIcon(){
-		return "icons/color_wheel.png";
+		return ICON_PATH;
 	}
 	
 	@Override
 	public String getDescription() {
-		return "8 color lanes are defined.These lane have script to change card color.";
+		return DESCRIPTION;
 	}
 
 }

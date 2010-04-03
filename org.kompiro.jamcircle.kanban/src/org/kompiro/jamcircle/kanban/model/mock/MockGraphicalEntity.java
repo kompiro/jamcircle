@@ -2,6 +2,10 @@ package org.kompiro.jamcircle.kanban.model.mock;
 
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
+/**
+ * This implementation describes GraphicalEntity of Mock and isn't able to store any persistence.
+ * @author kompiro
+ */
 public class MockGraphicalEntity extends MockEntity implements GraphicalEntity {
 	
 	private int x;

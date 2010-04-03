@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.kompiro.jamcircle.kanban.model.mock;
 
 import java.util.*;
@@ -9,14 +6,19 @@ import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 
+/**
+ * This implementation is mock of Lane and isn't able to store any persistence.
+ * @author kompiro
+ */
 public class Lane extends MockGraphicalEntity implements org.kompiro.jamcircle.kanban.model.Lane{
 
 	private Board board;
-	private int height = 500;
+	private int height = VALUE_OF_HEIGHT;
+	private int width = VALUE_OF_WIDTH;
+
 	private List<Card> cards = new ArrayList<Card>();
 	private String status;
 	private String script;
-	private int width = 200;
 	private Date createDate;
 	private boolean iconized;
 	private ScriptTypes scriptType;

@@ -9,7 +9,7 @@ import org.kompiro.jamcircle.kanban.service.loader.BoardTemplateLoader;
 
 public class BoardScriptTemplateLoaderImpl implements BoardTemplateLoader{
 	
-	static final String POINT_CALLBACK = "org.kompiro.jamcircle.kanban.boardScriptTemplate";
+	static final String POINT_CALLBACK = "org.kompiro.jamcircle.kanban.boardScriptTemplate"; //$NON-NLS-1$
 	private IExtensionRegistry registry = RegistryFactory.getRegistry();
 
 	public List<KanbanBoardTemplate> loadBoardTemplates() throws CoreException {

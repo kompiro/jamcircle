@@ -10,8 +10,14 @@ import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 import org.kompiro.jamcircle.kanban.model.mock.MockGraphicalEntity;
 
 
+/**
+ * This implementation describes board implmentation wrapper.
+ * @author kompiro
+ */
 public class BoardImpl extends EntityImpl{
 	
+	private static final String ERROR_HAS_OCCURED = "SQLException has occured.";//$NON-NLS-1$
+
 	private static final ExecutorService executor = Executors.newSingleThreadExecutor();
 	
 	private Board board;
@@ -39,9 +45,9 @@ public class BoardImpl extends EntityImpl{
 			card.save(false);
 			board.getEntityManager().flush(card);
 			try {
-				board.getEntityManager().find(Card.class,Card.PROP_ID + " = ?", card.getID());
+				board.getEntityManager().find(Card.class,Card.PROP_ID + QUERY, card.getID());
 			} catch (SQLException e) {
-				KanbanStatusHandler.fail(e, "SQLException has occured.");
+				KanbanStatusHandler.fail(e, ERROR_HAS_OCCURED);
 			}
 		}
 		PropertyChangeEvent event = new PropertyChangeEvent(board,Board.PROP_CARD,null,card);
@@ -144,7 +150,7 @@ public class BoardImpl extends EntityImpl{
 	
 	@Override
 	public String toString() {
-		return String.format("['#%d':'%s' trashed:'%s']",board.getID(),board.getTitle(),board.isTrashed());
+		return String.format(TO_STRING_FORMAT,board.getID(),board.getTitle(),board.isTrashed());
 	}
 	
 }

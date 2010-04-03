@@ -5,10 +5,10 @@ import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
 
 public class BoardTemplateDescriptor {
 
-	static final String ATTR_CLASS = "class";
-	static final String ATTR_ICON = "icon";
-	static final String ATTR_NAME = "name";
-	static final String ATTR_DESCRIPTION = "description";
+	static final String ATTR_CLASS = "class"; //$NON-NLS-1$
+	static final String ATTR_ICON = "icon"; //$NON-NLS-1$
+	static final String ATTR_NAME = "name"; //$NON-NLS-1$
+	static final String ATTR_DESCRIPTION = "description"; //$NON-NLS-1$
 
 	public KanbanBoardTemplate createTemplate(IConfigurationElement element) throws CoreException,IllegalArgumentException {
 		if(element == null) throw new IllegalArgumentException();

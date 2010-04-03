@@ -1,4 +1,6 @@
 package org.kompiro.jamcircle.kanban;
+
+import static java.lang.String.format;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,6 +10,13 @@ import org.kompiro.jamcircle.debug.IStatusHandler;
 
 public class KanbanStatusHandler {
 
+
+	private static final String LINE_BREAK = System.getProperty("line.separator"); //$NON-NLS-1$
+	private static final String NO_MESSAGE = "no message"; //$NON-NLS-1$
+	private static final String INFO_MESSAGE_FORMAT = "%s, source:%s"; //$NON-NLS-1$
+	private static final String DEBUG = "/debug"; //$NON-NLS-1$
+	private static final String DEBUG_LEVEL = "/debug/level"; //$NON-NLS-1$
+
 	private static final String ID_PLUGIN = KanbanActivator.ID;
 
 	private static Set<IStatusHandler> handlers = new HashSet<IStatusHandler>();
@@ -16,8 +25,8 @@ public class KanbanStatusHandler {
 	private static final boolean ENABLE_DEBUG_LEVEL;
 
 	static{
-		ENABLE_LOGGING = !Platform.isRunning() || Boolean.valueOf(Platform.getDebugOption(ID_PLUGIN + "/debug"));
-		ENABLE_DEBUG_LEVEL = !Platform.isRunning() || Boolean.valueOf(Platform.getDebugOption(ID_PLUGIN + "/debug/debug"));
+		ENABLE_LOGGING = !Platform.isRunning() || Boolean.valueOf(Platform.getDebugOption(ID_PLUGIN + DEBUG));
+		ENABLE_DEBUG_LEVEL = !Platform.isRunning() || Boolean.valueOf(Platform.getDebugOption(ID_PLUGIN + DEBUG_LEVEL));
 	}
 
 	public static void addStatusHandler(IStatusHandler handler) {
@@ -59,7 +68,7 @@ public class KanbanStatusHandler {
 	
 	public static void info(String message, Object source) {
 		if (source != null)
-			message += ", source: " + source.getClass().getName();
+			message = format(INFO_MESSAGE_FORMAT,message,source.getClass().getName());
 		for(IStatusHandler handler : handlers){
 			handler.info(message);
 		}
@@ -76,8 +85,8 @@ public class KanbanStatusHandler {
 
 	public static void fail(Throwable throwable, String message, boolean informUser, int severity) {
 		if (message == null)
-			message = "no message";
-		message += "\n";
+			message = NO_MESSAGE;
+		message += LINE_BREAK;
 
 		final Status status = new Status(severity, ID_PLUGIN, IStatus.OK, message, throwable);
 

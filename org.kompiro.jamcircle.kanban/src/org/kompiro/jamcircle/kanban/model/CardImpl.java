@@ -8,9 +8,15 @@ import org.kompiro.jamcircle.kanban.KanbanActivator;
 import org.kompiro.jamcircle.storage.service.StorageService;
 
 
+/**
+ * This implementation describes Card implmentation wrapper.
+ * @author kompiro
+ */
 public class CardImpl extends GraphicalImpl {
 	
-	public static final String CARD_PATH = "cards" + File.separator;
+	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+
+	public static final String CARD_PATH = "cards" + File.separator;  //$NON-NLS-1$
 
 	private Card card;
 	
@@ -33,7 +39,7 @@ public class CardImpl extends GraphicalImpl {
 	
 	public String getStatus(){
 		Lane lane = card.getLane();
-		if(lane == null) return "";
+		if(lane == null) return EMPTY_STRING;
 		return lane.getStatus();
 	}
 		
@@ -109,7 +115,7 @@ public class CardImpl extends GraphicalImpl {
 	
 	@Override
 	public String toString() {
-		return String.format("['#%d':'%s' trashed:'%s']", card.getID(),card.getSubject(),card.isTrashed());
+		return String.format(TO_STRING_FORMAT, card.getID(),card.getSubject(),card.isTrashed());
 	}
 
 }

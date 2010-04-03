@@ -8,17 +8,21 @@ import net.java.ao.schema.*;
 
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 
+/**
+ * This interface describes Board and uses ActiveObject.
+ * @author kompiro
+ */
 @Preload
 @Implementation(BoardImpl.class)
 public interface Board extends Entity,CardContainer,LaneContainer {
 
-	String PROP_ID = "id";
-	String PROP_CARD = "card";
-	String PROP_LANE = "lane";
-	String PROP_TITLE = "title";
-	String PROP_SCRIPT = "script";
-	String PROP_TRASHED = "trashed";
-	String PROP_CREATE_DATE = "createdate";
+	String PROP_ID = "id"; //$NON-NLS-1$
+	String PROP_CARD = "card"; //$NON-NLS-1$
+	String PROP_LANE = "lane"; //$NON-NLS-1$
+	String PROP_TITLE = "title"; //$NON-NLS-1$
+	String PROP_SCRIPT = "script"; //$NON-NLS-1$
+	String PROP_TRASHED = "trashed"; //$NON-NLS-1$
+	String PROP_CREATE_DATE = "createdate"; //$NON-NLS-1$
 
 	public void setTitle(String title);
 	
@@ -67,6 +71,9 @@ public interface Board extends Entity,CardContainer,LaneContainer {
 	@OneToMany(where="trashed = false")
 	public Lane[] getLanesFromDB();
 	
+	/**
+	 * clear all mocks on board.
+	 */
 	@Ignore
 	public void clearMocks();
 	
@@ -76,7 +83,7 @@ public interface Board extends Entity,CardContainer,LaneContainer {
 	Board getBoard();
 	
 	/**
-	 * This method calls {@link net.java.ao.RawEntity#save(false)} and run in  Executor.
+	 * This method calls {@link net.java.ao.RawEntity#save(false)} and run in Executor.
 	 * @param directExecution set true if you need direct {@link net.java.ao.RawEntity#save(false)}
 	 */
 	void save(boolean directExecution);

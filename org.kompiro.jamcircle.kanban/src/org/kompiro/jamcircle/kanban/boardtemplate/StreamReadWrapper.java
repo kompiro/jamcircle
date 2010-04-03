@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
+import org.kompiro.jamcircle.kanban.Messages;
 
 public abstract class StreamReadWrapper<T> {
 	public T run(URL resource){
@@ -26,7 +27,7 @@ public abstract class StreamReadWrapper<T> {
 	public abstract T doRun(InputStream stream);
 
 	private void fail(Exception e){
-		KanbanStatusHandler.fail(e, "running to read.",false);			
+		KanbanStatusHandler.fail(e, Messages.StreamReadWrapper_error_message,false);			
 	}
 
 }

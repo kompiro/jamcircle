@@ -10,20 +10,31 @@ import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 
+/**
+ * This interface describes Lane model using ActiveObjects.
+ * @author kompiro
+ */
 @Preload
 @Implementation(LaneImpl.class)
 public interface Lane extends GraphicalEntity ,CardContainer {
 
-	String PROP_STATUS = "status";
-	String PROP_SCRIPT = "script";
-	String PROP_WIDTH = "width";
-	String PROP_HEIGHT = "height";
-	String PROP_CARD = "card";
-	String PROP_CONSTRAINT = "constraint";
-	String PROP_CREATE_DATE = "createdate";
-	String PROP_TRASHED = "trashed";
-	String PROP_ICONIZED = "iconized";
-	String PROP_BOARD = "boardid";
+	public static final String HEIGHT = "500";//$NON-NLS-1$
+	public static final int VALUE_OF_HEIGHT = Integer.valueOf(HEIGHT);
+
+	public static final String WIDTH = "200";//$NON-NLS-1$
+	public static final int VALUE_OF_WIDTH = Integer.valueOf(WIDTH);
+
+	
+	String PROP_STATUS = "status";//$NON-NLS-1$
+	String PROP_SCRIPT = "script";//$NON-NLS-1$
+	String PROP_WIDTH = "width";//$NON-NLS-1$
+	String PROP_HEIGHT = "height";//$NON-NLS-1$
+	String PROP_CARD = "card";//$NON-NLS-1$
+	String PROP_CONSTRAINT = "constraint";//$NON-NLS-1$
+	String PROP_CREATE_DATE = "createdate";//$NON-NLS-1$
+	String PROP_TRASHED = "trashed";//$NON-NLS-1$
+	String PROP_ICONIZED = "iconized";//$NON-NLS-1$
+	String PROP_BOARD = "boardid";//$NON-NLS-1$
 
 	String getStatus();
 	
@@ -43,13 +54,13 @@ public interface Lane extends GraphicalEntity ,CardContainer {
 	int getWidth();
 	
 	@NotNull
-	@Default(value="200")
+	@Default(value=WIDTH)
 	void setWidth(int width);
 	
 	int getHeight();
 		
 	@NotNull
-	@Default(value="500")
+	@Default(value=HEIGHT)
 	void setHeight(int height);
 	
 	void setBoard(Board board);

@@ -9,31 +9,35 @@ import net.java.ao.Implementation;
 import net.java.ao.Preload;
 import net.java.ao.schema.*;
 
+/**
+ * This interface describes Card model using ActiveObjects.
+ * @author kompiro
+ */
 @Preload
 @Implementation(CardImpl.class)
 public interface Card extends HasColorTypeEntity{
 
-	String PROP_SUBJECT = "subject";
-	String PROP_CONTENT = "content";
+	String PROP_SUBJECT = "subject"; //$NON-NLS-1$
+	String PROP_CONTENT = "content"; //$NON-NLS-1$
 
-	String PROP_BOARD = "boardID";
-	String PROP_LANE = "laneID";
+	String PROP_BOARD = "boardID"; //$NON-NLS-1$
+	String PROP_LANE = "laneID"; //$NON-NLS-1$
 
-	String PROP_CREATED = "created";
-	String PROP_CREATEDATE = "createdate";
+	String PROP_CREATED = "created"; //$NON-NLS-1$
+	String PROP_CREATEDATE = "createdate"; //$NON-NLS-1$
 	
 	// TODO necessary?
-	String PROP_OWNER = "ownerID";
-	String PROP_FROM = "fromID";
-	String PROP_TO = "toID";
-	String PROP_FILES = "files";
-	String PROP_UUID = "uuid";
+	String PROP_OWNER = "ownerID"; //$NON-NLS-1$
+	String PROP_FROM = "fromID"; //$NON-NLS-1$
+	String PROP_TO = "toID"; //$NON-NLS-1$
+	String PROP_FILES = "files"; //$NON-NLS-1$
+	String PROP_UUID = "uuid"; //$NON-NLS-1$
 
-	String PROP_COMPLETED = "completed";
-	String PROP_COMPLETED_DATE = "completedDate";
+	String PROP_COMPLETED = "completed"; //$NON-NLS-1$
+	String PROP_COMPLETED_DATE = "completedDate"; //$NON-NLS-1$
 	
-	String PROP_DUE_DATE = "dueDate";
-	String PROP_FLAG_TYPE = "flagType";
+	String PROP_DUE_DATE = "dueDate"; //$NON-NLS-1$
+	String PROP_FLAG_TYPE = "flagType"; //$NON-NLS-1$
 	
 	@Ignore
 	void setID(int id);

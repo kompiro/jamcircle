@@ -6,7 +6,10 @@ import java.util.List;
 
 import org.apache.commons.lang.NotImplementedException;
 
-
+/**
+ * This interface describes CardContainer.
+ * @author kompiro
+ */
 public interface CardContainer {
 
 	boolean addCard(Card card);

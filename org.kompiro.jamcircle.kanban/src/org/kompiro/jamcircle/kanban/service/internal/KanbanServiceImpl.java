@@ -1,5 +1,6 @@
 package org.kompiro.jamcircle.kanban.service.internal;
 
+import static java.lang.String.format;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
@@ -11,6 +12,7 @@ import net.java.ao.*;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
+import org.kompiro.jamcircle.kanban.Messages;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
 import org.kompiro.jamcircle.kanban.boardtemplate.internal.*;
 import org.kompiro.jamcircle.kanban.model.*;
@@ -24,15 +26,18 @@ import org.kompiro.jamcircle.storage.service.StorageService;
 
 
 /**
+ * This class provides Kanban service.
  * @TestContext org.kompiro.jamcircle.kanban.service.internal.KanbanServiceImplTest
  */
 public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	
+	private static final String QUERY_TRUE = " = true";
+	private static final String QUERY = " = ?";
 	private static final int ICON_SIZE_Y = 74;
-	private static final String INBOX_ICON_MODEL = "org.kompiro.jamcircle.kanban.ui.model.InboxIconModel";
-	private static final String BOARD_SELECTER_MODEL = "org.kompiro.jamcircle.kanban.ui.model.BoardSelecterModel";
-	private static final String LANE_CREATER_MODEL = "org.kompiro.jamcircle.kanban.ui.model.LaneCreaterModel";
-	private static final String MODEL_TRASH_MODEL = "org.kompiro.jamcircle.kanban.ui.model.TrashModel";
+	private static final String INBOX_ICON_MODEL = "org.kompiro.jamcircle.kanban.ui.model.InboxIconModel"; //$NON-NLS-1$
+	private static final String BOARD_SELECTER_MODEL = "org.kompiro.jamcircle.kanban.ui.model.BoardSelecterModel"; //$NON-NLS-1$
+	private static final String LANE_CREATER_MODEL = "org.kompiro.jamcircle.kanban.ui.model.LaneCreaterModel"; //$NON-NLS-1$
+	private static final String MODEL_TRASH_MODEL = "org.kompiro.jamcircle.kanban.ui.model.TrashModel"; //$NON-NLS-1$
 	public static KanbanServiceImpl service = null;
 	
 	private List<KanbanBoardTemplate> templates = new ArrayList<KanbanBoardTemplate>();
@@ -59,7 +64,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 				try {
 					loadedTemplates = loader.loadBoardTemplates();
 				} catch (CoreException e) {
-					KanbanStatusHandler.fail(e, "failed when loading templates.", false);
+					KanbanStatusHandler.fail(e, Messages.KanbanServiceImpl_error_load_template, false);
 				}
 				templates.addAll(loadedTemplates);
 			}
@@ -82,7 +87,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	}
 	
 	public void forceInit(){
-		System.out.println("called forceInit.");
+		System.out.println(Messages.KanbanServiceImpl_infomation_call_forceInit);
 		doInit();
 	}
 
@@ -109,7 +114,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	}
 
 	private Board createBoard() {
-		return createBoard("Sample Board");
+		return createBoard(Messages.KanbanServiceImpl_sample_board_name);
 	}
 
 	public Card createClonedCard(Board board,User user,Card card,int x,int y){
@@ -155,14 +160,14 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		try{
 			int id = card.getID();
 			EntityManager entityManager = getEntityManager();
-			Card[] results = entityManager.find(Card.class,Card.PROP_ID + " = ?", id);
+			Card[] results = entityManager.find(Card.class,Card.PROP_ID + QUERY, id); //$NON-NLS-1$
 			card = results[0];
 		} catch (SQLException e) {
 			StringBuilder paramMessage = new StringBuilder(); 
 			for (DBParam param : params){
-				paramMessage.append(String.format("[%s:'%s'] ", param.getField(),param.getValue()));
+				paramMessage.append(format("[%s:'%s'] ", param.getField(),param.getValue())); //$NON-NLS-1$
 			}
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#createCard() {%s}",paramMessage);
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#createCard() {%s}",paramMessage); //$NON-NLS-1$
 		}
 		firePropertyChange(Card.class.getSimpleName(), null, card);
 		return card;
@@ -193,9 +198,9 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	
 	public int countCards() {
 		try {
-			return getEntityManager().count(Card.class,Card.PROP_TRASHED + " = true");
+			return getEntityManager().count(Card.class,Card.PROP_TRASHED + QUERY_TRUE); //$NON-NLS-1$
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e,"Trash:0001:can't count cards.");
+			KanbanStatusHandler.fail(e,Messages.KanbanServiceImpl_error_trash_count);
 			return 0;
 		}
 	}
@@ -215,7 +220,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		try {
 			lane = getEntityManager().create(Lane.class, params);
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#createLane()");
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#createLane()"); //$NON-NLS-1$
 		}
 		firePropertyChange(Lane.class.getSimpleName(), null, lane);
 		return lane;
@@ -233,7 +238,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		try {
 			return getEntityManager().find(Card.class);
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findAllCards()");
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findAllCards()"); //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -242,7 +247,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		try {
 			return getEntityManager().find(Card.class,criteria,parameters);
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findCards()");
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findCards()"); //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -251,12 +256,14 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		Card[] cards = null;
 		try {
 			cards = getEntityManager().find(Card.class,
-					Card.PROP_LANE + " is null and " +
-					Card.PROP_BOARD + " = ? and " +
-					Card.PROP_TRASHED + " = false and " +
-					Card.PROP_TO + " is null",board.getID());
+					format("%s is null and %s = ? and %s = false and %s is null",//$NON-NLS-1$
+							Card.PROP_LANE,
+							Card.PROP_BOARD,
+							Card.PROP_TRASHED,
+							Card.PROP_TO),
+							board.getID()); 
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e,"KanbanServiceImpl#findCardsOnBoard()");
+			KanbanStatusHandler.fail(e,"KanbanServiceImpl#findCardsOnBoard()"); //$NON-NLS-1$
 		}
 		return cards;
 	}
@@ -265,12 +272,13 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		Card[] cards = null;
 		try {
 			cards = getEntityManager().find(Card.class,
-					Card.PROP_LANE + " = ? and " +
-					Card.PROP_BOARD + " = ? and " +
-					Card.PROP_TRASHED + " = false and " +
-					Card.PROP_TO + " is null", lane.getID(),lane.getBoard().getID());
+					format("%s  = ? and %s = ? and %s = false and %s is null",//$NON-NLS-1$
+							Card.PROP_LANE,
+							Card.PROP_BOARD,
+							Card.PROP_TRASHED,
+							Card.PROP_TO), lane.getID(),lane.getBoard().getID());
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e,"KanbanServiceImpl#findCardsOnLane()");
+			KanbanStatusHandler.fail(e,"KanbanServiceImpl#findCardsOnLane()"); //$NON-NLS-1$
 		}
 		return cards;
 	}
@@ -278,18 +286,18 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	
 	public Lane[] findAllLanes() {
 		try {
-			return getEntityManager().find(Lane.class,Lane.PROP_TRASHED + " = ?",false);
+			return getEntityManager().find(Lane.class,Lane.PROP_TRASHED + QUERY,false); //$NON-NLS-1$
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findLanesOnBoard()");
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findLanesOnBoard()"); //$NON-NLS-1$
 		} 
 		return null;
 	}
 
 	public Lane[] findLanesInTrash() {
 		try {
-			return getEntityManager().find(Lane.class,Lane.PROP_TRASHED + " = ?",true);
+			return getEntityManager().find(Lane.class,Lane.PROP_TRASHED + QUERY,true); //$NON-NLS-1$
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findLanesInTrash()");
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findLanesInTrash()"); //$NON-NLS-1$
 		} 
 		return null;
 	}
@@ -297,11 +305,11 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	public Lane[] findLanesOnBoard(Board board) {
 		try {
 			return getEntityManager().find(Lane.class,
-					Lane.PROP_TRASHED + " = ? and " +
-					Lane.PROP_BOARD + " = ?",
+					Lane.PROP_TRASHED + " = ? and " + //$NON-NLS-1$
+					Lane.PROP_BOARD + QUERY, //$NON-NLS-1$
 					false,board.getID());
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findLanesOnBoard() %d",board.getID());
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findLanesOnBoard() %d",board.getID()); //$NON-NLS-1$
 		} 
 		return null;
 	}
@@ -309,24 +317,24 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	
 	public User[] findUsersOnBoard() {
 		try {
-			return getEntityManager().find(User.class,User.PROP_TRASHED + " = ?" ,false);
+			return getEntityManager().find(User.class,User.PROP_TRASHED + QUERY ,false); //$NON-NLS-1$
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findUsersOnBoard()");
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findUsersOnBoard()"); //$NON-NLS-1$
 		}
 		return null;
 	}
 	
 	public User findUser(String userId) {
 		try {
-			User[] users = getEntityManager().find(User.class,User.PROP_USERID + " = ? and " + 
-					User.PROP_TRASHED + " = ?",userId,false);
+			User[] users = getEntityManager().find(User.class,User.PROP_USERID + " = ? and " +  //$NON-NLS-1$
+					User.PROP_TRASHED + QUERY,userId,false); //$NON-NLS-1$
 			if(users.length != 1){
-				String message = String.format("Illegal data state User '%s' length:%d",userId,users.length);
+				String message = String.format("Illegal data state User '%s' length:%d",userId,users.length); //$NON-NLS-1$
 				throw new IllegalStateException(message);
 			}
 			return users[0];
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findFromUser() %s",userId);
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findFromUser() %s",userId); //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -348,9 +356,9 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	public Card[] findCardsSentTo(User sentTo) {
 		if(sentTo == null) return new Card[]{};
 		try {
-			return getEntityManager().find(Card.class,Card.PROP_TO + " = ?" , sentTo.getID());
+			return getEntityManager().find(Card.class,Card.PROP_TO + QUERY , sentTo.getID()); //$NON-NLS-1$
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findCardSentTo() '%s'",sentTo);
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findCardSentTo() '%s'",sentTo); //$NON-NLS-1$
 		}
 		return new Card[]{};
 	}
@@ -380,39 +388,43 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 
 	public User[] findAllUsers() {
 		try {
-			return getEntityManager().find(User.class,User.PROP_TRASHED + " = ?",false);
+			return getEntityManager().find(User.class,User.PROP_TRASHED + QUERY,false); //$NON-NLS-1$
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findAllUsers() ");
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findAllUsers() "); //$NON-NLS-1$
 			return null;
 		}
 	}
 
 	public boolean hasUser(String user) {
 		try {
-			return getEntityManager().count(User.class, User.PROP_USERID + " = ? and " + User.PROP_TRASHED + " = ?" ,user,false) != 0;
+			return getEntityManager().count(User.class, 
+					User.PROP_USERID + " = ? and " + User.PROP_TRASHED + QUERY ,
+					user,false) != 0; //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#hasUser() '%s'",user);
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#hasUser() '%s'",user); //$NON-NLS-1$
 			return false;
 		}
 	}
 	
 	public Board findBoard(int id){
 		try {
-			Board[] findBoards = getEntityManager().find(Board.class, Board.PROP_TRASHED + " = ? and " + Board.PROP_ID + " = ?",false,id);
+			Board[] findBoards = getEntityManager().find(Board.class,
+					Board.PROP_TRASHED + " = ? and " + Board.PROP_ID + QUERY,
+					false,id); //$NON-NLS-1$ //$NON-NLS-2$
 			if(findBoards.length == 1){
 				return findBoards[0];
 			}
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findBoard() id='%d'",id);
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findBoard() id='%d'",id); //$NON-NLS-1$
 		}
 		return null;		
 	}
 
 	public Board[] findAllBoard() {
 		try {
-			return getEntityManager().find(Board.class, Board.PROP_TRASHED + " = ?",false);
+			return getEntityManager().find(Board.class, Board.PROP_TRASHED + QUERY,false); //$NON-NLS-1$
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findAllBoard()");
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#findAllBoard()"); //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -430,7 +442,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 			User[] entities =  getEntityManager().find(User.class);
 			getEntityManager().delete(entities);
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#deleteAllUsers()");			
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#deleteAllUsers()");			 //$NON-NLS-1$
 		}
 	}
 
@@ -443,7 +455,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		try{
 			board = getEntityManager().create(Board.class,params);
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#createBoard()");			
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#createBoard()");			 //$NON-NLS-1$
 		}
 		firePropertyChange(Board.class.getSimpleName(), null, board);
 		return board;
@@ -491,7 +503,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 		try {
 			getEntityManager().create(Icon.class, params);
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e, "KanbanServiceImpl#addIcon() type:'%s' x:'%d' y:'%d' ",type,x,y);
+			KanbanStatusHandler.fail(e, "KanbanServiceImpl#addIcon() type:'%s' x:'%d' y:'%d' ",type,x,y); //$NON-NLS-1$
 		}
 		return icon;
 	}
@@ -503,9 +515,9 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 	public Icon[] findAllIcons() {
 		Icon[] icons = null;
 		try {
-			icons = getEntityManager().find(Icon.class,Icon.PROP_TRASHED + " = ?", false);
+			icons = getEntityManager().find(Icon.class,Icon.PROP_TRASHED + QUERY, false); //$NON-NLS-1$
 		} catch (SQLException e) {
-			KanbanStatusHandler.fail(e,"KanbanServiceImpl#findIcons()",true);
+			KanbanStatusHandler.fail(e,"KanbanServiceImpl#findIcons()",true); //$NON-NLS-1$
 		}
 		return icons;
 	}
@@ -536,7 +548,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 
 	public void changedStorage(IProgressMonitor monitor) {
 		initialized = false;
-		monitor.setTaskName("Initialize Database Connection...");
+		monitor.setTaskName(Messages.KanbanServiceImpl_database_initialize_message);
 		init();
 		monitor.internalWorked(15);
 	}

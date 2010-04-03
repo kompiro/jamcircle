@@ -1,14 +1,14 @@
 package org.kompiro.jamcircle.kanban.service.internal;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeNotNull;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Date;
 
 import net.java.ao.DBParam;
 import net.java.ao.EntityManager;

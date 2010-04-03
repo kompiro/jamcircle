@@ -4,7 +4,12 @@ import java.beans.PropertyChangeEvent;
 
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
-
+/**
+ * This implementation describes Graphical implementation and shows on board.
+ * When you add some model of GraphicalEntity and use Implementation wrapper,extends this class.
+ * @author kompiro
+ *
+ */
 public class GraphicalImpl extends EntityImpl{
 		
 	public GraphicalImpl(GraphicalEntity entity) {

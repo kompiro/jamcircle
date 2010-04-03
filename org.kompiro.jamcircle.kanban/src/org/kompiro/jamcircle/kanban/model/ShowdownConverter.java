@@ -5,9 +5,16 @@ import java.net.URL;
 import org.kompiro.jamcircle.kanban.internal.util.StreamUtil;
 
 
+/**
+ * This class provides to translate template using showdown(Markdown engine implemented by JavaScript).
+ * @author kompiro
+ */
 public class ShowdownConverter {
 
- 	private static final ShowdownConverter converter = new ShowdownConverter();
+ 	private static final String FILE_NAME_OF_TEMPLATE = "template.txt"; //$NON-NLS-1$
+	private static final String FILE_NAME_OF_SHOWDOWN_JS = "showdown.js"; //$NON-NLS-1$
+	private static final String EMPTY = ""; //$NON-NLS-1$
+	private static final ShowdownConverter converter = new ShowdownConverter();
 	
 	private ShowdownConverter(){
 	}
@@ -17,12 +24,12 @@ public class ShowdownConverter {
 	}
 
 	public String convert(String target){
-		if(target == null) return "";
-		URL resource = this.getClass().getResource("showdown.js");
+		if(target == null) return EMPTY;
+		URL resource = this.getClass().getResource(FILE_NAME_OF_SHOWDOWN_JS);
 		String script = StreamUtil.readFromResource(resource);
 		if(script == null) return null;
 
-		resource = this.getClass().getResource("template.txt");
+		resource = this.getClass().getResource(FILE_NAME_OF_TEMPLATE);
 		String template = StreamUtil.readFromResource(resource);
 		if(template == null) return null;
 

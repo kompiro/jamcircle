@@ -3,7 +3,12 @@ package org.kompiro.jamcircle.kanban.model;
 import java.io.Serializable;
 
 
-
+/**
+ * This implementation is DTO of Card.
+ * TODO This class needs to move XMPP Implementation
+ * @author kompiro
+ *
+ */
 public class CardDTO implements Serializable{
 
 	private static final long serialVersionUID = 8904805055342491909L;

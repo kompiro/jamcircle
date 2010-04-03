@@ -1,5 +1,9 @@
 package org.kompiro.jamcircle.kanban.model;
 
+/**
+ * describes color types.
+ * @author kompiro
+ */
 public enum ColorTypes {
 	RED,
 	YELLOW,

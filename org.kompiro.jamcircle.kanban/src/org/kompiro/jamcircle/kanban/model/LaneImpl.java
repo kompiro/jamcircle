@@ -6,9 +6,14 @@ import java.beans.PropertyChangeEvent;
 import java.sql.SQLException;
 
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
+import org.kompiro.jamcircle.kanban.Messages;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 
+/**
+ * This implementation describes Lane implmentation wrapper.
+ * @author kompiro
+ */
 public class LaneImpl extends GraphicalImpl {
 
 	private final Lane lane;
@@ -20,7 +25,7 @@ public class LaneImpl extends GraphicalImpl {
 
 	public boolean addCard(final Card card) {
 		if(lane.getBoard() == null){
-			String message = format("This lane doesn't have parent boardl.:%s",lane);
+			String message = format(Messages.LaneImpl_error_parent_board,lane);
 			throw new IllegalArgumentException(message);
 		}
 		card.setLane(lane);
@@ -35,9 +40,9 @@ public class LaneImpl extends GraphicalImpl {
 		if(!card.isMock()){
 			lane.getEntityManager().flush(card);
 			try {
-				lane.getEntityManager().find(Card.class,Card.PROP_ID + " = ?", card.getID());
+				lane.getEntityManager().find(Card.class,Card.PROP_ID + QUERY, card.getID());
 			} catch (SQLException e) {
-				KanbanStatusHandler.fail(e, "SQLException has occured.");
+				KanbanStatusHandler.fail(e, Messages.LaneImpl_error_sql);
 			}
 		}
 		PropertyChangeEvent event = new PropertyChangeEvent(lane,Lane.PROP_CARD,null,card);
@@ -52,8 +57,8 @@ public class LaneImpl extends GraphicalImpl {
 	@Override
 	protected void fireEvent(PropertyChangeEvent event) {
 		boolean added = event.getNewValue() != null;
-		KanbanStatusHandler.debug("LaneImpl.fireEvent() lane:'" + lane.getStatus() + "'" +
-				" event:'" + event.getPropertyName() + "' added:'" + added + "'");
+		KanbanStatusHandler.debug(Messages.LaneImpl_fire_debug_message,
+				lane.getStatus(),event.getPropertyName(),added);
 		super.fireEvent(event);
 	}
 
@@ -78,7 +83,7 @@ public class LaneImpl extends GraphicalImpl {
 	}
 
 	public String getContainerName() {
-		return format("Lane[%s]",lane.getStatus());
+		return format("Lane[%s]",lane.getStatus()); //$NON-NLS-1$
 	}
 	
 	public Board getBoard(){
@@ -88,7 +93,7 @@ public class LaneImpl extends GraphicalImpl {
 	
 	@Override
 	public String toString() {
-		return format("['#%d':'%s' trashed:'%s']", lane.getID(),lane.getStatus(),lane.isTrashed());
+		return format(TO_STRING_FORMAT, lane.getID(),lane.getStatus(),lane.isTrashed());
 	}
 
 }

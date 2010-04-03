@@ -76,7 +76,6 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	@Override
 	public void postStartup() {
 		trayItem.setImage(getAppImage());
-		showToolTip(Messages.ApplicationWorkbenchAdvisor_started_title, Messages.ApplicationWorkbenchAdvisor_started_message);
 	}
 
 	private void initalizeManager() {
@@ -108,6 +107,17 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 			public void menuDetected(MenuDetectEvent e) {
 				final Shell shell = new Shell();
 				final Menu menu = new Menu(shell);
+				openItem(shell, menu);
+				extensionItem(menu);
+				exitItem(shell, menu);
+				menu.setVisible(true);
+			}
+
+			private void extensionItem(Menu menu) {
+				separator(menu);
+			}
+
+			private void openItem(final Shell shell, final Menu menu) {
 				MenuItem open = new MenuItem(menu, SWT.POP_UP);
 				open.addSelectionListener(new SelectionAdapter(){
 					public void widgetSelected(SelectionEvent e) {
@@ -118,8 +128,13 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 				});
 				open.setText(Messages.ApplicationWorkbenchAdvisor_open_menu);
 				open.setImage(getAppImage());
-//				MenuItem separator = 
-					new MenuItem(menu, SWT.SEPARATOR);
+			}
+
+			private void separator(final Menu menu) {
+				new MenuItem(menu, SWT.SEPARATOR);
+			}
+			
+			private void exitItem(final Shell shell, final Menu menu) {
 				MenuItem exit = new MenuItem(menu, SWT.POP_UP);
 				exit.addSelectionListener(new SelectionAdapter(){
 					public void widgetSelected(SelectionEvent e) {
@@ -130,8 +145,8 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 				});
 				exit.setText(Messages.ApplicationWorkbenchAdvisor_exit_menu);
 				exit.setImage(getExitImage());
-				menu.setVisible(true);
 			}
+
 		});
 	}
 
@@ -174,10 +189,8 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	}
 
 	private void showBoard(Shell shell) {
-		showToolTip(Messages.ApplicationWorkbenchAdvisor_open_message);
 		RCPUtils.modifyAlphaForSurface(shell);
 		shell.setMinimized(false);
-//		closeToolTip();
 	}
 
 	private void hideBoard(Shell shell) {
@@ -185,11 +198,11 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		closeToolTip();
 	}
 	
-	private void showToolTip(String title){
+	public void showToolTip(String title){
 		showToolTip(title, null);
 	}
 	
-	private void showToolTip(String title, String message){
+	public void showToolTip(String title, String message){
 		if(tip != null){
 			closeToolTip();
 		}

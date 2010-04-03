@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.kompiro.jamcircle.kanban.model.mock;
 
 import java.util.*;
@@ -9,7 +6,10 @@ import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 
-
+/**
+ * This implementation is mock of Board and isn't able to store any persistence.
+ * @author kompiro
+ */
 public class Board extends MockEntity implements org.kompiro.jamcircle.kanban.model.Board{
 	
 	private List<Card> cards = new ArrayList<Card>();

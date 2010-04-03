@@ -11,7 +11,10 @@ import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.model.User;
 
-
+/**
+ * This implementation is mock of Card and isn't able to store any persistence.
+ * @author kompiro
+ */
 public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.kanban.model.Card {
 	
 	private int id;
