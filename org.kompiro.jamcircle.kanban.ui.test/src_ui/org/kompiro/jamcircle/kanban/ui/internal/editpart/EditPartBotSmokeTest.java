@@ -67,7 +67,7 @@ public class EditPartBotSmokeTest{
 		assertThat(laneParts.size(),is(not(0)));
 
 		assertThat(lanePart(0).getLaneModel().getStatus(),is("ToDo"));
-		assertThat(lanePart(1).getLaneModel().getStatus(),is("Doing"));
+		assertThat(lanePart(1).getLaneModel().getStatus(),is("In Progress"));
 		assertThat(lanePart(2).getLaneModel().getStatus(),is("Done"));
 	}
 	

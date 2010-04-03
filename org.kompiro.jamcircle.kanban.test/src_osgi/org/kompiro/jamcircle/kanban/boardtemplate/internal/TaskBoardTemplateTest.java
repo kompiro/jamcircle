@@ -21,7 +21,7 @@ public class TaskBoardTemplateTest extends AbstractKanbanTest{
 		assertNotNull(lanes);
 		assertEquals(3,lanes.length);
 		assertEquals("ToDo",lanes[0].getStatus());
-		assertEquals("Doing",lanes[1].getStatus());
+		assertEquals("In Progress",lanes[1].getStatus());
 		assertEquals("Done",lanes[2].getStatus());
 		assertNotNull(lanes[2].getScript());
 	}
