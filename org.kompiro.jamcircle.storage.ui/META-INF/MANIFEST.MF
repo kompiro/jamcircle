@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Storage UI Plug-in
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.kompiro.jamcircle.storage.ui;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.kompiro.jamcircle.storage.ui.StorageUIActivator
-Bundle-Vendor: kompiro.org
+Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.kompiro.jamcircle.storage

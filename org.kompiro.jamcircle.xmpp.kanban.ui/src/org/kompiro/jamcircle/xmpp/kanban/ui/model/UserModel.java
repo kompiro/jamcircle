@@ -14,7 +14,7 @@ import org.kompiro.jamcircle.xmpp.kanban.ui.internal.util.XMPPUtil;
 public class UserModel extends AbstractModel implements Comparable<UserModel>,IconModel{
 	
 	private static final long serialVersionUID = -5229805599410605915L;
-	public static final String PROP_PRESENCE = "PROP_PRESENCE";
+	public static final String PROP_PRESENCE = "PROP_PRESENCE"; //$NON-NLS-1$
 	
 	private RosterEntry entry;
 	private Presence presence;
@@ -34,12 +34,12 @@ public class UserModel extends AbstractModel implements Comparable<UserModel>,Ic
 	}
 
 	public String getName() {
-		if(entry == null) return "";
+		if(entry == null) return ""; //$NON-NLS-1$
 		return entry.getName();
 	}
 	
 	public String getPresenceFrom(){
-		if(presence == null) return "";
+		if(presence == null) return ""; //$NON-NLS-1$
 		return presence.getFrom();
 	}
 	

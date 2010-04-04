@@ -22,8 +22,7 @@ import org.jivesoftware.smack.XMPPException;
 import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 import org.kompiro.jamcircle.xmpp.service.XMPPSettings;
 import org.kompiro.jamcircle.xmpp.service.XMPPSettings.Setting;
-import org.kompiro.jamcircle.xmpp.ui.XMPPImageConstants;
-import org.kompiro.jamcircle.xmpp.ui.XMPPUIActivator;
+import org.kompiro.jamcircle.xmpp.ui.*;
 
 public class ConnectHandler extends AbstractHandler {
 	private String host;
@@ -46,7 +45,7 @@ public class ConnectHandler extends AbstractHandler {
 
 					public void run(IProgressMonitor monitor)
 							throws InvocationTargetException, InterruptedException {
-						monitor.beginTask("Connectiong to Server", 100);
+						monitor.beginTask(Messages.ConnectHandler_connecting_message, 100);
 						try {
 							createConnection(monitor,host, resource,serviceName, username, password,port);
 						} catch (XMPPException e) {
@@ -57,7 +56,7 @@ public class ConnectHandler extends AbstractHandler {
 					
 				});
 			} catch (Exception e) {
-				MessageDialog.openError(getShell(), "can't connect to server.", e.getCause().getMessage());
+				MessageDialog.openError(getShell(), Messages.ConnectHandler_connecting_error_message, e.getCause().getMessage());
 				return false;
 			}
 			return true;
@@ -66,9 +65,14 @@ public class ConnectHandler extends AbstractHandler {
 	}
 	public class ConnectionSettingPage extends WizardPage {
 		
-		private static final String CONNECT_TO_XMPP_OTHER = "XMPP/Other";
-		private static final String CONNECT_TO_JABBER_ORG = "jabber.org";
-		private static final String CONNECT_TO_GMAIL_SERVER = "GTalk/Gmail";
+		private static final String INIT_PORT_NO = "5222"; //$NON-NLS-1$
+		private static final String DOMAIN_OF_JABBER_ORG = "jabber.org"; //$NON-NLS-1$
+		private static final String SERVICE_OF_GMAIL_COM = "gmail.com"; //$NON-NLS-1$
+		private static final String DOMAIN_TALK_GOOGLE_COM = "talk.google.com"; //$NON-NLS-1$
+		private static final String PAGE_NAME_CONNECTION_SETTING = "ConnectionSetting"; //$NON-NLS-1$
+		private final String CONNECT_TO_XMPP_OTHER = Messages.ConnectHandler_xmpp_type;
+		private final String CONNECT_TO_JABBER_ORG = Messages.ConnectHandler_jabber_org_type;
+		private final String CONNECT_TO_GMAIL_SERVER = Messages.ConnectHandler_gtalk_type;
 		private XMPPSettings settings;
 		private Text serviceNameText;
 		private Text portText;
@@ -82,9 +86,9 @@ public class ConnectHandler extends AbstractHandler {
 		private CCombo protocolCombo;
 
 		public ConnectionSettingPage() {
-			super("Connection Setting");
-			setTitle("Connection Setting");
-			setMessage("Connect to XMPP(Jabber) Server.");
+			super(PAGE_NAME_CONNECTION_SETTING);
+			setTitle(Messages.ConnectHandler_connecting_setting_title);
+			setMessage(Messages.ConnectHandler_connecting_setting_message);
 			settings = getService().getSettings();
 		}
 
@@ -109,10 +113,10 @@ public class ConnectHandler extends AbstractHandler {
 			Group locationGroup = new Group(comp, SWT.NONE);
 			locationGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 			locationGroup.setLayout(new GridLayout(3, false));
-			locationGroup.setText("Location");
+			locationGroup.setText(Messages.ConnectHandler_location_label);
 			
 			Label protocolLabel = new Label(locationGroup,SWT.NONE);
-			protocolLabel.setText("Connect to:");
+			protocolLabel.setText(Messages.ConnectHandler_protocol_label);
 			
 			protocolCombo = new CCombo(locationGroup,SWT.FLAT|SWT.BORDER);
 			protocolCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,2,1));
@@ -127,13 +131,13 @@ public class ConnectHandler extends AbstractHandler {
 					CCombo source = (CCombo)e.getSource();
 					String value = source.getText();
 					if(CONNECT_TO_GMAIL_SERVER.equals(value)){
-						hostText.setText("talk.google.com");
-						serviceNameText.setText("gmail.com");
+						hostText.setText(DOMAIN_TALK_GOOGLE_COM);
+						serviceNameText.setText(SERVICE_OF_GMAIL_COM);
 						resourceText.setText(XMPPConnectionService.DEFAULT_RESOURCE_NAME);
 						disableLocationProperties();
 					}else if(CONNECT_TO_JABBER_ORG.equals(value)){
-						hostText.setText("jabber.org");
-						serviceNameText.setText("jabber.org");
+						hostText.setText(DOMAIN_OF_JABBER_ORG);
+						serviceNameText.setText(DOMAIN_OF_JABBER_ORG);
 						resourceText.setText(XMPPConnectionService.DEFAULT_RESOURCE_NAME);
 						disableLocationProperties();						
 					}else{
@@ -173,7 +177,7 @@ public class ConnectHandler extends AbstractHandler {
 			portLabel.setText("Port:");
 			portText = new Text(locationGroup,SWT.BORDER);
 			portText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,2,1));
-			portText.setText("5222");
+			portText.setText(INIT_PORT_NO);
 			portText.addModifyListener(new ModifyListener(){
 				public void modifyText(ModifyEvent e) {
 					try{
@@ -188,10 +192,10 @@ public class ConnectHandler extends AbstractHandler {
 			createEmptySpage(locationGroup);
 			serviceCheck = new Button(locationGroup,SWT.CHECK);
 			Label caucation = new Label(locationGroup,SWT.None);
-			caucation.setText("ServiceName is different HostName.");
+			caucation.setText(Messages.ConnectHandler_hostname_caution);
 			GridDataFactory.fillDefaults().align(SWT.LEFT, SWT.CENTER).applyTo(caucation);
 			Label serviceNameLabel = new Label(locationGroup,SWT.None);
-			serviceNameLabel.setText("ServiceName:");
+			serviceNameLabel.setText(Messages.ConnectHandler_service_name_label);
 			
 			serviceNameText = new Text(locationGroup,SWT.BORDER);
 			serviceNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,2,1));
@@ -208,7 +212,7 @@ public class ConnectHandler extends AbstractHandler {
 				};
 			});
 			Label resourceLabel = new Label(locationGroup,SWT.None);
-			resourceLabel.setText("Resource:");
+			resourceLabel.setText(Messages.ConnectHandler_resource_label);
 			resourceText = new Text(locationGroup, SWT.FLAT | SWT.BORDER);
 			resourceText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,2,1));
 			resourceText.setText(XMPPConnectionService.DEFAULT_RESOURCE_NAME);
@@ -224,7 +228,7 @@ public class ConnectHandler extends AbstractHandler {
 			Group settingGroup = new Group(comp,SWT.NONE);
 			settingGroup.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false));
 			settingGroup.setLayout(new GridLayout(3,false));
-			settingGroup .setText("Setting");
+			settingGroup .setText(Messages.ConnectHandler_setting_label);
 			settingCombo = new CCombo(settingGroup,SWT.FLAT|SWT.BORDER);
 			for (XMPPSettings.Setting setting : settings) {
 				settingCombo.add(setting.getSettingName());
@@ -239,7 +243,7 @@ public class ConnectHandler extends AbstractHandler {
 			settingCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,1,1));
 
 			deleteButton = new Button(settingGroup, SWT.PUSH);
-			deleteButton.setText("Delete Setting");
+			deleteButton.setText(Messages.ConnectHandler_delete_setting_label);
 			deleteButton.addSelectionListener(new SelectionAdapter(){
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -294,9 +298,9 @@ public class ConnectHandler extends AbstractHandler {
 			Group authGroup = new Group(comp, SWT.NONE);
 			authGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 			authGroup.setLayout(new GridLayout(3, false));
-			authGroup.setText("Authentication");
+			authGroup.setText(Messages.ConnectHandler_authentication_label);
 			Label usernameLabel = new Label(authGroup,SWT.None);
-			usernameLabel.setText("username:");
+			usernameLabel.setText(Messages.ConnectHandler_username_label);
 			usernameText = new Text(authGroup,SWT.BORDER);
 			usernameText.addModifyListener(new ModifyListener(){
 				public void modifyText(ModifyEvent e) {
@@ -305,7 +309,7 @@ public class ConnectHandler extends AbstractHandler {
 			});
 			usernameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,2,1));
 			Label passwordLabel = new Label(authGroup,SWT.None);
-			passwordLabel.setText("password:");
+			passwordLabel.setText(Messages.ConnectHandler_password_label);
 			passwordText = new Text(authGroup,SWT.BORDER|SWT.PASSWORD);
 			passwordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,2,1));
 			passwordText.addModifyListener(new ModifyListener(){
@@ -313,15 +317,6 @@ public class ConnectHandler extends AbstractHandler {
 					password = passwordText.getText();
 				}
 			});
-			
-//			Label empty = new Label(authGroup,SWT.None);
-//			Button passwordCheck = new Button(authGroup,SWT.CHECK);
-//			Label caucation = new Label(authGroup,SWT.None);
-//			caucation.setText("Remember my password.");
-//			empty = new Label(authGroup,SWT.None);
-//			Button autologinCheck = new Button(authGroup,SWT.CHECK);
-//			caucation = new Label(authGroup,SWT.None);
-//			caucation.setText("Auto login at startup.");
 		}
 		
 		@Override
@@ -361,7 +356,7 @@ public class ConnectHandler extends AbstractHandler {
 				ImageRegistry imageRegistry = XMPPUIActivator.getDefault().getImageRegistry();
 				Image image = imageRegistry.get(XMPPImageConstants.CONNECT.toString());
 				newShell.setImage(image);
-				newShell.setText("Connection Setting");
+				newShell.setText(Messages.ConnectHandler_connecting_settings_shell_title);
 			}
 		};
 		dialog.open();

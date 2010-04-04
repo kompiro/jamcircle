@@ -8,6 +8,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
+import org.kompiro.jamcircle.xmpp.ui.Messages;
 import org.kompiro.jamcircle.xmpp.ui.XMPPUIActivator;
 
 public class DisconnectHandler extends AbstractHandler {
@@ -19,7 +20,7 @@ public class DisconnectHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		final ApplicationWindow window = (ApplicationWindow)HandlerUtil
 		.getActiveWorkbenchWindowChecked(event);
-		Job job = new Job("Disconnect"){
+		Job job = new Job(Messages.DisconnectHandler_disconnect_job){
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				disconnectConnection(monitor);

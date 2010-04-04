@@ -18,6 +18,7 @@ import org.kompiro.jamcircle.kanban.ui.KanbanView;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 import org.kompiro.jamcircle.xmpp.XMPPStatusHandler;
+import org.kompiro.jamcircle.xmpp.kanban.ui.Messages;
 import org.kompiro.jamcircle.xmpp.kanban.ui.internal.XMPPKanbanUIContext;
 import org.kompiro.jamcircle.xmpp.kanban.ui.internal.util.XMPPUtil;
 import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
@@ -47,7 +48,7 @@ public class KanbanXMPPLoginListener implements XMPPLoginListener, IPartListener
 		}
 
 		public void connectionClosedOnError(final Exception e) {
-			XMPPStatusHandler.fail(e, "exception is occured when XMPP connection closing.");
+			XMPPStatusHandler.fail(e, Messages.KanbanXMPPLoginListener_error_message);
 		}
 
 		public void reconnectingIn(int seconds) {

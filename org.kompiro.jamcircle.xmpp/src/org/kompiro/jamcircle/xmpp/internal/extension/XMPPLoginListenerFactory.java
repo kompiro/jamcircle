@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.*;
+import org.kompiro.jamcircle.xmpp.Messages;
 import org.kompiro.jamcircle.xmpp.XMPPActivator;
 import org.kompiro.jamcircle.xmpp.service.XMPPLoginListener;
 import org.kompiro.jamcircle.xmpp.service.internal.XMPPConnectionServiceImpl;
 
 public class XMPPLoginListenerFactory {
 	
-	static final String POINT_CALLBACK = "org.kompiro.jamcircle.xmpp.xmppLoginListener";
-	static final String ATTR_CLASS = "class";
+	static final String POINT_CALLBACK = "org.kompiro.jamcircle.xmpp.xmppLoginListener"; //$NON-NLS-1$
+	static final String ATTR_CLASS = "class"; //$NON-NLS-1$
 	
 	private IExtensionRegistry registry = RegistryFactory.getRegistry();
 	private List<XMPPLoginListener> listeners = new ArrayList<XMPPLoginListener>();
@@ -20,7 +21,7 @@ public class XMPPLoginListenerFactory {
 		if(registry == null) return;
 		IExtensionPoint point = registry.getExtensionPoint(POINT_CALLBACK);
 		IExtension[] extensions = point.getExtensions();
-		MultiStatus statuses = new MultiStatus(XMPPActivator.PLUGIN_ID, Status.ERROR, "error has occured when initializing xmpp listeners.", null);
+		MultiStatus statuses = new MultiStatus(XMPPActivator.PLUGIN_ID, Status.ERROR, Messages.XMPPLoginListenerFactory_initialized_error_message, null);
 		for(IExtension extension: extensions){
 			IConfigurationElement[] elements = extension.getConfigurationElements();
 			for(IConfigurationElement elem : elements){

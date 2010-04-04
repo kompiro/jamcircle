@@ -1,5 +1,7 @@
 package org.kompiro.jamcircle.xmpp.service.internal;
 
+import static java.lang.String.format;
+
 import java.io.File;
 import java.util.*;
 
@@ -11,8 +13,7 @@ import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
-import org.kompiro.jamcircle.xmpp.XMPPActivator;
-import org.kompiro.jamcircle.xmpp.XMPPStatusHandler;
+import org.kompiro.jamcircle.xmpp.*;
 import org.kompiro.jamcircle.xmpp.internal.extension.XMPPLoginListenerFactory;
 import org.kompiro.jamcircle.xmpp.service.*;
 import org.kompiro.jamcircle.xmpp.service.XMPPSettings.Setting;
@@ -24,7 +25,11 @@ import org.kompiro.jamcircle.xmpp.util.XMPPUtil;
  */
 public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 
-	public static final String KEY_OF_SYSTEM_PROP_XMPP_CONNECT = XMPPActivator.PLUGIN_ID + ".connect";
+	private static final String EMPTY = "";//$NON-NLS-1$
+	private static final String PLAIN = "PLAIN";//$NON-NLS-1$
+	private static final String DOMAIN_OF_TALK_GOOGLE_COM = "talk.google.com"; //$NON-NLS-1$
+	private static final String AT_MARK = "@"; //$NON-NLS-1$
+	public static final String KEY_OF_SYSTEM_PROP_XMPP_CONNECT = XMPPActivator.PLUGIN_ID + ".connect"; //$NON-NLS-1$
 	private XMPPConnection connection;
 	private List<XMPPLoginListener> listeners = new ArrayList<XMPPLoginListener>();
 	private FileTransferManager manager;
@@ -46,7 +51,7 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 		if(getSettings().size() != 0) {
 			final Setting setting = getSettings().get(0);
 			final String host = setting.getHost();
-			final String message = String.format("Connectiong to %s ...",host);
+			final String message = String.format(Messages.XMPPConnectionServiceImpl_connecting_message,host);
 			XMPPStatusHandler.debug(message);
 			Job job = new Job(message) {
 				@Override
@@ -60,7 +65,7 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 						int port = setting.getPort();
 						login(monitor, host, resource, serviceName, port, username, password);
 					} catch (XMPPException e) {
-						XMPPStatusHandler.debug("Can't create initialize Connection.",e);
+						XMPPStatusHandler.debug(Messages.XMPPConnectionServiceImpl_initialize_connection_error_message,e);
 					} finally {
 						monitor.done();
 					}
@@ -85,11 +90,11 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 			String host, String resource,
 			String serviceName, int port, String username,
 			String password) throws XMPPException {
-		monitor.beginTask("Connectiong to " + host + "...", 100);
+		monitor.beginTask(format(Messages.XMPPConnectionServiceImpl_begin_connecting_message,host), 100);
 		if (getConnection() != null) {
 			getConnection().disconnect();
 		}
-		XMPPStatusHandler.debug("createConnection: host:'%s' resource:'%s' serviceName:'%s' port:'%d' username:'%s' password'%s'"
+		XMPPStatusHandler.debug("createConnection: host:'%s' resource:'%s' serviceName:'%s' port:'%d' username:'%s' password'%s'" //$NON-NLS-1$
 					,host,resource,serviceName,port,username,password);
 		ConnectionConfiguration connConfig = new ConnectionConfiguration(host,
 				port, serviceName);
@@ -97,19 +102,19 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 		try {
 			monitor.internalWorked(10);
 			connection.connect();
-			monitor.subTask("connected.");
+			monitor.subTask(Messages.XMPPConnectionServiceImpl_connected_task);
 			monitor.internalWorked(60);
-			if(resource == null || "".equals(resource)){
+			if(resource == null || EMPTY.equals(resource)){
 				resource = DEFAULT_RESOURCE_NAME;
 			}
-		    SASLAuthentication.supportSASLMechanism("PLAIN", 0);
+		    SASLAuthentication.supportSASLMechanism(PLAIN, 0);
 		    // hack : http://www.igniterealtime.org/community/thread/35976
 		    String loginname = username;
-		    if(host.equals("talk.google.com") && username.indexOf("@") < 0){
-		    	loginname += "@" + serviceName;
+		    if(host.equals(DOMAIN_OF_TALK_GOOGLE_COM) && username.indexOf(AT_MARK) < 0){
+		    	loginname += AT_MARK + serviceName;
 		    }
 		    connection.login(loginname, password, resource);
-			monitor.subTask("logged in.");
+			monitor.subTask(Messages.XMPPConnectionServiceImpl_logged_in_task);
 			monitor.internalWorked(30);
 			getSettings().add(host,resource,serviceName,username,password,port);
 			// call for SecureUICallbackProvider
@@ -131,11 +136,11 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 			System.setProperty(KEY_OF_SYSTEM_PROP_XMPP_CONNECT, String.valueOf(true));
 			createFileTransferManager(connection);
 		} catch (XMPPException e) {
-			XMPPStatusHandler.fail(e, "can't disconnect",false);
+			XMPPStatusHandler.fail(e, Messages.XMPPConnectionServiceImpl_disconnect_error_message,false);
 			try {
 				connection.disconnect();
 			} catch (Exception ex) {
-				XMPPStatusHandler.fail(ex, "can't disconnect",false);
+				XMPPStatusHandler.fail(ex, Messages.XMPPConnectionServiceImpl_disconnect_error_message,false);
 			}
 			throw e;
 		}
@@ -167,7 +172,7 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 	}
 	
 	public void logout(IProgressMonitor monitor) {
-		monitor.beginTask("Disconnect from server.", 100);
+		monitor.beginTask(Messages.XMPPConnectionServiceImpl_disconnect_task_name, 100);
 		monitor.internalWorked(10);
 		for (XMPPLoginListener listener : listeners) {
 			listener.beforeLoggedOut(connection);
@@ -200,12 +205,12 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 	}
 	
 	User getCurrentUser(){
-		XMPPStatusHandler.debug("getCurrentUser()");
+		XMPPStatusHandler.debug("getCurrentUser()"); //$NON-NLS-1$
 		XMPPConnection connection = getConnection();
 		User user = null;
 		if(connection != null){
 			String userId = XMPPUtil.getRemovedResourceUser(connection.getUser());
-			XMPPStatusHandler.debug("userId:'%s'",userId);
+			XMPPStatusHandler.debug("userId:'%s'",userId); //$NON-NLS-1$
 			KanbanService service = getKanbanService();
 			if(!service.hasUser(userId)){
 				user = service.addUser(userId);
@@ -223,10 +228,6 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 		this.kanbanService = service;
 	}
 	
-//	public void setActivator(XMPPActivator activator) {
-//		this.activator = activator;
-//	}
-	
 	void setConnection(XMPPConnection connection) {
 		this.connection = connection;
 	}
@@ -235,7 +236,7 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 		XMPPConnection connection = getConnection();
 		String userId = user.getUserId();
 		Presence precense = connection.getRoster().getPresence(userId);
-		String debugMessage = String.format("target:'%s'", user);
+		String debugMessage = String.format("target:'%s'", user); //$NON-NLS-1$
 		XMPPStatusHandler.debug(debugMessage);
 		if(!precense.isAvailable()){
 			return;
@@ -248,7 +249,7 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 		// Create the outgoing file transfer
 		CardDTO dto = new CardDTO(card);
 		Message messageObject = new Message();
-		messageObject.setBody("message form JAM Circle");
+		messageObject.setBody(Messages.XMPPConnectionServiceImpl_message_body);
 		messageObject.setProperty(XMPPConnectionService.PROP_SEND_CARD, dto);
 		Iterator<Presence> precenses = connection.getRoster().getPresences(userId);
 		try {
@@ -266,7 +267,7 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 				
 			}
 		} catch (XMPPException e) {
-			XMPPStatusHandler.fail(e, "send message failed.",true);
+			XMPPStatusHandler.fail(e, Messages.XMPPConnectionServiceImpl_send_failed_error_message,true);
 			return;
 		}
 		card.setTo(getUser(userId));

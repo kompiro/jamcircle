@@ -23,19 +23,20 @@ import org.jivesoftware.smack.packet.Presence;
 import org.kompiro.jamcircle.xmpp.XMPPStatusHandler;
 import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 import org.kompiro.jamcircle.xmpp.service.XMPPLoginListener;
-import org.kompiro.jamcircle.xmpp.ui.XMPPImageConstants;
-import org.kompiro.jamcircle.xmpp.ui.XMPPUIActivator;
+import org.kompiro.jamcircle.xmpp.ui.*;
 
 
 public class RosterView extends ViewPart implements RosterListener, XMPPLoginListener {
-
 	
+	private static final String POPUP_MENU = "#PopupMenu"; //$NON-NLS-1$
+	private static final String EMPTY = ""; //$NON-NLS-1$
+
 	public final class AddUserAction extends Action {
 		
 		private RosterEntry entry;
 
 		public AddUserAction(){
-			super("Enable entry on Kanban Board.");
+			super(Messages.RosterView_enable_message);
 			setImageDescriptor(getImageRegistry().getDescriptor(XMPPImageConstants.USER_ORANGE.toString()));
 		}
 				
@@ -55,7 +56,7 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 		private RosterEntry entry;
 
 		public DeleteUserAction(){
-			super("Disable entry on Kanban Board.");
+			super(Messages.RosterView_disable_message);
 			setImageDescriptor(getImageRegistry().getDescriptor(XMPPImageConstants.USER_GRAY.toString()));
 		}
 		
@@ -73,8 +74,8 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 	private final class DeleteEntryAction extends Action {
 		
 		public DeleteEntryAction() {
-			setText("Delete Entry");
-			setToolTipText("Delete Entry");
+			setText(Messages.RosterView_delete_text);
+			setToolTipText(Messages.RosterView_delete_tooltip);
 			setImageDescriptor(getImageRegistry().getDescriptor(XMPPImageConstants.USER_DELETE.toString()));
 		}
 				
@@ -88,13 +89,13 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 						RosterEntry entry = (RosterEntry) target;
 						try {
 						Shell shell = getShell();
-						String message = String.format("Do you realy want to remove entity '%s'?", entry.getUser());
+						String message = String.format(Messages.RosterView_remove_entity_message, entry.getUser());
 						MessageDialog.openConfirm(shell,
-								"Remove Entry",
+								Messages.RosterView_remove_title,
 								message);
 							roster.removeEntry(entry);
 						} catch (XMPPException e) {
-							XMPPStatusHandler.fail(e, "An exception has occured.");
+							XMPPStatusHandler.fail(e, Messages.RosterView_error_message);
 						}
 						
 					}
@@ -112,8 +113,8 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 
 		protected AddEntryPage(String pageName) {
 			super(pageName);
-			setTitle("Add Entry");
-			setDescription("");
+			setTitle(Messages.RosterView_add_entry);
+			setDescription(Messages.RosterView_add_entry_description);
 		}
 
 		public void createControl(Composite parent) {
@@ -121,7 +122,7 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 			GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).applyTo(comp);
 
 			Label userLabel = new Label(comp,SWT.None);
-			userLabel.setText("User:");
+			userLabel.setText(Messages.RosterView_user_label);
 			Text userText = new Text(comp,SWT.BORDER);
 			userText.addModifyListener(new ModifyListener(){
 				public void modifyText(ModifyEvent e) {
@@ -130,7 +131,7 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 			});
 			GridDataFactory.fillDefaults().grab(true, false).applyTo(userText);
 			Label nickNameLabel = new Label(comp,SWT.None);
-			nickNameLabel.setText("Nick name:");
+			nickNameLabel.setText(Messages.RosterView_nickname_label);
 			Text nickNameText = new Text(comp,SWT.BORDER);
 			nickNameText.addModifyListener(new ModifyListener(){
 				public void modifyText(ModifyEvent e) {
@@ -139,7 +140,7 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 			});
 			GridDataFactory.fillDefaults().grab(true, false).applyTo(nickNameText);
 			Label groupLabel = new Label(comp,SWT.None);
-			groupLabel.setText("Group:");
+			groupLabel.setText(Messages.RosterView_group_label);
 			CCombo groupCombo = new CCombo(comp,SWT.BORDER);
 			
 			Collection<RosterGroup> groups = getRosterGroups();
@@ -189,7 +190,7 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 		private AddEntryPage page;
 
 		AddEntryWizard(){
-			page = new AddEntryPage("Add new Entry.");
+			page = new AddEntryPage(Messages.RosterView_add_entry_page);
 			addPage(page);
 		}
 		
@@ -198,8 +199,8 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 			Roster roster = getConnection().getRoster();
 			String user = page.getUser();
 			if(roster.contains(user)){
-				String message = String.format("'%s' is already exist entry.",user);
-				MessageDialog.openWarning(getShell(), "The user is already exist.",message);
+				String message = String.format(Messages.RosterView_already_exist_entry_error_message,user);
+				MessageDialog.openWarning(getShell(), Messages.RosterView_already_exist_error_title,message);
 				return false;
 			}
 			String groupName = page.getGroupName();
@@ -215,7 +216,7 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 				roster.createEntry(user, page.getNickName(), joinToGroups);
 				return true;
 			} catch (XMPPException e) {
-				XMPPStatusHandler.fail(e, "An exception has occured.");
+				XMPPStatusHandler.fail(e, Messages.RosterView_error_message);
 				return false;
 			}
 		}
@@ -226,8 +227,8 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 	private final class AddEntryAction extends Action {
 		
 		public AddEntryAction(){
-			setText("Create New Entry");
-			setToolTipText("Create New Entry");
+			setText(Messages.RosterView_new_entry_text);
+			setToolTipText(Messages.RosterView_new_entry_tooltip);
 			setImageDescriptor(getImageRegistry().getDescriptor(XMPPImageConstants.USER_ADD.toString()));
 		}
 
@@ -427,7 +428,7 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 				case 0:
 					RosterEntry entry = status.entry;
 					String name = entry.getName();
-					if (name == null || "".equals(name)){
+					if (name == null || EMPTY.equals(name)){
 						name = entry.getUser();
 					}
 					return name;
@@ -444,7 +445,7 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 				switch(columnIndex){
 				case 0:
 					String name = entry.getName();
-					if (name == null || "".equals(name))
+					if (name == null || EMPTY.equals(name))
 						name = entry.getUser();
 					return name;
 				default:
@@ -492,10 +493,6 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 		hookContextMenu();
 		hookDoubleClickAction();
 		initialize(getConnection());
-//		Tree tree = viewer.getTree();
-//		for(TreeColumn column :tree.getColumns()){
-//			column.pack();
-//		}
 	}
 
 
@@ -505,19 +502,19 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 		TreeColumn username = new TreeColumn(tree,SWT.NONE);
 		username.setResizable(true);
 		username.setWidth(200);
-		username.setText("User Name");
+		username.setText(Messages.RosterView_user_name_label);
 		TreeColumn from = new TreeColumn(tree,SWT.NONE);
 		from.setResizable(true);
 		from.setWidth(200);
-		from.setText("From");
+		from.setText(Messages.RosterView_from_label);
 		TreeColumn precenseStatus = new TreeColumn(tree,SWT.NONE);
 		precenseStatus.setResizable(true);
 		precenseStatus.setWidth(200);
-		precenseStatus.setText("status");
+		precenseStatus.setText(Messages.RosterView_status_label);
 	}
 
 	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		MenuManager menuMgr = new MenuManager(POPUP_MENU); //$NON-NLS-1$
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
@@ -573,7 +570,7 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 			public void run() {
 				ISelection selection = viewer.getSelection();
 				Object obj = ((IStructuredSelection)selection).getFirstElement();
-				showMessage("Double-click detected on "+obj.toString());
+				showMessage(String.format(Messages.RosterView_double_click_message, obj.toString()));
 			}
 		};
 	}
@@ -588,7 +585,7 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 	private void showMessage(String message) {
 		MessageDialog.openInformation(
 			viewer.getControl().getShell(),
-			"Roasters",
+			Messages.RosterView_roasters_title,
 			message);
 	}
 
@@ -629,7 +626,7 @@ public class RosterView extends ViewPart implements RosterListener, XMPPLoginLis
 			public void run() {
 				IStatusLineManager manager = getStatusLineManager();
 				Image disconnectIcon = getImageRegistry().get(XMPPImageConstants.DISCONNECT.toString());
-				manager.setMessage(disconnectIcon,"");
+				manager.setMessage(disconnectIcon,EMPTY);
 				viewer.setInput(null);
 			}
 		});

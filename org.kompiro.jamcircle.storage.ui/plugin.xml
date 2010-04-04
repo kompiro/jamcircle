@@ -23,12 +23,12 @@
          point="org.eclipse.ui.commands">
       <category
             id="org.kompiro.jamcircle.storage.ui.commands.category"
-            name="Storage">
+            name="%category.name">
       </category>
       <command
             categoryId="org.kompiro.jamcircle.storage.ui.commands.category"
             id="org.kompiro.jamcircle.storage.ui.commands.settingCommand"
-            name="Storage Setting">
+            name="%command.name">
       </command>
    </extension>
    <extension

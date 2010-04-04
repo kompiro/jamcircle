@@ -7,11 +7,12 @@ import org.jivesoftware.smackx.filetransfer.*;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.xmpp.XMPPStatusHandler;
+import org.kompiro.jamcircle.xmpp.kanban.ui.Messages;
 
 class CardReceiveFileTransferListener implements FileTransferListener {
 	
-	static final String QUERY_OF_UUID_NOT_SENT_CARD = Card.PROP_TRASHED + " = ? and" + Card.PROP_UUID
-							+ " = ? and " + Card.PROP_TO + " is null";
+	static final String QUERY_OF_UUID_NOT_SENT_CARD = String.format("%s = ? and %s = ? and %s is null" //$NON-NLS-1$
+			,Card.PROP_TRASHED,Card.PROP_UUID,Card.PROP_TO);
 	private KanbanService kanbanService;
 
 	public CardReceiveFileTransferListener(KanbanService kanbanService) {
@@ -24,7 +25,7 @@ class CardReceiveFileTransferListener implements FileTransferListener {
 		IncomingFileTransfer accept = request.accept();
 		try {
 			String fileName = request.getFileName();
-			File tmpFile = new File(System.getProperty("java.io.tmpdir"),fileName);
+			File tmpFile = new File(System.getProperty("java.io.tmpdir"),fileName); //$NON-NLS-1$
 			if (tmpFile.exists()) {
 				tmpFile.delete();
 			}
@@ -36,7 +37,7 @@ class CardReceiveFileTransferListener implements FileTransferListener {
 			while (tmpCard == null) {
 				try {
 					if (time > 3) {
-						throw new RuntimeException("can't get card data.");
+						throw new RuntimeException(Messages.CardReceiveFileTransferListener_card_error_message);
 					}
 					Thread.sleep(2000);
 				} catch (InterruptedException e) {
@@ -49,7 +50,7 @@ class CardReceiveFileTransferListener implements FileTransferListener {
 			card.addFile(file);
 			card.save(false);
 		} catch (XMPPException e) {
-			XMPPStatusHandler.fail(e, "error has occured.");
+			XMPPStatusHandler.fail(e, Messages.CardReceiveFileTransferListener_error_message);
 			request.reject();
 		}
 	}

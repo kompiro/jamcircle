@@ -7,7 +7,7 @@ import org.osgi.framework.BundleContext;
 
 public class XMPPActivator extends Plugin {
 
-	public static final String PLUGIN_ID = "org.kompiro.jamcircle.xmpp";
+	public static final String PLUGIN_ID = "org.kompiro.jamcircle.xmpp"; //$NON-NLS-1$
 
 	private static XMPPActivator plugin;
 	

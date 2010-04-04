@@ -4,6 +4,7 @@ import org.eclipse.gef.EditPart;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.User;
 import org.kompiro.jamcircle.kanban.ui.command.CancelableCommand;
+import org.kompiro.jamcircle.xmpp.kanban.ui.Messages;
 
 public class SendCardCommand extends AbstractCommand implements CancelableCommand{
 
@@ -34,13 +35,13 @@ public class SendCardCommand extends AbstractCommand implements CancelableComman
 	}
 
 	public String getComfirmMessage() {
-		return String.format("Are you realy want to send the card '%s'?", part.getModel().toString());
+		return String.format(Messages.SendCardCommand_confirm_message, part.getModel().toString());
 	}
 
 	@Override
 	protected void initialize() {
 		if(target == null){
-			String message = String.format("Target user is null.");
+			String message = String.format(Messages.SendCardCommand_target_is_null_error_message);
 			throw new IllegalStateException(message);
 		}
 		boolean available = false;
@@ -49,16 +50,16 @@ public class SendCardCommand extends AbstractCommand implements CancelableComman
 		} catch (NullPointerException e) {
 		}
 		if(available == false){
-			String message = String.format("The user '%s' is not available.", target.getUserName());
+			String message = String.format(Messages.SendCardCommand_not_available_error_message, target.getUserName());
 			throw new IllegalStateException(message);
 		}
 		if(part == null){
-			String message = String.format("Target part is null.");
+			String message = String.format(Messages.SendCardCommand_target_part_null_error);
 			throw new IllegalStateException(message);
 		}
 		Object model = part.getModel();
 		if( (model instanceof Card) == false){
-			String message = String.format("The object '%s' is not support to send.", part.getClass().getSimpleName());
+			String message = String.format(Messages.SendCardCommand_not_supprt_send_error, part.getClass().getSimpleName());
 			throw new IllegalStateException(message);
 		}
 		this.card = (Card)model;

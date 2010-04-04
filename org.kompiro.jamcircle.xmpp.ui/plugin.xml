@@ -5,11 +5,11 @@
    <extension
          point="org.eclipse.ui.views">
       <category
-            name="JAM Circle"
+            name="%category.name"
             id="org.kompiro.jamcircle">
       </category>
       <view
-            name="Roasters"
+            name="%view.name"
             icon="icons/user.png"
             category="org.kompiro.jamcircle"
             class="org.kompiro.jamcircle.xmpp.ui.views.RosterView"
@@ -22,7 +22,7 @@
             class="org.kompiro.jamcircle.xmpp.ui.XMPPPerspective"
             icon="icons/user.png"
             id="org.kompiro.jamcircle.xmpp.ui.perspective.friends"
-            name="Roasters">
+            name="%perspective.name">
       </perspective>
    </extension>
    <extension
@@ -41,17 +41,17 @@
           point="org.eclipse.ui.commands">
        <category
              id="org.kompiro.trichord.distributed.xmpp.ui.commands.category"
-             name="XMPP(Jabber)">
+             name="%category.name.0">
        </category>
        <command
              categoryId="org.kompiro.trichord.distributed.xmpp.ui.commands.category"
              id="org.kompiro.trichord.distributed.xmpp.ui.commands.connectCommand"
-             name="Connect to XMPP(Jabber) Server">
+             name="%command.name">
        </command>
        <command
              categoryId="org.kompiro.trichord.distributed.xmpp.ui.commands.category"
              id="org.kompiro.trichord.distributed.xmpp.ui.commands.disconnectCommand"
-             name="Disconnect from Server">
+             name="%command.name.0">
        </command>
      </extension>
     <extension
@@ -104,14 +104,14 @@
                commandId="org.kompiro.trichord.distributed.xmpp.ui.commands.connectCommand"
                id="org.kompiro.trichord.distributed.xmpp.ui.menus.connectCommand"
                icon="icons/connect.png"
-               mnemonic="C">
+               mnemonic="%command.mnemonic">
          </command>
          <command
                commandId="org.kompiro.trichord.distributed.xmpp.ui.commands.disconnectCommand"
                id="org.kompiro.trichord.distributed.xmpp.ui.menus.disconnectCommand"
                icon="icons/disconnect.png"
                
-               mnemonic="D">
+               mnemonic="%command.mnemonic.0">
          </command>
        </menuContribution>
        <!--

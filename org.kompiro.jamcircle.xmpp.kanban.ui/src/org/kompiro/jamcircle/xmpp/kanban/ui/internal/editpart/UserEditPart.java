@@ -23,6 +23,7 @@ import org.kompiro.jamcircle.kanban.ui.editpart.IconEditPart;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListListener;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer;
+import org.kompiro.jamcircle.xmpp.kanban.ui.Messages;
 import org.kompiro.jamcircle.xmpp.kanban.ui.internal.command.*;
 import org.kompiro.jamcircle.xmpp.kanban.ui.internal.figure.UserFigure;
 import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
@@ -168,7 +169,7 @@ public class UserEditPart extends AbstractEditPart implements IconEditPart{
 				
 				@Override
 				protected void configureShell(Shell shell) {
-					shell.setText("Send History:" + getUserModel().getName());
+					shell.setText(Messages.UserEditPart_shell_title + getUserModel().getName());
 					super.configureShell(shell);
 				}
 			};

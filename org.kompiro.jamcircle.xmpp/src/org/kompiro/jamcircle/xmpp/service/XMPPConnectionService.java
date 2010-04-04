@@ -9,8 +9,8 @@ import org.kompiro.jamcircle.kanban.model.User;
 
 public interface XMPPConnectionService {
 
-	public static final String DEFAULT_RESOURCE_NAME = "JAM_CIRCLE";
-	public static final String PROP_SEND_CARD = "send_card";
+	public static final String DEFAULT_RESOURCE_NAME = "JAM_CIRCLE"; //$NON-NLS-1$
+	public static final String PROP_SEND_CARD = "send_card"; //$NON-NLS-1$
 
 	void login(IProgressMonitor monitor,String host , String resource,String serviceName, int port,String username,String password) throws XMPPException;
 	

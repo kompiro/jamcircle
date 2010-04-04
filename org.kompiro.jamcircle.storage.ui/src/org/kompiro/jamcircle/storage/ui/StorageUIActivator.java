@@ -8,7 +8,7 @@ import org.osgi.util.tracker.ServiceTracker;
 
 public class StorageUIActivator extends AbstractUIPlugin {
 
-	public static final String PLUGIN_ID = "org.kompiro.jamcircle.storage.ui";
+	public static final String PLUGIN_ID = "org.kompiro.jamcircle.storage.ui"; //$NON-NLS-1$
 	private ServiceTracker storageTracker;
 
 	private static StorageUIActivator plugin;

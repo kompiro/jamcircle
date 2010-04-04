@@ -9,18 +9,21 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Image;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.figure.BoldLabel;
+import org.kompiro.jamcircle.xmpp.kanban.ui.Messages;
 import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
 
 public class UserFigure extends Figure {
 
+	private static final String EMPTY = ""; //$NON-NLS-1$
+
 	private  class UserTooltipFigure extends Figure {
 		private UserTooltipFigure(){
 			setLayoutManager(new GridLayout(2,false));
-			add(new BoldLabel("Name:"));
+			add(new BoldLabel(Messages.UserFigure_name_label));
 			add(new Label(model.getName()));
-			add(new BoldLabel("User ID:"));
+			add(new BoldLabel(Messages.UserFigure_user_id_label));
 			add(new Label(model.getUserId()));
-			add(new BoldLabel("From:"));
+			add(new BoldLabel(Messages.UserFigure_from_label));
 			add(new Label(model.getPresenceFrom()));
 		}
 	}
@@ -45,7 +48,7 @@ public class UserFigure extends Figure {
 		add(figure,new Rectangle(1,1,72,72));
 		Label nameLabel;
 		String name = model.getName();
-		if(name != null && !name.equals("")){
+		if(name != null && !name.equals(EMPTY)){
 			nameLabel = new Label(name);
 		}else{
 			nameLabel = new Label(model.getUserId());

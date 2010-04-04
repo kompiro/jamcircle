@@ -4,21 +4,25 @@ import java.io.IOException;
 import java.util.*;
 
 import org.eclipse.equinox.security.storage.*;
+import org.kompiro.jamcircle.xmpp.Messages;
 import org.kompiro.jamcircle.xmpp.XMPPStatusHandler;
 
 public class XMPPSettings implements Iterable<XMPPSettings.Setting>{
 	
-	private static final String KEY_OF_HOST_NAME = "hostName";
-	private static final String KEY_OF_RESOURCE = "resource";
-	private static final String KEY_OF_PORT = "port";
-	private static final String KEY_OF_PASSWORD = "password";
-	private static final String KEY_OF_USERNAME = "username";
-	private static final String KEY_OF_SERVICE_NAME = "serviceName";
-	private static final String SECURE_PREFERENCES_KEY_NAME = "org.kompiro.jamcircle.xmpp";
+	private static final String EMPTY = ""; //$NON-NLS-1$
+	private static final String KEY_OF_HOST_NAME = "hostName"; //$NON-NLS-1$
+	private static final String KEY_OF_RESOURCE = "resource"; //$NON-NLS-1$
+	private static final String KEY_OF_PORT = "port"; //$NON-NLS-1$
+	private static final String KEY_OF_PASSWORD = "password"; //$NON-NLS-1$
+	private static final String KEY_OF_USERNAME = "username"; //$NON-NLS-1$
+	private static final String KEY_OF_SERVICE_NAME = "serviceName"; //$NON-NLS-1$
+	private static final String SECURE_PREFERENCES_KEY_NAME = "org.kompiro.jamcircle.xmpp"; //$NON-NLS-1$
 	
 	private List<Setting> settings = new ArrayList<Setting>();
 	
 	public class Setting{
+		private static final String SLASH = "/"; //$NON-NLS-1$
+		private static final String AT_MARK = "@"; //$NON-NLS-1$
 		private String host;
 		private String resource;
 		private String serviceName;
@@ -64,7 +68,7 @@ public class XMPPSettings implements Iterable<XMPPSettings.Setting>{
 		}
 		
 		public String getSettingName(){
-			return getUsername() + "@" + getHost() + "/" + getResource();
+			return getUsername() + AT_MARK + getHost() + SLASH + getResource();
 		}
 
 		@Override
@@ -195,9 +199,9 @@ public class XMPPSettings implements Iterable<XMPPSettings.Setting>{
 			}
 			node.flush();
 		} catch (StorageException e) {
-			XMPPStatusHandler.fail(e, "can't store settings.",true);
+			XMPPStatusHandler.fail(e, Messages.XMPPSettings_store_error_message,true);
 		} catch (IOException e) {
-			XMPPStatusHandler.fail(e, "can't store settings.",true);
+			XMPPStatusHandler.fail(e, Messages.XMPPSettings_store_error_message,true);
 		}
 	}
 
@@ -213,15 +217,15 @@ public class XMPPSettings implements Iterable<XMPPSettings.Setting>{
 			for(String settingName : node.childrenNames()){
 				ISecurePreferences settingNode = node.node(settingName);
 				try {
-					String hostName = settingNode.get(KEY_OF_HOST_NAME,"");
+					String hostName = settingNode.get(KEY_OF_HOST_NAME,EMPTY);
 					String resource = settingNode.get(KEY_OF_RESOURCE,XMPPConnectionService.DEFAULT_RESOURCE_NAME);
-					String serviceName = settingNode.get(KEY_OF_SERVICE_NAME,"");
-					String username = settingNode.get(KEY_OF_USERNAME,"");
-					String password = settingNode.get(KEY_OF_PASSWORD,"");
+					String serviceName = settingNode.get(KEY_OF_SERVICE_NAME,EMPTY);
+					String username = settingNode.get(KEY_OF_USERNAME,EMPTY);
+					String password = settingNode.get(KEY_OF_PASSWORD,EMPTY);
 					int port = settingNode.getInt(KEY_OF_PORT,5222);
 					add(hostName, resource, serviceName, username, password, port);				
 				} catch (StorageException e) {
-					XMPPStatusHandler.fail(e, "can't load settings.",true);
+					XMPPStatusHandler.fail(e, Messages.XMPPSettings_load_error_message,true);
 				}
 			}			
 		}

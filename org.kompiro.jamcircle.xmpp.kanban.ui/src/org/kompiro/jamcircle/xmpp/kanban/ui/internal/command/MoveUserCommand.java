@@ -3,6 +3,7 @@ package org.kompiro.jamcircle.xmpp.kanban.ui.internal.command;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
+import org.kompiro.jamcircle.xmpp.kanban.ui.Messages;
 import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
 
 public class MoveUserCommand extends MoveCommand<UserModel> {
@@ -30,14 +31,14 @@ public class MoveUserCommand extends MoveCommand<UserModel> {
 	
 	@Override
 	public String getDebugLabel() {
-		return String.format("%s [user=%s]",super.getDebugLabel(),user);
+		return String.format("%s [user=%s]",super.getDebugLabel(),user); //$NON-NLS-1$
 	}
 
 	@Override
 	protected void initialize() {
 		this.user = (UserModel)getModel();
 		if(user != null && getRectangle() != null){
-			setLabel("Move User '" + user.getName() + "'");
+			setLabel(String.format(Messages.MoveUserCommand_move_label,user.getName()));
 			this.oldLocation = user.getLocation();
 			this.location = getRectangle().getLocation();
 			setExecute(true);
