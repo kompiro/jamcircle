@@ -10,9 +10,9 @@ import org.osgi.framework.BundleContext;
 
 public class StorageActivator extends Plugin {
 
-	public static final String ID = "org.kompiro.jamcircle.storage";
+	public static final String ID = "org.kompiro.jamcircle.storage"; //$NON-NLS-1$
 	
-	private static final String KEY_OF_LOG_NET_JAVA_AO = "net.java.ao";
+	private static final String KEY_OF_LOG_NET_JAVA_AO = "net.java.ao"; //$NON-NLS-1$
 
 	private static StorageActivator plugin;
 	

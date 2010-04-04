@@ -1,5 +1,7 @@
 package org.kompiro.jamcircle.storage.service.internal;
 
+import static java.lang.String.format;
+
 import java.io.File;
 import java.io.FileReader;
 import java.sql.*;
@@ -16,12 +18,23 @@ import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 import org.kompiro.jamcircle.storage.service.*;
 
 /**
+ * This service provides storage service.
  * @author kompiro
  * @TestContext org.kompiro.jamcircle.storage.service.internal.StorageServiceImplTest
  * @TestContext org.kompiro.jamcircle.storage.service.internal.StorageServiceImplInitializeTest
  */
 public class StorageServiceImpl implements StorageService {
 	
+	private static final String ID = "ID"; //$NON-NLS-1$
+	private static final String COMMA = ","; //$NON-NLS-1$
+	private static final String TAB = "\t"; //$NON-NLS-1$
+	private static final String QUERY = "= ?"; //$NON-NLS-1$
+	private static final String DEFAULT_ADMIN_NAME = "sa"; //$NON-NLS-1$
+	private static final String EMPTY = ""; //$NON-NLS-1$
+	private static final String PASSWORD = EMPTY;
+	private static final String DB_NAME = "dbname"; //$NON-NLS-1$
+	private static final String RESOURCE_NAME = "storage"; //$NON-NLS-1$
+
 	private final class StorageChageListenerComparator implements
 			Comparator<StorageChageListener> {
 		public int compare(StorageChageListener o1, StorageChageListener o2) {
@@ -29,9 +42,9 @@ public class StorageServiceImpl implements StorageService {
 		}
 	}
 
-	private static final String KEY_OF_SYSTEM_PROPERTY_STORAGE_STOREROOT = "storage.storeroot";
-	private static final String KEY_OF_SYSTEM_STORAGE_DBNAME = "storage.dbname";
-	static String dbName = System.getProperty(KEY_OF_SYSTEM_STORAGE_DBNAME,"storage");
+	private static final String KEY_OF_SYSTEM_PROPERTY_STORAGE_STOREROOT = "storage.storeroot"; //$NON-NLS-1$
+	private static final String KEY_OF_SYSTEM_STORAGE_DBNAME = "storage.dbname"; //$NON-NLS-1$
+	static String dbName = System.getProperty(KEY_OF_SYSTEM_STORAGE_DBNAME,RESOURCE_NAME);
 	
 	private List<StorageChageListener> listeners = new ArrayList<StorageChageListener>();
 	private StorageSettings settings = new StorageSettings();
@@ -39,9 +52,9 @@ public class StorageServiceImpl implements StorageService {
 	
 	static{
 		try{
-			ResourceBundle r = ResourceBundle.getBundle("storage");
+			ResourceBundle r = ResourceBundle.getBundle(RESOURCE_NAME);
 			if(r != null){
-				dbName = r.getString("dbname");
+				dbName = r.getString(DB_NAME);
 			}
 		}catch(MissingResourceException e){
 			// Noting because there wouldn't like to set default dbname.
@@ -61,7 +74,7 @@ public class StorageServiceImpl implements StorageService {
 		settings.loadSettings();
 		if(settings.size() == 0){
 			fileService = new FileStorageServiceImpl();
-			settings.add(-1,fileService.getStoreRoot(),ConnectionMode.FILE.toString(), "sa", "");
+			settings.add(-1,fileService.getStoreRoot(),ConnectionMode.FILE.toString(), DEFAULT_ADMIN_NAME, PASSWORD);
 		}
 		StorageSetting setting = settings.get(0);
 		try {
@@ -70,7 +83,7 @@ public class StorageServiceImpl implements StorageService {
 			if(!(StorageServiceImpl.testmode)){
 				loader.setupStorageSetting();
 			}else{
-				System.err.println("can't connect storage. and now it is set testmode.");
+				System.err.println(Messages.StorageServiceImpl_test_mode_message);
 			}
 		}
 	}
@@ -83,12 +96,12 @@ public class StorageServiceImpl implements StorageService {
 	}
 			
 	public void loadStorage(StorageSetting setting,IProgressMonitor monitor) throws StorageConnectException{
-		monitor.beginTask("Connect to Database...", 110);
+		monitor.beginTask(Messages.StorageServiceImpl_connect_database_task, 110);
 		if(manager != null){
-			monitor.subTask("Disposed database connection.");
+			monitor.subTask(Messages.StorageServiceImpl_disposed_connection_task);
 			manager.getProvider().dispose();
 		}
-		progress(monitor,10,"Load Settings...");
+		progress(monitor,10,Messages.StorageServiceImpl_load_setting_message);
 		String storeRoot = System.getProperty(KEY_OF_SYSTEM_PROPERTY_STORAGE_STOREROOT);
 		String uri = null;
 		if(storeRoot != null){
@@ -96,20 +109,20 @@ public class StorageServiceImpl implements StorageService {
 		}else if(storeRoot == null || storeRoot.length() == 0){
 			if(testmode || ConnectionMode.MEM.toString().equals(setting.getMode())){
 				fileService = new FileStorageServiceImpl(setting.getUri());
-				uri = "jdbc:h2:mem:TEST;DB_CLOSE_DELAY=-1";				
+				uri = "jdbc:h2:mem:TEST;DB_CLOSE_DELAY=-1";				 //$NON-NLS-1$
 			}else
 			if(ConnectionMode.TCP.toString().equals(setting.getMode())){
 				fileService = new FileStorageServiceImpl();
-				uri = "jdbc:h2:" + setting.getUri() + dbName;
+				uri = format("jdbc:h2:%s",setting.getUri() + dbName); //$NON-NLS-1$
 			}else{
 				fileService = new FileStorageServiceImpl(setting.getUri());
-				uri = "jdbc:h2:" + getDBPath();
+				uri = format("jdbc:h2:%s" ,getDBPath()); //$NON-NLS-1$
 			}
 		}
 		
-		progress(monitor, 10, "Create database connection...");
+		progress(monitor, 10, Messages.StorageServiceImpl_connection_message);
 		createEntityManager(uri,setting.getUsername(),setting.getPassword());
-		progress(monitor, 60, "Store setting...");
+		progress(monitor, 60, Messages.StorageServiceImpl_store_setting_message);
 		storeSetting(setting);
 		for(StorageChageListener listener : listeners){
 			listener.changedStorage(monitor);
@@ -139,13 +152,13 @@ public class StorageServiceImpl implements StorageService {
 			throw new StorageConnectException(e);
 		}
 		if(StorageStatusHandler.isDebug()){
-			StorageStatusHandler.info("path:" + uri,true);
+			StorageStatusHandler.info(format("path:%s",uri),true); //$NON-NLS-1$
 		}
 		manager = new EntityManager(provider);
 	}
 	
 	public void recreateEntityManagerForTest() throws StorageConnectException{
-		assert manager == null || !testmode  : "recreateEntityManager is called after manager is created.";
+		assert manager == null || !testmode  : Messages.StorageServiceImpl_recreated_message;
 		DatabaseProvider provider = manager.getProvider();
 		String uri = provider.getURI();
 		String username = provider.getUsername();
@@ -171,13 +184,13 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	public boolean exportEntity(File csvFile, Class<? extends Entity> entityClass) {
-		String SQL = String.format("CALL CSVWRITE('%s', 'SELECT * FROM %s'); ",csvFile.getAbsolutePath(),entityClass.getSimpleName());
+		String SQL = String.format("CALL CSVWRITE('%s', 'SELECT * FROM %s'); ",csvFile.getAbsolutePath(),entityClass.getSimpleName()); //$NON-NLS-1$
 		StorageStatusHandler.debug(SQL);
 		try {
 			CallableStatement prepareCall = getEntityManager().getProvider().getConnection().prepareCall(SQL);
 			return prepareCall.execute();
 		} catch (SQLException e) {
-			String errorMessage = String.format("StorageServiceImpl#exportEntity() is failed. executed '%s'.",SQL);
+			String errorMessage = String.format("StorageServiceImpl#exportEntity() is failed. executed '%s'.",SQL); //$NON-NLS-1$
 			StorageStatusHandler.fail(e, errorMessage,true);
 			return false;
 		}
@@ -189,20 +202,20 @@ public class StorageServiceImpl implements StorageService {
 			StringBuilder target = new StringBuilder();
 			boolean first = true;
 			for(String column: columns){
-				if("ID".equals(column.toUpperCase())) continue;
+				if(ID.equals(column.toUpperCase())) continue;
 				if(!first){
-					target.append(",");
+					target.append(COMMA);
 				}
 				first = false;
 				target.append(column);
 			}
-			String SQL = String.format("INSERT INTO %s SELECT null as id,%s FROM CSVREAD('%s');",entityClass.getSimpleName() , target.toString(), csvFile.getAbsolutePath());
+			String SQL = String.format("INSERT INTO %s SELECT null as id,%s FROM CSVREAD('%s');",entityClass.getSimpleName() , target.toString(), csvFile.getAbsolutePath()); //$NON-NLS-1$
 			StorageStatusHandler.debug(SQL);
 			PreparedStatement prepareCall = getEntityManager().getProvider().getConnection().prepareStatement(SQL);
 			prepareCall.execute();
 			return true;
 		} catch (Exception e) {
-			StorageStatusHandler.fail(e, "StorageServiceImpl#importEntity()",true);
+			StorageStatusHandler.fail(e, "StorageServiceImpl#importEntity()",true); //$NON-NLS-1$
 			return false;
 		}
 	}
@@ -212,16 +225,16 @@ public class StorageServiceImpl implements StorageService {
 			Entity[] entities =  getEntityManager().find(entityClass);
 			getEntityManager().delete(entities);
 		} catch (SQLException e) {
-			StorageStatusHandler.fail(e, "StorageServiceImpl#deleteAllEntity()");			
+			StorageStatusHandler.fail(e, "StorageServiceImpl#deleteAllEntity()");			 //$NON-NLS-1$
 		}
 	}
 
 	public void deleteTrashedEntity(Class<? extends GraphicalEntity> entityClass) {
 		try {
-			GraphicalEntity[] entities =  getEntityManager().find(entityClass,GraphicalEntity.PROP_TRASHED + "= ?",true);
+			GraphicalEntity[] entities =  getEntityManager().find(entityClass,GraphicalEntity.PROP_TRASHED + QUERY,true);
 			getEntityManager().delete(entities);
 		} catch (SQLException e) {
-			StorageStatusHandler.fail(e, "StorageServiceImpl#deleteTrashedEntity()");			
+			StorageStatusHandler.fail(e, "StorageServiceImpl#deleteTrashedEntity()");			 //$NON-NLS-1$
 		}
 	}
 
@@ -236,10 +249,10 @@ public class StorageServiceImpl implements StorageService {
 		} catch (SQLException e) {
 			StringBuilder builder = new StringBuilder();
 			for(DBParam param:params){
-				builder.append(String.format("%s:%s",param.getField(),param.getValue()));
-				builder.append("\t");
+				builder.append(String.format("%s:%s",param.getField(),param.getValue())); //$NON-NLS-1$
+				builder.append(TAB);
 			}
-			StorageStatusHandler.fail(e, "StorageServiceImpl#create() '%s'",builder.toString());
+			StorageStatusHandler.fail(e, "StorageServiceImpl#create() '%s'",builder.toString()); //$NON-NLS-1$
 		}
 		return entity;
 
@@ -254,7 +267,7 @@ public class StorageServiceImpl implements StorageService {
 		try {
 			getEntityManager().delete(entity);
 		} catch (SQLException e) {
-			StorageStatusHandler.fail(e, "StorageServiceImpl#delete()");
+			StorageStatusHandler.fail(e, "StorageServiceImpl#delete()"); //$NON-NLS-1$
 		}
 	}
 	
@@ -291,9 +304,9 @@ public class StorageServiceImpl implements StorageService {
 	public <T extends Entity> T[] findInTrash(Class<T> clazz){
 		T[] results = null;
 		try {
-			results = getEntityManager().find(clazz,GraphicalEntity.PROP_TRASHED + " = ?",true);
+			results = getEntityManager().find(clazz,GraphicalEntity.PROP_TRASHED + QUERY,true);
 		} catch (SQLException e) {
-			StorageStatusHandler.fail(e,"StorageServiceImpl#countInTrash()",true);
+			StorageStatusHandler.fail(e,"StorageServiceImpl#countInTrash()",true); //$NON-NLS-1$
 		}
 		return results;
 	}
@@ -308,12 +321,12 @@ public class StorageServiceImpl implements StorageService {
 				try {
 					recreateEntityManagerForTest();
 				} catch (StorageConnectException e) {
-					StorageStatusHandler.fail(e, "StorageServiceImpl#migrate()",true);
+					StorageStatusHandler.fail(e, "StorageServiceImpl#migrate()",true); //$NON-NLS-1$
 				}
 			}
 			getEntityManager().migrate(entities);
 		} catch (SQLException e) {
-			StorageStatusHandler.fail(e, "StorageServiceImpl#migrate()",true);
+			StorageStatusHandler.fail(e, "StorageServiceImpl#migrate()",true); //$NON-NLS-1$
 		}
 	}
 
@@ -321,7 +334,7 @@ public class StorageServiceImpl implements StorageService {
 		try {
 			return getEntityManager().count(clazz);
 		} catch (SQLException e) {
-			StorageStatusHandler.fail(e, "StorageServiceImpl#count()",true);
+			StorageStatusHandler.fail(e, "StorageServiceImpl#count()",true); //$NON-NLS-1$
 			return 0;
 		}
 	}

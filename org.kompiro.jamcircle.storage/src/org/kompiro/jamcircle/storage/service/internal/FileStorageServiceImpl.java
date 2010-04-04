@@ -7,25 +7,26 @@ import java.util.*;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.runtime.Platform;
+import org.kompiro.jamcircle.storage.Messages;
 import org.kompiro.jamcircle.storage.StorageStatusHandler;
 import org.kompiro.jamcircle.storage.service.FileStorageService;
 
 public class FileStorageServiceImpl implements FileStorageService {
 
-	private static final String JAM_CIRCLE = "JAM_CIRCLE";
-	private static final String APPLICATION_DATA = "Application Data";
-	private static final String KEY_OF_SYSTEM_STORAGE_ADDTIONAL_PATH = "storage.addtionalPath";
+	private static final String JAM_CIRCLE = "JAM_CIRCLE"; //$NON-NLS-1$
+	private static final String APPLICATION_DATA = "Application Data"; //$NON-NLS-1$
+	private static final String KEY_OF_SYSTEM_STORAGE_ADDTIONAL_PATH = "storage.addtionalPath"; //$NON-NLS-1$
 	/** this property is used for testing. */
-	private static String addtionalPath = "";
+	private static String addtionalPath = ""; //$NON-NLS-1$
 	public static boolean testmode;
 	private String storeRoot;
 
 	static{
 		try{
-			ResourceBundle r = ResourceBundle.getBundle("storage");
+			ResourceBundle r = ResourceBundle.getBundle("storage"); //$NON-NLS-1$
 			if(r != null){
-				testmode = Boolean.valueOf(r.getString("testmode"));
-				addtionalPath = r.getString("addtionalPath");
+				testmode = Boolean.valueOf(r.getString("testmode")); //$NON-NLS-1$
+				addtionalPath = r.getString("addtionalPath"); //$NON-NLS-1$
 			}
 		}catch(MissingResourceException e){
 			// Noting because there wouldn't like to set default dbname.
@@ -43,20 +44,20 @@ public class FileStorageServiceImpl implements FileStorageService {
 
 	public void addFile(String destDir, File srcFile) {
 		String filePath = getStoreRoot() + destDir + File.separator + srcFile.getName();
-		String message = String.format("StorageServiceImpl#fileExists(filePath:'%s')", filePath);
+		String message = String.format("StorageServiceImpl#fileExists(filePath:'%s')", filePath); //$NON-NLS-1$
 		StorageStatusHandler.debug(message);
 		File destFile = new File(filePath);
 		try {
 			FileUtils.copyFile(srcFile, destFile);
 		} catch (IOException e) {
-			String errorMessage = String.format("can't copy file '%s'",srcFile.getName());
+			String errorMessage = String.format(Messages.FileStorageServiceImpl_copy_error_message,srcFile.getName());
 			StorageStatusHandler.fail(e, errorMessage);
 		}
 	}
 
 	public boolean fileExists(String path) {
 		String filePath = getStoreRoot() + path;
-		String message = String.format("StorageServiceImpl#fileExists(filePath:'%s')", filePath);
+		String message = String.format("StorageServiceImpl#fileExists(filePath:'%s')", filePath); //$NON-NLS-1$
 		StorageStatusHandler.debug(message);
 		File file = new File(filePath);
 		return file.exists();
@@ -71,15 +72,15 @@ public class FileStorageServiceImpl implements FileStorageService {
 	}
 
 	public String getStoreRoot() {
-		assert storeRoot == null : "storeRoot isn't initialized.";
-		if(addtionalPath != null && !"".equals(addtionalPath)){
+		assert storeRoot == null : Messages.FileStorageServiceImpl_initialized_error_message;
+		if(addtionalPath != null && !"".equals(addtionalPath)){ //$NON-NLS-1$
 			return new File(storeRoot).getAbsolutePath() + File.separator + addtionalPath + File.separator;
 		}
 		return new File(storeRoot).getAbsolutePath() + File.separator;
 	}
 	
 	String getDefaultStoreRoot() {
-		String storeRoot = "";
+		String storeRoot = ""; //$NON-NLS-1$
 		if(testmode || !Platform.isRunning()){
 			storeRoot = getDefaultRootForTest();
 		}else{
@@ -106,7 +107,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
 	private String getDefaultRootForTest() {
 		String storeRoot;
-		String tempDir = System.getProperty("java.io.tmpdir");
+		String tempDir = System.getProperty("java.io.tmpdir"); //$NON-NLS-1$
 		File testDir = new File(tempDir,JAM_CIRCLE);
 		testDir.mkdir();
 		storeRoot = testDir.getAbsolutePath() + File.separator;

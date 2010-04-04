@@ -8,7 +8,7 @@ import org.kompiro.jamcircle.debug.IStatusHandler;
 
 public class StorageStatusHandler {
 
-	private static final String ID_PLUGIN = "org.kompiro.jamcircle.storage";
+	private static final String ID_PLUGIN = "org.kompiro.jamcircle.storage"; //$NON-NLS-1$
 
 	private static Set<IStatusHandler> handlers = new HashSet<IStatusHandler>();
 	
@@ -16,8 +16,8 @@ public class StorageStatusHandler {
 	public static final boolean ENABLE_DEBUG_LEVEL;
 
 	static{
-		ENABLE_LOGGING = !Platform.isRunning() || Boolean.valueOf(Platform.getDebugOption(ID_PLUGIN + "/debug"));
-		ENABLE_DEBUG_LEVEL = !Platform.isRunning() || Boolean.valueOf(Platform.getDebugOption(ID_PLUGIN + "/debug/debug"));
+		ENABLE_LOGGING = !Platform.isRunning() || Boolean.valueOf(Platform.getDebugOption(ID_PLUGIN + "/debug")); //$NON-NLS-1$
+		ENABLE_DEBUG_LEVEL = !Platform.isRunning() || Boolean.valueOf(Platform.getDebugOption(ID_PLUGIN + "/debug/debug")); //$NON-NLS-1$
 	}
 
 	public static void addStatusHandler(IStatusHandler handler) {
@@ -67,7 +67,7 @@ public class StorageStatusHandler {
 
 	public static void info(String message, Object source,boolean informUser) {
 		if (source != null)
-			message += ", source: " + source.getClass().getName();
+			message += ", source: " + source.getClass().getName(); //$NON-NLS-1$
 		if(informUser){
 			for(IStatusHandler handler : handlers){
 				handler.info(message);
@@ -90,8 +90,8 @@ public class StorageStatusHandler {
 
 	public static void fail(Throwable throwable, String message, boolean informUser, int severity) {
 		if (message == null)
-			message = "no message";
-		message += "\n";
+			message = "no message"; //$NON-NLS-1$
+		message += "\n"; //$NON-NLS-1$
 
 		final Status status = new Status(severity, ID_PLUGIN, IStatus.OK, message, throwable);
 

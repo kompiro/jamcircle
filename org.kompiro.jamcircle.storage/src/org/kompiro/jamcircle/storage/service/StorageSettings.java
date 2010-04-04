@@ -4,15 +4,16 @@ import java.io.IOException;
 import java.util.*;
 
 import org.eclipse.equinox.security.storage.*;
+import org.kompiro.jamcircle.storage.Messages;
 import org.kompiro.jamcircle.storage.StorageStatusHandler;
 
 public class StorageSettings implements Iterable<StorageSetting>{
 	
-	private static final String KEY_OF_INDEX = "index";
-	private static final String KEY_OF_MODE = "mode";
-	private static final String KEY_OF_PASSWORD = "password";
-	private static final String KEY_OF_USERNAME = "username";
-	private static final String SECURE_PREFERENCES_KEY_NAME = "org.kompiro.jamcircle.storage";
+	private static final String KEY_OF_INDEX = "index"; //$NON-NLS-1$
+	private static final String KEY_OF_MODE = "mode"; //$NON-NLS-1$
+	private static final String KEY_OF_PASSWORD = "password"; //$NON-NLS-1$
+	private static final String KEY_OF_USERNAME = "username"; //$NON-NLS-1$
+	private static final String SECURE_PREFERENCES_KEY_NAME = "org.kompiro.jamcircle.storage"; //$NON-NLS-1$
 	
 	private List<StorageSetting> settings = new ArrayList<StorageSetting>();
 	
@@ -89,7 +90,7 @@ public class StorageSettings implements Iterable<StorageSetting>{
 		try {
 			node.flush();
 		} catch (IOException e) {
-			StorageStatusHandler.fail(e, "can't store settings.",true);
+			StorageStatusHandler.fail(e, Messages.StorageSettings_error_message,true);
 		}
 		try {
 			int i = 0;
@@ -104,9 +105,9 @@ public class StorageSettings implements Iterable<StorageSetting>{
 			}
 			node.flush();
 		} catch (StorageException e) {
-			StorageStatusHandler.fail(e, "can't store settings.",true);
+			StorageStatusHandler.fail(e, Messages.StorageSettings_error_message,true);
 		} catch (IOException e) {
-			StorageStatusHandler.fail(e, "can't store settings.",true);
+			StorageStatusHandler.fail(e, Messages.StorageSettings_error_message,true);
 		}
 	}
 
@@ -124,12 +125,12 @@ public class StorageSettings implements Iterable<StorageSetting>{
 				try {
 					uri = EncodingUtils.decodeSlashes(uri);
 					int index = settingNode.getInt(KEY_OF_INDEX, -1);
-					String mode = settingNode.get(KEY_OF_MODE,"");
-					String username = settingNode.get(KEY_OF_USERNAME,"");
-					String password = settingNode.get(KEY_OF_PASSWORD,"");
+					String mode = settingNode.get(KEY_OF_MODE,""); //$NON-NLS-1$
+					String username = settingNode.get(KEY_OF_USERNAME,""); //$NON-NLS-1$
+					String password = settingNode.get(KEY_OF_PASSWORD,""); //$NON-NLS-1$
 					add(index,uri, mode, username, password);
 				} catch (StorageException e) {
-					StorageStatusHandler.fail(e, "can't load settings.",true);
+					StorageStatusHandler.fail(e, Messages.StorageSettings_error_load_message,true);
 				}
 			}			
 		}

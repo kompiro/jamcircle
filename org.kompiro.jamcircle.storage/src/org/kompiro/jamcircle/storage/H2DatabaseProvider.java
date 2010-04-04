@@ -14,7 +14,7 @@ public class H2DatabaseProvider extends HSQLDatabaseProvider {
 	@Override
 	public Class<? extends Driver> getDriverClass()
 			throws ClassNotFoundException {
-		return (Class<? extends Driver>) Class.forName("org.h2.Driver");
+		return (Class<? extends Driver>) Class.forName("org.h2.Driver"); //$NON-NLS-1$
 	}	
 	
 }
