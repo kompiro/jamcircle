@@ -93,7 +93,7 @@ public class XMPPConnectionServiceImplTest {
 			ArgumentCaptor<Message> capture = ArgumentCaptor.forClass(Message.class);
 			verify(chat).sendMessage(capture.capture());
 			Message value = capture.getValue();
-			assertThat(value.getBody(),equalTo("message form JAM Circle"));
+			assertThat(value.getBody(),equalTo("message from JAM Circle"));
 			Object actualCard = value.getProperty(XMPPConnectionService.PROP_SEND_CARD);
 			assertThat(actualCard,is(CardDTO.class));
 			assertThat(((CardDTO)actualCard).getSubject(),equalTo(expectedMessage));
