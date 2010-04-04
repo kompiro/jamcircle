@@ -45,13 +45,45 @@ public class BoardLocalLayoutTest {
 	}
 	
 	@Test
-	public void moveWhenOutOfBounds() throws Exception {
+	public void moveWhenOutOfBoundsPlusX() throws Exception {
 		Rectangle targetRect = new Rectangle(new Point(450,20),CardFigureLayer.CARD_SIZE);
 		Rectangle expect = targetRect.getCopy();
 		Rectangle containerRect = new Rectangle(new Point(0,0),new Dimension(500, 500));
 		layout.calc(targetRect , containerRect);
 		assertThat(targetRect,is(not(expect)));
+		assertThat(targetRect.x,is(500 - CardFigureLayer.CARD_SIZE.width));
 	}
+
+	@Test
+	public void moveWhenOutOfBoundsMinusX() throws Exception {
+		Rectangle targetRect = new Rectangle(new Point(-10,20),CardFigureLayer.CARD_SIZE);
+		Rectangle expect = targetRect.getCopy();
+		Rectangle containerRect = new Rectangle(new Point(0,0),new Dimension(500, 500));
+		layout.calc(targetRect , containerRect);
+		assertThat(targetRect,is(not(expect)));
+		assertThat(targetRect.x,is(0));
+	}
+
+	@Test
+	public void moveWhenOutOfBoundsPlusY() throws Exception {
+		Rectangle targetRect = new Rectangle(new Point(450,510),CardFigureLayer.CARD_SIZE);
+		Rectangle expect = targetRect.getCopy();
+		Rectangle containerRect = new Rectangle(new Point(0,0),new Dimension(500, 500));
+		layout.calc(targetRect , containerRect);
+		assertThat(targetRect,is(not(expect)));
+		assertThat(targetRect.y,is(500 - CardFigureLayer.CARD_SIZE.height));
+	}
+	
+	@Test
+	public void moveWhenOutOfBoundsMinusY() throws Exception {
+		Rectangle targetRect = new Rectangle(new Point(450,-10),CardFigureLayer.CARD_SIZE);
+		Rectangle expect = targetRect.getCopy();
+		Rectangle containerRect = new Rectangle(new Point(0,0),new Dimension(500, 500));
+		layout.calc(targetRect , containerRect);
+		assertThat(targetRect,is(not(expect)));
+		assertThat(targetRect.y,is(0));
+	}
+	
 
 	@Test
 	public void moveWhenOutOfBoundsAndOnOneEditPart() throws Exception {

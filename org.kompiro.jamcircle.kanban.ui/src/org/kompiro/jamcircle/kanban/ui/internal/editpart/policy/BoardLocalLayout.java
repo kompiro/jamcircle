@@ -21,7 +21,17 @@ public class BoardLocalLayout {
 			Rectangle containerRect) {
 		Point start = targetRect.getLocation();
 		if(!containerRect.contains(targetRect)){
-			start.x = 0;
+			if(targetRect.getTop().y < containerRect.getTop().y){
+				start.y = 0;
+			}
+			else if(containerRect.getBottom().y < targetRect.getBottom().y){
+				start.y = containerRect.getBottom().y - targetRect.getSize().height; 
+			}
+			else if(containerRect.getRight().x < targetRect.getRight().x){
+				start.x = containerRect.getRight().x - targetRect.getSize().width;				
+			}else if(targetRect.getLeft().x < containerRect.getLeft().x){
+				start.x = 0;
+			}
 		}
 		EditPart editPart = getCardEditPart(start);
 		while(editPart != null) {

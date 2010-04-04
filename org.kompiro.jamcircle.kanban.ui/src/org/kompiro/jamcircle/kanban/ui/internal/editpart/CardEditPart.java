@@ -439,7 +439,7 @@ public class CardEditPart extends AbstractEditPart {
 			movable = false;
 		}
 		else if(isPropCommitLocation(evt)){
-			getCardFigure().revalidate();
+//			getCardFigure().revalidate();
 			effectToParentConstraint();
 			movable = true;
 		}

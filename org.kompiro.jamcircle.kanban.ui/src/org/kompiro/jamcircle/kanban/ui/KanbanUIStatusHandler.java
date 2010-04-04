@@ -60,10 +60,10 @@ public class KanbanUIStatusHandler {
 	}
 
 	public static void debug(String message,Object ... objects){
-		if(ENABLE_DEBUG_LEVEL){
+//		if(ENABLE_DEBUG_LEVEL){
 			message = String.format(message,objects);
 			log(new Status(IStatus.WARNING, ID_PLUGIN, IStatus.OK, message, null));
-		}
+//		}
 	}
 	
 	public static void debugUI(String message,Object... objects){

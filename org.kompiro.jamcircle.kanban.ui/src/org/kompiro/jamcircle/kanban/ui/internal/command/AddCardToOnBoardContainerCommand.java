@@ -43,8 +43,10 @@ public class AddCardToOnBoardContainerCommand extends AbstractCommand {
 		card.setX(constraint.x);
 		card.setY(constraint.y);
 		card.setTrashed(false);
-		card.save(false);
 		container.addCard(card);
+		
+		card.save(false);
+		card.commitLocation();
 	}
 	
 	@Override
