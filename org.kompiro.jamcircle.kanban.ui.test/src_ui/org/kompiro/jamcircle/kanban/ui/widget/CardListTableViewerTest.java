@@ -19,8 +19,7 @@ public class CardListTableViewerTest {
 
 	@Test
 	public void show() throws Exception {
-		Display display = new Display();
-		Shell shell = new Shell(display);
+		Shell shell = new Shell();
 		shell.setLayout(new FillLayout());
 
 		CardListTableViewer viewer = new CardListTableViewer(shell);
