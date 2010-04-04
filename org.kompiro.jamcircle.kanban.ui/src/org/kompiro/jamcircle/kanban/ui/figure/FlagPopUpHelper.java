@@ -18,9 +18,12 @@ import org.eclipse.swt.widgets.Display;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.FlagTypes;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.internal.command.ChangeFlagCommand;
 
 public class FlagPopUpHelper extends PopUpHelper{
+	private static final String KEY_OF_FLAG_IMAGE = "FLAG_%s_IMAGE"; //$NON-NLS-1$
+
 	private IFigure currentTipSource;
 
 	private Timer timer;
@@ -39,7 +42,7 @@ public class FlagPopUpHelper extends PopUpHelper{
 		images = new ArrayList<Image>();
 		FlagTypes[] flagTypeValues = FlagTypes.values();
 		for(int i = 0; i < flagTypeValues.length; i++){
-			Image image = KanbanUIActivator.getDefault().getImageRegistry().get(format("FLAG_%s_IMAGE",flagTypeValues[i]));
+			Image image = KanbanUIActivator.getDefault().getImageRegistry().get(format(KEY_OF_FLAG_IMAGE,flagTypeValues[i]));
 			images.add(new Image(c.getDisplay(),image.getImageData().scaledTo(16, 16)));
 		}
 		this.stack = stack;
@@ -135,7 +138,7 @@ public class FlagPopUpHelper extends PopUpHelper{
 				flagLabel.addActionListener(new FlagTypeChangeActionListener(FlagTypes.values()[i]));
 				add(flagLabel,new GridData());
 			}
-			Clickable hideFlagLabel = new Clickable(new Label("Hide"));
+			Clickable hideFlagLabel = new Clickable(new Label(Messages.FlagPopUpHelper_hide_label));
 			hideFlagLabel.addActionListener(new FlagTypeChangeActionListener(null));
 			add(hideFlagLabel,new GridData());
 		}

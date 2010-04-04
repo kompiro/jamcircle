@@ -31,7 +31,7 @@ import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class BoardListTableViewer implements PropertyChangeListener {
 
-	public static final String ID_BOARD_LIST = "board_list";
+	public static final String ID_BOARD_LIST = "board_list"; //$NON-NLS-1$
 
 	public final class BoardWrapper implements TableListWrapper {
 		private Board board;

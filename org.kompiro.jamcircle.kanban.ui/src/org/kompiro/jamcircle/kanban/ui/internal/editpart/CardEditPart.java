@@ -42,8 +42,8 @@ import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
 public class CardEditPart extends AbstractEditPart {
 	
-	private static final String LINE_BREAK = System.getProperty("line.separator");
-	private static final String EMPTY = "";
+	private static final String LINE_BREAK = System.getProperty("line.separator"); //$NON-NLS-1$
+	private static final String EMPTY = ""; //$NON-NLS-1$
 
 	private final class FlagActionIcon extends
 			ClickableActionIcon {

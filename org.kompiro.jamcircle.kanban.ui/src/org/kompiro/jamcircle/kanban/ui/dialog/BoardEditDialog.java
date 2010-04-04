@@ -14,9 +14,9 @@ import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class BoardEditDialog extends Dialog{
 
-	static final String ID_SCRIPT_TYPE = "script_type";
-	static final String ID_SCRIPT = "script";
-	static final String ID_TITLE = "title";
+	static final String ID_SCRIPT_TYPE = "script_type"; //$NON-NLS-1$
+	static final String ID_SCRIPT = "script"; //$NON-NLS-1$
+	static final String ID_TITLE = "title"; //$NON-NLS-1$
 
 	private Text titleText;
 	private Text scriptText;

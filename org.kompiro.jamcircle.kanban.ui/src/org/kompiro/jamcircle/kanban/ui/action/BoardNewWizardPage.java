@@ -49,7 +49,7 @@ public class BoardNewWizardPage extends WizardPage {
 	private KanbanBoardTemplate selectedInitializer;
 
 	public BoardNewWizardPage(KanbanBoardTemplate[] kanbanDataInitializers) {
-		super("new_board_wizard");
+		super("new_board_wizard"); //$NON-NLS-1$
 		setTitle(Messages.BoardNewWizardPage_title);
 		setDescription(Messages.BoardNewWizardPage_description);
 		this.initializers = trans(kanbanDataInitializers);

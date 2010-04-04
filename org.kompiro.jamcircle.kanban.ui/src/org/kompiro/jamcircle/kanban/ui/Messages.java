@@ -97,6 +97,7 @@ public class Messages extends NLS {
 	public static String EditBoardAction_error_message;
 	public static String EditBoardAction_text;
 	public static String EditBoardAction_tooltip;
+	public static String FlagPopUpHelper_hide_label;
 	public static String InboxEditPart_command_label;
 	public static String InboxIconModel_name;
 	public static String KanbanUIActivator_error_kanban_service;
@@ -127,6 +128,9 @@ public class Messages extends NLS {
 	public static String MessageDialogConfirmStrategy_confirm_title;
 	public static String MoveCardCommand_move_label;
 	public static String MoveIconCommand_command_label;
+	public static String OpenBoardRunnableWithProgress_change_message;
+	public static String OpenBoardRunnableWithProgress_get_board_message;
+	public static String OpenBoardRunnableWithProgress_view_error_message;
 	public static String OpenCardListAction_text;
 	public static String OpenCardListAction_title;
 	public static String OpenCardListAction_tooltip;

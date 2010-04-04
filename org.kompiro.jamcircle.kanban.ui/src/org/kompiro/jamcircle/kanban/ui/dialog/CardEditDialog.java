@@ -31,7 +31,7 @@ public class CardEditDialog extends Dialog{
 	private static final String EMPTY = ""; //$NON-NLS-1$
 
 	public static final String ID_SUBJECT = "subject"; //$NON-NLS-1$
-	public static final String ID_CONTENT = "contents";
+	public static final String ID_CONTENT = "contents"; //$NON-NLS-1$
 	public static final String ID_CONTENTS_BROWSER = "contents_browser"; //$NON-NLS-1$
 	public static final String ID_CONTENTS_BROWSER_TAB = "contents_browser_tab"; //$NON-NLS-1$
 	public static final String ID_DUE_DATE = "due_date"; //$NON-NLS-1$
