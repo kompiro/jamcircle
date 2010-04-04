@@ -15,6 +15,7 @@ import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.kompiro.jamcircle.storage.exception.StorageConnectException;
 import org.kompiro.jamcircle.storage.service.*;
+import org.kompiro.jamcircle.storage.ui.Messages;
 import org.kompiro.jamcircle.storage.ui.StorageUIActivator;
 
 public class StorageSettingWizard extends Wizard {
@@ -27,6 +28,7 @@ public class StorageSettingWizard extends Wizard {
 	
 	private class StorageSettingPage extends WizardPage {
 
+		private static final String PAGE_NAME = "StorageSetting"; //$NON-NLS-1$
 		private CCombo uriCombo;
 		private Text usernameText;
 		private Text passwordText;
@@ -34,9 +36,9 @@ public class StorageSettingWizard extends Wizard {
 		private Button deleteButton;
 
 		protected StorageSettingPage() {
-			super("Storage Setting");
-			setTitle("Storage Setting");
-			setDescription("Set storage infomation about File and Database.");
+			super(PAGE_NAME);
+			setTitle(Messages.StorageSettingWizard_wizard_title);
+			setDescription(Messages.StorageSettingWizard_wizard_description);
 		}
 
 		public void createControl(Composite parent) {
@@ -46,13 +48,13 @@ public class StorageSettingWizard extends Wizard {
 			Group currentGroup = new Group(comp,SWT.None); 
 			currentGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 			currentGroup.setLayout(new FillLayout());
-			currentGroup.setText("Current Store Path");
+			currentGroup.setText(Messages.StorageSettingWizard_current_path_label);
 			Text storePathText = new Text(currentGroup,SWT.BORDER|SWT.READ_ONLY);
 			storePathText.setText(getStoreRoot());
 			
 			Group pathGroup = new Group(comp,SWT.None);
 			pathGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-			pathGroup.setText("Store Path");
+			pathGroup.setText(Messages.StorageSettingWizard_store_path_label);
 			pathGroup.setLayout(new GridLayout(2,false));
 
 			uriCombo = new CCombo(pathGroup,SWT.BORDER);
@@ -70,7 +72,7 @@ public class StorageSettingWizard extends Wizard {
 			GridDataFactory.swtDefaults().align(SWT.FILL,SWT.CENTER).grab(true, false).applyTo(uriCombo);
 		
 			browseButton = new Button(pathGroup,SWT.BORDER);
-			browseButton.setText("Browse");
+			browseButton.setText(Messages.StorageSettingWizard_browse_label);
 			browseButton.addSelectionListener(new SelectionAdapter(){
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -79,8 +81,8 @@ public class StorageSettingWizard extends Wizard {
 					if(filePath != null) {
 						File file = new File(filePath);
 						if(!file.isDirectory()){
-							String message = String.format("Can't find the directory '%s'.",file.getAbsolutePath());
-							MessageDialog.openError(getShell(), "Error", message);
+							String message = String.format(Messages.StorageSettingWizard_not_found_directory_error,file.getAbsolutePath());
+							MessageDialog.openError(getShell(), Messages.StorageSettingWizard_error_title, message);
 							return;
 						}
 						uriCombo.setText(filePath);
@@ -91,7 +93,7 @@ public class StorageSettingWizard extends Wizard {
 			
 			createEmptyCell(pathGroup);
 			deleteButton = new Button(pathGroup,SWT.BORDER);
-			deleteButton.setText("Delete");
+			deleteButton.setText(Messages.StorageSettingWizard_delete_label);
 			deleteButton.addSelectionListener(new SelectionAdapter(){
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -110,12 +112,12 @@ public class StorageSettingWizard extends Wizard {
 			});
 			
 			Group settingGroup = new Group(comp,SWT.None);
-			settingGroup.setText("Authentication:");
+			settingGroup.setText(Messages.StorageSettingWizard_auth_label);
 			settingGroup.setLayout(new GridLayout(2,false));
 			settingGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
 			Label usernameLabel = new Label(settingGroup,SWT.NONE);
-			usernameLabel.setText("User Name:");
+			usernameLabel.setText(Messages.StorageSettingWizard_user_label);
 			usernameText = new Text(settingGroup,SWT.BORDER);
 			usernameText.addModifyListener(new ModifyListener(){
 				public void modifyText(ModifyEvent e) {
@@ -125,7 +127,7 @@ public class StorageSettingWizard extends Wizard {
 			GridDataFactory.fillDefaults().grab(true, false).applyTo(usernameText);
 
 			Label passwordLabel = new Label(settingGroup,SWT.NONE);
-			passwordLabel.setText("Password:");
+			passwordLabel.setText(Messages.StorageSettingWizard_password_label);
 			passwordText = new Text(settingGroup,SWT.BORDER|SWT.PASSWORD);
 			passwordText.addModifyListener(new ModifyListener(){
 				public void modifyText(ModifyEvent e) {
@@ -165,7 +167,7 @@ public class StorageSettingWizard extends Wizard {
 		page = new StorageSettingPage();
 		setNeedsProgressMonitor(true);
 		addPage(page);
-		setWindowTitle("Storage Setting");
+		setWindowTitle(Messages.StorageSettingWizard_window_title);
 	}
 
 	@Override
@@ -209,7 +211,7 @@ public class StorageSettingWizard extends Wizard {
 
 	private String getStoreRoot() {
 		StorageService storageService = getStorageService();
-		if(storageService == null) return "";
+		if(storageService == null) return ""; //$NON-NLS-1$
 		return storageService.getFileService().getStoreRoot();
 	}
 	
