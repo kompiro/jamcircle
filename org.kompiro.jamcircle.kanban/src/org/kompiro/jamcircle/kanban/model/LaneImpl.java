@@ -4,6 +4,7 @@ import static java.lang.String.format;
 
 import java.beans.PropertyChangeEvent;
 import java.sql.SQLException;
+import java.util.*;
 
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 import org.kompiro.jamcircle.kanban.Messages;
@@ -17,6 +18,8 @@ import org.kompiro.jamcircle.scripting.ScriptTypes;
 public class LaneImpl extends GraphicalImpl {
 
 	private final Lane lane;
+	
+	private List<Card> mockCards = new ArrayList<Card>();
 
 	public LaneImpl(Lane lane) throws IllegalArgumentException{
 		super(lane);
@@ -37,7 +40,9 @@ public class LaneImpl extends GraphicalImpl {
 		card.setTrashed(false);
 		card.setDeletedVisuals(false);
 		card.save(false);
-		if(!card.isMock()){
+		if(card.isMock()){
+			mockCards.add(card);
+		}else{
 			lane.getEntityManager().flush(card);
 			try {
 				lane.getEntityManager().find(Card.class,Card.PROP_ID + QUERY, card.getID());
@@ -67,9 +72,20 @@ public class LaneImpl extends GraphicalImpl {
 		card.setBoard(null);
 		card.setDeletedVisuals(true);
 		card.save(false);
+		if(card.isMock()){
+			mockCards.remove(card);
+		}
+
 		PropertyChangeEvent event = new PropertyChangeEvent(lane,Lane.PROP_CARD,card,null);
 		fireEvent(event);
 		return true;
+	}
+	
+	public Card[] getCards(){
+		Collection<Card> allCards = new ArrayList<Card>();
+		allCards.addAll(Arrays.asList(lane.getCards()));
+		allCards.addAll(mockCards);
+		return allCards.toArray(new Card[]{});
 	}
 	
 	public ScriptTypes getScriptType(){
