@@ -2,6 +2,7 @@ package org.kompiro.jamcircle.kanban.ui.internal.command;
 
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.Lane;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.command.AbstractCommand;
 import org.kompiro.jamcircle.kanban.ui.command.CancelableCommand;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
@@ -36,7 +37,7 @@ public class AddLaneTrashCommand extends AbstractCommand implements CancelableCo
 	}
 
 	public String getComfirmMessage() {
-		return String.format("Do you want to move %s to TrashBox?", lane.toString());
+		return String.format(Messages.AddLaneTrashCommand_confirm_message, lane.toString());
 	}
 
 	@Override

@@ -11,8 +11,8 @@ import org.eclipse.ui.PlatformUI;
 
 public abstract class AbstractModel implements Serializable{
 	private static final long serialVersionUID = 649516352865020200L;
-	public static final String PROP_NULL = "null";
-	public static String PROP_LOCATION = "location";
+	public static final String PROP_NULL = "null"; //$NON-NLS-1$
+	public static final String PROP_LOCATION = "location"; //$NON-NLS-1$
 
 	protected Point location;
 	

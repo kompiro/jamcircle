@@ -7,7 +7,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 
 public class BoldLabel extends Label{
-	private final static String BOLD_FONT = "BOLD_FONT";
+	private final static String BOLD_FONT = "BOLD_FONT"; //$NON-NLS-1$
 	static{
 		Font fo = JFaceResources.getDefaultFont();
 		FontData[] fontData = fo.getFontData();

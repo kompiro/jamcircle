@@ -13,6 +13,7 @@ import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractIconEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.command.AddCardToContanerCommand;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
@@ -30,7 +31,7 @@ public class InboxEditPart extends AbstractIconEditPart {
 	
 	@Override
 	protected String getImageLabel() {
-		return "INBOX";
+		return InboxIconModel.NAME;
 	}
 	
 	@Override
@@ -54,7 +55,7 @@ public class InboxEditPart extends AbstractIconEditPart {
 			protected Command getAddCommand(Request request) {
 				CompoundCommand command = new CompoundCommand();
 				GroupRequest req = (GroupRequest) request;
-				command.setDebugLabel("INBOX Command");
+				command.setDebugLabel(Messages.InboxEditPart_command_label);
 				for(Object obj : req.getEditParts()){
 					if (obj instanceof CardEditPart) {
 						CardEditPart cardPart = (CardEditPart) obj;

@@ -6,10 +6,11 @@ import org.eclipse.gef.requests.CreateRequest;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 
 public class LaneCreateRequest extends CreateRequest {
 	
-	public static final String EXPAND_DATA_KEY_SIZE = "size";
+	public static final String EXPAND_DATA_KEY_SIZE = "size"; //$NON-NLS-1$
 	
 	private KanbanService service;
 
@@ -30,7 +31,7 @@ public class LaneCreateRequest extends CreateRequest {
 				}
 
 				public String getStatus() {
-					return "Mock";
+					return "Mock"; //$NON-NLS-1$
 				}
 
 				public int getWidth() {
@@ -57,7 +58,7 @@ public class LaneCreateRequest extends CreateRequest {
 		size.width = size.width <= 200 ? 200 : size.width; 
 		size.height = size.height <= 200 ? 200 : size.height; 
 
-		lane = service.createLane(board,"new status",getLocation().x,getLocation().y,size.width,size.height);
+		lane = service.createLane(board,Messages.LaneCreateRequest_new_status_title,getLocation().x,getLocation().y,size.width,size.height);
 		return lane;
 	}
 

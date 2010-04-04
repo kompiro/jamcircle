@@ -2,14 +2,15 @@ package org.kompiro.jamcircle.kanban.ui.model;
 
 import org.kompiro.jamcircle.kanban.model.Icon;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 
 
 public class DefaultIconModelFactory implements IconModelFactory {
 	
-	public static final String TYPE_OF_LANE_CREATER = "LaneCreaterModel";
-	public static final String TYPE_OF_TRASH = "TrashModel";
-	public static final String TYPE_OF_BOARD_SELECTER = "BoardSelecterModel";
-	public static final String TYPE_OF_INBOX = "InboxIconModel";
+	public static final String TYPE_OF_LANE_CREATER = "LaneCreaterModel"; //$NON-NLS-1$
+	public static final String TYPE_OF_TRASH = "TrashModel"; //$NON-NLS-1$
+	public static final String TYPE_OF_BOARD_SELECTER = "BoardSelecterModel"; //$NON-NLS-1$
+	public static final String TYPE_OF_INBOX = "InboxIconModel"; //$NON-NLS-1$
 	private KanbanService kanbanService;
 	
 	public DefaultIconModelFactory(KanbanService kanbanService) {
@@ -19,7 +20,7 @@ public class DefaultIconModelFactory implements IconModelFactory {
 	public IconModel create(Icon icon) {
 		String type = icon.getClassType();
 		if(type == null){
-			String message = String.format("Unsupported icon type:'%s'",type);
+			String message = String.format(Messages.DefaultIconModelFactory_error_message,type);
 			throw new IllegalArgumentException(message);
 		}
 		type = type.substring(type.lastIndexOf('.') + 1);
@@ -36,7 +37,7 @@ public class DefaultIconModelFactory implements IconModelFactory {
 			InboxIconModel model = new InboxIconModel(icon);
 			return model;
 		}
-		String message = String.format("Unsupported icon type:'%s'",type);
+		String message = String.format(Messages.DefaultIconModelFactory_error_message,type);
 		throw new IllegalArgumentException(message);
 	}
 

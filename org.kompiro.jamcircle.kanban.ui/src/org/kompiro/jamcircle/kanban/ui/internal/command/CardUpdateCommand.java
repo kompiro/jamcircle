@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.*;
 
 import org.kompiro.jamcircle.kanban.model.Card;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.command.AbstractCommand;
 import org.kompiro.jamcircle.kanban.ui.command.provider.ConfirmProvider;
 import org.kompiro.jamcircle.kanban.ui.command.provider.MessageDialogConfirmProvider;
@@ -33,8 +34,8 @@ public class CardUpdateCommand extends AbstractCommand {
 			List<File> files) {
 		if(confirmExecution instanceof MessageDialogConfirmProvider){
 			MessageDialogConfirmProvider provider = (MessageDialogConfirmProvider) confirmExecution;
-			String title = "confirmation";
-			String message = "Do you want to delete some files? If you'll select OK.After you can't undo this command.";
+			String title = Messages.CardUpdateCommand_title;
+			String message = Messages.CardUpdateCommand_message;
 			provider.setTitle(title);
 			provider.setMessage(message);
 		}

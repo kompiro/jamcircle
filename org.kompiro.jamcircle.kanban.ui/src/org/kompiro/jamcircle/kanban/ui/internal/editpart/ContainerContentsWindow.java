@@ -7,6 +7,7 @@ package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.widgets.*;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListListener;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer;
 
@@ -36,7 +37,7 @@ final class ContainerContentsWindow extends ApplicationWindow {
 	@Override
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
-		String title = String.format("Card [%s]", container.getContainerName());
+		String title = String.format(Messages.ContainerContentsWindow_viewer_title, container.getContainerName());
 		shell.setText(title);
 	}
 

@@ -11,6 +11,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.tools.DragEditPartsTracker;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.command.CancelableCommand;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
 
@@ -41,7 +42,7 @@ public class CancelableDragEditPartsTracker extends
 		for(Command com : commands){
 			if (com instanceof CancelableCommand) {
 				CancelableCommand cancelableCommand = (CancelableCommand) com;
-				if(!MessageDialog.openConfirm(getShell(), "Confirm", cancelableCommand.getComfirmMessage())){
+				if(!MessageDialog.openConfirm(getShell(), Messages.CancelableDragEditPartsTracker_confirm_title, cancelableCommand.getComfirmMessage())){
 					return false;
 				}
 			}

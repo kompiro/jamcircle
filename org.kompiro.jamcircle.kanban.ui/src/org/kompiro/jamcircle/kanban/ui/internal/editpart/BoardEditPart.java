@@ -18,8 +18,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
-import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
+import org.kompiro.jamcircle.kanban.ui.*;
 import org.kompiro.jamcircle.kanban.ui.editpart.*;
 import org.kompiro.jamcircle.kanban.ui.internal.command.CardCloneCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.policy.BoardXYLayoutEditPolicy;
@@ -31,13 +30,13 @@ import org.kompiro.jamcircle.storage.model.GraphicalEntity;
  * @TestContext BoardEditPartTest
  */
 public class BoardEditPart extends AbstractEditPart implements CardContainerEditPart, IBoardEditPart{
-	public static final String TITLE_FONT_KEY = "org.kompiro.jamcircle.TITLE_FONT_KEY";
+	public static final String TITLE_FONT_KEY = "org.kompiro.jamcircle.TITLE_FONT_KEY"; //$NON-NLS-1$
 
-	private static final String LAYER_KEY_CARD = "card";
-	private static final String LAYER_KEY_ICON = "icon";
-	private static final String LAYER_KEY_LANE = "lane";
-	private static final String LAYER_KEY_BOARD = "background";
-	private static final String LAYER_KEY_BOARD_TITLE = "title";
+	private static final String LAYER_KEY_CARD = "card"; //$NON-NLS-1$
+	private static final String LAYER_KEY_ICON = "icon"; //$NON-NLS-1$
+	private static final String LAYER_KEY_LANE = "lane"; //$NON-NLS-1$
+	private static final String LAYER_KEY_BOARD = "background"; //$NON-NLS-1$
+	private static final String LAYER_KEY_BOARD_TITLE = "title"; //$NON-NLS-1$
 	
 
 	private final class CardLayer extends Layer {
@@ -95,7 +94,6 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 	private Layer cardLayer;
 	private LayeredPane wallboard;
 	private ImageFigure backImageFigure;
-//	private Conditional userEditPartCondition;
 	private Layer boardStatus;
 
 	private Label boardTitle;
@@ -207,7 +205,6 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 	
 	@Override
 	public DragTracker getDragTracker(Request request) {
-//		return new BoardMouseDragTracker(getKanbanService());
 		return new BoardDragTracker(getKanbanService());
 	}
 
@@ -233,19 +230,6 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		}
 		return results;
 	}
-
-	
-//	public Map<UserModel,UserEditPart> getUserChildren(){
-//		Map<UserModel,UserEditPart> results = new HashMap<UserModel,UserEditPart>();
-//		for(Object o : getChildren()){
-//			if(o instanceof UserEditPart){
-//				UserEditPart user = (UserEditPart)o;
-//				results.put(user.getUserModel(),user);
-//			}
-//		}
-//		return results;
-//	}
-
 	
 	@Override
 	protected void createEditPolicies() {
@@ -270,113 +254,18 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 	public void doPropertyChange(PropertyChangeEvent evt) {
 		Object newValue = evt.getNewValue();
 		Object oldValue = evt.getOldValue();
-		KanbanUIStatusHandler.debug(String.format("BoardEditPart propertyChange %s newValue:'%s' oldValue:'%s'", evt.getPropertyName(),newValue,oldValue));
+		KanbanUIStatusHandler.debug(String.format("BoardEditPart propertyChange %s newValue:'%s' oldValue:'%s'", evt.getPropertyName(),newValue,oldValue)); //$NON-NLS-1$
 		super.doPropertyChange(evt);
-//		if(isPropUser(evt)){
-//			if(newValue != null){
-//				if(newValue instanceof Collection<?>){
-//					KanbanUIStatusHandler.debugUI("Locating Users '%s'",newValue);
-//					evaluateUserLocation((Collection<?>) newValue);
-//				}else if(newValue instanceof UserModel){
-//					KanbanUIStatusHandler.debugUI("Locating User '%s'",newValue);
-//					evaluateUserLocation((UserModel) newValue);
-//				}
-//			}
-//		}else
 		if(isPropTitle(evt)){
 			if(newValue != null){
 				boardTitle.setText(newValue.toString());
 			}
 		}
-//		else if(isPropUserClear(evt)){
-//			for(UserEditPart user : getUserChildren().values()){
-//				removeChild(user);
-//			}
-//		}
 	}
-
-//	private boolean isPropUserClear(PropertyChangeEvent evt) {
-//		return BoardModel.PROP_USER_CLEAR.equals(evt.getPropertyName());
-//	}
 
 	private boolean isPropTitle(PropertyChangeEvent evt) {
 		return Board.PROP_TITLE.equals(evt.getPropertyName());
 	}
-
-//	private void evaluateUserLocation(Collection<?> users) {
-//		for(Object obj : users){
-//			if (obj instanceof UserModel) {
-//				UserModel user = (UserModel) obj;
-//				if( ! evaluateUserLocation(user)){
-//					continue;
-//				}
-//			}
-//		}
-//	}
-	
-//	private boolean evaluateUserLocation(UserModel user){
-//		Map<UserModel, UserEditPart> userChildren = getUserChildren();
-//		UserEditPart userPart = userChildren.get(user);
-//		if(userPart == null){
-//			return false;
-//		}
-//		evaluateUserLocation(userPart);
-//		return true;
-//	}
-
-//	private void evaluateUserLocation(UserEditPart userPart){
-//		UserModel userModel = userPart.getUserModel();
-//		KanbanUIStatusHandler.debugUI("evaluateUserLocation '%s' location:'%s'.",userModel.getUserId(),userModel.getLocation());
-//		int column = 0;
-//		int row = 0;
-//		UserFigure userFigure = userPart.getUserFigure();
-//		Dimension iconSize = userFigure.getSize();
-//		Point translate = userModel.getLocation().getCopy().translate(10,10);
-//		while(findEditPart(translate) != null ){
-//			translate.translate(0,iconSize.height);
-//			row++;
-//			if(!wallboard.containsPoint(translate.getCopy())){
-//				KanbanUIStatusHandler.debugUI("move to next column");
-//				row = 0;
-//				column++;
-//				translate = new Point(iconSize.width * column, iconSize.height * row);
-//			}
-//		}
-//		translate = userModel.getLocation().getCopy().translate(iconSize.width * column, iconSize.height * row);
-//		Display display = getDisplay();
-//		final UserEditPart fUserPart = userPart;
-//		final Point fTranslate = translate;
-//		if(Platform.isRunning()){
-//			display.asyncExec(new Runnable() {
-//				public void run() {
-//					KanbanUIStatusHandler.debugUI("UserEditPart move to : '%s'", fTranslate);
-//					fUserPart.getUserModel().setLocation(fTranslate);
-//					fUserPart.refresh();
-//				}
-//			});
-//		}else{
-//			KanbanUIStatusHandler.debugUI("UserEditPart move to : '%s'", fTranslate);
-//			fUserPart.getUserModel().setLocation(fTranslate);
-//			fUserPart.refresh();
-//		}		
-//	}
-
-//	private GraphicalEditPart findEditPart(Point target) {
-//		EditPartViewer viewer = getViewer();
-//		HashSet<IFigure> exclusionSet = new HashSet<IFigure>();
-//		exclusionSet.add(this.getFigure());
-//		exclusionSet.add(((GraphicalEditPart)viewer.getRootEditPart()).getFigure());
-//		GraphicalEditPart editPart = (GraphicalEditPart)viewer.findObjectAtExcluding(target, exclusionSet, userEditPartCondition);
-//		if(editPart != null){
-//			KanbanUIStatusHandler.debugUI("found EditPart '%s'",editPart.getClass().getName());
-//		}
-//		if(editPart instanceof BoardEditPart || editPart instanceof RootEditPart) return null;
-//		return editPart;
-//	}
-		
-//	private boolean isPropUser(PropertyChangeEvent evt) {
-//		return BoardModel.PROP_USER.equals(evt.getPropertyName());
-//	}
 
 	@Override
 	protected void addChildVisual(EditPart childEditPart, int index) {
@@ -425,10 +314,6 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		return (BoardModel) getModel();
 	}
 	
-//	private boolean isIconEditPart(EditPart editpart) {
-//		return (editpart instanceof IconEditPart);
-//	}
-
 	public CardContainer getCardContainer() {
 		return getBoardModel();
 	}

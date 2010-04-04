@@ -37,7 +37,7 @@ public class AddCardToContanerCommand extends AbstractCommand
 	
 	@Override
 	public String getDebugLabel() {
-		return String.format("%s container=[%s],card=[%s]",super.getDebugLabel(),container,card);
+		return String.format("%s container=[%s],card=[%s]",super.getDebugLabel(),container,card); //$NON-NLS-1$
 	}
 
 //	public String getComfirmMessage() {

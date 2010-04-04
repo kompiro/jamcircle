@@ -2,6 +2,7 @@ package org.kompiro.jamcircle.kanban.ui.internal.command;
 
 
 import org.eclipse.draw2d.geometry.Point;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 import org.kompiro.jamcircle.kanban.ui.model.IconModel;
 
@@ -33,7 +34,7 @@ public class MoveIconCommand extends MoveCommand<IconModel> {
 		this.icon = getModel();
 		if(icon != null && getRectangle() != null){
 			this.oldLocation = icon.getLocation();
-			setLabel(String.format("Move Icon:'%s'",icon.getClass().getSimpleName()));
+			setLabel(String.format(Messages.MoveIconCommand_command_label,icon.getClass().getSimpleName()));
 			this.location = getRectangle().getLocation();
 			setExecute(true);
 		}

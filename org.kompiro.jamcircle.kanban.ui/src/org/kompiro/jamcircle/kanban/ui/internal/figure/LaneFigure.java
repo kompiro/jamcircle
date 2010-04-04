@@ -7,11 +7,12 @@ import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.*;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 
 public class LaneFigure extends RectangleFigure {
 
 
-	public static final String KEY_OF_LANE_HEADER = "LANE_HEADER";
+	public static final String KEY_OF_LANE_HEADER = "LANE_HEADER"; //$NON-NLS-1$
 	
 	public class CardArea extends Figure {
 		@Override
@@ -27,8 +28,8 @@ public class LaneFigure extends RectangleFigure {
 	}
 	static final int LANE_SIZE_OF_CORNER = 20;
 	public static final int MARGIN = 5;
-	public static final String COLOR_KEY_LANE_BODY = "color_key_lane_body";
-	public static final String COLOR_KEY_LANE_BORDER = "color_key_lane_border";
+	public static final String COLOR_KEY_LANE_BODY = "color_key_lane_body"; //$NON-NLS-1$
+	public static final String COLOR_KEY_LANE_BORDER = "color_key_lane_border"; //$NON-NLS-1$
 	private Label statusFigure;
 	private CardArea cardArea;
 	private boolean creating;
@@ -61,7 +62,7 @@ public class LaneFigure extends RectangleFigure {
 		
 	
 	public void setStatus(String status) {
-		if(statusFigure == null) throw new IllegalStateException("LaneFigure:statusFigure is not initialized.");
+		if(statusFigure == null) throw new IllegalStateException(Messages.LaneFigure_initialized_error_message);
 		statusFigure.setText(status);
 	}
 

@@ -15,8 +15,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
 import org.kompiro.jamcircle.kanban.ui.KanbanView;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 
 public class CommandListTableViewer {
+	private static final String _5_DIGIT = "00000"; //$NON-NLS-1$
 	private TableViewer viewer;
 	private GC gc;
 	private int current;
@@ -94,7 +96,7 @@ public class CommandListTableViewer {
 		@Override
 		protected void paint(Event event, Object element) {
 			int index = event.index;
-			String text = "";
+			String text = ""; //$NON-NLS-1$
 			CommandWrapper wrapper = (CommandWrapper) element;
 			if(wrapper.getRow() == current - 1){
 				event.gc.setForeground(table.getDisplay().getSystemColor(SWT.COLOR_BLUE));
@@ -147,15 +149,15 @@ public class CommandListTableViewer {
 
 	private void commandRowLabel() {
 		TableColumn tableColumn = new TableColumn(table, SWT.RIGHT);
-		tableColumn.setText("index");
-		layout.addColumnData(new ColumnPixelData(gc.stringExtent("00000").x));
+		tableColumn.setText(Messages.CommandListTableViewer_index_label);
+		layout.addColumnData(new ColumnPixelData(gc.stringExtent(_5_DIGIT).x));
 	}
 
 
 	private void commandColumnLabel() {
 		TableColumn tableColumn = new TableColumn(table, SWT.LEFT);
-		tableColumn.setText("Command");
-		layout.addColumnData(new ColumnPixelData(gc.stringExtent("Command").x));
+		tableColumn.setText(Messages.CommandListTableViewer_command_label);
+		layout.addColumnData(new ColumnPixelData(gc.stringExtent(Messages.CommandListTableViewer_command_label).x));
 	}
 
 	public void setFocus() {

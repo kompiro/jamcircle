@@ -1,8 +1,10 @@
 package org.kompiro.jamcircle.kanban.ui.internal.command;
 
+import static java.lang.String.format;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.kompiro.jamcircle.kanban.model.Lane;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 
 /**
@@ -25,9 +27,9 @@ public class ChangeLaneConstraintCommand extends MoveCommand<Lane> {
 		this.oldRect = new Rectangle(lane.getX(),lane.getY(),lane.getWidth(),lane.getHeight());
 		this.rect = getRectangle();
 		if(isChangeSizeMode()){
-			setLabel("Change Size '" + lane.getStatus() +"'");
+			setLabel(format(Messages.ChangeLaneConstraintCommand_change_label, lane.getStatus()));
 		}else{
-			setLabel("Move area '" + lane.getStatus() +"'");			
+			setLabel(format(Messages.ChangeLaneConstraintCommand_move_label, lane.getStatus()));			
 		}
 		if(this.lane != null && this.rect != null){
 			setExecute(true);

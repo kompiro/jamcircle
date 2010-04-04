@@ -3,6 +3,7 @@ package org.kompiro.jamcircle.kanban.ui.internal.figure;
 import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.JFaceResources;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 
 public class LaneIconFigure extends RectangleFigure {
 	private Label statusFigure;
@@ -31,7 +32,7 @@ public class LaneIconFigure extends RectangleFigure {
 	}
 
 	public void setStatus(String status){
-		if(statusFigure == null) throw new IllegalStateException("LaneFigure:statusFigure is not initialized.");
+		if(statusFigure == null) throw new IllegalStateException(Messages.LaneIconFigure_initialized_error_message);
 		statusFigure.setText(status);
 	}
 	

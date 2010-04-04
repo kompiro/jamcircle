@@ -27,8 +27,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.CellEditorActionHandler;
 import org.kompiro.jamcircle.kanban.model.*;
-import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
+import org.kompiro.jamcircle.kanban.ui.*;
 import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 import org.kompiro.jamcircle.kanban.ui.command.provider.ConfirmProvider;
 import org.kompiro.jamcircle.kanban.ui.command.provider.MessageDialogConfirmProvider;
@@ -43,6 +42,9 @@ import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
 public class CardEditPart extends AbstractEditPart {
 	
+	private static final String LINE_BREAK = System.getProperty("line.separator");
+	private static final String EMPTY = "";
+
 	private final class FlagActionIcon extends
 			ClickableActionIcon {
 		private FlagActionIcon(Image image) {
@@ -167,9 +169,9 @@ public class CardEditPart extends AbstractEditPart {
 			public void actionPerformed(ActionEvent event) {
 				Shell shell = getShell();
 				Card card = getCardModel();
-				String title = String.format("#%d %s", card.getID(),card.getSubject());
+				String title = String.format(Messages.CardEditPart_contents_title, card.getID(),card.getSubject());
 				String content = card.getContent();
-				BrowserPopupDialog dialog = new BrowserPopupDialog(shell,title,"show card contents",content);
+				BrowserPopupDialog dialog = new BrowserPopupDialog(shell,title,Messages.CardEditPart_contents_status_bar,content);
 				dialog.create();
 				dialog.open();
 			}
@@ -419,10 +421,9 @@ public class CardEditPart extends AbstractEditPart {
 	}
 	
 	public void doPropertyChange(final PropertyChangeEvent evt) {
-		KanbanUIStatusHandler.debug("CardEditPart#propertyChange " +
-				"evt.getPropertyName:'" + evt.getPropertyName() + 
-				"' evt.getNewValue:'" + evt.getNewValue() + 
-				"' evt.getSource:'" + evt.getSource() + "'");
+		KanbanUIStatusHandler.debug(
+				"CardEditPart#propertyChange evt.getPropertyName:'%s' evt.getNewValue:'%s' evt.getSource:'%s'"//$NON-NLS-1$ 
+				,evt.getPropertyName(),evt.getNewValue(),evt.getSource()); 
 		if(isPropLocation(evt)){
 			Object newValue = evt.getNewValue();
 			if(! (newValue instanceof Integer)) return ;
@@ -463,7 +464,7 @@ public class CardEditPart extends AbstractEditPart {
 			setFlag(getCardModel());
 		}
 		else{
-			KanbanUIStatusHandler.info("no property handler:property name:" + evt.getPropertyName());
+			KanbanUIStatusHandler.info("no property handler:property name:%s",evt.getPropertyName()); //$NON-NLS-1$
 		}
 	}
 	
@@ -525,7 +526,7 @@ public class CardEditPart extends AbstractEditPart {
 			StringBuilder builder = new StringBuilder();
 			boolean isNotFirst = false;
 			for(File file : files){
-				if(isNotFirst) builder.append("\n");
+				if(isNotFirst) builder.append(LINE_BREAK); //$NON-NLS-1$
 				builder.append(file.getAbsolutePath());
 				isNotFirst = true;
 			}
@@ -547,7 +548,7 @@ public class CardEditPart extends AbstractEditPart {
 	}
 
 	private void setContent(String content) {
-		if(content == null || "".equals(content)){
+		if(content == null || EMPTY.equals(content)){ //$NON-NLS-1$
 			getPageIcon().setVisible(false);
 		}else{
 			getPageIcon().setVisible(true);

@@ -4,14 +4,15 @@ import org.apache.commons.lang.NotImplementedException;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 
 
 public class InboxIconModel extends AbstractIconModel implements CardContainer{
 
-	public static final String NAME = "INBOX";
+	public static final String NAME = Messages.InboxIconModel_name;
 
 	private static final long serialVersionUID = -6517334594320763535L;
-	private static final String PROP_CARD = "inbox card";
+	private static final String PROP_CARD = "inbox card"; //$NON-NLS-1$
 
 	public InboxIconModel(Icon icon){
 		super(icon);
@@ -30,7 +31,7 @@ public class InboxIconModel extends AbstractIconModel implements CardContainer{
 	}
 
 	public Card[] getCards() {
-		return getKanbanService().findCards("boardId is null and trashed = false");
+		return getKanbanService().findCards("boardId is null and trashed = false"); //$NON-NLS-1$
 	}
 
 	public String getContainerName() {

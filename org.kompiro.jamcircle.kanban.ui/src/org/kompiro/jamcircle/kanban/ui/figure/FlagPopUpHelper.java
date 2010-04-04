@@ -1,5 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui.figure;
 
+import static java.lang.String.format;
+
 import java.util.*;
 
 import org.eclipse.draw2d.*;
@@ -37,7 +39,7 @@ public class FlagPopUpHelper extends PopUpHelper{
 		images = new ArrayList<Image>();
 		FlagTypes[] flagTypeValues = FlagTypes.values();
 		for(int i = 0; i < flagTypeValues.length; i++){
-			Image image = KanbanUIActivator.getDefault().getImageRegistry().get("FLAG_" + flagTypeValues[i] + "_IMAGE");
+			Image image = KanbanUIActivator.getDefault().getImageRegistry().get(format("FLAG_%s_IMAGE",flagTypeValues[i]));
 			images.add(new Image(c.getDisplay(),image.getImageData().scaledTo(16, 16)));
 		}
 		this.stack = stack;

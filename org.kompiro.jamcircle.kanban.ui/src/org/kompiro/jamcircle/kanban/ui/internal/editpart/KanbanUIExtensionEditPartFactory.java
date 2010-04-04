@@ -8,12 +8,13 @@ import org.eclipse.core.runtime.*;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.editpart.ExtendedEditPartFactory;
 import org.kompiro.jamcircle.kanban.ui.editpart.SupportedClassPair;
 
 public class KanbanUIExtensionEditPartFactory implements EditPartFactory {
-	static final String POINT_CALLBACK = "org.kompiro.jamcircle.kanban.ui.editPartFactory";
-	static final String ATTR_HANDLER_CLASS = "class";
+	static final String POINT_CALLBACK = "org.kompiro.jamcircle.kanban.ui.editPartFactory"; //$NON-NLS-1$
+	static final String ATTR_HANDLER_CLASS = "class"; //$NON-NLS-1$
 
 	private static final String PLUGIN_ID = KanbanUIActivator.ID_PLUGIN;
 	private Map<SupportedClassPair, ExtendedEditPartFactory> factories = new HashMap<SupportedClassPair, ExtendedEditPartFactory>();
@@ -27,7 +28,7 @@ public class KanbanUIExtensionEditPartFactory implements EditPartFactory {
 		if(point == null) return;
 		IExtension[] extensions = point.getExtensions();
 		if(extensions == null) return;
-		MultiStatus statuses = new MultiStatus(PLUGIN_ID, Status.ERROR, "error has occured when initializing editpart factories.", null);
+		MultiStatus statuses = new MultiStatus(PLUGIN_ID, Status.ERROR, Messages.KanbanUIExtensionEditPartFactory_error_message, null);
 		for (IExtension extension:extensions) {
 			IConfigurationElement[] confElements = extension.getConfigurationElements();
 			for(IConfigurationElement element : confElements){
@@ -40,7 +41,7 @@ public class KanbanUIExtensionEditPartFactory implements EditPartFactory {
 				if(factory != null){
 					for(SupportedClassPair pair : factory.supportedClasses()){
 						if(factories.containsKey(pair)){
-							String message = format("class:'%s' is already registered.",pair.toString());
+							String message = format(Messages.KanbanUIExtensionEditPartFactory_class_already_registered_error,pair.toString());
 							IllegalStateException e = new IllegalStateException(message);
 							statuses.add(KanbanUIActivator.createErrorStatus(e));
 							continue;
@@ -56,7 +57,7 @@ public class KanbanUIExtensionEditPartFactory implements EditPartFactory {
 	}
 
 	public EditPart createEditPart(EditPart context, Object model) {
-		if(context == null) throw new IllegalArgumentException("Unsupported Object");
+		if(context == null) throw new IllegalArgumentException(Messages.KanbanUIExtensionEditPartFactory_unsupported_object_error);
 		EditPartFactory factory = null;
 		Set<SupportedClassPair> set = factories.keySet();
 		for(SupportedClassPair pair : set){
@@ -64,7 +65,7 @@ public class KanbanUIExtensionEditPartFactory implements EditPartFactory {
 				factory = factories.get(pair);			
 			}
 		}
-		if(factory == null) throw new IllegalArgumentException("Unsupported Object");
+		if(factory == null) throw new IllegalArgumentException(Messages.KanbanUIExtensionEditPartFactory_unsupported_object_error);
 		return factory.createEditPart(context, model);
 	}
 	

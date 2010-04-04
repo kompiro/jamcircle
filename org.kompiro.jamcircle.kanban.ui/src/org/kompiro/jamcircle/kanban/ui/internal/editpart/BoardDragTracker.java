@@ -17,7 +17,7 @@ import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
 public class BoardDragTracker extends MarqueeDragTracker {
 
-	public static final String PROPERTY_DRAG_TO_MOVE_VIEWPOINT = "move viewpoint";
+	public static final String PROPERTY_DRAG_TO_MOVE_VIEWPOINT = "move viewpoint"; //$NON-NLS-1$
 
 	private static final int RIGHT_CLICK = 3;
 	

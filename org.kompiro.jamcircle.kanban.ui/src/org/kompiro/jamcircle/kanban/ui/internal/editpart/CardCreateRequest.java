@@ -6,6 +6,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.requests.CreateRequest;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 
 public class CardCreateRequest extends CreateRequest {
 	
@@ -36,7 +37,7 @@ public class CardCreateRequest extends CreateRequest {
 			return mock;
 		}
 		User user = getUser();
-		Card card = service.createCard(this.board,"new card",user,x,y);
+		Card card = service.createCard(this.board,Messages.CardCreateRequest_new_card_subject,user,x,y);
 		if(filePath != null){
 			File file = new File(filePath);
 			if(file.exists() && file.isFile()){

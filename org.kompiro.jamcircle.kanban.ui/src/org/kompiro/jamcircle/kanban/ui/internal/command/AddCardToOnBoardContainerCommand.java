@@ -33,7 +33,7 @@ public class AddCardToOnBoardContainerCommand extends AbstractCommand {
 			changeContainer();
 			setUndoable(true);
 		} catch (SQLException e) {
-			KanbanUIStatusHandler.fail(e, "0000:AddCardToContainerCommand");
+			KanbanUIStatusHandler.fail(e, "0000:AddCardToContainerCommand"); //$NON-NLS-1$
 		}
 	}
 
@@ -58,7 +58,7 @@ public class AddCardToOnBoardContainerCommand extends AbstractCommand {
 	
 	@Override
 	public String getDebugLabel() {
-		String data = String.format("[card=%s,container=%s]",card.toString(),container.toString());
+		String data = String.format("[card=%s,container=%s]",card.toString(),container.toString()); //$NON-NLS-1$
 		return super.getDebugLabel() + data;
 	}
 }

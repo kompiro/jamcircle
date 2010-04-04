@@ -1,7 +1,8 @@
 package org.kompiro.jamcircle.kanban.ui.dialog;
 
-public class DialogConstants {
-	private DialogConstants(){	}
-	static final String KEY_OF_DATA_ID = "org.eclipse.swtbot.widget.key"; //$NON-NLS-1$
+import org.kompiro.jamcircle.kanban.ui.widget.WidgetConstants;
+
+class DialogConstants extends WidgetConstants{
+	private DialogConstants(){super();	}
 
 }

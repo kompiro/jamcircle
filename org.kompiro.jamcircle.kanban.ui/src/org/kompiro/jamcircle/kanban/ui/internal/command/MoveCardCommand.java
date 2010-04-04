@@ -4,6 +4,7 @@ package org.kompiro.jamcircle.kanban.ui.internal.command;
 import org.eclipse.draw2d.geometry.Point;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 
 public class MoveCardCommand extends MoveCommand<Card> {
@@ -33,7 +34,7 @@ public class MoveCardCommand extends MoveCommand<Card> {
 			card.commitLocation();
 			card.save(false);
 		}else{
-			KanbanUIStatusHandler.fail(new RuntimeException(), "MoveCardCommand:0001:Exception is occured");
+			KanbanUIStatusHandler.fail(new RuntimeException(), "MoveCardCommand:0001:Exception is occured"); //$NON-NLS-1$
 		}
 	}
 
@@ -44,7 +45,7 @@ public class MoveCardCommand extends MoveCommand<Card> {
 			setExecute(true);
 			this.location = getRectangle().getLocation();
 			this.oldLocation = new Point(card.getX(),card.getY());
-			setLabel("Move Card '" + card.getSubject() + "'");
+			setLabel(String.format(Messages.MoveCardCommand_move_label,card.getSubject()));
 		}
 	}
 		

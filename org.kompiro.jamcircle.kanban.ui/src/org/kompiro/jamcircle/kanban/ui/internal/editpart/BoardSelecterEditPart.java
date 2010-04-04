@@ -9,8 +9,7 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.*;
-import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
+import org.kompiro.jamcircle.kanban.ui.*;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractIconEditPart;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.BoardSelecterModel;
@@ -48,7 +47,7 @@ public class BoardSelecterEditPart extends AbstractIconEditPart{
 				@Override
 				protected void configureShell(Shell shell) {
 					super.configureShell(shell);
-					shell.setText("Board List");
+					shell.setText(Messages.BoardSelecterEditPart_viewer_title);
 					Image image = KanbanUIActivator.getDefault().getImageRegistry().get(KanbanImageConstants.KANBANS_IMAGE.toString());
 					shell.setImage(image);
 				}

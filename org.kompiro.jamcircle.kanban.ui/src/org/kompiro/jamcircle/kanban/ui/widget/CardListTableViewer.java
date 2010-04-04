@@ -1,5 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui.widget;
 
+import static org.kompiro.jamcircle.kanban.ui.widget.WidgetConstants.*;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -14,7 +16,6 @@ import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.*;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 import org.kompiro.jamcircle.kanban.model.*;
@@ -23,6 +24,8 @@ import org.kompiro.jamcircle.kanban.ui.dialog.CardEditDialog;
 
 public class CardListTableViewer implements PropertyChangeListener{
 	
+	private static final String EMPTY = ""; //$NON-NLS-1$
+	public static final String ID_CARD_LIST = "card_list"; //$NON-NLS-1$
 	public List<CardListListener> listeners = new ArrayList<CardListListener>();
 
 	public final class CardWrapper implements TableListWrapper{
@@ -31,6 +34,9 @@ public class CardListTableViewer implements PropertyChangeListener{
 		private CardContainer container;
 		
 		public CardWrapper(CardContainer container,Card card,boolean even){
+			if (card == null) {
+				throw new IllegalArgumentException(Messages.CardListTableViewer_illegal_argument_error_message);
+			}
 			this.container = container;
 			this.card = card;
 			this.even = even;
@@ -50,9 +56,6 @@ public class CardListTableViewer implements PropertyChangeListener{
 		
 		@Override
 		public String toString() {
-			if(card == null){
-				return "null";
-			}
 			return card.toString();
 		}
 	}
@@ -97,6 +100,8 @@ public class CardListTableViewer implements PropertyChangeListener{
 
 		viewer.setContentProvider(new CardListContentProvider());
 		final Table table = viewer.getTable();
+		table.setData(KEY_OF_DATA_ID,ID_CARD_LIST);
+		
 		GridDataFactory.fillDefaults().grab(true, true).hint(400, 400).applyTo(table);
 		createIdColumn();
 		createSubjectColumn();
@@ -112,44 +117,7 @@ public class CardListTableViewer implements PropertyChangeListener{
 				}
 			}
 		});
-//		table.addListener(SWT.EraseItem, new Listener() {
-//			public void handleEvent(Event event) {
-//				event.detail &= ~SWT.HOT;	
-//				if((event.detail & SWT.SELECTED) != 0) {
-//					GC gc = event.gc;
-//					Rectangle area = table.getClientArea();
-//					/*
-//					 * If you wish to paint the selection beyond the end of
-//					 * last column, you must change the clipping region.
-//					 */
-//					int columnCount = table.getColumnCount();
-//					if (event.index == columnCount - 1 || columnCount == 0) {
-//						int width = area.x + area.width - event.x;
-//						if (width > 0) {
-//							Region region = new Region();
-//							gc.getClipping(region);
-//							region.add(event.x, event.y, width, event.height); 
-//							gc.setClipping(region);
-//							region.dispose();
-//						}
-//					}
-//					gc.setAdvanced(true);
-//					if (gc.getAdvanced()) gc.setAlpha(127);								
-//					Rectangle rect = event.getBounds();
-//					Color foreground = gc.getForeground();
-//					Color background = gc.getBackground();
-//					gc.setForeground(table.getDisplay().getSystemColor(SWT.COLOR_DARK_BLUE));
-//					gc.setBackground(table.getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
-//					gc.fillGradientRectangle(0, rect.y, 600, rect.height, false);
-//					// restore colors for subsequent drawing
-//					gc.setForeground(foreground);
-//					gc.setBackground(background);
-//					event.detail &= ~SWT.SELECTED;					
-//				}						
-//			}
-//		});
 		viewer.addOpenListener(new IOpenListener(){
-
 			public void open(OpenEvent event) {
 				if(editProvider != null){
 					ISelection sel = event.getSelection();
@@ -191,7 +159,8 @@ public class CardListTableViewer implements PropertyChangeListener{
 				if (data instanceof StructuredSelection) {
 					StructuredSelection selection = (StructuredSelection) data;
 					for(Object obj : selection.toList()){
-						System.out.println(obj);
+						// TODO need to implmenet
+						KanbanUIStatusHandler.debug("dropped", obj); //$NON-NLS-1$
 					}
 				}
 			}
@@ -204,7 +173,7 @@ public class CardListTableViewer implements PropertyChangeListener{
 			public void dragStart(DragSourceEvent event) {
 				event.doit = true;
 				Widget widget = event.widget;
-				KanbanUIStatusHandler.debugUI("CardListTableViewer#dragStart() '%s' widget:'%s'", event,widget);
+				KanbanUIStatusHandler.debugUI("CardListTableViewer#dragStart() '%s' widget:'%s'", event,widget); //$NON-NLS-1$
 			}
 			public void dragFinished(DragSourceEvent event) {
 				ISelection selection = viewer.getSelection();
@@ -221,7 +190,7 @@ public class CardListTableViewer implements PropertyChangeListener{
 					StructuredSelection ss = (StructuredSelection) selection;
 					event.data = ss.toList();
 				}
-				KanbanUIStatusHandler.debugUI("CardListTableViewer#dragSetData() data:'%s'",event.data);
+				KanbanUIStatusHandler.debugUI("CardListTableViewer#dragSetData() data:'%s'",event.data); //$NON-NLS-1$
 			}
 		});
 	 	source.setTransfer(types);
@@ -229,7 +198,7 @@ public class CardListTableViewer implements PropertyChangeListener{
 
 	private void createIdColumn() {
 		idColumn = new TableViewerColumn(viewer, SWT.LEFT);
-		idColumn.getColumn().setText("id");
+		idColumn.getColumn().setText(Messages.CardListTableViewer_id_label);
 		idColumn.getColumn().setWidth(40);
 		idColumn.setLabelProvider(new TableListColumnLabelProvider(){
 			@Override
@@ -251,7 +220,7 @@ public class CardListTableViewer implements PropertyChangeListener{
 
 	private void createStatusColumn() {
 		statusColumn = new TableViewerColumn(viewer, SWT.LEFT);
-		statusColumn.getColumn().setText("status");
+		statusColumn.getColumn().setText(Messages.CardListTableViewer_status_label);
 		statusColumn.getColumn().setWidth(60);
 		statusColumn.setLabelProvider(new TableListColumnLabelProvider(){
 			@Override
@@ -265,7 +234,7 @@ public class CardListTableViewer implements PropertyChangeListener{
 				Card card1 = getCard(e1);
 				Card card2 = getCard(e2);
 				
-				String status1 = card1.getStatus() == null ? "" : card1.getStatus();
+				String status1 = card1.getStatus() == null ? EMPTY : card1.getStatus();
 				return status1.compareToIgnoreCase(card2.getStatus());
 			}
 			
@@ -274,7 +243,7 @@ public class CardListTableViewer implements PropertyChangeListener{
 
 	private void createSubjectColumn() {
 		subjectColumn = new TableViewerColumn(viewer, SWT.LEFT);
-		subjectColumn.getColumn().setText("subject");
+		subjectColumn.getColumn().setText(Messages.CardListTableViewer_subject_label);
 		subjectColumn.getColumn().setWidth(200);
 		subjectColumn.setLabelProvider(new TableListColumnLabelProvider(){
 			@Override
@@ -288,7 +257,7 @@ public class CardListTableViewer implements PropertyChangeListener{
 				Card card1 = getCard(e1);
 				Card card2 = getCard(e2);
 				
-				String subject1 = card1.getSubject() == null ? "" : card1.getSubject();
+				String subject1 = card1.getSubject() == null ? EMPTY : card1.getSubject();
 				return subject1.compareToIgnoreCase(card2.getSubject());
 			}
 			
@@ -297,7 +266,7 @@ public class CardListTableViewer implements PropertyChangeListener{
 	
 	private void createFromUserColumn() {
 		fromUserColumn = new TableViewerColumn(viewer,SWT.LEFT);
-		fromUserColumn.getColumn().setText("from");
+		fromUserColumn.getColumn().setText(Messages.CardListTableViewer_from_label);
 		fromUserColumn.getColumn().setWidth(120);
 		fromUserColumn.setLabelProvider(new TableListColumnLabelProvider(){
 			@Override
@@ -331,7 +300,7 @@ public class CardListTableViewer implements PropertyChangeListener{
 				String userName;
 				User from = card.getFrom();
 				if(from == null){
-					userName = "";
+					userName = EMPTY;
 				}else{
 					userName = from.getUserName() != null ? from.getUserName() : from.getUserId();
 				}
@@ -364,7 +333,7 @@ public class CardListTableViewer implements PropertyChangeListener{
 	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
-		KanbanUIStatusHandler.debugUI("source:'%s' new:'%s' old:'%s'",evt.getSource(),evt.getNewValue(),evt.getOldValue());
+		KanbanUIStatusHandler.debugUI("source:'%s' new:'%s' old:'%s'",evt.getSource(),evt.getNewValue(),evt.getOldValue()); //$NON-NLS-1$
 		if (evt.getSource() instanceof CardContainer && evt.getNewValue() instanceof Card){
 			final CardContainer container = (CardContainer) evt.getSource();
 			final Card card = (Card) evt.getNewValue();
@@ -388,47 +357,6 @@ public class CardListTableViewer implements PropertyChangeListener{
 	private Card getCard(Object element) {
 		if(!(element instanceof CardWrapper)) throw new IllegalArgumentException();
 		return ((CardWrapper) element).getCard();
-	}
-
-	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		Display display = new Display();
-		Shell shell = new Shell(display);
-		shell.setLayout(new FillLayout());
-
-		CardListTableViewer viewer = new CardListTableViewer(shell);
-		CardContainer cards = new CardContainer.Mock();
-		class MockDefault extends org.kompiro.jamcircle.kanban.model.mock.Card{
-			private String status;
-			private int id;
-			public MockDefault(int id ,String subject,String status){
-				super(subject);
-				this.id = id;
-				this.status = status;
-			}
-			@Override
-			public String getStatus() {
-				return status;
-			}
-			@Override
-			public int getID() {
-				return id;
-			}
-		};
-		for(int i = 0; i < 10; i++){
-			cards.addCard(new MockDefault(i,"Card List" + i,"Todo"));
-		}
-		viewer.setInput(cards);
-		shell.pack();
-		shell.open();
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch())
-				display.sleep();
-		}
-		display.dispose();
 	}
 	
 }

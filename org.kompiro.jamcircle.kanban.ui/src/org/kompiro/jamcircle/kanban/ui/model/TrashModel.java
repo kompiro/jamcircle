@@ -5,13 +5,14 @@ import org.apache.commons.lang.NotImplementedException;
 import org.eclipse.core.runtime.Platform;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 public class TrashModel extends AbstractIconModel implements CardContainer,LaneContainer {
-	public static final String NAME = "Trash";
+	public static final String NAME = Messages.TrashModel_name;
 
-	public static String PROP_CARD = "trash card";
-	public static String PROP_LANE = "trash lane";
+	public static String PROP_CARD = "trash card"; //$NON-NLS-1$
+	public static String PROP_LANE = "trash lane"; //$NON-NLS-1$
 	private KanbanService kanbanService;
 	private ConfirmStrategy confirmStrategy = new MessageDialogConfirmStrategy();
 	private static final long serialVersionUID = 33231939397478655L;
@@ -78,7 +79,7 @@ public class TrashModel extends AbstractIconModel implements CardContainer,LaneC
 	}
 
 	public String getContainerName() {
-		return "TrashBox";
+		return Messages.TrashModel_container_name;
 	}
 	
 	private KanbanService getKanbanService(){
@@ -94,7 +95,7 @@ public class TrashModel extends AbstractIconModel implements CardContainer,LaneC
 	 * @param board target board
 	 */
 	public void addBoard(Board board) {
-		String message = String.format("Do you really want to delete the board '%s'?\n(Can't undo this command.)",board.getTitle());
+		String message = String.format(Messages.TrashModel_confirm_message,board.getTitle());
 		if(confirm(message)){
 			Lane[] lanes = board.getLanes();
 			if(lanes != null){

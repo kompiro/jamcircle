@@ -177,7 +177,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 				@Override
 				protected void configureShell(Shell shell) {
 					super.configureShell(shell);
-					String title = String.format("Card List: %s",getCardContainer().getContainerName());
+					String title = String.format(Messages.LaneEditPart_viewer_title,getCardContainer().getContainerName());
 					shell.setText(title);
 					Image image = KanbanUIActivator.getDefault().getImageRegistry().get(KanbanImageConstants.KANBANS_IMAGE.toString());
 					shell.setImage(image);
@@ -292,7 +292,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 //				Platform.isRunning() &&
 				!laneModel.isIconized()){
 			Card[] cards = laneModel.getCards();
-			KanbanUIStatusHandler.info("LaneEditPart.getModelChildren() lane:'%s' length:'%d'",laneModel.getStatus(),cards.length);
+			KanbanUIStatusHandler.info("LaneEditPart.getModelChildren() lane:'%s' length:'%d'",laneModel.getStatus(),cards.length); //$NON-NLS-1$
 			return Arrays.asList(cards);
 		}
 		return super.getModelChildren();
@@ -385,7 +385,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			if(!lane.isIconized()){
 				super.doPropertyChange(evt);
 			}
-			String message = String.format("Lane \"%s\"'s children is changing", lane.getStatus());
+			String message = String.format(Messages.LaneEditPart_execute_script_message, lane.getStatus());
 			Job scriptJob = new Job(message){
 				@Override
 				public IStatus run(IProgressMonitor monitor) {
@@ -429,12 +429,12 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		if(Lane.PROP_CARD.equals(evt.getPropertyName()) && script != null){
 			Card card = (Card) (evt.getNewValue() != null? evt.getNewValue():evt.getOldValue());
 			Map<String,Object> beans= new HashMap<String, Object>();
-			beans.put("card", card);
-			beans.put("lane", lane);
-			beans.put("event", new ScriptEvent(evt));
-			beans.put("monitor", monitor);
+			beans.put("card", card); //$NON-NLS-1$
+			beans.put("lane", lane); //$NON-NLS-1$
+			beans.put("event", new ScriptEvent(evt)); //$NON-NLS-1$
+			beans.put("monitor", monitor); //$NON-NLS-1$
 			
-			String scriptName = String.format("Lane '%s' Script",lane.getStatus());
+			String scriptName = String.format(Messages.LaneEditPart_script_name,lane.getStatus());
 			try {
 				getScriptingService().eval(lane.getScriptType(), scriptName, script,beans);
 			} catch (ScriptingException e) {
@@ -459,7 +459,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	}
 
 	private boolean isChildrenChanged(PropertyChangeEvent evt) {
-		KanbanUIStatusHandler.debug("LaneEditPart.isChildrenChanged() name:" + evt.getPropertyName());
+		KanbanUIStatusHandler.debug("LaneEditPart.isChildrenChanged() name:" + evt.getPropertyName()); //$NON-NLS-1$
 		return Lane.PROP_CARD.equals(evt.getPropertyName());
 	}
 

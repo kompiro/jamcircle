@@ -49,8 +49,7 @@ import org.eclipse.gef.EditPart;
 
 		@Override
 		public String toString() {
-			return "SupportedClassPair [context=" + contextClass + ", model="
-					+ modelClass + "]";
+			return String.format("SupportedClassPair [context=%s, model=%s]",contextClass, modelClass); //$NON-NLS-1$
 		}
 		
 		

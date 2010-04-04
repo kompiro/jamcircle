@@ -11,13 +11,14 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.Display;
 import org.kompiro.jamcircle.kanban.model.ColorTypes;
-import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
+import org.kompiro.jamcircle.kanban.ui.*;
 import org.kompiro.jamcircle.kanban.ui.figure.CardToolTip;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
 public class CardFigureLayer extends Layer {
 	
+	private static final String DOUBLE_CHAR = "xx"; //$NON-NLS-1$
+	private static final String EMPTY = ""; //$NON-NLS-1$
 	public static final int HEADER_SECTION_HEIGHT = 16;
 	public static final int FOOTER_SECTION_HEIGHT = 16;
 	public static final int CARD_CHARS_OF_LINES = 10;
@@ -27,9 +28,9 @@ public class CardFigureLayer extends Layer {
 	private static final int LINE_WIDTH = 4;
 	private static final int FRAMES = 8;
 	
-	public static final String COLOR_KEY_CARD_BODY = "color_key_card_body";
-	public static final String COLOR_KEY_CARD_BORDER = "color_key_card_border";
-	public static String KEY_OF_CARD_HEADER = "CARD_HEADER";
+	public static final String COLOR_KEY_CARD_BODY = "color_key_card_body"; //$NON-NLS-1$
+	public static final String COLOR_KEY_CARD_BORDER = "color_key_card_border"; //$NON-NLS-1$
+	public static String KEY_OF_CARD_HEADER = "CARD_HEADER"; //$NON-NLS-1$
 	public static int theta = 45;
 	public static int maxColorCount = 360 / theta;
 
@@ -46,7 +47,6 @@ public class CardFigureLayer extends Layer {
 	private CardToolTip toolTipFigure;
 	private Figure footerSection;
 	private ColorTypes colorType;
-//	private FlagTypes flagType;
 	private Figure middleSection;
 	private Figure actionSection;
 	private Figure statusSection;
@@ -60,7 +60,7 @@ public class CardFigureLayer extends Layer {
 	static {
 		GC gc = new GC(getDisplay());
 		FontMetrics fontMetrics = gc.getFontMetrics();
-		int width = gc.stringExtent("xx").x * CARD_CHARS_OF_LINES;
+		int width = gc.stringExtent(DOUBLE_CHAR).x * CARD_CHARS_OF_LINES;
 		int height = (fontMetrics.getHeight() + 1) * CARD_LINES ;
 		CARD_WIDTH = width + LINE_WIDTH * 2;
 		CARD_HEIGHT = HEADER_SECTION_HEIGHT + height + LINE_WIDTH * 2;
@@ -124,7 +124,7 @@ public class CardFigureLayer extends Layer {
 		identitySection.setLayoutManager(new StackLayout());
 		
 		idLabel = new Label();
-		idLabel.setText("");
+		idLabel.setText(EMPTY);
 		idLabel.setBorder(null);
 		idLabel.setFont(getHeaderFont());
 		
@@ -156,7 +156,7 @@ public class CardFigureLayer extends Layer {
 		subjectPage.add(subject);
 		GC gc = new GC(getDisplay());
 		FontMetrics fontMetrics = gc.getFontMetrics();
-		int width = gc.stringExtent("xx").x * 10;
+		int width = gc.stringExtent(DOUBLE_CHAR).x * 10;
 		int height = fontMetrics.getHeight() * 4;
 		subjectSize = new Dimension(width,height);
 		middleSection.add(subjectPage,new Rectangle(new Point(0,0),subjectSize));
@@ -187,12 +187,12 @@ public class CardFigureLayer extends Layer {
 	}
 
 	public void setId(int id){
-		idLabel.setText("#"+id);
+		idLabel.setText("#"+id); //$NON-NLS-1$
 	}
 	
 	public void setMock(boolean isMock) {
 		mockImage.setVisible(isMock);
-		IFigure mockIdLabel = new Label("create from script");
+		IFigure mockIdLabel = new Label(Messages.CardFigureLayer_script_mock_label);
 		mockImage.setToolTip(mockIdLabel);
 		idLabel.setVisible( ! isMock);
 	}
@@ -215,7 +215,7 @@ public class CardFigureLayer extends Layer {
 			subject.setText(subjectText);
 			toolTipFigure.setBody(subjectText);
 		}else{
-			subject.setText("");
+			subject.setText(EMPTY);
 			toolTipFigure.setBody(null);
 		}
 	}
@@ -232,8 +232,8 @@ public class CardFigureLayer extends Layer {
 	
 	@Override
 	public void paint(Graphics graphics) {
-		KanbanUIStatusHandler.debugUI("CardFigure#paint() '%s' " +
-				"added:'%s' removed:'%s' alpha:'%d' visible:'%s'",idLabel.getText(),added,removed,alpha,isVisible());
+		KanbanUIStatusHandler.debugUI("CardFigure#paint() '%s' added:'%s' removed:'%s' alpha:'%d' visible:'%s'", //$NON-NLS-1$
+				idLabel.getText(),added,removed,alpha,isVisible());
 		if(!added){
 			doAddedAnimation(graphics);
 		}

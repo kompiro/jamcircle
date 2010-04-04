@@ -6,18 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kompiro.jamcircle.kanban.model.*;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 
 
 public class BoardModel extends AbstractModel implements CardContainer,LaneContainer, PropertyChangeListener{
 	
 	private static final long serialVersionUID = -7710219380100629938L;
-	public static final String PROP_CARD = "PROP_CARD";
-	public static final String PROP_LANE = "PROP_LANE";
-//	public static final String PROP_USER = "PROP_USER";
-//	public static final String PROP_USER_CLEAR = PROP_USER + "_CLEAR";
-	public static final String PROP_ICON = "PROP_ICON";
+	public static final String PROP_CARD = "PROP_CARD"; //$NON-NLS-1$
+	public static final String PROP_LANE = "PROP_LANE"; //$NON-NLS-1$
+	public static final String PROP_ICON = "PROP_ICON"; //$NON-NLS-1$
 
-//	private Map<String,UserModel> users = new LinkedHashMap<String,UserModel>();
 	private List<Object> children = new ArrayList<Object>();
 	private TrashModel trash;
 	private Board board;
@@ -31,12 +29,6 @@ public class BoardModel extends AbstractModel implements CardContainer,LaneConta
 	public boolean addCard(final Card card) {
 		final boolean[] result = new boolean[1];
 		result[0] = board.addCard(card);
-//		getDisplay().asyncExec(new Runnable() {
-//			
-//			public void run() {
-//				result[0] = board.addCard(card);
-//			}
-//		});
 		return result[0];
 	}
 
@@ -52,12 +44,6 @@ public class BoardModel extends AbstractModel implements CardContainer,LaneConta
 	public boolean removeCard(final Card card) {
 		final boolean[] result = new boolean[1];
 		result[0] = board.removeCard(card);
-//		getDisplay().asyncExec(new Runnable() {
-//			
-//			public void run() {
-//				result[0] = board.removeCard(card);
-//			}
-//		});
 		return result[0];
 	}
 	
@@ -105,25 +91,9 @@ public class BoardModel extends AbstractModel implements CardContainer,LaneConta
 		return children;
 	}
 	
-	@Override
-	public void firePropertyChange(String propName, Object oldValue,
-			Object newValue) {
-//		if(KanbanUIStatusHandler.isDebug()){
-//			String lanesMessage = "lanes " + sizeLane() + " " + board.getLanes();
-//			String cardsMessage = "cards " + sizeCard() + " " + board.getCards();
-//			String usersMessage = "users " + users.size() + " " + users;
-//			KanbanUIStatusHandler.debug("BoardModel.firePropertyChange()\n" + lanesMessage + cardsMessage + usersMessage);
-//		}
-		super.firePropertyChange(propName, oldValue, newValue);
-	}
-
 	public String getContainerName() {
-		return "Board";
+		return Messages.BoardModel_container_name;
 	}
-
-//	public boolean containsUser(UserModel value) {
-//		return users.containsValue(value);
-//	}
 
 	public Board getBoard() {
 		return this.board;
@@ -153,7 +123,7 @@ public class BoardModel extends AbstractModel implements CardContainer,LaneConta
 		if(trash == null && model instanceof TrashModel){
 			this.trash = (TrashModel) model;
 		}
-		// FIXME trash is more specified?
+		// FIXME is trash more specified?
 		this.icons.add(model);
 		firePropertyChange(PROP_ICON, null, model);
 	}

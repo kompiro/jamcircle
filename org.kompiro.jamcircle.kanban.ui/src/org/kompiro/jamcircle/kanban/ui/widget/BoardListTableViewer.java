@@ -1,10 +1,12 @@
 package org.kompiro.jamcircle.kanban.ui.widget;
 
+import static java.lang.String.format;
+import static org.kompiro.jamcircle.kanban.ui.widget.WidgetConstants.*;
+
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.Dialog;
@@ -16,7 +18,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.*;
 import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.PlatformUI;
@@ -30,12 +31,17 @@ import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class BoardListTableViewer implements PropertyChangeListener {
 
+	public static final String ID_BOARD_LIST = "board_list";
+
 	public final class BoardWrapper implements TableListWrapper {
 		private Board board;
 		private boolean even;
 
-		public BoardWrapper(Board card, boolean even) {
-			this.board = card;
+		public BoardWrapper(Board board, boolean even) {
+			if (board == null) {
+				throw new IllegalArgumentException(Messages.BoardListTableViewer_board_null_error_message);
+			}
+			this.board = board;
 			this.even = even;
 		}
 
@@ -49,9 +55,6 @@ public class BoardListTableViewer implements PropertyChangeListener {
 
 		@Override
 		public String toString() {
-			if (board == null) {
-				return "null";
-			}
 			return board.toString();
 		}
 	}
@@ -67,8 +70,8 @@ public class BoardListTableViewer implements PropertyChangeListener {
 
 		public Object[] getElements(Object inputElement) {
 			if (!(inputElement instanceof Board[])) {
-				String exceptionMessage = String.format(
-								"Illegal Argument BoardListContentProvider#getElements() %s",
+				String exceptionMessage = format(
+								Messages.BoardListTableViewer_illegal_argument_error_message,
 								inputElement);
 				throw new IllegalArgumentException(exceptionMessage);
 			}
@@ -102,6 +105,7 @@ public class BoardListTableViewer implements PropertyChangeListener {
 
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
+		table.setData(KEY_OF_DATA_ID, ID_BOARD_LIST);
 		
 		table.addMouseListener(new MouseAdapter(){
 			@Override
@@ -127,7 +131,7 @@ public class BoardListTableViewer implements PropertyChangeListener {
 
 	private void createDeleteMenu(Menu menu) {
 		MenuItem item = new MenuItem(menu,SWT.PUSH);
-		item.setText("Delete");
+		item.setText(Messages.BoardListTableViewer_delete_label);
 		item.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				widgetDefaultSelected(e);
@@ -146,7 +150,7 @@ public class BoardListTableViewer implements PropertyChangeListener {
 
 	private void createEditMenu(Menu menu) {
 		MenuItem item = new MenuItem(menu,SWT.PUSH);
-		item.setText("Edit");
+		item.setText(Messages.BoardListTableViewer_edit_label);
 		item.addSelectionListener(new SelectionAdapter(){
 			public void widgetDefaultSelected(SelectionEvent e) {
 				StructuredSelection selection = (StructuredSelection)viewer.getSelection();
@@ -175,7 +179,7 @@ public class BoardListTableViewer implements PropertyChangeListener {
 
 	private void createOpenMenu(Menu menu) {
 		MenuItem item = new MenuItem(menu,SWT.PUSH);
-		item.setText("Open");
+		item.setText(Messages.BoardListTableViewer_open_label);
 		item.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e) {
 				widgetDefaultSelected(e);
@@ -207,7 +211,8 @@ public class BoardListTableViewer implements PropertyChangeListener {
 				if (data instanceof StructuredSelection) {
 					StructuredSelection selection = (StructuredSelection) data;
 					for (Object obj : selection.toList()) {
-						System.out.println(obj);
+						// TODO need to implmenet
+						KanbanUIStatusHandler.debug("dropped", obj); //$NON-NLS-1$
 					}
 				}
 			}
@@ -233,7 +238,7 @@ public class BoardListTableViewer implements PropertyChangeListener {
 
 	private void createIdColumn() {
 		idColumn = new TableViewerColumn(viewer, SWT.LEAD);
-		idColumn.getColumn().setText("id");
+		idColumn.getColumn().setText(Messages.BoardListTableViewer_id_label);
 		idColumn.getColumn().setWidth(40);
 		idColumn.setLabelProvider(new TableListColumnLabelProvider(){
 
@@ -256,7 +261,7 @@ public class BoardListTableViewer implements PropertyChangeListener {
 
 	private void createStatusColumn() {
 		titleColumn = new TableViewerColumn(viewer, SWT.LEAD);
-		titleColumn.getColumn().setText("title");
+		titleColumn.getColumn().setText(Messages.BoardListTableViewer_title_label);
 		titleColumn.getColumn().setWidth(360);
 		titleColumn.setLabelProvider(new TableListColumnLabelProvider(){
 			@Override
@@ -268,7 +273,7 @@ public class BoardListTableViewer implements PropertyChangeListener {
 			protected int doCompare(Viewer viewer, Object e1, Object e2) {
 				Board board1 = getBoard(e1);
 				Board board2 = getBoard(e2);
-				String title1 = board1.getTitle() == null ? "" :board1.getTitle();
+				String title1 = board1.getTitle() == null ? "" :board1.getTitle(); //$NON-NLS-1$
 				return title1.compareToIgnoreCase(board2.getTitle());
 			}
 		};
@@ -279,42 +284,12 @@ public class BoardListTableViewer implements PropertyChangeListener {
 		return ((BoardWrapper)element).board;
 	}
 
-	
 	public void setInput(Board[] boards) {
 		viewer.setInput(boards);
 	}
 
 	public void dispose() {
 		viewer.getTable().dispose();
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		Display display = new Display();
-		Shell shell = new Shell(display);
-		shell.setLayout(new FillLayout());
-
-		BoardListTableViewer viewer = new BoardListTableViewer(shell);
-		List<Board> boards = new ArrayList<Board>();
-		class MockDefault extends org.kompiro.jamcircle.kanban.model.mock.Board {
-			public MockDefault(String title) {
-				setTitle(title);
-			}
-		}
-		;
-		for (int i = 0; i < 10; i++) {
-			boards.add(new MockDefault("Board List" + i));
-		}
-		viewer.setInput(boards.toArray(new Board[] {}));
-		shell.pack();
-		shell.open();
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch())
-				display.sleep();
-		}
-		display.dispose();
 	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
@@ -349,9 +324,9 @@ public class BoardListTableViewer implements PropertyChangeListener {
 		try {
 			service.runInUI(context,new OpenBoardRunnableWithProgress(board),null);
 		} catch (InvocationTargetException ex) {
-			KanbanUIStatusHandler.fail(ex.getTargetException(), "Opening Kanban Board is failed.");
+			KanbanUIStatusHandler.fail(ex.getTargetException(), Messages.BoardListTableViewer_open_failed_error_message);
 		} catch (InterruptedException ex) {
-			KanbanUIStatusHandler.fail(ex, "Opening Kanban Board is failed.");
+			KanbanUIStatusHandler.fail(ex, Messages.BoardListTableViewer_open_failed_error_message);
 		}
 	}
 

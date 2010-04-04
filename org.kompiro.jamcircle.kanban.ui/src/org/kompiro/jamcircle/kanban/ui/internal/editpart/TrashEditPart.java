@@ -33,7 +33,7 @@ public class TrashEditPart extends AbstractEditPart implements IconEditPart,Card
 
 		protected Command getAddCommand(Request request) {
 			CompoundCommand command = new CompoundCommand();
-			command.setDebugLabel("Trash Command");
+			command.setDebugLabel("Trash Command"); //$NON-NLS-1$
 			GroupRequest req = (GroupRequest)request;
 			for(Object obj : req.getEditParts()){
 				if (obj instanceof CardEditPart) {
