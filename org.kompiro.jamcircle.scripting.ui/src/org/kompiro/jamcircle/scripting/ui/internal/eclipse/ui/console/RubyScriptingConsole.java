@@ -42,6 +42,7 @@ import org.jruby.runtime.builtin.IRubyObject;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.ui.KanbanView;
 import org.kompiro.jamcircle.kanban.ui.editpart.IBoardCommandExecuter;
+import org.kompiro.jamcircle.scripting.ui.Messages;
 import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
 
 /**
@@ -55,8 +56,17 @@ import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
  */
 public class RubyScriptingConsole extends TextConsole {
 
-	private static final String OUTPUT_STREAM_COLOR = "RubyScriptingConsole.OutputStreamColor";
-	private static final String ERROR_STREAM_COLOR = "RubyScriptingConsole.ErrorStreamColor";
+	private static final String EMPTY = ""; //$NON-NLS-1$
+	private static final String KEY_OF_BUNDLE_VERSION = "Bundle-Version"; //$NON-NLS-1$
+	private static final String INIT_SCRIPT_RB = "init.rb"; //$NON-NLS-1$
+	private static final String PATH_OF_JRUBY_HOME = "META-INF/jruby.home"; //$NON-NLS-1$
+	private static final String BUNDLE_OF_ORG_JRUBY = "org.jruby"; //$NON-NLS-1$
+	private static final String KEY_OF_RUNTIME = "$$"; //$NON-NLS-1$
+	private static final String KEY_OF_BOARD_COMMAND_EXECUTER_ACCESSOR = "$board_command_executer_accessor"; //$NON-NLS-1$
+	private static final String KEY_OF_BOARD_ACCESSOR = "$board_accessor"; //$NON-NLS-1$
+	private static final String ARGS = "-Ku"; //$NON-NLS-1$
+	private static final String OUTPUT_STREAM_COLOR = "RubyScriptingConsole.OutputStreamColor"; //$NON-NLS-1$
+	private static final String ERROR_STREAM_COLOR = "RubyScriptingConsole.ErrorStreamColor"; //$NON-NLS-1$
 
 	/**
 	 * The document partitioner
@@ -76,7 +86,7 @@ public class RubyScriptingConsole extends TextConsole {
     /**
      * The encoding used to for displaying console output.
      */
-    private String fEncoding = "utf-8";
+    private String fEncoding = "utf-8"; //$NON-NLS-1$
 
 	private IOConsolePage consolePage;
 
@@ -189,7 +199,7 @@ public class RubyScriptingConsole extends TextConsole {
 			
 			public IContextInformation[] computeContextInformation(ITextViewer viewer,
 					int offset) {
-				lastError = "No Context Information available";
+				lastError = Messages.RubyScriptingConsole_no_context_error_message;
 				return null;
 			}
 			
@@ -199,7 +209,7 @@ public class RubyScriptingConsole extends TextConsole {
 				int currOffset = documentOffset - 1;
 
 				try {
-					String currWord = "";
+					String currWord = EMPTY;
 					char currChar;
 					while (currOffset > 0
 							&& !Character.isWhitespace(currChar = document
@@ -238,7 +248,7 @@ public class RubyScriptingConsole extends TextConsole {
 				}
 				return proposals;
 			}
-		}, "org.eclipse.ui.console.io_console_input_partition_type");
+		}, "org.eclipse.ui.console.io_console_input_partition_type"); //$NON-NLS-1$
 		return consolePage;
     }
     
@@ -431,11 +441,11 @@ public class RubyScriptingConsole extends TextConsole {
 	}
 	
 	private void createJob() {
-		final Job initJob = new Job("initialize ruby runtime"){
+		final Job initJob = new Job(Messages.RubyScriptingConsole_initialize_runtime_message){
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				RubyInstanceConfig config = new RubyInstanceConfig();
-				config.setArgv(new String[]{"-Ku"});
+				config.setArgv(new String[]{ARGS});
 				config.setJRubyHome(getJRubyHomeFromBundle());
 		        config.setObjectSpaceEnabled(true);
 				config.setOutput(new PrintStream(output));
@@ -455,15 +465,15 @@ public class RubyScriptingConsole extends TextConsole {
 					}
 				}
 				IRubyObject rubyBoard = JavaEmbedUtils.javaToRuby(runtime, new BoardAccessor());
-		        runtime.getGlobalVariables().defineReadonly("$board_accessor", new ValueAccessor(rubyBoard));		        
+		        runtime.getGlobalVariables().defineReadonly(KEY_OF_BOARD_ACCESSOR, new ValueAccessor(rubyBoard));		        
 				IRubyObject rubyBoardPart = JavaEmbedUtils.javaToRuby(runtime, new BoardCommandExecuterAccessor());
-		        runtime.getGlobalVariables().defineReadonly("$board_command_executer_accessor", new ValueAccessor(rubyBoardPart));		        
-		        runtime.getGlobalVariables().defineReadonly("$$", new ValueAccessor(runtime.newFixnum(System.identityHashCode(runtime))));		        
+		        runtime.getGlobalVariables().defineReadonly(KEY_OF_BOARD_COMMAND_EXECUTER_ACCESSOR, new ValueAccessor(rubyBoardPart));		        
+		        runtime.getGlobalVariables().defineReadonly(KEY_OF_RUNTIME, new ValueAccessor(runtime.newFixnum(System.identityHashCode(runtime))));		        
 			}
 
 			private String getJRubyHomeFromBundle() {
 				try {
-					String path = new File(FileLocator.getBundleFile(Platform.getBundle("org.jruby")),"META-INF/jruby.home").getAbsolutePath();
+					String path = new File(FileLocator.getBundleFile(Platform.getBundle(BUNDLE_OF_ORG_JRUBY)),PATH_OF_JRUBY_HOME).getAbsolutePath();
 					return path;
 				} catch (IOException e) {
 				}
@@ -471,17 +481,17 @@ public class RubyScriptingConsole extends TextConsole {
 			}
 		};
 		initJob.schedule();
-		Job reader = new Job("Run IRB"){
+		Job reader = new Job(Messages.RubyScriptingConsole_run_irb_message){
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
 					initJob.join();
 				} catch (InterruptedException e) {
-					return new Status(Status.WARNING, ScriptingUIActivator.PLUGIN_ID, "", e);
+					return new Status(Status.WARNING, ScriptingUIActivator.PLUGIN_ID, Messages.RubyScriptingConsole_join_error_title, e);
 				}
 
 		        RubyRuntimeAdapter runtimeAdapter = JavaEmbedUtils.newRuntimeAdapter();
-				String script = IOUtils.getStringFromResource("init.rb");
+				String script = IOUtils.getStringFromResource(INIT_SCRIPT_RB);
 				runtimeAdapter.eval(runtime, script);
 				shutdown();
 				return Status.OK_STATUS;
@@ -593,7 +603,7 @@ public class RubyScriptingConsole extends TextConsole {
 					if(lastOffset == last){
 						getDocument().replace(lastOffset, 0, oldLine);		
 					}else{
-						getDocument().replace(lastOffset, last - lastOffset, "");
+						getDocument().replace(lastOffset, last - lastOffset, EMPTY); //$NON-NLS-1$
 						getDocument().replace(lastOffset, 0, oldLine);
 					}
 				}
@@ -657,7 +667,7 @@ public class RubyScriptingConsole extends TextConsole {
 	
 	private void shutdown() {
 		JavaEmbedUtils.terminate(runtime);
-        runtime.getGlobalVariables().defineReadonly("$board_accessor", null);		        
+        runtime.getGlobalVariables().defineReadonly(KEY_OF_BOARD_ACCESSOR, null);		        
 		runtime = null;
 		input = null;
 		output = null;
@@ -716,8 +726,8 @@ public class RubyScriptingConsole extends TextConsole {
 	        getDocument().addDocumentListener(new CaretMoveListener(text));
 		}
         try {
-			String version = ScriptingUIActivator.getDefault().getBundle().getHeaders().get("Bundle-Version").toString();
-			String message = String.format("initialing ruby console\nver.%s\n",version);
+			String version = ScriptingUIActivator.getDefault().getBundle().getHeaders().get(KEY_OF_BUNDLE_VERSION).toString();
+			String message = String.format(Messages.RubyScriptingConsole_initialize_message,version);
 			output.write(message);
 		} catch (IOException e) {
 		}

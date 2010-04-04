@@ -3,8 +3,7 @@ package org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.console.IConsoleView;
-import org.kompiro.jamcircle.scripting.ui.ScriptingImageEnum;
-import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
+import org.kompiro.jamcircle.scripting.ui.*;
 
 /**
  * Toggles console auto-scroll
@@ -17,10 +16,10 @@ public class ScrollLockAction extends Action {
     private IConsoleView fConsoleView;
 	
 	public ScrollLockAction(IConsoleView consoleView) {
-		super("&Scroll Lock"); 
+		super(Messages.ScrollLockAction_text); 
         fConsoleView = consoleView;
 		
-		setToolTipText("Scroll Lock");  
+		setToolTipText(Messages.ScrollLockAction_tooltip);  
 		setHoverImageDescriptor(getImageDescriptor(ScriptingImageEnum.IMG_LCL_LOCK));		
 		setDisabledImageDescriptor(getImageDescriptor(ScriptingImageEnum.IMG_DLCL_LOCK));
 		setImageDescriptor(getImageDescriptor(ScriptingImageEnum.IMG_ELCL_LOCK));

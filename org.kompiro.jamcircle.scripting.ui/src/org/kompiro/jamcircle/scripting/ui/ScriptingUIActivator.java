@@ -14,7 +14,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public class ScriptingUIActivator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.kompiro.jamcircle.scripting.ui";
+	public static final String PLUGIN_ID = "org.kompiro.jamcircle.scripting.ui"; //$NON-NLS-1$
 
 	// The shared instance
 	private static ScriptingUIActivator plugin;
@@ -70,7 +70,7 @@ public class ScriptingUIActivator extends AbstractUIPlugin {
 	}
 	
 	public static IStatus createErrorStatus(Throwable e){
-		return new Status(IStatus.ERROR, PLUGIN_ID, "error is occured",e);
+		return new Status(IStatus.ERROR, PLUGIN_ID, Messages.ScriptingUIActivator_error_message,e);
 	}
 
 	public ScriptingService getScriptingService() {
