@@ -14,14 +14,14 @@ public class ScriptingEngineInitializerLoaderImpl implements ScriptingEngineInit
 
 	}
 
-	private static final String PLUGIN_ID = "org.kompiro.jamcircle.scripting";
-	static final String POINT_CALLBACK = "org.kompiro.jamcircle.scripting.scriptEngineInitializer";
+	private static final String PLUGIN_ID = "org.kompiro.jamcircle.scripting"; //$NON-NLS-1$
+	static final String POINT_CALLBACK = "org.kompiro.jamcircle.scripting.scriptEngineInitializer"; //$NON-NLS-1$
 	private Map<String,Object> result = new HashMap<String, Object>();
 	private IExtensionRegistry 	registry = RegistryFactory.getRegistry();
 		
 	public void init(ComponentContext context) throws CoreException{
-		result.put("BUNDLE_CONTEXT", context.getBundleContext());
-		MultiStatus statuses = new MultiStatus(PLUGIN_ID, Status.ERROR, "error has occured when initializing scripting engines.", null);
+		result.put("BUNDLE_CONTEXT", context.getBundleContext()); //$NON-NLS-1$
+		MultiStatus statuses = new MultiStatus(PLUGIN_ID, Status.ERROR, Messages.ScriptingEngineInitializerLoaderImpl_initialize_error, null);
 		ElementRunner runner = new ElementRunner(){
 			@Override
 			public void run(ScriptingInitializerLoaderDescriptor desc,MultiStatus statuses) {
@@ -62,7 +62,7 @@ public class ScriptingEngineInitializerLoaderImpl implements ScriptingEngineInit
 	}
 
 	public void loadExtendScript(final ScriptingService service) throws CoreException {
-		MultiStatus statuses = new MultiStatus(PLUGIN_ID, Status.ERROR, "error has occured when initializing scripting engines.", null);
+		MultiStatus statuses = new MultiStatus(PLUGIN_ID, Status.ERROR, Messages.ScriptingEngineInitializerLoaderImpl_initialize_error, null);
 
 		ElementRunner runner = new ElementRunner(){
 			@Override

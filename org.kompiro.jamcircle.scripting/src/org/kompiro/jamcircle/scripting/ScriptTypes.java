@@ -1,7 +1,7 @@
 package org.kompiro.jamcircle.scripting;
 
 public enum ScriptTypes {
-	JavaScript("javascript"),JRuby("ruby");
+	JavaScript("javascript"),JRuby("ruby"); //$NON-NLS-1$ //$NON-NLS-2$
 	
 	private String type;
 	

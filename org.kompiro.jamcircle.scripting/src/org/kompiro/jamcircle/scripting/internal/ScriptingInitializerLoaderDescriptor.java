@@ -12,8 +12,9 @@ import org.osgi.framework.Bundle;
 public class ScriptingInitializerLoaderDescriptor {
 	
 	public static class ScriptExtendDescriptor{
-		static final String FILE = "file";
-		static final String TYPE = "type";
+		private static final String EMPTY = ""; //$NON-NLS-1$
+		static final String FILE = "file"; //$NON-NLS-1$
+		static final String TYPE = "type"; //$NON-NLS-1$
 		private IConfigurationElement scriptElement;
 
 		public ScriptExtendDescriptor(
@@ -29,7 +30,7 @@ public class ScriptingInitializerLoaderDescriptor {
 		public String getScript() throws IOException{
 			String scriptName = scriptElement.getAttribute(FILE);
 			IExtension extension = scriptElement.getDeclaringExtension();
-			if(extension == null) return "";
+			if(extension == null) return EMPTY;
 			String symbolicName = extension.getNamespaceIdentifier();
 			Bundle bundle = Platform.getBundle(symbolicName);
 			URL resource = bundle.getResource(scriptName);
@@ -39,14 +40,14 @@ public class ScriptingInitializerLoaderDescriptor {
 		
 		public String getScriptName(){
 			IExtension extension = scriptElement.getDeclaringExtension();
-			if(extension == null) return "";
+			if(extension == null) return EMPTY;
 			String symbolicName = extension.getNamespaceIdentifier();
 			String scriptName = scriptElement.getAttribute(FILE);
-			return String.format("%s/%s",symbolicName,scriptName);
+			return String.format("%s/%s",symbolicName,scriptName); //$NON-NLS-1$
 		}
 	}
 	
-	static String ATTR_HANDLER_CLASS = "class";
+	static String ATTR_HANDLER_CLASS = "class"; //$NON-NLS-1$
 	private IConfigurationElement element;
 	
 	public ScriptingInitializerLoaderDescriptor(IConfigurationElement element){
