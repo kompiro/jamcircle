@@ -20,6 +20,12 @@ public class LaneLocalLayout {
 		if(targetRect.getLeft().x < 0){
 			start.x = 0;
 		}
+		if(start.x < 0 ){
+			start.x = 0;
+		}
+		if(start.y < 0 ){
+			start.y = 0;
+		}
 		targetRect.setLocation(start);
 	}
 

@@ -1,5 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
 
 import java.util.Map;
@@ -80,10 +82,10 @@ public class LaneEditPartTest extends AbstractEditPartTest{
 		request.setType(RequestConstants.REQ_RESIZE_CHILDREN);
 		todoLanePart.getCommand(request).execute();
 		todoLanePart.refresh();
-		assertEquals(expect.x,card.getX());
-		assertEquals(expect.y,card.getY());
+		// moved internal
+		assertThat(card.getX(),is(not(expect.x)));
+		assertThat(card.getY(),is(not(expect.y)));
 	}
-
 	
 	@Test
 	public void removeCardToLane() throws Exception {
