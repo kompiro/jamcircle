@@ -16,6 +16,10 @@ public class Messages extends NLS {
 	public static String ApplicationWorkbenchAdvisor_started_message;
 	public static String ApplicationWorkbenchAdvisor_started_title;
 	public static String RCPActivator_error;
+	public static String SiteAction_text;
+	public static String RCPPreferencePage_description;
+	public static String RCPPreferencePage_minimized_message;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

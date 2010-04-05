@@ -7,6 +7,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
+import org.kompiro.jamcircle.rcp.internal.action.SiteAction;
 
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
@@ -25,6 +26,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	private IWorkbenchAction copyAction;
 	private IWorkbenchAction pasteAction;
 	private IWorkbenchAction deleteAction;
+	private IAction siteAction;
 
 	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
@@ -57,6 +59,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		register(exportAction);
 		importAction = ActionFactory.IMPORT.create(window);
 		register(importAction);
+		siteAction = new SiteAction();
 	}
 
 	protected void fillMenuBar(IMenuManager menuBar) {
@@ -66,18 +69,16 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		createHelpMenu(menuBar);
 	}
 
-	private void createHelpMenu(IMenuManager menuBar) {
-		MenuManager helpMenu = new MenuManager(Messages.ApplicationActionBarAdvisor_Help, IWorkbenchActionConstants.M_HELP);
-		helpMenu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-		helpMenu.add(aboutAction);
-		menuBar.add(helpMenu);
-	}
-
-	private void createWindowMenu(IMenuManager menuBar) {
-		MenuManager windowMenu = new MenuManager(Messages.ApplicationActionBarAdvisor_Window, IWorkbenchActionConstants.M_WINDOW);
-		windowMenu.add(new Separator(IWorkbenchActionConstants.ADD_EXT));
-		windowMenu.add(preferenceAction);
-		menuBar.add(windowMenu);
+	private void createFileMenu(IMenuManager menuBar) {
+		MenuManager fileMenu = new MenuManager(Messages.ApplicationActionBarAdvisor_File, IWorkbenchActionConstants.M_FILE);
+		fileMenu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		fileMenu.add(newAction);
+		fileMenu.add(new Separator(IWorkbenchActionConstants.LAUNCH_EXT));
+		fileMenu.add(importAction);
+		fileMenu.add(exportAction);
+		fileMenu.add(new Separator(IWorkbenchActionConstants.GROUP_FILE));
+		fileMenu.add(exitAction);
+		menuBar.add(fileMenu);
 	}
 
 	private void createEditMenu(IMenuManager menuBar) {
@@ -96,16 +97,19 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		menuBar.add(editMenu);
 	}
 
-	private void createFileMenu(IMenuManager menuBar) {
-		MenuManager fileMenu = new MenuManager(Messages.ApplicationActionBarAdvisor_File, IWorkbenchActionConstants.M_FILE);
-		fileMenu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-		fileMenu.add(newAction);
-		fileMenu.add(new Separator(IWorkbenchActionConstants.LAUNCH_EXT));
-		fileMenu.add(importAction);
-		fileMenu.add(exportAction);
-		fileMenu.add(new Separator(IWorkbenchActionConstants.GROUP_FILE));
-		fileMenu.add(exitAction);
-		menuBar.add(fileMenu);
+	private void createWindowMenu(IMenuManager menuBar) {
+		MenuManager windowMenu = new MenuManager(Messages.ApplicationActionBarAdvisor_Window, IWorkbenchActionConstants.M_WINDOW);
+		windowMenu.add(new Separator(IWorkbenchActionConstants.ADD_EXT));
+		windowMenu.add(preferenceAction);
+		menuBar.add(windowMenu);
+	}
+
+	private void createHelpMenu(IMenuManager menuBar) {
+		MenuManager helpMenu = new MenuManager(Messages.ApplicationActionBarAdvisor_Help, IWorkbenchActionConstants.M_HELP);
+		helpMenu.add(siteAction);
+		helpMenu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		helpMenu.add(aboutAction);
+		menuBar.add(helpMenu);
 	}
 
 }

@@ -1,9 +1,11 @@
 package org.kompiro.jamcircle;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
+import org.kompiro.jamcircle.rcp.internal.preferences.PreferenceConstants;
 
 public class RCPUtils {
 
@@ -27,6 +29,7 @@ public class RCPUtils {
 	}
 	
 	static IAsyncRunnerDelegator delegator = new AsyncRunnerDelegator();
+	static boolean testmode;
 	
 	public static boolean isWindows(){
 		String platform = SWT.getPlatform();
@@ -41,7 +44,7 @@ public class RCPUtils {
 	}
 
 	private static void modifyAlphaForSurface(final Shell shell, final int alpha) {
-		if(alpha <= 0){ 
+		if(	!isBlurAnimation() || (isBlurAnimation() &&  alpha <= 0)){ 
 			shell.setAlpha(255);
 			return;
 		}
@@ -59,8 +62,9 @@ public class RCPUtils {
 
 	private static void modifyAlphaForDropout(final Shell shell,final int alpha) {
 		if(
-//				RCPUtils.isWindows() == false ||
-				alpha >= 256){ 
+			!isBlurAnimation() ||
+			(isBlurAnimation() && alpha >= 256)
+			){ 
 			shell.setAlpha(0);
 			shell.setVisible(false);
 			return;
@@ -72,5 +76,20 @@ public class RCPUtils {
 			}
 		});
 	}
+	
+	private static boolean isBlurAnimation() {
+		if(testmode) return true;
+		IPreferenceStore preferenceStore = getPreferenceStore();
+		if(preferenceStore == null) return false;
+		return preferenceStore.getBoolean(PreferenceConstants.BLUR_ANIMATION);
+	}
+
+	private static IPreferenceStore getPreferenceStore() {
+		RCPActivator activator = RCPActivator.getDefault();
+		if(activator == null ) return null;
+		IPreferenceStore preferenceStore = activator.getPreferenceStore();
+		return preferenceStore;
+	}
+
 
 }

@@ -18,6 +18,7 @@ public class RCPUtilsTest {
 
 	@Before
 	public void before() throws Exception {
+		RCPUtils.testmode = true;
 		backup = RCPUtils.delegator;
 	}
 	
@@ -31,7 +32,6 @@ public class RCPUtilsTest {
 		assertThat(RCPUtils.delegator,notNullValue());
 		assertThat(RCPUtils.delegator,instanceOf(AsyncRunnerDelegator.class));
 	}
-	
 	
 	@Test
 	public void modifyAlphaForSurface() throws Exception {

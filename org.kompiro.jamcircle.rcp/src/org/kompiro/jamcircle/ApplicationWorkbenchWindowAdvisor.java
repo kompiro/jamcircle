@@ -27,7 +27,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
 	public void preWindowOpen() {
 		IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
-//		configurer.setInitialSize(new Point(400, 400));
 		configurer.setShowPerspectiveBar(true);
 		configurer.setShowMenuBar(true);
 		configurer.setShowCoolBar(false);
@@ -73,12 +72,18 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	}
 
 	private boolean isMinimized() {
-		RCPActivator activator = RCPActivator.getDefault();
-		if(activator == null ) return false;
-		IPreferenceStore preferenceStore = activator.getPreferenceStore();
+		IPreferenceStore preferenceStore = getPreferenceStore();
 		if(preferenceStore == null) return false;
 		return preferenceStore.getBoolean(PreferenceConstants.MINIMIZED);
 	}
+
+	private IPreferenceStore getPreferenceStore() {
+		RCPActivator activator = RCPActivator.getDefault();
+		if(activator == null ) return null;
+		IPreferenceStore preferenceStore = activator.getPreferenceStore();
+		return preferenceStore;
+	}
+
 	
 	private void hideMenus() {
 		IMenuManager menuManager = getWindowConfigurer().getActionBarConfigurer().getMenuManager();

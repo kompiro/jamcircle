@@ -197,7 +197,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		RCPUtils.modifyAlphaForDropout(shell);
 		closeToolTip();
 	}
-	
+		
 	public void showToolTip(String title){
 		showToolTip(title, null);
 	}
