@@ -97,10 +97,10 @@ public class CardFigureLayer extends Layer {
 
 		createHeaderSection();
 		createSubjectPage();
-		manager = new FlowLayout();
-		manager.setMajorSpacing(0);
-		manager.setMinorSpacing(0);
-		setLayoutManager(manager);
+		FlowLayout mainManager = new FlowLayout();
+		mainManager.setMajorSpacing(0);
+		mainManager.setMinorSpacing(0);
+		setLayoutManager(mainManager);
 
 		add(figure);
 

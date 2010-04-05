@@ -19,12 +19,6 @@ public class LaneFigure extends RectangleFigure {
 		protected boolean useLocalCoordinates() {
 			return true;
 		}
-
-		@Override
-		public void setConstraint(IFigure child, Object constraint) {
-			resizeLaneFigure(child,constraint);
-			super.setConstraint(child, constraint);
-		}
 	}
 	static final int LANE_SIZE_OF_CORNER = 20;
 	public static final int MARGIN = 5;
@@ -137,22 +131,9 @@ public class LaneFigure extends RectangleFigure {
 	private void createCardArea() {
 		if(cardArea == null){
 			cardArea = new CardArea();
-			XYLayout xyl = new XYLayout()
-			{
-				@Override
-				public void setConstraint(IFigure figure, Object newConstraint) {
-					resizeLaneFigure(figure,newConstraint);
-					super.setConstraint(figure, newConstraint);
-				}
-			};
+			XYLayout xyl = new XYLayout();
 			cardArea.setLayoutManager(xyl);
-			cardArea.setBorder(new CompoundBorder(new MarginBorder(0,MARGIN,MARGIN,MARGIN),new LineBorder(ColorConstants.gray)));
-//			cardArea.addLayoutListener(new LayoutListener.Stub(){
-//				@Override
-//				public void setConstraint(IFigure child, Object constraint) {
-//					super.setConstraint(child, constraint);
-//				}
-//			});
+			cardArea.setBorder(new LineBorder(ColorConstants.lightGray));
 			GridData constraint = new GridData();
 			constraint.grabExcessHorizontalSpace = true;
 			constraint.grabExcessVerticalSpace = true;
@@ -188,42 +169,7 @@ public class LaneFigure extends RectangleFigure {
 	public int getMaxCardLocationY(Dimension sourceSize,Dimension targetSize){
 		return sourceSize.height - (targetSize.height + LANE_SIZE_OF_CORNER + MARGIN + (int)getStatusAreaHeight());
 	}
-	
-	private void resizeLaneFigure(IFigure child,Object constraint) {
-		if (constraint instanceof Rectangle) {
-			Rectangle rect = (Rectangle) constraint;
-			LaneFigure parent = LaneFigure.this;
-			Dimension size = parent.getSize();
-			boolean changed = false;
-			int x = Math.abs(rect.x);
-			int reqWidth = x + rect.width + LANE_SIZE_OF_CORNER + MARGIN;
-			if(rect.x < 0){
-				rect.x = 0;
-				changed = true;
-			}
-			if(size.width < reqWidth){
-				size.width = reqWidth;
-				changed = true;
-			}
-			int y = Math.abs(rect.y);
-			int reqHeight = y + rect.height + LANE_SIZE_OF_CORNER + MARGIN + (int)getStatusAreaHeight();
-			if(rect.y < 0){
-				rect.y = 0;
-				changed = true;
-			}
-			if(size.height < reqHeight){
-				size.height = reqHeight;
-				changed = true;
-			}
-			if(changed){
-				parent.setSize(size);
-				parent.repaint();
-				child.revalidate();
-				child.repaint();
-			}
-		}
-	}
-		
+			
 	public IFigure getActionSection(){
 		return this.actionSection;
 	}

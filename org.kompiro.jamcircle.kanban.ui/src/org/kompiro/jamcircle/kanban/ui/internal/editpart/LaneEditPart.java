@@ -30,6 +30,7 @@ import org.kompiro.jamcircle.kanban.ui.dialog.LaneEditDialog;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
 import org.kompiro.jamcircle.kanban.ui.editpart.CardContainerEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.command.*;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.policy.LaneLocalLayout;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.*;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
@@ -53,6 +54,8 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			if(child.getParent() != LaneEditPart.this && isNotRectangle(constraint)) return null;
 			Object target = child.getModel();
 			Rectangle rect = (Rectangle) constraint;
+			LaneLocalLayout layout = new LaneLocalLayout();
+			layout.calc(rect, getLaneFigure().getCardArea().getBounds());
 			MoveCommand<Object> command = getMoveCommand(child);
 			command.setModel(target);
 			command.setRectangle(rect);
@@ -97,6 +100,8 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 				return null;
 			}
 			CardEditPart cardPart = (CardEditPart) child;
+			LaneLocalLayout layout = new LaneLocalLayout();
+			layout.calc(rect, getLaneFigure().getCardArea().getBounds());
 			CompoundCommand command = new CompoundCommand();
 			command.add(new AddCardToOnBoardContainerCommand(cardPart.getCardModel(), rect, getLaneModel()));
 			return command;
@@ -393,15 +398,6 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 				}
 			};
 			scriptJob.schedule();
-//			IProgressService service = (IProgressService) PlatformUI.getWorkbench().getService(IProgressService.class);
-//			IRunnableContext context = new ProgressMonitorDialog(getShell());
-//			try {
-//				service.runInUI(context,new ScriptExcecuteWithProgress(evt),null);
-//			} catch (InvocationTargetException ex) {
-//				KanbanUIStatusHandler.fail(ex.getTargetException(), "Moving card is failed.");
-//			} catch (InterruptedException ex) {
-//				KanbanUIStatusHandler.fail(ex, "Moving Card is failed.");
-//			}
 		}
 		else if(isPropIconized(evt)){
 			IFigure parent = getFigure().getParent();
