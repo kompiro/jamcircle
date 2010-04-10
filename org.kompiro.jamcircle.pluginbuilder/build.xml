@@ -9,6 +9,7 @@
 	<property file="build_${hostname}.properties" />
 	<property file="build_local.properties" />
 	<property name="eclipse.installation.dir" value="${eclipseDir}"/>
+	<property name="config.file" value="pluginbuilder.config"/>
 	<import file="build-files/build_shared.xml"/>
 	
 	<target name="-properties">		
@@ -33,7 +34,7 @@
 		<GetHostName />
 		<property file="build_${hostname}.properties" />
 		<property file="build_local.properties" />
-		<property file="pluginbuilder.config" />
+		<property file="${config.file}" />
 		
 		<!-- set defaults -->
 		<property name="buildTarget" value="main"/>
@@ -164,6 +165,7 @@
 			<jvmarg value="-DfetchTag=${fetchTag}"/>
 			<jvmarg value="-DbuildProperties=${buildHome}/build-files/build.properties"/>
 			<jvmarg value="-Dmapfile=${mapfile}"/>
+			<jvmarg value="-Dconfig.file=${config.file}"/>
                         <!--
 			<jvmarg line="-agentlib:jdwp=transport=dt_socket,suspend=y,server=y,address=localhost:44000"/>
 			-->

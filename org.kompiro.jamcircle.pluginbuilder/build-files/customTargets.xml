@@ -12,8 +12,9 @@
 			<equals arg1="${buildType}" arg2="I" />
 		</or>
 	</condition>
+	<property name="config.file" value="${buildHome}/pluginbuilder.config"/>
 
-	<property file="${buildHome}/pluginbuilder.config" />
+	<property file="${config.file}" />
 
 	<property file="${buildDirectory}/version.properties" />
 	<property name="buildLabel" value="${buildType}-${version.full}" />
@@ -55,8 +56,8 @@
 		<antcall target="allElementsExceptSvnFetch"/>
 		<antcall target="fetchSubversion"/>
 	</target>
-
-	<import file="allElements.xml"/>
+	<property name="allElements" value="allElements.xml"/>
+	<import file="${allElements}"/>
 	<import file="subversionSupport.xml"/>
 
 
@@ -79,6 +80,7 @@
 	<!-- Steps to do before setup -->
 	<!-- ===================================================================== -->
 	<target name="preSetup">
+		<echoproperties/>
 	</target>
 	<!-- ===================================================================== -->
 	<!-- Steps to do after setup but before starting the build proper -->

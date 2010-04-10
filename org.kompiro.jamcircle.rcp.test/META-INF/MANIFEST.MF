@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: RCP Test Fragment
-Bundle-SymbolicName: org.kompiro.jamcircle.rcp.test
+Bundle-SymbolicName: org.kompiro.jamcircle.rcp.test;singleton:=true
 Bundle-Version: 0.0.0
 Bundle-Vendor: kompiro.org
 Fragment-Host: org.kompiro.jamcircle.rcp
