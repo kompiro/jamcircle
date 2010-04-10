@@ -29,6 +29,11 @@
 	<!-- and features. Results exist as folders and have not yet been jarred.  -->
 	<!-- ===================================================================== -->
 	<target name="post.gather.bin.parts">
+		<signjar keystore="${sign.keystore}" 
+			alias="${sign.alias}" 
+			storepass="${sign.storepass}">
+			<fileset dir="${buildDirectory}/buildRepo/plugins" includes="org.kompiro.*.jar"/>
+		</signjar>
 	</target>
 
 	<!-- ===================================================================== -->
@@ -46,16 +51,6 @@
 	<!-- (and potentially signed)                                              -->
 	<!-- ===================================================================== -->
 	<target name="post.jarUp">
-		<!-- This target is not called by p2 enabled mode. -->
-		<condition property="jarProcessor.unsign">
-			<not>
-				<contains string="${elementName}" substring="org.kompiro.jamcircle"/>
-			</not>
-		</condition>
-		<condition property="jarProcessor.sign">
-			<contains string="${elementName}" substring="org.kompiro.jamcircle"/>
-		</condition>
-		<echo message="${elementName}:${jarProcessor.unsign} ${jarProcessor.sign}"/>
 	</target>
 
 	<!-- ===================================================================== -->
