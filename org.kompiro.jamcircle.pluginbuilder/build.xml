@@ -9,7 +9,7 @@
 	<property file="build_${hostname}.properties" />
 	<property file="build_local.properties" />
 	<property name="eclipse.installation.dir" value="${eclipseDir}"/>
-	<property name="config.file" value="pluginbuilder.config"/>
+	<property name="config.file" value="${buildHome}/pluginbuilder.config"/>
 	<import file="build-files/build_shared.xml"/>
 	
 	<target name="-properties">		

@@ -14,6 +14,14 @@
 			<property name="type" value="feature" />
 			<property name="id" value="org.kompiro.jamcircle.test" />
 		</ant>
+		<ant antfile="${genericTargets}" target="${target}">
+			<property name="type" value="feature" />
+			<property name="id" value="org.kompiro.jamcircle.rcp" />
+		</ant>
+		<ant antfile="${genericTargets}" target="${target}">
+			<property name="type" value="feature" />
+			<property name="id" value="org.kompiro.jamcircle.rcp.test" />
+		</ant>
 	</target>
 	<target name="rcpbuild" if="build.container.feature">
 		<ant antfile="${genericTargets}" target="${target}">
@@ -21,14 +29,29 @@
 			<property name="id" value="org.eclipse.pde.build.container.feature" />
 		</ant>
 	</target>
-	<!--
-	<target name="rcpbuild" if="build.container.feature">
-		<ant antfile="${genericTargets}" target="${target}">
-			<property name="type" value="feature" />
-			<property name="id" value="org.kompiro.jamcircle" />
+
+	<!-- assmble targets for RCP Base build -->	
+	<target name="assemble.org.kompiro.jamcircle.rcp.p2">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
+ 			<property name="archiveName" value="${archiveNamePrefix}-rcp-p2.zip"/>
 		</ant>
 	</target>
-	-->
+	<target name="assemble.org.kompiro.jamcircle.rcp.group.group.group">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
+ 			<property name="archiveName" value="${archiveNamePrefix}-rcp.zip"/>
+		</ant>
+	</target>
+	<target name="assemble.org.kompiro.jamcircle.rcp.test.group.group.group">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
+ 			<property name="archiveName" value="${archiveNamePrefix}-rcp-test.zip"/>
+		</ant>
+	</target>
+	<target name="assemble.org.kompiro.jamcircle.rcp.test.p2">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
+ 			<property name="archiveName" value="${archiveNamePrefix}-rcp-test-p2.zip"/>
+		</ant>
+	</target>
+
 	
 	<!-- generated assemble targets -->	     
 	<target name="assemble.org.kompiro.jamcircle">

@@ -56,7 +56,7 @@
 		<antcall target="allElementsExceptSvnFetch"/>
 		<antcall target="fetchSubversion"/>
 	</target>
-	<property name="allElements" value="allElements.xml"/>
+	<property name="allElements" value="${buildHome}/build-files/allElements.xml"/>
 	<import file="${allElements}"/>
 	<import file="subversionSupport.xml"/>
 
@@ -80,7 +80,6 @@
 	<!-- Steps to do before setup -->
 	<!-- ===================================================================== -->
 	<target name="preSetup">
-		<echoproperties/>
 	</target>
 	<!-- ===================================================================== -->
 	<!-- Steps to do after setup but before starting the build proper -->

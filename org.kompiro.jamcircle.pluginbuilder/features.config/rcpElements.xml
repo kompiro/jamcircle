@@ -11,27 +11,15 @@
     	</target>
 		
 	<target name="assemble.org.kompiro.jamcircle.rcp.p2">
- 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-p2.zip"/>
-		</ant>
 	</target>
 
 	<target name="assemble.org.kompiro.jamcircle.rcp.group.group.group">
- 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
- 			<property name="archiveName" value="${archiveNamePrefix}.zip"/>
-		</ant>
 	</target>
 	
-	<!-- assmble targets for RCP build -->	
+	<!-- assmble targets for RCP Base build -->	
 	<target name="assemble.org.kompiro.jamcircle.rcp.test.group.group.group">
- 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
- 			<property name="archiveName" value="${archiveNamePrefix}-test.zip"/>
-		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.rcp.test.p2">
- 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-p2.zip"/>
-		</ant>
 	</target>
 
 	<property name="assemble.org.eclipse.pde.build.container.feature.group.group.group" value="true" />
