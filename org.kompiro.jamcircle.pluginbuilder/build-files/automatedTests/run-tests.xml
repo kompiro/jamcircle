@@ -188,11 +188,7 @@ version=3.1.0</echo>
 		<antcall target="runDirector">
 			<param name="p2.repo" value="${p2.build.repo}"/>
 			<param name="p2.director.iu"
-				value="org.kompiro.jamcircle.feature.group,
-					org.kompiro.jamcircle.rcp.feature.group,
-					org.kompiro.jamcircle.test.feature.group,
-					org.kompiro.jamcircle.rcp.test.feature.group
-			"/>
+				value="org.kompiro.jamcircle.feature.group,org.kompiro.jamcircle.rcp.feature.group,org.kompiro.jamcircle.test.feature.group,org.kompiro.jamcircle.rcp.test.feature.group"/>
 			<param name="p2.director.installPath" value="${test.eclipse.host.eclipse}"/>
 		</antcall>
 	</target>
@@ -202,7 +198,7 @@ version=3.1.0</echo>
 		<echo message="Removing Extension Site from ${test.eclipse.host}."/>
 		<antcall target="unRunDirector">
 			<param name="p2.repo" value="${p2.build.repo}"/>
-			<param name="p2.director.iu" value="org.kompiro.jamcircle.feature.group,org.kompiro.jamcircle.test.feature.group"/>
+			<param name="p2.director.iu" value="org.kompiro.jamcircle.feature.group,org.kompiro.jamcircle.rcp.feature.group,org.kompiro.jamcircle.test.feature.group,org.kompiro.jamcircle.rcp.test.feature.group"/>
 			<param name="p2.director.installPath" value="${test.eclipse.host.eclipse}"/>
 		</antcall>
 		<antcall target="updateManager">	
