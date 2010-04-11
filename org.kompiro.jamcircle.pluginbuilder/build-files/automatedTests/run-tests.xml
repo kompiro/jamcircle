@@ -187,7 +187,12 @@ version=3.1.0</echo>
 		</antcall>
 		<antcall target="runDirector">
 			<param name="p2.repo" value="${p2.build.repo}"/>
-			<param name="p2.director.iu" value="org.kompiro.jamcircle.feature.group,org.kompiro.jamcircle.test.feature.group"/>
+			<param name="p2.director.iu"
+				value="org.kompiro.jamcircle.feature.group,
+					org.kompiro.jamcircle.rcp.feature.group,
+					org.kompiro.jamcircle.test.feature.group,
+					org.kompiro.jamcircle.rcp.test.feature.group
+			"/>
 			<param name="p2.director.installPath" value="${test.eclipse.host.eclipse}"/>
 		</antcall>
 	</target>
