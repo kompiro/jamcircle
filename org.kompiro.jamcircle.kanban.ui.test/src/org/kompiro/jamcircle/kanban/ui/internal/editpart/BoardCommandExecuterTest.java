@@ -48,7 +48,7 @@ public class BoardCommandExecuterTest {
 	public void addCard() throws Exception {
 		Card card = mock(Card.class);
 		ArgumentCaptor<Command> argument = ArgumentCaptor.forClass(Command.class);
-		executer.add(card);
+		executer.addCard(card);
 		verify(stack).execute(argument.capture());
 		assertThat(argument.getValue(),is(instanceOf(CreateCardCommand.class)));
 	}
@@ -57,7 +57,7 @@ public class BoardCommandExecuterTest {
 	public void addLane() throws Exception {
 		Lane lane = mock(Lane.class);
 		ArgumentCaptor<Command> argument = ArgumentCaptor.forClass(Command.class);
-		executer.add(lane);
+		executer.addLane(lane);
 		verify(stack).execute(argument.capture());
 		assertThat(argument.getValue(),is(instanceOf(CreateLaneCommand.class)));
 	}
@@ -68,7 +68,7 @@ public class BoardCommandExecuterTest {
 		board.addCard(card);
 		part.refresh();
 		ArgumentCaptor<Command> argument = ArgumentCaptor.forClass(Command.class);
-		executer.remove(card);
+		executer.removeCard(card);
 		
 		verify(stack).execute(argument.capture());
 		Command value = argument.getValue();
@@ -84,7 +84,7 @@ public class BoardCommandExecuterTest {
 		board.addLane(lane);
 		part.refresh();
 		ArgumentCaptor<Command> argument = ArgumentCaptor.forClass(Command.class);
-		executer.remove(lane);
+		executer.removeLane(lane);
 		
 		verify(stack).execute(argument.capture());
 		Command value = argument.getValue();
