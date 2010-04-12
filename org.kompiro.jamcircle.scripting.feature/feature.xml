@@ -30,8 +30,8 @@
       <import plugin="org.eclipse.osgi.services"/>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.ui.console"/>
-      <import plugin="org.kompiro.jamcircle.kanban.ui"/>
       <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.kompiro.jamcircle.kanban"/>
    </requires>
 
    <plugin

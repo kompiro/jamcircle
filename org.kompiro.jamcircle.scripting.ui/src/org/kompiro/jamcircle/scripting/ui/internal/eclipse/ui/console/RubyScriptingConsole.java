@@ -40,8 +40,7 @@ import org.jruby.internal.runtime.ValueAccessor;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.kompiro.jamcircle.kanban.model.Board;
-import org.kompiro.jamcircle.kanban.ui.KanbanView;
-import org.kompiro.jamcircle.kanban.ui.editpart.IBoardCommandExecuter;
+import org.kompiro.jamcircle.kanban.model.BoardContainer;
 import org.kompiro.jamcircle.scripting.ui.Messages;
 import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
 
@@ -56,6 +55,7 @@ import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
  */
 public class RubyScriptingConsole extends TextConsole {
 
+	private static final String KANBAN_VIEW = "org.kompiro.jamcircle.kanban.KanbanView";//$NON-NLS-1$
 	private static final String EMPTY = ""; //$NON-NLS-1$
 	private static final String KEY_OF_BUNDLE_VERSION = "Bundle-Version"; //$NON-NLS-1$
 	private static final String INIT_SCRIPT_RB = "init.rb"; //$NON-NLS-1$
@@ -643,7 +643,7 @@ public class RubyScriptingConsole extends TextConsole {
 			final Object[] ret = new Object[1];
 			getDisplay().syncExec(new Runnable() {
 				public void run() {
-					KanbanView kanbanView = getKanbanView();
+					IAdaptable kanbanView = getKanbanView();
 					ret[0] = kanbanView.getAdapter(Board.class);
 				}
 			});
@@ -656,8 +656,8 @@ public class RubyScriptingConsole extends TextConsole {
 			final Object[] ret = new Object[1];
 			getDisplay().syncExec(new Runnable() {
 				public void run() {
-					KanbanView kanbanView = getKanbanView();
-					ret[0] = kanbanView.getAdapter(IBoardCommandExecuter.class);
+					IAdaptable kanbanView = getKanbanView();
+					ret[0] = kanbanView.getAdapter(BoardContainer.class);
 				}
 			});
 			return ret[0];
@@ -738,16 +738,16 @@ public class RubyScriptingConsole extends TextConsole {
         assist.showPossibleCompletions();
     }
 
-	private KanbanView getKanbanView() {
+	private IAdaptable getKanbanView() {
 		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		KanbanView view = null;
+		IAdaptable view = null;
 		if (window != null) {
 			IWorkbenchPage page = window.getActivePage();
 			if (page != null) {
-				view = (KanbanView) page.findView(KanbanView.ID);
+				view = (IAdaptable) page.findView(KANBAN_VIEW);
 			}
 		}
-		KanbanView kanbanView = view;
+		IAdaptable kanbanView = view;
 		return kanbanView;
 	}
 

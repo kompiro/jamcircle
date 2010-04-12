@@ -16,24 +16,24 @@ end
 def create_card(subject=nil)
   created = Card.new
   created.subject = subject
-  board_command_executer.add created
+  board_command_executer.add_card created
   return created
 end
 
 def remove_card(target)
-  board_command_executer.remove target
+  board_command_executer.remove_card target
   return target
 end
 
 def create_lane(status=nil)
   created = Lane.new
   created.status = status
-  board_command_executer.add created
+  board_command_executer.add_lane created
   return created
 end
 
 def remove_lane(target)
-  board_command_executer.remove target
+  board_command_executer.remove_lane target
   return target
 end
 

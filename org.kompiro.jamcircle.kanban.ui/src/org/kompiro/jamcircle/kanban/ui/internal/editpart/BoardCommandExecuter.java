@@ -7,11 +7,11 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.*;
 import org.kompiro.jamcircle.kanban.model.Card;
+import org.kompiro.jamcircle.kanban.model.BoardContainer;
 import org.kompiro.jamcircle.kanban.model.Lane;
-import org.kompiro.jamcircle.kanban.ui.editpart.IBoardCommandExecuter;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
-public class BoardCommandExecuter implements IBoardCommandExecuter {
+public class BoardCommandExecuter implements BoardContainer {
 	
 	private final class GraphicalCreationFactory implements
 			CreationFactory {
@@ -36,12 +36,12 @@ public class BoardCommandExecuter implements IBoardCommandExecuter {
 		this.part = part;
 	}
 
-	public void add(Card card) {
+	public void addCard(Card card) {
 		GraphicalCreationFactory factory = new GraphicalCreationFactory(card);
 		executeAddCommand(factory);
 	}
 	
-	public void add(Lane lane) {
+	public void addLane(Lane lane) {
 		GraphicalCreationFactory factory = new GraphicalCreationFactory(lane);
 		executeAddCommand(factory);
 	}
@@ -54,7 +54,7 @@ public class BoardCommandExecuter implements IBoardCommandExecuter {
 		part.getCommandStack().execute(command);
 	}
 
-	public void remove(Card card) {
+	public void removeCard(Card card) {
 		GroupRequest request = new GroupRequest(RequestConstants.REQ_ORPHAN_CHILDREN);
 		EditPart target = null;
 		List<CardEditPart> cardChildren = part.getCardChildren();
@@ -69,7 +69,7 @@ public class BoardCommandExecuter implements IBoardCommandExecuter {
 		part.getCommandStack().execute(command);
 	}
 
-	public void remove(Lane lane) {
+	public void removeLane(Lane lane) {
 		GroupRequest request = new GroupRequest(RequestConstants.REQ_ORPHAN_CHILDREN);
 		EditPart target = null;
 		List<LaneEditPart> laneChildren = part.getLaneChildren();
