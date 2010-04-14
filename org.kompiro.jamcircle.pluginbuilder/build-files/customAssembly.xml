@@ -40,6 +40,9 @@
 				<include name="org.jivesoftware*"/>
 				<exclude name="*test*"/>
 			</fileset>
+			<fileset dir="${buildDirectory}/buildRepo/features">
+				<include name="org.kompiro.*"/>
+			</fileset>
 		</signjar>
 	</target>
 
