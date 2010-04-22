@@ -65,12 +65,8 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	
 	@Override
 	public void preStartup() {
-		getDisplay().syncExec(new Runnable() {
-			public void run() {
-				createTray();
-				initalizeManager();
-			}
-		});
+		createTray();
+		initalizeManager();
 	}
 	
 	@Override
