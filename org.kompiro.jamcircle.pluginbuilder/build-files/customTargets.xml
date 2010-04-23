@@ -181,6 +181,7 @@
 		<!-- copy build results for rcp build -->
 		<copy todir="${buildResultsDirectory}" flatten="true">
 			<fileset dir="${buildDirectory}" includes="${buildType}-**/*.zip" />
+			<fileset dir="${buildDirectory}" includes="${buildType}-**/*.tar.gz" />
 		</copy>
 	</target>
 
