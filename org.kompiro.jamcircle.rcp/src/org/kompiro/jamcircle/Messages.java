@@ -8,11 +8,11 @@ public class Messages extends NLS {
 	public static String ApplicationActionBarAdvisor_File;
 	public static String ApplicationActionBarAdvisor_Help;
 	public static String ApplicationActionBarAdvisor_Window;
+	public static String ApplicationWorkbenchAdvisor_close_menu;
 	public static String ApplicationWorkbenchAdvisor_error;
 	public static String ApplicationWorkbenchAdvisor_exit_menu;
 	public static String ApplicationWorkbenchAdvisor_icon_tooltip;
 	public static String ApplicationWorkbenchAdvisor_open_menu;
-	public static String ApplicationWorkbenchAdvisor_open_message;
 	public static String ApplicationWorkbenchAdvisor_started_message;
 	public static String ApplicationWorkbenchAdvisor_started_title;
 	public static String RCPActivator_error;
