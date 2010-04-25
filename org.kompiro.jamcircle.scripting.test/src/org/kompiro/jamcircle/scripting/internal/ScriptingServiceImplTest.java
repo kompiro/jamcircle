@@ -48,6 +48,7 @@ public class ScriptingServiceImplTest {
 	@Test
 	public void evalJRubyReturnValue() throws Exception {
 		Object actual = service.eval(ScriptTypes.JRuby, "test", "result =  ONE + TWO; p 'evalJrubyReturnValue is testing...'; result", null);
+		assertNotNull(actual);
 		assertTrue(actual.getClass().getCanonicalName(),actual instanceof Long);
 		assertThat((Long)actual, is(3L));
 	}
@@ -58,14 +59,14 @@ public class ScriptingServiceImplTest {
 		service.eval(ScriptTypes.JRuby, "test", 
 				"p 'empty value'", new HashMap<String, Object>());
 		Person value = new Person();
-		value.setName("テスト太郎");
+		value.setName("Person's name");
 		instanceBeans.put("person", value);
 		String name = Person.class.getName();
 		Object result = service.eval(ScriptTypes.JRuby, "test", 
 				"include_class \"" + name + 
 				"\";\n" +
 				"$bsf.lookupBean('person').name", instanceBeans);
-		assertThat((String)result,is("テスト太郎"));
+		assertThat((String)result,is("Person's name"));
 	}
 	
 	@Test

@@ -10,11 +10,14 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swtbot.eclipse.finder.waits.Conditions;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.eclipse.gef.view.finder.widgets.*;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferenceConstants;
+import org.eclipse.ui.PlatformUI;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.kompiro.jamcircle.kanban.ui.KanbanPerspective;
@@ -24,6 +27,7 @@ import org.kompiro.jamcircle.kanban.ui.model.*;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class EditPartBotSmokeTest{
 	
+	private static final long TIMEOUT = 10 * 1000;
 	private SWTBotGefView view;
 	private SWTGefViewBot bot;
 
@@ -57,12 +61,7 @@ public class EditPartBotSmokeTest{
 	}
 	
 	@Test
-	public void laneTest() throws Exception {
-		laneExist();
-		createLane();
-	}
-
-	private void laneExist() {
+	public void laneExist() {
 		List<SWTBotGefViewEditPart> laneParts = getLaneViewParts();
 		assertThat(laneParts.size(),is(not(0)));
 
@@ -90,9 +89,9 @@ public class EditPartBotSmokeTest{
 	}
 
 	@Test
+	@Ignore
 	public void cardTest() throws Exception {
 		createCard();
-		assertThat(getCardViewParts().size(),is(1));
 		
 		// simulated Delete Request 
 		// (why: can't execute any shortcut request during test stage.it'll execute after test stage like these command)
@@ -103,6 +102,10 @@ public class EditPartBotSmokeTest{
 		((BoardEditPart)getViewBoardPart().part()).getCommand(request).execute();
 		assertThat(getCardViewParts().size(),is(0));
 
+		moveCard();
+	}
+
+	private void moveCard() throws Exception {
 		createCard();
 		assertThat(getCardViewParts().size(),is(1));
 		view.drag(getCardViewParts().get(0), 100, 200);
@@ -113,7 +116,10 @@ public class EditPartBotSmokeTest{
 	public void createCard() throws Exception {
 		SWTBotGefViewEditPart viewBoardPart = getViewBoardPart();
 		assertThat(viewBoardPart.part(),instanceOf(BoardEditPart.class));
+		waitForActiveShell();
 		viewBoardPart.doubleClick(new Point(1000,200));
+		waitForActiveShell();
+		assertThat(getCardViewParts().size(),is(1));
 	}
 
 	private SWTBotGefViewEditPart getViewBoardPart() {
@@ -123,11 +129,14 @@ public class EditPartBotSmokeTest{
 
 	public void createCardOnLane() throws Exception {
 		SWTBotGefViewEditPart viewBoardPart = getLaneViewParts().get(0);
+		waitForActiveShell();
 		viewBoardPart.doubleClick();
+		waitForActiveShell();
 	}
 
-	
-	private void createLane() throws Exception {
+	@Test
+	@Ignore
+	public void createLane() throws Exception {
 		int oldSize = getLaneViewParts().size();
 		view.getEditPart(LaneCreaterModel.NAME).doubleClick();
 		assertThat(getLaneViewParts().size(),is(oldSize + 1));
@@ -183,5 +192,12 @@ public class EditPartBotSmokeTest{
 		return view.editParts(editPartOfType(CardEditPart.class));
 	}
 
+	private void waitForActiveShell() {
+		bot.waitUntil(Conditions.waitForShell(is(getActiveShell())), TIMEOUT);
+	}
+
+	private Shell getActiveShell() {
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+	}
 	
 }

@@ -25,7 +25,7 @@ public class RCPPreferencePage
 		addField(
 				new BooleanFieldEditor(
 					PreferenceConstants.BLUR_ANIMATION,
-					"閉じる際にアニメーションを行う。",
+					Messages.RCPPreferencePage_close_animation_message,
 					getFieldEditorParent()));
 
 	}

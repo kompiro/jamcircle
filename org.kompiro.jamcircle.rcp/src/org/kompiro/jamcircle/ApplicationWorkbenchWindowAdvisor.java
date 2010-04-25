@@ -60,7 +60,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	@Override
 	public void postWindowCreate() {
 		hideMenus();
-		getShell().setMinimized(isMinimized());
+		// for MacOSX, it doesn't set setMinimized(false) because it shows nothing.
+		if(isMinimized()) getShell().setMinimized(true);
 	}
 	
 	@Override

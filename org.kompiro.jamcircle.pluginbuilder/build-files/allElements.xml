@@ -78,57 +78,57 @@
 	</target>
 	<target name="assemble.org.eclipse.pde.build.container.feature.linux.gtk.x86">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-linux.gtk.x86.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-linux.gtk.x86.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.eclipse.pde.build.container.feature.linux.gtk.ppc">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-linux.gtk.ppc.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-linux.gtk.ppc.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.eclipse.pde.build.container.feature.linux.gtk.x86_64">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-linux.gtk.x86_64.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-linux.gtk.x86_64.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.eclipse.pde.build.container.feature.linux.motif.x86">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-linux.motif.x86.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-linux.motif.x86.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.eclipse.pde.build.container.feature.solaris.motif.sparc">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-solaris.motif.sparc.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-solaris.motif.sparc.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.eclipse.pde.build.container.feature.solaris.gtk.sparc">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-solaris.gtk.sparc.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-solaris.gtk.sparc.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.eclipse.pde.build.container.feature.aix.motif.ppc">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-aix.motif.ppc.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-aix.motif.ppc.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.eclipse.pde.build.container.feature.hpux.motif.PA_RISC">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-hpux.motif.PA_RISC.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-hpux.motif.PA_RISC.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.eclipse.pde.build.container.feature.macosx.carbon.ppc">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-macosx.carbon.ppc.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-macosx.carbon.ppc.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.eclipse.pde.build.container.feature.macosx.carbon.x86">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-macosx.carbon.x86.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-macosx.carbon.x86.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.eclipse.pde.build.container.feature.macosx.cocoa.x86">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-macosx.cocoa.x86.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-macosx.cocoa.x86.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.group.group.group">
@@ -143,59 +143,59 @@
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.linux.gtk.x86">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-linux.gtk.x86.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-linux.gtk.x86.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.linux.gtk.ppc">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-linux.gtk.ppc.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-linux.gtk.ppc.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.linux.gtk.x86_64">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-linux.gtk.x86_64.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-linux.gtk.x86_64.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.linux.motif.x86">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-linux.motif.x86.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-linux.motif.x86.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.solaris.motif.sparc">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-solaris.motif.sparc.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-solaris.motif.sparc.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.solaris.gtk.sparc">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-solaris.gtk.sparc.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-solaris.gtk.sparc.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.aix.motif.ppc">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-aix.motif.ppc.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-aix.motif.ppc.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.hpux.motif.PA_RISC">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-hpux.motif.PA_RISC.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-hpux.motif.PA_RISC.tar.gz"/>
 		</ant>
 	</target>
 
 	<target name="assemble.org.kompiro.jamcircle.macosx.carbon.ppc">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-macosx.carbon.ppc.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-macosx.carbon.ppc.tar.gz"/>
 		</ant>
 	</target>
 	
 	<target name="assemble.org.kompiro.jamcircle.macosx.carbon.x86">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-macosx.carbon.x86.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-macosx.carbon.x86.tar.gz"/>
 		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.macosx.cocoa.x86">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-macosx.cocoa.x86.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-macosx.cocoa.x86.tar.gz"/>
 		</ant>
 	</target>	
 	<target name="assemble.org.kompiro.jamcircle.test.group.group.group">

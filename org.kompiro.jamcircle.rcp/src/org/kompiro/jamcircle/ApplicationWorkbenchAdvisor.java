@@ -65,12 +65,8 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	
 	@Override
 	public void preStartup() {
-		getDisplay().syncExec(new Runnable() {
-			public void run() {
-				createTray();
-				initalizeManager();
-			}
-		});
+		createTray();
+		initalizeManager();
 	}
 	
 	@Override
@@ -98,55 +94,14 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		trayItem.setToolTipText(Messages.ApplicationWorkbenchAdvisor_icon_tooltip);
 		trayItem.addSelectionListener(new SelectionAdapter(){
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				openWindowInProgress(trayItem);
+			public void widgetSelected(SelectionEvent e) {
+				showMenu();
 			}
 		});
 		trayItem.addMenuDetectListener(new MenuDetectListener(){
-		
 			public void menuDetected(MenuDetectEvent e) {
-				final Shell shell = new Shell();
-				final Menu menu = new Menu(shell);
-				openItem(shell, menu);
-				extensionItem(menu);
-				exitItem(shell, menu);
-				menu.setVisible(true);
+				openWindowInProgress(trayItem);
 			}
-
-			private void extensionItem(Menu menu) {
-				separator(menu);
-			}
-
-			private void openItem(final Shell shell, final Menu menu) {
-				MenuItem open = new MenuItem(menu, SWT.POP_UP);
-				open.addSelectionListener(new SelectionAdapter(){
-					public void widgetSelected(SelectionEvent e) {
-						openWindowInProgress(trayItem);
-						menu.dispose();
-						shell.dispose();
-					}
-				});
-				open.setText(Messages.ApplicationWorkbenchAdvisor_open_menu);
-				open.setImage(getAppImage());
-			}
-
-			private void separator(final Menu menu) {
-				new MenuItem(menu, SWT.SEPARATOR);
-			}
-			
-			private void exitItem(final Shell shell, final Menu menu) {
-				MenuItem exit = new MenuItem(menu, SWT.POP_UP);
-				exit.addSelectionListener(new SelectionAdapter(){
-					public void widgetSelected(SelectionEvent e) {
-						PlatformUI.getWorkbench().close();
-						menu.dispose();
-						shell.dispose();
-					}
-				});
-				exit.setText(Messages.ApplicationWorkbenchAdvisor_exit_menu);
-				exit.setImage(getExitImage());
-			}
-
 		});
 	}
 
@@ -179,8 +134,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	}
 	
 	private void handleShowOrHideBoard(TrayItem trayItem) {
-		IWorkbench workbench = PlatformUI.getWorkbench();
-		Shell shell = workbench.getActiveWorkbenchWindow().getShell();
+		Shell shell = getActiveShell();
 		if(shell.isVisible() == false || shell.getMinimized()){
 			showBoard(shell);
 		}else{
@@ -236,5 +190,63 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	private Image getExitImage() {
 		return getImageRegistry().get(ImageConstants.EXIT_IMAGE.toString());
 	}
-		
+
+	private void showMenu() {
+		final Shell shell = new Shell();
+		final Menu menu = new Menu(shell);
+		openItem(shell, menu);
+		extensionItem(menu);
+		exitItem(shell, menu);
+		menu.setVisible(true);
+	}
+	
+
+	private void extensionItem(Menu menu) {
+		separator(menu);
+	}
+
+	private void openItem(final Shell shell, final Menu menu) {
+		MenuItem boardItem = new MenuItem(menu, SWT.POP_UP);
+		boardItem.addSelectionListener(new SelectionAdapter(){
+			public void widgetSelected(SelectionEvent e) {
+				openWindowInProgress(trayItem);
+				menu.dispose();
+				shell.dispose();
+			}
+		});
+		Shell activeShell = getActiveShell();
+		if(activeShell != null && activeShell.isVisible()){
+			boardItem.setText(Messages.ApplicationWorkbenchAdvisor_close_menu);
+		}else{
+			boardItem.setText(Messages.ApplicationWorkbenchAdvisor_open_menu);
+		}
+		boardItem.setImage(getAppImage());
+	}
+
+	private void separator(final Menu menu) {
+		new MenuItem(menu, SWT.SEPARATOR);
+	}
+	
+	private void exitItem(final Shell shell, final Menu menu) {
+		MenuItem exit = new MenuItem(menu, SWT.POP_UP);
+		exit.addSelectionListener(new SelectionAdapter(){
+			public void widgetSelected(SelectionEvent e) {
+				PlatformUI.getWorkbench().close();
+				menu.dispose();
+				shell.dispose();
+			}
+		});
+		exit.setText(Messages.ApplicationWorkbenchAdvisor_exit_menu);
+		exit.setImage(getExitImage());
+	}
+
+	private Shell getActiveShell() {
+		IWorkbench workbench = PlatformUI.getWorkbench();
+		if(workbench == null) return null;
+		IWorkbenchWindow activeWindow = workbench.getActiveWorkbenchWindow();
+		if(activeWindow == null) return null;
+		Shell shell = activeWindow.getShell();
+		return shell;
+	}
+
 }
