@@ -29,7 +29,8 @@ JRuby Project http://jruby.codehaus.org/
 
    <windowImages i16="/org.kompiro.jamcircle.rcp/icons/kanban_016.gif" i32="/org.kompiro.jamcircle.rcp/icons/kanban_032.gif" i48="/org.kompiro.jamcircle.rcp/icons/kanban_048.gif" i64="/org.kompiro.jamcircle.rcp/icons/kanban_064.gif" i128="/org.kompiro.jamcircle.rcp/icons/kanban_128.gif"/>
 
-   <launcher name="JAMCircle">
+   <launcher name="jamcircle">
+      <linux icon="/org.kompiro.jamcircle.rcp/icons/linux/kanban_048.xpm"/>
       <macosx icon="/org.kompiro.jamcircle.rcp/icons/mac/kanban_032.icns"/>
       <solaris/>
       <win useIco="false">
@@ -45,6 +46,7 @@ JRuby Project http://jruby.codehaus.org/
 
 
    <vm>
+      <linux>org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/OSGi%Minimum-1.0</linux>
    </vm>
 
    <license>
