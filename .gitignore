@@ -1,6 +1,7 @@
 **/bin/**
 **/**/*~
 *~
+*log
 **/**/Thumbs.db
 External Plug-in Libraries/
 .metadata
@@ -19,7 +20,8 @@ xstream/
 de.spiritlink.jobs/
 org.kompiro.jamcircle.builder/
 *example/
-**/screenshots/
+**/screenshots/**
+**/screenshots
 learning.*/
 results/
 testresults/
