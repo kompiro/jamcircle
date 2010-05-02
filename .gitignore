@@ -10,9 +10,7 @@ jcodings/
 jvyamlb/
 leaning.*/
 org.apache.bsf/.settings/
-org.eclipse.pde.build.source/
-org.eclipse.pde.build/
-org.eclipse.releng.basebuilder/
+org.eclipse.*/
 org.kompiro.eclipseextension.maxscreen/
 org.kompiro.jamcircle.platform/
 org.kompiro.jamcircle.platform.ui/
