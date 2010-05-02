@@ -1,4 +1,9 @@
 <project name="Build specific targets and properties" default="noDefault">
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+      <classpath>
+        <pathelement location="${buildHome}/build-files/ant-contrib.jar"/>
+      </classpath>
+    </taskdef>
 
 	<!-- =====================================================================
 	    
@@ -89,6 +94,16 @@
 			<property name="p2.director.iu" value="org.kompiro.jamcircle.scripting.feature.group"/>
 			<property name="p2.director.installPath" value="${eclipse.base}"/>
 		</ant>
+		<if>
+		 <equals arg1="${os}" arg2="macosx" />
+		 <then>
+		 	<property name="tmpFolder" location="/tmp/org.kompiro.jamcircle.builder/tmp/jamcircle"/>
+
+		 	<move file="${tmpFolder}/${launcherName}.app/Contents/MacOS/jamcircle.ini" 
+		 		tofile="${tmpFolder}/${launcherName}.app/Contents/MacOS/${launcherName}.ini" 
+		 		overwrite="true"/>
+		 </then>
+		</if>
 	</target>
 	
 	<!-- ===================================================================== -->
