@@ -1,8 +1,9 @@
 <project name="Build specific targets and properties" default="noDefault">
 	<property name="javancss" value="${buildHome}/build-files/javancss"/>
-	<property name="mapfile" value="${buildHome}/maps/all.map"/>
+	<property name="mapfile" value="${buildHome}/maps/all.map_template"/>
 	<taskdef name="javancss" classname="javancss.JavancssAntTask" classpath="${javancss}/lib/javancss.jar"/>
 	<typedef resource="org/pluginbuilder/anttasks/pluginbuildertasks.properties" classpath="${buildHome}/build-files/pluginbuilder-anttasks.jar" />
+	<property environment="env"/>
 	<condition property="isNightlyBuild">
 		<equals arg1="${buildType}" arg2="N" />
 	</condition>
@@ -67,7 +68,12 @@
 	<!-- ===================================================================== -->
 	<target name="getMapFiles" if="isCVSOrCopy">
 		<echo message="Copying map files."/>
-		<copy todir="${buildDirectory}/maps" file="${mapfile}"/>
+		<mkdir dir="${buildDirectory}/maps"/>
+		<copy tofile="${buildDirectory}/maps/all.map" file="${mapfile}">
+			<filterset>
+				<filter token="workspace" value="${env.WORKSPACE}" />
+			</filterset>
+		</copy>
 		<!--
 		<copy todir="${buildDirectory}/maps">
 			<fileset dir="${buildHome}/maps" includes="*.map">
@@ -164,7 +170,7 @@
 		<p2.publish.featuresAndBundles  repository="${p2.build.repo}">
 			<features dir="${deltaPack}/features" includes="*"/>
 			<bundles dir="${deltaPack}/plugins" includes="*"/>
-		</p2.publish.featuresAndBundles>		
+		</p2.publish.featuresAndBundles>
 	</target>
 	<!-- ===================================================================== -->
 	<!-- Steps to do after  running assemble. -->
