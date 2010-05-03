@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="JAM Circle" uid="I20100425-1000" id="org.kompiro.jamcircle.rcp.product" application="org.kompiro.jamcircle.rcp.application" version="0.8.1" useFeatures="true" includeLaunchers="true">
+<product name="JAM Circle" uid="I20100503-1000" id="org.kompiro.jamcircle.rcp.product" application="org.kompiro.jamcircle.rcp.application" version="0.8.1" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.kompiro.jamcircle.rcp/icons/about2.png"/>
       <text>
          JAM Circle
-
-Version: 0.8.1
-
 Visit http://kompiro.org/jamcircle/
 
 This product includes software developed by the
@@ -49,6 +46,7 @@ JRuby Project http://jruby.codehaus.org/
             winLargeLow="/org.kompiro.jamcircle.rcp/icons/windows/kanban_048_8.bmp"/>
       </win>
    </launcher>
+
 
    <vm>
       <linux>org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5</linux>
