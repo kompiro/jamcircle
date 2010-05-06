@@ -2,20 +2,11 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.kompiro.jamcircle.kanban.boardTemplate">
-      <template
-            class="org.kompiro.jamcircle.kanban.example.twitter.internal.BoardTemplate"
-            description="This is a sample template board."
-            icon="icons/feed.png"
-            name="Feed Board">
-      </template>
-   </extension>
-   <extension
          point="org.kompiro.jamcircle.kanban.boardScriptTemplate">
       <template
             description="This is a sample template board implemented JRuby."
             icon="icons/feed.png"
-            name="Test Board(JRuby)"
+            name="Feed Board"
             type="JRuby"
             source="script/feed.rb">
       </template>
