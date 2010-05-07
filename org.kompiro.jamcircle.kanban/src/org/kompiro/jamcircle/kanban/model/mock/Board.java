@@ -75,6 +75,10 @@ public class Board extends MockEntity implements org.kompiro.jamcircle.kanban.mo
 	public boolean removeLane(Lane lane) {
 		return lanes.remove(lane);
 	}
+	
+	public boolean containLane(Lane lane){
+		return lanes.contains(lane);
+	}
 
 	public void setCreateDate(Date date) {
 		this.createdDate = date;

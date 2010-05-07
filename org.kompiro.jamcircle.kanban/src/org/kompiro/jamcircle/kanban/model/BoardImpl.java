@@ -2,7 +2,10 @@ package org.kompiro.jamcircle.kanban.model;
 
 import java.beans.PropertyChangeEvent;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -72,7 +75,7 @@ public class BoardImpl extends EntityImpl{
 	public boolean containCard(Card card){
 		return board.equals(card.getBoard()) || mockCards.contains(card);
 	}
-	
+
 	public Card[] getCards(){
 		Collection<Card> allCards = new ArrayList<Card>();
 		allCards.addAll(Arrays.asList(board.getCardsFromDB()));
@@ -127,6 +130,11 @@ public class BoardImpl extends EntityImpl{
 		allLanes.addAll(mockLanes);
 		return allLanes.toArray(new Lane[]{});
 	}
+	
+	public boolean containLane(Lane lane){
+		return board.equals(lane.getBoard()) || mockLanes.contains(lane);
+	}
+
 	
 	public void save(boolean directExecution){
 		if(directExecution){

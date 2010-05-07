@@ -48,23 +48,14 @@ public interface Board extends Entity,CardContainer,LaneContainer {
 	void setCreateDate(Date date);
 
 	Date getCreateDate();
-	
-	public  boolean addCard(Card card);
-
-	public  boolean removeCard(Card card);
-
-	public  boolean containCard(Card card);
-
-	@Ignore
-	public Card[] getCards();
-		
+			
 	@OneToMany(where="trashed = false and laneid is null")
 	public Card[] getCardsFromDB();
 
-	public  boolean addLane(Lane lane);
+	public boolean addLane(Lane lane);
 
-	public  boolean removeLane(Lane lane);
-	
+	public boolean removeLane(Lane lane);
+		
 	@Ignore
 	public Lane[] getLanes();
 

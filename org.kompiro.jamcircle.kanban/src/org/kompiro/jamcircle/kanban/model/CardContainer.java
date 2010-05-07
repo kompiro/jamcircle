@@ -4,6 +4,8 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.java.ao.schema.Ignore;
+
 import org.apache.commons.lang.NotImplementedException;
 
 /**
@@ -18,6 +20,7 @@ public interface CardContainer {
 	
 	boolean containCard(Card card);
 	
+	@Ignore
 	Card[] getCards();
 	
 	void addPropertyChangeListener(PropertyChangeListener listener);

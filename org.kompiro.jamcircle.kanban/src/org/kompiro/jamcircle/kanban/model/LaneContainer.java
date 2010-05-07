@@ -10,6 +10,8 @@ public interface LaneContainer {
 
 	boolean removeLane(Lane lane);
 	
+	public boolean containLane(Lane lane);
+	
 	Lane[] getLanes();
 
 }

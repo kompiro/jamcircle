@@ -35,7 +35,6 @@ public class BoardModel extends AbstractModel implements CardContainer,LaneConta
 	public boolean containCard(Card o) {
 		return board.containCard(o);
 	}
-
 	
 	public boolean isEmptyCards(){
 		return board.getCards().length == 0;
@@ -57,6 +56,10 @@ public class BoardModel extends AbstractModel implements CardContainer,LaneConta
 
 	public boolean addLane(Lane lane) {
 		return board.addLane(lane);
+	}
+	
+	public boolean containLane(Lane o) {
+		return board.containLane(o);
 	}
 
 	public boolean isEmptyLanes(){
