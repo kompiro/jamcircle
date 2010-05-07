@@ -10,6 +10,7 @@
 	<property file="build_local.properties" />
 	<property name="eclipse.installation.dir" value="${eclipseDir}"/>
 	<property name="config.file" value="${buildHome}/pluginbuilder.config"/>
+	<property name="mapfile" value="${buildHome}/maps/all.map_template"/>
 	<import file="build-files/build_shared.xml"/>
 	
 	<target name="-properties">		

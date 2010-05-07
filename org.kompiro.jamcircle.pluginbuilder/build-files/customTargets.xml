@@ -1,6 +1,5 @@
 <project name="Build specific targets and properties" default="noDefault">
 	<property name="javancss" value="${buildHome}/build-files/javancss"/>
-	<property name="mapfile" value="${buildHome}/maps/all.map_template"/>
 	<taskdef name="javancss" classname="javancss.JavancssAntTask" classpath="${javancss}/lib/javancss.jar"/>
 	<typedef resource="org/pluginbuilder/anttasks/pluginbuildertasks.properties" classpath="${buildHome}/build-files/pluginbuilder-anttasks.jar" />
 	<property environment="env"/>
