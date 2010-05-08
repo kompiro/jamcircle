@@ -1,14 +1,17 @@
 package org.kompiro.jamcircle.kanban.service.internal;
 
 import static org.junit.Assume.assumeNotNull;
-import static org.kompiro.jamcircle.kanban.model.Lane.*;
+import static org.kompiro.jamcircle.kanban.model.Lane.VALUE_OF_HEIGHT;
+import static org.kompiro.jamcircle.kanban.model.Lane.VALUE_OF_WIDTH;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.java.ao.EntityManager;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.kompiro.jamcircle.kanban.KanbanActivator;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Card;
@@ -55,7 +58,6 @@ public abstract class AbstractKanbanTest {
 		return getKanbanService().createLane(board, status, 0, 0, VALUE_OF_WIDTH, VALUE_OF_HEIGHT);
 	}
 
-		
 	@After
 	public void after() throws Exception{
 		try {

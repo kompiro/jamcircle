@@ -1,7 +1,12 @@
 package org.kompiro.jamcircle.kanban.model.mock;
 
-import java.util.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
@@ -22,6 +27,7 @@ public class Lane extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	private Date createDate;
 	private boolean iconized;
 	private ScriptTypes scriptType;
+	private String iconSrc;
 
 	public void setHeight(int height) {
 		this.height = height;
@@ -119,4 +125,20 @@ public class Lane extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 		this.scriptType = type;
 	}
 
+	public String getIconSrc() {
+		return iconSrc;
+	}
+
+	public void setIconSrc(String iconSrc) {
+		this.iconSrc = iconSrc;
+	}
+
+	public URL getIconURL(){
+		try {
+			return new URL(getIconSrc());
+		} catch (MalformedURLException e) {
+			KanbanStatusHandler.info(e.getLocalizedMessage());
+		}
+		return null;
+	}
 }

@@ -3,8 +3,12 @@ package org.kompiro.jamcircle.kanban.model;
 import java.sql.Types;
 import java.util.Date;
 
-import net.java.ao.*;
-import net.java.ao.schema.*;
+import net.java.ao.Implementation;
+import net.java.ao.OneToMany;
+import net.java.ao.Preload;
+import net.java.ao.schema.Default;
+import net.java.ao.schema.NotNull;
+import net.java.ao.schema.SQLType;
 
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
@@ -23,7 +27,6 @@ public interface Lane extends GraphicalEntity ,CardContainer {
 
 	public static final String WIDTH = "200";//$NON-NLS-1$
 	public static final int VALUE_OF_WIDTH = Integer.valueOf(WIDTH);
-
 	
 	String PROP_STATUS = "status";//$NON-NLS-1$
 	String PROP_SCRIPT = "script";//$NON-NLS-1$
@@ -35,6 +38,8 @@ public interface Lane extends GraphicalEntity ,CardContainer {
 	String PROP_TRASHED = "trashed";//$NON-NLS-1$
 	String PROP_ICONIZED = "iconized";//$NON-NLS-1$
 	String PROP_BOARD = "boardid";//$NON-NLS-1$
+	/** Image source field */
+	String PROP_ICON_SRC = "iconSrc"; //$NON-NLS-1$
 
 	String getStatus();
 	
@@ -81,6 +86,10 @@ public interface Lane extends GraphicalEntity ,CardContainer {
 	
 	@Default(value="false")
 	void setIconized(boolean iconized);
+	
+	void setIconSrc(String src);
+	
+	String getIconSrc();
 	
 	@OneToMany(where="trashed=false")
 	Card[] getCards();

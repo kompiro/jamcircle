@@ -1,10 +1,9 @@
 package org.kompiro.jamcircle.kanban.model;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.junit.Assert.assertThat;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.service.internal.AbstractKanbanTest;
 
@@ -39,9 +38,4 @@ public class BoardTest extends AbstractKanbanTest{
 		assertThat(board.containLane(lane),is(false));
 	}
 	
-
-	@Ignore
-	@Test
-	public void icons() throws Exception {
-	}
 }

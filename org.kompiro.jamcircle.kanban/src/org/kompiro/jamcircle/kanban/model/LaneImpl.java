@@ -3,8 +3,13 @@ package org.kompiro.jamcircle.kanban.model;
 import static java.lang.String.format;
 
 import java.beans.PropertyChangeEvent;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 import org.kompiro.jamcircle.kanban.Messages;
@@ -104,6 +109,15 @@ public class LaneImpl extends GraphicalImpl {
 	
 	public Board getBoard(){
 		return lane.getBoard();
+	}
+	
+	public URL getIconURL(){
+		try {
+			return new URL(lane.getIconSrc());
+		} catch (MalformedURLException e) {
+			KanbanStatusHandler.info(e.getLocalizedMessage());
+		}
+		return null;
 	}
 
 	
