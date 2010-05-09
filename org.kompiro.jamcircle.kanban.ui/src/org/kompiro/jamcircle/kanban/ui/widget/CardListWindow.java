@@ -19,6 +19,12 @@ import org.kompiro.jamcircle.kanban.ui.command.provider.ConfirmProvider;
 import org.kompiro.jamcircle.kanban.ui.command.provider.MessageDialogConfirmProvider;
 import org.kompiro.jamcircle.kanban.ui.internal.command.CardUpdateCommand;
 
+/**
+ * Show the list of cards.
+ * TODO implement CSV Export Action
+ * @author kompiro
+ *
+ */
 public class CardListWindow extends ApplicationWindow {
 
 	private CardListTableViewer viewer;
