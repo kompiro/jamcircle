@@ -1,8 +1,13 @@
 package org.kompiro.jamcircle.kanban.model.mock;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -13,9 +18,29 @@ import java.util.UUID;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.ColorTypes;
 import org.kompiro.jamcircle.kanban.model.FlagTypes;
+import org.kompiro.jamcircle.kanban.model.Lane;
 
 public class CardTest {
 	
+	@Test
+	public void getStatusWhenNull() throws Exception {
+		Card card = new Card();
+		assertThat(card.getStatus(),is(""));
+
+		Lane lane = mock(Lane.class);
+		when(lane.getStatus()).thenReturn("Great!");
+		card.setLane(lane);
+	}
+	
+	@Test
+	public void getStatus() throws Exception {
+		Card card = new Card();
+		Lane lane = mock(Lane.class);
+		when(lane.getStatus()).thenReturn("Great!");
+		card.setLane(lane);
+		assertThat(card.getStatus(),is("Great!"));
+	}
+		
 	@Test
 	public void firePropSubject() throws Exception {
 		Card card = new Card();
@@ -66,7 +91,8 @@ public class CardTest {
 		Card card = new Card();
 		PropertyChangeListener listener = mock(PropertyChangeListener.class);
 		card.addPropertyChangeListener(listener);
-		card.setLane(new Lane());
+		Lane lane = mock(Lane.class);
+		card.setLane(lane);
 		verify(listener).propertyChange(any(PropertyChangeEvent.class));
 	}
 	

@@ -161,6 +161,7 @@ public class CardListTableViewer implements PropertyChangeListener{
 					for(Object obj : selection.toList()){
 						// TODO need to implmenet
 						KanbanUIStatusHandler.debug("dropped", obj); //$NON-NLS-1$
+						System.out.println(obj);
 					}
 				}
 			}

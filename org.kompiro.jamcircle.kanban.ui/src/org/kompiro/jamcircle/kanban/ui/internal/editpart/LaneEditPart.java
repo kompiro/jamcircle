@@ -1,47 +1,124 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
 import java.beans.PropertyChangeEvent;
-import java.io.File;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.draw2d.*;
-import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.ActionEvent;
+import org.eclipse.draw2d.Clickable;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.*;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.editpolicies.*;
-import org.eclipse.gef.requests.*;
+import org.eclipse.gef.editpolicies.ComponentEditPolicy;
+import org.eclipse.gef.editpolicies.ContainerEditPolicy;
+import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.gef.requests.GroupRequest;
+import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.*;
-import org.kompiro.jamcircle.kanban.model.*;
-import org.kompiro.jamcircle.kanban.ui.*;
+import org.eclipse.swt.widgets.Shell;
+import org.kompiro.jamcircle.kanban.model.Card;
+import org.kompiro.jamcircle.kanban.model.CardContainer;
+import org.kompiro.jamcircle.kanban.model.Lane;
+import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
+import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
+import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
-import org.kompiro.jamcircle.kanban.ui.command.provider.ConfirmProvider;
-import org.kompiro.jamcircle.kanban.ui.command.provider.MessageDialogConfirmProvider;
 import org.kompiro.jamcircle.kanban.ui.dialog.LaneEditDialog;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
 import org.kompiro.jamcircle.kanban.ui.editpart.CardContainerEditPart;
-import org.kompiro.jamcircle.kanban.ui.internal.command.*;
+import org.kompiro.jamcircle.kanban.ui.figure.ClickableActionIcon;
+import org.kompiro.jamcircle.kanban.ui.internal.command.AddCardToOnBoardContainerCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.command.AddLaneTrashCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.command.CardCloneCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.command.ChangeLaneConstraintCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.command.CreateCardCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.command.LaneToggleIconizedCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.command.LaneUpdateCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.command.RemoveCardCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.policy.LaneLocalLayout;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.*;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneIconFigure;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 import org.kompiro.jamcircle.kanban.ui.script.ScriptEvent;
-import org.kompiro.jamcircle.kanban.ui.widget.CardListEditProvider;
-import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer;
+import org.kompiro.jamcircle.kanban.ui.widget.CardListWindow;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.scripting.ScriptingService;
 import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
+
+/**
+ * Controller for Lane model.
+ * @author kompiro
+ */
 public class LaneEditPart extends AbstractEditPart implements CardContainerEditPart{
+
+	private final class OpenListActionIcon extends
+			ClickableActionIcon {
+
+		private OpenListActionIcon() {
+			super(getIconImage(KanbanImageConstants.OPEN_LIST_ACTION_IMAGE.toString()));
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			ApplicationWindow window = new CardListWindow(getShell(),getCardContainer(),getCommandStack());
+			window.create();
+			window.open();
+		}
+	}
+
+	private final class EditActionIcon extends ClickableActionIcon {
+
+		public EditActionIcon() {
+			super(getIconImage(KanbanImageConstants.EDIT_IMAGE.toString()));
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			Shell shell = getViewer().getControl().getShell();
+			Lane lane = getLaneModel();
+			LaneEditDialog dialog = new LaneEditDialog(shell,lane.getStatus(),lane.getScript(),lane.getScriptType());
+			int returnCode = dialog.open();
+			if(Dialog.OK == returnCode){
+				String status = dialog.getStatus();
+				String script = dialog.getScript();
+				ScriptTypes type = dialog.getScriptType();
+				doUpdateLaneCommand(status,script,type);
+			}
+		}
+	}
+
+	private final class IconizeActionIcon extends ClickableActionIcon {
+		
+		public IconizeActionIcon() {
+			super(getIconImage(KanbanImageConstants.LANE_ICONIZE_IMAGE.toString()));
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			getCommandStack().execute(new LaneToggleIconizedCommand(getLaneModel()));
+		}
+	}
 
 	private final class LaneXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		
@@ -124,74 +201,16 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		}
 	}
 
-	private ActionListener iconizeListener = new ActionListener(){
-		public void actionPerformed(ActionEvent event) {
-			getCommandStack().execute(new LaneToggleIconizedCommand(getLaneModel()));
-		}
-	};
 	
 	private LaneFigure laneFigure;
 	private LaneIconFigure laneIconFigure;
 	private TrashModel trash;
+	
 	private Clickable iconizeIcon;
+
 	private Clickable editIcon;
-	private ActionListener editListener = new ActionListener(){
-		public void actionPerformed(ActionEvent event) {
-			Shell shell = getViewer().getControl().getShell();
-			Lane lane = getLaneModel();
-			LaneEditDialog dialog = new LaneEditDialog(shell,lane.getStatus(),lane.getScript(),lane.getScriptType());
-			int returnCode = dialog.open();
-			if(Dialog.OK == returnCode){
-				String status = dialog.getStatus();
-				String script = dialog.getScript();
-				ScriptTypes type = dialog.getScriptType();
-				doUpdateLaneCommand(status,script,type);
-			}
-		}
-	};
 
 	private Clickable openListIcon;
-	private ActionListener openListListener = new ActionListener(){
-		public void actionPerformed(ActionEvent event) {
-			final Shell shell = getViewer().getControl().getShell();
-			ApplicationWindow window = new ApplicationWindow(shell){
-				private CardListTableViewer viewer;
-				@Override
-				protected Control createContents(Composite parent) {
-					this.viewer = new CardListTableViewer(parent);
-					viewer.setInput(getCardContainer());
-					getCardContainer().addPropertyChangeListener(viewer);
-					viewer.setEditProvider(new CardListEditProvider(){
-						public void edit(Card card, String subject,
-								String content, Date dueDate, List<File> files) {
-							ConfirmProvider provider = new MessageDialogConfirmProvider(getShell());
-							CardUpdateCommand command = new CardUpdateCommand(provider ,card,subject,content,dueDate,files);
-							getCommandStack().execute(command);
-							viewer.refresh();
-						}
-					});
-					return parent;
-				}
-				
-				@Override
-				public boolean close() {
-					getCardContainer().removePropertyChangeListener(viewer);
-					return super.close();
-				}
-				
-				@Override
-				protected void configureShell(Shell shell) {
-					super.configureShell(shell);
-					String title = String.format(Messages.LaneEditPart_viewer_title,getCardContainer().getContainerName());
-					shell.setText(title);
-					Image image = KanbanUIActivator.getDefault().getImageRegistry().get(KanbanImageConstants.KANBANS_IMAGE.toString());
-					shell.setImage(image);
-				}
-			};
-			window.create();
-			window.open();
-		}
-	};
 
 	public LaneEditPart(BoardModel board) {
 		super(board);
@@ -225,42 +244,28 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 
 
 	private void createActionIcons() {
-		ImageRegistry imageRegistry = getImageRegistry();
-		Image iconizeIconImage = imageRegistry.get(KanbanImageConstants.LANE_ICONIZE_IMAGE.toString());
-		iconizeIcon = new Clickable(new Label(iconizeIconImage));
-		iconizeIcon.setSize(16,16);
+		iconizeIcon = new IconizeActionIcon();
 		laneFigure.getActionSection().add(iconizeIcon);
 		
-		Image editIconImage = imageRegistry.get(KanbanImageConstants.EDIT_IMAGE.toString());
-		editIcon = new Clickable(new Label(editIconImage));
-		editIcon.setSize(16, 16);
+		editIcon = new EditActionIcon();
 		laneFigure.getActionSection().add(editIcon);
 		
-		Image openListIconImage = imageRegistry.get(KanbanImageConstants.OPEN_LIST_ACTION_IMAGE.toString());
-		openListIcon = new Clickable(new Label(openListIconImage));
-		openListIcon.setSize(16, 16);
+		openListIcon = new OpenListActionIcon();
 		laneFigure.getActionSection().add(openListIcon);
+	}
+
+
+	private Image getIconImage(String key) {
+		return getImageRegistry().get(key);
 	}
 	
 	@Override
 	public void activate() {
 		createActionIcons();
-
-		iconizeIcon.addActionListener(iconizeListener);
-		editIcon.addActionListener(editListener);
-		openListIcon.addActionListener(openListListener);
 		hideActionIcons();
 		super.activate();
 	}
 	
-	@Override
-	public void deactivate() {
-		super.deactivate();
-		editIcon.removeActionListener(editListener);
-		iconizeIcon.removeActionListener(iconizeListener);
-		openListIcon.removeActionListener(openListListener);
-	}
-
 	@Override
 	protected void addChildVisual(EditPart childEditPart, int index) {
 		IFigure child = ((GraphicalEditPart)childEditPart).getFigure();
@@ -416,6 +421,8 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			addNotify();
 			getBoardModel().setAnimated(true);
 		}
+		else if(isPropIconSrc(evt)){
+		}
 	}
 
 
@@ -462,6 +469,11 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	private boolean isPropConstraint(PropertyChangeEvent evt) {
 		return Lane.PROP_CONSTRAINT.equals(evt.getPropertyName());
 	}	
+
+	private boolean isPropIconSrc(PropertyChangeEvent evt) {
+		return Lane.PROP_ICON_SRC.equals(evt.getPropertyName());
+	}	
+
 	
 	public Lane getLaneModel(){
 		return (Lane) getModel();

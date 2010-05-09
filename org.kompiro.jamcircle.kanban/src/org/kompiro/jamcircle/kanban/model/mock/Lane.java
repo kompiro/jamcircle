@@ -1,12 +1,9 @@
 package org.kompiro.jamcircle.kanban.model.mock;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
@@ -133,12 +130,4 @@ public class Lane extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 		this.iconSrc = iconSrc;
 	}
 
-	public URL getIconURL(){
-		try {
-			return new URL(getIconSrc());
-		} catch (MalformedURLException e) {
-			KanbanStatusHandler.info(e.getLocalizedMessage());
-		}
-		return null;
-	}
 }

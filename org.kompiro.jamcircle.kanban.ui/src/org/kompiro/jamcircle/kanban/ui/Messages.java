@@ -125,6 +125,7 @@ public class Messages extends NLS {
 	public static String LaneEditPart_viewer_title;
 	public static String LaneFigure_initialized_error_message;
 	public static String LaneIconFigure_initialized_error_message;
+	public static String LaneCustomizedIconFigure_initialized_error_message;
 	public static String MessageDialogConfirmStrategy_confirm_title;
 	public static String MoveCardCommand_move_label;
 	public static String MoveIconCommand_command_label;

@@ -76,6 +76,7 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public String getStatus() {
+		if(lane == null) return "";
 		return lane.getStatus();
 	}
 
