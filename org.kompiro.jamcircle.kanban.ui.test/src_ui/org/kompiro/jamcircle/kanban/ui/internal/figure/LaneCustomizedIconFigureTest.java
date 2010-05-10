@@ -14,7 +14,7 @@ public class LaneCustomizedIconFigureTest {
 	
 	@Test
 	public void createFigure() throws Exception {
-		Display display = new Display();
+		Display display = Display.getDefault();
 		Shell shell = new Shell(display);
 		shell.setLayout(new FillLayout());
 		LightweightSystem lws = new LightweightSystem(shell);
