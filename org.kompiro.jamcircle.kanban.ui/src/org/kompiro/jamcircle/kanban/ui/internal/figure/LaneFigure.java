@@ -1,16 +1,29 @@
 package org.kompiro.jamcircle.kanban.ui.internal.figure;
 
-import org.eclipse.draw2d.*;
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.GridData;
+import org.eclipse.draw2d.GridLayout;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.LineBorder;
+import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.SchemeBorder;
+import org.eclipse.draw2d.StackLayout;
+import org.eclipse.draw2d.ToolbarLayout;
+import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.*;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontMetrics;
+import org.eclipse.swt.graphics.GC;
 import org.kompiro.jamcircle.kanban.ui.Messages;
 
 public class LaneFigure extends RectangleFigure {
-
 
 	public static final String KEY_OF_LANE_HEADER = "LANE_HEADER"; //$NON-NLS-1$
 	
@@ -20,6 +33,7 @@ public class LaneFigure extends RectangleFigure {
 			return true;
 		}
 	}
+	
 	static final int LANE_SIZE_OF_CORNER = 20;
 	public static final int MARGIN = 5;
 	public static final String COLOR_KEY_LANE_BODY = "color_key_lane_body"; //$NON-NLS-1$
@@ -34,7 +48,8 @@ public class LaneFigure extends RectangleFigure {
 	
 	public LaneFigure(){
 //		corner = new Dimension(LANE_SIZE_OF_CORNER, LANE_SIZE_OF_CORNER);
-		setLayoutManager(new GridLayout());
+		setLayoutManager(new GridLayout(1,true));
+		
 		SchemeBorder outer = new ShadowRectangleBoarder();
 		setBorder(outer);
 		setBackgroundColor(JFaceResources.getColorRegistry().get(COLOR_KEY_LANE_BODY));
@@ -78,10 +93,8 @@ public class LaneFigure extends RectangleFigure {
 		actionPaneFigure = new Figure();
 		actionPaneFigure.setLayoutManager(new GridLayout());
 		headerFigure.add(actionPaneFigure);
-		GridData constraint = new GridData();
+		GridData constraint = new GridData(GridData.FILL_HORIZONTAL);
 		constraint.heightHint = height;
-		constraint.grabExcessHorizontalSpace = true;
-		constraint.horizontalAlignment = SWT.FILL;
 		add(headerFigure,constraint);
 	}
 
@@ -129,18 +142,19 @@ public class LaneFigure extends RectangleFigure {
 	}
 	
 	private void createCardArea() {
-		if(cardArea == null){
-			cardArea = new CardArea();
-			XYLayout xyl = new XYLayout();
-			cardArea.setLayoutManager(xyl);
-			cardArea.setBorder(new LineBorder(ColorConstants.lightGray));
-			GridData constraint = new GridData();
-			constraint.grabExcessHorizontalSpace = true;
-			constraint.grabExcessVerticalSpace = true;
-			constraint.horizontalAlignment = SWT.FILL;
-			constraint.verticalAlignment = SWT.FILL;
-			add(cardArea,constraint);
-		}
+		IFigure cardAreaSection = new Figure(); 
+		cardAreaSection.setLayoutManager(new GridLayout());
+		cardArea = new CardArea();
+		cardArea.setLayoutManager(new XYLayout());
+		cardArea.setBorder(new LineBorder(ColorConstants.lightGray));
+		cardArea.setSize(CardFigureLayer.CARD_SIZE);
+
+		GridData constraint = new GridData(GridData.FILL_BOTH);
+		cardAreaSection.add(cardArea,constraint);
+		constraint = new GridData(GridData.FILL_BOTH);
+		constraint.widthHint = CardFigureLayer.CARD_WIDTH;
+		constraint.heightHint = CardFigureLayer.CARD_HEIGHT;
+		add(cardAreaSection,constraint);
 	}
 
 	public CardArea getCardArea() {
