@@ -16,7 +16,7 @@ import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.CardArea;
 public class CardAreaCalcurator {
 	
 	public void calc(LaneEditPart part, Rectangle rect, Map<?,?> visualPartMap, CompoundCommand command){
-		LaneFigureLayer laneFigure = part.getLaneFigure();
+		LaneFigureLayer laneFigure = part.getLaneFigureLayer();
 		CardArea area = laneFigure.getCardArea();
 		for (Object o : area.getChildren()) {
 			if (o instanceof CardFigureLayer) {

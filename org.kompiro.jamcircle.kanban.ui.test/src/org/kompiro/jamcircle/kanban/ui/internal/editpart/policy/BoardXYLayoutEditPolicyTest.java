@@ -218,7 +218,7 @@ public class BoardXYLayoutEditPolicyTest {
 		when(viewer.getVisualPartMap()).thenReturn(partMap );
 		
 		LaneFigureLayer laneFigure = mock(LaneFigureLayer.class);
-		when(part.getLaneFigure()).thenReturn(laneFigure);
+		when(part.getLaneFigureLayer()).thenReturn(laneFigure);
 		CardArea cardArea = mock(CardArea.class);
 		when(laneFigure.getCardArea()).thenReturn(cardArea );
 		

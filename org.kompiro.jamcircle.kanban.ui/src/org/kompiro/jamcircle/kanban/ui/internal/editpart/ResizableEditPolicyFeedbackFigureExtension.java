@@ -7,14 +7,45 @@ import org.eclipse.draw2d.*;
 import org.eclipse.gef.*;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gef.handles.AbstractHandle;
+import org.eclipse.gef.handles.RelativeHandleLocator;
 import org.eclipse.gef.handles.ResizeHandle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigureLayer;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
 public class ResizableEditPolicyFeedbackFigureExtension extends
 		ResizableEditPolicy {
+	
+	
+	/**
+	 * TODO Refactoring
+	 */
+	private final class LaneResizeHandle extends ResizeHandle {
+		private LaneResizeHandle(GraphicalEditPart owner, int direction) {
+			super(owner, direction);
+			IFigure figure = owner.getFigure();
+			if (figure instanceof LaneFigureLayer) {
+				LaneFigureLayer layer = (LaneFigureLayer) figure;
+				figure = layer.getLaneFigure();
+				setLocator(new RelativeHandleLocator(figure, direction));
+			}
+		}
+
+		@Override
+		protected Color getFillColor() {
+			return WorkbenchUtil.getDisplay().getSystemColor(SWT.COLOR_GRAY);
+		}
+
+		@Override
+		public void paintFigure(Graphics g) {
+			g.setAlpha(140);
+			super.paintFigure(g);
+		}
+	}
+
+
 	private final EditPart child;
 
 	public ResizableEditPolicyFeedbackFigureExtension(EditPart child) {
@@ -62,17 +93,7 @@ public class ResizableEditPolicyFeedbackFigureExtension extends
 	}
 
 	private AbstractHandle createHandle(GraphicalEditPart owner, int direction) {
-		ResizeHandle handle = new ResizeHandle(owner, direction){
-			@Override
-			protected Color getFillColor() {
-				return WorkbenchUtil.getDisplay().getSystemColor(SWT.COLOR_GRAY);
-			}
-			@Override
-			public void paintFigure(Graphics g) {
-				g.setAlpha(140);
-				super.paintFigure(g);
-			}
-		};
+		ResizeHandle handle = new LaneResizeHandle(owner, direction);
 		return handle;
 	}
 

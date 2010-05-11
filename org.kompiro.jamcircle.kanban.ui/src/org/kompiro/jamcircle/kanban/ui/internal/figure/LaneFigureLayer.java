@@ -91,5 +91,9 @@ public class LaneFigureLayer extends Layer {
 	public int getMaxCardLocationY(Dimension sourceSize, Dimension targetSize) {
 		return laneFigure.getMaxCardLocationY(sourceSize, targetSize);
 	}
+
+	public IFigure getLaneFigure() {
+		return this.laneFigure;
+	}
 	
 }

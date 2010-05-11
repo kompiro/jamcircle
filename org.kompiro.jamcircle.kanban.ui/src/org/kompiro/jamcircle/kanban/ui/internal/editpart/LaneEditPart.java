@@ -133,7 +133,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			Object target = child.getModel();
 			Rectangle rect = (Rectangle) constraint;
 			LaneLocalLayout layout = new LaneLocalLayout();
-			layout.calc(rect, getLaneFigure().getCardArea().getBounds());
+			layout.calc(rect, getLaneFigureLayer().getCardArea().getBounds());
 			MoveCommand<Object> command = getMoveCommand(child);
 			command.setModel(target);
 			command.setRectangle(rect);
@@ -179,7 +179,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			}
 			CardEditPart cardPart = (CardEditPart) child;
 			LaneLocalLayout layout = new LaneLocalLayout();
-			layout.calc(rect, getLaneFigure().getCardArea().getBounds());
+			layout.calc(rect, getLaneFigureLayer().getCardArea().getBounds());
 			CompoundCommand command = new CompoundCommand();
 			command.add(new AddCardToOnBoardContainerCommand(cardPart.getCardModel(), rect, getLaneModel()));
 			return command;
@@ -310,10 +310,10 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	
 	@Override
 	public IFigure getContentPane() {
-		return getLaneFigure().getCardArea();
+		return getLaneFigureLayer().getCardArea();
 	}
 	
-	public LaneFigureLayer getLaneFigure(){
+	public LaneFigureLayer getLaneFigureLayer(){
 		return laneFigure;
 	}
 	
@@ -343,7 +343,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			@Override
 			protected Command getCloneCommand(ChangeBoundsRequest request) {
 				Point targetLocation = request.getLocation();
-				targetLocation.translate(getLaneFigure().getCardArea().getLocation().negate());
+				targetLocation.translate(getLaneFigureLayer().getCardArea().getLocation().negate());
 				targetLocation.translate(new Point(LaneFigure.MARGIN,LaneFigure.MARGIN).negate());
 				return new CardCloneCommand(request,getLaneModel());
 			}
@@ -388,7 +388,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			parentPart.setLayoutConstraint(this, getFigure(), constraint);
 		}
 		else if(isPropStatus(evt)){
-			getLaneFigure().setStatus(lane.getStatus());
+			getLaneFigureLayer().setStatus(lane.getStatus());
 			getLaneIconFigure().setStatus(lane.getStatus());
 		}
 		else if(isChildrenChanged(evt)){
@@ -448,11 +448,6 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		return Status.OK_STATUS;
 	}
 	
-	@Override
-	public IFigure getFigure() {
-		return super.getFigure();
-	}
-		
 	private boolean isPropIconized(PropertyChangeEvent evt) {
 		return Lane.PROP_ICONIZED.equals(evt.getPropertyName());
 	}
