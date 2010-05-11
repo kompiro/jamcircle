@@ -7,6 +7,8 @@ import org.eclipse.draw2d.Layer;
 import org.eclipse.draw2d.LayoutListener;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.SWT;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.CardArea;
 
@@ -36,9 +38,12 @@ public class LaneFigureLayer extends Layer {
 		LayoutListener listener = new LayoutListener.Stub() {
 			@Override
 			public void postLayout(IFigure container) {
-				laneFigure.setSize(container.getSize().getCopy().expand(0, - 16));
+				Rectangle rect = container.getBounds().getCopy();
+				laneFigure.setSize(rect.getSize().expand(0, - 16));
 				laneFigure.repaint();
-				
+				Point location = actionArea.getBounds().getLocation().getCopy();
+				actionArea.setLocation(new Point(location.x, rect.getBottomRight().y - 16));
+				actionArea.repaint();
 			}
 		};
 		addLayoutListener(listener);
