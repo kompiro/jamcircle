@@ -48,7 +48,11 @@ public class LaneFigure extends RectangleFigure {
 	
 	public LaneFigure(){
 //		corner = new Dimension(LANE_SIZE_OF_CORNER, LANE_SIZE_OF_CORNER);
-		setLayoutManager(new GridLayout(1,true));
+		GridLayout manager = new GridLayout(1,true);
+		manager.marginHeight = 0;
+		manager.marginWidth = 0;
+
+		setLayoutManager(manager);
 		
 		SchemeBorder outer = new ShadowRectangleBoarder();
 		setBorder(outer);

@@ -10,12 +10,13 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.LaneEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigureLayer;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.CardArea;
 
 public class CardAreaCalcurator {
 	
 	public void calc(LaneEditPart part, Rectangle rect, Map<?,?> visualPartMap, CompoundCommand command){
-		LaneFigure laneFigure = part.getLaneFigure();
+		LaneFigureLayer laneFigure = part.getLaneFigure();
 		CardArea area = laneFigure.getCardArea();
 		for (Object o : area.getChildren()) {
 			if (o instanceof CardFigureLayer) {
@@ -29,7 +30,7 @@ public class CardAreaCalcurator {
 	}
 
 	private ChangeBoundsRequest translateCard(EditPart card, Rectangle rect,
-			LaneFigure laneFigure, CardFigureLayer cardFigure) {
+			LaneFigureLayer laneFigure, CardFigureLayer cardFigure) {
 		Dimension size = cardFigure.getSize();
 		Point translate = cardFigure.getLocation().getCopy().translate(size);
 		Rectangle localRect = rect.getCopy();

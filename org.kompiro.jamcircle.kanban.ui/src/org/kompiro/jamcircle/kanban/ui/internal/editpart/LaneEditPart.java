@@ -56,6 +56,7 @@ import org.kompiro.jamcircle.kanban.ui.internal.command.RemoveCardCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.policy.LaneLocalLayout;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigureLayer;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneIconFigure;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
@@ -202,7 +203,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	}
 
 	
-	private LaneFigure laneFigure;
+	private LaneFigureLayer laneFigure;
 	private LaneIconFigure laneIconFigure;
 	private TrashModel trash;
 	
@@ -221,7 +222,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	@Override
 	public IFigure createFigure() {
 		Lane lane = getLaneModel();
-		LaneFigure laneFigure = new LaneFigure();
+		LaneFigureLayer laneFigure = new LaneFigureLayer();
 		laneFigure.setSize(lane.getWidth(), lane.getHeight());
 		laneFigure.setOpaque(true);
 		laneFigure.setLocation(new Point(lane.getX(),lane.getY()));
@@ -313,7 +314,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		return getLaneFigure().getCardArea();
 	}
 	
-	public LaneFigure getLaneFigure(){
+	public LaneFigureLayer getLaneFigure(){
 		return laneFigure;
 	}
 	

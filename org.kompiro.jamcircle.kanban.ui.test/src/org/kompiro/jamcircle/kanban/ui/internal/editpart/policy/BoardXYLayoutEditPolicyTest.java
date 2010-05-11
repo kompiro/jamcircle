@@ -1,10 +1,15 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart.policy;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,19 +18,31 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LayoutManager;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.*;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPartViewer;
+import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.requests.*;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.gef.requests.CreationFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
 import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
-import org.kompiro.jamcircle.kanban.ui.internal.command.*;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.command.AddCardToOnBoardContainerCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.command.CreateCardCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.command.CreateLaneCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.command.RemoveCardCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardEditPart;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.LaneEditPart;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigureLayer;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.CardArea;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
@@ -200,7 +217,7 @@ public class BoardXYLayoutEditPolicyTest {
 		Map<?,?> partMap = new HashMap<IFigure, EditPart>();
 		when(viewer.getVisualPartMap()).thenReturn(partMap );
 		
-		LaneFigure laneFigure = mock(LaneFigure.class);
+		LaneFigureLayer laneFigure = mock(LaneFigureLayer.class);
 		when(part.getLaneFigure()).thenReturn(laneFigure);
 		CardArea cardArea = mock(CardArea.class);
 		when(laneFigure.getCardArea()).thenReturn(cardArea );
