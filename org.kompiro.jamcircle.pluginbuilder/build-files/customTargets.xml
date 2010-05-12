@@ -235,7 +235,7 @@
          ================================= -->
 	<target name="javancss" description="report ncss">
 		<javancss 
-			srcdir="/home/kompiro/codes/java/jamcircle/"
+			srcdir="${env.WORKSPACE}"
 			includes="org.kompiro.jamcircle.*/**/*.java" 
 			excludes="**/learning/**,**/org/eclipse/**"
 			ccnPerFuncMax="100" 
