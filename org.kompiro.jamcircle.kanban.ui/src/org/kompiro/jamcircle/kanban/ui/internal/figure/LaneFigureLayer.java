@@ -14,6 +14,7 @@ import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.CardArea;
 
 public class LaneFigureLayer extends Layer {
 
+	private static final int ACTION_ICON_SIZE = 16;
 	private LaneFigure laneFigure;
 	private IFigure actionArea;
 
@@ -39,10 +40,10 @@ public class LaneFigureLayer extends Layer {
 			@Override
 			public void postLayout(IFigure container) {
 				Rectangle rect = container.getBounds().getCopy();
-				laneFigure.setSize(rect.getSize().expand(0, - 16));
+				laneFigure.setSize(rect.getSize().expand(0, - ACTION_ICON_SIZE));
 				laneFigure.repaint();
 				Point location = actionArea.getBounds().getLocation().getCopy();
-				actionArea.setLocation(new Point(location.x, rect.getBottomRight().y - 16));
+				actionArea.setLocation(new Point(location.x, rect.getBottomRight().y - ACTION_ICON_SIZE));
 				actionArea.repaint();
 			}
 		};
@@ -56,7 +57,7 @@ public class LaneFigureLayer extends Layer {
 		actionArea.setLayoutManager(new ToolbarLayout(true));
 		
 		GridData constraint = new GridData();
-		constraint.heightHint = 16;
+		constraint.heightHint = ACTION_ICON_SIZE;
 		constraint.grabExcessHorizontalSpace = true;
 		constraint.grabExcessVerticalSpace = true;
 		constraint.horizontalAlignment = SWT.RIGHT;
@@ -67,7 +68,7 @@ public class LaneFigureLayer extends Layer {
 	
 	@Override
 	public void setSize(int w, int h) {
-		super.setSize(w, h + 16);
+		super.setSize(w, h + ACTION_ICON_SIZE);
 		laneFigure.setSize(w, h);
 		laneFigure.setPreferredSize(w,h);
 	}

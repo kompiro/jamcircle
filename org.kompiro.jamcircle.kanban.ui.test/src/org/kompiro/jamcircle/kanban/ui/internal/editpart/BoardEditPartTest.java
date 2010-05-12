@@ -90,6 +90,7 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 		boardPart.refresh();
 		boardChildrenPartMap = getChildlenPartmap(boardPart);
 		GraphicalEditPart lanePart = boardChildrenPartMap.get(lane);
+		Dimension initSize = lanePart.getFigure().getSize();
 
 		ChangeBoundsRequest request = new ChangeBoundsRequest(RequestConstants.REQ_RESIZE_CHILDREN);
 		request.setEditParts(lanePart);
@@ -105,8 +106,8 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 		boardPart.refresh();
 		assertEquals(expect.x,lane.getX());
 		assertEquals(expect.y,lane.getY());
-		assertEquals(LaneMock.INIT_WIDTH,lane.getWidth());
-		assertEquals(LaneMock.INIT_HEIGHT,lane.getHeight());		
+		assertEquals(initSize.width,lane.getWidth());
+		assertEquals(initSize.height,lane.getHeight());		
 	}
 	
 	@Test
@@ -121,6 +122,7 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 		boardPart.refresh();
 		boardChildrenPartMap = getChildlenPartmap(boardPart);
 		GraphicalEditPart lanePart = boardChildrenPartMap.get(lane);
+		Dimension initSize = lanePart.getFigure().getSize();
 
 		ChangeBoundsRequest request = new ChangeBoundsRequest(RequestConstants.REQ_RESIZE_CHILDREN);
 		request.setEditParts(lanePart);
@@ -135,8 +137,8 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 		
 		assertEquals(expect.x,lane.getX());
 		assertEquals(expect.y,lane.getY());
-		assertEquals(LaneMock.INIT_WIDTH,lane.getWidth(),5);
-		assertEquals(LaneMock.INIT_HEIGHT,lane.getHeight(),5);		
+		assertEquals(initSize.width,lane.getWidth(),5);
+		assertEquals(initSize.height,lane.getHeight(),5);		
 	}
 	
 	
@@ -147,7 +149,8 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 		boardPart.refresh();
 		boardChildrenPartMap = getChildlenPartmap(boardPart);
 		GraphicalEditPart lanePart = boardChildrenPartMap.get(lane);
-		
+		Dimension initSize = lanePart.getFigure().getSize();
+	
 		ChangeBoundsRequest request = new ChangeBoundsRequest(RequestConstants.REQ_RESIZE_CHILDREN);
 		request.setEditParts(lanePart);
 		// size: +100, +100
@@ -161,8 +164,8 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 
 		assertEquals(0,lane.getX());
 		assertEquals(0,lane.getY());
-		assertEquals(LaneMock.INIT_WIDTH + sizeDelta.width,lane.getWidth());
-		assertEquals(LaneMock.INIT_HEIGHT + sizeDelta.height,lane.getHeight());		
+		assertEquals(initSize.width + sizeDelta.width,lane.getWidth());
+		assertEquals(initSize.height + sizeDelta.height,lane.getHeight());		
 	}
 	
 	
@@ -183,6 +186,7 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 		boardPart.refresh();
 		boardChildrenPartMap = getChildlenPartmap(boardPart);
 		GraphicalEditPart lanePart = boardChildrenPartMap.get(lane);
+		Dimension initSize = lanePart.getFigure().getSize();
 		
 		ChangeBoundsRequest request = new ChangeBoundsRequest(RequestConstants.REQ_RESIZE_CHILDREN);
 		request.setEditParts(lanePart);
@@ -200,8 +204,8 @@ public class BoardEditPartTest extends AbstractEditPartTest{
 
 		assertEquals(expect.x,lane.getX());
 		assertEquals(expect.y,lane.getY());
-		assertEquals(LaneMock.INIT_WIDTH + sizeDelta.width,lane.getWidth());
-		assertEquals(LaneMock.INIT_HEIGHT + sizeDelta.height,lane.getHeight());		
+		assertEquals(initSize.width + sizeDelta.width,lane.getWidth());
+		assertEquals(initSize.height + sizeDelta.height,lane.getHeight());		
 	}
 	
 	@Test
