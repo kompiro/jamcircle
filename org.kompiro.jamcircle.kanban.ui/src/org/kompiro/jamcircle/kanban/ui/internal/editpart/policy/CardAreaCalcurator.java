@@ -2,7 +2,9 @@ package org.kompiro.jamcircle.kanban.ui.internal.editpart.policy;
 
 import java.util.Map;
 
-import org.eclipse.draw2d.geometry.*;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -10,13 +12,12 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.LaneEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigureLayer;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.CardArea;
 
 public class CardAreaCalcurator {
 	
 	public void calc(LaneEditPart part, Rectangle rect, Map<?,?> visualPartMap, CompoundCommand command){
-		LaneFigureLayer laneFigure = part.getLaneFigureLayer();
+		LaneFigure laneFigure = part.getLaneFigure();
 		CardArea area = laneFigure.getCardArea();
 		for (Object o : area.getChildren()) {
 			if (o instanceof CardFigureLayer) {
@@ -30,7 +31,7 @@ public class CardAreaCalcurator {
 	}
 
 	private ChangeBoundsRequest translateCard(EditPart card, Rectangle rect,
-			LaneFigureLayer laneFigure, CardFigureLayer cardFigure) {
+			LaneFigure laneFigure, CardFigureLayer cardFigure) {
 		Dimension size = cardFigure.getSize();
 		Point translate = cardFigure.getLocation().getCopy().translate(size);
 		Rectangle localRect = rect.getCopy();

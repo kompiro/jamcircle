@@ -28,7 +28,7 @@ public class RoundedMoveHandle extends MoveHandle {
 		if(ownerFigure instanceof CardFigureLayer){
 			ownerFigure = ((CardFigureLayer)ownerFigure).getCardFigure();
 		}else if(ownerFigure instanceof LaneFigureLayer){
-			ownerFigure = ((LaneFigureLayer)ownerFigure).getLaneFigure();
+			ownerFigure = ((LaneFigureLayer)ownerFigure).getTargetFigure();
 		}
 		Dimension ownerR = ownerFigure.getBounds().getSize();
 		Rectangle r = getBounds();

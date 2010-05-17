@@ -1,26 +1,22 @@
 package org.kompiro.jamcircle.kanban.ui.internal.figure;
 
+import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Layer;
-import org.eclipse.draw2d.LayoutListener;
 import org.eclipse.draw2d.ToolbarLayout;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.SWT;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.CardArea;
 
-public class LaneFigureLayer extends Layer {
+public class LaneFigureLayer<G extends Figure> extends Layer {
 
 	private static final int ACTION_ICON_SIZE = 16;
-	private LaneFigure laneFigure;
+	private G figure;
 	private IFigure actionArea;
 
-	public LaneFigureLayer(){		
+	public LaneFigureLayer(G figure){		
 		createLayoutManager();
-		createLaneFigure();
+		createFigure(figure);
 		createActionArea();
 	}
 
@@ -33,23 +29,13 @@ public class LaneFigureLayer extends Layer {
 		setLayoutManager(manager);
 	}
 
-	private void createLaneFigure() {
-		laneFigure = new LaneFigure();
-		laneFigure.setVisible(true);
-		LayoutListener listener = new LayoutListener.Stub() {
-			@Override
-			public void postLayout(IFigure container) {
-				Rectangle rect = container.getBounds().getCopy();
-				laneFigure.setSize(rect.getSize().expand(0, - ACTION_ICON_SIZE));
-				laneFigure.repaint();
-				Point location = actionArea.getBounds().getLocation().getCopy();
-				actionArea.setLocation(new Point(location.x, rect.getBottomRight().y - ACTION_ICON_SIZE));
-				actionArea.repaint();
-			}
-		};
-		addLayoutListener(listener);
-		GridData constraint = new GridData();
-		add(laneFigure,constraint);
+	private void createFigure(G figure) {
+		this.figure = figure;
+		figure.setVisible(true);
+		GridData constraint = new GridData(GridData.FILL_BOTH);
+		constraint.grabExcessHorizontalSpace = true;
+		constraint.grabExcessVerticalSpace = true;
+		add(figure,constraint);
 	}
 	
 	private void createActionArea() {
@@ -68,33 +54,18 @@ public class LaneFigureLayer extends Layer {
 	
 	@Override
 	public void setSize(int w, int h) {
-		super.setSize(w, h + ACTION_ICON_SIZE);
-		laneFigure.setSize(w, h);
-		laneFigure.setPreferredSize(w,h);
-	}
-
-	public void setStatus(String status) {
-		laneFigure.setStatus(status);
+		super.setSize(w, h);
+		//+ ACTION_ICON_SIZE);
+		figure.setSize(w, h);
+		figure.setPreferredSize(w,h);
 	}
 
 	public IFigure getActionSection() {
 		return actionArea;
 	}
 
-	public CardArea getCardArea() {
-		return laneFigure.getCardArea();
-	}
-
-	public int getMaxCardLocationX(Dimension sourceSize, Dimension targetSize) {
-		return laneFigure.getMaxCardLocationX(sourceSize, targetSize);
-	}
-
-	public int getMaxCardLocationY(Dimension sourceSize, Dimension targetSize) {
-		return laneFigure.getMaxCardLocationY(sourceSize, targetSize);
-	}
-
-	public IFigure getLaneFigure() {
-		return this.laneFigure;
+	public IFigure getTargetFigure() {
+		return this.figure;
 	}
 	
 }

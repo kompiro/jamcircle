@@ -133,7 +133,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			Object target = child.getModel();
 			Rectangle rect = (Rectangle) constraint;
 			LaneLocalLayout layout = new LaneLocalLayout();
-			layout.calc(rect, getLaneFigureLayer().getCardArea().getBounds());
+			layout.calc(rect, getLaneFigure().getCardArea().getBounds());
 			MoveCommand<Object> command = getMoveCommand(child);
 			command.setModel(target);
 			command.setRectangle(rect);
@@ -179,7 +179,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			}
 			CardEditPart cardPart = (CardEditPart) child;
 			LaneLocalLayout layout = new LaneLocalLayout();
-			layout.calc(rect, getLaneFigureLayer().getCardArea().getBounds());
+			layout.calc(rect, getLaneFigure().getCardArea().getBounds());
 			CompoundCommand command = new CompoundCommand();
 			command.add(new AddCardToOnBoardContainerCommand(cardPart.getCardModel(), rect, getLaneModel()));
 			return command;
@@ -203,7 +203,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	}
 
 	
-	private LaneFigureLayer laneFigure;
+	private LaneFigureLayer<LaneFigure> actionLayer;
 	private LaneIconFigure laneIconFigure;
 	private TrashModel trash;
 	
@@ -212,6 +212,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	private Clickable editIcon;
 
 	private Clickable openListIcon;
+	private LaneFigure laneFigure;
 
 	public LaneEditPart(BoardModel board) {
 		super(board);
@@ -222,36 +223,33 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	@Override
 	public IFigure createFigure() {
 		Lane lane = getLaneModel();
-		LaneFigureLayer laneFigure = new LaneFigureLayer();
-		laneFigure.setSize(lane.getWidth(), lane.getHeight());
-		laneFigure.setLocation(new Point(lane.getX(),lane.getY()));
+		laneFigure = new LaneFigure();
 		laneFigure.setStatus(lane.getStatus());
-		if(this.laneFigure == null){
-			this.laneFigure = laneFigure;
-		}
+
+		actionLayer = new LaneFigureLayer<LaneFigure>(laneFigure);
+		actionLayer.setSize(lane.getWidth(), lane.getHeight());
+		actionLayer.setLocation(new Point(lane.getX(),lane.getY()));
 				
-		LaneIconFigure iconFigure = new LaneIconFigure();
-		iconFigure.setLocation(new Point(lane.getX(),lane.getY()));
-		iconFigure.setStatus(lane.getStatus());
-		if(this.laneIconFigure == null){
-			this.laneIconFigure = iconFigure;
-		}
+		laneIconFigure = new LaneIconFigure();
+		laneIconFigure.setLocation(new Point(lane.getX(),lane.getY()));
+		laneIconFigure.setStatus(lane.getStatus());
+
 		if(lane.isIconized()){
-			return iconFigure;
+			return laneIconFigure;
 		}
-		return laneFigure;
+		return actionLayer;
 	}
 
 
 	private void createActionIcons() {
 		iconizeIcon = new IconizeActionIcon();
-		laneFigure.getActionSection().add(iconizeIcon);
+		actionLayer.getActionSection().add(iconizeIcon);
 		
 		editIcon = new EditActionIcon();
-		laneFigure.getActionSection().add(editIcon);
+		actionLayer.getActionSection().add(editIcon);
 		
 		openListIcon = new OpenListActionIcon();
-		laneFigure.getActionSection().add(openListIcon);
+		actionLayer.getActionSection().add(openListIcon);
 	}
 
 
@@ -310,11 +308,16 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	
 	@Override
 	public IFigure getContentPane() {
-		return getLaneFigureLayer().getCardArea();
+		return getLaneFigure().getCardArea();
 	}
 	
-	public LaneFigureLayer getLaneFigureLayer(){
-		return laneFigure;
+	public LaneFigure getLaneFigure() {
+		return this.laneFigure;
+	}
+
+
+	public LaneFigureLayer<LaneFigure> getLaneFigureLayer(){
+		return actionLayer;
 	}
 	
 
@@ -343,7 +346,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			@Override
 			protected Command getCloneCommand(ChangeBoundsRequest request) {
 				Point targetLocation = request.getLocation();
-				targetLocation.translate(getLaneFigureLayer().getCardArea().getLocation().negate());
+				targetLocation.translate(getLaneFigure().getCardArea().getLocation().negate());
 				targetLocation.translate(new Point(LaneFigure.MARGIN,LaneFigure.MARGIN).negate());
 				return new CardCloneCommand(request,getLaneModel());
 			}
@@ -388,7 +391,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			parentPart.setLayoutConstraint(this, getFigure(), constraint);
 		}
 		else if(isPropStatus(evt)){
-			getLaneFigureLayer().setStatus(lane.getStatus());
+			getLaneFigure().setStatus(lane.getStatus());
 			getLaneIconFigure().setStatus(lane.getStatus());
 		}
 		else if(isChildrenChanged(evt)){
@@ -411,10 +414,10 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			getContentPane().getChildren().clear();
 			if(lane.isIconized()){
 				setFigure(laneIconFigure);
-				laneIconFigure.setLocation(laneFigure.getLocation());
+				laneIconFigure.setLocation(actionLayer.getLocation());
 			}else{
-				setFigure(laneFigure);
-				laneFigure.setLocation(laneIconFigure.getLocation());
+				setFigure(actionLayer);
+				actionLayer.setLocation(laneIconFigure.getLocation());
 			}
 			parent.add(getFigure());
 			getBoardModel().setAnimated(false);

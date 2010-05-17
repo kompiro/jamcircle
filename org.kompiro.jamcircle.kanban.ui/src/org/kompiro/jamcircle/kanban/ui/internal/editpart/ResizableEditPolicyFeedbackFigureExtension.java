@@ -28,7 +28,7 @@ public class ResizableEditPolicyFeedbackFigureExtension extends
 			IFigure figure = owner.getFigure();
 			if (figure instanceof LaneFigureLayer) {
 				LaneFigureLayer layer = (LaneFigureLayer) figure;
-				figure = layer.getLaneFigure();
+				figure = layer.getTargetFigure();
 				setLocator(new RelativeHandleLocator(figure, direction));
 			}
 		}

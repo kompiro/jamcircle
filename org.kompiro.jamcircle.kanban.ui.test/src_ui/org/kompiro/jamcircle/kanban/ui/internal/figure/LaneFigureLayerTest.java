@@ -23,9 +23,10 @@ public class LaneFigureLayerTest  {
 		Shell shell = new Shell(display);
 		shell.setLayout(new FillLayout());
 		LightweightSystem lws = new LightweightSystem(shell);
-		LaneFigureLayer figure = new LaneFigureLayer();
+		LaneFigure laneFigure = new LaneFigure();
+		LaneFigureLayer<LaneFigure> figure = new LaneFigureLayer<LaneFigure>(laneFigure);
 		figure.setSize(200,500);
-		figure.setStatus("test");
+		laneFigure.setStatus("test");
 		lws.setContents(figure);
 		shell.open();
 	}

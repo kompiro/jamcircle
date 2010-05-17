@@ -42,7 +42,7 @@ import org.kompiro.jamcircle.kanban.ui.internal.command.RemoveCardCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.LaneEditPart;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigureLayer;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.CardArea;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
@@ -217,8 +217,8 @@ public class BoardXYLayoutEditPolicyTest {
 		Map<?,?> partMap = new HashMap<IFigure, EditPart>();
 		when(viewer.getVisualPartMap()).thenReturn(partMap );
 		
-		LaneFigureLayer laneFigure = mock(LaneFigureLayer.class);
-		when(part.getLaneFigureLayer()).thenReturn(laneFigure);
+		LaneFigure laneFigure = mock(LaneFigure.class);
+		when(part.getLaneFigure()).thenReturn(laneFigure);
 		CardArea cardArea = mock(CardArea.class);
 		when(laneFigure.getCardArea()).thenReturn(cardArea );
 		
