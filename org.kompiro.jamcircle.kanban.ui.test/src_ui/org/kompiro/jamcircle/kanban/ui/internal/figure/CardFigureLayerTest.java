@@ -11,7 +11,7 @@ import org.kompiro.jamcircle.kanban.ui.KanbanJFaceResource;
 
 public class CardFigureLayerTest {
 
-	{
+	static {
 		Display.getDefault();
 		KanbanJFaceResource.initialize();
 	}
@@ -27,6 +27,24 @@ public class CardFigureLayerTest {
 		lws.setContents(figure);
 		shell.pack();
 		shell.open();
+	}
+	
+	public static void main(String[] args) {
+		Display display = Display.getDefault();
+		Shell shell = new Shell(display);
+		shell.setLayout(new FillLayout());
+		LightweightSystem lws = new LightweightSystem(shell);
+		CardFigureLayer figure = new CardFigureLayer();
+		figure.setColorType(ColorTypes.BLUE);
+		lws.setContents(figure);
+		shell.pack();
+		shell.open();
+		while (!shell.isDisposed()) {
+			if (!display.readAndDispatch())
+				display.sleep();
+		}
+		display.dispose();
+
 	}
 
 }
