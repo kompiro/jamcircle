@@ -26,9 +26,6 @@ public class KanbanScriptingEngineInitializerTest {
 		initializer.init(beans);
 
 		assertEquals(beans.get("FLAG_RED"),FlagTypes.RED);
-		
-		
-		
 	}
 	
 }
