@@ -144,7 +144,6 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 	private void showBoard(Shell shell) {
 		RCPUtils.modifyAlphaForSurface(shell);
-		shell.setMinimized(false);
 	}
 
 	private void hideBoard(Shell shell) {
