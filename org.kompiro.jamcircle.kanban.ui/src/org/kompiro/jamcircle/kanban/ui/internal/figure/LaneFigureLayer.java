@@ -14,7 +14,7 @@ public class LaneFigureLayer<G extends Figure> extends Layer {
 	private G figure;
 	private IFigure actionArea;
 
-	public LaneFigureLayer(G figure){		
+	public LaneFigureLayer(G figure){
 		createLayoutManager();
 		createFigure(figure);
 		createActionArea();
@@ -33,8 +33,6 @@ public class LaneFigureLayer<G extends Figure> extends Layer {
 		this.figure = figure;
 		figure.setVisible(true);
 		GridData constraint = new GridData(GridData.FILL_BOTH);
-		constraint.grabExcessHorizontalSpace = true;
-		constraint.grabExcessVerticalSpace = true;
 		add(figure,constraint);
 	}
 	
@@ -44,20 +42,9 @@ public class LaneFigureLayer<G extends Figure> extends Layer {
 		
 		GridData constraint = new GridData();
 		constraint.heightHint = ACTION_ICON_SIZE;
-		constraint.grabExcessHorizontalSpace = true;
-		constraint.grabExcessVerticalSpace = true;
 		constraint.horizontalAlignment = SWT.RIGHT;
 		constraint.verticalAlignment = SWT.CENTER;
 		add(actionArea,constraint);		
-	}
-
-	
-	@Override
-	public void setSize(int w, int h) {
-		super.setSize(w, h);
-		//+ ACTION_ICON_SIZE);
-		figure.setSize(w, h);
-		figure.setPreferredSize(w,h);
 	}
 
 	public IFigure getActionSection() {
