@@ -31,7 +31,7 @@ public class MoveCardCommand extends MoveCommand<Card> {
 			card.prepareLocation();
 			card.setX(location.x);
 			card.setY(location.y);
-			card.commitLocation();
+			card.commitLocation(location);
 			card.save(false);
 		}else{
 			KanbanUIStatusHandler.fail(new RuntimeException(), "MoveCardCommand:0001:Exception is occured"); //$NON-NLS-1$

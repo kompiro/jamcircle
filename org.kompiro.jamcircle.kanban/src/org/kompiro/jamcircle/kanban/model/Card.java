@@ -7,7 +7,9 @@ import java.util.List;
 
 import net.java.ao.Implementation;
 import net.java.ao.Preload;
-import net.java.ao.schema.*;
+import net.java.ao.schema.Default;
+import net.java.ao.schema.Ignore;
+import net.java.ao.schema.SQLType;
 
 /**
  * This interface describes Card model using ActiveObjects.

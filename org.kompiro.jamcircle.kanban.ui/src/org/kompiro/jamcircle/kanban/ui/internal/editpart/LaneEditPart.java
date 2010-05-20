@@ -56,7 +56,7 @@ import org.kompiro.jamcircle.kanban.ui.internal.command.RemoveCardCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.policy.LaneLocalLayout;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigureLayer;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.ActionArea;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneIconFigure;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
@@ -203,7 +203,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	}
 
 	
-	private LaneFigureLayer<LaneFigure> actionLayer;
+	private ActionArea<IFigure> actionLayer;
 	private LaneIconFigure laneIconFigure;
 	private TrashModel trash;
 	
@@ -213,43 +213,82 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 
 	private Clickable openListIcon;
 	private LaneFigure laneFigure;
+	private ActionArea<IFigure> laneIconActionLayer;
 
 	public LaneEditPart(BoardModel board) {
 		super(board);
 		this.trash = board.getTrashModel();
 	}
 
-
 	@Override
 	public IFigure createFigure() {
-		Lane lane = getLaneModel();
-		laneFigure = new LaneFigure();
-		laneFigure.setStatus(lane.getStatus());
-
-		actionLayer = new LaneFigureLayer<LaneFigure>(laneFigure);
-		actionLayer.setSize(lane.getWidth(), lane.getHeight());
-		actionLayer.setLocation(new Point(lane.getX(),lane.getY()));
-				
-		laneIconFigure = new LaneIconFigure();
-		laneIconFigure.setLocation(new Point(lane.getX(),lane.getY()));
-		laneIconFigure.setStatus(lane.getStatus());
-
-		if(lane.isIconized()){
-			return laneIconFigure;
+		laneFigure = createLaneFigure();
+		actionLayer = createActionLayer(laneFigure);
+		laneIconFigure = createIconFigure();
+		laneIconActionLayer = createActionLayer(laneIconFigure);
+		
+		if(getLaneModel().isIconized()){
+			return laneIconActionLayer;
 		}
 		return actionLayer;
 	}
 
 
+	private LaneIconFigure createIconFigure() {
+		LaneIconFigure laneIconFigure = new LaneIconFigure();			
+		Lane lane = getLaneModel();
+		laneIconFigure.setLocation(new Point(lane.getX(),lane.getY()));
+		laneIconFigure.setStatus(lane.getStatus());
+		return laneIconFigure;
+	}
+
+
+	private ActionArea<IFigure> createActionLayer(IFigure figure) {
+		ActionArea<IFigure> actionLayer = new ActionArea<IFigure>(figure);
+		Lane lane = getLaneModel();
+		actionLayer.setLocation(new Point(lane.getX(),lane.getY()));
+		return actionLayer;
+	}
+
+
+	private LaneFigure createLaneFigure() {
+		LaneFigure laneFigure = new LaneFigure();
+		laneFigure.setOpaque(true);
+		Lane lane = getLaneModel();
+		laneFigure.setSize(lane.getWidth(), lane.getHeight());
+		laneFigure.setStatus(lane.getStatus());
+		return laneFigure;
+	}
+	
+	@Override
+	protected IFigure copiedFigure() {
+		if(getLaneModel().isIconized()){
+			return createIconFigure();
+		}
+		return createActionLayer(createLaneFigure());
+	}
+
 	private void createActionIcons() {
 		iconizeIcon = new IconizeActionIcon();
-		actionLayer.getActionSection().add(iconizeIcon);
-		
 		editIcon = new EditActionIcon();
-		actionLayer.getActionSection().add(editIcon);
-		
 		openListIcon = new OpenListActionIcon();
-		actionLayer.getActionSection().add(openListIcon);
+		
+		detatchActionIcon();
+		
+	}
+
+	private void detatchActionIcon() {
+		if(getLaneModel().isIconized()){
+			IFigure actionSection = laneIconActionLayer.getActionSection();
+			actionSection.add(iconizeIcon);
+			actionSection.add(editIcon);
+			actionSection.add(openListIcon);
+		}else{
+			IFigure actionSection = actionLayer.getActionSection();
+			actionSection.add(iconizeIcon);
+			actionSection.add(editIcon);
+			actionSection.add(openListIcon);
+		}
 	}
 
 
@@ -272,6 +311,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			GraphicalEntity model = (GraphicalEntity) childEditPart.getModel();
 			model.setDeletedVisuals(false);
 			card.setRemoved(false);
+			card.setAdded(false);
 		}
 		getContentPane().add(child,child.getBounds(), -1);
 	}
@@ -316,7 +356,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	}
 
 
-	public LaneFigureLayer<LaneFigure> getLaneFigureLayer(){
+	public ActionArea<IFigure> getLaneFigureLayer(){
 		return actionLayer;
 	}
 	
@@ -382,12 +422,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		GraphicalEditPart parentPart = (GraphicalEditPart) getParent();
 		Lane lane = getLaneModel();
 		if(isPropConstraint(evt)){
-			Rectangle constraint;
-			if(lane.isIconized()){
-				constraint = new Rectangle(lane.getX(),lane.getY(),72,72);
-			}else{
-				constraint = new Rectangle(lane.getX(),lane.getY(),lane.getWidth(),lane.getHeight());
-			}
+			Rectangle constraint = (Rectangle) evt.getNewValue();
 			parentPart.setLayoutConstraint(this, getFigure(), constraint);
 		}
 		else if(isPropStatus(evt)){
@@ -413,12 +448,13 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			parent.remove(getFigure());
 			getContentPane().getChildren().clear();
 			if(lane.isIconized()){
-				setFigure(laneIconFigure);
+				setFigure(laneIconActionLayer);
 				laneIconFigure.setLocation(actionLayer.getLocation());
 			}else{
 				setFigure(actionLayer);
 				actionLayer.setLocation(laneIconFigure.getLocation());
 			}
+			detatchActionIcon();
 			parent.add(getFigure());
 			getBoardModel().setAnimated(false);
 			addNotify();

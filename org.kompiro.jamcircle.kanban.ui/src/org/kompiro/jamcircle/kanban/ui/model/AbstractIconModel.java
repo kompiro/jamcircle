@@ -23,7 +23,7 @@ public abstract class AbstractIconModel extends AbstractModel implements IconMod
 		Point oldLocation = getLocation();
 		icon.setX(location.x);
 		icon.setY(location.y);
-		icon.commitLocation();
+		icon.commitLocation(location);
 		icon.save(false);
 		firePropertyChange(PROP_LOCATION, oldLocation, location);
 	}

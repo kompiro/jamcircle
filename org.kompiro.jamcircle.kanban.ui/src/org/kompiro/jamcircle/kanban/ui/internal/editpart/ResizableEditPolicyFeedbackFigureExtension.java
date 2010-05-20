@@ -12,7 +12,7 @@ import org.eclipse.gef.handles.ResizeHandle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigureLayer;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.ActionArea;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
 public class ResizableEditPolicyFeedbackFigureExtension extends
@@ -26,8 +26,8 @@ public class ResizableEditPolicyFeedbackFigureExtension extends
 		private LaneResizeHandle(GraphicalEditPart owner, int direction) {
 			super(owner, direction);
 			IFigure figure = owner.getFigure();
-			if (figure instanceof LaneFigureLayer) {
-				LaneFigureLayer layer = (LaneFigureLayer) figure;
+			if (figure instanceof ActionArea) {
+				ActionArea layer = (ActionArea) figure;
 				figure = layer.getTargetFigure();
 				setLocator(new RelativeHandleLocator(figure, direction));
 			}

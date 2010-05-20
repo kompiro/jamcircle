@@ -1,6 +1,5 @@
 package org.kompiro.jamcircle.kanban.ui.internal.figure;
 
-import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
@@ -8,13 +7,13 @@ import org.eclipse.draw2d.Layer;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.swt.SWT;
 
-public class LaneFigureLayer<G extends Figure> extends Layer {
+public class ActionArea<FIG extends IFigure> extends Layer {
 
 	private static final int ACTION_ICON_SIZE = 16;
-	private G figure;
+	private FIG figure;
 	private IFigure actionArea;
 
-	public LaneFigureLayer(G figure){
+	public ActionArea(FIG figure){
 		createLayoutManager();
 		createFigure(figure);
 		createActionArea();
@@ -29,8 +28,9 @@ public class LaneFigureLayer<G extends Figure> extends Layer {
 		setLayoutManager(manager);
 	}
 
-	private void createFigure(G figure) {
+	private void createFigure(FIG figure) {
 		this.figure = figure;
+		setSize(figure.getSize().getCopy().expand(0, ACTION_ICON_SIZE));
 		figure.setVisible(true);
 		GridData constraint = new GridData(GridData.FILL_BOTH);
 		add(figure,constraint);

@@ -42,7 +42,7 @@ public class MoveIconCommandTest extends AbstractCommandTest {
 		command.execute();
 		verify(icon).setX(EXPECTED_X);
 		verify(icon).setY(EXPECTED_Y);
-		verify(icon).commitLocation();
+		verify(icon).commitLocation(any());
 	}
 	
 	@Override
@@ -51,7 +51,7 @@ public class MoveIconCommandTest extends AbstractCommandTest {
 		command.execute();
 		verify(icon).setX(EXPECTED_X);
 		verify(icon).setY(EXPECTED_Y);
-		verify(icon).commitLocation();
+		verify(icon).commitLocation(any());
 		assertThat(command.canUndo(),is(true));
 		command.undo();
 		verify(icon).setX(0);
@@ -67,7 +67,7 @@ public class MoveIconCommandTest extends AbstractCommandTest {
 		verify(icon).setX(0);
 		verify(icon,times(2)).setY(EXPECTED_Y);
 		verify(icon).setY(0);
-		verify(icon,times(3)).commitLocation();
+		verify(icon,times(3)).commitLocation(any());
 	}
 	
 	@Override

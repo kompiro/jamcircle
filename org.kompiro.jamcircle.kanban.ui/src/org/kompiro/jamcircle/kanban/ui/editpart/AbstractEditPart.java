@@ -108,7 +108,7 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		super.reorderChild(child, 0);
 	}
 	
-	public IFigure copyFigureForDragAndDrop(){
+	public final IFigure copyFigureForDragAndDrop(){
 		IFigure figure = new Layer(){			
 			@Override
 			public void paint(Graphics graphics) {
@@ -122,11 +122,15 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		};
 		figure.setOpaque(false);
 		figure.setLayoutManager(new FreeformLayout());
-		IFigure sourceFigure = createFigure();
+		IFigure sourceFigure = copiedFigure();
 		figure.add(sourceFigure);
 		sourceFigure.setBounds(sourceFigure.getBounds().getCopy().setLocation(new Point(0,0)));
 		figure.setBounds(sourceFigure.getBounds());
 		return figure;
+	}
+
+	protected IFigure copiedFigure() {
+		return createFigure();
 	}
 
 	@Override

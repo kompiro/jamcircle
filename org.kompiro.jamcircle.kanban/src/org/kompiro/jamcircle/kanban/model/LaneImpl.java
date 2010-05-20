@@ -97,8 +97,8 @@ public class LaneImpl extends GraphicalImpl {
 		return scriptType;
 	}
 	
-	public void commitConstraint(){
-		fireEvent(new PropertyChangeEvent(this,Lane.PROP_CONSTRAINT,null,null));
+	public void commitConstraint(Object bounds){
+		fireEvent(new PropertyChangeEvent(this,Lane.PROP_CONSTRAINT,null,bounds));
 	}
 
 	public String getContainerName() {

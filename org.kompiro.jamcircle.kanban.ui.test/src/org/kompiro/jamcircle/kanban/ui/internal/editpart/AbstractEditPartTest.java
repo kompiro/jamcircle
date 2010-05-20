@@ -163,7 +163,7 @@ public abstract class AbstractEditPartTest {
 		}
 
 		@Override
-		public void commitConstraint() {
+		public void commitConstraint(Object bounds) {
 		}
 	}
 

@@ -90,6 +90,6 @@ public interface Lane extends GraphicalEntity ,CardContainer {
 	@OneToMany(where="trashed=false")
 	Card[] getCards();
 	
-	void commitConstraint();
+	void commitConstraint(Object bounds);
 
 }

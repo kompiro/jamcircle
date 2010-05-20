@@ -426,7 +426,7 @@ public class CardEditPart extends AbstractEditPart {
 				,evt.getPropertyName(),evt.getNewValue(),evt.getSource()); 
 		if(isPropLocation(evt)){
 			Object newValue = evt.getNewValue();
-			if(! (newValue instanceof Integer)) return ;
+			if( ! (newValue instanceof Integer)) return ;
 			Point location = (Point) new Point(getCardModel().getX(),getCardModel().getY());
 			IFigure figure = getFigure();
 			if(movable){
@@ -439,8 +439,14 @@ public class CardEditPart extends AbstractEditPart {
 			movable = false;
 		}
 		else if(isPropCommitLocation(evt)){
-//			getCardFigure().revalidate();
+			getCardFigure().revalidate();
+			Object newValue = evt.getNewValue();
+			if (!(newValue instanceof int[])) return;
+			int[] lValue = (int[]) newValue;
+			Point location = new Point(lValue[0],lValue[1]);
+			figure.setLocation(location);
 			effectToParentConstraint();
+			figure.repaint();
 			movable = true;
 		}
 		else if(isPropSubject(evt)){

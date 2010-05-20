@@ -40,13 +40,14 @@ public class AddCardToOnBoardContainerCommand extends AbstractCommand {
 	private void changeContainer() throws SQLException {
 		oldLocation = new Point(card.getX(),card.getY());
 		trashed = card.isTrashed();
+		card.prepareLocation();
 		card.setX(constraint.x);
 		card.setY(constraint.y);
 		card.setTrashed(false);
+		card.save(true);
 		container.addCard(card);
+		card.commitLocation(constraint.getLocation());
 		
-		card.save(false);
-		card.commitLocation();
 	}
 	
 	@Override

@@ -74,8 +74,8 @@ public class Lane extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 		this.createDate = date;
 	}
 	
-	public void commitConstraint() {
-		fireProperty(Lane.PROP_CONSTRAINT,null,null);
+	public void commitConstraint(Object bounds) {
+		fireProperty(Lane.PROP_CONSTRAINT,null,bounds);
 	}
 		
 	public boolean isIconized(){

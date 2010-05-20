@@ -20,8 +20,8 @@ public class GraphicalImpl extends EntityImpl{
 		fireEvent(new PropertyChangeEvent(entity,GraphicalEntity.PROP_PREPARE_LOCATION,null,null));
 	}
 	
-	public void commitLocation() {
-		fireEvent(new PropertyChangeEvent(entity,GraphicalEntity.PROP_COMMIT_LOCATION,null,null));
+	public void commitLocation(Object location) {
+		fireEvent(new PropertyChangeEvent(entity,GraphicalEntity.PROP_COMMIT_LOCATION,null,location));
 	}
 
 }

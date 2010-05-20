@@ -1,7 +1,6 @@
 package org.kompiro.jamcircle.kanban.ui.internal.figure;
 
 import org.eclipse.draw2d.LightweightSystem;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -9,7 +8,7 @@ import org.junit.Test;
 import org.kompiro.jamcircle.kanban.ui.KanbanJFaceResource;
 
 
-public class LaneFigureLayerTest  {
+public class ActionAreaTest  {
 
 	{
 		Display.getDefault();
@@ -24,7 +23,7 @@ public class LaneFigureLayerTest  {
 		shell.setLayout(new FillLayout());
 		LightweightSystem lws = new LightweightSystem(shell);
 		LaneFigure laneFigure = new LaneFigure();
-		LaneFigureLayer<LaneFigure> figure = new LaneFigureLayer<LaneFigure>(laneFigure);
+		ActionArea<LaneFigure> figure = new ActionArea<LaneFigure>(laneFigure);
 		figure.setSize(200,500);
 		laneFigure.setStatus("test");
 		lws.setContents(figure);

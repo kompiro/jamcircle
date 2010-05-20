@@ -39,9 +39,10 @@ public interface GraphicalEntity extends Entity {
 	
 	/**
 	 * commited the location of this model
+	 * @param location
 	 */
 	@Ignore
-	void commitLocation();
+	void commitLocation(Object location);
 	
 	@Ignore
 	boolean isMock();

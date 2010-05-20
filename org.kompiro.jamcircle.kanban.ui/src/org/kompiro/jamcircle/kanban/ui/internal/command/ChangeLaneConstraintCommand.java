@@ -48,7 +48,7 @@ public class ChangeLaneConstraintCommand extends MoveCommand<Lane> {
 			lane.setWidth(rect.width);
 			lane.setHeight(rect.height);
 		}
-		lane.commitConstraint();
+		lane.commitConstraint(rect);
 		lane.save(false);
 	}
 		
@@ -60,7 +60,7 @@ public class ChangeLaneConstraintCommand extends MoveCommand<Lane> {
 		lane.setY(oldRect.getLocation().y);
 		lane.setWidth(oldRect.width);
 		lane.setHeight(oldRect.height);
-		lane.commitConstraint();
+		lane.commitConstraint(oldRect);
 		lane.save(false);
 	}
 	

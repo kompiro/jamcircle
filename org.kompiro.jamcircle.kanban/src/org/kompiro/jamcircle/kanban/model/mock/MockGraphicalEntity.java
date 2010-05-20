@@ -53,10 +53,12 @@ public class MockGraphicalEntity extends MockEntity implements GraphicalEntity {
 		save();
 	}
 
-	public void commitLocation() {
+	public void commitLocation(Object location) {
+		fireProperty(PROP_COMMIT_LOCATION, null, location);
 	}
 
 	public void prepareLocation() {
+		fireProperty(PROP_PREPARE_LOCATION, null, null);
 	}
 
 }
