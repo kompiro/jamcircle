@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.draw2d.ActionEvent;
 import org.eclipse.draw2d.Clickable;
+import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -56,7 +57,7 @@ import org.kompiro.jamcircle.kanban.ui.internal.command.RemoveCardCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.policy.LaneLocalLayout;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.ActionArea;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.AnnotationArea;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneIconFigure;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
@@ -203,7 +204,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	}
 
 	
-	private ActionArea<IFigure> actionLayer;
+	private AnnotationArea<Figure> actionLayer;
 	private LaneIconFigure laneIconFigure;
 	private TrashModel trash;
 	
@@ -213,7 +214,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 
 	private Clickable openListIcon;
 	private LaneFigure laneFigure;
-	private ActionArea<IFigure> laneIconActionLayer;
+	private AnnotationArea<Figure> laneIconActionLayer;
 
 	public LaneEditPart(BoardModel board) {
 		super(board);
@@ -243,10 +244,8 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	}
 
 
-	private ActionArea<IFigure> createActionLayer(IFigure figure) {
-		ActionArea<IFigure> actionLayer = new ActionArea<IFigure>(figure);
-		Lane lane = getLaneModel();
-		actionLayer.setLocation(new Point(lane.getX(),lane.getY()));
+	private AnnotationArea<Figure> createActionLayer(Figure figure) {
+		AnnotationArea<Figure> actionLayer = new AnnotationArea<Figure>(figure);
 		return actionLayer;
 	}
 
@@ -257,6 +256,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		Lane lane = getLaneModel();
 		laneFigure.setSize(lane.getWidth(), lane.getHeight());
 		laneFigure.setStatus(lane.getStatus());
+		laneFigure.setLocation(new Point(lane.getX(),lane.getY()));
 		return laneFigure;
 	}
 	
@@ -316,11 +316,14 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		getContentPane().add(child,child.getBounds(), -1);
 	}
 	
+	
 	@Override
 	protected void removeChildVisual(EditPart childEditPart) {
 		IFigure child = ((GraphicalEditPart)childEditPart).getFigure();
-		if (child instanceof CardFigure) {
-			CardFigure card = (CardFigure) child;
+		if (child instanceof AnnotationArea<?>) {
+			@SuppressWarnings("unchecked")
+			AnnotationArea<CardFigure> area = (AnnotationArea<CardFigure>) child;
+			CardFigure card = area.getTargetFigure();
 			GraphicalEntity model = (GraphicalEntity) childEditPart.getModel();
 			if(model.isDeletedVisuals()){
 				card.setRemoved(true);
@@ -356,7 +359,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	}
 
 
-	public ActionArea<IFigure> getLaneFigureLayer(){
+	public AnnotationArea<Figure> getLaneFigureLayer(){
 		return actionLayer;
 	}
 	

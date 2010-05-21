@@ -23,7 +23,7 @@ public class ActionAreaTest  {
 		shell.setLayout(new FillLayout());
 		LightweightSystem lws = new LightweightSystem(shell);
 		LaneFigure laneFigure = new LaneFigure();
-		ActionArea<LaneFigure> figure = new ActionArea<LaneFigure>(laneFigure);
+		AnnotationArea<LaneFigure> figure = new AnnotationArea<LaneFigure>(laneFigure);
 		figure.setSize(200,500);
 		laneFigure.setStatus("test");
 		lws.setContents(figure);

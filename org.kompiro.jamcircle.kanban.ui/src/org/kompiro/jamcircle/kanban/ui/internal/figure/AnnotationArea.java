@@ -1,5 +1,6 @@
 package org.kompiro.jamcircle.kanban.ui.internal.figure;
 
+import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
@@ -7,14 +8,16 @@ import org.eclipse.draw2d.Layer;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.swt.SWT;
 
-public class ActionArea<FIG extends IFigure> extends Layer {
+public class AnnotationArea<FIG extends Figure> extends Layer {
 
-	private static final int ACTION_ICON_SIZE = 16;
+	public static final int ACTION_ICON_SIZE = 16;
 	private FIG figure;
+	private IFigure statusArea;
 	private IFigure actionArea;
 
-	public ActionArea(FIG figure){
+	public AnnotationArea(FIG figure){
 		createLayoutManager();
+		createStatusArea();
 		createFigure(figure);
 		createActionArea();
 	}
@@ -28,9 +31,21 @@ public class ActionArea<FIG extends IFigure> extends Layer {
 		setLayoutManager(manager);
 	}
 
+	private void createStatusArea() {
+		statusArea = new Layer();
+		statusArea.setLayoutManager(new ToolbarLayout(true));
+		
+		GridData constraint = new GridData();
+		constraint.heightHint = ACTION_ICON_SIZE;
+		constraint.horizontalAlignment = SWT.RIGHT;
+		constraint.verticalAlignment = SWT.CENTER;
+		add(statusArea,constraint);		
+	}
+
 	private void createFigure(FIG figure) {
 		this.figure = figure;
-		setSize(figure.getSize().getCopy().expand(0, ACTION_ICON_SIZE));
+		setSize(figure.getSize().getCopy().expand(0, ACTION_ICON_SIZE * 2));
+		setLocation(figure.getLocation());
 		figure.setVisible(true);
 		GridData constraint = new GridData(GridData.FILL_BOTH);
 		add(figure,constraint);
@@ -50,8 +65,12 @@ public class ActionArea<FIG extends IFigure> extends Layer {
 	public IFigure getActionSection() {
 		return actionArea;
 	}
+	
+	public IFigure getStatusSection() {
+		return statusArea;
+	}
 
-	public IFigure getTargetFigure() {
+	public FIG getTargetFigure() {
 		return this.figure;
 	}
 	

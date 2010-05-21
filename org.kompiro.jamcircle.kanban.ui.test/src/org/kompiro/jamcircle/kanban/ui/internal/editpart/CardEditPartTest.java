@@ -2,12 +2,15 @@ package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.File;
 import java.util.Calendar;
 
-import org.eclipse.draw2d.*;
+import org.eclipse.draw2d.Clickable;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,30 +18,31 @@ import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.ColorTypes;
 import org.kompiro.jamcircle.kanban.ui.editpart.IPropertyChangeDelegator;
 import org.kompiro.jamcircle.kanban.ui.figure.StatusIcon;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.AnnotationArea;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
 
 public class CardEditPartTest {
-	private CardFigure figure;
+	private CardFigure cardFigure;
 	private Card card;
 	private CardEditPart part;
+	private IFigure figure;
 
 	@Before
 	public void before() {
 		BoardModel board = mock(BoardModel.class);
-		figure = mock(CardFigure.class);
-		Figure actionSection = mock(Figure.class);
-		when(figure.getActionSection()).thenReturn(actionSection);
-		when(figure.getStatusSection()).thenReturn(actionSection);
+		cardFigure = mock(CardFigure.class);
 		part = new CardEditPart(board);
-		part.setFigure(figure);
+		card = new org.kompiro.jamcircle.kanban.model.mock.Card();
+		part.setModel(card);
+		figure = mock(AnnotationArea.class);
+		part.setFigure(figure );
+		part.setCardFigure(cardFigure);
 		IFigure dueDummy = mock(IFigure.class);
 		part.setDueDummy(dueDummy);
 		IPropertyChangeDelegator delegator = new IPropertyChangeDelegatorForTest();
-		part.setDelegator(delegator );
-		card = new org.kompiro.jamcircle.kanban.model.mock.Card();
-		part.setModel(card);
+		part.setDelegator(delegator);
 		
 		part.activate();
 	}
@@ -60,7 +64,7 @@ public class CardEditPartTest {
 	public void doPropSubject() throws Exception {
 		card.setSubject("test");
 		
-		verify(figure).setSubject(eq("test"));
+		verify(cardFigure).setSubject(eq("test"));
 	}
 	
 	@Test
@@ -140,7 +144,7 @@ public class CardEditPartTest {
 	@Test
 	public void doColorTypeChanged() throws Exception {
 		card.setColorType(ColorTypes.BLUE);
-		verify(figure).setColorType(ColorTypes.BLUE);
+		verify(cardFigure).setColorType(ColorTypes.BLUE);
 	}
 	
 }

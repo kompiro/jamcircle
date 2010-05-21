@@ -36,7 +36,7 @@ import org.kompiro.jamcircle.kanban.ui.dialog.CardEditDialog;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
 import org.kompiro.jamcircle.kanban.ui.figure.*;
 import org.kompiro.jamcircle.kanban.ui.internal.command.*;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.ActionArea;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.AnnotationArea;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
@@ -108,8 +108,8 @@ public class CardEditPart extends AbstractEditPart {
 	private StatusIcon flagWhiteIcon, flagBlueIcon, flagOrangeIcon, flagGreenIcon, flagRedIcon;
 	private Figure flagCurrentIcon;
 	private boolean movable = true;
-	private ActionArea<CardFigure> anotationArea;
-	private CardFigure figure;
+	private AnnotationArea<CardFigure> anotationArea;
+	private CardFigure cardFigure;
 	
 
 	public CardEditPart(BoardModel board) {
@@ -119,11 +119,11 @@ public class CardEditPart extends AbstractEditPart {
 	@Override
 	protected IFigure createFigure() {
 		Card model = getCardModel();
-		figure = createCardFigure(model);
+		cardFigure = createCardFigure(model);
 		dueDummy = new Figure();
 		dueDummy.setLayoutManager(new StackLayout());
 		dueDummy.setSize(16,16);
-		anotationArea = new ActionArea<CardFigure>(figure);
+		anotationArea = new AnnotationArea<CardFigure>(cardFigure);
 
 		return anotationArea;
 	}
@@ -271,7 +271,7 @@ public class CardEditPart extends AbstractEditPart {
 		if( ! PlatformUI.isWorkbenchRunning()) return;
 		createIcons();
 		hideActionIcons();
-		IFigure actionSection = anotationArea.getActionSection();
+		IFigure actionSection = getActionSection();
 		if(getCardModel().isMock()){
 			actionSection.add(storeIcon);
 		}
@@ -279,7 +279,7 @@ public class CardEditPart extends AbstractEditPart {
 		actionSection.add(editIcon);
 		actionSection.add(colorIcon);
 		actionSection.add(deleteIcon);
-		IFigure statusSection = getCardFigure().getStatusSection();
+		IFigure statusSection = getStatusSection();
 		statusSection.add(flagSection);
 		statusSection.add(dueDummy);
 		statusSection.add(fileIcon);
@@ -296,6 +296,14 @@ public class CardEditPart extends AbstractEditPart {
 		setCompleted(card);
 		setDue(card);
 		setFlag(card);
+	}
+
+	IFigure getStatusSection() {
+		return anotationArea.getStatusSection();
+	}
+
+	IFigure getActionSection() {
+		return anotationArea.getActionSection();
 	}
 	
 
@@ -424,7 +432,7 @@ public class CardEditPart extends AbstractEditPart {
 	}
 
 	private void effectToParentConstraint() {
-		CardFigure cardFigure = getCardFigure();
+		Figure cardFigure = (Figure) getFigure();
 		GraphicalEditPart part = (GraphicalEditPart) getParent();
 		if(part != null){
 			Object constraint = cardFigure.getBounds();
@@ -455,16 +463,14 @@ public class CardEditPart extends AbstractEditPart {
 		else if(isPropCommitLocation(evt)){
 			getCardFigure().revalidate();
 			Object newValue = evt.getNewValue();
-			if (!(newValue instanceof int[])) return;
-			int[] lValue = (int[]) newValue;
-			Point location = new Point(lValue[0],lValue[1]);
-			figure.setLocation(location);
+			Point location = (Point) newValue;
+			cardFigure.setLocation(location);
 			effectToParentConstraint();
-			figure.repaint();
 			movable = true;
 		}
 		else if(isPropSubject(evt)){
-			getCardFigure().setSubject(getCardModel().getSubject());
+			String subject = (String) evt.getNewValue();
+			getCardFigure().setSubject(subject);
 		}
 		else if(isPropBody(evt)){
 			setContent(getCardModel().getContent());
@@ -534,7 +540,7 @@ public class CardEditPart extends AbstractEditPart {
 	}
 
 	private CardFigure getCardFigure(){
-		return figure;
+		return cardFigure;
 	}
 	
 	private void setFiles(List<File> files){
@@ -648,5 +654,9 @@ public class CardEditPart extends AbstractEditPart {
 	
 	void setOverDueIcon(StatusIcon overDueIcon) {
 		this.overDueIcon = overDueIcon;
+	}
+	
+	public void setCardFigure(CardFigure cardFigure) {
+		this.cardFigure = cardFigure;
 	}
 }
