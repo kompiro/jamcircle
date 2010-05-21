@@ -10,7 +10,6 @@ import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ImageFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.Layer;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.StackLayout;
@@ -35,12 +34,11 @@ import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.figure.CardToolTip;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
-public class CardFigureLayer extends Layer {
+public class CardFigure extends RoundedRectangle {
 	
 	private static final String DOUBLE_CHAR = "xx"; //$NON-NLS-1$
 	private static final String EMPTY = ""; //$NON-NLS-1$
 	public static final int HEADER_SECTION_HEIGHT = 16;
-	public static final int FOOTER_SECTION_HEIGHT = 16;
 	public static final int CARD_CHARS_OF_LINES = 10;
 	public static final int CARD_LINES = 4;
 	
@@ -65,14 +63,11 @@ public class CardFigureLayer extends Layer {
 
 	private Dimension subjectSize;
 	private CardToolTip toolTipFigure;
-	private Figure footerSection;
 	private ColorTypes colorType;
 	private Figure middleSection;
-	private Figure actionSection;
 	private Figure statusSection;
 	private Figure headerSection;
 	private ImageFigure mockImage;
-	private RoundedRectangle figure;
 	
 	public static final int CARD_WIDTH;
 	public static final int CARD_HEIGHT;
@@ -84,36 +79,23 @@ public class CardFigureLayer extends Layer {
 		int height = (fontMetrics.getHeight() + 1) * CARD_LINES ;
 		CARD_WIDTH = width + LINE_WIDTH * 2;
 		CARD_HEIGHT = HEADER_SECTION_HEIGHT + height + LINE_WIDTH * 2;
-		CARD_SIZE  = new Dimension(CardFigureLayer.CARD_WIDTH,CardFigureLayer.CARD_HEIGHT);
+		CARD_SIZE  = new Dimension(CardFigure.CARD_WIDTH,CardFigure.CARD_HEIGHT);
 	}
 	
-	public CardFigureLayer(){
+	public CardFigure(){
 		this(null);
 	}
 	
-	public CardFigureLayer(ImageRegistry imageRegisty){
-		this.figure = new RoundedRectangle(){
-			protected void outlineShape(Graphics graphics) {
-				Rectangle f = Rectangle.SINGLETON;
-				Rectangle r = getBounds();
-				f.x = r.x + figure.getLineWidth() / 2;
-				f.y = r.y + figure.getLineWidth() / 2;
-				f.width = r.width - figure.getLineWidth();
-				f.height = r.height - figure.getLineWidth();
-				
-				graphics.setForegroundColor(JFaceResources.getColorRegistry().get(COLOR_KEY_CARD_BORDER + colorType.ordinal()));
-				graphics.drawRoundRectangle(f, 8, 8);
-			}
-		};
-		setSize(CARD_WIDTH,	CARD_HEIGHT + FOOTER_SECTION_HEIGHT);
-		figure.setLineWidth(LINE_WIDTH);
+	public CardFigure(ImageRegistry imageRegisty){
+		setSize(CARD_WIDTH,	CARD_HEIGHT);
+		setLineWidth(LINE_WIDTH);
 		FlowLayout manager = new FlowLayout();
 		manager.setMajorSpacing(0);
 		manager.setMinorSpacing(0);
-		figure.setLayoutManager(manager);
+		setLayoutManager(manager);
 
 		CompoundBorder compoundBorder = new CompoundBorder(new ShadowBoarder(new Dimension(8,8)),new MarginBorder(LINE_WIDTH - 1));
-		figure.setBorder(compoundBorder);
+		setBorder(compoundBorder);
 
 		createHeaderSection();
 		createSubjectPage();
@@ -122,12 +104,22 @@ public class CardFigureLayer extends Layer {
 		mainManager.setMinorSpacing(0);
 		setLayoutManager(mainManager);
 
-		add(figure);
-
-		createFooterSection();
 		toolTipFigure = new CardToolTip(imageRegisty);
 		setToolTip(toolTipFigure);
 	}
+	
+	protected void outlineShape(Graphics graphics) {
+		Rectangle f = Rectangle.SINGLETON;
+		Rectangle r = getBounds();
+		f.x = r.x + getLineWidth() / 2;
+		f.y = r.y + getLineWidth() / 2;
+		f.width = r.width - getLineWidth();
+		f.height = r.height - getLineWidth();
+		
+		graphics.setForegroundColor(JFaceResources.getColorRegistry().get(COLOR_KEY_CARD_BORDER + colorType.ordinal()));
+		graphics.drawRoundRectangle(f, 8, 8);
+	}
+
 	
 	
 	private void createHeaderSection(){
@@ -138,7 +130,7 @@ public class CardFigureLayer extends Layer {
 		manager.horizontalSpacing = 0;
 		manager.verticalSpacing = 0;
 		headerSection.setLayoutManager(manager);
-		figure.add(headerSection,new Rectangle(0,0,getSize().width, 16));
+		add(headerSection,new Rectangle(0,0,getSize().width, 16));
 
 		IFigure identitySection = new Figure();
 		identitySection.setLayoutManager(new StackLayout());
@@ -180,30 +172,12 @@ public class CardFigureLayer extends Layer {
 		int height = fontMetrics.getHeight() * 4;
 		subjectSize = new Dimension(width,height);
 		middleSection.add(subjectPage,new Rectangle(new Point(0,0),subjectSize));
-		figure.add(middleSection);
+		add(middleSection);
 	}
 	
 	
 	public IFigure getMiddleSection() {
 		return middleSection;
-	}
-
-	private void createFooterSection() {
-		actionSection = new Layer();
-		actionSection.setLayoutManager(new ToolbarLayout(true));
-		footerSection = new Layer();
-		GridLayout gridLayout = new GridLayout();
-		gridLayout.marginHeight = 0;
-		gridLayout.marginWidth = 0;
-		footerSection.setLayoutManager(gridLayout);
-		GridData actionLayoutData = new GridData();
-		actionLayoutData.horizontalAlignment = GridData.FILL_HORIZONTAL;
-		footerSection.add(actionSection,actionLayoutData);
-		footerSection.setBackgroundColor(null);
-		footerSection.setOpaque(false);
-		actionSection.setBackgroundColor(null);
-		actionSection.setOpaque(false);
-		add(footerSection);
 	}
 
 	public void setId(int id){
@@ -220,7 +194,7 @@ public class CardFigureLayer extends Layer {
 	public void setColorType(ColorTypes colorType){
 		colorType = setDefaultColorType(colorType);
 		this.colorType = colorType;
-		figure.setBackgroundColor(JFaceResources.getColorRegistry().get(COLOR_KEY_CARD_BODY + colorType.ordinal()));
+		setBackgroundColor(JFaceResources.getColorRegistry().get(COLOR_KEY_CARD_BODY + colorType.ordinal()));
 	}
 
 	private ColorTypes setDefaultColorType(ColorTypes colorType) {
@@ -310,20 +284,12 @@ public class CardFigureLayer extends Layer {
 	public Figure getStatusSection() {
 		return statusSection;
 	}
-	
-	public Figure getActionSection() {
-		return actionSection;
-	}
-	
+		
 	public void setAdded(boolean added) {
 		this.added = added;
 		if(added){
 			alpha = 255;
 		}
-	}
-
-	public IFigure getCardFigure() {
-		return this.figure;
 	}
 	
 }

@@ -22,7 +22,7 @@ public class CardFigureLayerTest {
 		Shell shell = new Shell(display);
 		shell.setLayout(new FillLayout());
 		LightweightSystem lws = new LightweightSystem(shell);
-		CardFigureLayer figure = new CardFigureLayer();
+		CardFigure figure = new CardFigure();
 		figure.setColorType(ColorTypes.BLUE);
 		lws.setContents(figure);
 		shell.pack();
@@ -34,7 +34,7 @@ public class CardFigureLayerTest {
 		Shell shell = new Shell(display);
 		shell.setLayout(new FillLayout());
 		LightweightSystem lws = new LightweightSystem(shell);
-		CardFigureLayer figure = new CardFigureLayer();
+		CardFigure figure = new CardFigure();
 		figure.setColorType(ColorTypes.BLUE);
 		lws.setContents(figure);
 		shell.pack();

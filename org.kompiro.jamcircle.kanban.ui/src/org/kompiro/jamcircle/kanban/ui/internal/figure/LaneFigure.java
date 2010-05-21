@@ -151,13 +151,13 @@ public class LaneFigure extends RectangleFigure {
 		cardArea = new CardArea();
 		cardArea.setLayoutManager(new XYLayout());
 		cardArea.setBorder(new LineBorder(ColorConstants.lightGray));
-		cardArea.setSize(CardFigureLayer.CARD_SIZE);
+		cardArea.setSize(CardFigure.CARD_SIZE);
 
 		GridData constraint = new GridData(GridData.FILL_BOTH);
 		cardAreaSection.add(cardArea,constraint);
 		constraint = new GridData(GridData.FILL_BOTH);
-		constraint.widthHint = CardFigureLayer.CARD_WIDTH;
-		constraint.heightHint = CardFigureLayer.CARD_HEIGHT;
+		constraint.widthHint = CardFigure.CARD_WIDTH;
+		constraint.heightHint = CardFigure.CARD_HEIGHT;
 		add(cardAreaSection,constraint);
 	}
 

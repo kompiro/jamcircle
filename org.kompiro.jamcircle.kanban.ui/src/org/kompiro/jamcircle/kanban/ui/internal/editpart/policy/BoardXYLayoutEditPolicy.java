@@ -14,7 +14,7 @@ import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 import org.kompiro.jamcircle.kanban.ui.editpart.IconEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.command.*;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
 public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
@@ -77,7 +77,7 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		if (object instanceof Card) {
 			Card card = (Card) object;
 			Rectangle containerRect = getLayoutContainer().getBounds();
-			Dimension cardSize = new Dimension(CardFigureLayer.CARD_WIDTH,CardFigureLayer.CARD_HEIGHT + CardFigureLayer.FOOTER_SECTION_HEIGHT);
+			Dimension cardSize = new Dimension(CardFigure.CARD_WIDTH,CardFigure.CARD_HEIGHT);
 
 			Rectangle rect = new Rectangle(new Point(card.getX(),card.getY()),cardSize);
 			boardLocalLayout.calc(rect ,containerRect);

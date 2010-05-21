@@ -8,7 +8,7 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.handles.MoveHandle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.ActionArea;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
@@ -25,10 +25,10 @@ public class RoundedMoveHandle extends MoveHandle {
 	public void paint(Graphics graphics) {
 		Rectangle f = Rectangle.SINGLETON;
 		IFigure ownerFigure = getOwnerFigure();
-		if(ownerFigure instanceof CardFigureLayer){
-			ownerFigure = ((CardFigureLayer)ownerFigure).getCardFigure();
-		}else if(ownerFigure instanceof ActionArea){
-			ownerFigure = ((ActionArea)ownerFigure).getTargetFigure();
+		if(ownerFigure instanceof CardFigure){
+			ownerFigure = ((CardFigure)ownerFigure);
+		}else if(ownerFigure instanceof ActionArea<?>){
+			ownerFigure = ((ActionArea<?>)ownerFigure).getTargetFigure();
 		}
 		Dimension ownerR = ownerFigure.getBounds().getSize();
 		Rectangle r = getBounds();

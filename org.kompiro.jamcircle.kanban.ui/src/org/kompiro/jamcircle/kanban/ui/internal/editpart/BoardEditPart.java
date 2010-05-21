@@ -22,7 +22,7 @@ import org.kompiro.jamcircle.kanban.ui.*;
 import org.kompiro.jamcircle.kanban.ui.editpart.*;
 import org.kompiro.jamcircle.kanban.ui.internal.command.CardCloneCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.policy.BoardXYLayoutEditPolicy;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
@@ -288,8 +288,8 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		IFigure child = ((GraphicalEditPart)childEditPart).getFigure();
 		// Tips : for Animation 
 		Layer layer = wallboard.getLayer(LAYER_KEY_CARD);
-		if (child instanceof CardFigureLayer) {
-			CardFigureLayer card = (CardFigureLayer) child;
+		if (child instanceof CardFigure) {
+			CardFigure card = (CardFigure) child;
 			GraphicalEntity model = (GraphicalEntity) childEditPart.getModel();
 			if(model.isDeletedVisuals()){
 				card.setRemoved(true);

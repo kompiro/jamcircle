@@ -36,7 +36,8 @@ import org.kompiro.jamcircle.kanban.ui.dialog.CardEditDialog;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
 import org.kompiro.jamcircle.kanban.ui.figure.*;
 import org.kompiro.jamcircle.kanban.ui.internal.command.*;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.ActionArea;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
@@ -107,6 +108,8 @@ public class CardEditPart extends AbstractEditPart {
 	private StatusIcon flagWhiteIcon, flagBlueIcon, flagOrangeIcon, flagGreenIcon, flagRedIcon;
 	private Figure flagCurrentIcon;
 	private boolean movable = true;
+	private ActionArea<CardFigure> anotationArea;
+	private CardFigure figure;
 	
 
 	public CardEditPart(BoardModel board) {
@@ -116,7 +119,22 @@ public class CardEditPart extends AbstractEditPart {
 	@Override
 	protected IFigure createFigure() {
 		Card model = getCardModel();
-		CardFigureLayer figure = new CardFigureLayer(getImageRegistry());
+		figure = createCardFigure(model);
+		dueDummy = new Figure();
+		dueDummy.setLayoutManager(new StackLayout());
+		dueDummy.setSize(16,16);
+		anotationArea = new ActionArea<CardFigure>(figure);
+
+		return anotationArea;
+	}
+	
+	@Override
+	protected IFigure copiedFigure() {
+		return createCardFigure(getCardModel());
+	}
+
+	private CardFigure createCardFigure(Card model) {
+		CardFigure figure = new CardFigure(getImageRegistry());
 		figure.setSubject(model.getSubject());
 		figure.setMock(model.isMock());
 		figure.setId(model.getID());
@@ -127,10 +145,6 @@ public class CardEditPart extends AbstractEditPart {
 		if(!animated){
 			figure.setAdded(true);
 		}
-		dueDummy = new Figure();
-		dueDummy.setLayoutManager(new StackLayout());
-		dueDummy.setSize(16,16);
-
 		return figure;
 	}
 
@@ -257,7 +271,7 @@ public class CardEditPart extends AbstractEditPart {
 		if( ! PlatformUI.isWorkbenchRunning()) return;
 		createIcons();
 		hideActionIcons();
-		IFigure actionSection = getCardFigure().getActionSection();
+		IFigure actionSection = anotationArea.getActionSection();
 		if(getCardModel().isMock()){
 			actionSection.add(storeIcon);
 		}
@@ -410,7 +424,7 @@ public class CardEditPart extends AbstractEditPart {
 	}
 
 	private void effectToParentConstraint() {
-		CardFigureLayer cardFigure = getCardFigure();
+		CardFigure cardFigure = getCardFigure();
 		GraphicalEditPart part = (GraphicalEditPart) getParent();
 		if(part != null){
 			Object constraint = cardFigure.getBounds();
@@ -519,8 +533,8 @@ public class CardEditPart extends AbstractEditPart {
 		return (Card) getModel();
 	}
 
-	private CardFigureLayer getCardFigure(){
-		return (CardFigureLayer) getFigure();
+	private CardFigure getCardFigure(){
+		return figure;
 	}
 	
 	private void setFiles(List<File> files){

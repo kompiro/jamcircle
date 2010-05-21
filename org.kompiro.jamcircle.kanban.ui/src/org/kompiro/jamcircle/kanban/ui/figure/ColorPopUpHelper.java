@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Display;
 import org.kompiro.jamcircle.kanban.model.ColorTypes;
 import org.kompiro.jamcircle.kanban.model.HasColorTypeEntity;
 import org.kompiro.jamcircle.kanban.ui.internal.command.ChangeColorCommand;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigureLayer;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
 
 public class ColorPopUpHelper extends PopUpHelper{
 	private IFigure currentTipSource;
@@ -35,8 +35,8 @@ public class ColorPopUpHelper extends PopUpHelper{
 		getShell().setForeground(ColorConstants.tooltipForeground);
 		this.entity = entity;
 		images = new ArrayList<Image>();
-		for(int i = 0; i < CardFigureLayer.maxColorCount; i++){
-			Color color = JFaceResources.getColorRegistry().get(CardFigureLayer.COLOR_KEY_CARD_BORDER + i);
+		for(int i = 0; i < CardFigure.maxColorCount; i++){
+			Color color = JFaceResources.getColorRegistry().get(CardFigure.COLOR_KEY_CARD_BORDER + i);
 			images.add(new Image(c.getDisplay(),new ImageData(24,16,8,new PaletteData(new RGB[]{color.getRGB()}))));
 		}
 		this.stack = stack;
