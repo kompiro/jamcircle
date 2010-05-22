@@ -26,8 +26,8 @@ public class ResizableEditPolicyFeedbackFigureExtension extends
 		private LaneResizeHandle(GraphicalEditPart owner, int direction) {
 			super(owner, direction);
 			IFigure figure = owner.getFigure();
-			if (figure instanceof AnnotationArea) {
-				AnnotationArea layer = (AnnotationArea) figure;
+			if (figure instanceof AnnotationArea<?>) {
+				AnnotationArea<?> layer = (AnnotationArea<?>) figure;
 				figure = layer.getTargetFigure();
 				setLocator(new RelativeHandleLocator(figure, direction));
 			}

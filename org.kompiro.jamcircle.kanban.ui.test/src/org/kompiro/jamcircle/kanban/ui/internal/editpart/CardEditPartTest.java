@@ -37,7 +37,8 @@ public class CardEditPartTest {
 		card = new org.kompiro.jamcircle.kanban.model.mock.Card();
 		part.setModel(card);
 		figure = mock(AnnotationArea.class);
-		part.setFigure(figure );
+		part.createFigure();
+		part.setFigure(figure);
 		part.setCardFigure(cardFigure);
 		IFigure dueDummy = mock(IFigure.class);
 		part.setDueDummy(dueDummy);

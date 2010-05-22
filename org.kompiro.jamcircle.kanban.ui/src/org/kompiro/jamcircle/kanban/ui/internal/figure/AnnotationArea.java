@@ -11,6 +11,7 @@ import org.eclipse.swt.SWT;
 public class AnnotationArea<FIG extends Figure> extends Layer {
 
 	public static final int ACTION_ICON_SIZE = 16;
+	public static final int ANNOTATION_HEIGHT = ACTION_ICON_SIZE * 2;
 	private FIG figure;
 	private IFigure statusArea;
 	private IFigure actionArea;
@@ -44,7 +45,7 @@ public class AnnotationArea<FIG extends Figure> extends Layer {
 
 	private void createFigure(FIG figure) {
 		this.figure = figure;
-		setSize(figure.getSize().getCopy().expand(0, ACTION_ICON_SIZE * 2));
+		setSize(figure.getSize().getCopy().expand(0, ANNOTATION_HEIGHT));
 		setLocation(figure.getLocation());
 		figure.setVisible(true);
 		GridData constraint = new GridData(GridData.FILL_BOTH);
