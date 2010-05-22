@@ -67,6 +67,7 @@ public class RubyScriptingConsole extends TextConsole {
 	private static final String ARGS = "-Ku"; //$NON-NLS-1$
 	private static final String OUTPUT_STREAM_COLOR = "RubyScriptingConsole.OutputStreamColor"; //$NON-NLS-1$
 	private static final String ERROR_STREAM_COLOR = "RubyScriptingConsole.ErrorStreamColor"; //$NON-NLS-1$
+	private static final String LINE_SEPARATOR = System.getProperty("line.separator");//$NON-NLS-1$
 
 	/**
 	 * The document partitioner
@@ -545,7 +546,9 @@ public class RubyScriptingConsole extends TextConsole {
 				try {
 					String text = doc.get(getLastOffset(), doc.getLength()-getLastOffset());
 					if( ! completing){
-						Readline.getHistory(Readline.getHolder(runtime)).addToHistory(text);
+						if(text.indexOf(LINE_SEPARATOR) == -1){
+							Readline.getHistory(Readline.getHolder(runtime)).addToHistory(text);
+						}
 					}
 				} catch (BadLocationException e) {
 				}
