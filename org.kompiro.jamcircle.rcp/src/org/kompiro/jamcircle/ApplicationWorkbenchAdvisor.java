@@ -97,10 +97,14 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 			public void widgetSelected(SelectionEvent e) {
 				showMenu();
 			}
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				showBoard();
+			}
 		});
 		trayItem.addMenuDetectListener(new MenuDetectListener(){
 			public void menuDetected(MenuDetectEvent e) {
-				openWindowInProgress(trayItem);
+				handleShowOrHideBoard(trayItem);
 			}
 		});
 	}
@@ -129,24 +133,22 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		manager.uninstall();
 	}
 
-	private void openWindowInProgress(TrayItem trayItem) {
-		handleShowOrHideBoard(trayItem);
-	}
-	
 	private void handleShowOrHideBoard(TrayItem trayItem) {
 		Shell shell = getActiveShell();
 		if(shell.isVisible() == false || shell.getMinimized()){
-			showBoard(shell);
+			showBoard();
 		}else{
-			hideBoard(shell);
+			hideBoard();
 		}
 	}
 
-	private void showBoard(Shell shell) {
+	private void showBoard() {
+		Shell shell = getActiveShell();
 		RCPUtils.modifyAlphaForSurface(shell);
 	}
 
-	private void hideBoard(Shell shell) {
+	private void hideBoard() {
+		Shell shell = getActiveShell();
 		RCPUtils.modifyAlphaForDropout(shell);
 		closeToolTip();
 	}
@@ -208,7 +210,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		MenuItem boardItem = new MenuItem(menu, SWT.POP_UP);
 		boardItem.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e) {
-				openWindowInProgress(trayItem);
+				handleShowOrHideBoard(trayItem);
 				menu.dispose();
 				shell.dispose();
 			}

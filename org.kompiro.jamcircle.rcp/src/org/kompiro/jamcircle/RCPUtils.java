@@ -38,8 +38,9 @@ public class RCPUtils {
 	
 	public static void modifyAlphaForSurface(Shell shell) {
 		modifyAlphaForSurface(shell, 255);
-		shell.setVisible(true);
-		shell.setActive();
+		if(shell.isVisible() == false){
+			shell.setVisible(true);			
+		}
 		shell.setFocus();
 	}
 
