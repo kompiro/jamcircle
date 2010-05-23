@@ -12,29 +12,65 @@
 
 package org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import jline.History;
 
-import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.resource.*;
-import org.eclipse.jface.text.*;
-import org.eclipse.jface.text.contentassist.*;
+import org.eclipse.jface.resource.ColorRegistry;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.DocumentEvent;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IDocumentListener;
+import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.ITypedRegion;
+import org.eclipse.jface.text.contentassist.CompletionProposal;
+import org.eclipse.jface.text.contentassist.ContentAssistEvent;
+import org.eclipse.jface.text.contentassist.ContentAssistant;
+import org.eclipse.jface.text.contentassist.ContextInformationValidator;
+import org.eclipse.jface.text.contentassist.ICompletionListener;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
+import org.eclipse.jface.text.contentassist.IContextInformation;
+import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.*;
-import org.eclipse.ui.console.*;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.console.ConsolePlugin;
+import org.eclipse.ui.console.IConsole;
+import org.eclipse.ui.console.IConsoleDocumentPartitioner;
+import org.eclipse.ui.console.IConsoleManager;
+import org.eclipse.ui.console.IConsoleView;
+import org.eclipse.ui.console.TextConsole;
+import org.eclipse.ui.console.TextConsoleViewer;
 import org.eclipse.ui.part.IPageBookViewPage;
 import org.eclipse.ui.statushandlers.StatusManager;
-import org.jruby.*;
+import org.jruby.Ruby;
+import org.jruby.RubyInstanceConfig;
+import org.jruby.RubyRuntimeAdapter;
 import org.jruby.ext.Readline;
 import org.jruby.internal.runtime.ValueAccessor;
 import org.jruby.javasupport.JavaEmbedUtils;
@@ -99,7 +135,7 @@ public class RubyScriptingConsole extends TextConsole {
 
 	private IOConsoleInputStream input;
 	
-	private ControlFromKey keyListener;
+	private HandleHistoryAndCompletionListener handleListener;
 	
 	private ContentAssistant assist;
     
@@ -519,9 +555,18 @@ public class RubyScriptingConsole extends TextConsole {
 		}
 	}
 
-	private final class ControlFromKey implements VerifyKeyListener,ICompletionListener{
+	private final class HandleHistoryAndCompletionListener implements VerifyKeyListener,ICompletionListener,VerifyListener{
 
 		private boolean completing;
+		
+		public void verifyText(VerifyEvent e) {
+			String text = e.text;
+			if(isIncludedLineSeparator(text) == false) return;
+			String[] lines  = text.split(LINE_SEPARATOR);
+			for(String line : lines){
+				addHistory(line);
+			}
+		}
 
 		public void verifyKey(VerifyEvent event) {
 			switch(event.keyCode){
@@ -546,8 +591,8 @@ public class RubyScriptingConsole extends TextConsole {
 				try {
 					String text = doc.get(getLastOffset(), doc.getLength()-getLastOffset());
 					if( ! completing){
-						if(text.indexOf(LINE_SEPARATOR) == -1){
-							Readline.getHistory(Readline.getHolder(runtime)).addToHistory(text);
+						if(isIncludedLineSeparator(text) == false){
+							addHistory(text);
 						}
 					}
 				} catch (BadLocationException e) {
@@ -559,6 +604,15 @@ public class RubyScriptingConsole extends TextConsole {
 				completeAction(event);
 			default:
 			}
+		}
+
+		private void addHistory(String line) {
+			if(line == null || line.isEmpty()) return;
+			Readline.getHistory(Readline.getHolder(runtime)).addToHistory(line.trim());
+		}
+
+		private boolean isIncludedLineSeparator(String text) {
+			return text.indexOf(LINE_SEPARATOR) != -1;
 		}
 
 		private boolean isReadOnly(int nextCaretOffset) {
@@ -639,6 +693,7 @@ public class RubyScriptingConsole extends TextConsole {
 		public void selectionChanged(ICompletionProposal proposal,
 				boolean smartToggle) {
 		}
+
 	}
 
 	public class BoardAccessor{
@@ -685,8 +740,10 @@ public class RubyScriptingConsole extends TextConsole {
 		        Control control = viewer.getControl();
 		        if (control instanceof StyledText) {
 		        	StyledText text = (StyledText) control;
-					text.removeVerifyKeyListener(keyListener);
-					keyListener = null;
+					text.removeVerifyKeyListener(handleListener);
+					text.removeVerifyListener(handleListener);
+					assist.removeCompletionListener(handleListener);
+					handleListener = null;
 				}
 				assist.uninstall();
 			}
@@ -722,10 +779,11 @@ public class RubyScriptingConsole extends TextConsole {
         TextConsoleViewer viewer = consolePage.getViewer();
         Control control = viewer.getControl();
         if (control instanceof StyledText) {
-        	final StyledText text = (StyledText) control;
-			keyListener = new ControlFromKey();
-			assist.addCompletionListener(keyListener);
-			text.addVerifyKeyListener(keyListener);
+        	StyledText text = (StyledText) control;
+			handleListener = new HandleHistoryAndCompletionListener();
+			assist.addCompletionListener(handleListener);
+			text.addVerifyKeyListener(handleListener);
+			text.addVerifyListener(handleListener);
 	        getDocument().addDocumentListener(new CaretMoveListener(text));
 		}
         try {
