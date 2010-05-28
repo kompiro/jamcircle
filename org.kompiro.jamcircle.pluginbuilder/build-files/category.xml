@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.kompiro.jamcircle.kanban_1.1.0.qualifier.jar" id="org.kompiro.jamcircle.kanban" version="1.1.0.qualifier">
+      <category name="JAM Circle"/>
+   </feature>
+   <feature url="features/org.kompiro.jamcircle.scripting_0.1.0.qualifier.jar" id="org.kompiro.jamcircle.scripting" version="0.1.0.qualifier">
+      <category name="JAM Circle"/>
+   </feature>
+   <feature url="features/org.kompiro.jamcircle.xmpp_0.2.0.qualifier.jar" id="org.kompiro.jamcircle.xmpp" version="0.2.0.qualifier">
+      <category name="JAM Circle"/>
+   </feature>
+   <category-def name="JAM Circle" label="JAM Circle"/>
+</site>
