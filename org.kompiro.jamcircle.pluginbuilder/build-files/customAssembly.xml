@@ -133,11 +133,10 @@
 			<sysproperty key="osgi.configuration.area" value="${p2.director.configArea}" />
 		</java>
 		<echo message="${p2.categorizer.java.output}" />
-		<antcall target="logDirectorCall"/>
 		<condition property="p2.categorizer.error">
 			<isfailure code="${p2.categorizer.return.code}" />
 		</condition>
-		<fail if="p2.categorizer.error" message="A Problem occured while running the director." />
+		<fail if="p2.categorizer.error" message="A Problem occured while running the categorizer." />
 	</target>
 
 	
