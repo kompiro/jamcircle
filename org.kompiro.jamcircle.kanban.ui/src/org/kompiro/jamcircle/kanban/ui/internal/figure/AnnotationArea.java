@@ -19,7 +19,7 @@ public class AnnotationArea<FIG extends Figure> extends Layer {
 	public AnnotationArea(FIG figure){
 		createLayoutManager();
 		createStatusArea();
-		createFigure(figure);
+		setFigure(figure);
 		createActionArea();
 	}
 
@@ -43,7 +43,7 @@ public class AnnotationArea<FIG extends Figure> extends Layer {
 		add(statusArea,constraint);		
 	}
 
-	private void createFigure(FIG figure) {
+	private void setFigure(FIG figure) {
 		this.figure = figure;
 		setSize(figure.getSize().getCopy().expand(0, ANNOTATION_HEIGHT));
 		setLocation(figure.getLocation());
@@ -74,5 +74,5 @@ public class AnnotationArea<FIG extends Figure> extends Layer {
 	public FIG getTargetFigure() {
 		return this.figure;
 	}
-	
+		
 }

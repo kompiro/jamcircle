@@ -297,6 +297,11 @@ public class CardEditPart extends AbstractEditPart {
 		setDue(card);
 		setFlag(card);
 	}
+	
+	public void deactivate() {
+		anotationArea.removeAll();
+		super.deactivate();
+	};
 
 	IFigure getStatusSection() {
 		return anotationArea.getStatusSection();
@@ -539,7 +544,7 @@ public class CardEditPart extends AbstractEditPart {
 		return (Card) getModel();
 	}
 
-	private CardFigure getCardFigure(){
+	CardFigure getCardFigure(){
 		return cardFigure;
 	}
 	

@@ -288,14 +288,15 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		IFigure child = ((GraphicalEditPart)childEditPart).getFigure();
 		// Tips : for Animation 
 		Layer layer = wallboard.getLayer(LAYER_KEY_CARD);
-		if (child instanceof CardFigure) {
-			CardFigure card = (CardFigure) child;
-			GraphicalEntity model = (GraphicalEntity) childEditPart.getModel();
+		if (childEditPart instanceof CardEditPart) {
+			CardEditPart cardEditPart = (CardEditPart) childEditPart;
+			GraphicalEntity model = cardEditPart.getCardModel();
+			CardFigure cardFigure = cardEditPart.getCardFigure();
 			if(model.isDeletedVisuals()){
-				card.setRemoved(true);
-				card.repaint();
+				cardFigure.setRemoved(true);
+				cardFigure.repaint();
 			}
-			if(!child.isVisible()){
+			if(!cardFigure.isVisible()){
 				layer.remove(child);
 			}
 		}
