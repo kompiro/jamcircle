@@ -96,7 +96,7 @@
 		</ant>
 		<antcall target="runCategorizer">
 			<param name="p2.repo" value="${p2.build.repo}"/>
-			<param name="p2.category.xml" value="${buildHome}/build-files/category.xml"/>
+			<param name="p2.category.xml" value="file:${buildHome}/build-files/category.xml"/>
 		</antcall>
 		<if>
 		 <equals arg1="${os}" arg2="macosx" />
