@@ -60,7 +60,7 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		super.deactivate();
 		if(getFigure() instanceof AnnotationArea<?>){
 			AnnotationArea<?> fig = (AnnotationArea<?>)getFigure();
-			fig.removeAll();
+			fig.removeAnnotation();
 		}
 		if (getModel() instanceof AbstractModel) {
 			AbstractModel lModel = (AbstractModel) getModel();

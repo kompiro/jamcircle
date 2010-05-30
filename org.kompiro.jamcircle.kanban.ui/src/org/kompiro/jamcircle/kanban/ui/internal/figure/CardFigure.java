@@ -107,7 +107,7 @@ public class CardFigure extends RoundedRectangle {
 		toolTipFigure = new CardToolTip(imageRegisty);
 		setToolTip(toolTipFigure);
 	}
-	
+			
 	protected void outlineShape(Graphics graphics) {
 		Rectangle f = Rectangle.SINGLETON;
 		Rectangle r = getBounds();

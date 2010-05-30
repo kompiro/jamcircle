@@ -13,8 +13,8 @@ public class AnnotationArea<FIG extends Figure> extends Layer {
 	public static final int ACTION_ICON_SIZE = 16;
 	public static final int ANNOTATION_HEIGHT = ACTION_ICON_SIZE * 2;
 	private FIG figure;
-	private IFigure statusArea;
-	private IFigure actionArea;
+	private Layer statusArea;
+	private Layer actionArea;
 
 	public AnnotationArea(FIG figure){
 		createLayoutManager();
@@ -73,6 +73,11 @@ public class AnnotationArea<FIG extends Figure> extends Layer {
 
 	public FIG getTargetFigure() {
 		return this.figure;
+	}
+
+	public void removeAnnotation() {
+		actionArea.removeAll();
+		statusArea.removeAll();
 	}
 		
 }
