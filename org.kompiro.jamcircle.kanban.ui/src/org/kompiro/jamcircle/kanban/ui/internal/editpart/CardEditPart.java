@@ -298,11 +298,6 @@ public class CardEditPart extends AbstractEditPart {
 		setFlag(card);
 	}
 	
-	public void deactivate() {
-		anotationArea.removeAll();
-		super.deactivate();
-	};
-
 	IFigure getStatusSection() {
 		return anotationArea.getStatusSection();
 	}

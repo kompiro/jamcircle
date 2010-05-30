@@ -20,6 +20,7 @@ import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.AsyncDisplayDelegator;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.CancelableDragEditPartsTracker;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.AnnotationArea;
 import org.kompiro.jamcircle.kanban.ui.model.AbstractModel;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
@@ -57,6 +58,10 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 	@Override
 	public void deactivate() {
 		super.deactivate();
+		if(getFigure() instanceof AnnotationArea<?>){
+			AnnotationArea<?> fig = (AnnotationArea<?>)getFigure();
+			fig.removeAll();
+		}
 		if (getModel() instanceof AbstractModel) {
 			AbstractModel lModel = (AbstractModel) getModel();
 			lModel.removePropertyChangeListener(this);
