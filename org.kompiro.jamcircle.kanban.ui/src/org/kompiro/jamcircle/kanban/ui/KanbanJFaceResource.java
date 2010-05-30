@@ -50,7 +50,7 @@ public class KanbanJFaceResource {
 	private static void laneInitialize() {
 		int r = 255;
 		int g = 255;
-		int b = 180;
+		int b = 200;
 		RGB rgb = new RGB(r,g,b);
 		JFaceResources.getColorRegistry().put(LaneFigure.COLOR_KEY_LANE_BODY, rgb);
 		r = 255;

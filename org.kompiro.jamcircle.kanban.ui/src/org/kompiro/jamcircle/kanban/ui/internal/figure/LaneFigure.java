@@ -25,6 +25,7 @@ import org.kompiro.jamcircle.kanban.ui.Messages;
 
 public class LaneFigure extends RectangleFigure {
 
+	private static final int LANE_BORDER_LINE_WIDTH = 4;
 	public static final String KEY_OF_LANE_HEADER = "LANE_HEADER"; //$NON-NLS-1$
 	
 	public class CardArea extends Figure {
@@ -57,7 +58,7 @@ public class LaneFigure extends RectangleFigure {
 		SchemeBorder outer = new ShadowRectangleBoarder();
 		setBorder(outer);
 		setBackgroundColor(JFaceResources.getColorRegistry().get(COLOR_KEY_LANE_BODY));
-		setLineWidth(4);
+		setLineWidth(LANE_BORDER_LINE_WIDTH);
 		createHeader();
 		createCardArea();
 	}
@@ -65,12 +66,22 @@ public class LaneFigure extends RectangleFigure {
 	protected void outlineShape(Graphics graphics) {
 		Rectangle f = Rectangle.SINGLETON;
 		Rectangle r = getBounds();
-		f.x = r.x + lineWidth / 2;
-		f.y = r.y + lineWidth / 2;
-		f.width = r.width - lineWidth;
-		f.height = r.height - lineWidth;
+		int borderHalfWidth = LANE_BORDER_LINE_WIDTH / 2;
+		f.x = r.x + borderHalfWidth;
+		f.y = r.y + borderHalfWidth;
+		f.width = r.width - LANE_BORDER_LINE_WIDTH;
+		f.height = r.height - LANE_BORDER_LINE_WIDTH;
 		graphics.setForegroundColor(JFaceResources.getColorRegistry().get(COLOR_KEY_LANE_BORDER));
 		graphics.drawRectangle(f);
+		graphics.setForegroundColor(ColorConstants.gray);
+		graphics.setLineWidth(1);
+		Rectangle in = f.getCopy();
+		in.x = in.x + borderHalfWidth;
+		in.y = in.y + borderHalfWidth;
+		in.width = in.width - LANE_BORDER_LINE_WIDTH;
+		in.height = in.height - LANE_BORDER_LINE_WIDTH;
+		graphics.drawLine(in.getTopLeft(), in.getTopRight());
+		graphics.drawLine(in.getTopLeft(), in.getBottomLeft());
 	}
 		
 	
