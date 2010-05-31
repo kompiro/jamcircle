@@ -34,27 +34,32 @@ public class BoardLocalLayout {
 				start.x = 0;
 			}
 		}
-		EditPart editPart = getCardEditPart(start);
+		Dimension cardSize = new Dimension(CardFigure.CARD_WIDTH,CardFigure.CARD_HEIGHT + AnnotationArea.ANNOTATION_HEIGHT * 2);
+		EditPart editPart = getCardEditPart(new Rectangle(start,cardSize));
 		while(editPart != null) {
 			start.x += CardFigure.CARD_WIDTH + 5;
-			Dimension cardSize = new Dimension(CardFigure.CARD_WIDTH,CardFigure.CARD_HEIGHT + AnnotationArea.ANNOTATION_HEIGHT);
 			Rectangle localRect = new Rectangle(start,cardSize);
 			
 			if(!containerRect.contains(localRect)){
-				start.y += CardFigure.CARD_HEIGHT + 5;
+				start.y += CardFigure.CARD_HEIGHT + AnnotationArea.ANNOTATION_HEIGHT * 2 + 5;
 				start.x = 0;
 			}
-			editPart = getCardEditPart(start);
+			editPart = getCardEditPart(new Rectangle(start,cardSize));
 		}
 		targetRect.setLocation(start);
 	}
 
-	private EditPart getCardEditPart(Point start) {
+	private EditPart getCardEditPart(Rectangle start) {
 		Map<?,?> visualPartMap = viewer.getVisualPartMap();
 		for(Object key :visualPartMap.keySet()){
 			IFigure fig = (IFigure) key;
-			Rectangle cardRect = fig.getBounds().getCopy();
-			if(cardRect.contains(start)){
+			if (fig instanceof AnnotationArea<?> == false) continue;
+			AnnotationArea<?> area = (AnnotationArea<?>) fig;
+			Object target = area.getTargetFigure();
+			if (target instanceof CardFigure == false) continue;
+			CardFigure card = (CardFigure) target;
+			Rectangle cardRect = card.getBounds().getCopy();
+			if(start.touches(cardRect)){
 				EditPart editPart = (EditPart) visualPartMap.get(key);
 				if(editPart instanceof CardEditPart) return editPart;
 			}
