@@ -25,7 +25,7 @@ import org.kompiro.jamcircle.kanban.ui.Messages;
 
 public class LaneFigure extends RectangleFigure {
 
-	private static final int LANE_BORDER_LINE_WIDTH = 4;
+	static final int LANE_BORDER_LINE_WIDTH = 4;
 	public static final String KEY_OF_LANE_HEADER = "LANE_HEADER"; //$NON-NLS-1$
 	
 	public class CardArea extends Figure {

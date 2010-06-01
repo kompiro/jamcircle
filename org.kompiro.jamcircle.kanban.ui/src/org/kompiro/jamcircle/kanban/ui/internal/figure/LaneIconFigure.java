@@ -1,5 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui.internal.figure;
 
+import static org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.*;
+
 import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.JFaceResources;
@@ -12,7 +14,7 @@ public class LaneIconFigure extends RectangleFigure {
 		setLayoutManager(new XYLayout());
 		SchemeBorder outer = new ShadowRectangleBoarder();
 		setBorder(outer);
-		setBackgroundColor(JFaceResources.getColorRegistry().get(LaneFigure.COLOR_KEY_LANE_BODY));
+		setBackgroundColor(JFaceResources.getColorRegistry().get(COLOR_KEY_LANE_BODY));
 		setLineWidth(4);
 		setSize(72, 72);
 		statusFigure = new Label();
@@ -23,12 +25,22 @@ public class LaneIconFigure extends RectangleFigure {
 	protected void outlineShape(Graphics graphics) {
 		Rectangle f = Rectangle.SINGLETON;
 		Rectangle r = getBounds();
-		f.x = r.x + lineWidth / 2;
-		f.y = r.y + lineWidth / 2;
-		f.width = r.width - lineWidth;
-		f.height = r.height - lineWidth;
-		graphics.setForegroundColor(JFaceResources.getColorRegistry().get(LaneFigure.COLOR_KEY_LANE_BORDER));
+		int borderHalfWidth = LANE_BORDER_LINE_WIDTH / 2;
+		f.x = r.x + borderHalfWidth;
+		f.y = r.y + borderHalfWidth;
+		f.width = r.width - LANE_BORDER_LINE_WIDTH;
+		f.height = r.height - LANE_BORDER_LINE_WIDTH;
+		graphics.setForegroundColor(JFaceResources.getColorRegistry().get(COLOR_KEY_LANE_BORDER));
 		graphics.drawRectangle(f);
+		graphics.setForegroundColor(ColorConstants.gray);
+		graphics.setLineWidth(1);
+		Rectangle in = f.getCopy();
+		in.x = in.x + borderHalfWidth;
+		in.y = in.y + borderHalfWidth;
+		in.width = in.width - LANE_BORDER_LINE_WIDTH;
+		in.height = in.height - LANE_BORDER_LINE_WIDTH;
+		graphics.drawLine(in.getTopLeft(), in.getTopRight());
+		graphics.drawLine(in.getTopLeft(), in.getBottomLeft());
 	}
 
 	public void setStatus(String status){
