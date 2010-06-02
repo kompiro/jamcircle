@@ -89,6 +89,7 @@ public abstract class AbstractKanbanTest {
 		} catch (Exception e) {
 			showErrorInAfterMethods("AllBoards",e.getLocalizedMessage());
 		}
+		getKanbanService().getStorageService().getFileService().deleteAll();
 		
 		KanbanServiceImpl service = getKanbanService();
 		service.setInitialized(false);

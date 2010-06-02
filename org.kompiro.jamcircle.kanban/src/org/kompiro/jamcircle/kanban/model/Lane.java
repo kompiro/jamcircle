@@ -1,5 +1,6 @@
 package org.kompiro.jamcircle.kanban.model;
 
+import java.io.File;
 import java.sql.Types;
 import java.util.Date;
 
@@ -35,7 +36,7 @@ public interface Lane extends GraphicalEntity ,CardContainer {
 	String PROP_ICONIZED = "iconized";//$NON-NLS-1$
 	String PROP_BOARD = "boardid";//$NON-NLS-1$
 	/** Image source field */
-	String PROP_ICON_SRC = "iconSrc"; //$NON-NLS-1$
+	String PROP_CUSTOM_ICON = "custom_icon"; //$NON-NLS-1$
 
 	String getStatus();
 	
@@ -83,13 +84,19 @@ public interface Lane extends GraphicalEntity ,CardContainer {
 	@Default(value="false")
 	void setIconized(boolean iconized);
 	
-	void setIconSrc(String src);
-	
-	String getIconSrc();
 	
 	@OneToMany(where="trashed=false")
 	Card[] getCards();
 	
 	void commitConstraint(Object bounds);
+	
+	@Ignore
+	void setCustomIcon(File icon);
+	
+	@Ignore
+	File getCustomIcon();
+	
+	@Ignore
+	boolean hasCustomIcon();
 
 }

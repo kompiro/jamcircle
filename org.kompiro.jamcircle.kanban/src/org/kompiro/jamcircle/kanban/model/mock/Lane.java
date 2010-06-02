@@ -1,5 +1,6 @@
 package org.kompiro.jamcircle.kanban.model.mock;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,7 +25,7 @@ public class Lane extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	private Date createDate;
 	private boolean iconized;
 	private ScriptTypes scriptType;
-	private String iconSrc;
+	private File icon;
 
 	public void setHeight(int height) {
 		this.height = height;
@@ -122,12 +123,16 @@ public class Lane extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 		this.scriptType = type;
 	}
 
-	public String getIconSrc() {
-		return iconSrc;
+	public File getCustomIcon() {
+		return icon;
 	}
 
-	public void setIconSrc(String iconSrc) {
-		this.iconSrc = iconSrc;
+	public void setCustomIcon(File icon) {
+		this.icon = icon;
+	}
+
+	public boolean hasCustomIcon() {
+		return icon != null;
 	}
 
 }

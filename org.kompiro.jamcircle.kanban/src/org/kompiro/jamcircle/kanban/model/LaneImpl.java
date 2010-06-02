@@ -3,15 +3,18 @@ package org.kompiro.jamcircle.kanban.model;
 import static java.lang.String.format;
 
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.kompiro.jamcircle.kanban.KanbanActivator;
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 import org.kompiro.jamcircle.kanban.Messages;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
+import org.kompiro.jamcircle.storage.service.StorageService;
 
 
 /**
@@ -20,6 +23,8 @@ import org.kompiro.jamcircle.scripting.ScriptTypes;
  */
 public class LaneImpl extends GraphicalImpl {
 
+	private static final String LANE_PATH = "lanes" + File.separator;  //$NON-NLS-1$
+	
 	private final Lane lane;
 	
 	private List<Card> mockCards = new ArrayList<Card>();
@@ -107,6 +112,39 @@ public class LaneImpl extends GraphicalImpl {
 	
 	public Board getBoard(){
 		return lane.getBoard();
+	}
+	
+	public void setCustomIcon(File file){
+		File oldIcon = getCustomIcon();
+		if(oldIcon != null && oldIcon.exists()){
+			oldIcon.delete();
+		}
+		getStorageService().getFileService().addFile(getPath(), file);
+		PropertyChangeEvent event = new PropertyChangeEvent(lane,Lane.PROP_CUSTOM_ICON,file,oldIcon);
+		fireEvent(event);
+	}
+	
+	public File getCustomIcon(){
+		List<File> files = getFiles();
+		if(files == null) return null;
+		return files.get(0);
+	}
+
+	private List<File> getFiles() {
+		return getStorageService().getFileService().getFiles(getPath());
+	}
+	
+	public boolean hasCustomIcon(){
+		return getCustomIcon() != null;
+	}
+	
+	private String getPath() {
+		return LANE_PATH + lane.getID();
+	}
+
+	
+	private StorageService getStorageService() {
+		return KanbanActivator.getKanbanService().getStorageService();
 	}
 	
 	@Override
