@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.core.runtime.Platform;
 import org.kompiro.jamcircle.storage.Messages;
 import org.kompiro.jamcircle.storage.StorageStatusHandler;
+import org.kompiro.jamcircle.storage.exception.FileException;
 import org.kompiro.jamcircle.storage.service.FileStorageService;
 
 public class FileStorageServiceImpl implements FileStorageService {
@@ -78,6 +79,15 @@ public class FileStorageServiceImpl implements FileStorageService {
 		}
 		return new File(storeRoot).getAbsolutePath() + File.separator;
 	}
+	
+	public void deleteAll() {
+		File root = new File(getStoreRoot());
+		try {
+			FileUtils.deleteDirectory(root);
+		} catch (IOException e) {
+			throw new FileException(e);
+		}
+	};
 	
 	String getDefaultStoreRoot() {
 		String storeRoot = ""; //$NON-NLS-1$

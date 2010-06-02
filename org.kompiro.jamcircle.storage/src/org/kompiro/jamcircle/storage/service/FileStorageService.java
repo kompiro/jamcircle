@@ -13,4 +13,6 @@ public interface FileStorageService {
 
 	public String getStoreRoot();
 
+	public void deleteAll();
+
 }
