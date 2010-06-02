@@ -3,8 +3,6 @@ package org.kompiro.jamcircle.storage.service;
 import java.io.File;
 import java.util.List;
 
-import org.kompiro.jamcircle.storage.exception.FileStorageException;
-
 /**
  * This service provides File API for control JAM Circle's data.
  * The name of JAM Circle's data directory is "StoreRoot".
@@ -40,11 +38,5 @@ public interface FileStorageService {
 	 */
 	public String getStoreRoot();
 
-	/**
-	 * CAUTION
-	 * delete all files on storage root.
-	 * @throws FileStorageException it cause that if you call on normal environment.
-	 */
-	public void deleteAll() throws FileStorageException;
 
 }

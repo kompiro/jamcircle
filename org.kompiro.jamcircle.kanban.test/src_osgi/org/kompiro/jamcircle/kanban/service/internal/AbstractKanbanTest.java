@@ -16,6 +16,7 @@ import org.kompiro.jamcircle.kanban.KanbanActivator;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.Lane;
+import org.kompiro.jamcircle.storage.service.FileStorageService;
 
 public abstract class AbstractKanbanTest {
 
@@ -58,6 +59,7 @@ public abstract class AbstractKanbanTest {
 		return getKanbanService().createLane(board, status, 0, 0, VALUE_OF_WIDTH, VALUE_OF_HEIGHT);
 	}
 
+	@SuppressWarnings("restriction")
 	@After
 	public void after() throws Exception{
 		try {
@@ -89,7 +91,8 @@ public abstract class AbstractKanbanTest {
 		} catch (Exception e) {
 			showErrorInAfterMethods("AllBoards",e.getLocalizedMessage());
 		}
-		getKanbanService().getStorageService().getFileService().deleteAll();
+		FileStorageService fileService = getKanbanService().getStorageService().getFileService();
+		((org.kompiro.jamcircle.storage.service.internal.FileStorageServiceImpl)fileService).deleteAll();
 		
 		KanbanServiceImpl service = getKanbanService();
 		service.setInitialized(false);
