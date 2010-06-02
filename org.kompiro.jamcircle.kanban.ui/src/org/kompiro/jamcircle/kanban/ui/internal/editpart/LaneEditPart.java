@@ -1,6 +1,9 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
 import java.beans.PropertyChangeEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -55,13 +58,15 @@ import org.kompiro.jamcircle.kanban.ui.internal.command.LaneToggleIconizedComman
 import org.kompiro.jamcircle.kanban.ui.internal.command.LaneUpdateCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.command.RemoveCardCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.policy.LaneLocalLayout;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.AnnotationArea;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneCustomizedIconFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneIconFigure;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 import org.kompiro.jamcircle.kanban.ui.script.ScriptEvent;
+import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListWindow;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.scripting.ScriptingService;
@@ -206,6 +211,10 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	
 	private AnnotationArea<Figure> actionLayer;
 	private LaneIconFigure laneIconFigure;
+	private AnnotationArea<Figure>  customIconLayer;
+	private LaneCustomizedIconFigure customIconFigure;
+
+	
 	private TrashModel trash;
 	
 	private Clickable iconizeIcon;
@@ -227,13 +236,39 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		actionLayer = createActionLayer(laneFigure);
 		laneIconFigure = createIconFigure();
 		laneIconActionLayer = createActionLayer(laneIconFigure);
-		
+		customIconFigure = createCustomIcon();
+		customIconLayer = createActionLayer(customIconFigure);
 		if(getLaneModel().isIconized()){
+			if(getLaneModel().hasCustomIcon()){
+				return customIconLayer;
+			}
 			return laneIconActionLayer;
 		}
 		return actionLayer;
 	}
 
+
+	private LaneCustomizedIconFigure createCustomIcon() {
+		LaneCustomizedIconFigure customIconFigure = new LaneCustomizedIconFigure();			
+		Lane lane = getLaneModel();
+		customIconFigure.setLocation(new Point(lane.getX(),lane.getY()));
+		customIconFigure.setStatus(lane.getStatus());
+		createCustomIcon(customIconFigure);
+		return customIconFigure;
+	}
+
+	private void createCustomIcon(LaneCustomizedIconFigure customIconFigure) {
+		File customIcon = getLaneModel().getCustomIcon();
+		if(customIcon != null && customIcon.exists()){
+			try {
+				FileInputStream stream = new FileInputStream(customIcon);
+				Image image = new Image(WorkbenchUtil.getDisplay(),stream);
+				customIconFigure.setImage(image);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	private LaneIconFigure createIconFigure() {
 		LaneIconFigure laneIconFigure = new LaneIconFigure();			
@@ -451,8 +486,13 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			parent.remove(getFigure());
 			getContentPane().getChildren().clear();
 			if(lane.isIconized()){
-				setFigure(laneIconActionLayer);
-				laneIconFigure.setLocation(actionLayer.getLocation());
+				if(lane.getCustomIcon() != null){
+					setFigure(customIconLayer);
+					laneIconFigure.setLocation(new Point(lane.getX(),lane.getY()));
+				}else{
+					setFigure(laneIconActionLayer);
+					laneIconFigure.setLocation(new Point(lane.getX(),lane.getY()));
+				}
 			}else{
 				setFigure(actionLayer);
 				actionLayer.setLocation(laneIconFigure.getLocation());
@@ -463,7 +503,14 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			addNotify();
 			getBoardModel().setAnimated(true);
 		}
-		else if(isPropIconSrc(evt)){
+		else if(isPropCustomIcon(evt)){
+			if(evt.getNewValue() != null){
+				createCustomIcon(customIconFigure);
+				if(lane.isIconized()){
+					setFigure(customIconLayer);
+					laneIconFigure.setLocation(new Point(lane.getX(),lane.getY()));
+				}
+			}
 		}
 	}
 
@@ -507,8 +554,8 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		return Lane.PROP_CONSTRAINT.equals(evt.getPropertyName());
 	}	
 
-	private boolean isPropIconSrc(PropertyChangeEvent evt) {
-		return Lane.PROP_ICON_SRC.equals(evt.getPropertyName());
+	private boolean isPropCustomIcon(PropertyChangeEvent evt) {
+		return Lane.PROP_CUSTOM_ICON.equals(evt.getPropertyName());
 	}	
 
 	
