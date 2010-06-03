@@ -117,6 +117,7 @@ public class Messages extends NLS {
 	public static String KanbanView_target_board_message;
 	public static String LaneCreateRequest_new_status_title;
 	public static String LaneCreaterModel_name;
+	public static String LaneEditDialog_custom_icon_label;
 	public static String LaneEditDialog_script_label;
 	public static String LaneEditDialog_status_label;
 	public static String LaneEditDialog_title;

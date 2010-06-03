@@ -24,6 +24,8 @@ import org.kompiro.jamcircle.storage.service.StorageService;
 public class LaneImpl extends GraphicalImpl {
 
 	private static final String LANE_PATH = "lanes" + File.separator;  //$NON-NLS-1$
+
+	private static final String ICON_PATH = "icon" + File.separator;//$NON-NLS-1$
 	
 	private final Lane lane;
 	
@@ -119,26 +121,33 @@ public class LaneImpl extends GraphicalImpl {
 		if(oldIcon != null && oldIcon.exists()){
 			oldIcon.delete();
 		}
-		getStorageService().getFileService().addFile(getPath(), file);
+		if(file == null) {
+			PropertyChangeEvent event = new PropertyChangeEvent(lane,Lane.PROP_CUSTOM_ICON,file,oldIcon);
+			fireEvent(event);
+			return;
+		}
+		getStorageService().getFileService().addFile(getIconPath(), file);
 		PropertyChangeEvent event = new PropertyChangeEvent(lane,Lane.PROP_CUSTOM_ICON,file,oldIcon);
 		fireEvent(event);
 	}
 	
 	public File getCustomIcon(){
-		List<File> files = getFiles();
+		List<File> files = getIconFiles();
 		if(files == null) return null;
 		return files.get(0);
 	}
 
-	private List<File> getFiles() {
-		return getStorageService().getFileService().getFiles(getPath());
+	private List<File> getIconFiles() {
+		return getStorageService().getFileService().getFiles(getIconPath());
 	}
 	
 	public boolean hasCustomIcon(){
 		return getCustomIcon() != null;
 	}
 	
-	
+	private String getIconPath(){
+		return getPath() + ICON_PATH;
+	}
 	
 	private String getPath() {
 		return LANE_PATH + lane.getID();

@@ -104,13 +104,14 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		public void actionPerformed(ActionEvent event) {
 			Shell shell = getViewer().getControl().getShell();
 			Lane lane = getLaneModel();
-			LaneEditDialog dialog = new LaneEditDialog(shell,lane.getStatus(),lane.getScript(),lane.getScriptType());
+			LaneEditDialog dialog = new LaneEditDialog(shell,lane.getStatus(),lane.getScript(),lane.getScriptType(),lane.getCustomIcon());
 			int returnCode = dialog.open();
 			if(Dialog.OK == returnCode){
 				String status = dialog.getStatus();
 				String script = dialog.getScript();
 				ScriptTypes type = dialog.getScriptType();
-				doUpdateLaneCommand(status,script,type);
+				File customIcon = dialog.getCustomizeIcon();
+				doUpdateLaneCommand(status,script,type,customIcon);
 			}
 		}
 	}
@@ -452,8 +453,8 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		}
 	}
 	
-	private void doUpdateLaneCommand(String status, String script,ScriptTypes type) {
-		getCommandStack().execute(new LaneUpdateCommand(getLaneModel(),status,script,type));
+	private void doUpdateLaneCommand(String status, String script,ScriptTypes type, File customIcon) {
+		getCommandStack().execute(new LaneUpdateCommand(getLaneModel(),status,script,type,customIcon));
 	}
 
 	protected void doPropertyChange(final PropertyChangeEvent evt) {

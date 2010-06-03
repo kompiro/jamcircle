@@ -1,11 +1,12 @@
 package org.kompiro.jamcircle.storage.service.internal;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 import java.io.File;
 
+import org.junit.Before;
 import org.junit.Test;
 
 
@@ -16,8 +17,6 @@ public class FileStorageServiceImplTest {
 
 	@Test
 	public void addFile() throws Exception {
-		
-		before();
 		
 		File file1 = File.createTempFile("test", ".png");
 		impl.addFile("", file1);
@@ -33,8 +32,6 @@ public class FileStorageServiceImplTest {
 	@Test
 	public void deleteAll() throws Exception {
 		
-		before();
-		
 		File file1 = File.createTempFile("test", ".png");
 		impl.addFile("", file1);
 		File file2 = File.createTempFile("test", ".png");
@@ -46,10 +43,21 @@ public class FileStorageServiceImplTest {
 		
 		assertThat(root.list(),is(nullValue()));
 
+	}
+	
+	@Test
+	public void delete() throws Exception {
+		
+		File file1 = File.createTempFile("test", ".png");
+		impl.addFile("", file1);
+		impl.deleteFile("", file1);
+
+		assertThat(root.list().length,is(0));
 		
 	}
 
-	private void before() {
+	@Before
+	public void before() {
 		impl = new FileStorageServiceImpl();
 		root = new File(impl.getStoreRoot());
 		File[] files = root.listFiles();

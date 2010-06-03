@@ -17,6 +17,13 @@ public interface FileStorageService {
 	 * @param srcFile file
 	 */
 	public void addFile(String destDir, File srcFile);
+	
+	/**
+	 * delete file from Stroe Root
+	 * @param destDir
+	 * @param targetFile
+	 */
+	public void deleteFile(String destDir,File targetFile);
 
 	/**
 	 * get files from StoreRoot's directory

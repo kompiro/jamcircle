@@ -2,6 +2,7 @@ package org.kompiro.jamcircle.kanban.model;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
@@ -42,6 +43,22 @@ public class LaneTest extends AbstractKanbanTest {
 		assertThat(icon,is(notNullValue()));
 		assertThat(icon.exists(),is(true));
 		assertThat(icon.getName(),is(file2.getName()));
+	}
+	
+	@Test
+	public void deleteIcon() throws Exception {
+		
+		Board board = createBoardForTest("TEST_BOARD");
+		Lane lane = createLaneForTest(board, "TEST_STATUS");
+		File file = File.createTempFile("test", ".png");
+		
+		lane.setCustomIcon(file);
+		lane.setCustomIcon(null);
+
+		File icon = lane.getCustomIcon();
+		
+		assertThat(icon,is(nullValue()));
+
 	}
 	
 }

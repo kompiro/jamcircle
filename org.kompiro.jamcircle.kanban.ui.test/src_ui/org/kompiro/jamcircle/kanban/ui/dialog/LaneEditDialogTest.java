@@ -4,6 +4,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.kompiro.jamcircle.kanban.ui.dialog.LaneEditDialog.*;
 
+import java.io.File;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotCombo;
@@ -20,7 +25,8 @@ public class LaneEditDialogTest  {
 		final LaneEditDialog dialog = new LaneEditDialog(shell,
 				"initialize_title",
 				"initialize_script",
-				ScriptTypes.JRuby);
+				ScriptTypes.JRuby,
+				null);
 		Throwable[] ex = new Throwable[1];
 		new DialogBotThread(dialog,ex ,new Runnable() {
 			
@@ -56,15 +62,19 @@ public class LaneEditDialogTest  {
 	}
 
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		Shell shell = new Shell();
+		URL resource = LaneEditDialogTest.class.getResource("trac_bullet.png");
+		String asciiString = resource.getFile();
+		File file = new File(asciiString);
 		LaneEditDialog dialog = new LaneEditDialog(shell,
 				"testtesttesttesttesttesttesttesttesttesttesttesttesttesttest" +
 				"testtesttesttesttesttesttesttesttesttesttesttesttesttesttest",
 				"testtesttesttesttesttesttesttesttesttesttesttesttesttesttest" +
 				"testtesttesttesttesttesttesttesttesttesttesttesttesttesttest" +
 				"testtesttesttesttesttesttesttesttesttesttesttesttesttesttest",
-				ScriptTypes.JRuby);
+				ScriptTypes.JRuby,
+				file);
 		dialog.open();
 	}
 

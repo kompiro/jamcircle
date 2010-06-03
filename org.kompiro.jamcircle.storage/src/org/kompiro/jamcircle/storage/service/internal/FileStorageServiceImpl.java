@@ -55,6 +55,14 @@ public class FileStorageServiceImpl implements FileStorageService {
 			StorageStatusHandler.fail(e, errorMessage);
 		}
 	}
+	
+	public void deleteFile(String destDir, File targetFile) {
+		String filePath = getStoreRoot() + destDir + File.separator + targetFile.getName();
+		String message = String.format("StorageServiceImpl#fileExists(filePath:'%s')", filePath); //$NON-NLS-1$
+		StorageStatusHandler.debug(message);
+		File destFile = new File(filePath);
+		destFile.delete();
+	}
 
 	public boolean fileExists(String path) {
 		String filePath = getStoreRoot() + path;

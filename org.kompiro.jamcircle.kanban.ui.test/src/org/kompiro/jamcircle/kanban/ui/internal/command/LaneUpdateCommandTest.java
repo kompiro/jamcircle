@@ -5,6 +5,9 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
+import java.io.File;
+import java.net.URL;
+
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.mock.Lane;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
@@ -18,6 +21,7 @@ public class LaneUpdateCommandTest extends AbstractCommandTest{
 	private static final String EXPECTED_STATUS = "status";
 	private Lane lane;
 	private LaneUpdateCommand command;
+	private File customIcon;
 
 	@Test
 	public void initialize() throws Exception {
@@ -25,11 +29,12 @@ public class LaneUpdateCommandTest extends AbstractCommandTest{
 		String status = null;
 		String script = null;
 		ScriptTypes type = null;
-		LaneUpdateCommand command = new LaneUpdateCommand(lane, status, script, type);
+		File customIcon = null;
+		LaneUpdateCommand command = new LaneUpdateCommand(lane, status, script, type,customIcon );
 		command.initialize();
 		assertThat(command.canExecute(),is(false));
 		lane = mock(Lane.class);
-		command = new LaneUpdateCommand(lane, status, script, type);
+		command = new LaneUpdateCommand(lane, status, script, type, customIcon);
 		command.initialize();
 		assertThat(command.canExecute(),is(true));
 	}
@@ -40,6 +45,7 @@ public class LaneUpdateCommandTest extends AbstractCommandTest{
 		assertThat(lane.getStatus(),is(EXPECTED_STATUS));
 		assertThat(lane.getScript(),is(EXPECTED_SCRIPT));
 		assertThat(lane.getScriptType(),is(ScriptTypes.JRuby));
+		assertThat(lane.getCustomIcon().getName(),is(customIcon.getName()));
 	}
 	
 	@Override
@@ -50,6 +56,7 @@ public class LaneUpdateCommandTest extends AbstractCommandTest{
 		assertThat(lane.getStatus(),is(INIT_STATUS));
 		assertThat(lane.getScript(),is(INIT_SCRIPT));
 		assertThat(lane.getScriptType(),is(nullValue()));		
+		assertThat(lane.getCustomIcon(),is(nullValue()));
 	}
 	
 	@Override
@@ -61,7 +68,7 @@ public class LaneUpdateCommandTest extends AbstractCommandTest{
 		assertThat(lane.getStatus(),is(EXPECTED_STATUS));
 		assertThat(lane.getScript(),is(EXPECTED_SCRIPT));
 		assertThat(lane.getScriptType(),is(ScriptTypes.JRuby));
-		
+		assertThat(lane.getCustomIcon().getName(),is(customIcon.getName()));
 	}
 	
 	@Override
@@ -70,7 +77,9 @@ public class LaneUpdateCommandTest extends AbstractCommandTest{
 		String status = EXPECTED_STATUS;
 		String script = EXPECTED_SCRIPT;
 		ScriptTypes type = ScriptTypes.JRuby;
-		command = new LaneUpdateCommand(lane, status, script, type);
+		URL resource = LaneToggleIconizedCommandTest.class.getResource("kanban_128.gif");
+		customIcon = new File(resource.getFile());
+		command = new LaneUpdateCommand(lane, status, script, type,customIcon);
 		command.initialize();
 		
 	}
