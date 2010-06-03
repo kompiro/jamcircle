@@ -138,6 +138,8 @@ public class LaneImpl extends GraphicalImpl {
 		return getCustomIcon() != null;
 	}
 	
+	
+	
 	private String getPath() {
 		return LANE_PATH + lane.getID();
 	}

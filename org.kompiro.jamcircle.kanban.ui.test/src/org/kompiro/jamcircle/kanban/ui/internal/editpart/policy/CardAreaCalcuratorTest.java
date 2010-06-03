@@ -41,7 +41,7 @@ public class CardAreaCalcuratorTest {
 		when(parent.getViewer()).thenReturn(viewer );
 		when(viewer.getEditPartFactory()).thenReturn(new KanbanUIEditPartFactory(boardModel));
 		part.setParent(parent);
-		Object lane = new Lane();
+		Lane lane = new Lane();
 		part.setModel(lane);
 		part.getFigure();
 		rect = new Rectangle();

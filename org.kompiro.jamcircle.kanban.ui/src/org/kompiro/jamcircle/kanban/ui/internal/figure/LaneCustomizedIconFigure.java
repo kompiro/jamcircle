@@ -21,7 +21,6 @@ import org.kompiro.jamcircle.kanban.ui.Messages;
  */
 public class LaneCustomizedIconFigure extends Figure {
 	
-	private static final String STATUS = "status"; //$NON-NLS-1$
 	private static final String IMAGE = "image"; //$NON-NLS-1$
 
 	private Label statusFigure;
@@ -42,9 +41,6 @@ public class LaneCustomizedIconFigure extends Figure {
 	}
 	
 	public void setStatus(String status){
-		if(status == null){ 
-			throw new IllegalStateException(format(Messages.LaneCustomizedIconFigure_initialized_error_message,STATUS));
-		};
 		statusFigure.setText(status);
 	}
 

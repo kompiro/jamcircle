@@ -1,11 +1,18 @@
 package org.kompiro.jamcircle.kanban.ui.internal.figure;
 
-import static org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.*;
+import static org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.COLOR_KEY_LANE_BODY;
+import static org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.COLOR_KEY_LANE_BORDER;
+import static org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.LANE_BORDER_LINE_WIDTH;
 
-import org.eclipse.draw2d.*;
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.PositionConstants;
+import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.draw2d.SchemeBorder;
+import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.JFaceResources;
-import org.kompiro.jamcircle.kanban.ui.Messages;
 
 public class LaneIconFigure extends RectangleFigure {
 	private Label statusFigure;
@@ -44,7 +51,6 @@ public class LaneIconFigure extends RectangleFigure {
 	}
 
 	public void setStatus(String status){
-		if(statusFigure == null) throw new IllegalStateException(Messages.LaneIconFigure_initialized_error_message);
 		statusFigure.setText(status);
 	}
 	
