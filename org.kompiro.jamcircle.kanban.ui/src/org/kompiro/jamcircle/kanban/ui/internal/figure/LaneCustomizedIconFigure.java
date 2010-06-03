@@ -6,7 +6,6 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.ImageFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.SchemeBorder;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.JFaceResources;
@@ -28,8 +27,6 @@ public class LaneCustomizedIconFigure extends Figure {
 
 	public LaneCustomizedIconFigure(){
 		setLayoutManager(new XYLayout());
-		SchemeBorder outer = new ShadowRectangleBoarder();
-		setBorder(outer);
 		setSize(72, 72);
 		imageFigure = new ImageFigure();
 		add(imageFigure,new Rectangle(0,-10,72,72),0);

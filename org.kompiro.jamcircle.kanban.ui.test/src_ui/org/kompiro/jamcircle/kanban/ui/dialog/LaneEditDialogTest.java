@@ -2,11 +2,11 @@ package org.kompiro.jamcircle.kanban.ui.dialog;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.kompiro.jamcircle.kanban.ui.dialog.LaneEditDialog.*;
+import static org.kompiro.jamcircle.kanban.ui.dialog.LaneEditDialog.ID_SCRIPT;
+import static org.kompiro.jamcircle.kanban.ui.dialog.LaneEditDialog.ID_SCRIPT_TYPE;
+import static org.kompiro.jamcircle.kanban.ui.dialog.LaneEditDialog.ID_STATUS;
 
 import java.io.File;
-import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.eclipse.swt.widgets.Shell;

@@ -141,25 +141,25 @@ public class LaneEditDialog extends Dialog{
 		Button button = new Button(group, SWT.PUSH);
 		button.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
 				false));
-		button.setText(Messages.CardEditDialog_add_file_label);
+		button.setText("選択");
 		button.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog dialog = new FileDialog(getShell(),SWT.OPEN);
+				dialog.setFilterExtensions(new String[]{"*.png","*.gif"});
 				String filePath = dialog.open();
-				if(filePath != null) {
-					File file = new File(filePath);
-					if( ! file.exists()){
-						KanbanUIStatusHandler.info(Messages.CardEditDialog_info_file_not_exist,file,true);
-						return;
-					}else if( ! file.isFile()){
-						KanbanUIStatusHandler.info(Messages.CardEditDialog_info_selection_is_not_file,file,true);
-						return;
-					}
-					customizeIcon = file;
-					icon.setText(null);
-					setIconImage(icon);
+				if(filePath == null) return;
+				File file = new File(filePath);
+				if( ! file.exists()){
+					KanbanUIStatusHandler.info(Messages.CardEditDialog_info_file_not_exist,file,true);
+					return;
+				}else if( ! file.isFile()){
+					KanbanUIStatusHandler.info(Messages.CardEditDialog_info_selection_is_not_file,file,true);
+					return;
 				}
+				customizeIcon = file;
+				icon.setText("");
+				setIconImage(icon);
 			}
 		});		
 	}
@@ -185,6 +185,9 @@ public class LaneEditDialog extends Dialog{
 	private void setIconImage(final Label icon) {
 		ImageLoader loader = new ImageLoader();
 		ImageData[] datas = loader.load(customizeIcon.getAbsolutePath());
+		if(icon.getImage() != null){
+			icon.getImage().dispose();
+		}
 		Image image = new Image(WorkbenchUtil.getDisplay(), datas[0]);
 		icon.setImage(image);
 	}

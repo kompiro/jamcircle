@@ -2,8 +2,6 @@ package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
 import java.beans.PropertyChangeEvent;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -261,13 +259,8 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	private void createCustomIcon(LaneCustomizedIconFigure customIconFigure) {
 		File customIcon = getLaneModel().getCustomIcon();
 		if(customIcon != null && customIcon.exists()){
-			try {
-				FileInputStream stream = new FileInputStream(customIcon);
-				Image image = new Image(WorkbenchUtil.getDisplay(),stream);
-				customIconFigure.setImage(image);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
+			Image image = new Image(WorkbenchUtil.getDisplay(),customIcon.getAbsolutePath());
+			customIconFigure.setImage(image);
 		}
 	}
 
@@ -314,17 +307,19 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	}
 
 	private void detatchActionIcon() {
+		IFigure actionSection;
 		if(getLaneModel().isIconized()){
-			IFigure actionSection = laneIconActionLayer.getActionSection();
-			actionSection.add(iconizeIcon);
-			actionSection.add(editIcon);
-			actionSection.add(openListIcon);
+			if(getLaneModel().hasCustomIcon()){
+				actionSection = customIconLayer.getActionSection();				
+			}else{
+				actionSection = laneIconActionLayer.getActionSection();
+			}
 		}else{
-			IFigure actionSection = actionLayer.getActionSection();
-			actionSection.add(iconizeIcon);
-			actionSection.add(editIcon);
-			actionSection.add(openListIcon);
+			actionSection = actionLayer.getActionSection();
 		}
+		actionSection.add(iconizeIcon);
+		actionSection.add(editIcon);
+		actionSection.add(openListIcon);
 	}
 
 
@@ -508,6 +503,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			if(evt.getNewValue() != null){
 				createCustomIcon(customIconFigure);
 				if(lane.isIconized()){
+					detatchActionIcon();
 					setFigure(customIconLayer);
 					laneIconFigure.setLocation(new Point(lane.getX(),lane.getY()));
 				}
