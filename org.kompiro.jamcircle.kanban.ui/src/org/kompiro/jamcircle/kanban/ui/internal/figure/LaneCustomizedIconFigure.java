@@ -27,14 +27,14 @@ public class LaneCustomizedIconFigure extends Figure {
 
 	public LaneCustomizedIconFigure(){
 		setLayoutManager(new XYLayout());
-		setSize(72, 72);
+		setSize(72, 92);
 		imageFigure = new ImageFigure();
-		add(imageFigure,new Rectangle(0,-10,72,72),0);
+		add(imageFigure,new Rectangle(0, 0,72,72),0);
 
 		statusFigure = new Label();
 		statusFigure.setFont(JFaceResources.getTextFont());
 		statusFigure.setTextAlignment(PositionConstants.CENTER);
-		add(statusFigure,new Rectangle(0,72-25,72,10));
+		add(statusFigure,new Rectangle(0,77,72,15));
 	}
 	
 	public void setStatus(String status){
@@ -50,7 +50,7 @@ public class LaneCustomizedIconFigure extends Figure {
 			oldImage.dispose();
 		}
 		ImageData imageData = image.getImageData();
-		Image newImage = new Image(Display.getDefault(),imageData.scaledTo(50, 50));
+		Image newImage = new Image(Display.getDefault(),imageData.scaledTo(72, 72));
 		imageFigure.setImage(newImage);
 	}
 	

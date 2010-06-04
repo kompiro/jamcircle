@@ -222,7 +222,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 
 	private Clickable openListIcon;
 	private LaneFigure laneFigure;
-	private AnnotationArea<Figure> laneIconActionLayer;
+	private AnnotationArea<Figure> laneIconLayer;
 
 	public LaneEditPart(BoardModel board) {
 		super(board);
@@ -234,14 +234,14 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		laneFigure = createLaneFigure();
 		actionLayer = createActionLayer(laneFigure);
 		laneIconFigure = createIconFigure();
-		laneIconActionLayer = createActionLayer(laneIconFigure);
+		laneIconLayer = createActionLayer(laneIconFigure);
 		customIconFigure = createCustomIcon();
 		customIconLayer = createActionLayer(customIconFigure);
 		if(getLaneModel().isIconized()){
 			if(getLaneModel().hasCustomIcon()){
 				return customIconLayer;
 			}
-			return laneIconActionLayer;
+			return laneIconLayer;
 		}
 		return actionLayer;
 	}
@@ -292,9 +292,12 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	@Override
 	protected IFigure copiedFigure() {
 		if(getLaneModel().isIconized()){
+			if(getLaneModel().hasCustomIcon()){
+				return createCustomIcon();
+			}
 			return createIconFigure();
 		}
-		return createActionLayer(createLaneFigure());
+		return createLaneFigure();
 	}
 
 	private void createActionIcons() {
@@ -312,7 +315,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			if(getLaneModel().hasCustomIcon()){
 				actionSection = customIconLayer.getActionSection();				
 			}else{
-				actionSection = laneIconActionLayer.getActionSection();
+				actionSection = laneIconLayer.getActionSection();
 			}
 		}else{
 			actionSection = actionLayer.getActionSection();
@@ -475,39 +478,32 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 				}
 			};
 			scriptJob.schedule();
-		}
-		else if(isPropIconized(evt)){
+		}else if(isPropIconized(evt) || isPropCustomIcon(evt)){
+			if(isPropCustomIcon(evt)){
+				createCustomIcon(customIconFigure);
+			}
 			IFigure parent = getFigure().getParent();
 			removeNotify();
 			parent.remove(getFigure());
 			getContentPane().getChildren().clear();
+			Point location = new Point(lane.getX(),lane.getY());
 			if(lane.isIconized()){
 				if(lane.getCustomIcon() != null){
 					setFigure(customIconLayer);
-					laneIconFigure.setLocation(new Point(lane.getX(),lane.getY()));
+					customIconLayer.setLocation(location);
 				}else{
-					setFigure(laneIconActionLayer);
-					laneIconFigure.setLocation(new Point(lane.getX(),lane.getY()));
+					setFigure(laneIconLayer);
+					laneIconFigure.setLocation(location);
 				}
 			}else{
 				setFigure(actionLayer);
-				actionLayer.setLocation(laneIconFigure.getLocation());
+				actionLayer.setLocation(location);
 			}
 			detatchActionIcon();
 			parent.add(getFigure());
 			getBoardModel().setAnimated(false);
 			addNotify();
 			getBoardModel().setAnimated(true);
-		}
-		else if(isPropCustomIcon(evt)){
-			if(evt.getNewValue() != null){
-				createCustomIcon(customIconFigure);
-				if(lane.isIconized()){
-					detatchActionIcon();
-					setFigure(customIconLayer);
-					laneIconFigure.setLocation(new Point(lane.getX(),lane.getY()));
-				}
-			}
 		}
 	}
 

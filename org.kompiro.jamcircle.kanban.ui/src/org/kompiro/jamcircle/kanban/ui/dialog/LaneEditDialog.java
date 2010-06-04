@@ -129,24 +129,25 @@ public class LaneEditDialog extends Dialog{
 	private void createCustomIconGroup(Composite parent) {
 		Group group = new Group(parent,SWT.None);
 		group.setText(Messages.LaneEditDialog_custom_icon_label);
-		group.setLayout(new GridLayout());
+		final GridLayout layout = new GridLayout();
+		group.setLayout(layout);
 		final Label icon = new Label(group, SWT.NONE);
-		icon.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
-				false));
+		icon.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true,
+				true));
 		if(customizeIcon != null){
 			setIconImage(icon);
 		}else{
 			icon.setText("no data");
 		}
-		Button button = new Button(group, SWT.PUSH);
-		button.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
+		Button selectButton = new Button(group, SWT.PUSH);
+		selectButton.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
 				false));
-		button.setText("選択");
-		button.addSelectionListener(new SelectionAdapter(){
+		selectButton.setText("選択");
+		selectButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog dialog = new FileDialog(getShell(),SWT.OPEN);
-				dialog.setFilterExtensions(new String[]{"*.png","*.gif"});
+				dialog.setFilterExtensions(new String[]{"*.png;*.gif;*.ico;*.jpg"});
 				String filePath = dialog.open();
 				if(filePath == null) return;
 				File file = new File(filePath);
@@ -160,12 +161,24 @@ public class LaneEditDialog extends Dialog{
 				customizeIcon = file;
 				icon.setText("");
 				setIconImage(icon);
+				getShell().pack();
 			}
-		});		
+		});
+		Button deleteButton = new Button(group, SWT.PUSH);
+		deleteButton.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
+				false));
+		deleteButton.setText("削除");
+		deleteButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				icon.setText("no data");
+				customizeIcon = null;
+				setIconImage(icon);
+			}
+		});
+		
 	}
 
-
-	
 	public String getStatus(){
 		return status;
 	}
@@ -183,13 +196,31 @@ public class LaneEditDialog extends Dialog{
 	}
 
 	private void setIconImage(final Label icon) {
-		ImageLoader loader = new ImageLoader();
-		ImageData[] datas = loader.load(customizeIcon.getAbsolutePath());
 		if(icon.getImage() != null){
 			icon.getImage().dispose();
 		}
-		Image image = new Image(WorkbenchUtil.getDisplay(), datas[0]);
+		if(customizeIcon == null){
+			getShell().layout();
+			getShell().pack();
+			return;
+		}
+		ImageLoader loader = new ImageLoader();
+		ImageData[] datas = loader.load(customizeIcon.getAbsolutePath());
+		ImageData data = datas[0];
+		int width = data.width;
+		int height = data.height;
+		if(width > 200 || height > 200){
+			if(width > height){
+				int calcHeight = (int)(height / (width / 200.0));
+				data = data.scaledTo(200, calcHeight);
+			}else{
+				int calcWidth = (int)(width / (height / 200.0));
+				data = data.scaledTo(calcWidth, 200);
+			}
+		}
+		Image image = new Image(WorkbenchUtil.getDisplay(), data);
 		icon.setImage(image);
+		getShell().layout();
 	}
 		
 }
