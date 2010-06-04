@@ -31,7 +31,7 @@
          </property>
          <property
                name="aboutText"
-               value="JAM Circle&#x0A;&#x0A;Version: 0.8.0&#x0A;&#x0A;Visit http://kompiro.org/jamcircle/&#x0A;&#x0A;This product includes software developed by the&#x0A;Apache Software Foundation http://www.apache.org/&#x0A;Mozilla Foundation(Rhino) https://developer.mozilla.org/en/Rhino&#x0A;JRuby Project http://jruby.codehaus.org/">
+               value="JAM Circle&#x0A;Visit http://kompiro.org/jamcircle/&#x0A;&#x0A;This product includes software developed by the&#x0A;Apache Software Foundation http://www.apache.org/&#x0A;Mozilla Foundation(Rhino) https://developer.mozilla.org/en/Rhino&#x0A;JRuby Project http://jruby.org/&#x0A;&#x0A;JAMCircle&apos;s icon uses famfamfam.com  &#x0A;http://www.famfamfam.com/">
          </property>
          <property
                name="aboutImage"
