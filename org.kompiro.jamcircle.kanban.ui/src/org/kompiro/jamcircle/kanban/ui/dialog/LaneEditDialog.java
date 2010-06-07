@@ -23,6 +23,9 @@ import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class LaneEditDialog extends Dialog{
 
+	private static final String EMPTY = ""; //$NON-NLS-1$
+	private static final String NO_DATA = "no data"; //$NON-NLS-1$
+	private static final String GRAPHIC_EXTENSION = "*.png;*.gif;*.ico;*.jpg"; //$NON-NLS-1$
 	static final String ID_SCRIPT_TYPE = "script_type"; //$NON-NLS-1$
 	static final String ID_SCRIPT = "script"; //$NON-NLS-1$
 	static final String ID_STATUS = "status"; //$NON-NLS-1$
@@ -137,17 +140,17 @@ public class LaneEditDialog extends Dialog{
 		if(customizeIcon != null){
 			setIconImage(icon);
 		}else{
-			icon.setText("no data");
+			icon.setText(NO_DATA);
 		}
 		Button selectButton = new Button(group, SWT.PUSH);
 		selectButton.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
 				false));
-		selectButton.setText("選択");
+		selectButton.setText(Messages.LaneEditDialog_select_image);
 		selectButton.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog dialog = new FileDialog(getShell(),SWT.OPEN);
-				dialog.setFilterExtensions(new String[]{"*.png;*.gif;*.ico;*.jpg"});
+				dialog.setFilterExtensions(new String[]{GRAPHIC_EXTENSION});
 				String filePath = dialog.open();
 				if(filePath == null) return;
 				File file = new File(filePath);
@@ -159,7 +162,7 @@ public class LaneEditDialog extends Dialog{
 					return;
 				}
 				customizeIcon = file;
-				icon.setText("");
+				icon.setText(EMPTY);
 				setIconImage(icon);
 				getShell().pack();
 			}
@@ -167,11 +170,11 @@ public class LaneEditDialog extends Dialog{
 		Button deleteButton = new Button(group, SWT.PUSH);
 		deleteButton.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
 				false));
-		deleteButton.setText("削除");
+		deleteButton.setText(Messages.LaneEditDialog_delete_image);
 		deleteButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				icon.setText("no data");
+				icon.setText(NO_DATA);
 				customizeIcon = null;
 				setIconImage(icon);
 			}
