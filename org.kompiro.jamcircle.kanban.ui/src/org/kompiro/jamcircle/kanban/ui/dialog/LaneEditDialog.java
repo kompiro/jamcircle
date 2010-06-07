@@ -207,6 +207,13 @@ public class LaneEditDialog extends Dialog{
 		ImageLoader loader = new ImageLoader();
 		ImageData[] datas = loader.load(customizeIcon.getAbsolutePath());
 		ImageData data = datas[0];
+		data = scaleTo200px(data);
+		Image image = new Image(WorkbenchUtil.getDisplay(), data);
+		icon.setImage(image);
+		getShell().layout();
+	}
+
+	private ImageData scaleTo200px(ImageData data) {
 		int width = data.width;
 		int height = data.height;
 		if(width > 200 || height > 200){
@@ -218,9 +225,7 @@ public class LaneEditDialog extends Dialog{
 				data = data.scaledTo(calcWidth, 200);
 			}
 		}
-		Image image = new Image(WorkbenchUtil.getDisplay(), data);
-		icon.setImage(image);
-		getShell().layout();
+		return data;
 	}
 		
 }
