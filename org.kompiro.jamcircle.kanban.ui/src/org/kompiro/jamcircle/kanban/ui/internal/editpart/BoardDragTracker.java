@@ -69,7 +69,8 @@ public class BoardDragTracker extends MarqueeDragTracker {
 	protected boolean handleButtonUp(int button) {
 		if(button == RIGHT_CLICK){
 			Dimension difference = getDifference();
-			if(difference.getArea() <= 4){
+			int area = difference.getArea();
+			if(Math.abs(area) <= 4){
 				getCurrentViewer().getControl().getMenu().setVisible(true);
 			}
 			if (stateTransition(STATE_DRAG_IN_PROGRESS, STATE_TERMINAL)) {
