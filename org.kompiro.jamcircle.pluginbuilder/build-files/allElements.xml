@@ -22,6 +22,10 @@
 			<property name="type" value="feature" />
 			<property name="id" value="org.kompiro.jamcircle.rcp.test" />
 		</ant>
+		<ant antfile="${genericTargets}" target="${target}">
+			<property name="type" value="feature" />
+			<property name="id" value="org.kompiro.jamcircle.extension.feedboard" />
+		</ant>
 	</target>
 	<target name="rcpbuild" if="build.container.feature">
 		<ant antfile="${genericTargets}" target="${target}">
@@ -50,6 +54,10 @@
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
  			<property name="archiveName" value="${archiveNamePrefix}-rcp-test-p2.zip"/>
 		</ant>
+	</target>
+	<target name="assemble.org.kompiro.jamcircle.extension.feedboard.p2">
+	</target>
+	<target name="assemble.org.kompiro.jamcircle.extension.feedboard.group.group.group">
 	</target>
 
 	
