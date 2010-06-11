@@ -1,6 +1,7 @@
 <project name="Run as part of postBuild" default="main">
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${buildHome}/build-files/ant-contrib.jar" />
 	<taskdef resource="org/pluginbuilder/anttasks/pluginbuildertasks.properties" classpath="${buildHome}/build-files/pluginbuilder-anttasks.jar" />
+	<BundleFileLocator eclipseInstallationRoot="${eclipse.home}" bundleId="org.eclipse.equinox.launcher" property="equinoxjar" />
 
 	<target name="main">
 		<echoproperties/>
@@ -120,7 +121,7 @@
 			<isset property="osgi.dev" />
 		</condition>
 		
-		<java jar="${equinoxLauncherJar}" fork="true" failonerror="false" resultproperty="p2.categorizer.return.code" outputproperty="p2.categorizer.java.output">
+		<java jar="${equinoxjar}" fork="true" failonerror="false" resultproperty="p2.categorizer.return.code" outputproperty="p2.categorizer.java.output">
 			<arg line="-application org.eclipse.equinox.p2.publisher.CategoryPublisher" />
 			<arg line="-nosplash" />
 			<arg line="--launcher.suppressErrors" />
