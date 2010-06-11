@@ -129,7 +129,7 @@
 			<arg line="-metadataRepository"/>
 			<arg value="${p2.repo}" />
 			<arg line="-categoryDefinition ${p2.category.xml}"/>
-			<jvmarg value="-Declipse.p2.data.area=${p2.director.dataArea}" />
+			<jvmarg value="-Declipse.p2.data.area=${p2.metadata.repo}" />
 			<jvmarg value="-Declipse.p2.profile=@none" />
 			<sysproperty key="osgi.configuration.area" value="${p2.director.configArea}" />
 		</java>
