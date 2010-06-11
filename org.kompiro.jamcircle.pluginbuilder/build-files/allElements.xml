@@ -56,6 +56,9 @@
 		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.extension.feedboard.p2">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
+ 			<property name="archiveName" value="${archiveNamePrefix}-extension.feedboard-p2.zip"/>
+		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.extension.feedboard.group.group.group">
 	</target>
@@ -240,7 +243,7 @@
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.test.p2">
  		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">			
- 			<property name="archiveName" value="${archiveNamePrefix}-p2.zip"/>
+ 			<property name="archiveName" value="${archiveNamePrefix}-test-p2.zip"/>
 		</ant>
 	</target>
 
