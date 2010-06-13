@@ -15,6 +15,7 @@ import org.jruby.internal.runtime.ValueAccessor;
 import org.jruby.javasupport.JavaEmbedUtils;
 import org.kompiro.jamcircle.scripting.*;
 import org.kompiro.jamcircle.scripting.exception.ScriptingException;
+import org.osgi.service.component.ComponentContext;
 
 public class ScriptingServiceImpl implements ScriptingService{
 	private static final String INIT_SCRIPT_JRUBY = "init.rb"; //$NON-NLS-1$
@@ -43,9 +44,10 @@ public class ScriptingServiceImpl implements ScriptingService{
 
 	private Ruby runtime;
 	private Map<String,Object> globalValues = new HashMap<String,Object>();
-	private ScriptingEngineInitializerLoader loader = new ScriptingEngineInitializerLoaderImpl();
-	
-	public void init() throws ScriptingException{
+	private ScriptingEngineInitializerLoader loader;
+//	= new ScriptingEngineInitializerLoaderImpl();
+		
+	public void init(ComponentContext context) throws ScriptingException{
 		if(!initialized){
 			synchronized (this) {
 				manager = new BSFManager();

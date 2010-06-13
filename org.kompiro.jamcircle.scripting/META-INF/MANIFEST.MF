@@ -14,4 +14,4 @@ Require-Bundle: org.mozilla.javascript,
  org.jruby,
  org.apache.bsf,
  org.eclipse.core.runtime
-Service-Component: OSGI-INF/ScriptingService.xml
+Service-Component: OSGI-INF/ScriptingService.xml,OSGI-INF/ScriptingEngineInitializerLoader.xml

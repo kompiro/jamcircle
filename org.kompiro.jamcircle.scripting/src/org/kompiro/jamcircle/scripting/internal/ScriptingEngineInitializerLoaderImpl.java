@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.eclipse.core.runtime.*;
 import org.kompiro.jamcircle.scripting.*;
+import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 import org.kompiro.jamcircle.scripting.internal.ScriptingInitializerLoaderDescriptor.ScriptExtendDescriptor;
 import org.osgi.service.component.ComponentContext;
 
@@ -18,8 +19,8 @@ public class ScriptingEngineInitializerLoaderImpl implements ScriptingEngineInit
 	static final String POINT_CALLBACK = "org.kompiro.jamcircle.scripting.scriptEngineInitializer"; //$NON-NLS-1$
 	private Map<String,Object> result = new HashMap<String, Object>();
 	private IExtensionRegistry 	registry = RegistryFactory.getRegistry();
-		
-	public void init(ComponentContext context) throws CoreException{
+			
+	public void activate(ComponentContext context) throws ScriptingException{
 		result.put("BUNDLE_CONTEXT", context.getBundleContext()); //$NON-NLS-1$
 		MultiStatus statuses = new MultiStatus(PLUGIN_ID, Status.ERROR, Messages.ScriptingEngineInitializerLoaderImpl_initialize_error, null);
 		ElementRunner runner = new ElementRunner(){
@@ -36,7 +37,7 @@ public class ScriptingEngineInitializerLoaderImpl implements ScriptingEngineInit
 		};
 		handle(runner,statuses);
 		if(!statuses.isOK()){
-			throw new CoreException(statuses);
+			throw new ScriptingException(new CoreException(statuses));
 		}				
 	}
 	
