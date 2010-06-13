@@ -2,6 +2,7 @@ package org.kompiro.jamcircle.kanban.ui.util;
 
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.*;
@@ -9,8 +10,22 @@ import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.ui.KanbanView;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
+/**
+ * This utility class provides some function for Workbench operation.
+ * @author kompiro
+ */
 public class WorkbenchUtil {
 
+	public static void openWarning(final String title,final String message){
+		sync(new Runnable() {
+			public void run() {
+				Shell parent = getShell();
+				MessageDialog.openWarning(parent, title, message);
+			}
+		});
+	}
+	
+	
 	public static KanbanView findKanbanView() {
 		final Object[] results = new Object[1];
 		getDisplay().syncExec(new Runnable() {
@@ -61,6 +76,15 @@ public class WorkbenchUtil {
 			return defDisplay;
 		}
 
+	}
+	
+	public static void sync(Runnable runnable){
+		Display display = getDisplay();
+		if(display == null){
+			runnable.run();
+			return;
+		}
+		display.syncExec(runnable);
 	}
 	
 	public static void async(Runnable runnable){

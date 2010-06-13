@@ -104,4 +104,18 @@
              class="org.kompiro.jamcircle.kanban.ui.KanbanUIPreferenceInitializer">
        </initializer>
     </extension>
+   <extension
+         point="org.kompiro.jamcircle.scripting.scriptEngineInitializer">
+      <initializer
+            class="org.kompiro.jamcircle.kanban.model.KanbanScriptingEngineInitializer">
+         <script
+               file="script/init.rb"
+               type="JRuby">
+         </script>
+         <script
+               file="script/init.js"
+               type="JavaScript">
+         </script>
+      </initializer>
+   </extension>
 </plugin>
