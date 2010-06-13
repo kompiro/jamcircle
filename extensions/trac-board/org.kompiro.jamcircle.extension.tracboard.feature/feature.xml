@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.kompiro.jamcircle.extension.tracboard"
+      label="JAM Circle Trac Board Extension"
+      version="0.1.0.qualifier"
+      provider-name="kompiro.org">
+
+   <description url="http://kompiro.org/jamcircle/">
+      Feed board extension
+   </description>
+
+   <copyright url="%copyright_url">
+      %copyright
+   </copyright>
+
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+      %license
+   </license>
+
+   <url>
+      <discovery label="JAM Circle Project Page" url="http://kompiro.org/jamcircle"/>
+   </url>
+
+   <plugin
+         id="org.kompiro.jamcircle.extension.feedboard"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>
