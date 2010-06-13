@@ -9,9 +9,5 @@
    <feature url="features/org.kompiro.jamcircle.xmpp_0.2.0.qualifier.jar" id="org.kompiro.jamcircle.xmpp" version="0.2.0.qualifier">
       <category name="JAM Circle"/>
    </feature>
-   <feature url="features/org.kompiro.jamcircle.extension.feedboard_0.1.0.qualifier.jar" id="org.kompiro.jamcircle.extension.feedboard" version="0.1.0.qualifier">
-      <category name="JAM Circle Extension"/>
-   </feature>
-   <category-def name="JAM Circle Extension" label="JAM Circle Extension"/>
    <category-def name="JAM Circle" label="JAM Circle"/>
 </site>
