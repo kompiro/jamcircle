@@ -6,7 +6,7 @@
          id="kanban"
          point="org.eclipse.ui.views">
       <category
-            name="JAM Circle"
+            name="%category.name"
             id="org.kompiro.jamcircle">
       </category>
       <view
@@ -15,7 +15,7 @@
             class="org.kompiro.jamcircle.kanban.ui.KanbanView"
             icon="icons/kanbans.png"
             id="org.kompiro.jamcircle.kanban.KanbanView"
-            name="Kanban"/>
+            name="%view.name"/>
    </extension>   
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
@@ -52,14 +52,14 @@
             class="org.kompiro.jamcircle.kanban.ui.KanbanPerspective"
             icon="icons/kanbans_16.png"
             id="org.kompiro.jamcircle.kanban.ui.perspective.kanban"
-            name="Kanban">
+            name="%perspective.name">
       </perspective>
    </extension>
     <extension
           point="org.eclipse.ui.newWizards">
        <category
              id="org.kompiro.jamcircle.kanban.ui"
-             name="JAM Circle">
+             name="%new.wizard.category.name">
        </category>
        <wizard
              category="org.kompiro.jamcircle.kanban.ui"
@@ -67,7 +67,7 @@
              descriptionImage="icons/kanbans.png"
              icon="icons/kanban_016.gif"
              id="org.kompiro.jamcircle.kanban.ui.action.BoardNewWizard"
-             name="New Board Wizard"
+             name="%new_board_wizard"
              project="false">
        </wizard>
     </extension>
@@ -75,27 +75,27 @@
           point="org.eclipse.ui.exportWizards">
        <category
              id="org.kompiro.jamcircle.kanban.ui"
-             name="JAM Circle">
+             name="%export.wizard.category.name">
        </category>
        <wizard
              category="org.kompiro.jamcircle.kanban.ui"
              class="org.kompiro.jamcircle.kanban.ui.action.CSVExportWizard"
              icon="icons/page_excel.png"
              id="org.kompiro.jamcircle.kanban.ui.action.CSVExportWizard"
-             name="CSV Export">
+             name="%csv.export.wizard.name">
        </wizard>
     </extension>
     <extension
           point="org.eclipse.ui.importWizards">
        <category
              id="org.kompiro.jamcircle.kanban.ui"
-             name="JAM Circle">
+             name="%import.wizard.category.name">
        </category>
        <wizard
              class="org.kompiro.jamcircle.kanban.ui.action.CSVImportWizard"
              icon="icons/page_excel.png"
              id="org.kompiro.jamcircle.kanban.ui"
-             name="CSV Import">
+             name="%csv.import.wizard.name">
        </wizard>
     </extension>
     <extension
