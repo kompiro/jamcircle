@@ -21,7 +21,7 @@ public class ScriptingServiceImplTest {
 		globalBeans.put("TWO", 2);
 
 		service = new ScriptingServiceImpl();
-		service.init();
+		service.init(null);
 		service.setGlobalValues(globalBeans);
 	}
 	

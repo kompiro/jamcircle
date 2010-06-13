@@ -61,7 +61,7 @@ public class ScriptingEngineInitializerLoaderImplTest{
 			}
 		}).when(initializer).init((Map<String, Object>)anyMap());
 		ComponentContext context = mock(ComponentContext.class);
-		loader.init(context);
+		loader.activate(context);
 		
 		Map<String, Object> values = loader.getGrobalValues();
 		assertThat(values,not(nullValue()));
