@@ -4,6 +4,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.kompiro.jamcircle.kanban.ui.messages"; //$NON-NLS-1$
+	public static String KanbanUIActivator_error_kanban_context;
 	public static String AbstractCommand_activator_error_message;
 	public static String AbstractCommand_can_not_execute_message;
 	public static String AbstractCommand_error_message;

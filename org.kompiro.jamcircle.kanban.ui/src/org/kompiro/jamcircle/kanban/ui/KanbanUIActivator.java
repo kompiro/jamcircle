@@ -120,7 +120,9 @@ public class KanbanUIActivator extends AbstractUIPlugin {
 	}
 	
 	public KanbanService getKanbanService(){
-		KanbanService service = KanbanUIContext.getDefault().getKanbanService();
+		KanbanUIContext context = KanbanUIContext.getDefault();
+		if(context == null) throw new IllegalStateException(Messages.KanbanUIActivator_error_kanban_service);		
+		KanbanService service = context.getKanbanService();
 		if(service == null) throw new IllegalStateException(Messages.KanbanUIActivator_error_kanban_service);		
 		service .init();
 		return service;
