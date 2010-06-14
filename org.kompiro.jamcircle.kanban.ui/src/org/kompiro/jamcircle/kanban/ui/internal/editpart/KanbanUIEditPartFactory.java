@@ -14,30 +14,24 @@ public class KanbanUIEditPartFactory implements EditPartFactory{
 	private IPropertyChangeDelegator delegator;
 	private KanbanUIExtensionEditPartFactory extensionFactory;
 
-	public KanbanUIEditPartFactory(BoardModel board){
-		this.board = board;
-	}
-
 	/**
 	 * For Test Constructor
-	 * @param board
 	 * @param delegator
 	 */
-	KanbanUIEditPartFactory(BoardModel board,IPropertyChangeDelegator delegator){
-		this(board);
+	KanbanUIEditPartFactory(IPropertyChangeDelegator delegator){
 		this.delegator = delegator;
 	}
 
 	
+	public KanbanUIEditPartFactory() {
+	}
+
 	public EditPart createEditPart(EditPart context, Object model) {
 		EditPart part;
 		if (model instanceof Card) {
 			part = new CardEditPart(board);
 		}else if (model instanceof Lane){
 			part = new LaneEditPart(board);				
-		// FIXME extension factory
-//		}else if (model instanceof UserModel){
-//			part = new UserEditPart(board);				
 		}else if (model instanceof TrashModel){
 			part = new TrashEditPart(board);
 		}else if (model instanceof LaneCreaterModel){
@@ -73,6 +67,10 @@ public class KanbanUIEditPartFactory implements EditPartFactory{
 		if(this.extensionFactory != null){
 			this.extensionFactory.initialize();
 		}
+	}
+	
+	public void setBoardModel(BoardModel board) {
+		this.board = board;
 	}
 
 }

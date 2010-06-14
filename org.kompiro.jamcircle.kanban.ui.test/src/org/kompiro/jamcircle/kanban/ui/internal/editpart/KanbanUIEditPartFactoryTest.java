@@ -37,7 +37,8 @@ public class KanbanUIEditPartFactoryTest {
 	
 	private void createFactory() {
 		BoardModel board = mock(BoardModel.class);
-		factory = new KanbanUIEditPartFactory(board);
+		factory = new KanbanUIEditPartFactory();
+		factory.setBoardModel(board);
 	}
 
 }

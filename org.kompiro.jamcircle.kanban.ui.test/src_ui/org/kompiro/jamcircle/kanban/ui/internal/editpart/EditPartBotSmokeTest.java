@@ -20,6 +20,7 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferenceConstants;
 import org.eclipse.ui.PlatformUI;
 import org.junit.*;
 import org.junit.runner.RunWith;
+import org.kompiro.jamcircle.kanban.ui.IMonitorDelegator;
 import org.kompiro.jamcircle.kanban.ui.KanbanPerspective;
 import org.kompiro.jamcircle.kanban.ui.KanbanView;
 import org.kompiro.jamcircle.kanban.ui.model.*;
@@ -28,11 +29,22 @@ import org.kompiro.jamcircle.kanban.ui.model.*;
 public class EditPartBotSmokeTest{
 	
 	private static final long TIMEOUT = 10 * 1000;
-	private SWTBotGefView view;
-	private SWTGefViewBot bot;
+	private static SWTBotGefView view;
+	private static SWTGefViewBot bot;
+	private static IMonitorDelegator backup;
 
-	@Before
-	public void before() throws Exception {
+	@BeforeClass
+	public static void before() throws Exception {
+		backup = KanbanView.getDelegator();
+		IMonitorDelegator delegator = new IMonitorDelegator(){
+
+			public void run(MonitorRunnable runner) {
+				runner.run();
+			}
+			
+		};
+		KanbanView.setDelegator(delegator);
+
 		System.setProperty(SWTBotPreferenceConstants.KEY_TIMEOUT,"1000");
 		bot = new SWTGefViewBot();
 		SWTBotView viewById;
@@ -48,8 +60,9 @@ public class EditPartBotSmokeTest{
 		view = bot.createView(activeView.getReference(),bot);
 	}
 	
-	@After
-	public void after() throws Exception {
+	@AfterClass
+	public static void after() throws Exception {
+		KanbanView.setDelegator(backup);
 	}
 	
 	@Test

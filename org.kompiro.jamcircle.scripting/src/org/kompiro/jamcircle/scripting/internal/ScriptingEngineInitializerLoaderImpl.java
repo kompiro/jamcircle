@@ -21,7 +21,9 @@ public class ScriptingEngineInitializerLoaderImpl implements ScriptingEngineInit
 	private IExtensionRegistry 	registry = RegistryFactory.getRegistry();
 			
 	public void activate(ComponentContext context) throws ScriptingException{
-		result.put("BUNDLE_CONTEXT", context.getBundleContext()); //$NON-NLS-1$
+		if(context != null){
+			result.put("BUNDLE_CONTEXT", context.getBundleContext()); //$NON-NLS-1$
+		}
 		MultiStatus statuses = new MultiStatus(PLUGIN_ID, Status.ERROR, Messages.ScriptingEngineInitializerLoaderImpl_initialize_error, null);
 		ElementRunner runner = new ElementRunner(){
 			@Override

@@ -36,7 +36,8 @@ public class BoardCommandExecuterTest {
 		when(domain.getCommandStack()).thenReturn(stack);
 		when(root.getViewer()).thenReturn(viewer );
 		BoardModel boardModel = new BoardModel(board);
-		EditPartFactory factory = new KanbanUIEditPartFactory(boardModel);
+		KanbanUIEditPartFactory factory = new KanbanUIEditPartFactory();
+		factory.setBoardModel(boardModel);
 		when(viewer.getEditPartFactory()).thenReturn(factory);
 		part = new BoardEditPart(boardModel);
 		part.setParent(parent);

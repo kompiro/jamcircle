@@ -237,7 +237,8 @@ public abstract class AbstractEditPartTest {
 		boardEntity.addPropertyChangeListener(board);
 
 		board.addIcon(trashMock);
-		KanbanUIEditPartFactory factory = new KanbanUIEditPartFactory(board,new IPropertyChangeDelegatorForTest());
+		KanbanUIEditPartFactory factory = new KanbanUIEditPartFactory(new IPropertyChangeDelegatorForTest());
+		factory.setBoardModel(board);
 		viewer.setEditPartFactory(factory);
 		viewer.setContents(board);
 		assumeThat(root.getChildren().size(), is(1));

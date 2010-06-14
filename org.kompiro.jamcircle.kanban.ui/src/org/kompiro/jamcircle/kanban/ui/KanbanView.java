@@ -2,60 +2,97 @@ package org.kompiro.jamcircle.kanban.ui;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.*;
+import java.util.Collections;
+import java.util.EventObject;
 import java.util.List;
 
-import org.eclipse.core.runtime.*;
-import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.*;
+import org.eclipse.gef.EditDomain;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.EditPartViewer.Conditional;
-import org.eclipse.gef.commands.*;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CommandStackListener;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ScalableRootEditPart;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
-import org.eclipse.gef.ui.actions.*;
+import org.eclipse.gef.ui.actions.DeleteAction;
+import org.eclipse.gef.ui.actions.RedoAction;
+import org.eclipse.gef.ui.actions.SelectAllAction;
+import org.eclipse.gef.ui.actions.UndoAction;
+import org.eclipse.gef.ui.actions.ZoomInAction;
+import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
-import org.eclipse.jface.action.*;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IStatusLineManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.jface.viewers.*;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
-import org.eclipse.swt.dnd.*;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.FileTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.part.CellEditorActionHandler;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
-import org.kompiro.jamcircle.kanban.model.*;
+import org.kompiro.jamcircle.kanban.model.Board;
+import org.kompiro.jamcircle.kanban.model.BoardContainer;
+import org.kompiro.jamcircle.kanban.model.Card;
+import org.kompiro.jamcircle.kanban.model.CardContainer;
+import org.kompiro.jamcircle.kanban.model.User;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
-import org.kompiro.jamcircle.kanban.ui.action.*;
+import org.kompiro.jamcircle.kanban.ui.IMonitorDelegator.MonitorRunnable;
+import org.kompiro.jamcircle.kanban.ui.action.CaptureBoardAction;
+import org.kompiro.jamcircle.kanban.ui.action.CopyAction;
+import org.kompiro.jamcircle.kanban.ui.action.CutAction;
+import org.kompiro.jamcircle.kanban.ui.action.EditBoardAction;
+import org.kompiro.jamcircle.kanban.ui.action.OpenCardListAction;
+import org.kompiro.jamcircle.kanban.ui.action.OpenCommandListAction;
+import org.kompiro.jamcircle.kanban.ui.action.PasteAction;
 import org.kompiro.jamcircle.kanban.ui.editpart.IBoardEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.command.RemoveCardCommand;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;
-import org.kompiro.jamcircle.kanban.ui.model.*;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardCommandExecuter;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardDragTracker;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardEditPart;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardCreateRequest;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
+import org.kompiro.jamcircle.kanban.ui.internal.view.StorageContentsOperator;
+import org.kompiro.jamcircle.kanban.ui.internal.view.StorageContentsOperatorImpl;
+import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.util.GraphicalUtil;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer;
 import org.kompiro.jamcircle.kanban.ui.widget.CardObjectTransfer;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer.CardWrapper;
-import org.kompiro.jamcircle.scripting.ScriptingService;
-import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 import org.kompiro.jamcircle.storage.service.StorageChageListener;
 
 public class KanbanView extends ViewPart implements StorageChageListener,PropertyChangeListener{
-
-
-	// TODO extract ScriptConstants
-	private static final String BEAN_NAME_BOARD_COMMAND_EXECUTER = "boardCommandExecuter";//$NON-NLS-1$
-	private static final String BEAN_NAME_BOARD = "board";//$NON-NLS-1$
-	private static final String BEAN_NAME_MONITOR = "monitor";//$NON-NLS-1$
-	private static final String BEAN_NAME_BOARD_PART = "boardPart";//$NON-NLS-1$
 
 	public static String ID = "org.kompiro.jamcircle.kanban.KanbanView"; //$NON-NLS-1$
 
@@ -90,7 +127,6 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 	private CopyAction copyHandler;
 	private CutAction cutHandler;
 	private CellEditorActionHandler handlers;
-	private IconModelFactory iconModelFactory;
 	private IAction caputureBoardAction;
 	private ScalableRootEditPart rootPart;
 	private ZoomInAction zoomInAction;
@@ -98,12 +134,28 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 
 	private IAction editBoardAction;
 
+	private StorageContentsOperator operator;
+
+	private static IMonitorDelegator delegator = new IMonitorDelegator() {
+		public void run(final MonitorRunnable runner) {
+			UIJob job = new UIJob(Messages.KanbanView_storage_initialize_message){
+			
+				@Override
+				public IStatus runInUIThread(IProgressMonitor monitor) {
+					runner.setMonitor(monitor);
+					runner.run();
+					return Status.OK_STATUS;
+				}
+			};
+			job.schedule();
+		}
+	};
+
 
 	public KanbanView() {
 		if (getKanbanService() != null) {
 			getKanbanService().addStorageChangeListener(this);
 			getKanbanService().addPropertyChangeListener(this);
-			iconModelFactory = new DefaultIconModelFactory(getKanbanService());
 		}
 		KanbanJFaceResource.initialize();
 
@@ -130,6 +182,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 		target.setTransfer(types);
 		target.addDropListener(new KanbanViewDropAdapter());
 		hookGraphicalViewer();
+		operator = new StorageContentsOperatorImpl(getGraphicalViewer());
 		setInintialContents();
 	}
 	
@@ -252,7 +305,6 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 		return getActivator().getImageRegistry();
 	}
 
-
 	private void setInintialContents() {
 		if(Platform.isRunning()){
 			storageInitialize();
@@ -260,89 +312,17 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 	}
 	
 	public void setContents(Board board,final IProgressMonitor monitor) {
-		BoardModel oldBoardModel = null;
 		if(boardModel != null){
-			oldBoardModel = boardModel;
-			board.removePropertyChangeListener(boardModel);
+			boardModel.getBoard().removePropertyChangeListener(boardModel);
 		}
-		boardModel = new BoardModel(board);
-		if(oldBoardModel != null){
-			List<IconModel> iconModels = oldBoardModel.getIconModels();
-			for (IconModel iconModel : iconModels) {
-				boardModel.addIcon(iconModel);
-			}			
-		}
-		board.addPropertyChangeListener(boardModel);
-		
-		KanbanUIEditPartFactory factory = new KanbanUIEditPartFactory(this.boardModel);
-		KanbanUIExtensionEditPartFactory extensionFactory = new KanbanUIExtensionEditPartFactory();
-		factory.setExtensionFactory(extensionFactory);
-		
-		String taskName = String.format(Messages.KanbanView_open_message,board.getTitle()); 
-		monitor.subTask(taskName);
-		getGraphicalViewer().setEditPartFactory(factory);
-		
-		monitor.internalWorked(1);
-		refreshIcons();
-		monitor.internalWorked(1);
-		
-		final int id = board.getID();
-		getGraphicalViewer().setContents(boardModel);
-		new Job(Messages.KanbanView_execute_script_message){
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				executeScript(monitor);
-				return Status.OK_STATUS;
-			}
-		}.schedule();
-		storeCurrentBoard(id);
+
+		operator.setContents(board,monitor);
 	}
-
-	private void executeScript(final IProgressMonitor monitor) {
-		Board board = boardModel.getBoard();
-		String script = board.getScript();
-		if(script != null && script.length() != 0){
-			monitor.setTaskName(Messages.KanbanView_execute_script_task_name);
-			boardModel.clearMocks();
-
-			String scriptName = String.format(Messages.KanbanView_target_board_message,board.getTitle());
-
-			Map<String,Object> beans= new HashMap<String, Object>();
-			beans.put(BEAN_NAME_BOARD, this.boardModel);
-			beans.put(BEAN_NAME_MONITOR, monitor);
-			beans.put(BEAN_NAME_BOARD_PART, getBoardEditPart());
-			beans.put(BEAN_NAME_BOARD_COMMAND_EXECUTER, new BoardCommandExecuter(getBoardEditPart()));
-			try {
-				ScriptingService service = getScriptingService();
-				service.eval(board.getScriptType(), scriptName, script,beans);
-			} catch (ScriptingException e) {
-				KanbanUIStatusHandler.fail(e, e.getMessage());
-			}
-		}
-	}
-
-	private void storeCurrentBoard(int id) {
-		KanbanUIStatusHandler.debugUI("KanbanView#storeCurrentBoard() id='%d'", id); //$NON-NLS-1$
-		KanbanUIActivator activator = getActivator();
-		if(activator != null){
-			getPreference().putInt(KanbanPreferenceConstants.BOARD_ID.toString(), id);
-		}
-	}
-
-	private void refreshIcons() {
-		KanbanService service = getKanbanService();
-		Icon[] icons = service.findAllIcons();
-		for(Icon icon : icons){
-			IconModel model = iconModelFactory.create(icon);
-			this.boardModel.addIcon(model);
-		}
-	}
-
+	
 	private void storageInitialize() {
-		UIJob job = new UIJob(Messages.KanbanView_storage_initialize_message){
-		
-			@Override
-			public IStatus runInUIThread(IProgressMonitor monitor) {
+		final IProgressMonitor monitor = new NullProgressMonitor();
+		MonitorRunnable runner = new MonitorRunnable(monitor){
+			public void run() {
 				monitor.subTask(Messages.KanbanView_storage_initialize_task_message);
 				KanbanService service = getKanbanService();
 				int id = getPreference().getInt(KanbanPreferenceConstants.BOARD_ID.toString(),1);
@@ -351,12 +331,24 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 				if(board == null){
 					board = service.findBoard(1);
 				}
-				setContents(board,monitor);
 				monitor.internalWorked(30.0);
-				return Status.OK_STATUS;
+				setContents(board,monitor);				
 			}
 		};
-		job.schedule();
+		runner.setMonitor(monitor);
+		delegator.run(runner);
+//				KanbanService service = getKanbanService();
+//				int id = getPreference().getInt(KanbanPreferenceConstants.BOARD_ID.toString(),1);
+//				KanbanUIStatusHandler.debugUI("KanbanView#storageInitialize() id:'%d'", id); //$NON-NLS-1$
+//				Board board = service.findBoard(id);
+//				if(board == null){
+//					board = service.findBoard(1);
+//				}
+//				setContents(board,monitor);
+//				return Status.OK_STATUS;
+//			}
+//		};
+//		job.schedule();
 	}
 	
 ////	private void refreshXmppConnectionStatus() {
@@ -548,10 +540,6 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 		return boardModel;
 	}
 
-	private ScriptingService getScriptingService() throws ScriptingException {
-		return KanbanUIActivator.getDefault().getScriptingService();
-	}
-
 	private IEclipsePreferences getPreference() {
 		return new InstanceScope().getNode(KanbanUIActivator.ID_PLUGIN);
 	}
@@ -570,6 +558,14 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 				}
 			});
 		}
+	}
+	
+	public static void setDelegator(IMonitorDelegator delegator) {
+		KanbanView.delegator = delegator;
+	}
+
+	public static IMonitorDelegator getDelegator() {
+		return KanbanView.delegator;
 	}
 
 }

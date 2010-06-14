@@ -39,7 +39,9 @@ public class CardAreaCalcuratorTest {
 		when(parent.getRoot()).thenReturn(parent);
 		EditPartViewer viewer = mock(EditPartViewer.class);
 		when(parent.getViewer()).thenReturn(viewer );
-		when(viewer.getEditPartFactory()).thenReturn(new KanbanUIEditPartFactory(boardModel));
+		KanbanUIEditPartFactory factory = new KanbanUIEditPartFactory();
+		factory.setBoardModel(boardModel);
+		when(viewer.getEditPartFactory()).thenReturn(factory);
 		part.setParent(parent);
 		Lane lane = new Lane();
 		part.setModel(lane);
