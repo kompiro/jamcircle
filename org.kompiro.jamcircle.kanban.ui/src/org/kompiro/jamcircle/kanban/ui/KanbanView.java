@@ -336,7 +336,8 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 			}
 		};
 		runner.setMonitor(monitor);
-		delegator.run(runner);
+		runner.run();
+//		delegator.run(runner);
 //				KanbanService service = getKanbanService();
 //				int id = getPreference().getInt(KanbanPreferenceConstants.BOARD_ID.toString(),1);
 //				KanbanUIStatusHandler.debugUI("KanbanView#storageInitialize() id:'%d'", id); //$NON-NLS-1$
