@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<site>
-   <feature url="features/org.kompiro.jamcircle.extension.feedboard_0.1.0.qualifier.jar" id="org.kompiro.jamcircle.extension.feedboard" version="0.1.0.qualifier">
-      <category name="org.kompiro.jamcircle.extension"/>
-   </feature>
-   <category-def name="org.kompiro.jamcircle.extension" label="JAM Circle Extension"/>
-</site>
