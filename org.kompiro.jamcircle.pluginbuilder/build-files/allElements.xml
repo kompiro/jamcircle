@@ -61,6 +61,9 @@
 		</ant>
 	</target>
 	<target name="assemble.org.kompiro.jamcircle.extension.feedboard.group.group.group">
+ 		<ant antfile="${assembleScriptName}" dir="${buildDirectory}">
+ 			<property name="archiveName" value="${archiveNamePrefix}-feedboard.zip"/>
+		</ant>
 	</target>
 
 	
