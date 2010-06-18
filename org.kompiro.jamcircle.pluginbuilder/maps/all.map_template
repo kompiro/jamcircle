@@ -53,4 +53,6 @@ plugin@org.sf.feeling.swt.win32.extension=COPY,@WORKSPACE@,org.sf.feeling.swt.wi
 
 #extensions
 feature@org.kompiro.jamcircle.extension.feedboard=COPY,@WORKSPACE@/extensions/example.feed,org.kompiro.jamcircle.extension.feedboard.feature
+feature@org.kompiro.jamcircle.extension.tracboard=COPY,@WORKSPACE@/extensions/example.feed,org.kompiro.jamcircle.extension.tracboard.feature
 plugin@org.kompiro.jamcircle.extension.feedboard=COPY,@WORKSPACE@/extensions/example.feed,org.kompiro.jamcircle.extension.feedboard
+plugin@org.kompiro.jamcircle.extension.tracboard=COPY,@WORKSPACE@/extensions/example.feed,org.kompiro.jamcircle.extension.tracboard
