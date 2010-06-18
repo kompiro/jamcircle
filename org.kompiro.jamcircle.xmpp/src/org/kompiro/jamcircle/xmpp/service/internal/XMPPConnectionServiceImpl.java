@@ -82,7 +82,7 @@ public class XMPPConnectionServiceImpl implements XMPPConnectionService {
 		if(settings.size() != 0){
 			settings.storeSttings();
 		}
-		factory.unbind(this);
+		if(factory != null)	factory.unbind(this);
 	}
 
 
