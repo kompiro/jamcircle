@@ -7,10 +7,8 @@ import java.util.EventObject;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.draw2d.Viewport;
@@ -60,14 +58,12 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.part.CellEditorActionHandler;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.progress.UIJob;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.BoardContainer;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
 import org.kompiro.jamcircle.kanban.model.User;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
-import org.kompiro.jamcircle.kanban.ui.IMonitorDelegator.MonitorRunnable;
 import org.kompiro.jamcircle.kanban.ui.action.CaptureBoardAction;
 import org.kompiro.jamcircle.kanban.ui.action.CopyAction;
 import org.kompiro.jamcircle.kanban.ui.action.CutAction;
@@ -86,10 +82,15 @@ import org.kompiro.jamcircle.kanban.ui.internal.view.StorageContentsOperator;
 import org.kompiro.jamcircle.kanban.ui.internal.view.StorageContentsOperatorImpl;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.util.GraphicalUtil;
+import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator;
+import org.kompiro.jamcircle.kanban.ui.util.UIJobMonitorDelegator;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
+import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator.MonitorRunnable;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer;
 import org.kompiro.jamcircle.kanban.ui.widget.CardObjectTransfer;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer.CardWrapper;
+import org.kompiro.jamcircle.scripting.ScriptingService;
+import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 import org.kompiro.jamcircle.storage.service.StorageChageListener;
 
 public class KanbanView extends ViewPart implements StorageChageListener,PropertyChangeListener{
@@ -136,20 +137,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 
 	private StorageContentsOperator operator;
 
-	private static IMonitorDelegator delegator = new IMonitorDelegator() {
-		public void run(final MonitorRunnable runner) {
-			UIJob job = new UIJob(Messages.KanbanView_storage_initialize_message){
-			
-				@Override
-				public IStatus runInUIThread(IProgressMonitor monitor) {
-					runner.setMonitor(monitor);
-					runner.run();
-					return Status.OK_STATUS;
-				}
-			};
-			job.schedule();
-		}
-	};
+	private static IMonitorDelegator delegator = new UIJobMonitorDelegator(Messages.KanbanView_storage_initialize_message);
 
 
 	public KanbanView() {
@@ -182,8 +170,18 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 		target.setTransfer(types);
 		target.addDropListener(new KanbanViewDropAdapter());
 		hookGraphicalViewer();
-		operator = new StorageContentsOperatorImpl(getGraphicalViewer());
+		operator = new StorageContentsOperatorImpl(getScriptingService(),getKanbanService());
+		operator.initialize();
 		setInintialContents();
+	}
+
+	private ScriptingService getScriptingService() {
+		try {
+			return KanbanUIActivator.getDefault().getScriptingService();
+		} catch (ScriptingException e) {
+			KanbanUIStatusHandler.fail(e, "");
+			return null;
+		}
 	}
 	
 		
@@ -311,17 +309,17 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 		}
 	}
 	
-	public void setContents(Board board,final IProgressMonitor monitor) {
+	public void setContents(Board board, IProgressMonitor monitor) {
 		if(boardModel != null){
 			boardModel.getBoard().removePropertyChangeListener(boardModel);
 		}
 
-		operator.setContents(board,monitor);
+		operator.setContents(getGraphicalViewer(),board,monitor);
 	}
 	
 	private void storageInitialize() {
 		final IProgressMonitor monitor = new NullProgressMonitor();
-		MonitorRunnable runner = new MonitorRunnable(monitor){
+		MonitorRunnable runner = new MonitorRunnable(){
 			public void run() {
 				monitor.subTask(Messages.KanbanView_storage_initialize_task_message);
 				KanbanService service = getKanbanService();
@@ -487,7 +485,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 		getKanbanService().removePropertyChangeListener(this);
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(Class adapter) {
 		if(GraphicalViewer.class.equals(adapter)){

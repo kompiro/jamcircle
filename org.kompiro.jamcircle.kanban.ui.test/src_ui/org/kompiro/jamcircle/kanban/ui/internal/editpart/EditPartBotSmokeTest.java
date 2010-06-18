@@ -20,10 +20,10 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferenceConstants;
 import org.eclipse.ui.PlatformUI;
 import org.junit.*;
 import org.junit.runner.RunWith;
-import org.kompiro.jamcircle.kanban.ui.IMonitorDelegator;
 import org.kompiro.jamcircle.kanban.ui.KanbanPerspective;
 import org.kompiro.jamcircle.kanban.ui.KanbanView;
 import org.kompiro.jamcircle.kanban.ui.model.*;
+import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator;
 
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class EditPartBotSmokeTest{

@@ -144,6 +144,9 @@ public class Messages extends NLS {
 	public static String OpenCommandListAction_tooltip;
 	public static String PasteAction_text;
 	public static String PasteAction_tooltip;
+	public static String StorageContentsOperatorImpl_error_extension_factory_is_null;
+	public static String StorageContentsOperatorImpl_error_kanban_service_is_null;
+	public static String StorageContentsOperatorImpl_error_scripting_service_is_null;
 	public static String TrashModel_confirm_message;
 	public static String TrashModel_container_name;
 	public static String TrashModel_name;

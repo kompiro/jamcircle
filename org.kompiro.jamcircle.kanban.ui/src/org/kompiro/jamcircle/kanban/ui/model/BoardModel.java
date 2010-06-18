@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.ui.Messages;
+import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 
 public class BoardModel extends AbstractModel implements CardContainer,LaneContainer, PropertyChangeListener{
@@ -143,6 +144,12 @@ public class BoardModel extends AbstractModel implements CardContainer,LaneConta
 	
 	public void clearMocks() {
 		board.clearMocks();
+	}
+
+	public boolean hasScript() {
+		String script = board.getScript();
+		ScriptTypes scriptType = board.getScriptType();
+		return (script != null && script.length() != 0) && scriptType != null;
 	}
 	
 	
