@@ -1,22 +1,17 @@
 package org.kompiro.jamcircle.kanban.ui.internal.view;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.ui.PlatformUI;
-import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Icon;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.KanbanPreferenceConstants;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
 import org.kompiro.jamcircle.kanban.ui.Messages;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardCommandExecuter;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.KanbanUIEditPartFactory;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.KanbanUIExtensionEditPartFactory;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
@@ -26,19 +21,12 @@ import org.kompiro.jamcircle.kanban.ui.model.IconModelFactory;
 import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator;
 import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator.MonitorRunnable;
 import org.kompiro.jamcircle.kanban.ui.util.JobMonitorDelegator;
-import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.scripting.ScriptingService;
-import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 
 /**
- * This class 
+ * Operate for storage instance.
  */
 public class StorageContentsOperatorImpl implements StorageContentsOperator{
-
-	private static final String BEAN_NAME_BOARD_COMMAND_EXECUTER = "boardCommandExecuter";//$NON-NLS-1$
-	private static final String BEAN_NAME_BOARD = "board";//$NON-NLS-1$
-	private static final String BEAN_NAME_MONITOR = "monitor";//$NON-NLS-1$
-	private static final String BEAN_NAME_BOARD_PART = "boardPart";//$NON-NLS-1$
 
 	private KanbanUIEditPartFactory factory = new KanbanUIEditPartFactory();
 	private IconModelFactory iconModelFactory;
@@ -77,41 +65,9 @@ public class StorageContentsOperatorImpl implements StorageContentsOperator{
 		storeCurrentBoard(boardModel.getID());
 	}
 
-	private void executeScript(final GraphicalViewer viewer ,final BoardModel boardModel) {
+	private void executeScript(GraphicalViewer viewer ,BoardModel boardModel) {
 		
-		MonitorRunnable runner = new MonitorRunnable() {
-			
-			public void run() {
-				if(boardModel.hasScript()){
-					monitor.setTaskName(Messages.KanbanView_execute_script_task_name);
-					boardModel.clearMocks();
-				
-					Map<String, Object> beans = createBeans(viewer, boardModel);
-
-					Board board = boardModel.getBoard();
-					String script = board.getScript();
-					ScriptTypes scriptType = board.getScriptType();
-					String scriptName = String.format(Messages.KanbanView_target_board_message,board.getTitle());
-					try {
-						ScriptingService service = getScriptingService();
-						service.eval(scriptType, scriptName, script,beans);
-					} catch (ScriptingException e) {
-						KanbanUIStatusHandler.fail(e, e.getMessage());
-					}
-				}
-			}
-
-			private Map<String, Object> createBeans(
-					GraphicalViewer viewer, BoardModel boardModel) {
-				Map<String,Object> beans= new HashMap<String, Object>();
-				beans.put(BEAN_NAME_BOARD, boardModel);
-				beans.put(BEAN_NAME_MONITOR, monitor);
-				beans.put(BEAN_NAME_BOARD_PART, viewer.getContents());
-				beans.put(BEAN_NAME_BOARD_COMMAND_EXECUTER, new BoardCommandExecuter((BoardEditPart)viewer.getContents()));
-				return beans;
-			}
-
-		};
+		MonitorRunnable runner = new BoardScriptRunnable(boardModel, viewer, getScriptingService());
 		
 		delegator.run(runner);
 
