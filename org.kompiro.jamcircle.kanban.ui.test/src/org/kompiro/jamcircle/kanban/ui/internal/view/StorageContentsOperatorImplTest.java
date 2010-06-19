@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.KanbanUIExtensionEditPartFactory;
+import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.scripting.ScriptingService;
@@ -59,10 +60,19 @@ public class StorageContentsOperatorImplTest {
 		operator.initialize();
 	}
 	
+	@Test
+	public void setContents() throws Exception {
+		BoardModel board = mock(BoardModel.class);
+		GraphicalViewer viewer = mock(GraphicalViewer.class);
+		operator.setContents(viewer, board , new NullProgressMonitor());
+		
+		verify(viewer).setContents(board);
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void setContents_script_is_not_called() throws Exception {
-		Board board = mock(Board.class);
+		BoardModel board = mock(BoardModel.class);
 		GraphicalViewer viewer = mock(GraphicalViewer.class);
 		operator.setContents(viewer, board , new NullProgressMonitor());
 		
@@ -72,12 +82,16 @@ public class StorageContentsOperatorImplTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void setContents_script_is_called() throws Exception {
+		BoardModel boardModel = mock(BoardModel.class);
 		Board board = mock(Board.class);
+		when(boardModel.getBoard()).thenReturn(board);
+		when(boardModel.hasScript()).thenReturn(true);
+		
 		when(board.getScriptType()).thenReturn(ScriptTypes.JRuby);
 		when(board.getScript()).thenReturn("p 'hello'");
 
 		GraphicalViewer viewer = mock(GraphicalViewer.class);
-		operator.setContents(viewer,board , new NullProgressMonitor());
+		operator.setContents(viewer,boardModel , new NullProgressMonitor());
 		
 		verify(scriptingService).eval(eq(ScriptTypes.JRuby), anyString(), anyString(), (Map<String, Object>)any());
 	}

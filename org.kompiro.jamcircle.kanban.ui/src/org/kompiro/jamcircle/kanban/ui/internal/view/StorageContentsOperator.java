@@ -2,7 +2,7 @@ package org.kompiro.jamcircle.kanban.ui.internal.view;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.gef.GraphicalViewer;
-import org.kompiro.jamcircle.kanban.model.Board;
+import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
 public interface StorageContentsOperator {
 	
@@ -14,10 +14,10 @@ public interface StorageContentsOperator {
 
 	/**
 	 * set contents to target viewer
-	 * @param board
+	 * @param boardModel
 	 * @param monitor
 	 */
-	void setContents(GraphicalViewer viewer,Board board, IProgressMonitor monitor);
+	void setContents(GraphicalViewer viewer,BoardModel boardModel, IProgressMonitor monitor);
 
 
 }

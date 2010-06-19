@@ -61,13 +61,10 @@ public class StorageContentsOperatorImpl implements StorageContentsOperator{
 		iconModelFactory = new DefaultIconModelFactory(kanbanService);
 	}
 
-	public void setContents(GraphicalViewer viewer,Board board, IProgressMonitor monitor) {
+	public void setContents(GraphicalViewer viewer,BoardModel boardModel, IProgressMonitor monitor) {
 		viewer.setEditPartFactory(factory);		
-		String taskName = String.format(Messages.KanbanView_open_message,board.getTitle()); 
+		String taskName = String.format(Messages.KanbanView_open_message,boardModel.getTitle()); 
 		monitor.subTask(taskName);
-
-		BoardModel boardModel = new BoardModel(board);
-		board.addPropertyChangeListener(boardModel);
 		
 		factory.setBoardModel(boardModel);
 					
@@ -77,7 +74,7 @@ public class StorageContentsOperatorImpl implements StorageContentsOperator{
 		
 		viewer.setContents(boardModel);
 		executeScript(viewer,boardModel);
-		storeCurrentBoard(board.getID());
+		storeCurrentBoard(boardModel.getID());
 	}
 
 	private void executeScript(final GraphicalViewer viewer ,final BoardModel boardModel) {

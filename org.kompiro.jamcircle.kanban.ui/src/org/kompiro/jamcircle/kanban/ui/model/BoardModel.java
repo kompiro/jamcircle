@@ -151,6 +151,14 @@ public class BoardModel extends AbstractModel implements CardContainer,LaneConta
 		ScriptTypes scriptType = board.getScriptType();
 		return (script != null && script.length() != 0) && scriptType != null;
 	}
+
+	public String getTitle() {
+		return board.getTitle();
+	}
+
+	public int getID() {
+		return board.getID();
+	}
 	
 	
 }

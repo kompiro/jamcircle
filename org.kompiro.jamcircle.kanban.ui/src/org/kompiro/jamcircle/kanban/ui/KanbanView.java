@@ -135,8 +135,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 
 	private IAction editBoardAction;
 
-	private StorageContentsOperator operator;
-
+	private StorageContentsOperator operator = new StorageContentsOperatorImpl(getScriptingService(),getKanbanService());
 	private static IMonitorDelegator delegator = new UIJobMonitorDelegator(Messages.KanbanView_storage_initialize_message);
 
 
@@ -146,6 +145,7 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 			getKanbanService().addPropertyChangeListener(this);
 		}
 		KanbanJFaceResource.initialize();
+		operator.initialize();
 
 	}
 
@@ -170,21 +170,9 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 		target.setTransfer(types);
 		target.addDropListener(new KanbanViewDropAdapter());
 		hookGraphicalViewer();
-		operator = new StorageContentsOperatorImpl(getScriptingService(),getKanbanService());
-		operator.initialize();
 		setInintialContents();
 	}
 
-	private ScriptingService getScriptingService() {
-		try {
-			return KanbanUIActivator.getDefault().getScriptingService();
-		} catch (ScriptingException e) {
-			KanbanUIStatusHandler.fail(e, "");
-			return null;
-		}
-	}
-	
-		
 	private void makeActions() {
 		undoHandler = new UndoAction(this);
 		handlers.setUndoAction(undoHandler);
@@ -313,8 +301,10 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 		if(boardModel != null){
 			boardModel.getBoard().removePropertyChangeListener(boardModel);
 		}
+		boardModel = new BoardModel(board);
+		board.addPropertyChangeListener(boardModel);
 
-		operator.setContents(getGraphicalViewer(),board,monitor);
+		operator.setContents(getGraphicalViewer(),boardModel,monitor);
 	}
 	
 	private void storageInitialize() {
@@ -519,6 +509,15 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 	
 	private KanbanService getKanbanService() {
 		return getActivator().getKanbanService();
+	}
+
+	private ScriptingService getScriptingService() {
+		try {
+			return KanbanUIActivator.getDefault().getScriptingService();
+		} catch (ScriptingException e) {
+			KanbanUIStatusHandler.fail(e, "");
+			return null;
+		}
 	}
 
 	public void changedStorage(IProgressMonitor monitor) {
