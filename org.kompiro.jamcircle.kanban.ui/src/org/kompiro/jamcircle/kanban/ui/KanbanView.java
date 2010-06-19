@@ -390,8 +390,6 @@ public class KanbanView extends ViewPart implements StorageChageListener,Propert
 		}
 	}
 
-//
-
 	private final class KanbanViewDropAdapter extends DropTargetAdapter {
 
 		public void drop(DropTargetEvent event) {
