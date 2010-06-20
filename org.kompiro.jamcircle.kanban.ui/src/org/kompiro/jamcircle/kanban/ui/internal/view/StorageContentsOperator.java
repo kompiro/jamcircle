@@ -14,8 +14,9 @@ public interface StorageContentsOperator {
 
 	/**
 	 * set contents to target viewer
-	 * @param boardModel
-	 * @param monitor
+	 * @param viewer target viewer
+	 * @param boardModel contents
+	 * @param monitor monitor
 	 */
 	void setContents(GraphicalViewer viewer,BoardModel boardModel, IProgressMonitor monitor);
 
