@@ -22,7 +22,7 @@
    </url>
 
    <plugin
-         id="org.kompiro.jamcircle.extension.feedboard"
+         id="org.kompiro.jamcircle.extension.tracboard"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
