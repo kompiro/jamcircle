@@ -29,10 +29,9 @@ public class KanbanUIExtensionEditPartFactoryTest {
 	}
 	
 	@Test
-	public void factoryHasIExtensionRegistryWhenNormalEnvironment() throws Exception {
+	public void factoryHasNoIExtensionRegistryWhenNormalEnvironment() throws Exception {
 		KanbanUIExtensionEditPartFactory factory = new KanbanUIExtensionEditPartFactory();
-		assertThat(factory.getRegistry(),notNullValue());
-		assertThat(factory.getRegistry(),is(IExtensionRegistry.class));
+		assertThat(factory.getRegistry(),nullValue());
 	}
 	
 	@Test
