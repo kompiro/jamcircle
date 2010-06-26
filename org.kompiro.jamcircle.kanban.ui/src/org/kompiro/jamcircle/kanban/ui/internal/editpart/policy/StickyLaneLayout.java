@@ -12,31 +12,55 @@ public class StickyLaneLayout {
 		this.board = board;
 	}
 
-	public Rectangle around(Lane target) {
+	public Rectangle rideOn(Lane targetLane, Rectangle target) {
 		Lane[] lanes = board.getLanes();
-		Rectangle targetRect = createRectange(target);
+		target = target.getCopy();
 		if(lanes == null) return null;
 		for (Lane lane : lanes) {
-			Rectangle rect = createRectange(lane);
-			if(onLeftSide(rect,targetRect)){
-				return targetRect.setLocation(rect.x - targetRect.width, targetRect.y);
+			if(lane.equals(targetLane)) continue;
+			Rectangle base = createRectangle(lane);
+			if(base.touches(target) == false) continue;
+			if(onLeftSide(base,target)){
+				return target.setLocation(base.getTopLeft().x - target.width, base.getTopLeft().y);
 			}
-			if(onRightSide(rect,targetRect)){
-				return targetRect.setLocation(rect.x + rect.width, targetRect.y);
+			if(onRightSide(base,target)){
+				return target.setLocation(base.getTopRight().x, base.getTopRight().y);
+			}
+			if(onUpSide(base,target)){
+				return target.setLocation(target.x, base.getTop().y - target.height);
+			}
+			if(onDownSide(base,target)){
+				return target.setLocation(target.x, base.getBottom().y);
 			}
 		}
 		return null;
 	}
 
+	private boolean onDownSide(Rectangle base, Rectangle target) {
+		return base.getBottom().y <= target.getBottom().y && 
+		target.getTop().y <= base.getBottom().y &&
+		base.getBottom().y <= target.getBottom().y;
+	}
+
+	private boolean onUpSide(Rectangle base, Rectangle target) {
+		return target.getTop().y <= base.getTop().y && 
+		base.getTop().y <= target.getBottom().y &&
+		target.getBottom().y <= base.getBottom().y;
+	}
+
 	private boolean onLeftSide(Rectangle base, Rectangle target) {
-		return target.x <= base.x && base.x <= target.x + target.width;
+		return target.getLeft().x <= base.getLeft().x && 
+		base.getLeft().x <= target.getRight().x &&
+		target.getRight().x <= base.getRight().x;
 	}
 
 	private boolean onRightSide(Rectangle base, Rectangle target) {
-		return base.x <= target.x && target.x <= base.x + base.width;
+		return base.getLeft().x <= target.getLeft().x && 
+		target.getLeft().x <= base.getRight().x &&
+		base.getRight().x <= target.getRight().x;
 	}
 
-	private Rectangle createRectange(Lane lane) {
+	private Rectangle createRectangle(Lane lane) {
 		return new Rectangle(lane.getX(), lane.getY(), lane.getWidth(), lane.getHeight());
 	}
 

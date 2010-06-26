@@ -283,6 +283,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		LaneFigure laneFigure = new LaneFigure();
 		laneFigure.setOpaque(true);
 		Lane lane = getLaneModel();
+		System.out.println(lane);
 		laneFigure.setSize(lane.getWidth(), lane.getHeight());
 		laneFigure.setStatus(lane.getStatus());
 		laneFigure.setLocation(new Point(lane.getX(),lane.getY()));

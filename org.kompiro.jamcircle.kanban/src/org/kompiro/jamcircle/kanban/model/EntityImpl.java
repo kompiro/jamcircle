@@ -16,7 +16,7 @@ import net.java.ao.Entity;
 public abstract class EntityImpl {
 	
 	public static final String QUERY = " = ?";//$NON-NLS-1$
-	public static String TO_STRING_FORMAT = "['#%d':'%s' trashed:'%s']"; //$NON-NLS-1$
+	public static String TO_STRING_FORMAT = "['#%d':'%s' trashed:'%s' size:'%d,%d' point:'%d,%d']"; //$NON-NLS-1$
 
 	private List<PropertyChangeListener> listeners = new LinkedList<PropertyChangeListener>();
 	protected Entity entity;

@@ -50,6 +50,7 @@ public class ChangeLaneConstraintCommand extends MoveCommand<Lane> {
 		}
 		lane.commitConstraint(rect);
 		lane.save(false);
+		System.out.println(lane);
 	}
 		
 	@Override

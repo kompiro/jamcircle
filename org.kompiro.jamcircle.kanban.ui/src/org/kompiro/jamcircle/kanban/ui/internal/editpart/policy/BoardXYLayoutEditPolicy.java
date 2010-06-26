@@ -25,9 +25,12 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	private BoardLocalLayout boardLocalLayout;
 
+	private StickyLaneLayout laneLayout;
+
 	public BoardXYLayoutEditPolicy(BoardEditPart part){
 		this.part = part;
-		boardLocalLayout = new BoardLocalLayout(part.getViewer());
+		this.boardLocalLayout = new BoardLocalLayout(part.getViewer());
+		this.laneLayout = new StickyLaneLayout(part.getBoardModel().getBoard());
 	}
 
 	@Override
@@ -39,14 +42,16 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		}
 		Object target = child.getModel();
 		Rectangle rect = (Rectangle) constraint;
+		System.out.println(rect);
 		MoveCommand<Object> command = getMoveCommand(child);
 		command.setModel(target);
 		command.setRectangle(rect);
 		if (target instanceof Lane) {
 			Lane lane = (Lane) target;
-//			if(rect.touches(new Rectangle(10,10,100,100))){
-//				rect.x = 100;
-//			}
+			Rectangle moved = laneLayout.rideOn(lane,rect);
+			if(moved != null) {
+				command.setRectangle(moved);
+			}
 			CompoundCommand compoundCommand = new CompoundCommand();
 			compoundCommand.add(command);
 			if (child instanceof LaneEditPart && !lane.isIconized()) {
