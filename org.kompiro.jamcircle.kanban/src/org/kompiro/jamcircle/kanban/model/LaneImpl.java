@@ -160,7 +160,8 @@ public class LaneImpl extends GraphicalImpl {
 	
 	@Override
 	public String toString() {
-		return format(TO_STRING_FORMAT, lane.getID(),lane.getStatus(),lane.isTrashed());
+		return format(TO_STRING_FORMAT, lane.getID(),lane.getStatus(),lane.isTrashed(),
+				lane.getWidth(),lane.getHeight(),lane.getX(),lane.getY());
 	}
 
 }
