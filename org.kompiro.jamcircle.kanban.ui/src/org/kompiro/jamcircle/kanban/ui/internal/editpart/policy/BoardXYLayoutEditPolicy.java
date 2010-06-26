@@ -44,9 +44,9 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		command.setRectangle(rect);
 		if (target instanceof Lane) {
 			Lane lane = (Lane) target;
-			if(rect.touches(new Rectangle(10,10,100,100))){
-				rect.x = 100;
-			}
+//			if(rect.touches(new Rectangle(10,10,100,100))){
+//				rect.x = 100;
+//			}
 			CompoundCommand compoundCommand = new CompoundCommand();
 			compoundCommand.add(command);
 			if (child instanceof LaneEditPart && !lane.isIconized()) {

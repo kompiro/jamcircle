@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import org.eclipse.core.runtime.*;
 import org.eclipse.gef.EditPart;
+import org.eclipse.ui.PlatformUI;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.mock.*;
@@ -30,8 +31,10 @@ public class KanbanUIExtensionEditPartFactoryTest {
 	
 	@Test
 	public void factoryHasNoIExtensionRegistryWhenNormalEnvironment() throws Exception {
+		if(PlatformUI.isWorkbenchRunning() == false) return; 
 		KanbanUIExtensionEditPartFactory factory = new KanbanUIExtensionEditPartFactory();
-		assertThat(factory.getRegistry(),nullValue());
+		assertThat(factory.getRegistry(),notNullValue());
+		assertThat(factory.getRegistry(),instanceOf(IExtensionRegistry.class));
 	}
 	
 	@Test

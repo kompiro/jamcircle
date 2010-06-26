@@ -3,10 +3,7 @@ package org.kompiro.jamcircle.kanban.ui.internal.view;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.Map;
 
@@ -33,6 +30,7 @@ public class StorageContentsOperatorImplTest {
 		scriptingService = mock(ScriptingService.class);
 		operator = createOperator(scriptingService);
 		KanbanUIExtensionEditPartFactory extensionFactory = mock(KanbanUIExtensionEditPartFactory.class);
+		doNothing().when(extensionFactory).initialize();
 		operator.setExtensionFactory(extensionFactory);
 		operator.setDelegator(new IMonitorDelegator.DirectExecute());
 	}

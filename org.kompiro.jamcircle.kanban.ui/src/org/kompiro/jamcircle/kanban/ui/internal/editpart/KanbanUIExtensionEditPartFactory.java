@@ -23,7 +23,7 @@ public class KanbanUIExtensionEditPartFactory implements EditPartFactory {
 	public KanbanUIExtensionEditPartFactory() throws IllegalStateException{
 	}
 
-	void initialize() throws IllegalStateException{
+	public void initialize() throws IllegalStateException{
 		IExtensionPoint point = registry.getExtensionPoint(POINT_CALLBACK);
 		if(point == null) return;
 		IExtension[] extensions = point.getExtensions();
