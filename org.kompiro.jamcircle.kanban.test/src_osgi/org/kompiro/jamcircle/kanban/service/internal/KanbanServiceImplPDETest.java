@@ -1,11 +1,19 @@
 package org.kompiro.jamcircle.kanban.service.internal;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
 import org.junit.Test;
-import org.kompiro.jamcircle.kanban.model.*;
+import org.kompiro.jamcircle.kanban.model.Board;
+import org.kompiro.jamcircle.kanban.model.Card;
+import org.kompiro.jamcircle.kanban.model.Icon;
+import org.kompiro.jamcircle.kanban.model.Lane;
+import org.kompiro.jamcircle.kanban.model.User;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 
 public class KanbanServiceImplPDETest extends AbstractKanbanTest{
@@ -106,9 +114,19 @@ public class KanbanServiceImplPDETest extends AbstractKanbanTest{
 		KanbanService service = getKanbanService();
 		service.init();
 
-		service.addUser("kompiro@test");
+		User user = service.addUser("kompiro@test");
+		assertNotNull(user);
 		assertTrue(service.hasUser("kompiro@test"));
 		assertNotNull(service.findUser("kompiro@test"));
+	}
+	
+	@Test
+	public void addIcon() throws Exception {
+		KanbanService service = getKanbanService();
+		service.init();
+
+		Icon icon = service.addIcon("test_type",0,0);
+		assertNotNull(icon);
 	}
 	
 	@Test

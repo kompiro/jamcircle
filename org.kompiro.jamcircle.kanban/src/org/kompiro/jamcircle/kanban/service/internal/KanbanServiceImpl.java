@@ -501,7 +501,7 @@ public class KanbanServiceImpl implements KanbanService,StorageChageListener {
 				new DBParam(Icon.PROP_LOCATION_Y,y)
 		};
 		try {
-			getEntityManager().create(Icon.class, params);
+			icon = getEntityManager().create(Icon.class, params);
 		} catch (SQLException e) {
 			KanbanStatusHandler.fail(e, "KanbanServiceImpl#addIcon() type:'%s' x:'%d' y:'%d' ",type,x,y); //$NON-NLS-1$
 		}
