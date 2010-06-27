@@ -73,7 +73,6 @@ import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 /**
  * Controller for Lane model.
- * @author kompiro
  */
 public class LaneEditPart extends AbstractEditPart implements CardContainerEditPart{
 
@@ -82,6 +81,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 
 		private OpenListActionIcon() {
 			super(getIconImage(KanbanImageConstants.OPEN_LIST_ACTION_IMAGE.toString()));
+			setTooltipText(Messages.LaneEditPart_icon_open_list);
 		}
 
 		@Override
@@ -96,6 +96,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 
 		public EditActionIcon() {
 			super(getIconImage(KanbanImageConstants.EDIT_IMAGE.toString()));
+			setTooltipText(Messages.LaneEditPart_icon_edit_lane);
 		}
 
 		@Override
@@ -118,6 +119,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		
 		public IconizeActionIcon() {
 			super(getIconImage(KanbanImageConstants.LANE_ICONIZE_IMAGE.toString()));
+			setTooltipText(Messages.LaneEditPart_icon_iconized_lane);
 		}
 
 		@Override

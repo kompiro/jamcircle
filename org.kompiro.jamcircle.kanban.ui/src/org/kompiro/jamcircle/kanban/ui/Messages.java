@@ -60,6 +60,13 @@ public class Messages extends NLS {
 	public static String CardEditDialog_title;
 	public static String CardEditPart_contents_status_bar;
 	public static String CardEditPart_contents_title;
+	public static String CardEditPart_icon_change_color;
+	public static String CardEditPart_icon_delete_card;
+	public static String CardEditPart_icon_edit_card;
+	public static String CardEditPart_icon_frag_icon;
+	public static String CardEditPart_icon_open_contents;
+	public static String CardEditPart_icon_open_files;
+	public static String CardEditPart_icon_store_database;
 	public static String CardFigureLayer_script_mock_label;
 	public static String CardListTableViewer_from_label;
 	public static String CardListTableViewer_id_label;
@@ -125,6 +132,9 @@ public class Messages extends NLS {
 	public static String LaneEditDialog_status_label;
 	public static String LaneEditDialog_title;
 	public static String LaneEditPart_execute_script_message;
+	public static String LaneEditPart_icon_edit_lane;
+	public static String LaneEditPart_icon_iconized_lane;
+	public static String LaneEditPart_icon_open_list;
 	public static String LaneEditPart_script_name;
 	public static String LaneEditPart_viewer_title;
 	public static String LaneFigure_initialized_error_message;

@@ -16,6 +16,10 @@ public abstract class ClickableActionIcon extends Clickable implements ActionLis
 		super.addNotify();
 	}
 	
+	public void setTooltipText(String text){
+		setToolTip(new Label(text));
+	}
+	
 	@Override
 	public void removeNotify() {
 		super.removeNotify();

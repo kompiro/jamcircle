@@ -46,10 +46,123 @@ public class CardEditPart extends AbstractEditPart {
 	private static final String LINE_BREAK = System.getProperty("line.separator"); //$NON-NLS-1$
 	private static final String EMPTY = ""; //$NON-NLS-1$
 
+	private final class EditCardActionIcon extends
+			ClickableActionIcon {
+		private EditCardActionIcon(Image image) {
+			super(image);
+			setTooltipText(Messages.CardEditPart_icon_edit_card);
+		}
+
+		public void actionPerformed(ActionEvent event) {
+			Shell shell = getShell();
+			Card card = getCardModel();
+			CardEditDialog dialog = new CardEditDialog(shell,card);
+			int returnCode = dialog.open();
+			if(Dialog.OK == returnCode){
+				String subject = dialog.getSubjectText();
+				String content = dialog.getContentText();
+				Date dueDate = dialog.getDueDate();
+				List<File> files = dialog.getFiles();
+				ConfirmProvider provider = new MessageDialogConfirmProvider(getShell());
+				CardUpdateCommand command = new CardUpdateCommand(provider,card,subject,content,dueDate,files);
+				getCommandStack().execute(command);
+			}
+		}
+	}
+
+	private final class DeleteCardActionIcon extends
+			ClickableActionIcon {
+		private DeleteCardActionIcon(Image image) {
+			super(image);
+			setTooltipText(Messages.CardEditPart_icon_delete_card);
+		}
+
+		public void actionPerformed(ActionEvent event) {
+			GroupRequest deleteReq =
+				new GroupRequest(RequestConstants.REQ_DELETE);
+			deleteReq.setEditParts(CardEditPart.this);
+
+			CompoundCommand compoundCmd = new CompoundCommand();
+			Command cmd = CardEditPart.this.getCommand(deleteReq);
+			if (cmd != null) compoundCmd.add(cmd);
+			getCommandStack().execute(compoundCmd);
+		}
+	}
+
+	private final class ChangeColorActionIcon extends
+			ClickableActionIcon {
+		private ChangeColorActionIcon(Image image) {
+			super(image);
+			setTooltipText(Messages.CardEditPart_icon_change_color);
+		}
+
+		public void actionPerformed(ActionEvent event) {
+			Object source = event.getSource();
+			if (source instanceof Clickable) {
+				Clickable colorIcon = (Clickable) source;
+				Control control = getViewer().getControl();
+				CommandStack stack = getCommandStack();
+				ColorPopUpHelper helper = new ColorPopUpHelper(control,stack,getCardModel());
+				org.eclipse.swt.graphics.Point target = control.getDisplay().getCursorLocation();
+				
+				helper.displayToolTipNear(colorIcon,target.x,target.y);
+			}
+		}
+	}
+
+	private final class OpenFileActionIcon extends
+			ClickableActionIcon {
+		private OpenFileActionIcon(Image image) {
+			super(image);
+			setTooltipText(Messages.CardEditPart_icon_open_files);
+		}
+
+		public void actionPerformed(ActionEvent event) {
+			String filePath = getCardModel().getFilePath();
+			Program.launch(filePath);
+		}
+	}
+
+	private final class OpenContentsActionIcon extends
+			ClickableActionIcon {
+		private OpenContentsActionIcon(Image image) {
+			super(image);
+			setTooltipText(Messages.CardEditPart_icon_open_contents);
+		}
+
+		public void actionPerformed(ActionEvent event) {
+			Shell shell = getShell();
+			Card card = getCardModel();
+			String title = String.format(Messages.CardEditPart_contents_title, card.getID(),card.getSubject());
+			String content = card.getContent();
+			BrowserPopupDialog dialog = new BrowserPopupDialog(shell,title,Messages.CardEditPart_contents_status_bar,content);
+			dialog.create();
+			dialog.open();
+		}
+	}
+
+	private final class StoreDBActionIcon extends
+			ClickableActionIcon {
+		private StoreDBActionIcon(Image image) {
+			super(image);
+			setTooltipText(Messages.CardEditPart_icon_store_database);
+		}
+
+		public void actionPerformed(ActionEvent event) {
+			Card card = getCardModel();
+			CardContainer container = (CardContainer)CardEditPart.this.getParent().getModel();
+			CompoundCommand command = new CompoundCommand();
+			command.add(new CardStoreCommand((org.kompiro.jamcircle.kanban.model.mock.Card) card, container));
+			command.add(new RemoveCardCommand(card, container));
+			getCommandStack().execute(command);
+		}
+	}
+
 	private final class FlagActionIcon extends
 			ClickableActionIcon {
 		private FlagActionIcon(Image image) {
 			super(image);
+			setTooltipText(Messages.CardEditPart_icon_frag_icon);
 		}
 
 		public void actionPerformed(ActionEvent event) {
@@ -165,92 +278,28 @@ public class CardEditPart extends AbstractEditPart {
 	}
 	
 	private void createStoreIcon() {
-		storeIcon = new ClickableActionIcon(KanbanImageConstants.DB_ADD_IMAGE.getIamge()){
-			public void actionPerformed(ActionEvent event) {
-				Card card = getCardModel();
-				CardContainer container = (CardContainer)CardEditPart.this.getParent().getModel();
-				CompoundCommand command = new CompoundCommand();
-				command.add(new CardStoreCommand((org.kompiro.jamcircle.kanban.model.mock.Card) card, container));
-				command.add(new RemoveCardCommand(card, container));
-				getCommandStack().execute(command);
-			}
-		};
+		storeIcon = new StoreDBActionIcon(KanbanImageConstants.DB_ADD_IMAGE.getIamge());
 	}
 
 
 	private void createPageIcon() {
-		pageIcon = new ClickableActionIcon(KanbanImageConstants.PAGE_IMAGE.getIamge()){
-			public void actionPerformed(ActionEvent event) {
-				Shell shell = getShell();
-				Card card = getCardModel();
-				String title = String.format(Messages.CardEditPart_contents_title, card.getID(),card.getSubject());
-				String content = card.getContent();
-				BrowserPopupDialog dialog = new BrowserPopupDialog(shell,title,Messages.CardEditPart_contents_status_bar,content);
-				dialog.create();
-				dialog.open();
-			}
-		};
+		pageIcon = new OpenContentsActionIcon(KanbanImageConstants.PAGE_IMAGE.getIamge());
 	}
 
 	private void createFileIcon() {
-		fileIcon = new ClickableActionIcon(KanbanImageConstants.FILE_LINK_IMAGE.getIamge()){
-			public void actionPerformed(ActionEvent event) {
-				String filePath = getCardModel().getFilePath();
-				Program.launch(filePath);
-			}
-		};
+		fileIcon = new OpenFileActionIcon(KanbanImageConstants.FILE_LINK_IMAGE.getIamge());
 	}
 
 	private void createColorIcon() {
-		colorIcon = new ClickableActionIcon(KanbanImageConstants.COLOR_IMAGE.getIamge()){
-			public void actionPerformed(ActionEvent event) {
-				Object source = event.getSource();
-				if (source instanceof Clickable) {
-					Clickable colorIcon = (Clickable) source;
-					Control control = getViewer().getControl();
-					CommandStack stack = getCommandStack();
-					ColorPopUpHelper helper = new ColorPopUpHelper(control,stack,getCardModel());
-					org.eclipse.swt.graphics.Point target = control.getDisplay().getCursorLocation();
-					
-					helper.displayToolTipNear(colorIcon,target.x,target.y);
-				}
-			}
-		};
+		colorIcon = new ChangeColorActionIcon(KanbanImageConstants.COLOR_IMAGE.getIamge());
 	}
 
 	private void createDeleteAction() {
-		deleteIcon = new ClickableActionIcon(KanbanImageConstants.DELETE_IMAGE.getIamge()){
-			public void actionPerformed(ActionEvent event) {
-				GroupRequest deleteReq =
-					new GroupRequest(RequestConstants.REQ_DELETE);
-				deleteReq.setEditParts(CardEditPart.this);
-
-				CompoundCommand compoundCmd = new CompoundCommand();
-				Command cmd = CardEditPart.this.getCommand(deleteReq);
-				if (cmd != null) compoundCmd.add(cmd);
-				getCommandStack().execute(compoundCmd);
-			};
-		};
+		deleteIcon = new DeleteCardActionIcon(KanbanImageConstants.DELETE_IMAGE.getIamge());
 	}
 
 	private void createEditIcon() {
-		editIcon = new ClickableActionIcon(KanbanImageConstants.EDIT_IMAGE.getIamge()){
-			public void actionPerformed(ActionEvent event) {
-				Shell shell = getShell();
-				Card card = getCardModel();
-				CardEditDialog dialog = new CardEditDialog(shell,card);
-				int returnCode = dialog.open();
-				if(Dialog.OK == returnCode){
-					String subject = dialog.getSubjectText();
-					String content = dialog.getContentText();
-					Date dueDate = dialog.getDueDate();
-					List<File> files = dialog.getFiles();
-					ConfirmProvider provider = new MessageDialogConfirmProvider(getShell());
-					CardUpdateCommand command = new CardUpdateCommand(provider,card,subject,content,dueDate,files);
-					getCommandStack().execute(command);
-				}
-			}
-		};
+		editIcon = new EditCardActionIcon(KanbanImageConstants.EDIT_IMAGE.getIamge());
 	}
 
 	private void createFlagSection() {
