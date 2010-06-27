@@ -18,6 +18,8 @@ public class CardImpl extends GraphicalImpl {
 
 	public static final String CARD_PATH = "cards" + File.separator;  //$NON-NLS-1$
 
+	private static String TO_STRING_FORMAT = "CARD['#%d':'%s' trashed:'%s' point:'%d,%d']"; //$NON-NLS-1$
+
 	private Card card;
 	
 	private boolean deletedVisuals;
@@ -115,7 +117,7 @@ public class CardImpl extends GraphicalImpl {
 	
 	@Override
 	public String toString() {
-		return String.format(TO_STRING_FORMAT, card.getID(),card.getSubject(),card.isTrashed());
+		return String.format(TO_STRING_FORMAT, card.getID(),card.getSubject(),card.isTrashed(),card.getX(),card.getY());
 	}
 
 }

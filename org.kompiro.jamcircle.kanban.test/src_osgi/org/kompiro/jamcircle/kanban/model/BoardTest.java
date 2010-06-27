@@ -38,4 +38,12 @@ public class BoardTest extends AbstractKanbanTest{
 		assertThat(board.containLane(lane),is(false));
 	}
 	
+	@Test
+	public void no_exceptions_are_occured_when_call_toString() throws Exception {
+		
+		Board board = createBoardForTest("TEST_BOARD");
+		System.out.println(board.toString());
+		
+	}
+	
 }

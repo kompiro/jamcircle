@@ -15,7 +15,9 @@ import org.junit.BeforeClass;
 import org.kompiro.jamcircle.kanban.KanbanActivator;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Card;
+import org.kompiro.jamcircle.kanban.model.Icon;
 import org.kompiro.jamcircle.kanban.model.Lane;
+import org.kompiro.jamcircle.kanban.model.User;
 import org.kompiro.jamcircle.storage.service.FileStorageService;
 
 public abstract class AbstractKanbanTest {
@@ -59,6 +61,15 @@ public abstract class AbstractKanbanTest {
 		return getKanbanService().createLane(board, status, 0, 0, VALUE_OF_WIDTH, VALUE_OF_HEIGHT);
 	}
 
+	protected Icon createIconForTest(String type){
+		return getKanbanService().addIcon(type, 0, 0);
+	}
+	
+	protected User createUserForTest(String userId) {
+		return getKanbanService().addUser(userId);
+	}
+
+	
 	@SuppressWarnings("restriction")
 	@After
 	public void after() throws Exception{

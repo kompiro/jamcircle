@@ -6,8 +6,8 @@ import net.java.ao.Preload;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 /**
- * This interface describes Icon model.
- * @author kompiro
+ * This interface describes Icon model.<br>
+ * Icons are showed on all boards and same location.<br>
  */
 @Preload
 @Implementation(IconImpl.class)

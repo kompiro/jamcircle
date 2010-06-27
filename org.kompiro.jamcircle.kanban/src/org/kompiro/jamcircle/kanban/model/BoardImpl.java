@@ -20,6 +20,7 @@ import org.kompiro.jamcircle.kanban.model.mock.MockGraphicalEntity;
 public class BoardImpl extends EntityImpl{
 	
 	private static final String ERROR_HAS_OCCURED = "SQLException has occured.";//$NON-NLS-1$
+	public static String TO_STRING_FORMAT = "BOARD['#%d':'%s' trashed:'%s']"; //$NON-NLS-1$
 
 	private static final ExecutorService executor = Executors.newSingleThreadExecutor();
 	

@@ -26,7 +26,9 @@ public class LaneImpl extends GraphicalImpl {
 	private static final String LANE_PATH = "lanes" + File.separator;  //$NON-NLS-1$
 
 	private static final String ICON_PATH = "icon" + File.separator;//$NON-NLS-1$
-	
+
+	private static String TO_STRING_FORMAT = "LANE['#%d':'%s' trashed:'%s' size:'%d,%d' point:'%d,%d']"; //$NON-NLS-1$
+
 	private final Lane lane;
 	
 	private List<Card> mockCards = new ArrayList<Card>();

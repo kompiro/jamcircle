@@ -61,4 +61,13 @@ public class LaneTest extends AbstractKanbanTest {
 
 	}
 	
+	@Test
+	public void no_exceptions_are_occured_when_call_toString() throws Exception {
+		
+		Board board = createBoardForTest("TEST_BOARD");
+		Lane lane = createLaneForTest(board, "TEST_STATUS");
+		System.out.println(lane.toString());
+		
+	}
+	
 }
