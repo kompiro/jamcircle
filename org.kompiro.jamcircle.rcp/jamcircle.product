@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="JAM Circle" uid="I20100606-1000" id="org.kompiro.jamcircle.rcp.product" application="org.kompiro.jamcircle.rcp.application" version="0.9.0" useFeatures="true" includeLaunchers="true">
+<product name="JAM Circle" uid="I20100628-2000" id="org.kompiro.jamcircle.rcp.product" application="org.kompiro.jamcircle.rcp.application" version="0.9.0" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.kompiro.jamcircle.rcp/icons/about2.png"/>
@@ -14,8 +14,12 @@ Apache Software Foundation http://www.apache.org/
 Mozilla Foundation(Rhino) https://developer.mozilla.org/en/Rhino
 JRuby Project http://jruby.org/
 
-JAMCircle&apos;s icon uses famfamfam.com  
+JAMCircle&apos;s icon uses these site icons.
+famfamfam.com 
 http://www.famfamfam.com/
+
+created by Yusuke Kamiyamane
+http://p.yusukekamiyamane.com/
       </text>
    </aboutInfo>
 
@@ -52,8 +56,8 @@ http://www.famfamfam.com/
 
 
    <vm>
-      <linux>org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5</linux>
-      <macos>org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5</macos>
+      <linux include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5</linux>
+      <macos include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5</macos>
    </vm>
 
    <license>

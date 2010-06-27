@@ -2,7 +2,7 @@
 <feature
       id="org.kompiro.jamcircle.kanban"
       label="JAM Circle Kanban  Feature"
-      version="1.1.0.qualifier"
+      version="1.2.0.qualifier"
       provider-name="kompiro.org">
 
    <description url="http://kompiro.org/jamcircle">
