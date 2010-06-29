@@ -66,10 +66,13 @@ public class BoardTemplateDescriptorTest {
 		when(element.getAttribute(ATTR_ICON)).thenReturn("icon");
 		when(element.getAttribute(ATTR_NAME)).thenReturn("name");
 		when(element.getAttribute(ATTR_DESCRIPTION)).thenReturn("desc");
+		
 		IContributor contributor = mock(IContributor.class);
 		when(contributor.getName()).thenReturn(KanbanActivator.ID);
 		when(element.getContributor()).thenReturn(contributor);
+		
 		KanbanBoardTemplate template = desc.createTemplate(element);
+		
 		assertThat(template.getName(),is("name"));
 		assertThat(template.getIcon(),is("icon"));
 		assertThat(template.getDescription(),is("desc"));

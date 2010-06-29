@@ -13,6 +13,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.KanbanActivator;
 import org.kompiro.jamcircle.kanban.service.internal.AbstractKanbanTest;
+import org.kompiro.jamcircle.kanban.test.util.TestUtils;
 import org.kompiro.jamcircle.storage.service.StorageService;
 
 public class ModelTest extends AbstractKanbanTest{
@@ -45,7 +46,7 @@ public class ModelTest extends AbstractKanbanTest{
 		assertTrue(message,service.getFileService().fileExists(path));
 		assertTrue(card.hasFiles());
 		FileInputStream stream = new FileInputStream(card.getFiles().get(0));
-		assertEquals(util.readFile(),getString(stream));
+		assertEquals(util.readFile(null),getString(stream));
 	}
 	
 	private String getString(InputStream stream) throws IOException{
@@ -65,14 +66,14 @@ public class ModelTest extends AbstractKanbanTest{
 		
 		DBParam[] params = new DBParam[]{
 				new DBParam(Card.PROP_SUBJECT,"very very long value"),
-				new DBParam(Card.PROP_CONTENT,util.readFile()),
+				new DBParam(Card.PROP_CONTENT,util.readFile(null)),
 				new DBParam(Card.PROP_CREATEDATE,new Date()),
 				new DBParam(Card.PROP_TRASHED,false),
 		};
 		entityManager.create(Card.class,params);
 		params = new DBParam[]{
 				new DBParam(Lane.PROP_STATUS,"very very long value"),
-				new DBParam(Lane.PROP_SCRIPT,util.readFile()),
+				new DBParam(Lane.PROP_SCRIPT,util.readFile(null)),
 				new DBParam(Lane.PROP_CREATE_DATE,new Date()),
 		};
 		entityManager.create(Lane.class,params);
