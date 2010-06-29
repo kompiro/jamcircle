@@ -1,0 +1,21 @@
+board:
+	title: 6月30日のボード
+	lanes:
+		- id: 1
+		  status: test1
+		  x: 0
+		  y: 0
+		  width: 200
+		  height: 500
+		- id: 2
+		  status: test 2
+		  x: 200
+		  y: 0
+		  width: 200
+		  height: 500
+		- id: 3
+		  status: test	3
+		  x: 0
+		  y: 300
+		  width: 200
+		  height: 500
