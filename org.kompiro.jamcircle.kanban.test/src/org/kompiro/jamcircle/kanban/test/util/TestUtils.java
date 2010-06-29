@@ -1,23 +1,27 @@
-package org.kompiro.jamcircle.kanban.model;
+package org.kompiro.jamcircle.kanban.test.util;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URL;
 
 import org.eclipse.core.runtime.FileLocator;
-import org.kompiro.jamcircle.kanban.KanbanActivator;
-import org.osgi.framework.Bundle;
 
 public class TestUtils {
 	public static final String LONG_TXT_FILE = "long.txt";
-	public static final String LONG_TXT = "/org/kompiro/jamcircle/kanban/model/"
+	public static final String LONG_TXT = "/org/kompiro/jamcircle/kanban/test/util/"
 			+ LONG_TXT_FILE;
-	private static Bundle bundle;
 
-
-	public String readFile() throws Exception {
-		URL resource = getResource();
+	public String readFile(String path) throws Exception {
+		return readFile(getClass(),path);
+	}
+	
+	public String readFile(Class<?> clazz,String path) throws Exception {
+		URL resource = getResource(clazz,path);
 		assertNotNull(resource);
 		InputStream stream = resource.openStream();
 		Reader r = new InputStreamReader(stream);
@@ -31,7 +35,7 @@ public class TestUtils {
 	}
 
 	public File target() throws Exception {
-		URL resource = getResource();
+		URL resource = getResource(LONG_TXT);
 		if (!resource.getProtocol().equals("file")) {
 			resource = FileLocator.resolve(resource);
 		}
@@ -41,16 +45,14 @@ public class TestUtils {
 		return null;
 	}
 
-	private URL getResource() {
-		KanbanActivator activator = KanbanActivator.getDefault();
-		if (activator == null) {
-			return getClass().getResource(LONG_TXT_FILE);
-		}
-		bundle = activator.getBundle();
-
-		return bundle.getResource(LONG_TXT);
+	private URL getResource(String path) {
+		return getResource(getClass(), path);
 	}
-			
+	
+	private URL getResource(Class<?> clazz,String path){
+		return clazz.getResource(path);		
+	}
+	
 	public void travasalDelete(File parent) {
 		if(parent == null) return;
 		if(parent.isFile() || parent.listFiles() == null){
