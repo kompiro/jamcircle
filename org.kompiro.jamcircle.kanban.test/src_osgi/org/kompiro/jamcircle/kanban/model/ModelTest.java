@@ -46,7 +46,7 @@ public class ModelTest extends AbstractKanbanTest{
 		assertTrue(message,service.getFileService().fileExists(path));
 		assertTrue(card.hasFiles());
 		FileInputStream stream = new FileInputStream(card.getFiles().get(0));
-		assertEquals(util.readFile(null),getString(stream));
+		assertEquals(util.readFile(TestUtils.LONG_TXT),getString(stream));
 	}
 	
 	private String getString(InputStream stream) throws IOException{
@@ -66,14 +66,14 @@ public class ModelTest extends AbstractKanbanTest{
 		
 		DBParam[] params = new DBParam[]{
 				new DBParam(Card.PROP_SUBJECT,"very very long value"),
-				new DBParam(Card.PROP_CONTENT,util.readFile(null)),
+				new DBParam(Card.PROP_CONTENT,util.readFile(TestUtils.LONG_TXT)),
 				new DBParam(Card.PROP_CREATEDATE,new Date()),
 				new DBParam(Card.PROP_TRASHED,false),
 		};
 		entityManager.create(Card.class,params);
 		params = new DBParam[]{
 				new DBParam(Lane.PROP_STATUS,"very very long value"),
-				new DBParam(Lane.PROP_SCRIPT,util.readFile(null)),
+				new DBParam(Lane.PROP_SCRIPT,util.readFile(TestUtils.LONG_TXT)),
 				new DBParam(Lane.PROP_CREATE_DATE,new Date()),
 		};
 		entityManager.create(Lane.class,params);
