@@ -1,11 +1,17 @@
 package org.kompiro.jamcircle.kanban.service.internal;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import net.java.ao.schema.NotNull;
+
+import org.hamcrest.core.IsNull;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
@@ -14,6 +20,9 @@ import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 
 public class BoardConverterTest {
+	
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	private BoardConverter conv;
 
@@ -22,6 +31,14 @@ public class BoardConverterTest {
 		
 		conv = new BoardConverter();
 		
+	}
+	
+	@Test
+	public void modelToText_throws_IllegalArgumentException_when_null_value() throws Exception {
+		
+		exception.expect(IllegalArgumentException.class);
+		exception.expectMessage(any(String.class));
+		conv.modelToText(null);
 	}
 	
 	@Test
@@ -183,6 +200,20 @@ public class BoardConverterTest {
 		assertThat(actualLane,is(not(nullValue())));
 		assertThat(actualLane.getID(), is(1));
 		assertThat(actualLane.getStatus(), is("test1"));
+	}
+	
+	@Test
+	public void textToModel_illegal_text() throws Exception {
+		
+		exception.expect(IllegalStateException.class);
+		exception.expectMessage(any(String.class));
+
+		String text = new TestUtils().readFile(getClass(),"illegal_board_key.txt");
+
+		KanbanService service = mock(KanbanService.class);
+		conv.setKanbanService(service);
+		conv.textToModel(text);
+		
 	}
 
 	private Board createMockBoard(String title) {
