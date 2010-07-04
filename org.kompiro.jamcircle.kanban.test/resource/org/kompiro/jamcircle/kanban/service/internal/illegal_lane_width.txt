@@ -1,9 +1,9 @@
-boa:
+board:
 	title: 6月30日のボード
 	lanes:
 		- id: 1
 		  status: test1
-		  x: test
+		  x: 0
 		  y: 0
-		  width: 250
+		  width: test
 		  height: 600

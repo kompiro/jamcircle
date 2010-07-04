@@ -3,8 +3,7 @@ package org.kompiro.jamcircle.kanban.boardtemplate;
 import org.kompiro.jamcircle.kanban.model.Board;
 
 /**
- * This interface is implemented for 
- * @author kompiro
+ * This interface describes board template.
  */
 public interface KanbanBoardTemplate {
 
@@ -30,8 +29,8 @@ public interface KanbanBoardTemplate {
 	public void setDescription(String description);
 	
 	/**
-	 * Return Icon's relative path.
-	 * @return
+	 * return icon's relative path to show on the wizard.
+	 * @return icon's path
 	 */
 	public String getIcon();
 	public void setIcon(String icon);

@@ -1,4 +1,4 @@
-boa:
+board:
 	title: 6月30日のボード
 	lanes:
 		- id: 1
