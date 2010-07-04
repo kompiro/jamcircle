@@ -2,11 +2,7 @@ package org.kompiro.jamcircle.kanban.test.util;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.net.URL;
 
 import org.eclipse.core.runtime.FileLocator;
@@ -17,19 +13,27 @@ public class TestUtils {
 			+ LONG_TXT_FILE;
 
 	public String readFile(String path) throws Exception {
-		return readFile(getClass(),path);
+		return readFile(getClass(), path);
 	}
-	
-	public String readFile(Class<?> clazz,String path) throws Exception {
-		URL resource = getResource(clazz,path);
+
+	public String readFile(Class<?> clazz, String path) throws Exception {
+		URL resource = getResource(clazz, path);
 		assertNotNull(resource);
 		InputStream stream = resource.openStream();
 		Reader r = new InputStreamReader(stream);
-		BufferedReader br = new BufferedReader(r);
+		return readFromReader(r);
+	}
+
+	public String readFromReader(Reader r) throws IOException {
 		StringBuilder builder = new StringBuilder();
-		String line = null;
-		while ((line = br.readLine()) != null) {
-			builder.append(line + "\n");
+		try {
+			BufferedReader br = new BufferedReader(r);
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				builder.append(line + "\n");
+			}
+		} finally {
+			r.close();
 		}
 		return builder.toString();
 	}
@@ -48,24 +52,24 @@ public class TestUtils {
 	private URL getResource(String path) {
 		return getResource(getClass(), path);
 	}
-	
-	private URL getResource(Class<?> clazz,String path){
-		return clazz.getResource(path);		
+
+	private URL getResource(Class<?> clazz, String path) {
+		return clazz.getResource(path);
 	}
-	
+
 	public void travasalDelete(File parent) {
-		if(parent == null) return;
-		if(parent.isFile() || parent.listFiles() == null){
+		if (parent == null)
+			return;
+		if (parent.isFile() || parent.listFiles() == null) {
 			parent.delete();
 			return;
 		}
-		for(File file : parent.listFiles()){
-			if(file.isDirectory()){
+		for (File file : parent.listFiles()) {
+			if (file.isDirectory()) {
 				travasalDelete(file);
 			}
 			file.delete();
 		}
 	}
-
 
 }

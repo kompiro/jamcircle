@@ -2,29 +2,103 @@ package org.kompiro.jamcircle.kanban.service.internal;
 
 import static java.lang.String.format;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.*;
 
+import org.kompiro.jamcircle.kanban.internal.util.StreamUtil;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.service.exception.BoardFileFormatException;
+import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class BoardConverter {
 
-	private KanbanService service;
-	private Pattern titlePattern = Pattern.compile("board:\\n\\stitle: (.+)\\n");
+	private static final String BOARD_SCRIPT_NAME_OF_JAVASCRIPT = "board.js";
+
+	static final String BOARD_FORMAT_FILE_EXTENSION_NAME = ".jbf";
+
+	private static final Pattern titlePattern = Pattern.compile("board:\\n\\stitle: (.+)\\n");
 	// Why \\d isn't use because to throw format error.
-	private Pattern lanePattern = Pattern.compile("- id: (.+)\\n" +
+	private static final Pattern lanePattern = Pattern.compile("- id: (.+)\\n" +
 			"\\s+status: (.+)\\n" +
 			"\\s+x: (.+)\\n" +
 			"\\s+y: (.+)\\n" +
 			"\\s+width: (.+)\\n" +
 			"\\s+height: (.+)\\n"
 			);
+
+	private KanbanService service;
+
+	public void dump(File file, Board board) {
+		ZipOutputStream stream = null;
+		try {
+			stream = new ZipOutputStream(new FileOutputStream(file));
+			String containerName = getContainerName(file);
+			createBoardYmlEntry(board, stream, containerName);
+			createBoardScriptEntry(board, stream, containerName);
+		} catch (IOException e) {
+		} finally {
+			try {
+				if (stream != null)
+					stream.close();
+			} catch (IOException e) {
+			}
+		}
+	}
+
+	public Board load(File file) {
+		try {
+			ZipFile zip = new ZipFile(file);
+			String containerName = getContainerName(file);
+			Board board = loadBoard(containerName, zip);
+			loadJRubyScript(board, containerName, zip);
+			if (board.getScriptType() == null) {
+				loadJavaScriptScript(board, containerName, zip);
+			}
+			return board;
+		} catch (ZipException e) {
+		} catch (IOException e) {
+		}
+
+		return null;
+	}
+
+	private void loadJavaScriptScript(Board board, String containerName, ZipFile zip) throws IOException {
+		String boardJavaScriptScriptName = BOARD_SCRIPT_NAME_OF_JAVASCRIPT;
+		ZipEntry entry = zip.getEntry(containerName + boardJavaScriptScriptName);
+		if (entry != null) {
+			InputStream stream = zip.getInputStream(entry);
+			String script = StreamUtil.readFromStream(stream);
+			board.setScript(script);
+			board.setScriptType(ScriptTypes.JavaScript);
+		}
+	}
+
+	private void loadJRubyScript(Board board, String containerName, ZipFile zip) throws IOException {
+		String boardJRubyScriptName = "board.rb";
+		ZipEntry entry = zip.getEntry(containerName + boardJRubyScriptName);
+		if (entry != null) {
+			InputStream stream = zip.getInputStream(entry);
+			String script = StreamUtil.readFromStream(stream);
+			board.setScript(script);
+			board.setScriptType(ScriptTypes.JRuby);
+		}
+	}
+
+	private Board loadBoard(String containerName, ZipFile zip) throws IOException {
+		String boardFileName = "board.yml";
+		ZipEntry entry = zip.getEntry(containerName + boardFileName);
+
+		InputStream stream = zip.getInputStream(entry);
+		String boardText = StreamUtil.readFromStream(stream);
+		Board textToModel = textToModel(boardText);
+		return textToModel;
+	}
 
 	public String modelToText(Board board) {
 		if (board == null)
@@ -60,6 +134,44 @@ public class BoardConverter {
 			board.addLane(lane);
 		}
 		return board;
+	}
+
+	private void createBoardYmlEntry(Board board, ZipOutputStream stream, String containerName) {
+		ZipEntry boardEntry = new ZipEntry(containerName + "board.yml");
+		try {
+			stream.putNextEntry(boardEntry);
+			String text = modelToText(board);
+			stream.write(text.getBytes(), 0, text.getBytes().length);
+		} catch (IOException e) {
+		}
+	}
+
+	private void createBoardScriptEntry(Board board, ZipOutputStream stream, String containerName) {
+		String script = board.getScript();
+		ScriptTypes scriptType = board.getScriptType();
+		if (scriptType == null || script == null || script.equals(""))
+			return;
+		String fileName = null;
+		switch (scriptType) {
+		case JRuby:
+			fileName = "board.rb";
+			break;
+		case JavaScript:
+			fileName = BOARD_SCRIPT_NAME_OF_JAVASCRIPT;
+			break;
+		}
+		ZipEntry entry = new ZipEntry(containerName + fileName);
+		try {
+			stream.putNextEntry(entry);
+			stream.write(script.getBytes(), 0, script.getBytes().length);
+		} catch (IOException e) {
+		}
+	}
+
+	private String getContainerName(File file) {
+		String name = file.getName();
+		String containerName = name.substring(0, name.lastIndexOf('.')) + "/";
+		return containerName;
 	}
 
 	private Lane[] retrieveLanes(Board board, String text) {

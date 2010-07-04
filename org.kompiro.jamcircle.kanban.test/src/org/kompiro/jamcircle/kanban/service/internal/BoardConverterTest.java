@@ -10,6 +10,11 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
+import java.io.InputStreamReader;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.kompiro.jamcircle.kanban.model.Board;
@@ -26,10 +31,13 @@ public class BoardConverterTest {
 
 	private BoardConverter conv;
 
+	private TestUtils testUtil;
+
 	@Before
 	public void before() throws Exception {
 
 		conv = new BoardConverter();
+		testUtil = new TestUtils();
 
 	}
 
@@ -49,7 +57,7 @@ public class BoardConverterTest {
 
 		String actual = conv.modelToText(board);
 		assertThat(actual, is(not(nullValue())));
-		String expected = new TestUtils().readFile(getClass(),
+		String expected = testUtil.readFile(getClass(),
 				"simple_board.txt");
 		assertThat(actual, is(expected));
 		assertThat(board.getLanes(), is(nullValue()));
@@ -64,7 +72,7 @@ public class BoardConverterTest {
 
 		String actual = conv.modelToText(board);
 		assertThat(actual, is(not(nullValue())));
-		String expected = new TestUtils().readFile(getClass(),
+		String expected = testUtil.readFile(getClass(),
 				"simple_board.txt");
 		assertThat(actual, is(expected));
 	}
@@ -76,7 +84,7 @@ public class BoardConverterTest {
 
 		String actual = conv.modelToText(board);
 		assertThat(actual, is(not(nullValue())));
-		String expected = new TestUtils().readFile(getClass(),
+		String expected = testUtil.readFile(getClass(),
 				"no_title_board.txt");
 		assertThat(actual, is(expected));
 
@@ -89,7 +97,7 @@ public class BoardConverterTest {
 
 		String actual = conv.modelToText(board);
 		assertThat(actual, is(not(nullValue())));
-		String expected = new TestUtils().readFile(getClass(),
+		String expected = testUtil.readFile(getClass(),
 				"include_space.txt");
 		assertThat(actual, is(expected));
 
@@ -105,7 +113,7 @@ public class BoardConverterTest {
 
 		String actual = conv.modelToText(board);
 		assertThat(actual, is(not(nullValue())));
-		String expected = new TestUtils().readFile(getClass(),
+		String expected = testUtil.readFile(getClass(),
 				"board_has_a_lane.txt");
 		assertThat(actual, is(expected));
 
@@ -123,7 +131,7 @@ public class BoardConverterTest {
 
 		String actual = conv.modelToText(board);
 		assertThat(actual, is(not(nullValue())));
-		String expected = new TestUtils().readFile(getClass(),
+		String expected = testUtil.readFile(getClass(),
 				"board_has_some_lanes.txt");
 		assertThat(actual, is(expected));
 
@@ -140,7 +148,7 @@ public class BoardConverterTest {
 		when(service.createBoard(title)).thenReturn(expected);
 		conv.setKanbanService(service);
 
-		String text = new TestUtils().readFile(getClass(), "simple_board.txt");
+		String text = testUtil.readFile(getClass(), "simple_board.txt");
 		Board board = conv.textToModel(text);
 		assertThat(board, is(not(nullValue())));
 		assertThat(board.getTitle(), is("test"));
@@ -157,7 +165,7 @@ public class BoardConverterTest {
 		when(service.createBoard(boardTitle)).thenReturn(expected);
 		conv.setKanbanService(service);
 
-		String text = new TestUtils()
+		String text = testUtil
 				.readFile(getClass(), "no_title_board.txt");
 		Board board = conv.textToModel(text);
 		assertThat(board, is(not(nullValue())));
@@ -175,7 +183,7 @@ public class BoardConverterTest {
 		when(service.createBoard(boardTitle)).thenReturn(expected);
 		conv.setKanbanService(service);
 
-		String text = new TestUtils().readFile(getClass(), "include_space.txt");
+		String text = testUtil.readFile(getClass(), "include_space.txt");
 		Board board = conv.textToModel(text);
 		assertThat(board, is(not(nullValue())));
 		assertThat(board.getTitle(), is(boardTitle));
@@ -196,7 +204,7 @@ public class BoardConverterTest {
 				lane);
 		conv.setKanbanService(service);
 
-		String text = new TestUtils().readFile(getClass(),
+		String text = testUtil.readFile(getClass(),
 				"board_has_a_lane.txt");
 		Board board = conv.textToModel(text);
 		assertThat(board, is(not(nullValue())));
@@ -231,7 +239,7 @@ public class BoardConverterTest {
 				.thenReturn(lane3);
 		conv.setKanbanService(service);
 
-		String text = new TestUtils().readFile(getClass(),
+		String text = testUtil.readFile(getClass(),
 				"board_has_some_lanes.txt");
 		Board board = conv.textToModel(text);
 		assertThat(board, is(not(nullValue())));
@@ -264,7 +272,7 @@ public class BoardConverterTest {
 		exception.expect(BoardFileFormatException.class);
 		exception.expectMessage(any(String.class));
 
-		String text = new TestUtils().readFile(getClass(),
+		String text = testUtil.readFile(getClass(),
 				"illegal_board_key.txt");
 
 		String boardTitle = "6月30日のボード";
@@ -285,7 +293,7 @@ public class BoardConverterTest {
 		exception.expect(BoardFileFormatException.class);
 		exception.expectMessage(any(String.class));
 
-		String text = new TestUtils()
+		String text = testUtil
 				.readFile(getClass(), "illegal_lane_id.txt");
 
 		String boardTitle = "6月30日のボード";
@@ -304,7 +312,7 @@ public class BoardConverterTest {
 		exception.expect(BoardFileFormatException.class);
 		exception.expectMessage(any(String.class));
 
-		String text = new TestUtils()
+		String text = testUtil
 				.readFile(getClass(), "illegal_lane_x.txt");
 
 		String boardTitle = "6月30日のボード";
@@ -323,7 +331,7 @@ public class BoardConverterTest {
 		exception.expect(BoardFileFormatException.class);
 		exception.expectMessage(any(String.class));
 
-		String text = new TestUtils()
+		String text = testUtil
 				.readFile(getClass(), "illegal_lane_y.txt");
 
 		String boardTitle = "6月30日のボード";
@@ -342,7 +350,7 @@ public class BoardConverterTest {
 		exception.expect(BoardFileFormatException.class);
 		exception.expectMessage(any(String.class));
 
-		String text = new TestUtils()
+		String text = testUtil
 				.readFile(getClass(), "illegal_lane_width.txt");
 
 		String boardTitle = "6月30日のボード";
@@ -361,7 +369,7 @@ public class BoardConverterTest {
 		exception.expect(BoardFileFormatException.class);
 		exception.expectMessage(any(String.class));
 
-		String text = new TestUtils()
+		String text = testUtil
 				.readFile(getClass(), "illegal_lane_height.txt");
 
 		String boardTitle = "6月30日のボード";
@@ -372,6 +380,159 @@ public class BoardConverterTest {
 		conv.setKanbanService(service);
 		conv.textToModel(text);
 
+	}
+
+	@Test
+	public void dump_simple_board() throws Exception {
+		Board board = createBoard("test");
+
+		File file = File.createTempFile("simple_board", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		conv.dump(file, board);
+
+		assertThat(file.length(), is(not(0L)));
+		ZipFile zip = new ZipFile(file);
+		assertThat(zip.size(), is(1));
+
+		String boardFileName = "board.yml";
+		String containerName = getContainerName(file);
+		ZipEntry entry = new ZipEntry(containerName + boardFileName);
+
+		InputStreamReader reader = new InputStreamReader(zip.getInputStream(entry));
+		String actual = testUtil.readFromReader(reader);
+
+		String expected = testUtil.readFile(getClass(),
+				"simple_board.txt");
+		assertThat(actual, is(expected));
+	}
+
+	@Test
+	public void dump_board_has_jruby_script() throws Exception {
+		Board board = createMockBoard("test");
+		board.setScript("p 'hello jruby'");
+		board.setScriptType(ScriptTypes.JRuby);
+
+		File file = File.createTempFile("board_has_script", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		conv.dump(file, board);
+
+		assertThat(file.length(), is(not(0L)));
+		ZipFile zip = new ZipFile(file);
+		assertThat(zip.size(), is(2));
+
+		String boardFileName = "board.yml";
+		ZipEntry entry = new ZipEntry(getContainerName(file) + boardFileName);
+
+		InputStreamReader reader = new InputStreamReader(zip.getInputStream(entry));
+		String actual = testUtil.readFromReader(reader);
+
+		String expected = testUtil.readFile(getClass(),
+				"simple_board.txt");
+		assertThat(actual, is(expected));
+
+		ZipEntry scriptEntry = new ZipEntry(getContainerName(file) + "board.rb");
+
+		reader = new InputStreamReader(zip.getInputStream(scriptEntry));
+		actual = testUtil.readFromReader(reader);
+
+		expected = testUtil.readFile(getClass(),
+				"board.rb");
+		assertThat(actual, is(expected));
+
+	}
+
+	@Test
+	public void dump_board_has_javascript_script() throws Exception {
+		Board board = createMockBoard("test");
+		board.setScript("print \"hello rhino\"");
+		board.setScriptType(ScriptTypes.JavaScript);
+
+		File file = File.createTempFile("board_has_javascript", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		conv.dump(file, board);
+
+		assertThat(file.length(), is(not(0L)));
+		ZipFile zip = new ZipFile(file);
+		assertThat(zip.size(), is(2));
+
+		String boardFileName = "board.yml";
+		ZipEntry entry = new ZipEntry(getContainerName(file) + boardFileName);
+
+		InputStreamReader reader = new InputStreamReader(zip.getInputStream(entry));
+		String actual = testUtil.readFromReader(reader);
+
+		String expected = testUtil.readFile(getClass(),
+				"simple_board.txt");
+		assertThat(actual, is(expected));
+
+		ZipEntry scriptEntry = new ZipEntry(getContainerName(file) + "board.js");
+
+		reader = new InputStreamReader(zip.getInputStream(scriptEntry));
+		actual = testUtil.readFromReader(reader);
+
+		expected = testUtil.readFile(getClass(),
+				"board.js");
+		assertThat(actual, is(expected));
+
+	}
+
+	@Test
+	public void load_simple_board() throws Exception {
+		String title = "test";
+		Board board = createBoard(title);
+
+		KanbanService service = mock(KanbanService.class);
+		when(service.createBoard(title)).thenReturn(board);
+		conv.setKanbanService(service);
+
+		File file = File.createTempFile("simple_board", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		conv.dump(file, board);
+		Board actual = conv.load(file);
+
+		assertThat(actual.getTitle(), is("test"));
+		assertThat(actual.getScriptType(), is(nullValue()));
+	}
+
+	@Test
+	public void load_board_has_a_jruby_script() throws Exception {
+		String title = "test";
+		String script = "p 'hello jruby'";
+
+		Board board = createMockBoard(title);
+		board.setScript(script);
+		board.setScriptType(ScriptTypes.JRuby);
+
+		KanbanService service = mock(KanbanService.class);
+		when(service.createBoard(title)).thenReturn(createMockBoard(title));
+		conv.setKanbanService(service);
+
+		File file = File.createTempFile("board_has_a_jruby_script", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		conv.dump(file, board);
+		Board actual = conv.load(file);
+
+		assertThat(actual.getTitle(), is("test"));
+		assertThat(actual.getScriptType(), is(ScriptTypes.JRuby));
+		assertThat(actual.getScript().trim(), is(script));
+	}
+
+	@Test
+	public void load_board_has_a_javascript_script() throws Exception {
+		String title = "test";
+		String script = "print \"hello javascript\"";
+
+		Board board = createMockBoard(title);
+		board.setScript(script);
+		board.setScriptType(ScriptTypes.JavaScript);
+
+		KanbanService service = mock(KanbanService.class);
+		when(service.createBoard(title)).thenReturn(createMockBoard(title));
+		conv.setKanbanService(service);
+
+		File file = File.createTempFile("board_has_a_javascript_script",
+				BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		conv.dump(file, board);
+		Board actual = conv.load(file);
+
+		assertThat(actual.getTitle(), is("test"));
+		assertThat(actual.getScriptType(), is(ScriptTypes.JavaScript));
+		assertThat(actual.getScript().trim(), is(script));
 	}
 
 	private Board createMockBoard(String title) {
@@ -401,6 +562,12 @@ public class BoardConverterTest {
 		when(lane.getWidth()).thenReturn(width);
 		when(lane.getHeight()).thenReturn(height);
 		return lane;
+	}
+
+	private String getContainerName(File file) {
+		String name = file.getName();
+		String containerName = name.substring(0, name.lastIndexOf('.')) + "/";
+		return containerName;
 	}
 
 }
