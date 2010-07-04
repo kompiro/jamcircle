@@ -474,6 +474,34 @@ public class BoardConverterTest {
 	}
 
 	@Test
+	public void dump_board_has_some_lanes() throws Exception {
+		String title = "6月30日のボード";
+		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
+		Lane lane2 = createLane(2, "test 2", 200, 0, 200, 500);
+		Lane lane3 = createLane(3, "test	3", 0, 300, 200, 500);
+
+		Lane[] lanes = new Lane[] { lane1, lane2, lane3 };
+		Board board = createBoard(title, lanes);
+
+		KanbanService service = mock(KanbanService.class);
+		Board created = createMockBoard(title);
+		when(service.createBoard(title)).thenReturn(created);
+		Lane lane4 = createLane(4, "test1", 0, 0, 200, 500);
+		when(service.createLane(created, "test1", 0, 0, 200, 500)).thenReturn(lane4);
+		Lane lane5 = createLane(5, "test 2", 200, 0, 200, 500);
+		when(service.createLane(created, "test 2", 200, 0, 200, 500)).thenReturn(lane5);
+		Lane lane6 = createLane(6, "test	3", 0, 300, 200, 500);
+		when(service.createLane(created, "test	3", 0, 300, 200, 500)).thenReturn(lane6);
+		conv.setKanbanService(service);
+
+		File file = File.createTempFile("board_has_some_lanes", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		conv.dump(file, board);
+		Board actual = conv.load(file);
+		assertThat(actual.getLanes().length, is(3));
+
+	}
+
+	@Test
 	public void load_simple_board() throws Exception {
 		String title = "test";
 		Board board = createBoard(title);
