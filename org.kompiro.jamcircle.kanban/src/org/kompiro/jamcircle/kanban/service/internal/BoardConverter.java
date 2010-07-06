@@ -18,9 +18,17 @@ import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class BoardConverter {
 
+	private static final String EXTENSION_OF_YAML = ".yml";
+
+	private static final String BASE_NAME_OF_BOARD = "board";
+
+	private static final String CONTAINER_OF_LANES = "lanes/";
+
+	private static final String EXTENSION_OF_RUBY = ".rb";
+
 	private static final String EXTENSION_OF_JAVASCRIPT = ".js";
 
-	static final String BOARD_FORMAT_FILE_EXTENSION_NAME = ".jbf";
+	static final String BOARD_FORMAT_FILE_EXTENSION_NAME = ".zip";
 
 	private static final Pattern titlePattern = Pattern.compile("board:\\n\\stitle: (.+)\\n");
 	// Why \\d isn't use because to throw format error.
@@ -40,7 +48,7 @@ public class BoardConverter {
 			stream = new ZipOutputStream(new FileOutputStream(file));
 			String containerName = getContainerName(file);
 			createBoardYmlEntry(board, stream, containerName);
-			createBoardScriptEntry(board, stream, containerName, "board");
+			createBoardScriptEntry(board, stream, containerName, BASE_NAME_OF_BOARD);
 			createLanesScriptEntry(board, stream, containerName);
 		} catch (IOException e) {
 		} finally {
@@ -57,8 +65,9 @@ public class BoardConverter {
 		if (lanes == null || lanes.length == 0)
 			return;
 		for (Lane lane : lanes) {
-			String fileName = format("%d_%s", lane.getID(), lane.getStatus());
-			createScriptEntity(stream, lane.getScript(), lane.getScriptType(), containerName + "lanes/", fileName);
+			String fileName = getLaneScriptFileName(lane);
+			createScriptEntity(stream, lane.getScript(), lane.getScriptType(), containerName + CONTAINER_OF_LANES,
+					fileName);
 		}
 	}
 
@@ -71,6 +80,7 @@ public class BoardConverter {
 			if (board.getScriptType() == null) {
 				loadJavaScriptScript(board, containerName, zip);
 			}
+			loadLaneScript(board.getLanes(), containerName, zip);
 			return board;
 		} catch (ZipException e) {
 		} catch (IOException e) {
@@ -79,8 +89,45 @@ public class BoardConverter {
 		return null;
 	}
 
+	private void loadLaneScript(Lane[] lanes, String containerName, ZipFile zip) throws IOException {
+		if (lanes == null || lanes.length == 0)
+			return;
+		for (Lane lane : lanes) {
+			loadLaneJRubyScript(containerName, zip, lane);
+			if (lane.getScriptType() != null) {
+				continue;
+			}
+			loadLaneJavaScript(containerName, zip, lane);
+		}
+	}
+
+	private void loadLaneJRubyScript(String containerName, ZipFile zip, Lane lane) throws IOException {
+		String loadPath = containerName + CONTAINER_OF_LANES + getLaneScriptFileName(lane) + EXTENSION_OF_RUBY;
+		ZipEntry entry = zip.getEntry(loadPath);
+		if (entry != null) {
+			InputStream stream = zip.getInputStream(entry);
+			String script = StreamUtil.readFromStream(stream);
+			lane.setScript(script);
+			lane.setScriptType(ScriptTypes.JRuby);
+			lane.save();
+		}
+	}
+
+	private void loadLaneJavaScript(String containerName, ZipFile zip, Lane lane) throws IOException {
+		String loadPath = containerName + CONTAINER_OF_LANES + getLaneScriptFileName(lane) + EXTENSION_OF_JAVASCRIPT;
+		System.out.println(loadPath);
+		ZipEntry entry = zip.getEntry(containerName + CONTAINER_OF_LANES + getLaneScriptFileName(lane)
+				+ EXTENSION_OF_JAVASCRIPT);
+		if (entry != null) {
+			InputStream stream = zip.getInputStream(entry);
+			String script = StreamUtil.readFromStream(stream);
+			lane.setScript(script);
+			lane.setScriptType(ScriptTypes.JavaScript);
+		}
+	}
+
 	private void loadJavaScriptScript(Board board, String containerName, ZipFile zip) throws IOException {
-		String boardJavaScriptScriptName = "board" + EXTENSION_OF_JAVASCRIPT;
+		String boardJavaScriptScriptName = BASE_NAME_OF_BOARD + EXTENSION_OF_JAVASCRIPT;
 		ZipEntry entry = zip.getEntry(containerName + boardJavaScriptScriptName);
 		if (entry != null) {
 			InputStream stream = zip.getInputStream(entry);
@@ -91,7 +138,7 @@ public class BoardConverter {
 	}
 
 	private void loadJRubyScript(Board board, String containerName, ZipFile zip) throws IOException {
-		String boardJRubyScriptName = "board" + ".rb";
+		String boardJRubyScriptName = BASE_NAME_OF_BOARD + EXTENSION_OF_RUBY;
 		ZipEntry entry = zip.getEntry(containerName + boardJRubyScriptName);
 		if (entry != null) {
 			InputStream stream = zip.getInputStream(entry);
@@ -102,7 +149,7 @@ public class BoardConverter {
 	}
 
 	private Board loadBoard(String containerName, ZipFile zip) throws IOException {
-		String boardFileName = "board.yml";
+		String boardFileName = BASE_NAME_OF_BOARD + EXTENSION_OF_YAML;
 		ZipEntry entry = zip.getEntry(containerName + boardFileName);
 
 		InputStream stream = zip.getInputStream(entry);
@@ -148,7 +195,7 @@ public class BoardConverter {
 	}
 
 	private void createBoardYmlEntry(Board board, ZipOutputStream stream, String containerName) {
-		ZipEntry boardEntry = new ZipEntry(containerName + "board.yml");
+		ZipEntry boardEntry = new ZipEntry(containerName + BASE_NAME_OF_BOARD + EXTENSION_OF_YAML);
 		try {
 			stream.putNextEntry(boardEntry);
 			String text = modelToText(board);
@@ -169,7 +216,7 @@ public class BoardConverter {
 			return;
 		switch (scriptType) {
 		case JRuby:
-			fileName = fileName + ".rb";
+			fileName = fileName + EXTENSION_OF_RUBY;
 			break;
 		case JavaScript:
 			fileName = fileName + EXTENSION_OF_JAVASCRIPT;
@@ -226,6 +273,10 @@ public class BoardConverter {
 			throw new BoardFileFormatException(format(
 					"%s's value:\"%s\" is illegal.The value needs Number.Please check.", key, value));
 		}
+	}
+
+	private String getLaneScriptFileName(Lane lane) {
+		return format("%d_%s", lane.getID(), lane.getStatus());
 	}
 
 	private String getTitle(String text) {

@@ -667,6 +667,78 @@ public class BoardConverterTest {
 		assertThat(actual.getScript().trim(), is(script));
 	}
 
+	@Test
+	public void load_a_lane_has_jruby_script() throws Exception {
+		String title = "6月30日のボード";
+		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
+		when(lane1.getScript()).thenReturn("p 'hello jruby'");
+		when(lane1.getScriptType()).thenReturn(ScriptTypes.JRuby);
+
+		Lane[] lanes = new Lane[] { lane1 };
+		Board board = createBoard(title, lanes);
+
+		KanbanService service = mock(KanbanService.class);
+		Board created = createMockBoard(title);
+		when(service.createBoard(title)).thenReturn(created);
+		Lane lane4 = createLane(1, "test1", 0, 0, 200, 500);
+		when(service.createLane(created, "test1", 0, 0, 200, 500)).thenReturn(lane4);
+		conv.setKanbanService(service);
+
+		File file = File.createTempFile("lane_has_a_script", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		conv.dump(file, board);
+		Board actualBoard = conv.load(file);
+
+		Lane[] actualLanes = actualBoard.getLanes();
+		assertThat(actualLanes.length, is(1));
+
+		String expected = testUtil.readFile(getClass(),
+				"1_test1.rb");
+		verify(actualLanes[0]).setScript(expected);
+		verify(actualLanes[0]).setScriptType(ScriptTypes.JRuby);
+
+	}
+
+	@Test
+	public void load_some_lanes_have_javascript_script() throws Exception {
+		String title = "6月30日のボード";
+		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
+		when(lane1.getScript()).thenReturn("print \"hello javascript\"");
+		when(lane1.getScriptType()).thenReturn(ScriptTypes.JavaScript);
+
+		Lane lane2 = createLane(2, "test2", 300, 0, 200, 500);
+		when(lane2.getScript()).thenReturn("print \"hello javascript\"");
+		when(lane2.getScriptType()).thenReturn(ScriptTypes.JavaScript);
+
+		Lane[] lanes = new Lane[] { lane1, lane2 };
+		Board board = createBoard(title, lanes);
+
+		KanbanService service = mock(KanbanService.class);
+		Board created = createMockBoard(title);
+		when(service.createBoard(title)).thenReturn(created);
+		Lane lane3 = createLane(1, "test1", 0, 0, 200, 500);
+		when(service.createLane(created, "test1", 0, 0, 200, 500)).thenReturn(lane3);
+		Lane lane4 = createLane(2, "test2", 300, 0, 200, 500);
+		when(service.createLane(created, "test2", 300, 0, 200, 500)).thenReturn(lane4);
+		conv.setKanbanService(service);
+
+		File file = File.createTempFile("lanes_have_some_script", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		conv.dump(file, board);
+		Board actualBoard = conv.load(file);
+
+		Lane[] actualLanes = actualBoard.getLanes();
+		assertThat(actualLanes.length, is(2));
+
+		String expected = testUtil.readFile(getClass(),
+				"1_test1.js");
+		verify(actualLanes[0]).setScript(expected);
+		verify(actualLanes[0]).setScriptType(ScriptTypes.JavaScript);
+		expected = testUtil.readFile(getClass(),
+				"2_test2.js");
+		verify(actualLanes[1]).setScript(expected);
+		verify(actualLanes[1]).setScriptType(ScriptTypes.JavaScript);
+
+	}
+
 	private Board createMockBoard(String title) {
 		org.kompiro.jamcircle.kanban.model.mock.Board board = new org.kompiro.jamcircle.kanban.model.mock.Board();
 		board.setTitle(title);
