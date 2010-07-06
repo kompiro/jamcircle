@@ -151,7 +151,7 @@ version=3.1.0</echo>
 			<jvmarg value="-Demma.coverage.out.file=${emma.coverage.output}"/>
 			<jvmarg value="-Duser.home=${buildDirectory}/user"/>
 			<jvmarg value="${optJvmArg}"/>
-			<jvmarg value="-Xmx800m"/>
+			<jvmarg value="-Xmx600m"/>
 			<jvmarg value="-Dorg.eclipse.update.reconcile=true" />
 			
 			<sysproperty key="autotestsuite.results.directory" value="${test.result.dir}/xml" />
