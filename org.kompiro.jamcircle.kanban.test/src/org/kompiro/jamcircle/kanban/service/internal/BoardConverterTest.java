@@ -1,6 +1,5 @@
 package org.kompiro.jamcircle.kanban.service.internal;
 
-import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -15,8 +14,8 @@ import java.io.InputStreamReader;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.junit.*;
-import org.junit.rules.ExpectedException;
+import org.junit.Before;
+import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
@@ -26,8 +25,8 @@ import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class BoardConverterTest {
 
-	@Rule
-	public ExpectedException exception = ExpectedException.none();
+	// @Rule
+	// public ExpectedException exception = ExpectedException.none();
 
 	private BoardConverter conv;
 
@@ -41,12 +40,12 @@ public class BoardConverterTest {
 
 	}
 
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void modelToText_throws_IllegalArgumentException_when_null_value()
 			throws Exception {
 
-		exception.expect(IllegalArgumentException.class);
-		exception.expectMessage(any(String.class));
+		// exception.expect(IllegalArgumentException.class);
+		// exception.expectMessage(any(String.class));
 		conv.modelToText(null);
 	}
 
@@ -266,11 +265,11 @@ public class BoardConverterTest {
 
 	}
 
-	@Test
+	@Test(expected = BoardFileFormatException.class)
 	public void textToModel_illegal_board_key() throws Exception {
 
-		exception.expect(BoardFileFormatException.class);
-		exception.expectMessage(any(String.class));
+		// exception.expect(BoardFileFormatException.class);
+		// exception.expectMessage(any(String.class));
 
 		String text = testUtil.readFile(getClass(),
 				"illegal_board_key.txt");
@@ -287,11 +286,11 @@ public class BoardConverterTest {
 
 	}
 
-	@Test
+	@Test(expected = BoardFileFormatException.class)
 	public void textToModel_illegal_lane_id() throws Exception {
 
-		exception.expect(BoardFileFormatException.class);
-		exception.expectMessage(any(String.class));
+		// exception.expect(BoardFileFormatException.class);
+		// exception.expectMessage(any(String.class));
 
 		String text = testUtil
 				.readFile(getClass(), "illegal_lane_id.txt");
@@ -306,11 +305,11 @@ public class BoardConverterTest {
 
 	}
 
-	@Test
+	@Test(expected = BoardFileFormatException.class)
 	public void textToModel_illegal_lane_x() throws Exception {
 
-		exception.expect(BoardFileFormatException.class);
-		exception.expectMessage(any(String.class));
+		// exception.expect(BoardFileFormatException.class);
+		// exception.expectMessage(any(String.class));
 
 		String text = testUtil
 				.readFile(getClass(), "illegal_lane_x.txt");
@@ -325,11 +324,11 @@ public class BoardConverterTest {
 
 	}
 
-	@Test
+	@Test(expected = BoardFileFormatException.class)
 	public void textToModel_illegal_lane_y() throws Exception {
 
-		exception.expect(BoardFileFormatException.class);
-		exception.expectMessage(any(String.class));
+		// exception.expect(BoardFileFormatException.class);
+		// exception.expectMessage(any(String.class));
 
 		String text = testUtil
 				.readFile(getClass(), "illegal_lane_y.txt");
@@ -344,11 +343,11 @@ public class BoardConverterTest {
 
 	}
 
-	@Test
+	@Test(expected = BoardFileFormatException.class)
 	public void textToModel_illegal_lane_width() throws Exception {
 
-		exception.expect(BoardFileFormatException.class);
-		exception.expectMessage(any(String.class));
+		// exception.expect(BoardFileFormatException.class);
+		// exception.expectMessage(any(String.class));
 
 		String text = testUtil
 				.readFile(getClass(), "illegal_lane_width.txt");
@@ -363,11 +362,11 @@ public class BoardConverterTest {
 
 	}
 
-	@Test
+	@Test(expected = BoardFileFormatException.class)
 	public void textToModel_illegal_lane_height() throws Exception {
 
-		exception.expect(BoardFileFormatException.class);
-		exception.expectMessage(any(String.class));
+		// exception.expect(BoardFileFormatException.class);
+		// exception.expectMessage(any(String.class));
 
 		String text = testUtil
 				.readFile(getClass(), "illegal_lane_height.txt");
@@ -498,6 +497,111 @@ public class BoardConverterTest {
 		conv.dump(file, board);
 		Board actual = conv.load(file);
 		assertThat(actual.getLanes().length, is(3));
+
+	}
+
+	@Test
+	public void dump_a_lane_has_jruby_script() throws Exception {
+		String title = "6月30日のボード";
+		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
+		when(lane1.getScript()).thenReturn("p 'hello jruby'");
+		when(lane1.getScriptType()).thenReturn(ScriptTypes.JRuby);
+
+		Lane[] lanes = new Lane[] { lane1 };
+		Board board = createBoard(title, lanes);
+
+		KanbanService service = mock(KanbanService.class);
+		Board created = createMockBoard(title);
+		when(service.createBoard(title)).thenReturn(created);
+		Lane lane4 = createLane(1, "test1", 0, 0, 200, 500);
+		when(service.createLane(created, "test1", 0, 0, 200, 500)).thenReturn(lane4);
+		conv.setKanbanService(service);
+
+		File file = File.createTempFile("lane_has_a_script", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		conv.dump(file, board);
+
+		assertThat(file.length(), is(not(0L)));
+		ZipFile zip = new ZipFile(file);
+		assertThat(zip.size(), is(2));
+
+		String boardFileName = "board.yml";
+		ZipEntry entry = new ZipEntry(getContainerName(file) + boardFileName);
+
+		InputStreamReader reader = new InputStreamReader(zip.getInputStream(entry));
+		String actual = testUtil.readFromReader(reader);
+
+		String expected = testUtil.readFile(getClass(),
+				"lane_has_a_script.txt");
+		assertThat(actual, is(expected));
+
+		ZipEntry scriptEntry = new ZipEntry(getContainerName(file) + "lanes/1_test1.rb");
+
+		reader = new InputStreamReader(zip.getInputStream(scriptEntry));
+		actual = testUtil.readFromReader(reader);
+
+		expected = testUtil.readFile(getClass(),
+				"1_test1.rb");
+		assertThat(actual, is(expected));
+
+	}
+
+	@Test
+	public void dump_some_lanes_have_javascript_script() throws Exception {
+		String title = "6月30日のボード";
+		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
+		when(lane1.getScript()).thenReturn("print \"hello javascript\"");
+		when(lane1.getScriptType()).thenReturn(ScriptTypes.JavaScript);
+
+		Lane lane2 = createLane(2, "test2", 300, 0, 200, 500);
+		when(lane2.getScript()).thenReturn("print \"hello javascript\"");
+		when(lane2.getScriptType()).thenReturn(ScriptTypes.JavaScript);
+
+		Lane[] lanes = new Lane[] { lane1, lane2 };
+		Board board = createBoard(title, lanes);
+
+		KanbanService service = mock(KanbanService.class);
+		Board created = createMockBoard(title);
+		when(service.createBoard(title)).thenReturn(created);
+		Lane lane3 = createLane(1, "test1", 0, 0, 200, 500);
+		when(service.createLane(created, "test1", 0, 0, 200, 500)).thenReturn(lane3);
+		Lane lane4 = createLane(2, "test2", 300, 0, 200, 500);
+		when(service.createLane(created, "test2", 300, 0, 200, 500)).thenReturn(lane4);
+		conv.setKanbanService(service);
+
+		File file = File.createTempFile("lanes_have_some_script", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		conv.dump(file, board);
+
+		assertThat(file.length(), is(not(0L)));
+		ZipFile zip = new ZipFile(file);
+		assertThat(zip.size(), is(3));
+
+		String boardFileName = "board.yml";
+		ZipEntry entry = new ZipEntry(getContainerName(file) + boardFileName);
+
+		InputStreamReader reader = new InputStreamReader(zip.getInputStream(entry));
+		String actual = testUtil.readFromReader(reader);
+
+		String expected = testUtil.readFile(getClass(),
+				"lanes_have_some_script.txt");
+		assertThat(actual, is(expected));
+
+		ZipEntry scriptEntry = new ZipEntry(getContainerName(file) + "lanes/1_test1.js");
+
+		reader = new InputStreamReader(zip.getInputStream(scriptEntry));
+		actual = testUtil.readFromReader(reader);
+
+		expected = testUtil.readFile(getClass(),
+				"1_test1.js");
+		assertThat(actual, is(expected));
+
+		scriptEntry = new ZipEntry(getContainerName(file) + "lanes/2_test2.js");
+
+		reader = new InputStreamReader(zip.getInputStream(scriptEntry));
+		actual = testUtil.readFromReader(reader);
+
+		expected = testUtil.readFile(getClass(),
+				"2_test2.js");
+		assertThat(actual, is(expected));
 
 	}
 

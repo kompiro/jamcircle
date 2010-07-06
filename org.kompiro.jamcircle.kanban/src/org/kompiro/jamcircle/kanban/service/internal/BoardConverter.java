@@ -18,7 +18,7 @@ import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class BoardConverter {
 
-	private static final String BOARD_SCRIPT_NAME_OF_JAVASCRIPT = "board.js";
+	private static final String EXTENSION_OF_JAVASCRIPT = ".js";
 
 	static final String BOARD_FORMAT_FILE_EXTENSION_NAME = ".jbf";
 
@@ -40,7 +40,8 @@ public class BoardConverter {
 			stream = new ZipOutputStream(new FileOutputStream(file));
 			String containerName = getContainerName(file);
 			createBoardYmlEntry(board, stream, containerName);
-			createBoardScriptEntry(board, stream, containerName);
+			createBoardScriptEntry(board, stream, containerName, "board");
+			createLanesScriptEntry(board, stream, containerName);
 		} catch (IOException e) {
 		} finally {
 			try {
@@ -48,6 +49,16 @@ public class BoardConverter {
 					stream.close();
 			} catch (IOException e) {
 			}
+		}
+	}
+
+	private void createLanesScriptEntry(Board board, ZipOutputStream stream, String containerName) {
+		Lane[] lanes = board.getLanes();
+		if (lanes == null || lanes.length == 0)
+			return;
+		for (Lane lane : lanes) {
+			String fileName = format("%d_%s", lane.getID(), lane.getStatus());
+			createScriptEntity(stream, lane.getScript(), lane.getScriptType(), containerName + "lanes/", fileName);
 		}
 	}
 
@@ -69,7 +80,7 @@ public class BoardConverter {
 	}
 
 	private void loadJavaScriptScript(Board board, String containerName, ZipFile zip) throws IOException {
-		String boardJavaScriptScriptName = BOARD_SCRIPT_NAME_OF_JAVASCRIPT;
+		String boardJavaScriptScriptName = "board" + EXTENSION_OF_JAVASCRIPT;
 		ZipEntry entry = zip.getEntry(containerName + boardJavaScriptScriptName);
 		if (entry != null) {
 			InputStream stream = zip.getInputStream(entry);
@@ -80,7 +91,7 @@ public class BoardConverter {
 	}
 
 	private void loadJRubyScript(Board board, String containerName, ZipFile zip) throws IOException {
-		String boardJRubyScriptName = "board.rb";
+		String boardJRubyScriptName = "board" + ".rb";
 		ZipEntry entry = zip.getEntry(containerName + boardJRubyScriptName);
 		if (entry != null) {
 			InputStream stream = zip.getInputStream(entry);
@@ -146,18 +157,22 @@ public class BoardConverter {
 		}
 	}
 
-	private void createBoardScriptEntry(Board board, ZipOutputStream stream, String containerName) {
+	private void createBoardScriptEntry(Board board, ZipOutputStream stream, String containerName, String fileName) {
 		String script = board.getScript();
 		ScriptTypes scriptType = board.getScriptType();
+		createScriptEntity(stream, script, scriptType, containerName, fileName);
+	}
+
+	private void createScriptEntity(ZipOutputStream stream, String script, ScriptTypes scriptType,
+			String containerName, String fileName) {
 		if (scriptType == null || script == null || script.equals(""))
 			return;
-		String fileName = null;
 		switch (scriptType) {
 		case JRuby:
-			fileName = "board.rb";
+			fileName = fileName + ".rb";
 			break;
 		case JavaScript:
-			fileName = BOARD_SCRIPT_NAME_OF_JAVASCRIPT;
+			fileName = fileName + EXTENSION_OF_JAVASCRIPT;
 			break;
 		}
 		ZipEntry entry = new ZipEntry(containerName + fileName);
