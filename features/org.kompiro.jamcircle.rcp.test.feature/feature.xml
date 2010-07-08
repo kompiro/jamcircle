@@ -2,7 +2,7 @@
 <feature
       id="org.kompiro.jamcircle.rcp.test"
       label="JAM Circle RCP Base Test Feature"
-      version="0.8.0.qualifier"
+      version="0.0.0"
       provider-name="kompiro.org">
 
    <description url="http://kompiro.org/jamcircle/">
