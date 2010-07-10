@@ -120,7 +120,7 @@
 		<condition property="p2.director.devMode" value="-dev &quot;${osgi.dev}&quot;" else="">
 			<isset property="osgi.dev" />
 		</condition>
-		
+		<echoproperties/>
 		<java jar="${equinoxjar}" fork="true" failonerror="false" resultproperty="p2.categorizer.return.code" outputproperty="p2.categorizer.java.output">
 			<arg line="-application org.eclipse.equinox.p2.publisher.CategoryPublisher" />
 			<arg line="-nosplash" />
