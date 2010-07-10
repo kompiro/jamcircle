@@ -1,7 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.kompiro.jamcircle.kanban_1.2.0.qualifier.jar" id="org.kompiro.jamcircle.kanban" version="1.2.0.qualifier">
-      <category name="org.kompiro.jamcircle"/>
-   </feature>
-   <category-def name="org.kompiro.jamcircle" label="JAM Circle"/>
 </site>
