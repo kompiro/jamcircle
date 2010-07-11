@@ -139,7 +139,10 @@
 		<condition property="p2.categorizer.error">
 			<isfailure code="${p2.return.code}" />
 		</condition>
+		<echo message="${p2.categorizer.error}" />
+		<!--
 		<fail if="p2.categorizer.error" message="A Problem occured while running the categorizer." />
+		-->
 	</target>
 
 
