@@ -121,8 +121,9 @@
 			<isset property="osgi.dev" />
 		</condition>
 		<echoproperties/>
-		<java jar="${equinoxjar}" fork="true" failonerror="false" resultproperty="p2.categorizer.return.code" outputproperty="p2.categorizer.java.output">
-			<arg line="-application org.eclipse.equinox.p2.publisher.CategoryPublisher" />
+		<java jar="${equinoxjar}" fork="true" failonerror="false" resultproperty="p2.return.code" outputproperty="p2.java.output">
+			<arg line="-application" />
+			<arg value="org.eclipse.equinox.p2.publisher.CategoryPublisher" />
 			<arg line="-nosplash" />
 			<arg line="--launcher.suppressErrors" />
 			<arg line="-consoleLog" />
@@ -134,14 +135,11 @@
 			<jvmarg value="-Declipse.p2.profile=@none" />
 			<sysproperty key="osgi.configuration.area" value="${p2.director.configArea}" />
 		</java>
-		<echo message="${p2.categorizer.java.output}" />
+		<echo message="${p2.java.output}" />
 		<condition property="p2.categorizer.error">
-			<isfailure code="${p2.categorizer.return.code}" />
+			<isfailure code="${p2.return.code}" />
 		</condition>
 		<fail if="p2.categorizer.error" message="A Problem occured while running the categorizer." />
-		<!--
-		<echo message="${p2.categorizer.java.output}" />
-		-->
 	</target>
 
 
