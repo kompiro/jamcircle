@@ -6,17 +6,33 @@ Bundle-Version: 0.0.0
 Bundle-Vendor: kompiro.org
 Fragment-Host: org.kompiro.jamcircle.kanban.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Require-Bundle: org.junit4,
- com.ibm.icu,
- org.apache.log4j,
- org.mockito,
- org.eclipse.swtbot.eclipse.finder,
- org.eclipse.swtbot.junit4_x,
- org.eclipse.swtbot.swt.finder
+Require-Bundle: com.ibm.icu
 Bundle-RegisterBuddy: org.mockito,org.apache.log4j
-Import-Package: org.eclipse.swtbot.eclipse.gef.finder,
+Import-Package: 
+ org.eclipse.swtbot.eclipse.finder,
+ org.eclipse.swtbot.eclipse.finder.waits,
+ org.eclipse.swtbot.eclipse.finder.widgets,
+ org.eclipse.swtbot.eclipse.gef.finder,
  org.eclipse.swtbot.eclipse.gef.finder.finders,
  org.eclipse.swtbot.eclipse.gef.finder.matchers,
  org.eclipse.swtbot.eclipse.gef.finder.widgets,
- org.eclipse.swtbot.eclipse.gef.view.finder.widgets
+ org.eclipse.swtbot.eclipse.gef.view.finder.widgets,
+ org.eclipse.swtbot.swt.finder,
+ org.eclipse.swtbot.swt.finder.exceptions,
+ org.eclipse.swtbot.swt.finder.finders,
+ org.eclipse.swtbot.swt.finder.junit,
+ org.eclipse.swtbot.swt.finder.matchers,
+ org.eclipse.swtbot.swt.finder.results,
+ org.eclipse.swtbot.swt.finder.utils,
+ org.eclipse.swtbot.swt.finder.waits,
+ org.eclipse.swtbot.swt.finder.widgets,
+ org.hamcrest,
+ org.junit;version="4.8.1",
+ org.junit.runner;version="4.8.1",
+ org.junit.runner.notification;version="4.8.1",
+ org.junit.runners;version="4.8.1",
+ org.junit.runners.model;version="4.8.1",
+ org.mockito,
+ org.mockito.invocation,
+ org.mockito.stubbing
 Export-Package: org.eclipse.swtbot.eclipse.gef.view.finder.widgets

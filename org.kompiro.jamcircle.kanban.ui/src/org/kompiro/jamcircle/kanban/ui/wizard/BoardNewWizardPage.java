@@ -1,4 +1,4 @@
-package org.kompiro.jamcircle.kanban.ui.action;
+package org.kompiro.jamcircle.kanban.ui.wizard;
 
 import java.io.IOException;
 import java.io.InputStream;
