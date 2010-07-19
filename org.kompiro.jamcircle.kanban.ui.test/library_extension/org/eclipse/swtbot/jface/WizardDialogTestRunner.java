@@ -93,14 +93,20 @@ public class WizardDialogTestRunner extends SWTBotJunit4ClassRunner {
 	@Override
 	protected Object createTest() throws Exception {
 		Object test = super.createTest();
+		inject(test, "bot", bot);
 		if (newWizard != null) {
-			try {
-				Field field = test.getClass().getField("wizard");
-				field.set(test, newWizard);
-			} catch (NoSuchFieldException e) {
-			}
+			inject(test, "wizard", newWizard);
 		}
 		return test;
+	}
+
+	private void inject(Object test, String fieldName, Object param) throws IllegalAccessException {
+		Field field;
+		try {
+			field = test.getClass().getField(fieldName);
+			field.set(test, param);
+		} catch (NoSuchFieldException e) {
+		}
 	}
 
 	private IWizard newWizard() throws InstantiationException, IllegalAccessException {
