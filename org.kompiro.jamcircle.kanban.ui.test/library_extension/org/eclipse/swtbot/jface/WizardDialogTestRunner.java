@@ -7,9 +7,9 @@ import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
-import org.eclipse.swtbot.swt.finder.results.VoidResult;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.TestClass;
@@ -17,6 +17,7 @@ import org.junit.runners.model.TestClass;
 public class WizardDialogTestRunner extends SWTBotJunit4ClassRunner {
 
 	private IWizard newWizard = null;
+	private SWTBot bot;
 
 	public WizardDialogTestRunner(Class<?> klass) throws Exception {
 		super(klass);
@@ -30,6 +31,7 @@ public class WizardDialogTestRunner extends SWTBotJunit4ClassRunner {
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
 		}
+		bot = new SWTBot();
 		final boolean[] finishPressed = new boolean[1];
 		final WizardDialog dialog = new WizardDialog(parentShell, newWizard) {
 			@Override
@@ -39,22 +41,22 @@ public class WizardDialogTestRunner extends SWTBotJunit4ClassRunner {
 			}
 		};
 		final Exception[] ex = new Exception[1];
-		final boolean[] done = new boolean[1];
 		Runnable r = new Runnable() {
 			public void run() {
 				try {
 					WizardDialogTestRunner.super.runChild(method, notifier);
+					closeDialogs();
 				} catch (Exception e) {
 					ex[0] = e;
-				} finally {
-					if (dialog.getShell() != null && dialog.getShell().isDisposed() == false) {
-						UIThreadRunnable.syncExec(new VoidResult() {
-							public void run() {
-								dialog.close();
-							}
-						});
+				}
+			}
+
+			private void closeDialogs() {
+				SWTBotShell[] shells = bot.shells();
+				for (SWTBotShell shell : shells) {
+					if (shell.isVisible()) {
+						shell.close();
 					}
-					done[0] = true;
 				}
 			}
 		};
@@ -64,17 +66,24 @@ public class WizardDialogTestRunner extends SWTBotJunit4ClassRunner {
 		dialog.open();
 
 		waitForNonUIThreadFinished(parentShell, nonUIThread);
+		if (dialog.getShell() != null && dialog.getShell().isVisible()) {
+			dialog.close();
+		}
 		if (ex[0] != null) {
 			throw new IllegalStateException(ex[0]);
 		}
 	}
 
 	private void waitForNonUIThreadFinished(Shell parentShell, Thread nonUIThread) {
-		Display display = parentShell.getDisplay();
+		Display display = bot.getDisplay();
+		long timeout = System.currentTimeMillis() + 5000L;
 		while (nonUIThread.isAlive()) {
 			try {
 				if (!display.readAndDispatch()) {
 					display.sleep();
+				}
+				if (System.currentTimeMillis() > timeout) {
+					break;
 				}
 			} catch (Throwable e) {
 			}
