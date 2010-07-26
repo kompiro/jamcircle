@@ -12,11 +12,12 @@ import java.util.zip.*;
 import org.kompiro.jamcircle.kanban.internal.util.StreamUtil;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Lane;
+import org.kompiro.jamcircle.kanban.service.BoardConverter;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.service.exception.BoardFileFormatException;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 
-public class BoardConverter {
+public class BoardConverterImpl implements BoardConverter {
 
 	private static final String EXTENSION_OF_YAML = ".yml";
 
@@ -27,8 +28,6 @@ public class BoardConverter {
 	private static final String EXTENSION_OF_RUBY = ".rb";
 
 	private static final String EXTENSION_OF_JAVASCRIPT = ".js";
-
-	static final String BOARD_FORMAT_FILE_EXTENSION_NAME = ".zip";
 
 	private static final Pattern titlePattern = Pattern.compile("board:\\n\\stitle: (.+)\\n");
 	// Why \\d isn't use because to throw format error.
@@ -42,6 +41,17 @@ public class BoardConverter {
 
 	private KanbanService service;
 
+	public BoardConverterImpl() {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.kompiro.jamcircle.kanban.service.internal.BoardConverter#dump(java
+	 * .io.File, org.kompiro.jamcircle.kanban.model.Board)
+	 */
 	public void dump(File file, Board board) {
 		ZipOutputStream stream = null;
 		try {
@@ -71,6 +81,13 @@ public class BoardConverter {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.kompiro.jamcircle.kanban.service.internal.BoardConverter#load(java
+	 * .io.File)
+	 */
 	public Board load(File file) {
 		try {
 			ZipFile zip = new ZipFile(file);
@@ -289,7 +306,7 @@ public class BoardConverter {
 		return title;
 	}
 
-	void setKanbanService(KanbanService service) {
+	public void setKanbanService(KanbanService service) {
 		this.service = service;
 	}
 

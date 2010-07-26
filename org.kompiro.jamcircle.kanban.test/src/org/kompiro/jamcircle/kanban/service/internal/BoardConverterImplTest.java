@@ -23,19 +23,19 @@ import org.kompiro.jamcircle.kanban.service.exception.BoardFileFormatException;
 import org.kompiro.jamcircle.kanban.test.util.TestUtils;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 
-public class BoardConverterTest {
+public class BoardConverterImplTest {
 
 	// @Rule
 	// public ExpectedException exception = ExpectedException.none();
 
-	private BoardConverter conv;
+	private BoardConverterImpl conv;
 
 	private TestUtils testUtil;
 
 	@Before
 	public void before() throws Exception {
 
-		conv = new BoardConverter();
+		conv = new BoardConverterImpl();
 		testUtil = new TestUtils();
 
 	}
@@ -385,7 +385,7 @@ public class BoardConverterTest {
 	public void dump_simple_board() throws Exception {
 		Board board = createBoard("test");
 
-		File file = File.createTempFile("simple_board", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		File file = File.createTempFile("simple_board", BoardConverterImpl.BOARD_FORMAT_FILE_EXTENSION_NAME);
 		conv.dump(file, board);
 
 		assertThat(file.length(), is(not(0L)));
@@ -410,7 +410,7 @@ public class BoardConverterTest {
 		board.setScript("p 'hello jruby'");
 		board.setScriptType(ScriptTypes.JRuby);
 
-		File file = File.createTempFile("board_has_script", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		File file = File.createTempFile("board_has_script", BoardConverterImpl.BOARD_FORMAT_FILE_EXTENSION_NAME);
 		conv.dump(file, board);
 
 		assertThat(file.length(), is(not(0L)));
@@ -444,7 +444,7 @@ public class BoardConverterTest {
 		board.setScript("print \"hello rhino\"");
 		board.setScriptType(ScriptTypes.JavaScript);
 
-		File file = File.createTempFile("board_has_javascript", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		File file = File.createTempFile("board_has_javascript", BoardConverterImpl.BOARD_FORMAT_FILE_EXTENSION_NAME);
 		conv.dump(file, board);
 
 		assertThat(file.length(), is(not(0L)));
@@ -493,7 +493,7 @@ public class BoardConverterTest {
 		when(service.createLane(created, "test	3", 0, 300, 200, 500)).thenReturn(lane6);
 		conv.setKanbanService(service);
 
-		File file = File.createTempFile("board_has_some_lanes", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		File file = File.createTempFile("board_has_some_lanes", BoardConverterImpl.BOARD_FORMAT_FILE_EXTENSION_NAME);
 		conv.dump(file, board);
 		Board actual = conv.load(file);
 		assertThat(actual.getLanes().length, is(3));
@@ -517,7 +517,7 @@ public class BoardConverterTest {
 		when(service.createLane(created, "test1", 0, 0, 200, 500)).thenReturn(lane4);
 		conv.setKanbanService(service);
 
-		File file = File.createTempFile("lane_has_a_script", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		File file = File.createTempFile("lane_has_a_script", BoardConverterImpl.BOARD_FORMAT_FILE_EXTENSION_NAME);
 		conv.dump(file, board);
 
 		assertThat(file.length(), is(not(0L)));
@@ -568,7 +568,7 @@ public class BoardConverterTest {
 		when(service.createLane(created, "test2", 300, 0, 200, 500)).thenReturn(lane4);
 		conv.setKanbanService(service);
 
-		File file = File.createTempFile("lanes_have_some_script", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		File file = File.createTempFile("lanes_have_some_script", BoardConverterImpl.BOARD_FORMAT_FILE_EXTENSION_NAME);
 		conv.dump(file, board);
 
 		assertThat(file.length(), is(not(0L)));
@@ -614,7 +614,7 @@ public class BoardConverterTest {
 		when(service.createBoard(title)).thenReturn(board);
 		conv.setKanbanService(service);
 
-		File file = File.createTempFile("simple_board", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		File file = File.createTempFile("simple_board", BoardConverterImpl.BOARD_FORMAT_FILE_EXTENSION_NAME);
 		conv.dump(file, board);
 		Board actual = conv.load(file);
 
@@ -635,7 +635,8 @@ public class BoardConverterTest {
 		when(service.createBoard(title)).thenReturn(createMockBoard(title));
 		conv.setKanbanService(service);
 
-		File file = File.createTempFile("board_has_a_jruby_script", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		File file = File
+				.createTempFile("board_has_a_jruby_script", BoardConverterImpl.BOARD_FORMAT_FILE_EXTENSION_NAME);
 		conv.dump(file, board);
 		Board actual = conv.load(file);
 
@@ -658,7 +659,7 @@ public class BoardConverterTest {
 		conv.setKanbanService(service);
 
 		File file = File.createTempFile("board_has_a_javascript_script",
-				BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+				BoardConverterImpl.BOARD_FORMAT_FILE_EXTENSION_NAME);
 		conv.dump(file, board);
 		Board actual = conv.load(file);
 
@@ -684,7 +685,7 @@ public class BoardConverterTest {
 		when(service.createLane(created, "test1", 0, 0, 200, 500)).thenReturn(lane4);
 		conv.setKanbanService(service);
 
-		File file = File.createTempFile("lane_has_a_script", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		File file = File.createTempFile("lane_has_a_script", BoardConverterImpl.BOARD_FORMAT_FILE_EXTENSION_NAME);
 		conv.dump(file, board);
 		Board actualBoard = conv.load(file);
 
@@ -721,7 +722,7 @@ public class BoardConverterTest {
 		when(service.createLane(created, "test2", 300, 0, 200, 500)).thenReturn(lane4);
 		conv.setKanbanService(service);
 
-		File file = File.createTempFile("lanes_have_some_script", BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		File file = File.createTempFile("lanes_have_some_script", BoardConverterImpl.BOARD_FORMAT_FILE_EXTENSION_NAME);
 		conv.dump(file, board);
 		Board actualBoard = conv.load(file);
 

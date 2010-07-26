@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="false" name="org.kompiro.jamcircle.kanban.service.BoardConverter">
+   <implementation class="org.kompiro.jamcircle.kanban.service.internal.BoardConverterImpl"/>
+   <reference bind="setKanbanService" cardinality="1..1" interface="org.kompiro.jamcircle.kanban.service.KanbanService" name="KanbanService" policy="static"/>
+   <service>
+      <provide interface="org.kompiro.jamcircle.kanban.service.BoardConverter"/>
+   </service>
+</scr:component>
