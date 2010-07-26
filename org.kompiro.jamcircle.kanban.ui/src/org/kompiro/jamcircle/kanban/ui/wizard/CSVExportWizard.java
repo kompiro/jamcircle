@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
@@ -23,11 +22,6 @@ public class CSVExportWizard extends Wizard implements IExportWizard {
 	public void addPages() {
 		page = new CSVExportPage(this);
 		addPage(page);
-	}
-
-	@Override
-	public void addPage(IWizardPage page) {
-		super.addPage(page);
 	}
 
 	@Override

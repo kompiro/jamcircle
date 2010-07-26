@@ -83,13 +83,13 @@ public class Messages extends NLS {
 	public static String ContainerContentsWindow_viewer_title;
 	public static String CopyAction_title;
 	public static String CopyAction_tooltip;
-	public static String CSVExportWizard_browse;
+	public static String Wizard_file_browse;
 	public static String CSVExportWizard_description;
 	public static String CSVExportWizard_dialog_message;
 	public static String CSVExportWizard_error_title;
 	public static String CSVExportWizard_export_task_name;
-	public static String CSVExportWizard_file_label;
-	public static String CSVExportWizard_output_label;
+	public static String Wizard_file_label;
+	public static String Wizard_file_output_label;
 	public static String CSVExportWizard_title;
 	public static String CSVImportWizard_browse_label;
 	public static String CSVImportWizard_description;

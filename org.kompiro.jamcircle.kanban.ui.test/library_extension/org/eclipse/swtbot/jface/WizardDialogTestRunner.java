@@ -33,7 +33,7 @@ public class WizardDialogTestRunner extends SWTBotJunit4ClassRunner {
 		}
 		bot = new SWTBot();
 		final boolean[] finishPressed = new boolean[1];
-		final WizardDialog dialog = new WizardDialog(parentShell, newWizard) {
+		WizardDialog dialog = new WizardDialog(parentShell, newWizard) {
 			@Override
 			protected void finishPressed() {
 				super.finishPressed();
@@ -66,9 +66,7 @@ public class WizardDialogTestRunner extends SWTBotJunit4ClassRunner {
 		dialog.open();
 
 		waitForNonUIThreadFinished(parentShell, nonUIThread);
-		if (dialog.getShell() != null && dialog.getShell().isVisible()) {
-			dialog.close();
-		}
+		parentShell.dispose();
 		if (ex[0] != null) {
 			throw new IllegalStateException(ex[0]);
 		}
@@ -103,7 +101,8 @@ public class WizardDialogTestRunner extends SWTBotJunit4ClassRunner {
 	private void inject(Object test, String fieldName, Object param) throws IllegalAccessException {
 		Field field;
 		try {
-			field = test.getClass().getField(fieldName);
+			field = test.getClass().getDeclaredField(fieldName);
+			field.setAccessible(true);
 			field.set(test, param);
 		} catch (NoSuchFieldException e) {
 		}

@@ -1,7 +1,6 @@
 package org.kompiro.jamcircle.kanban.ui.wizard;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -32,13 +31,13 @@ import org.kompiro.jamcircle.kanban.ui.Messages;
 public class CSVExportWizardTest {
 
 	private SWTBot bot;
+	private CSVExportWizard wizard;
+
 	private SWTBotShell target;
-	public CSVExportWizard wizard;
 	private IRunnableWithProgress runner;
 
 	@Before
 	public void before() {
-		bot = new SWTBot();
 		target = bot.shell(Messages.CSVExportWizard_title);
 		runner = mock(IExportRunnableWithProgress.class);
 		wizard.setRunner(runner);
@@ -47,7 +46,6 @@ public class CSVExportWizardTest {
 
 	@Test
 	public void show() throws Throwable {
-		assertThat(wizard, is(notNullValue()));
 		bot.button(IDialogConstants.CANCEL_LABEL).click();
 		assertThat(Conditions.shellCloses(target).test(), is(true));
 	}
@@ -59,7 +57,7 @@ public class CSVExportWizardTest {
 
 	@Test
 	public void finish_is_enabled_when_file_form_is_exists_path() throws Exception {
-		SWTBotText fileText = bot.textWithLabel(Messages.CSVExportWizard_output_label);
+		SWTBotText fileText = bot.textWithLabel(Messages.Wizard_file_output_label);
 		assertThat(fileText.getText(), is(""));
 		File tmpFile = File.createTempFile("tmp", ".txt");
 		String path = tmpFile.getAbsolutePath();
@@ -69,7 +67,7 @@ public class CSVExportWizardTest {
 
 	@Test
 	public void runner_is_called_when_finish_is_pushed() throws Exception {
-		SWTBotText fileText = bot.textWithLabel(Messages.CSVExportWizard_output_label);
+		SWTBotText fileText = bot.textWithLabel(Messages.Wizard_file_output_label);
 		assertThat(fileText.getText(), is(""));
 		File tmpFile = File.createTempFile("tmp", ".txt");
 		String path = tmpFile.getAbsolutePath();
