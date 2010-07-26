@@ -3,4 +3,5 @@
    <implementation class="org.kompiro.jamcircle.kanban.ui.KanbanUIContext"/>
    <reference bind="setKanbanService" cardinality="1..1" interface="org.kompiro.jamcircle.kanban.service.KanbanService" name="KanbanService" policy="static"/>
    <reference bind="setScriptingService" cardinality="1..1" interface="org.kompiro.jamcircle.scripting.ScriptingService" name="ScriptingService" policy="static"/>
+   <reference bind="setBoardConverter" cardinality="1..1" interface="org.kompiro.jamcircle.kanban.service.BoardConverter" name="BoardConverter" policy="static"/>
 </scr:component>
