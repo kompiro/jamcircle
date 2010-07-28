@@ -54,6 +54,8 @@ public class WizardDialogTestRunner extends SWTBotJunit4ClassRunner {
 			private void closeDialogs() {
 				SWTBotShell[] shells = bot.shells();
 				for (SWTBotShell shell : shells) {
+					if (shell.widget.isDisposed())
+						continue;
 					if (shell.isVisible()) {
 						shell.close();
 					}
