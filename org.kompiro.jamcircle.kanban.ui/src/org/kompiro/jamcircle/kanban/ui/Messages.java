@@ -95,10 +95,8 @@ public class Messages extends NLS {
 	public static String Wizard_file_label;
 	public static String Wizard_file_output_label;
 	public static String CSVExportWizard_title;
-	public static String CSVImportWizard_browse_label;
 	public static String CSVImportWizard_description;
 	public static String CSVImportWizard_error_title;
-	public static String CSVImportWizard_file_label;
 	public static String CSVImportWizard_file_text;
 	public static String CSVImportWizard_import_task_name;
 	public static String CSVImportWizard_title;
