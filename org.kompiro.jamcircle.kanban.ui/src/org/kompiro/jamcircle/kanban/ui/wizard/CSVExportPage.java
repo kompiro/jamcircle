@@ -12,17 +12,11 @@ import org.kompiro.jamcircle.kanban.ui.Messages;
 
 public class CSVExportPage extends WizardPage {
 
-	/**
-	 * 
-	 */
-	private CSVExportWizard exportWizard;
 	private Text fileText;
 
-	protected CSVExportPage(CSVExportWizard csvExportWizard) {
+	public CSVExportPage() {
 		super("CSVExportPage"); //$NON-NLS-1$
-		exportWizard = csvExportWizard;
 		setTitle(Messages.CSVExportWizard_title);
-		exportWizard.setWindowTitle(Messages.CSVExportWizard_title);
 		setDescription(Messages.CSVExportWizard_description);
 		setPageComplete(false);
 	}

@@ -34,10 +34,10 @@ public class CSVImportPage extends WizardPage {
 		layout.numColumns = 3;
 		layout.verticalSpacing = 9;
 		Label fileLabel = new Label(fileGroup, SWT.None);
-		fileLabel.setText(Messages.CSVImportWizard_file_label);
+		fileLabel.setText(Messages.Wizard_file_label);
 		fileText = new Text(fileGroup, SWT.BORDER);
 		Button fileBrowseButton = new Button(fileGroup, SWT.None);
-		fileBrowseButton.setText(Messages.CSVImportWizard_browse_label);
+		fileBrowseButton.setText(Messages.Wizard_file_browse);
 		fileBrowseButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

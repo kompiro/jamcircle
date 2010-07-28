@@ -16,11 +16,9 @@ public class CSVExportWizard extends Wizard implements IExportWizard {
 	private IRunnableWithProgress runner;
 
 	public CSVExportWizard() {
+		setWindowTitle(Messages.CSVExportWizard_title);
 		setNeedsProgressMonitor(true);
-	}
-
-	public void addPages() {
-		page = new CSVExportPage(this);
+		page = new CSVExportPage();
 		addPage(page);
 	}
 
