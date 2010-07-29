@@ -31,23 +31,21 @@ public class CSVExportPage extends WizardPage {
 	}
 
 	private void createFileGroup(Composite composite) {
-		Group fileGroup = new Group(composite, SWT.None);
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(fileGroup);
-		fileGroup.setText(Messages.Wizard_file_label);
-		GridLayoutFactory.swtDefaults().numColumns(3).applyTo(fileGroup);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(composite);
+		GridLayoutFactory.swtDefaults().numColumns(3).applyTo(composite);
 
-		Label fileLabel = new Label(fileGroup, SWT.None);
+		Label fileLabel = new Label(composite, SWT.None);
 		fileLabel.setText(Messages.Wizard_file_output_label);
 
 		// TODO Select Directory or File and Model Type.
-		fileText = new Text(fileGroup, SWT.BORDER);
+		fileText = new Text(composite, SWT.BORDER);
 		fileText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				File file = new File(((Text) e.widget).getText());
 				setPageComplete(file.exists());
 			}
 		});
-		Button fileBrowseButton = new Button(fileGroup, SWT.None);
+		Button fileBrowseButton = new Button(composite, SWT.None);
 		fileBrowseButton.setText(Messages.Wizard_file_browse);
 		fileBrowseButton.addSelectionListener(new SelectionAdapter() {
 			@Override
