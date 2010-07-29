@@ -50,7 +50,7 @@ public class BoardExportWizardTest {
 
 	@Test
 	public void show() throws Throwable {
-
+		bot.shell(Messages.BoardExportWizard_title).isOpen();
 	}
 
 	@Test

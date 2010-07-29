@@ -10,6 +10,7 @@ import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.service.BoardConverter;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIContext;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 
 public class BoardExportWizard extends Wizard implements IExportWizard {
 
@@ -18,6 +19,7 @@ public class BoardExportWizard extends Wizard implements IExportWizard {
 	private BoardExportWizardPage page;
 
 	public BoardExportWizard() {
+		setWindowTitle(Messages.BoardExportWizard_title);
 		setNeedsProgressMonitor(true);
 		page = new BoardExportWizardPage();
 		addPage(page);
