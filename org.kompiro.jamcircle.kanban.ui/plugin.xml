@@ -99,10 +99,18 @@
              name="%import.wizard.category.name">
        </category>
        <wizard
+             category="org.kompiro.jamcircle.kanban.ui"
              class="org.kompiro.jamcircle.kanban.ui.wizard.CSVImportWizard"
              icon="icons/page_excel.png"
              id="org.kompiro.jamcircle.kanban.ui"
              name="%csv.import.wizard.name">
+       </wizard>
+       <wizard
+             category="org.kompiro.jamcircle.kanban.ui"
+             class="org.kompiro.jamcircle.kanban.ui.wizard.BoardImportWizard"
+             icon="icons/kanban_016.gif"
+             id="org.kompiro.jamcircle.kanban.ui.boardimportwizard"
+             name="%board.import.wizard.name">
        </wizard>
     </extension>
     <extension
