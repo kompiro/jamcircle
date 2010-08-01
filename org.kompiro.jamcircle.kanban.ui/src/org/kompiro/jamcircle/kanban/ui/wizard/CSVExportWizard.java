@@ -2,18 +2,19 @@ package org.kompiro.jamcircle.kanban.ui.wizard;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.kompiro.jamcircle.kanban.ui.Messages;
+import org.kompiro.jamcircle.kanban.ui.widget.MessageDialogHelper;
 
 public class CSVExportWizard extends Wizard implements IExportWizard {
 
 	private CSVExportPage page;
 	private IRunnableWithProgress runner;
+	private MessageDialogHelper helper;
 
 	public CSVExportWizard() {
 		setWindowTitle(Messages.CSVExportWizard_title);
@@ -31,10 +32,11 @@ public class CSVExportWizard extends Wizard implements IExportWizard {
 		try {
 			getContainer().run(true, false, runner);
 		} catch (InterruptedException e) {
+			// cancel case
 			return false;
 		} catch (InvocationTargetException e) {
 			Throwable realException = e.getTargetException();
-			MessageDialog.openError(getShell(), Messages.CSVExportWizard_error_title, realException.getMessage());
+			helper.openError(getShell(), Messages.CSVExportWizard_error_title, realException);
 			return false;
 		}
 
@@ -46,6 +48,10 @@ public class CSVExportWizard extends Wizard implements IExportWizard {
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	}
+
+	public void setHelper(MessageDialogHelper helper) {
+		this.helper = helper;
 	}
 
 }
