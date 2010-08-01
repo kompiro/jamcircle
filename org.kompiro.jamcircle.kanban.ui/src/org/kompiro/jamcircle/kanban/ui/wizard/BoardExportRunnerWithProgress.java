@@ -10,12 +10,12 @@ import org.kompiro.jamcircle.kanban.service.BoardConverter;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIContext;
 import org.kompiro.jamcircle.kanban.ui.Messages;
 
-class BoardExportRunnerWithProgress implements IRunnableWithProgress {
+public class BoardExportRunnerWithProgress implements IRunnableWithProgress {
 	private BoardConverter boardConverter = KanbanUIContext.getDefault().getBoardConverter();
 	private File file;
 	private Board board;
 
-	BoardExportRunnerWithProgress() {
+	public BoardExportRunnerWithProgress() {
 	}
 
 	public void run(IProgressMonitor monitor) throws InvocationTargetException {

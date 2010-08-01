@@ -54,7 +54,7 @@ public class BoardImportWizardTest {
 
 	@Test
 	public void finish_is_enabled_when_file_form_is_exists_path() throws Exception {
-		SWTBotText fileText = bot.textWithLabel("入力");
+		SWTBotText fileText = bot.textWithLabel(Messages.BoardImportWizardPage_import_file_label);
 		assertThat(fileText.getText(), is(""));
 		File tmpFile = File.createTempFile("tmp", ".txt");
 		String path = tmpFile.getAbsolutePath();
@@ -64,7 +64,7 @@ public class BoardImportWizardTest {
 
 	@Test
 	public void runner_is_called_when_finish_is_pushed() throws Exception {
-		SWTBotText fileText = bot.textWithLabel("入力");
+		SWTBotText fileText = bot.textWithLabel(Messages.BoardImportWizardPage_import_file_label);
 		assertThat(fileText.getText(), is(""));
 		File tmpFile = File.createTempFile("tmp", ".txt");
 		String path = tmpFile.getAbsolutePath();
