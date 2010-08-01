@@ -98,6 +98,7 @@ public class BoardConverterImpl implements BoardConverter {
 				loadJavaScriptScript(board, containerName, zip);
 			}
 			loadLaneScript(board.getLanes(), containerName, zip);
+			board.save();
 			return board;
 		} catch (ZipException e) {
 		} catch (IOException e) {
@@ -160,8 +161,10 @@ public class BoardConverterImpl implements BoardConverter {
 		if (entry != null) {
 			InputStream stream = zip.getInputStream(entry);
 			String script = StreamUtil.readFromStream(stream);
-			board.setScript(script);
-			board.setScriptType(ScriptTypes.JRuby);
+			if (script != null) {
+				board.setScript(script.trim());
+				board.setScriptType(ScriptTypes.JRuby);
+			}
 		}
 	}
 

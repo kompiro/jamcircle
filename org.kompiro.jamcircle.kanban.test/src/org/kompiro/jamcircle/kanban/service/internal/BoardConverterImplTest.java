@@ -632,7 +632,8 @@ public class BoardConverterImplTest {
 		board.setScriptType(ScriptTypes.JRuby);
 
 		KanbanService service = mock(KanbanService.class);
-		when(service.createBoard(title)).thenReturn(createMockBoard(title));
+		Board createBoard = createBoard(title);
+		when(service.createBoard(title)).thenReturn(createBoard);
 		conv.setKanbanService(service);
 
 		File file = File
@@ -640,9 +641,9 @@ public class BoardConverterImplTest {
 		conv.dump(file, board);
 		Board actual = conv.load(file);
 
-		assertThat(actual.getTitle(), is("test"));
-		assertThat(actual.getScriptType(), is(ScriptTypes.JRuby));
-		assertThat(actual.getScript().trim(), is(script));
+		verify(actual).setScriptType(ScriptTypes.JRuby);
+		verify(actual).setScript(script);
+		verify(actual).save();
 	}
 
 	@Test
@@ -753,7 +754,9 @@ public class BoardConverterImplTest {
 	private Board createBoard(String title, Lane[] lanes) {
 		Board board = mock(Board.class);
 		when(board.getTitle()).thenReturn(title);
-		when(board.getLanes()).thenReturn(lanes);
+		if (lanes != null) {
+			when(board.getLanes()).thenReturn(lanes);
+		}
 		return board;
 	}
 
