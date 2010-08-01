@@ -19,6 +19,10 @@ public class Messages extends NLS {
 	public static String BoardExportWizardPage_selection_group;
 	public static String BoardExportWizardPage_title;
 	public static String BoardImportWizard_title;
+	public static String BoardImportWizardPage_import_file_dialog_message;
+	public static String BoardImportWizardPage_import_file_label;
+	public static String BoardImportWizardPage_message;
+	public static String BoardImportWizardPage_title;
 	public static String BoardListTableViewer_board_null_error_message;
 	public static String BoardListTableViewer_delete_label;
 	public static String BoardListTableViewer_edit_label;
@@ -164,6 +168,7 @@ public class Messages extends NLS {
 	public static String TrashModel_confirm_message;
 	public static String TrashModel_container_name;
 	public static String TrashModel_name;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
