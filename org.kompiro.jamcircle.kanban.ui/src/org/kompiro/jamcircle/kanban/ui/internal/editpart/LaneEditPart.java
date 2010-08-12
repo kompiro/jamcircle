@@ -2,65 +2,32 @@ package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
 import java.beans.PropertyChangeEvent;
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.draw2d.ActionEvent;
-import org.eclipse.draw2d.Clickable;
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.*;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.editpolicies.ComponentEditPolicy;
-import org.eclipse.gef.editpolicies.ContainerEditPolicy;
-import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
-import org.eclipse.gef.requests.ChangeBoundsRequest;
-import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.gef.requests.GroupRequest;
-import org.eclipse.gef.requests.SelectionRequest;
+import org.eclipse.gef.editpolicies.*;
+import org.eclipse.gef.requests.*;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
-import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.CardContainer;
-import org.kompiro.jamcircle.kanban.model.Lane;
-import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
-import org.kompiro.jamcircle.kanban.ui.Messages;
+import org.kompiro.jamcircle.kanban.model.*;
+import org.kompiro.jamcircle.kanban.ui.*;
 import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 import org.kompiro.jamcircle.kanban.ui.dialog.LaneEditDialog;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
 import org.kompiro.jamcircle.kanban.ui.editpart.CardContainerEditPart;
 import org.kompiro.jamcircle.kanban.ui.figure.ClickableActionIcon;
-import org.kompiro.jamcircle.kanban.ui.internal.command.AddCardToOnBoardContainerCommand;
-import org.kompiro.jamcircle.kanban.ui.internal.command.AddLaneTrashCommand;
-import org.kompiro.jamcircle.kanban.ui.internal.command.CardCloneCommand;
-import org.kompiro.jamcircle.kanban.ui.internal.command.ChangeLaneConstraintCommand;
-import org.kompiro.jamcircle.kanban.ui.internal.command.CreateCardCommand;
-import org.kompiro.jamcircle.kanban.ui.internal.command.LaneToggleIconizedCommand;
-import org.kompiro.jamcircle.kanban.ui.internal.command.LaneUpdateCommand;
-import org.kompiro.jamcircle.kanban.ui.internal.command.RemoveCardCommand;
+import org.kompiro.jamcircle.kanban.ui.internal.command.*;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.policy.LaneLocalLayout;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.AnnotationArea;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneCustomizedIconFigure;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneIconFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.*;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 import org.kompiro.jamcircle.kanban.ui.script.ScriptEvent;
@@ -74,7 +41,7 @@ import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 /**
  * Controller for Lane model.
  */
-public class LaneEditPart extends AbstractEditPart implements CardContainerEditPart{
+public class LaneEditPart extends AbstractEditPart implements CardContainerEditPart {
 
 	private final class OpenListActionIcon extends
 			ClickableActionIcon {
@@ -86,7 +53,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			ApplicationWindow window = new CardListWindow(getShell(),getCardContainer(),getCommandStack());
+			ApplicationWindow window = new CardListWindow(getShell(), getCardContainer(), getCommandStack());
 			window.create();
 			window.open();
 		}
@@ -103,20 +70,21 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		public void actionPerformed(ActionEvent event) {
 			Shell shell = getViewer().getControl().getShell();
 			Lane lane = getLaneModel();
-			LaneEditDialog dialog = new LaneEditDialog(shell,lane.getStatus(),lane.getScript(),lane.getScriptType(),lane.getCustomIcon());
+			LaneEditDialog dialog = new LaneEditDialog(shell, lane.getStatus(), lane.getScript(), lane.getScriptType(),
+					lane.getCustomIcon());
 			int returnCode = dialog.open();
-			if(Dialog.OK == returnCode){
+			if (Dialog.OK == returnCode) {
 				String status = dialog.getStatus();
 				String script = dialog.getScript();
 				ScriptTypes type = dialog.getScriptType();
 				File customIcon = dialog.getCustomizeIcon();
-				doUpdateLaneCommand(status,script,type,customIcon);
+				doUpdateLaneCommand(status, script, type, customIcon);
 			}
 		}
 	}
 
 	private final class IconizeActionIcon extends ClickableActionIcon {
-		
+
 		public IconizeActionIcon() {
 			super(getIconImage(KanbanImageConstants.LANE_ICONIZE_IMAGE.toString()));
 			setTooltipText(Messages.LaneEditPart_icon_iconized_lane);
@@ -129,14 +97,15 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	}
 
 	private final class LaneXYLayoutEditPolicy extends XYLayoutEditPolicy {
-		
-		public LaneXYLayoutEditPolicy(){
+
+		public LaneXYLayoutEditPolicy() {
 		}
 
 		@Override
 		protected Command createChangeConstraintCommand(EditPart child,
 				Object constraint) {
-			if(child.getParent() != LaneEditPart.this && isNotRectangle(constraint)) return null;
+			if (child.getParent() != LaneEditPart.this && isNotRectangle(constraint))
+				return null;
 			Object target = child.getModel();
 			Rectangle rect = (Rectangle) constraint;
 			LaneLocalLayout layout = new LaneLocalLayout();
@@ -149,7 +118,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 
 		@SuppressWarnings("unchecked")
 		private MoveCommand<Object> getMoveCommand(EditPart child) {
-			return (MoveCommand<Object>)child.getAdapter(MoveCommand.class);
+			return (MoveCommand<Object>) child.getAdapter(MoveCommand.class);
 		}
 
 		private boolean isNotRectangle(Object constraint) {
@@ -159,29 +128,29 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		@Override
 		protected Command getCreateCommand(CreateRequest request) {
 			Object object = request.getNewObject();
-			if(object instanceof Card){
+			if (object instanceof Card) {
 				Card card = (Card) object;
 				CreateCardCommand command = new CreateCardCommand();
 				Object container = getHost().getModel();
-				command.setContainer((CardContainer)container);
+				command.setContainer((CardContainer) container);
 				command.setModel(card);
-				return command;				
+				return command;
 			}
 			return null;
 		}
-		
+
 		@Override
 		protected EditPolicy createChildEditPolicy(EditPart child) {
 			return new NonResizableEditPolicyFeedbackFigureExtension(child);
 		}
 
 		@Override
-		protected Command createAddCommand(EditPart child,Object constraint) {
+		protected Command createAddCommand(EditPart child, Object constraint) {
 			if (!(constraint instanceof Rectangle)) {
 				return null;
 			}
 			Rectangle rect = (Rectangle) constraint;
-			if(!(child instanceof CardEditPart)){
+			if (!(child instanceof CardEditPart)) {
 				return null;
 			}
 			CardEditPart cardPart = (CardEditPart) child;
@@ -191,16 +160,16 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			command.add(new AddCardToOnBoardContainerCommand(cardPart.getCardModel(), rect, getLaneModel()));
 			return command;
 		}
-		
+
 		@Override
 		protected Command getOrphanChildrenCommand(Request request) {
-			if(request instanceof GroupRequest){
+			if (request instanceof GroupRequest) {
 				CompoundCommand command = new CompoundCommand();
 				GroupRequest req = (GroupRequest) request;
-				for(Object o : req.getEditParts()){
+				for (Object o : req.getEditParts()) {
 					if (o instanceof CardEditPart) {
 						CardEditPart child = (CardEditPart) o;
-						command.add(new RemoveCardCommand(child.getCardModel(),getLaneModel()));
+						command.add(new RemoveCardCommand(child.getCardModel(), getLaneModel()));
 					}
 				}
 				return command;
@@ -209,15 +178,13 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		}
 	}
 
-	
 	private AnnotationArea<Figure> actionLayer;
 	private LaneIconFigure laneIconFigure;
-	private AnnotationArea<Figure>  customIconLayer;
+	private AnnotationArea<Figure> customIconLayer;
 	private LaneCustomizedIconFigure customIconFigure;
 
-	
 	private TrashModel trash;
-	
+
 	private Clickable iconizeIcon;
 
 	private Clickable editIcon;
@@ -239,8 +206,8 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		laneIconLayer = createActionLayer(laneIconFigure);
 		customIconFigure = createCustomIcon();
 		customIconLayer = createActionLayer(customIconFigure);
-		if(getLaneModel().isIconized()){
-			if(getLaneModel().hasCustomIcon()){
+		if (getLaneModel().isIconized()) {
+			if (getLaneModel().hasCustomIcon()) {
 				return customIconLayer;
 			}
 			return laneIconLayer;
@@ -248,11 +215,10 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		return actionLayer;
 	}
 
-
 	private LaneCustomizedIconFigure createCustomIcon() {
-		LaneCustomizedIconFigure customIconFigure = new LaneCustomizedIconFigure();			
+		LaneCustomizedIconFigure customIconFigure = new LaneCustomizedIconFigure();
 		Lane lane = getLaneModel();
-		customIconFigure.setLocation(new Point(lane.getX(),lane.getY()));
+		customIconFigure.setLocation(new Point(lane.getX(), lane.getY()));
 		customIconFigure.setStatus(lane.getStatus());
 		createCustomIcon(customIconFigure);
 		return customIconFigure;
@@ -260,26 +226,24 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 
 	private void createCustomIcon(LaneCustomizedIconFigure customIconFigure) {
 		File customIcon = getLaneModel().getCustomIcon();
-		if(customIcon != null && customIcon.exists()){
-			Image image = new Image(WorkbenchUtil.getDisplay(),customIcon.getAbsolutePath());
+		if (customIcon != null && customIcon.exists()) {
+			Image image = new Image(WorkbenchUtil.getDisplay(), customIcon.getAbsolutePath());
 			customIconFigure.setImage(image);
 		}
 	}
 
 	private LaneIconFigure createIconFigure() {
-		LaneIconFigure laneIconFigure = new LaneIconFigure();			
+		LaneIconFigure laneIconFigure = new LaneIconFigure();
 		Lane lane = getLaneModel();
-		laneIconFigure.setLocation(new Point(lane.getX(),lane.getY()));
+		laneIconFigure.setLocation(new Point(lane.getX(), lane.getY()));
 		laneIconFigure.setStatus(lane.getStatus());
 		return laneIconFigure;
 	}
-
 
 	private AnnotationArea<Figure> createActionLayer(Figure figure) {
 		AnnotationArea<Figure> actionLayer = new AnnotationArea<Figure>(figure);
 		return actionLayer;
 	}
-
 
 	private LaneFigure createLaneFigure() {
 		LaneFigure laneFigure = new LaneFigure();
@@ -288,14 +252,14 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		System.out.println(lane);
 		laneFigure.setSize(lane.getWidth(), lane.getHeight());
 		laneFigure.setStatus(lane.getStatus());
-		laneFigure.setLocation(new Point(lane.getX(),lane.getY()));
+		laneFigure.setLocation(new Point(lane.getX(), lane.getY()));
 		return laneFigure;
 	}
-	
+
 	@Override
 	protected IFigure copiedFigure() {
-		if(getLaneModel().isIconized()){
-			if(getLaneModel().hasCustomIcon()){
+		if (getLaneModel().isIconized()) {
+			if (getLaneModel().hasCustomIcon()) {
 				return createCustomIcon();
 			}
 			return createIconFigure();
@@ -307,20 +271,20 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		iconizeIcon = new IconizeActionIcon();
 		editIcon = new EditActionIcon();
 		openListIcon = new OpenListActionIcon();
-		
+
 		detatchActionIcon();
-		
+
 	}
 
 	private void detatchActionIcon() {
 		IFigure actionSection;
-		if(getLaneModel().isIconized()){
-			if(getLaneModel().hasCustomIcon()){
-				actionSection = customIconLayer.getActionSection();				
-			}else{
+		if (getLaneModel().isIconized()) {
+			if (getLaneModel().hasCustomIcon()) {
+				actionSection = customIconLayer.getActionSection();
+			} else {
 				actionSection = laneIconLayer.getActionSection();
 			}
-		}else{
+		} else {
 			actionSection = actionLayer.getActionSection();
 		}
 		actionSection.add(iconizeIcon);
@@ -328,21 +292,20 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		actionSection.add(openListIcon);
 	}
 
-
 	private Image getIconImage(String key) {
 		return getImageRegistry().get(key);
 	}
-	
+
 	@Override
 	public void activate() {
 		createActionIcons();
 		hideActionIcons();
 		super.activate();
 	}
-	
+
 	@Override
 	protected void addChildVisual(EditPart childEditPart, int index) {
-		IFigure child = ((GraphicalEditPart)childEditPart).getFigure();
+		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (child instanceof CardFigure) {
 			CardFigure card = (CardFigure) child;
 			GraphicalEntity model = (GraphicalEntity) childEditPart.getModel();
@@ -350,61 +313,59 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			card.setRemoved(false);
 			card.setAdded(false);
 		}
-		getContentPane().add(child,child.getBounds(), -1);
+		getContentPane().add(child, child.getBounds(), -1);
 	}
-	
-	
+
 	@Override
 	protected void removeChildVisual(EditPart childEditPart) {
-		IFigure child = ((GraphicalEditPart)childEditPart).getFigure();
+		IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (child instanceof AnnotationArea<?>) {
 			@SuppressWarnings("unchecked")
 			AnnotationArea<CardFigure> area = (AnnotationArea<CardFigure>) child;
 			CardFigure card = area.getTargetFigure();
 			GraphicalEntity model = (GraphicalEntity) childEditPart.getModel();
-			if(model.isDeletedVisuals()){
+			if (model.isDeletedVisuals()) {
 				card.setRemoved(true);
 			}
 			card.repaint();
 		}
-		// Tips : for Animation 
-		if(!child.isShowing()){
+		// Tips : for Animation
+		if (!child.isShowing()) {
 			getContentPane().remove(child);
 		}
 	}
-	
+
 	@Override
 	protected List<?> getModelChildren() {
 		Lane laneModel = getLaneModel();
-		if(
-//				Platform.isRunning() &&
-				!laneModel.isIconized()){
+		if (
+		// Platform.isRunning() &&
+		!laneModel.isIconized()) {
 			Card[] cards = laneModel.getCards();
-			KanbanUIStatusHandler.info("LaneEditPart.getModelChildren() lane:'%s' length:'%d'",laneModel.getStatus(),cards.length); //$NON-NLS-1$
+			KanbanUIStatusHandler.info(
+					"LaneEditPart.getModelChildren() lane:'%s' length:'%d'", laneModel.getStatus(), cards.length); //$NON-NLS-1$
 			return Arrays.asList(cards);
 		}
 		return super.getModelChildren();
 	}
-	
+
 	@Override
 	public IFigure getContentPane() {
 		return getLaneFigure().getCardArea();
 	}
-	
+
 	public LaneFigure getLaneFigure() {
 		return this.laneFigure;
 	}
 
-
-	public AnnotationArea<Figure> getLaneFigureLayer(){
+	public AnnotationArea<Figure> getLaneFigureLayer() {
 		return actionLayer;
 	}
-	
 
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new LaneXYLayoutEditPolicy());
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy(){
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
 			@Override
 			protected Command createDeleteCommand(GroupRequest deleteRequest) {
 				CompoundCommand command = new CompoundCommand();
@@ -412,39 +373,40 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 				requestToParent.setEditParts(LaneEditPart.this);
 				requestToParent.setType(REQ_ORPHAN_CHILDREN);
 				command.add(getParent().getCommand(requestToParent));
-				command.add(new AddLaneTrashCommand(trash,getLaneModel()));
+				command.add(new AddLaneTrashCommand(trash, getLaneModel()));
 				return command;
 			}
 		});
-		installEditPolicy(EditPolicy.CONTAINER_ROLE, new ContainerEditPolicy(){
+		installEditPolicy(EditPolicy.CONTAINER_ROLE, new ContainerEditPolicy() {
 
 			@Override
 			protected Command getCreateCommand(CreateRequest request) {
 				return null;
 			}
-			
+
 			@Override
 			protected Command getCloneCommand(ChangeBoundsRequest request) {
 				Point targetLocation = request.getLocation();
 				targetLocation.translate(getLaneFigure().getCardArea().getLocation().negate());
-				targetLocation.translate(new Point(LaneFigure.MARGIN,LaneFigure.MARGIN).negate());
-				return new CardCloneCommand(request,getLaneModel());
+				targetLocation.translate(new Point(LaneFigure.MARGIN, LaneFigure.MARGIN).negate());
+				return new CardCloneCommand(request, getLaneModel());
 			}
-			
+
 		});
 	}
-	
+
 	@Override
 	public void performRequest(Request req) {
-		if(RequestConstants.REQ_OPEN.equals(req.getType())){
+		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
 			Lane lane = getLaneModel();
-			if(lane.isIconized()){
+			if (lane.isIconized()) {
 				getCommandStack().execute(new LaneToggleIconizedCommand(getLaneModel()));
 				return;
 			}
 			if (req instanceof SelectionRequest) {
 				SelectionRequest sel = (SelectionRequest) req;
-				CardCreateRequest cardCreateRequest = new CardCreateRequest(getKanbanService(),getBoardModel().getBoard());
+				CardCreateRequest cardCreateRequest = new CardCreateRequest(getKanbanService(), getBoardModel()
+						.getBoard());
 				Point contentPaneLocation = getContentPane().getBounds().getLocation().negate();
 				Point targetLocation = sel.getLocation().getCopy().translate(contentPaneLocation);
 				targetLocation.translate(-10, -10);
@@ -453,52 +415,50 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			}
 		}
 	}
-	
-	private void doUpdateLaneCommand(String status, String script,ScriptTypes type, File customIcon) {
-		getCommandStack().execute(new LaneUpdateCommand(getLaneModel(),status,script,type,customIcon));
+
+	private void doUpdateLaneCommand(String status, String script, ScriptTypes type, File customIcon) {
+		getCommandStack().execute(new LaneUpdateCommand(getLaneModel(), status, script, type, customIcon));
 	}
 
 	protected void doPropertyChange(final PropertyChangeEvent evt) {
 		GraphicalEditPart parentPart = (GraphicalEditPart) getParent();
 		Lane lane = getLaneModel();
-		if(isPropConstraint(evt)){
+		if (isPropConstraint(evt)) {
 			Rectangle constraint = (Rectangle) evt.getNewValue();
 			parentPart.setLayoutConstraint(this, getFigure(), constraint);
-		}
-		else if(isPropStatus(evt)){
+		} else if (isPropStatus(evt)) {
 			getLaneFigure().setStatus(lane.getStatus());
 			getLaneIconFigure().setStatus(lane.getStatus());
-		}
-		else if(isChildrenChanged(evt)){
-			if(!lane.isIconized()){
+		} else if (isChildrenChanged(evt)) {
+			if (!lane.isIconized()) {
 				super.doPropertyChange(evt);
 			}
 			String message = String.format(Messages.LaneEditPart_execute_script_message, lane.getStatus());
-			Job scriptJob = new Job(message){
+			Job scriptJob = new Job(message) {
 				@Override
 				public IStatus run(IProgressMonitor monitor) {
-					return 	executeScript(evt,monitor);
+					return executeScript(evt, monitor);
 				}
 			};
 			scriptJob.schedule();
-		}else if(isPropIconized(evt) || isPropCustomIcon(evt)){
-			if(isPropCustomIcon(evt)){
+		} else if (isPropIconized(evt) || isPropCustomIcon(evt)) {
+			if (isPropCustomIcon(evt)) {
 				createCustomIcon(customIconFigure);
 			}
 			IFigure parent = getFigure().getParent();
 			removeNotify();
 			parent.remove(getFigure());
 			getContentPane().getChildren().clear();
-			Point location = new Point(lane.getX(),lane.getY());
-			if(lane.isIconized()){
-				if(lane.getCustomIcon() != null){
+			Point location = new Point(lane.getX(), lane.getY());
+			if (lane.isIconized()) {
+				if (lane.getCustomIcon() != null) {
 					setFigure(customIconLayer);
 					customIconLayer.setLocation(location);
-				}else{
+				} else {
 					setFigure(laneIconLayer);
 					laneIconFigure.setLocation(location);
 				}
-			}else{
+			} else {
 				setFigure(actionLayer);
 				actionLayer.setLocation(location);
 			}
@@ -507,24 +467,24 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			getBoardModel().setAnimated(false);
 			addNotify();
 			getBoardModel().setAnimated(true);
+			refreshVisuals();
 		}
 	}
-
 
 	private IStatus executeScript(PropertyChangeEvent evt, IProgressMonitor monitor) {
 		Lane lane = getLaneModel();
 		String script = lane.getScript();
-		if(Lane.PROP_CARD.equals(evt.getPropertyName()) && script != null){
-			Card card = (Card) (evt.getNewValue() != null? evt.getNewValue():evt.getOldValue());
-			Map<String,Object> beans= new HashMap<String, Object>();
+		if (Lane.PROP_CARD.equals(evt.getPropertyName()) && script != null) {
+			Card card = (Card) (evt.getNewValue() != null ? evt.getNewValue() : evt.getOldValue());
+			Map<String, Object> beans = new HashMap<String, Object>();
 			beans.put("card", card); //$NON-NLS-1$
 			beans.put("lane", lane); //$NON-NLS-1$
 			beans.put("event", new ScriptEvent(evt)); //$NON-NLS-1$
 			beans.put("monitor", monitor); //$NON-NLS-1$
-			
-			String scriptName = String.format(Messages.LaneEditPart_script_name,lane.getStatus());
+
+			String scriptName = String.format(Messages.LaneEditPart_script_name, lane.getStatus());
 			try {
-				getScriptingService().eval(lane.getScriptType(), scriptName, script,beans);
+				getScriptingService().eval(lane.getScriptType(), scriptName, script, beans);
 			} catch (ScriptingException e) {
 				KanbanUIStatusHandler.fail(e, e.getMessage());
 				return new Status(Status.ERROR, KanbanUIActivator.ID_PLUGIN, IStatus.OK, e.getMessage(), e);
@@ -532,7 +492,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		}
 		return Status.OK_STATUS;
 	}
-	
+
 	private boolean isPropIconized(PropertyChangeEvent evt) {
 		return Lane.PROP_ICONIZED.equals(evt.getPropertyName());
 	}
@@ -548,27 +508,25 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 
 	private boolean isPropConstraint(PropertyChangeEvent evt) {
 		return Lane.PROP_CONSTRAINT.equals(evt.getPropertyName());
-	}	
+	}
 
 	private boolean isPropCustomIcon(PropertyChangeEvent evt) {
 		return Lane.PROP_CUSTOM_ICON.equals(evt.getPropertyName());
-	}	
+	}
 
-	
-	public Lane getLaneModel(){
+	public Lane getLaneModel() {
 		return (Lane) getModel();
 	}
 
 	public CardContainer getCardContainer() {
 		return getLaneModel();
 	}
-	
+
 	@Override
 	public void showTargetFeedback(Request request) {
 		showActionIcons();
 		super.showTargetFeedback(request);
 	}
-
 
 	private void showActionIcons() {
 		iconizeIcon.setVisible(true);
@@ -582,17 +540,16 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		super.eraseTargetFeedback(request);
 	}
 
-
 	private void hideActionIcons() {
 		iconizeIcon.setVisible(false);
 		editIcon.setVisible(false);
 		openListIcon.setVisible(false);
 	}
-	
+
 	public LaneIconFigure getLaneIconFigure() {
 		return laneIconFigure;
 	}
-	
+
 	private ScriptingService getScriptingService() throws ScriptingException {
 		return KanbanUIActivator.getDefault().getScriptingService();
 	}
@@ -600,10 +557,10 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object getAdapter(Class key) {
-		if(MoveCommand.class.equals(key)){
+		if (MoveCommand.class.equals(key)) {
 			return new ChangeLaneConstraintCommand();
 		}
 		return super.getAdapter(key);
 	}
-	
+
 }
