@@ -1,6 +1,6 @@
 package learning;
 
-import java.io.File;
+import java.io.InputStream;
 
 import org.junit.Test;
 
@@ -9,8 +9,20 @@ import org.junit.Test;
  * Not Testing.
  */
 public class Learning {
+
 	@Test
-	public void learning() throws Exception {
-		System.out.println(new File("C:\\temp\\").getAbsolutePath());
+	public void testname() throws Exception {
+
+		ProcessBuilder builder = new ProcessBuilder("/usr/local/git/bin/git");
+		Process process = builder.start();
+		InputStream stream = process.getInputStream();
+		while (true) {
+			int c = stream.read();
+			if (c == -1) {
+				stream.close();
+				break;
+			}
+			System.out.print((char) c);
+		}
 	}
 }
