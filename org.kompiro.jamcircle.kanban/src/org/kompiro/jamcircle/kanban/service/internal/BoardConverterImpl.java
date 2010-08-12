@@ -3,8 +3,7 @@ package org.kompiro.jamcircle.kanban.service.internal;
 import static java.lang.String.format;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.*;
@@ -24,6 +23,12 @@ public class BoardConverterImpl implements BoardConverter {
 	private static final String BASE_NAME_OF_BOARD = "board";
 
 	private static final String CONTAINER_OF_LANES = "lanes/";
+
+	private static final String CONTAINER_OF_LANE_ICONS = CONTAINER_OF_LANES + "icons/";
+
+	private static final Pattern iconPathPattern = Pattern.compile(".*/" + CONTAINER_OF_LANE_ICONS + "(.*)");
+
+	private static final Pattern iconNamePattern = Pattern.compile("(\\d+)_(.+)");
 
 	private static final String EXTENSION_OF_RUBY = ".rb";
 
@@ -58,6 +63,7 @@ public class BoardConverterImpl implements BoardConverter {
 			stream = new ZipOutputStream(new FileOutputStream(file));
 			String containerName = getContainerName(file);
 			createBoardYmlEntry(board, stream, containerName);
+			createLanesIconEntry(board, stream, containerName);
 			createBoardScriptEntry(board, stream, containerName, BASE_NAME_OF_BOARD);
 			createLanesScriptEntry(board, stream, containerName);
 		} catch (IOException e) {
@@ -81,6 +87,36 @@ public class BoardConverterImpl implements BoardConverter {
 		}
 	}
 
+	private void createIconEntity(ZipOutputStream stream, File customIcon, String containerName, String fileName) {
+		ZipEntry entry = new ZipEntry(containerName + fileName);
+		try {
+			stream.putNextEntry(entry);
+			InputStream inputStream = new BufferedInputStream(new FileInputStream(customIcon));
+			int len;
+			byte[] buf = new byte[8192];
+			while ((len = inputStream.read(buf)) != -1) {
+				stream.write(buf, 0, len);
+			}
+		} catch (IOException e) {
+		}
+	}
+
+	private String getLaneIconFileName(Lane lane) {
+		return format("%d_%s", lane.getID(), lane.getCustomIcon().getName());
+	}
+
+	private void createLanesIconEntry(Board board, ZipOutputStream stream, String containerName) {
+		Lane[] lanes = board.getLanes();
+		if (lanes == null || lanes.length == 0)
+			return;
+		for (Lane lane : lanes) {
+			if (lane.getCustomIcon() == null)
+				continue;
+			String fileName = getLaneIconFileName(lane);
+			createIconEntity(stream, lane.getCustomIcon(), containerName + CONTAINER_OF_LANE_ICONS, fileName);
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -93,11 +129,6 @@ public class BoardConverterImpl implements BoardConverter {
 			ZipFile zip = new ZipFile(file);
 			String containerName = getContainerName(file);
 			Board board = loadBoard(containerName, zip);
-			loadJRubyScript(board, containerName, zip);
-			if (board.getScriptType() == null) {
-				loadJavaScriptScript(board, containerName, zip);
-			}
-			loadLaneScript(board.getLanes(), containerName, zip);
 			board.save();
 			return board;
 		} catch (ZipException e) {
@@ -105,6 +136,76 @@ public class BoardConverterImpl implements BoardConverter {
 		}
 
 		return null;
+	}
+
+	private Board loadBoard(String containerName, ZipFile zip) throws IOException {
+		String boardFileName = BASE_NAME_OF_BOARD + EXTENSION_OF_YAML;
+		ZipEntry entry = zip.getEntry(containerName + boardFileName);
+
+		InputStream stream = zip.getInputStream(entry);
+		String boardText = StreamUtil.readFromStream(stream);
+		Board board = textToModel(boardText);
+		loadCustomIcon(board, containerName, zip);
+		loadJRubyScript(board, containerName, zip);
+		if (board.getScriptType() == null) {
+			loadJavaScriptScript(board, containerName, zip);
+		}
+		loadLaneScript(board.getLanes(), containerName, zip);
+		return board;
+	}
+
+	private void loadCustomIcon(Board board, String containerName, ZipFile zip) {
+		Lane[] lanes = board.getLanes();
+		if (lanes == null)
+			return;
+		Enumeration<? extends ZipEntry> entries = zip.entries();
+		while (entries.hasMoreElements()) {
+			ZipEntry entry = entries.nextElement();
+			String name = entry.getName();
+			Matcher iconMatcher = iconPathPattern.matcher(name);
+			if (iconMatcher.matches()) {
+				String iconName = iconMatcher.group(1);
+				Matcher nameMatcher = iconNamePattern.matcher(iconName);
+				if (nameMatcher.matches()) {
+					String iconId = nameMatcher.group(1);
+					String fileName = nameMatcher.group(2);
+					for (Lane lane : lanes) {
+						if (iconId.equals(String.valueOf(lane.getID()))) {
+							File icon = null;
+							byte[] buf = new byte[8192];
+							FileOutputStream outStream = null;
+							BufferedInputStream inputStream = null;
+							try {
+								icon = new File(System.getProperty("java.io.tmpdir"), fileName);
+								outStream = new FileOutputStream(icon);
+								inputStream = new BufferedInputStream(zip.getInputStream(entry));
+								int len;
+								while ((len = inputStream.read(buf)) != -1) {
+									outStream.write(buf, 0, len);
+								}
+								outStream.flush();
+							} catch (IOException e) {
+							}
+							if (inputStream != null) {
+								try {
+									inputStream.close();
+								} catch (IOException e) {
+								}
+							}
+							if (outStream != null) {
+								try {
+									outStream.close();
+								} catch (IOException e) {
+								}
+							}
+							if (icon != null) {
+								lane.setCustomIcon(icon);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private void loadLaneScript(Lane[] lanes, String containerName, ZipFile zip) throws IOException {
@@ -133,9 +234,7 @@ public class BoardConverterImpl implements BoardConverter {
 
 	private void loadLaneJavaScript(String containerName, ZipFile zip, Lane lane) throws IOException {
 		String loadPath = containerName + CONTAINER_OF_LANES + getLaneScriptFileName(lane) + EXTENSION_OF_JAVASCRIPT;
-		System.out.println(loadPath);
-		ZipEntry entry = zip.getEntry(containerName + CONTAINER_OF_LANES + getLaneScriptFileName(lane)
-				+ EXTENSION_OF_JAVASCRIPT);
+		ZipEntry entry = zip.getEntry(loadPath);
 		if (entry != null) {
 			InputStream stream = zip.getInputStream(entry);
 			String script = StreamUtil.readFromStream(stream);
@@ -145,37 +244,28 @@ public class BoardConverterImpl implements BoardConverter {
 	}
 
 	private void loadJavaScriptScript(Board board, String containerName, ZipFile zip) throws IOException {
-		String boardJavaScriptScriptName = BASE_NAME_OF_BOARD + EXTENSION_OF_JAVASCRIPT;
-		ZipEntry entry = zip.getEntry(containerName + boardJavaScriptScriptName);
-		if (entry != null) {
-			InputStream stream = zip.getInputStream(entry);
-			String script = StreamUtil.readFromStream(stream);
-			board.setScript(script);
-			board.setScriptType(ScriptTypes.JavaScript);
-		}
+		ScriptTypes scriptType = ScriptTypes.JavaScript;
+		String scriptName = BASE_NAME_OF_BOARD + EXTENSION_OF_JAVASCRIPT;
+		loadScript(board, containerName, zip, scriptType, scriptName);
 	}
 
 	private void loadJRubyScript(Board board, String containerName, ZipFile zip) throws IOException {
-		String boardJRubyScriptName = BASE_NAME_OF_BOARD + EXTENSION_OF_RUBY;
-		ZipEntry entry = zip.getEntry(containerName + boardJRubyScriptName);
+		ScriptTypes scriptType = ScriptTypes.JRuby;
+		String scriptName = BASE_NAME_OF_BOARD + EXTENSION_OF_RUBY;
+		loadScript(board, containerName, zip, scriptType, scriptName);
+	}
+
+	private void loadScript(Board board, String containerName, ZipFile zip, ScriptTypes scriptType, String scriptName)
+			throws IOException {
+		ZipEntry entry = zip.getEntry(containerName + scriptName);
 		if (entry != null) {
 			InputStream stream = zip.getInputStream(entry);
 			String script = StreamUtil.readFromStream(stream);
 			if (script != null) {
 				board.setScript(script.trim());
-				board.setScriptType(ScriptTypes.JRuby);
+				board.setScriptType(scriptType);
 			}
 		}
-	}
-
-	private Board loadBoard(String containerName, ZipFile zip) throws IOException {
-		String boardFileName = BASE_NAME_OF_BOARD + EXTENSION_OF_YAML;
-		ZipEntry entry = zip.getEntry(containerName + boardFileName);
-
-		InputStream stream = zip.getInputStream(entry);
-		String boardText = StreamUtil.readFromStream(stream);
-		Board textToModel = textToModel(boardText);
-		return textToModel;
 	}
 
 	public String modelToText(Board board) {
@@ -264,6 +354,7 @@ public class BoardConverterImpl implements BoardConverter {
 		Matcher matcher = lanePattern.matcher(text);
 		List<Lane> lanes = new ArrayList<Lane>();
 		while (matcher.find()) {
+			@SuppressWarnings("unused")
 			Integer id = transInteger("lane.id", matcher.group(1));
 			String status = matcher.group(2);
 			Integer x = transInteger("lane.x", matcher.group(3));
@@ -271,18 +362,10 @@ public class BoardConverterImpl implements BoardConverter {
 			Integer width = transInteger("lane.width", matcher.group(5));
 			Integer height = transInteger("lane.height", matcher.group(6));
 			Lane lane = service.createLane(board, status, x, y, width, height);
-			String script = loadScript(file, id);
-			if (script != null) {
-				lane.setScript(script);
-			}
 			lanes.add(lane);
 		}
 
 		return lanes.toArray(new Lane[] {});
-	}
-
-	private String loadScript(File file, Integer id) {
-		return null;
 	}
 
 	private Integer transInteger(String key, String value) {

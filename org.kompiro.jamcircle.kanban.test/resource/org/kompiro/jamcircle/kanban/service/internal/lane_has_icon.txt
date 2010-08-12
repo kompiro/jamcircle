@@ -1,0 +1,9 @@
+board:
+	title: 8月3日のボード
+	lanes:
+		- id: 1
+		  status: test1
+		  x: 0
+		  y: 0
+		  width: 200
+		  height: 500

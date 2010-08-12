@@ -6,11 +6,11 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.File;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -392,16 +392,7 @@ public class BoardConverterImplTest {
 		ZipFile zip = new ZipFile(file);
 		assertThat(zip.size(), is(1));
 
-		String boardFileName = "board.yml";
-		String containerName = getContainerName(file);
-		ZipEntry entry = new ZipEntry(containerName + boardFileName);
-
-		InputStreamReader reader = new InputStreamReader(zip.getInputStream(entry));
-		String actual = testUtil.readFromReader(reader);
-
-		String expected = testUtil.readFile(getClass(),
-				"simple_board.txt");
-		assertThat(actual, is(expected));
+		assertBoardText(file, "simple_board.txt");
 	}
 
 	@Test
@@ -417,22 +408,14 @@ public class BoardConverterImplTest {
 		ZipFile zip = new ZipFile(file);
 		assertThat(zip.size(), is(2));
 
-		String boardFileName = "board.yml";
-		ZipEntry entry = new ZipEntry(getContainerName(file) + boardFileName);
-
-		InputStreamReader reader = new InputStreamReader(zip.getInputStream(entry));
-		String actual = testUtil.readFromReader(reader);
-
-		String expected = testUtil.readFile(getClass(),
-				"simple_board.txt");
-		assertThat(actual, is(expected));
+		assertBoardText(file, "simple_board.txt");
 
 		ZipEntry scriptEntry = new ZipEntry(getContainerName(file) + "board.rb");
 
-		reader = new InputStreamReader(zip.getInputStream(scriptEntry));
-		actual = testUtil.readFromReader(reader);
+		InputStreamReader reader = new InputStreamReader(zip.getInputStream(scriptEntry));
+		String actual = testUtil.readFromReader(reader);
 
-		expected = testUtil.readFile(getClass(),
+		String expected = testUtil.readFile(getClass(),
 				"board.rb");
 		assertThat(actual, is(expected));
 
@@ -451,22 +434,14 @@ public class BoardConverterImplTest {
 		ZipFile zip = new ZipFile(file);
 		assertThat(zip.size(), is(2));
 
-		String boardFileName = "board.yml";
-		ZipEntry entry = new ZipEntry(getContainerName(file) + boardFileName);
-
-		InputStreamReader reader = new InputStreamReader(zip.getInputStream(entry));
-		String actual = testUtil.readFromReader(reader);
-
-		String expected = testUtil.readFile(getClass(),
-				"simple_board.txt");
-		assertThat(actual, is(expected));
+		assertBoardText(file, "simple_board.txt");
 
 		ZipEntry scriptEntry = new ZipEntry(getContainerName(file) + "board.js");
 
-		reader = new InputStreamReader(zip.getInputStream(scriptEntry));
-		actual = testUtil.readFromReader(reader);
+		InputStreamReader reader = new InputStreamReader(zip.getInputStream(scriptEntry));
+		String actual = testUtil.readFromReader(reader);
 
-		expected = testUtil.readFile(getClass(),
+		String expected = testUtil.readFile(getClass(),
 				"board.js");
 		assertThat(actual, is(expected));
 
@@ -524,22 +499,14 @@ public class BoardConverterImplTest {
 		ZipFile zip = new ZipFile(file);
 		assertThat(zip.size(), is(2));
 
-		String boardFileName = "board.yml";
-		ZipEntry entry = new ZipEntry(getContainerName(file) + boardFileName);
-
-		InputStreamReader reader = new InputStreamReader(zip.getInputStream(entry));
-		String actual = testUtil.readFromReader(reader);
-
-		String expected = testUtil.readFile(getClass(),
-				"lane_has_a_script.txt");
-		assertThat(actual, is(expected));
+		assertBoardText(file, "lane_has_a_script.txt");
 
 		ZipEntry scriptEntry = new ZipEntry(getContainerName(file) + "lanes/1_test1.rb");
 
-		reader = new InputStreamReader(zip.getInputStream(scriptEntry));
-		actual = testUtil.readFromReader(reader);
+		InputStreamReader reader = new InputStreamReader(zip.getInputStream(scriptEntry));
+		String actual = testUtil.readFromReader(reader);
 
-		expected = testUtil.readFile(getClass(),
+		String expected = testUtil.readFile(getClass(),
 				"1_test1.rb");
 		assertThat(actual, is(expected));
 
@@ -575,22 +542,14 @@ public class BoardConverterImplTest {
 		ZipFile zip = new ZipFile(file);
 		assertThat(zip.size(), is(3));
 
-		String boardFileName = "board.yml";
-		ZipEntry entry = new ZipEntry(getContainerName(file) + boardFileName);
-
-		InputStreamReader reader = new InputStreamReader(zip.getInputStream(entry));
-		String actual = testUtil.readFromReader(reader);
-
-		String expected = testUtil.readFile(getClass(),
-				"lanes_have_some_script.txt");
-		assertThat(actual, is(expected));
+		assertBoardText(file, "lanes_have_some_script.txt");
 
 		ZipEntry scriptEntry = new ZipEntry(getContainerName(file) + "lanes/1_test1.js");
 
-		reader = new InputStreamReader(zip.getInputStream(scriptEntry));
-		actual = testUtil.readFromReader(reader);
+		InputStreamReader reader = new InputStreamReader(zip.getInputStream(scriptEntry));
+		String actual = testUtil.readFromReader(reader);
 
-		expected = testUtil.readFile(getClass(),
+		String expected = testUtil.readFile(getClass(),
 				"1_test1.js");
 		assertThat(actual, is(expected));
 
@@ -603,6 +562,30 @@ public class BoardConverterImplTest {
 				"2_test2.js");
 		assertThat(actual, is(expected));
 
+	}
+
+	@Test
+	public void dump_a_lane_has_icon_image() throws Exception {
+
+		String title = "8月3日のボード";
+		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
+		File base = File.createTempFile("image", ".png");
+		File image = spy(base);
+		when(image.getName()).thenReturn("image.png");
+		when(lane1.getCustomIcon()).thenReturn(image);
+
+		Lane[] lanes = new Lane[] { lane1 };
+		Board board = createBoard(title, lanes);
+		File file = File.createTempFile("lane_has_icon_image", BoardConverterImpl.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		conv.dump(file, board);
+
+		assertBoardText(file, "lane_has_icon.txt");
+
+		ZipFile zip = new ZipFile(file);
+		assertThat(zip.size(), is(2));
+
+		ZipEntry entry = zip.getEntry(getContainerName(file) + "lanes/icons/1_image.png");
+		assertThat(entry.isDirectory(), is(false));
 	}
 
 	@Test
@@ -739,6 +722,105 @@ public class BoardConverterImplTest {
 		verify(actualLanes[1]).setScript(expected);
 		verify(actualLanes[1]).setScriptType(ScriptTypes.JavaScript);
 
+	}
+
+	private void assertBoardText(File file, String expectedBoardText) throws IOException, Exception {
+		ZipFile zip = new ZipFile(file);
+		ZipEntry entry = new ZipEntry(getContainerName(file) + "board.yml");
+
+		InputStreamReader reader = new InputStreamReader(zip.getInputStream(entry));
+		String actual = testUtil.readFromReader(reader);
+
+		String expected = testUtil.readFile(getClass(), expectedBoardText);
+		assertThat(actual, is(expected));
+	}
+
+	@Test
+	public void load_a_lane_has_icon_image() throws Exception {
+
+		String title = "8月3日のボード";
+		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
+		setMockIcon(lane1, "image.png");
+
+		Lane[] lanes = new Lane[] { lane1 };
+		Board board = createBoard(title, lanes);
+
+		KanbanService service = mock(KanbanService.class);
+		lanes = new Lane[] {};
+		Board created = createMockBoard(title);
+		when(service.createBoard(title)).thenReturn(created);
+		Lane lane4 = createMockLane(1, "test1", 0, 0, 200, 500);
+		when(service.createLane(created, "test1", 0, 0, 200, 500)).thenReturn(lane4);
+		conv.setKanbanService(service);
+
+		File file = File.createTempFile("lane_has_icon_image", BoardConverterImpl.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		conv.dump(file, board);
+		Board actual = conv.load(file);
+		assertThat(actual.getLanes()[0].getStatus(), is("test1"));
+		File customIcon = actual.getLanes()[0].getCustomIcon();
+		assertThat(customIcon, is(not(nullValue())));
+		assertThat(customIcon.getName(), is("image.png"));
+	}
+
+	@Test
+	public void load_some_lanes_have_icon_images() throws Exception {
+
+		String title = "8月3日のボード";
+		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
+		setMockIcon(lane1, "image.png");
+		Lane lane2 = createLane(2, "test 2", 0, 0, 200, 500);
+		setMockIcon(lane2, "イメージ.png");
+
+		Lane[] lanes = new Lane[] { lane1, lane2 };
+		Board board = createBoard(title, lanes);
+
+		KanbanService service = mock(KanbanService.class);
+		lanes = new Lane[] {};
+		Board created = createMockBoard(title);
+		when(service.createBoard(title)).thenReturn(created);
+		Lane lane4 = createMockLane(1, "test1", 0, 0, 200, 500);
+		when(service.createLane(created, "test1", 0, 0, 200, 500)).thenReturn(lane4);
+		Lane lane5 = createMockLane(2, "test 2", 0, 0, 200, 500);
+		when(service.createLane(created, "test 2", 0, 0, 200, 500)).thenReturn(lane5);
+		conv.setKanbanService(service);
+
+		File file = File.createTempFile("lanes_have_icons_image", BoardConverterImpl.BOARD_FORMAT_FILE_EXTENSION_NAME);
+		conv.dump(file, board);
+		Board actual = conv.load(file);
+
+		Lane actualLane1 = actual.getLanes()[0];
+		assertThat(actualLane1.getStatus(), is("test1"));
+		File customIcon1 = actualLane1.getCustomIcon();
+		assertThat(customIcon1, is(not(nullValue())));
+		assertThat(customIcon1.getName(), is("image.png"));
+
+		Lane actualLane2 = actual.getLanes()[1];
+		assertThat(actualLane2.getStatus(), is("test 2"));
+		File customIcon2 = actualLane2.getCustomIcon();
+		assertThat(customIcon2, is(not(nullValue())));
+		assertThat(customIcon2.getName(), is("イメージ.png"));
+	}
+
+	private void setMockIcon(Lane target, String fileName) throws IOException {
+		File base = File.createTempFile("image", ".png");
+		File image = spy(base);
+		when(image.getName()).thenReturn(fileName);
+		when(target.getCustomIcon()).thenReturn(image);
+	}
+
+	private Lane createMockLane(final int id, String title, int x, int y, int width, int height) {
+		org.kompiro.jamcircle.kanban.model.mock.Lane lane = new org.kompiro.jamcircle.kanban.model.mock.Lane() {
+			@Override
+			public int getID() {
+				return id;
+			}
+		};
+		lane.setStatus(title);
+		lane.setX(x);
+		lane.setY(y);
+		lane.setWidth(width);
+		lane.setHeight(height);
+		return lane;
 	}
 
 	private Board createMockBoard(String title) {
