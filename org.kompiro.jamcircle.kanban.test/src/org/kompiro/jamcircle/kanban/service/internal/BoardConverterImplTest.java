@@ -52,7 +52,7 @@ public class BoardConverterImplTest {
 	@Test
 	public void modelToText_simple_board() throws Exception {
 
-		Board board = createBoard("test");
+		Board board = testUtil.createBoard("test");
 
 		String actual = conv.modelToText(board);
 		assertThat(actual, is(not(nullValue())));
@@ -65,7 +65,7 @@ public class BoardConverterImplTest {
 	@Test
 	public void modelToText_board_has_script() throws Exception {
 
-		Board board = createBoard("test");
+		Board board = testUtil.createBoard("test");
 		when(board.getScript()).thenReturn("p test");
 		when(board.getScriptType()).thenReturn(ScriptTypes.JRuby);
 
@@ -79,7 +79,7 @@ public class BoardConverterImplTest {
 	@Test
 	public void modelToText_no_title() throws Exception {
 
-		Board board = createBoard("");
+		Board board = testUtil.createBoard("");
 
 		String actual = conv.modelToText(board);
 		assertThat(actual, is(not(nullValue())));
@@ -92,7 +92,7 @@ public class BoardConverterImplTest {
 	@Test
 	public void modelToText_include_space() throws Exception {
 
-		Board board = createBoard("test 1");
+		Board board = testUtil.createBoard("test 1");
 
 		String actual = conv.modelToText(board);
 		assertThat(actual, is(not(nullValue())));
@@ -105,10 +105,10 @@ public class BoardConverterImplTest {
 	@Test
 	public void modelToText_board_has_a_lane() throws Exception {
 
-		Lane lane = createLane(1, "test1", 0, 0, 250, 600);
+		Lane lane = testUtil.createLane(1, "test1", 0, 0, 250, 600);
 
 		Lane[] lanes = new Lane[] { lane };
-		Board board = createBoard("6月30日のボード", lanes);
+		Board board = testUtil.createBoard("6月30日のボード", lanes);
 
 		String actual = conv.modelToText(board);
 		assertThat(actual, is(not(nullValue())));
@@ -119,14 +119,30 @@ public class BoardConverterImplTest {
 	}
 
 	@Test
+	public void modelToText_board_has_a_iconized_lane() throws Exception {
+
+		Lane lane = testUtil.createLane(1, "test1", 0, 0, 250, 600, true);
+
+		Lane[] lanes = new Lane[] { lane };
+		Board board = testUtil.createBoard("6月30日のボード", lanes);
+
+		String actual = conv.modelToText(board);
+		assertThat(actual, is(not(nullValue())));
+		String expected = testUtil.readFile(getClass(),
+				"board_has_a_iconized_lane.txt");
+		assertThat(actual, is(expected));
+
+	}
+
+	@Test
 	public void modelToText_board_has_some_lanes() throws Exception {
 
-		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
-		Lane lane2 = createLane(2, "test 2", 200, 0, 200, 500);
-		Lane lane3 = createLane(3, "test	3", 0, 300, 200, 500);
+		Lane lane1 = testUtil.createLane(1, "test1", 0, 0, 200, 500);
+		Lane lane2 = testUtil.createLane(2, "test 2", 200, 0, 200, 500, true);
+		Lane lane3 = testUtil.createLane(3, "test	3", 0, 300, 200, 500);
 
 		Lane[] lanes = new Lane[] { lane1, lane2, lane3 };
-		Board board = createBoard("6月30日のボード", lanes);
+		Board board = testUtil.createBoard("6月30日のボード", lanes);
 
 		String actual = conv.modelToText(board);
 		assertThat(actual, is(not(nullValue())));
@@ -158,7 +174,7 @@ public class BoardConverterImplTest {
 	public void textToModel_no_title_board() throws Exception {
 
 		String boardTitle = "";
-		Board expected = createBoard(boardTitle);
+		Board expected = testUtil.createBoard(boardTitle);
 
 		KanbanService service = mock(KanbanService.class);
 		when(service.createBoard(boardTitle)).thenReturn(expected);
@@ -176,7 +192,7 @@ public class BoardConverterImplTest {
 	public void textToModel_include_space() throws Exception {
 
 		String boardTitle = "test 1";
-		Board expected = createBoard(boardTitle);
+		Board expected = testUtil.createBoard(boardTitle);
 
 		KanbanService service = mock(KanbanService.class);
 		when(service.createBoard(boardTitle)).thenReturn(expected);
@@ -193,9 +209,9 @@ public class BoardConverterImplTest {
 	public void textToModel_has_a_lane() throws Exception {
 
 		String boardTitle = "6月30日のボード";
-		Board expected = createMockBoard(boardTitle);
+		Board expected = testUtil.createMockBoard(boardTitle);
 
-		Lane lane = createLane(1, "test1", 0, 0, 250, 600);
+		Lane lane = testUtil.createLane(1, "test1", 0, 0, 250, 600);
 
 		KanbanService service = mock(KanbanService.class);
 		when(service.createBoard(boardTitle)).thenReturn(expected);
@@ -215,18 +231,49 @@ public class BoardConverterImplTest {
 		Lane actualLane = lanes[0];
 		assertThat(actualLane, is(not(nullValue())));
 		assertThat(actualLane.getID(), is(1));
-		assertThat(actualLane.getStatus(), is("test1"));
+		verify(service).createLane(expected, "test1", 0, 0, 250, 600);
+		verify(actualLane).setIconized(false);
+	}
+
+	@Test
+	public void textToModel_has_a_iconized_lane() throws Exception {
+
+		String boardTitle = "6月30日のボード";
+		Board expected = testUtil.createMockBoard(boardTitle);
+
+		Lane lane = testUtil.createLane(1, "test1", 0, 0, 250, 600);
+
+		KanbanService service = mock(KanbanService.class);
+		when(service.createBoard(boardTitle)).thenReturn(expected);
+		when(service.createLane(expected, "test1", 0, 0, 250, 600)).thenReturn(
+				lane);
+		conv.setKanbanService(service);
+
+		String text = testUtil.readFile(getClass(),
+				"board_has_a_iconized_lane.txt");
+		Board board = conv.textToModel(text);
+		assertThat(board, is(not(nullValue())));
+		assertThat(board.getTitle(), is(boardTitle));
+
+		Lane[] lanes = board.getLanes();
+		assertThat(lanes, is(not(nullValue())));
+		assertThat(lanes.length, is(1));
+		Lane actualLane = lanes[0];
+		assertThat(actualLane, is(not(nullValue())));
+		assertThat(actualLane.getID(), is(1));
+		verify(service).createLane(expected, "test1", 0, 0, 250, 600);
+		verify(actualLane).setIconized(true);
 	}
 
 	@Test
 	public void textToModel_has_some_lanes() throws Exception {
 
 		String boardTitle = "6月30日のボード";
-		Board expected = createMockBoard(boardTitle);
+		Board expected = testUtil.createMockBoard(boardTitle);
 
-		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
-		Lane lane2 = createLane(2, "test 2", 200, 0, 200, 500);
-		Lane lane3 = createLane(3, "test	3", 0, 300, 200, 500);
+		Lane lane1 = testUtil.createLane(1, "test1", 0, 0, 200, 500);
+		Lane lane2 = testUtil.createLane(2, "test 2", 200, 0, 200, 500);
+		Lane lane3 = testUtil.createLane(3, "test	3", 0, 300, 200, 500);
 
 		KanbanService service = mock(KanbanService.class);
 		when(service.createBoard(boardTitle)).thenReturn(expected);
@@ -275,7 +322,7 @@ public class BoardConverterImplTest {
 				"illegal_board_key.txt");
 
 		String boardTitle = "6月30日のボード";
-		Board expected = createMockBoard(boardTitle);
+		Board expected = testUtil.createMockBoard(boardTitle);
 		KanbanService service = mock(KanbanService.class);
 		when(service.createBoard(boardTitle)).thenReturn(expected);
 
@@ -296,7 +343,7 @@ public class BoardConverterImplTest {
 				.readFile(getClass(), "illegal_lane_id.txt");
 
 		String boardTitle = "6月30日のボード";
-		Board expected = createMockBoard(boardTitle);
+		Board expected = testUtil.createMockBoard(boardTitle);
 		KanbanService service = mock(KanbanService.class);
 		when(service.createBoard(boardTitle)).thenReturn(expected);
 
@@ -315,7 +362,7 @@ public class BoardConverterImplTest {
 				.readFile(getClass(), "illegal_lane_x.txt");
 
 		String boardTitle = "6月30日のボード";
-		Board expected = createMockBoard(boardTitle);
+		Board expected = testUtil.createMockBoard(boardTitle);
 		KanbanService service = mock(KanbanService.class);
 		when(service.createBoard(boardTitle)).thenReturn(expected);
 
@@ -334,7 +381,7 @@ public class BoardConverterImplTest {
 				.readFile(getClass(), "illegal_lane_y.txt");
 
 		String boardTitle = "6月30日のボード";
-		Board expected = createMockBoard(boardTitle);
+		Board expected = testUtil.createMockBoard(boardTitle);
 		KanbanService service = mock(KanbanService.class);
 		when(service.createBoard(boardTitle)).thenReturn(expected);
 
@@ -353,7 +400,7 @@ public class BoardConverterImplTest {
 				.readFile(getClass(), "illegal_lane_width.txt");
 
 		String boardTitle = "6月30日のボード";
-		Board expected = createMockBoard(boardTitle);
+		Board expected = testUtil.createMockBoard(boardTitle);
 		KanbanService service = mock(KanbanService.class);
 		when(service.createBoard(boardTitle)).thenReturn(expected);
 
@@ -372,7 +419,7 @@ public class BoardConverterImplTest {
 				.readFile(getClass(), "illegal_lane_height.txt");
 
 		String boardTitle = "6月30日のボード";
-		Board expected = createMockBoard(boardTitle);
+		Board expected = testUtil.createMockBoard(boardTitle);
 		KanbanService service = mock(KanbanService.class);
 		when(service.createBoard(boardTitle)).thenReturn(expected);
 
@@ -383,7 +430,7 @@ public class BoardConverterImplTest {
 
 	@Test
 	public void dump_simple_board() throws Exception {
-		Board board = createBoard("test");
+		Board board = testUtil.createBoard("test");
 
 		File file = File.createTempFile("simple_board", BoardConverterImpl.BOARD_FORMAT_FILE_EXTENSION_NAME);
 		conv.dump(file, board);
@@ -397,7 +444,7 @@ public class BoardConverterImplTest {
 
 	@Test
 	public void dump_board_has_jruby_script() throws Exception {
-		Board board = createMockBoard("test");
+		Board board = testUtil.createMockBoard("test");
 		board.setScript("p 'hello jruby'");
 		board.setScriptType(ScriptTypes.JRuby);
 
@@ -423,7 +470,7 @@ public class BoardConverterImplTest {
 
 	@Test
 	public void dump_board_has_javascript_script() throws Exception {
-		Board board = createMockBoard("test");
+		Board board = testUtil.createMockBoard("test");
 		board.setScript("print \"hello rhino\"");
 		board.setScriptType(ScriptTypes.JavaScript);
 
@@ -450,21 +497,21 @@ public class BoardConverterImplTest {
 	@Test
 	public void dump_board_has_some_lanes() throws Exception {
 		String title = "6月30日のボード";
-		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
-		Lane lane2 = createLane(2, "test 2", 200, 0, 200, 500);
-		Lane lane3 = createLane(3, "test	3", 0, 300, 200, 500);
+		Lane lane1 = testUtil.createLane(1, "test1", 0, 0, 200, 500);
+		Lane lane2 = testUtil.createLane(2, "test 2", 200, 0, 200, 500);
+		Lane lane3 = testUtil.createLane(3, "test	3", 0, 300, 200, 500);
 
 		Lane[] lanes = new Lane[] { lane1, lane2, lane3 };
-		Board board = createBoard(title, lanes);
+		Board board = testUtil.createBoard(title, lanes);
 
 		KanbanService service = mock(KanbanService.class);
-		Board created = createMockBoard(title);
+		Board created = testUtil.createMockBoard(title);
 		when(service.createBoard(title)).thenReturn(created);
-		Lane lane4 = createLane(4, "test1", 0, 0, 200, 500);
+		Lane lane4 = testUtil.createLane(4, "test1", 0, 0, 200, 500);
 		when(service.createLane(created, "test1", 0, 0, 200, 500)).thenReturn(lane4);
-		Lane lane5 = createLane(5, "test 2", 200, 0, 200, 500);
+		Lane lane5 = testUtil.createLane(5, "test 2", 200, 0, 200, 500);
 		when(service.createLane(created, "test 2", 200, 0, 200, 500)).thenReturn(lane5);
-		Lane lane6 = createLane(6, "test	3", 0, 300, 200, 500);
+		Lane lane6 = testUtil.createLane(6, "test	3", 0, 300, 200, 500);
 		when(service.createLane(created, "test	3", 0, 300, 200, 500)).thenReturn(lane6);
 		conv.setKanbanService(service);
 
@@ -478,17 +525,17 @@ public class BoardConverterImplTest {
 	@Test
 	public void dump_a_lane_has_jruby_script() throws Exception {
 		String title = "6月30日のボード";
-		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
+		Lane lane1 = testUtil.createLane(1, "test1", 0, 0, 200, 500);
 		when(lane1.getScript()).thenReturn("p 'hello jruby'");
 		when(lane1.getScriptType()).thenReturn(ScriptTypes.JRuby);
 
 		Lane[] lanes = new Lane[] { lane1 };
-		Board board = createBoard(title, lanes);
+		Board board = testUtil.createBoard(title, lanes);
 
 		KanbanService service = mock(KanbanService.class);
-		Board created = createMockBoard(title);
+		Board created = testUtil.createMockBoard(title);
 		when(service.createBoard(title)).thenReturn(created);
-		Lane lane4 = createLane(1, "test1", 0, 0, 200, 500);
+		Lane lane4 = testUtil.createLane(1, "test1", 0, 0, 200, 500);
 		when(service.createLane(created, "test1", 0, 0, 200, 500)).thenReturn(lane4);
 		conv.setKanbanService(service);
 
@@ -515,23 +562,23 @@ public class BoardConverterImplTest {
 	@Test
 	public void dump_some_lanes_have_javascript_script() throws Exception {
 		String title = "6月30日のボード";
-		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
+		Lane lane1 = testUtil.createLane(1, "test1", 0, 0, 200, 500);
 		when(lane1.getScript()).thenReturn("print \"hello javascript\"");
 		when(lane1.getScriptType()).thenReturn(ScriptTypes.JavaScript);
 
-		Lane lane2 = createLane(2, "test2", 300, 0, 200, 500);
+		Lane lane2 = testUtil.createLane(2, "test2", 300, 0, 200, 500);
 		when(lane2.getScript()).thenReturn("print \"hello javascript\"");
 		when(lane2.getScriptType()).thenReturn(ScriptTypes.JavaScript);
 
 		Lane[] lanes = new Lane[] { lane1, lane2 };
-		Board board = createBoard(title, lanes);
+		Board board = testUtil.createBoard(title, lanes);
 
 		KanbanService service = mock(KanbanService.class);
-		Board created = createMockBoard(title);
+		Board created = testUtil.createMockBoard(title);
 		when(service.createBoard(title)).thenReturn(created);
-		Lane lane3 = createLane(1, "test1", 0, 0, 200, 500);
+		Lane lane3 = testUtil.createLane(1, "test1", 0, 0, 200, 500);
 		when(service.createLane(created, "test1", 0, 0, 200, 500)).thenReturn(lane3);
-		Lane lane4 = createLane(2, "test2", 300, 0, 200, 500);
+		Lane lane4 = testUtil.createLane(2, "test2", 300, 0, 200, 500);
 		when(service.createLane(created, "test2", 300, 0, 200, 500)).thenReturn(lane4);
 		conv.setKanbanService(service);
 
@@ -568,14 +615,14 @@ public class BoardConverterImplTest {
 	public void dump_a_lane_has_icon_image() throws Exception {
 
 		String title = "8月3日のボード";
-		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
+		Lane lane1 = testUtil.createLane(1, "test1", 0, 0, 200, 500);
 		File base = File.createTempFile("image", ".png");
 		File image = spy(base);
 		when(image.getName()).thenReturn("image.png");
 		when(lane1.getCustomIcon()).thenReturn(image);
 
 		Lane[] lanes = new Lane[] { lane1 };
-		Board board = createBoard(title, lanes);
+		Board board = testUtil.createBoard(title, lanes);
 		File file = File.createTempFile("lane_has_icon_image", BoardConverterImpl.BOARD_FORMAT_FILE_EXTENSION_NAME);
 		conv.dump(file, board);
 
@@ -591,7 +638,7 @@ public class BoardConverterImplTest {
 	@Test
 	public void load_simple_board() throws Exception {
 		String title = "test";
-		Board board = createBoard(title);
+		Board board = testUtil.createBoard(title);
 
 		KanbanService service = mock(KanbanService.class);
 		when(service.createBoard(title)).thenReturn(board);
@@ -610,12 +657,12 @@ public class BoardConverterImplTest {
 		String title = "test";
 		String script = "p 'hello jruby'";
 
-		Board board = createMockBoard(title);
+		Board board = testUtil.createMockBoard(title);
 		board.setScript(script);
 		board.setScriptType(ScriptTypes.JRuby);
 
 		KanbanService service = mock(KanbanService.class);
-		Board createBoard = createBoard(title);
+		Board createBoard = testUtil.createBoard(title);
 		when(service.createBoard(title)).thenReturn(createBoard);
 		conv.setKanbanService(service);
 
@@ -634,12 +681,12 @@ public class BoardConverterImplTest {
 		String title = "test";
 		String script = "print \"hello javascript\"";
 
-		Board board = createMockBoard(title);
+		Board board = testUtil.createMockBoard(title);
 		board.setScript(script);
 		board.setScriptType(ScriptTypes.JavaScript);
 
 		KanbanService service = mock(KanbanService.class);
-		when(service.createBoard(title)).thenReturn(createMockBoard(title));
+		when(service.createBoard(title)).thenReturn(testUtil.createMockBoard(title));
 		conv.setKanbanService(service);
 
 		File file = File.createTempFile("board_has_a_javascript_script",
@@ -655,17 +702,17 @@ public class BoardConverterImplTest {
 	@Test
 	public void load_a_lane_has_jruby_script() throws Exception {
 		String title = "6月30日のボード";
-		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
+		Lane lane1 = testUtil.createLane(1, "test1", 0, 0, 200, 500);
 		when(lane1.getScript()).thenReturn("p 'hello jruby'");
 		when(lane1.getScriptType()).thenReturn(ScriptTypes.JRuby);
 
 		Lane[] lanes = new Lane[] { lane1 };
-		Board board = createBoard(title, lanes);
+		Board board = testUtil.createBoard(title, lanes);
 
 		KanbanService service = mock(KanbanService.class);
-		Board created = createMockBoard(title);
+		Board created = testUtil.createMockBoard(title);
 		when(service.createBoard(title)).thenReturn(created);
-		Lane lane4 = createLane(1, "test1", 0, 0, 200, 500);
+		Lane lane4 = testUtil.createLane(1, "test1", 0, 0, 200, 500);
 		when(service.createLane(created, "test1", 0, 0, 200, 500)).thenReturn(lane4);
 		conv.setKanbanService(service);
 
@@ -686,23 +733,23 @@ public class BoardConverterImplTest {
 	@Test
 	public void load_some_lanes_have_javascript_script() throws Exception {
 		String title = "6月30日のボード";
-		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
+		Lane lane1 = testUtil.createLane(1, "test1", 0, 0, 200, 500);
 		when(lane1.getScript()).thenReturn("print \"hello javascript\"");
 		when(lane1.getScriptType()).thenReturn(ScriptTypes.JavaScript);
 
-		Lane lane2 = createLane(2, "test2", 300, 0, 200, 500);
+		Lane lane2 = testUtil.createLane(2, "test2", 300, 0, 200, 500);
 		when(lane2.getScript()).thenReturn("print \"hello javascript\"");
 		when(lane2.getScriptType()).thenReturn(ScriptTypes.JavaScript);
 
 		Lane[] lanes = new Lane[] { lane1, lane2 };
-		Board board = createBoard(title, lanes);
+		Board board = testUtil.createBoard(title, lanes);
 
 		KanbanService service = mock(KanbanService.class);
-		Board created = createMockBoard(title);
+		Board created = testUtil.createMockBoard(title);
 		when(service.createBoard(title)).thenReturn(created);
-		Lane lane3 = createLane(1, "test1", 0, 0, 200, 500);
+		Lane lane3 = testUtil.createLane(1, "test1", 0, 0, 200, 500);
 		when(service.createLane(created, "test1", 0, 0, 200, 500)).thenReturn(lane3);
-		Lane lane4 = createLane(2, "test2", 300, 0, 200, 500);
+		Lane lane4 = testUtil.createLane(2, "test2", 300, 0, 200, 500);
 		when(service.createLane(created, "test2", 300, 0, 200, 500)).thenReturn(lane4);
 		conv.setKanbanService(service);
 
@@ -724,32 +771,21 @@ public class BoardConverterImplTest {
 
 	}
 
-	private void assertBoardText(File file, String expectedBoardText) throws IOException, Exception {
-		ZipFile zip = new ZipFile(file);
-		ZipEntry entry = new ZipEntry(getContainerName(file) + "board.yml");
-
-		InputStreamReader reader = new InputStreamReader(zip.getInputStream(entry));
-		String actual = testUtil.readFromReader(reader);
-
-		String expected = testUtil.readFile(getClass(), expectedBoardText);
-		assertThat(actual, is(expected));
-	}
-
 	@Test
 	public void load_a_lane_has_icon_image() throws Exception {
 
 		String title = "8月3日のボード";
-		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
-		setMockIcon(lane1, "image.png");
+		Lane lane1 = testUtil.createLane(1, "test1", 0, 0, 200, 500);
+		testUtil.setMockIcon(lane1, "image.png");
 
 		Lane[] lanes = new Lane[] { lane1 };
-		Board board = createBoard(title, lanes);
+		Board board = testUtil.createBoard(title, lanes);
 
 		KanbanService service = mock(KanbanService.class);
 		lanes = new Lane[] {};
-		Board created = createMockBoard(title);
+		Board created = testUtil.createMockBoard(title);
 		when(service.createBoard(title)).thenReturn(created);
-		Lane lane4 = createMockLane(1, "test1", 0, 0, 200, 500);
+		Lane lane4 = testUtil.createMockLane(1, "test1", 0, 0, 200, 500);
 		when(service.createLane(created, "test1", 0, 0, 200, 500)).thenReturn(lane4);
 		conv.setKanbanService(service);
 
@@ -766,21 +802,21 @@ public class BoardConverterImplTest {
 	public void load_some_lanes_have_icon_images() throws Exception {
 
 		String title = "8月3日のボード";
-		Lane lane1 = createLane(1, "test1", 0, 0, 200, 500);
-		setMockIcon(lane1, "image.png");
-		Lane lane2 = createLane(2, "test 2", 0, 0, 200, 500);
-		setMockIcon(lane2, "イメージ.png");
+		Lane lane1 = testUtil.createLane(1, "test1", 0, 0, 200, 500);
+		testUtil.setMockIcon(lane1, "image.png");
+		Lane lane2 = testUtil.createLane(2, "test 2", 0, 0, 200, 500);
+		testUtil.setMockIcon(lane2, "イメージ.png");
 
 		Lane[] lanes = new Lane[] { lane1, lane2 };
-		Board board = createBoard(title, lanes);
+		Board board = testUtil.createBoard(title, lanes);
 
 		KanbanService service = mock(KanbanService.class);
 		lanes = new Lane[] {};
-		Board created = createMockBoard(title);
+		Board created = testUtil.createMockBoard(title);
 		when(service.createBoard(title)).thenReturn(created);
-		Lane lane4 = createMockLane(1, "test1", 0, 0, 200, 500);
+		Lane lane4 = testUtil.createMockLane(1, "test1", 0, 0, 200, 500);
 		when(service.createLane(created, "test1", 0, 0, 200, 500)).thenReturn(lane4);
-		Lane lane5 = createMockLane(2, "test 2", 0, 0, 200, 500);
+		Lane lane5 = testUtil.createMockLane(2, "test 2", 0, 0, 200, 500);
 		when(service.createLane(created, "test 2", 0, 0, 200, 500)).thenReturn(lane5);
 		conv.setKanbanService(service);
 
@@ -801,57 +837,35 @@ public class BoardConverterImplTest {
 		assertThat(customIcon2.getName(), is("イメージ.png"));
 	}
 
-	private void setMockIcon(Lane target, String fileName) throws IOException {
-		File base = File.createTempFile("image", ".png");
-		File image = spy(base);
-		when(image.getName()).thenReturn(fileName);
-		when(target.getCustomIcon()).thenReturn(image);
+	@Test
+	public void load_actual_file() throws Exception {
+
+		KanbanService service = mock(KanbanService.class);
+		Board created = testUtil.createMockBoard("Sample Board");
+		when(service.createBoard("Sample Board")).thenReturn(created);
+		Lane todo = testUtil.createMockLane(1, "TODO", 322, 96, 259, 413);
+		when(service.createLane(created, "TODO", 322, 96, 259, 413)).thenReturn(todo);
+		Lane lane2 = testUtil.createMockLane(2, "新しい状態", 623, 29, 200, 296);
+		when(service.createLane(created, "新しい状態", 623, 29, 200, 296)).thenReturn(lane2);
+		Lane lane3 = testUtil.createMockLane(3, "新しい状態", 580, 191, 359, 367);
+		when(service.createLane(created, "新しい状態", 580, 191, 359, 367)).thenReturn(lane3);
+		conv.setKanbanService(service);
+
+		File file = testUtil.getFile(BoardConverterImplTest.class, "Sample Board.zip");
+		Board actual = conv.load(file);
+		assertThat(actual.getTitle(), is("Sample Board"));
+		assertThat(actual.getLanes()[0].getCustomIcon(), is(not(nullValue())));
 	}
 
-	private Lane createMockLane(final int id, String title, int x, int y, int width, int height) {
-		org.kompiro.jamcircle.kanban.model.mock.Lane lane = new org.kompiro.jamcircle.kanban.model.mock.Lane() {
-			@Override
-			public int getID() {
-				return id;
-			}
-		};
-		lane.setStatus(title);
-		lane.setX(x);
-		lane.setY(y);
-		lane.setWidth(width);
-		lane.setHeight(height);
-		return lane;
-	}
+	private void assertBoardText(File file, String expectedBoardText) throws IOException, Exception {
+		ZipFile zip = new ZipFile(file);
+		ZipEntry entry = new ZipEntry(getContainerName(file) + "board.yml");
 
-	private Board createMockBoard(String title) {
-		org.kompiro.jamcircle.kanban.model.mock.Board board = new org.kompiro.jamcircle.kanban.model.mock.Board();
-		board.setTitle(title);
-		return board;
-	}
+		InputStreamReader reader = new InputStreamReader(zip.getInputStream(entry));
+		String actual = testUtil.readFromReader(reader);
 
-	private Board createBoard(String title) {
-		return createBoard(title, null);
-	}
-
-	private Board createBoard(String title, Lane[] lanes) {
-		Board board = mock(Board.class);
-		when(board.getTitle()).thenReturn(title);
-		if (lanes != null) {
-			when(board.getLanes()).thenReturn(lanes);
-		}
-		return board;
-	}
-
-	private Lane createLane(int id, String status, int locationX,
-			int locationY, int width, int height) {
-		Lane lane = mock(Lane.class);
-		when(lane.getID()).thenReturn(id);
-		when(lane.getStatus()).thenReturn(status);
-		when(lane.getX()).thenReturn(locationX);
-		when(lane.getY()).thenReturn(locationY);
-		when(lane.getWidth()).thenReturn(width);
-		when(lane.getHeight()).thenReturn(height);
-		return lane;
+		String expected = testUtil.readFile(getClass(), expectedBoardText);
+		assertThat(actual, is(expected));
 	}
 
 	private String getContainerName(File file) {

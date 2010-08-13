@@ -18,6 +18,16 @@ import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 public class BoardConverterImpl implements BoardConverter {
 
+	private static final class LaneWrapper {
+		private Lane lane;
+		private int oldId;
+
+		public LaneWrapper(int oldId, Lane lane) {
+			this.lane = lane;
+			this.oldId = oldId;
+		}
+	}
+
 	private static final String EXTENSION_OF_YAML = ".yml";
 
 	private static final String BASE_NAME_OF_BOARD = "board";
@@ -35,13 +45,14 @@ public class BoardConverterImpl implements BoardConverter {
 	private static final String EXTENSION_OF_JAVASCRIPT = ".js";
 
 	private static final Pattern titlePattern = Pattern.compile("board:\\n\\stitle: (.+)\\n");
-	// Why \\d isn't use because to throw format error.
+	// Why \\d doesn't use is because to throw format error.
 	private static final Pattern lanePattern = Pattern.compile("- id: (.+)\\n" +
 			"\\s+status: (.+)\\n" +
 			"\\s+x: (.+)\\n" +
 			"\\s+y: (.+)\\n" +
 			"\\s+width: (.+)\\n" +
-			"\\s+height: (.+)\\n"
+			"\\s+height: (.+)\\n" +
+			"(\\s+iconized: (.+)\\n)?"
 			);
 
 	private KanbanService service;
@@ -144,8 +155,9 @@ public class BoardConverterImpl implements BoardConverter {
 
 		InputStream stream = zip.getInputStream(entry);
 		String boardText = StreamUtil.readFromStream(stream);
-		Board board = textToModel(boardText);
-		loadCustomIcon(board, containerName, zip);
+		List<LaneWrapper> retrieved = new ArrayList<LaneWrapper>();
+		Board board = textToModel(boardText, retrieved);
+		loadCustomIcon(board, retrieved, containerName, zip);
 		loadJRubyScript(board, containerName, zip);
 		if (board.getScriptType() == null) {
 			loadJavaScriptScript(board, containerName, zip);
@@ -154,10 +166,7 @@ public class BoardConverterImpl implements BoardConverter {
 		return board;
 	}
 
-	private void loadCustomIcon(Board board, String containerName, ZipFile zip) {
-		Lane[] lanes = board.getLanes();
-		if (lanes == null)
-			return;
+	private void loadCustomIcon(Board board, List<LaneWrapper> retrieved, String containerName, ZipFile zip) {
 		Enumeration<? extends ZipEntry> entries = zip.entries();
 		while (entries.hasMoreElements()) {
 			ZipEntry entry = entries.nextElement();
@@ -169,8 +178,9 @@ public class BoardConverterImpl implements BoardConverter {
 				if (nameMatcher.matches()) {
 					String iconId = nameMatcher.group(1);
 					String fileName = nameMatcher.group(2);
-					for (Lane lane : lanes) {
-						if (iconId.equals(String.valueOf(lane.getID()))) {
+					for (LaneWrapper wrapper : retrieved) {
+						Lane lane = wrapper.lane;
+						if (iconId.equals(String.valueOf(wrapper.oldId))) {
 							File icon = null;
 							byte[] buf = new byte[8192];
 							FileOutputStream outStream = null;
@@ -185,21 +195,23 @@ public class BoardConverterImpl implements BoardConverter {
 								}
 								outStream.flush();
 							} catch (IOException e) {
-							}
-							if (inputStream != null) {
-								try {
-									inputStream.close();
-								} catch (IOException e) {
+							} finally {
+								if (inputStream != null) {
+									try {
+										inputStream.close();
+									} catch (IOException e) {
+									}
 								}
-							}
-							if (outStream != null) {
-								try {
-									outStream.close();
-								} catch (IOException e) {
+								if (outStream != null) {
+									try {
+										outStream.close();
+									} catch (IOException e) {
+									}
 								}
 							}
 							if (icon != null) {
 								lane.setCustomIcon(icon);
+								lane.save();
 							}
 						}
 					}
@@ -286,20 +298,30 @@ public class BoardConverterImpl implements BoardConverter {
 			builder.append(format("		  y: %d\n", lane.getY()));
 			builder.append(format("		  width: %d\n", lane.getWidth()));
 			builder.append(format("		  height: %d\n", lane.getHeight()));
+			if (lane.isIconized()) {
+				builder.append(format("		  iconized: %s\n", lane.isIconized()));
+			}
 		}
 		return builder.toString();
 	}
 
 	public Board textToModel(String text) {
+		return textToModel(text, null);
+	}
+
+	public Board textToModel(String text, List<LaneWrapper> retrieved) {
 		String title = getTitle(text);
 		Board board = service.createBoard(title);
 		if (board == null)
 			throw new BoardFileFormatException(format("Can't parse board from '%s'", text));
-		Lane[] lanes = retrieveLanes(board, text);
-		if (lanes == null || lanes.length == 0)
+		List<LaneWrapper> lanes = retrieveLanes(board, text);
+		if (retrieved != null) {
+			retrieved.addAll(lanes);
+		}
+		if (lanes == null || lanes.size() == 0)
 			return board;
-		for (Lane lane : lanes) {
-			board.addLane(lane);
+		for (LaneWrapper lane : lanes) {
+			board.addLane(lane.lane);
 		}
 		return board;
 	}
@@ -346,26 +368,29 @@ public class BoardConverterImpl implements BoardConverter {
 		return containerName;
 	}
 
-	private Lane[] retrieveLanes(Board board, String text) {
-		return retrieveLanes(null, board, text);
-	}
-
-	private Lane[] retrieveLanes(File file, Board board, String text) {
+	private List<LaneWrapper> retrieveLanes(Board board, String text) {
 		Matcher matcher = lanePattern.matcher(text);
-		List<Lane> lanes = new ArrayList<Lane>();
+		List<LaneWrapper> lanes = new ArrayList<LaneWrapper>();
 		while (matcher.find()) {
-			@SuppressWarnings("unused")
 			Integer id = transInteger("lane.id", matcher.group(1));
 			String status = matcher.group(2);
 			Integer x = transInteger("lane.x", matcher.group(3));
 			Integer y = transInteger("lane.y", matcher.group(4));
 			Integer width = transInteger("lane.width", matcher.group(5));
 			Integer height = transInteger("lane.height", matcher.group(6));
+			Boolean iconized = transBoolean("lane.iconized", matcher.group(8));
 			Lane lane = service.createLane(board, status, x, y, width, height);
-			lanes.add(lane);
+			lane.setIconized(iconized);
+			lane.save();
+			lanes.add(new LaneWrapper(id, lane));
 		}
 
-		return lanes.toArray(new Lane[] {});
+		return lanes;
+	}
+
+	private Boolean transBoolean(String key, String value) {
+		Boolean result = Boolean.valueOf(value);
+		return result;
 	}
 
 	private Integer transInteger(String key, String value) {

@@ -13,6 +13,7 @@ board:
 		  y: 0
 		  width: 200
 		  height: 500
+		  iconized: true
 		- id: 3
 		  status: test	3
 		  x: 0
