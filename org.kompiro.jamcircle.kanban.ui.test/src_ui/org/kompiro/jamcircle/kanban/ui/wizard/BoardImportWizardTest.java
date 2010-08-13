@@ -18,8 +18,10 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.service.BoardConverter;
 import org.kompiro.jamcircle.kanban.ui.Messages;
+import org.kompiro.jamcircle.kanban.ui.wizard.BoardImportWizard.WizardContainerDelegator;
 
 @RunWith(WizardDialogTestRunner.class)
 @WithWizard(BoardImportWizard.class)
@@ -30,11 +32,14 @@ public class BoardImportWizardTest {
 
 	private SWTBotShell target;
 	private BoardConverter boardConverter;
+	private WizardContainerDelegator delegator;
 
 	@Before
 	public void before() {
 		boardConverter = mock(BoardConverter.class);
 		wizard.setConverter(boardConverter);
+		delegator = mock(WizardContainerDelegator.class);
+		wizard.setDelegator(delegator);
 		target = bot.shell(Messages.BoardImportWizard_title);
 		target.activate();
 	}
@@ -65,12 +70,12 @@ public class BoardImportWizardTest {
 	@Test
 	public void runner_is_called_when_finish_is_pushed() throws Exception {
 		SWTBotText fileText = bot.textWithLabel(Messages.BoardImportWizardPage_import_file_label);
-		assertThat(fileText.getText(), is(""));
 		File tmpFile = File.createTempFile("tmp", ".txt");
 		String path = tmpFile.getAbsolutePath();
 		fileText.setText(path);
 		bot.button(IDialogConstants.FINISH_LABEL).click();
 		verify(boardConverter).load(any(File.class));
+		verify(delegator).run(any(Board.class));
 	}
 
 }

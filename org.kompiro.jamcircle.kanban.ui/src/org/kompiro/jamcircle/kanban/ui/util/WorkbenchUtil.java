@@ -1,6 +1,5 @@
 package org.kompiro.jamcircle.kanban.ui.util;
 
-
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
@@ -12,11 +11,12 @@ import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
 /**
  * This utility class provides some function for Workbench operation.
+ * 
  * @author kompiro
  */
 public class WorkbenchUtil {
 
-	public static void openWarning(final String title,final String message){
+	public static void openWarning(final String title, final String message) {
 		sync(new Runnable() {
 			public void run() {
 				Shell parent = getShell();
@@ -24,24 +24,26 @@ public class WorkbenchUtil {
 			}
 		});
 	}
-	
-	
+
 	public static KanbanView findKanbanView() {
 		final Object[] results = new Object[1];
 		getDisplay().syncExec(new Runnable() {
 			public void run() {
 				IWorkbench workbench = getWorkbench();
-				if(workbench == null) return;
-				if(workbench.getWorkbenchWindowCount() == 0) return;
+				if (workbench == null)
+					return;
+				if (workbench.getWorkbenchWindowCount() == 0)
+					return;
 				IWorkbenchPage activePage = null;
-				for(IWorkbenchWindow workbenchWindow: workbench.getWorkbenchWindows()){
+				for (IWorkbenchWindow workbenchWindow : workbench.getWorkbenchWindows()) {
 					activePage = workbenchWindow.getActivePage();
-					if(activePage == null){
+					if (activePage == null) {
 						continue;
 					}
 				}
-				if(activePage == null) return;
-				
+				if (activePage == null)
+					return;
+
 				IViewPart foundView = activePage.findView(KanbanView.ID);
 				if (foundView instanceof KanbanView) {
 					KanbanView view = (KanbanView) foundView;
@@ -49,47 +51,49 @@ public class WorkbenchUtil {
 				}
 			}
 		});
-		return (KanbanView)results[0];
+		return (KanbanView) results[0];
 	}
-	
-	public static BoardModel getCurrentKanbanBoard(){
+
+	public static BoardModel getCurrentKanbanBoard() {
 		KanbanView findKanbanView = findKanbanView();
-		if(findKanbanView == null) return null;
-		return (BoardModel)findKanbanView.getAdapter(Board.class);
+		if (findKanbanView == null)
+			return null;
+		return (BoardModel) findKanbanView.getAdapter(Board.class);
 	}
-	
-	public static Display getDisplay(){
+
+	public static Display getDisplay() {
 		IWorkbench workbench = getWorkbench();
 		Display defDisplay = Display.getDefault();
-		if(workbench == null){
+		if (workbench == null) {
 			return defDisplay;
 		}
-		try{
-			if(workbench == null) return defDisplay;
+		try {
 			Display display = workbench.getDisplay();
-			if(display != null) return display;
+			if (display != null)
+				return display;
 			IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-			if(activeWorkbenchWindow == null) return defDisplay;
+			if (activeWorkbenchWindow == null)
+				return defDisplay;
 			display = activeWorkbenchWindow.getShell().getDisplay();
 			return display;
-		}catch(IllegalStateException e){
+		} catch (IllegalStateException e) {
 			return defDisplay;
 		}
 
 	}
-	
-	public static void sync(Runnable runnable){
+
+	public static void sync(Runnable runnable) {
 		Display display = getDisplay();
-		if(display == null){
+		if (display == null) {
 			runnable.run();
 			return;
 		}
 		display.syncExec(runnable);
 	}
-	
-	public static void async(Runnable runnable){
+
+	public static void async(Runnable runnable) {
 		Display display = getDisplay();
-		if(display == null){
+		if (display == null) {
 			runnable.run();
 			return;
 		}
@@ -97,27 +101,31 @@ public class WorkbenchUtil {
 	}
 
 	public static IWorkbench getWorkbench() {
-		if(Platform.isRunning()){
-			if(PlatformUI.isWorkbenchRunning()){
+		if (Platform.isRunning()) {
+			if (PlatformUI.isWorkbenchRunning()) {
 				return PlatformUI.getWorkbench();
 			}
 		}
 		return null;
 	}
-	
-	public static IWorkbenchWindow getWorkbenchWindow(){
+
+	public static IWorkbenchWindow getWorkbenchWindow() {
 		IWorkbench workbench = getWorkbench();
-		if(workbench == null) return null;
+		if (workbench == null)
+			return null;
 		IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
-		if(window != null) return window;
-		if(workbench.getWorkbenchWindowCount() == 0) return null;
+		if (window != null)
+			return window;
+		if (workbench.getWorkbenchWindowCount() == 0)
+			return null;
 		return workbench.getWorkbenchWindows()[0];
 	}
 
 	public static Shell getShell() {
 		IWorkbenchWindow window = getWorkbenchWindow();
-		if(window == null) return null;
+		if (window == null)
+			return null;
 		return window.getShell();
 	}
-	
+
 }

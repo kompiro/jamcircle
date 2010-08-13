@@ -16,6 +16,21 @@ import org.junit.runners.model.TestClass;
 
 public class WizardDialogTestRunner extends SWTBotJunit4ClassRunner {
 
+	private static class WizardDialogForTest extends WizardDialog {
+		private final boolean[] finishPressed;
+
+		private WizardDialogForTest(Shell parentShell, IWizard newWizard, boolean[] finishPressed) {
+			super(parentShell, newWizard);
+			this.finishPressed = finishPressed;
+		}
+
+		@Override
+		protected void finishPressed() {
+			super.finishPressed();
+			finishPressed[0] = true;
+		}
+	}
+
 	private IWizard newWizard = null;
 	private SWTBot bot;
 
@@ -33,13 +48,7 @@ public class WizardDialogTestRunner extends SWTBotJunit4ClassRunner {
 		}
 		bot = new SWTBot();
 		final boolean[] finishPressed = new boolean[1];
-		WizardDialog dialog = new WizardDialog(parentShell, newWizard) {
-			@Override
-			protected void finishPressed() {
-				super.finishPressed();
-				finishPressed[0] = true;
-			}
-		};
+		WizardDialog dialog = new WizardDialogForTest(parentShell, newWizard, finishPressed);
 		final Exception[] ex = new Exception[1];
 		Runnable r = new Runnable() {
 			public void run() {
