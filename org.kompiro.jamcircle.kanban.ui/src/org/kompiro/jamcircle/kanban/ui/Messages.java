@@ -18,6 +18,7 @@ public class Messages extends NLS {
 	public static String BoardExportWizardPage_message;
 	public static String BoardExportWizardPage_selection_group;
 	public static String BoardExportWizardPage_title;
+	public static String BoardImportWizard_error_message;
 	public static String BoardImportWizard_title;
 	public static String BoardImportWizardPage_import_file_dialog_message;
 	public static String BoardImportWizardPage_import_file_label;
