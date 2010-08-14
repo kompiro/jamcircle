@@ -16,10 +16,10 @@ import org.junit.runners.model.TestClass;
 
 public class WizardDialogTestRunner extends SWTBotJunit4ClassRunner {
 
-	private static class WizardDialogForTest extends WizardDialog {
+	public static class WizardDialogForTest extends WizardDialog {
 		private final boolean[] finishPressed;
 
-		private WizardDialogForTest(Shell parentShell, IWizard newWizard, boolean[] finishPressed) {
+		public WizardDialogForTest(Shell parentShell, IWizard newWizard, boolean[] finishPressed) {
 			super(parentShell, newWizard);
 			this.finishPressed = finishPressed;
 		}
