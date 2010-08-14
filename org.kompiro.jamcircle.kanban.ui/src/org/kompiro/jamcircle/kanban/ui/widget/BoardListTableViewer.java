@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 import org.kompiro.jamcircle.kanban.model.Board;
+import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.*;
 import org.kompiro.jamcircle.kanban.ui.dialog.BoardEditDialog;
 import org.kompiro.jamcircle.kanban.ui.internal.OpenBoardRunnableWithProgress;
@@ -32,6 +33,7 @@ public class BoardListTableViewer implements PropertyChangeListener {
 	private TrashModel trashModel;
 	private Table table;
 	private BoardListTableWidget widget;
+	private KanbanService kanbanService = KanbanUIActivator.getDefault().getKanbanService();
 
 	public BoardListTableViewer(Composite comp) {
 		Composite composite = new Composite(comp, SWT.NONE);
@@ -144,7 +146,7 @@ public class BoardListTableViewer implements PropertyChangeListener {
 				if (data instanceof StructuredSelection) {
 					StructuredSelection selection = (StructuredSelection) data;
 					for (Object obj : selection.toList()) {
-						// TODO need to implmenet
+						// TODO need to implement
 						KanbanUIStatusHandler.debug("dropped", obj); //$NON-NLS-1$
 					}
 				}
@@ -184,8 +186,7 @@ public class BoardListTableViewer implements PropertyChangeListener {
 	}
 
 	private void refreshTableViewer() {
-		Board[] boards = KanbanUIActivator.getDefault().getKanbanService()
-				.findAllBoard();
+		Board[] boards = kanbanService.findAllBoard();
 		widget.setInput(boards);
 	}
 
