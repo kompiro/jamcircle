@@ -55,11 +55,11 @@ public class BoardImportWizardPage extends WizardPage {
 				dialog.setFilterExtensions(new String[] { "*.zip" }); //$NON-NLS-1$
 				dialog.setText(Messages.BoardImportWizardPage_import_file_dialog_message);
 				String path = dialog.open();
-				if (path != null) {
+				if (path != null && !path.equals("")) {//$NON-NLS-1$
 					fileText.setText(path);
+					file = new File(path);
+					setPageComplete(file.exists());
 				}
-				file = new File(path);
-				setPageComplete(file.exists());
 			}
 		});
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(fileText);
