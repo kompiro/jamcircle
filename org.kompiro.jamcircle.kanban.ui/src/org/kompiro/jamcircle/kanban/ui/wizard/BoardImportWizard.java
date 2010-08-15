@@ -16,9 +16,9 @@ import org.kompiro.jamcircle.kanban.ui.internal.OpenBoardRunnableWithProgress;
 
 public class BoardImportWizard extends Wizard implements IImportWizard {
 
-	class WizardContainerDelegator {
+	public class WizardContainerDelegator {
 
-		boolean run(Board board) {
+		public boolean run(Board board) {
 			final OpenBoardRunnableWithProgress runnable = new OpenBoardRunnableWithProgress(board);
 			try {
 				getContainer().run(false, false, runnable);
