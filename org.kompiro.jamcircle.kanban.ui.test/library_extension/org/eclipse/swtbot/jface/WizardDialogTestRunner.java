@@ -8,6 +8,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.junit.runner.notification.RunNotifier;
@@ -46,7 +47,15 @@ public class WizardDialogTestRunner extends SWTBotJunit4ClassRunner {
 			}
 
 			private void closeDialogs() {
-				SWTBotShell activeShell = bot.activeShell();
+				SWTBotShell activeShell;
+				try {
+					activeShell = bot.activeShell();
+				} catch (WidgetNotFoundException e) {
+					// already closed.
+					return;
+				}
+				if (activeShell.widget == null)
+					return;
 				String title = activeShell.getText();
 				if (title.equals(newWizard.getWindowTitle())) {
 					activeShell.close();

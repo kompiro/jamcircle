@@ -46,7 +46,7 @@ public class BoardImportWizardTest {
 
 	@Test
 	public void show() throws Throwable {
-		target.isOpen();
+		assertThat(target.isOpen(), is(true));
 
 		bot.button(IDialogConstants.CANCEL_LABEL).click();
 		assertThat(Conditions.shellCloses(target).test(), is(true));
