@@ -18,16 +18,16 @@ import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
 public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
-	
+
 	private BoardEditPart part;
-	
+
 	private CardAreaCalcurator cardAreaCalcurator = new CardAreaCalcurator();
 
 	private BoardLocalLayout boardLocalLayout;
 
 	private StickyLaneLayout laneLayout;
 
-	public BoardXYLayoutEditPolicy(BoardEditPart part){
+	public BoardXYLayoutEditPolicy(BoardEditPart part) {
 		this.part = part;
 		this.boardLocalLayout = new BoardLocalLayout(part.getViewer());
 		this.laneLayout = new StickyLaneLayout(part.getBoardModel().getBoard());
@@ -36,27 +36,26 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected Command createChangeConstraintCommand(EditPart child,
 			Object constraint) {
-		if (child.getParent() !=part
+		if (child.getParent() != part
 				&& isNotRectangle(constraint)) {
 			return null;
 		}
 		Object target = child.getModel();
 		Rectangle rect = (Rectangle) constraint;
-		System.out.println(rect);
 		MoveCommand<Object> command = getMoveCommand(child);
 		command.setModel(target);
 		command.setRectangle(rect);
 		if (target instanceof Lane) {
 			Lane lane = (Lane) target;
-			Rectangle moved = laneLayout.rideOn(lane,rect);
-			if(moved != null) {
+			Rectangle moved = laneLayout.rideOn(lane, rect);
+			if (moved != null) {
 				command.setRectangle(moved);
 			}
 			CompoundCommand compoundCommand = new CompoundCommand();
 			compoundCommand.add(command);
 			if (child instanceof LaneEditPart && !lane.isIconized()) {
 				LaneEditPart part = (LaneEditPart) child;
-				cardAreaCalcurator.calc(part,rect,part.getViewer().getVisualPartMap(),compoundCommand);
+				cardAreaCalcurator.calc(part, rect, part.getViewer().getVisualPartMap(), compoundCommand);
 			}
 			return compoundCommand;
 		}
@@ -85,16 +84,16 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		if (object instanceof Card) {
 			Card card = (Card) object;
 			Rectangle containerRect = getLayoutContainer().getBounds();
-			Dimension cardSize = new Dimension(CardFigure.CARD_WIDTH,CardFigure.CARD_HEIGHT);
+			Dimension cardSize = new Dimension(CardFigure.CARD_WIDTH, CardFigure.CARD_HEIGHT);
 
-			Rectangle rect = new Rectangle(new Point(card.getX(),card.getY()),cardSize);
-			boardLocalLayout.calc(rect ,containerRect);
+			Rectangle rect = new Rectangle(new Point(card.getX(), card.getY()), cardSize);
+			boardLocalLayout.calc(rect, containerRect);
 			card.setX(rect.x);
 			card.setY(rect.y);
 			CreateCardCommand command = new CreateCardCommand();
 			Object container = getHost().getModel();
 			command.setContainer((BoardModel) container);
-			
+
 			command.setModel(card);
 			return command;
 		} else if (object instanceof Lane) {
@@ -144,7 +143,7 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		}
 		CardEditPart cardPart = (CardEditPart) child;
 		Rectangle containerRect = getLayoutContainer().getBounds();
-		boardLocalLayout.calc(rect,containerRect);
+		boardLocalLayout.calc(rect, containerRect);
 		CompoundCommand command = new CompoundCommand();
 		command.add(new AddCardToOnBoardContainerCommand(cardPart
 				.getCardModel(), rect, getBoardModel()));
@@ -158,10 +157,9 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	void setLaneLocalLayout(CardAreaCalcurator calc) {
 		this.cardAreaCalcurator = calc;
 	}
-	
+
 	void setBoardLocalLayout(BoardLocalLayout boardLocalLayout) {
 		this.boardLocalLayout = boardLocalLayout;
 	}
-	
-	
+
 }
