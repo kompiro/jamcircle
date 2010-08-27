@@ -17,7 +17,6 @@ module Gem
     # platform?
 
     def ssl_available?
-      require 'rubygems/gem_openssl'
       @ssl_available
     end
 
@@ -31,7 +30,7 @@ module Gem
 
     def ensure_ssl_available
       unless ssl_available?
-        fail Gem::Exception, "SSL is not installed on this system"
+        raise Gem::Exception, "SSL is not installed on this system"
       end
     end
   end

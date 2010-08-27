@@ -39,11 +39,16 @@
 # it to the next release.
 #
 
+# JRUBY-3413 and JRUBY-4231
+ARGV << "--no-pager"
 
-require 'rdoc/ri/ri_driver'
-
-######################################################################
-
-ri = RiDriver.new
-ri.process_args
-
+begin
+  # Ruby 1.8 mode
+  require 'rdoc/ri/ri_driver'
+  ri = RiDriver.new
+  ri.process_args
+rescue LoadError
+  # Ruby 1.9 mode
+  require 'rdoc/ri/driver'
+  RDoc::RI::Driver.run
+end

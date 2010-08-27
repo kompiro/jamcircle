@@ -11,7 +11,7 @@ Bundle-ActivationPolicy: lazy
 Export-Package: org.kompiro.jamcircle.scripting,
  org.kompiro.jamcircle.scripting.exception
 Require-Bundle: org.mozilla.javascript,
- org.jruby,
+ org.jruby.jruby,
  org.apache.bsf,
  org.eclipse.core.runtime
 Service-Component: OSGI-INF/ScriptingService.xml,OSGI-INF/ScriptingEngineInitializerLoader.xml

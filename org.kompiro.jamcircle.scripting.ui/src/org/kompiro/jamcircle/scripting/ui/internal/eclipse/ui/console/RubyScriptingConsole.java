@@ -61,7 +61,7 @@ public class RubyScriptingConsole extends TextConsole {
 	private static final String KEY_OF_BUNDLE_VERSION = "Bundle-Version"; //$NON-NLS-1$
 	private static final String INIT_SCRIPT_RB = "init.rb"; //$NON-NLS-1$
 	private static final String PATH_OF_JRUBY_HOME = "META-INF/jruby.home"; //$NON-NLS-1$
-	private static final String BUNDLE_OF_ORG_JRUBY = "org.jruby"; //$NON-NLS-1$
+	private static final String BUNDLE_OF_ORG_JRUBY = "org.jruby.jruby"; //$NON-NLS-1$
 	private static final String KEY_OF_RUNTIME = "$$"; //$NON-NLS-1$
 	private static final String KEY_OF_BOARD_COMMAND_EXECUTER_ACCESSOR = "$board_command_executer_accessor"; //$NON-NLS-1$
 	private static final String KEY_OF_BOARD_ACCESSOR = "$board_accessor"; //$NON-NLS-1$
@@ -553,9 +553,12 @@ public class RubyScriptingConsole extends TextConsole {
 					public void checkPermission(final Permission perm, final Object context) {
 					}
 				});
-				runtimeAdapter.eval(runtime, script);
-				// retrieve security manager
-				System.setSecurityManager(securityManager);
+				try {
+					runtimeAdapter.eval(runtime, script);
+				} finally {
+					// retrieve security manager
+					System.setSecurityManager(securityManager);
+				}
 				shutdown();
 				return Status.OK_STATUS;
 			}

@@ -36,7 +36,7 @@ public class ScriptingServiceImpl implements ScriptingService {
 	private static final String INIT_SCRIPT_JRUBY = "init.rb"; //$NON-NLS-1$
 	private static final String INIT_SCRIPT_JS = "init.js"; //$NON-NLS-1$
 	private static final String PATH_OF_JRUBY_HOME = "META-INF/jruby.home"; //$NON-NLS-1$
-	private static final String NAME_OF_JRUBY_BUNDLE = "org.jruby"; //$NON-NLS-1$
+	private static final String NAME_OF_JRUBY_BUNDLE = "org.jruby.jruby"; //$NON-NLS-1$
 	private static final String KEY_OF_RUNTIME = "$$"; //$NON-NLS-1$
 	private static final String KEY_OF_BSF = "$bsf"; //$NON-NLS-1$
 	private static final String ARGS_OF_JRUBY_ENGINE = "-Ku"; //$NON-NLS-1$
@@ -67,7 +67,11 @@ public class ScriptingServiceImpl implements ScriptingService {
 				manager = new BSFManager();
 				RubyInstanceConfig config = new RubyInstanceConfig();
 				config.setArgv(new String[] { ARGS_OF_JRUBY_ENGINE });
-				setJRubyHome(config);
+				try {
+					setJRubyHome(config);
+				} catch (IOException e) {
+					throw new ScriptingException(e.getLocalizedMessage(), e);
+				}
 				config.setObjectSpaceEnabled(true);
 				runtime = JavaEmbedUtils.initialize(new ArrayList<Object>(), config);
 				runtime.getGlobalVariables().defineReadonly(KEY_OF_BSF,
@@ -87,14 +91,11 @@ public class ScriptingServiceImpl implements ScriptingService {
 		}
 	}
 
-	private void setJRubyHome(RubyInstanceConfig config) {
+	private void setJRubyHome(RubyInstanceConfig config) throws IOException {
 		String home = null;
 		if (Platform.isRunning()) {
-			try {
-				home = new File(FileLocator.getBundleFile(Platform.getBundle(NAME_OF_JRUBY_BUNDLE)), PATH_OF_JRUBY_HOME)
+			home = new File(FileLocator.getBundleFile(Platform.getBundle(NAME_OF_JRUBY_BUNDLE)), PATH_OF_JRUBY_HOME)
 						.getAbsolutePath();
-			} catch (IOException e) {
-			}
 		}
 		if (home != null) {
 			config.setJRubyHome(home);
@@ -147,6 +148,7 @@ public class ScriptingServiceImpl implements ScriptingService {
 		} catch (IOException e) {
 			throw new ScriptingException(Messages.ScriptingServiceImpl_reading_template_error_message, e);
 		} finally {
+
 			if (beans != null) {
 				for (Map.Entry<String, Object> entry : beans.entrySet()) {
 					manager.unregisterBean(entry.getKey());
@@ -160,8 +162,17 @@ public class ScriptingServiceImpl implements ScriptingService {
 		Object result = null;
 		SecurityManager securityManager = System.getSecurityManager();
 		System.setSecurityManager(new SecurityManagerExtension());
-		if (testmode == false) {
+		try {
+			result = doExecuteScript(type, scriptName, script, templateLines, result);
+		} finally {
+			System.setSecurityManager(securityManager);
+		}
+		return result;
+	}
 
+	private Object doExecuteScript(ScriptTypes type, String scriptName, String script, int templateLines, Object result)
+			throws BSFException {
+		if (testmode == false) {
 			switch (type) {
 			case JavaScript:
 				result = manager.eval(type.getType(), scriptName, -templateLines, 0, script);
@@ -170,9 +181,7 @@ public class ScriptingServiceImpl implements ScriptingService {
 				result = JavaEmbedUtils.rubyToJava(runtime.executeScript(script, scriptName));
 				break;
 			}
-
 		}
-		System.setSecurityManager(securityManager);
 		return result;
 	}
 

@@ -28,8 +28,8 @@ class Gem::Commands::UpdateCommand < Gem::Command
     end
 
     add_local_remote_options
-
     add_platform_option
+    add_prerelease_option "as update targets"
   end
 
   def arguments # :nodoc:
@@ -51,7 +51,7 @@ class Gem::Commands::UpdateCommand < Gem::Command
       say "Updating RubyGems"
 
       unless options[:args].empty? then
-        fail "No gem names are allowed with the --system option"
+        raise "No gem names are allowed with the --system option"
       end
 
       rubygems_update = Gem::Specification.new
@@ -100,7 +100,7 @@ class Gem::Commands::UpdateCommand < Gem::Command
     if gems_to_update.include? "rubygems-update" then
       Gem.source_index.refresh!
 
-      update_gems = Gem.source_index.search 'rubygems-update'
+      update_gems = Gem.source_index.find_name 'rubygems-update'
 
       latest_update_gem = update_gems.sort_by { |s| s.version }.last
 
