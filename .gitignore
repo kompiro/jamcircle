@@ -3,6 +3,7 @@
 *~
 *log
 **/**/Thumbs.db
+**/**/.DS_store
 External Plug-in Libraries/
 .metadata
 bytelist/
