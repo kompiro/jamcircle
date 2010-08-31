@@ -542,7 +542,9 @@ public class RubyScriptingConsole extends TextConsole {
 				System.setSecurityManager(new SecurityManager() {
 					@Override
 					public void checkExit(int status) {
-						throw new SecurityException();
+						if (!PlatformUI.getWorkbench().isClosing()) {
+							throw new SecurityException();
+						}
 					}
 
 					@Override

@@ -60,6 +60,7 @@ public class ScriptingServiceImpl implements ScriptingService {
 	private Ruby runtime;
 	private Map<String, Object> globalValues = new HashMap<String, Object>();
 	private ScriptingEngineInitializerLoader loader;
+	private final SecurityManager defaultSecurityManeager = System.getSecurityManager();
 
 	public void init() throws ScriptingException {
 		if (!initialized) {
@@ -148,7 +149,6 @@ public class ScriptingServiceImpl implements ScriptingService {
 		} catch (IOException e) {
 			throw new ScriptingException(Messages.ScriptingServiceImpl_reading_template_error_message, e);
 		} finally {
-
 			if (beans != null) {
 				for (Map.Entry<String, Object> entry : beans.entrySet()) {
 					manager.unregisterBean(entry.getKey());
@@ -160,12 +160,11 @@ public class ScriptingServiceImpl implements ScriptingService {
 	public Object executeScript(ScriptTypes type, String scriptName,
 			String script, int templateLines) throws BSFException {
 		Object result = null;
-		SecurityManager securityManager = System.getSecurityManager();
 		System.setSecurityManager(new SecurityManagerExtension());
 		try {
 			result = doExecuteScript(type, scriptName, script, templateLines, result);
 		} finally {
-			System.setSecurityManager(securityManager);
+			System.setSecurityManager(defaultSecurityManeager);
 		}
 		return result;
 	}
@@ -195,6 +194,7 @@ public class ScriptingServiceImpl implements ScriptingService {
 	}
 
 	public void terminate() {
+		System.setSecurityManager(defaultSecurityManeager);
 		manager.terminate();
 		JavaEmbedUtils.terminate(runtime);
 	}
