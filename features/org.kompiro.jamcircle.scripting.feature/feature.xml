@@ -23,7 +23,7 @@
 
    <requires>
       <import plugin="org.mozilla.javascript"/>
-      <import plugin="org.jruby"/>
+      <import plugin="org.jruby.jruby"/>
       <import plugin="org.apache.bsf"/>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.osgi"/>
