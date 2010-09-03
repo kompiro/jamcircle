@@ -39,10 +39,10 @@
 			storepass="${sign.storepass}">
 			<fileset dir="${buildDirectory}/buildRepo/plugins">
 				<include name="org.kompiro.*"/>
-				<include name="org.apache.bsf*"/>
-				<include name="org.jruby*"/>
-				<include name="org.mozilla*"/>
-				<include name="org.jivesoftware*"/>
+				<exclude name="org.apache.bsf*"/>
+				<exclude name="org.jruby*"/>
+				<exclude name="org.mozilla*"/>
+				<exclude name="org.jivesoftware*"/>
 				<exclude name="*test*"/>
 			</fileset>
 			<fileset dir="${buildDirectory}/buildRepo/features">
