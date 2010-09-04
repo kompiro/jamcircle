@@ -12,7 +12,8 @@
 
 package org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.security.Permission;
 import java.util.*;
 
@@ -43,6 +44,7 @@ import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.BoardContainer;
 import org.kompiro.jamcircle.scripting.ui.Messages;
 import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
+import org.kompiro.jamcircle.scripting.ui.internal.JRubyUtil;
 
 /**
  * A console that displays text from I/O streams. An I/O console can have
@@ -60,8 +62,6 @@ public class RubyScriptingConsole extends TextConsole {
 	private static final String EMPTY = ""; //$NON-NLS-1$
 	private static final String KEY_OF_BUNDLE_VERSION = "Bundle-Version"; //$NON-NLS-1$
 	private static final String INIT_SCRIPT_RB = "init.rb"; //$NON-NLS-1$
-	private static final String PATH_OF_JRUBY_HOME = "META-INF/jruby.home"; //$NON-NLS-1$
-	private static final String BUNDLE_OF_ORG_JRUBY = "org.jruby.jruby"; //$NON-NLS-1$
 	private static final String KEY_OF_RUNTIME = "$$"; //$NON-NLS-1$
 	private static final String KEY_OF_BOARD_COMMAND_EXECUTER_ACCESSOR = "$board_command_executer_accessor"; //$NON-NLS-1$
 	private static final String KEY_OF_BOARD_ACCESSOR = "$board_accessor"; //$NON-NLS-1$
@@ -487,7 +487,11 @@ public class RubyScriptingConsole extends TextConsole {
 			protected IStatus run(IProgressMonitor monitor) {
 				RubyInstanceConfig config = new RubyInstanceConfig();
 				config.setArgv(new String[] { ARGS });
-				config.setJRubyHome(getJRubyHomeFromBundle());
+				JRubyUtil jRubyUtil = new JRubyUtil();
+				config.setJRubyHome(jRubyUtil.getJRubyHomeFromBundle());
+				Map<String, String> environment = new HashMap<String, String>();
+				environment.put("GEM_HOME", jRubyUtil.getGemHome());
+				config.setEnvironment(environment);
 				config.setObjectSpaceEnabled(true);
 				config.setOutput(new PrintStream(output));
 				config.setInput(input);
@@ -515,15 +519,6 @@ public class RubyScriptingConsole extends TextConsole {
 						new ValueAccessor(runtime.newFixnum(System.identityHashCode(runtime))));
 			}
 
-			private String getJRubyHomeFromBundle() {
-				try {
-					String path = new File(FileLocator.getBundleFile(Platform.getBundle(BUNDLE_OF_ORG_JRUBY)),
-							PATH_OF_JRUBY_HOME).getAbsolutePath();
-					return path;
-				} catch (IOException e) {
-				}
-				return null;
-			}
 		};
 		initJob.schedule();
 		Job reader = new Job(Messages.RubyScriptingConsole_run_irb_message) {
