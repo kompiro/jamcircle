@@ -4,7 +4,7 @@ import java.io.*;
 
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.Job;
-import org.kompiro.jamcircle.scripting.ui.internal.JRubyUtil;
+import org.kompiro.jamcircle.scripting.util.JRubyUtil;
 
 public class InstallGemJob extends Job {
 	private final String target;

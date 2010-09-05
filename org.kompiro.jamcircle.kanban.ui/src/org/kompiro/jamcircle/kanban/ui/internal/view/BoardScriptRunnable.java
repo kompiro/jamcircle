@@ -38,19 +38,19 @@ class BoardScriptRunnable extends MonitorRunnable {
 	}
 
 	public void run() {
-		if(boardModel.hasScript()){
+		if (boardModel.hasScript()) {
 			SubMonitor sub = SubMonitor.convert(monitor);
 			sub.setTaskName(Messages.KanbanView_execute_script_task_name);
 			boardModel.clearMocks();
-		
-			Map<String, Object> beans = createBeans(viewer, boardModel,sub);
+
+			Map<String, Object> beans = createBeans(viewer, boardModel, sub);
 
 			Board board = boardModel.getBoard();
 			String script = board.getScript();
 			ScriptTypes scriptType = board.getScriptType();
-			String scriptName = String.format(Messages.KanbanView_target_board_message,board.getTitle());
+			String scriptName = String.format(Messages.KanbanView_target_board_message, board.getTitle());
 			try {
-				scriptingService.eval(scriptType, scriptName, script,beans);
+				scriptingService.eval(scriptType, scriptName, script, beans);
 			} catch (ScriptingException e) {
 				KanbanUIStatusHandler.fail(e, e.getMessage());
 			}
@@ -59,11 +59,11 @@ class BoardScriptRunnable extends MonitorRunnable {
 
 	private Map<String, Object> createBeans(
 			GraphicalViewer viewer, BoardModel boardModel, SubMonitor sub) {
-		Map<String,Object> beans= new HashMap<String, Object>();
+		Map<String, Object> beans = new HashMap<String, Object>();
 		beans.put(BEAN_NAME_BOARD, boardModel);
 		beans.put(BEAN_NAME_MONITOR, sub);
 		beans.put(BEAN_NAME_BOARD_PART, viewer.getContents());
-		beans.put(BEAN_NAME_BOARD_COMMAND_EXECUTER, new BoardCommandExecuter((BoardEditPart)viewer.getContents()));
+		beans.put(BEAN_NAME_BOARD_COMMAND_EXECUTER, new BoardCommandExecuter((BoardEditPart) viewer.getContents()));
 		return beans;
 	}
 }

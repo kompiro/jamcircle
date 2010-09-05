@@ -3,8 +3,11 @@ package org.kompiro.jamcircle.scripting.ui;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.kompiro.jamcircle.scripting.ScriptingService;
+import org.kompiro.jamcircle.scripting.util.ScriptingSecurityHelper;
+import org.kompiro.jamcircle.scripting.util.ScriptingSecurityManager;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -20,62 +23,55 @@ public class ScriptingUIActivator extends AbstractUIPlugin {
 	private static ScriptingUIActivator plugin;
 
 	private ServiceTracker scriptingServiceTracker;
-	
+
 	/**
 	 * The constructor
 	 */
 	public ScriptingUIActivator() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		scriptingServiceTracker = new ServiceTracker(context,ScriptingService.class.getName(), null);
+		scriptingServiceTracker = new ServiceTracker(context, ScriptingService.class.getName(), null);
 		scriptingServiceTracker.open();
+		ScriptingSecurityManager.setScriptingExitHelper(new ScriptingSecurityHelper() {
+			public void throwSecurityException() throws SecurityException {
+				if (PlatformUI.isWorkbenchRunning()) {
+					throw new SecurityException();
+				}
+			}
+		});
 		plugin = this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		scriptingServiceTracker.close();
 		super.stop(context);
 	}
 
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
 	public static ScriptingUIActivator getDefault() {
 		return plugin;
 	}
-	
+
 	@Override
 	protected void initializeImageRegistry(ImageRegistry reg) {
-		for(ScriptingImageEnum e :ScriptingImageEnum.values()){
+		for (ScriptingImageEnum e : ScriptingImageEnum.values()) {
 			initializeImage(reg, e);
 		}
 	}
-	
-	private void initializeImage(ImageRegistry reg,ScriptingImageEnum constants) {
+
+	private void initializeImage(ImageRegistry reg, ScriptingImageEnum constants) {
 		String PLUGIN_ID = getBundle().getSymbolicName();
 		reg.put(constants.toString(), imageDescriptorFromPlugin(PLUGIN_ID, constants.getPath()));
 	}
-	
-	public static IStatus createErrorStatus(Throwable e){
-		return new Status(IStatus.ERROR, PLUGIN_ID, Messages.ScriptingUIActivator_error_message,e);
+
+	public static IStatus createErrorStatus(Throwable e) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, Messages.ScriptingUIActivator_error_message, e);
 	}
 
 	public ScriptingService getScriptingService() {
 		return (ScriptingService) scriptingServiceTracker.getService();
 	}
-
 
 }

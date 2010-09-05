@@ -14,7 +14,6 @@ package org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.security.Permission;
 import java.util.*;
 
 import jline.History;
@@ -35,16 +34,17 @@ import org.eclipse.ui.*;
 import org.eclipse.ui.console.*;
 import org.eclipse.ui.part.IPageBookViewPage;
 import org.eclipse.ui.statushandlers.StatusManager;
-import org.jruby.*;
+import org.jruby.embed.LocalContextScope;
+import org.jruby.embed.ScriptingContainer;
 import org.jruby.ext.Readline;
-import org.jruby.internal.runtime.ValueAccessor;
-import org.jruby.javasupport.JavaEmbedUtils;
-import org.jruby.runtime.builtin.IRubyObject;
+import org.jruby.util.KCode;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.BoardContainer;
 import org.kompiro.jamcircle.scripting.ui.Messages;
 import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
-import org.kompiro.jamcircle.scripting.ui.internal.JRubyUtil;
+import org.kompiro.jamcircle.scripting.util.JRubyUtil;
+import org.kompiro.jamcircle.scripting.util.ScriptingSecurityManager;
+import org.osgi.framework.Bundle;
 
 /**
  * A console that displays text from I/O streams. An I/O console can have
@@ -62,10 +62,8 @@ public class RubyScriptingConsole extends TextConsole {
 	private static final String EMPTY = ""; //$NON-NLS-1$
 	private static final String KEY_OF_BUNDLE_VERSION = "Bundle-Version"; //$NON-NLS-1$
 	private static final String INIT_SCRIPT_RB = "init.rb"; //$NON-NLS-1$
-	private static final String KEY_OF_RUNTIME = "$$"; //$NON-NLS-1$
 	private static final String KEY_OF_BOARD_COMMAND_EXECUTER_ACCESSOR = "$board_command_executer_accessor"; //$NON-NLS-1$
 	private static final String KEY_OF_BOARD_ACCESSOR = "$board_accessor"; //$NON-NLS-1$
-	private static final String ARGS = "-Ku"; //$NON-NLS-1$
 	private static final String OUTPUT_STREAM_COLOR = "RubyScriptingConsole.OutputStreamColor"; //$NON-NLS-1$
 	private static final String ERROR_STREAM_COLOR = "RubyScriptingConsole.ErrorStreamColor"; //$NON-NLS-1$
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator");//$NON-NLS-1$
@@ -92,7 +90,8 @@ public class RubyScriptingConsole extends TextConsole {
 
 	private IOConsolePage consolePage;
 
-	private Ruby runtime;
+	// private Ruby runtime;
+	private ScriptingContainer container;
 
 	private IOConsoleOutputStream output;
 
@@ -244,7 +243,7 @@ public class RubyScriptingConsole extends TextConsole {
 					}
 					List<?> suggestions = new LinkedList<String>();
 					IDocument doc = getDocument();
-					Readline.getCompletor(Readline.getHolder(runtime))
+					Readline.getCompletor(Readline.getHolder(container.getProvider().getRuntime()))
 							.complete(doc.get(), doc.getLength(), suggestions);
 
 					ICompletionProposal[] proposals = null;
@@ -483,40 +482,35 @@ public class RubyScriptingConsole extends TextConsole {
 
 	private void createJob() {
 		final Job initJob = new Job(Messages.RubyScriptingConsole_initialize_runtime_message) {
+
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				RubyInstanceConfig config = new RubyInstanceConfig();
-				config.setArgv(new String[] { ARGS });
 				JRubyUtil jRubyUtil = new JRubyUtil();
-				config.setJRubyHome(jRubyUtil.getJRubyHomeFromBundle());
-				Map<String, String> environment = new HashMap<String, String>();
-				environment.put("GEM_HOME", jRubyUtil.getGemHome());
-				config.setEnvironment(environment);
-				config.setObjectSpaceEnabled(true);
-				config.setOutput(new PrintStream(output));
-				config.setInput(input);
-				config.setError(new PrintStream(error));
-				runtime = JavaEmbedUtils.initialize(new ArrayList<Object>(), config);
+
+				LocalContextScope scope = LocalContextScope.SINGLETHREAD;
+				container = new ScriptingContainer(scope);
+				container.setError(new PrintStream(error));
+				container.setInput(input);
+				container.setOutput(new PrintStream(output));
+				container.setRunRubyInProcess(true);
+				container.setKCode(KCode.UTF8);
+				container.setHomeDirectory(jRubyUtil.getJRubyHomeFromBundle());
+				container.setEnvironment(jRubyUtil.getDefaultEnvironment());
+				container.setObjectSpaceEnabled(true);
+
 				defineGlobalValues();
 				return Status.OK_STATUS;
 			}
 
+			@SuppressWarnings("unchecked")
 			private void defineGlobalValues() {
 				Map<String, Object> glovalValues = ScriptingUIActivator.getDefault().getScriptingService()
 						.getGlovalValues();
 				if (glovalValues != null) {
-					for (Map.Entry<String, Object> value : glovalValues.entrySet()) {
-						IRubyObject rubyObject = JavaEmbedUtils.javaToRuby(runtime, value.getValue());
-						runtime.defineGlobalConstant(value.getKey(), rubyObject);
-					}
+					container.getVarMap().putAll(glovalValues);
 				}
-				IRubyObject rubyBoard = JavaEmbedUtils.javaToRuby(runtime, new BoardAccessor());
-				runtime.getGlobalVariables().defineReadonly(KEY_OF_BOARD_ACCESSOR, new ValueAccessor(rubyBoard));
-				IRubyObject rubyBoardPart = JavaEmbedUtils.javaToRuby(runtime, new BoardCommandExecuterAccessor());
-				runtime.getGlobalVariables().defineReadonly(KEY_OF_BOARD_COMMAND_EXECUTER_ACCESSOR,
-						new ValueAccessor(rubyBoardPart));
-				runtime.getGlobalVariables().defineReadonly(KEY_OF_RUNTIME,
-						new ValueAccessor(runtime.newFixnum(System.identityHashCode(runtime))));
+				container.put(KEY_OF_BOARD_ACCESSOR, new BoardAccessor());
+				container.put(KEY_OF_BOARD_COMMAND_EXECUTER_ACCESSOR, new BoardCommandExecuterAccessor());
 			}
 
 		};
@@ -531,30 +525,12 @@ public class RubyScriptingConsole extends TextConsole {
 							Messages.RubyScriptingConsole_join_error_title, e);
 				}
 
-				RubyRuntimeAdapter runtimeAdapter = JavaEmbedUtils.newRuntimeAdapter();
 				String script = IOUtils.getStringFromResource(INIT_SCRIPT_RB);
-				SecurityManager securityManager = System.getSecurityManager();
-				System.setSecurityManager(new SecurityManager() {
-					@Override
-					public void checkExit(int status) {
-						if (!PlatformUI.getWorkbench().isClosing()) {
-							throw new SecurityException();
-						}
-					}
-
-					@Override
-					public void checkPermission(final Permission perm) {
-					}
-
-					@Override
-					public void checkPermission(final Permission perm, final Object context) {
-					}
-				});
+				ScriptingSecurityManager.runScript();
 				try {
-					runtimeAdapter.eval(runtime, script);
+					container.runScriptlet(script);
 				} finally {
-					// retrieve security manager
-					System.setSecurityManager(securityManager);
+					ScriptingSecurityManager.finishedScript();
 				}
 				shutdown();
 				return Status.OK_STATUS;
@@ -640,7 +616,7 @@ public class RubyScriptingConsole extends TextConsole {
 		private void addHistory(String line) {
 			if (line == null || line.isEmpty())
 				return;
-			Readline.getHistory(Readline.getHolder(runtime)).addToHistory(line.trim());
+			Readline.getHistory(Readline.getHolder(container.getProvider().getRuntime())).addToHistory(line.trim());
 		}
 
 		private boolean isIncludedLineSeparator(String text) {
@@ -660,7 +636,7 @@ public class RubyScriptingConsole extends TextConsole {
 			// if (!Readline.getHistory(Readline.getHolder(runtime)).next())
 			// return;
 
-			History history = Readline.getHistory(Readline.getHolder(runtime));
+			History history = Readline.getHistory(Readline.getHolder(container.getProvider().getRuntime()));
 			if (history.next()) { // at end
 				// history.previous(); // undo check
 				String oldLine = history.current().trim();
@@ -675,7 +651,7 @@ public class RubyScriptingConsole extends TextConsole {
 			// else
 			// Readline.getHistory(Readline.getHolder(runtime)).previous(); //
 			// undo check
-			History history = Readline.getHistory(Readline.getHolder(runtime));
+			History history = Readline.getHistory(Readline.getHolder(container.getProvider().getRuntime()));
 			if (!history.previous())
 				return;
 
@@ -759,9 +735,8 @@ public class RubyScriptingConsole extends TextConsole {
 	}
 
 	private void shutdown() {
-		JavaEmbedUtils.terminate(runtime);
-		runtime.getGlobalVariables().defineReadonly(KEY_OF_BOARD_ACCESSOR, null);
-		runtime = null;
+		container.terminate();
+		container = null;
 		input = null;
 		output = null;
 		error = null;
@@ -822,17 +797,22 @@ public class RubyScriptingConsole extends TextConsole {
 			text.addVerifyListener(handleListener);
 			getDocument().addDocumentListener(new CaretMoveListener(text));
 		}
+		String version = getScriptingUIBundleVersion();
+		String message = String.format(Messages.RubyScriptingConsole_initialize_message, version);
 		try {
-			String version = ScriptingUIActivator.getDefault().getBundle().getHeaders().get(KEY_OF_BUNDLE_VERSION)
-					.toString();
-			String message = String.format(Messages.RubyScriptingConsole_initialize_message, version);
 			output.write(message);
 		} catch (IOException e) {
 		}
 	}
 
+	private String getScriptingUIBundleVersion() {
+		ScriptingUIActivator activator = ScriptingUIActivator.getDefault();
+		Bundle bundle = activator.getBundle();
+		return bundle.getHeaders().get(KEY_OF_BUNDLE_VERSION).toString();
+	}
+
 	protected void completeAction(KeyEvent event) {
-		if (Readline.getCompletor(Readline.getHolder(runtime)) == null)
+		if (Readline.getCompletor(Readline.getHolder(container.getProvider().getRuntime())) == null)
 			return;
 		assist.showPossibleCompletions();
 	}
