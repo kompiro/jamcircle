@@ -16,7 +16,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	private static final String WIN32_KEY_STATE_MANAGER = "org.kompiro.jamcircle.rcp.win32.internal.KeyStateManagerFowWin32"; //$NON-NLS-1$
 	private static final String ID_SEPARATOR = ","; //$NON-NLS-1$
 	private static final String ID_OF_PERSPECTIVE_KANBAN = "org.kompiro.jamcircle.kanban.ui.perspective.kanban"; //$NON-NLS-1$
-    private static final String ID_OF_PERSPECTIVE_FRIENDS = "org.kompiro.jamcircle.xmpp.ui.perspective.friends"; //$NON-NLS-1$
+	private static final String ID_OF_PERSPECTIVE_FRIENDS = "org.kompiro.jamcircle.xmpp.ui.perspective.friends"; //$NON-NLS-1$
 	private IKeyStateManager manager = null;
 	private TrayItem trayItem;
 	private KeyEventListener listener;
@@ -27,55 +27,61 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		if (RCPUtils.isWindows()) {
 			className = WIN32_KEY_STATE_MANAGER;
 		}
-		if (className != null){
+		if (className != null) {
 			try {
 				Class<?> clazz = Class.forName(className);
 				manager = (IKeyStateManager) clazz.newInstance();
 			} catch (Exception e) {
-				IStatus status = new Status(IStatus.ERROR, RCPActivator.PLUGIN_ID, Messages.ApplicationWorkbenchAdvisor_error,e);
+				IStatus status = new Status(IStatus.ERROR, RCPActivator.PLUGIN_ID,
+						Messages.ApplicationWorkbenchAdvisor_error, e);
 				StatusManager.getManager().handle(status);
 			}
 		}
 	}
-	
+
 	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
-        return new ApplicationWorkbenchWindowAdvisor(configurer);
-    }
+		return new ApplicationWorkbenchWindowAdvisor(configurer);
+	}
 
 	public String getInitialWindowPerspectiveId() {
 		return ID_OF_PERSPECTIVE_KANBAN;
 	}
-	
+
 	@Override
 	public void initialize(IWorkbenchConfigurer configurer) {
 		configurer.setExitOnLastWindowClose(false);
 		String defaultPerspective = ID_OF_PERSPECTIVE_KANBAN + ID_SEPARATOR + ID_OF_PERSPECTIVE_FRIENDS;
 		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.SHOW_PROGRESS_ON_STARTUP, false);
-		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.PERSPECTIVE_BAR_EXTRAS, defaultPerspective);
-		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.INITIAL_FAST_VIEW_BAR_LOCATION, IWorkbenchPreferenceConstants.LEFT);
-		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.DOCK_PERSPECTIVE_BAR, IWorkbenchPreferenceConstants.LEFT);
+		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.PERSPECTIVE_BAR_EXTRAS,
+				defaultPerspective);
+		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.INITIAL_FAST_VIEW_BAR_LOCATION,
+				IWorkbenchPreferenceConstants.LEFT);
+		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.DOCK_PERSPECTIVE_BAR,
+				IWorkbenchPreferenceConstants.LEFT);
 		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.SHOW_OTHER_IN_PERSPECTIVE_MENU, false);
 		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.SHOW_TEXT_ON_PERSPECTIVE_BAR, false);
 		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.SHOW_OPEN_ON_PERSPECTIVE_BAR, false);
 		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.DISABLE_NEW_FAST_VIEW, true);
 		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.SHOW_TRADITIONAL_STYLE_TABS, false);
 		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.SHOW_INTRO, false);
-		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.DEFAULT_PERSPECTIVE_ID, ID_OF_PERSPECTIVE_KANBAN);
+		PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.DEFAULT_PERSPECTIVE_ID,
+				ID_OF_PERSPECTIVE_KANBAN);
 	}
-	
+
 	@Override
 	public void preStartup() {
 		createTray();
 		initalizeManager();
 	}
-	
+
 	@Override
 	public void postStartup() {
 		trayItem.setImage(getAppImage());
 	}
 
 	private void initalizeManager() {
-		if(manager == null) return;
+		if (manager == null)
+			return;
 		manager.install();
 		listener = new KeyEventListener() {
 			public void fireEvent() {
@@ -92,35 +98,38 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		trayItem.setImage(getAppOffImage());
 		trayItem.setText(ApplicationWorkbenchWindowAdvisor.APP_NAME);
 		trayItem.setToolTipText(Messages.ApplicationWorkbenchAdvisor_icon_tooltip);
-		trayItem.addSelectionListener(new SelectionAdapter(){
+		trayItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				showMenu();
+				Shell shell = getActiveShell();
+				if (shell.isVisible()) {
+					shell.forceActive();
+				}
 			}
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				showBoard();
-			}
-		});
-		trayItem.addMenuDetectListener(new MenuDetectListener(){
-			public void menuDetected(MenuDetectEvent e) {
 				handleShowOrHideBoard(trayItem);
 			}
 		});
+		trayItem.addMenuDetectListener(new MenuDetectListener() {
+			public void menuDetected(MenuDetectEvent e) {
+				showMenu();
+			}
+		});
 	}
-
 
 	private Display getDisplay() {
 		Display display = Display.getDefault();
 		return display;
 	}
-	
+
 	@Override
 	public boolean preShutdown() {
 		shutdownManager();
 		Tray tray = getDisplay().getSystemTray();
 		TrayItem[] items = tray.getItems();
-		for(TrayItem item : items){
+		for (TrayItem item : items) {
 			item.dispose();
 		}
 		tray.dispose();
@@ -128,16 +137,17 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	}
 
 	private void shutdownManager() {
-		if(manager == null)return;
+		if (manager == null)
+			return;
 		manager.removeKeyEventListener(listener);
 		manager.uninstall();
 	}
 
 	private void handleShowOrHideBoard(TrayItem trayItem) {
 		Shell shell = getActiveShell();
-		if(shell.isVisible() == false || shell.getMinimized()){
+		if (shell.isVisible() == false || shell.getMinimized()) {
 			showBoard();
-		}else{
+		} else {
 			hideBoard();
 		}
 	}
@@ -152,30 +162,32 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		RCPUtils.modifyAlphaForDropout(shell);
 		closeToolTip();
 	}
-		
-	public void showToolTip(String title){
+
+	public void showToolTip(String title) {
 		showToolTip(title, null);
 	}
-	
-	public void showToolTip(String title, String message){
-		if(tip != null){
+
+	public void showToolTip(String title, String message) {
+		if (tip != null) {
 			closeToolTip();
 		}
-		tip = new ToolTip(new Shell(getDisplay()) , SWT.BALLOON | SWT.ICON_INFORMATION);
+		tip = new ToolTip(new Shell(getDisplay()), SWT.BALLOON | SWT.ICON_INFORMATION);
 		tip.setText(title);
-		if(message != null)	tip.setMessage(message);
+		if (message != null)
+			tip.setMessage(message);
 		trayItem.setToolTip(tip);
-		tip.setVisible(true);					
+		tip.setVisible(true);
 	}
-	
-	private void closeToolTip(){
-		if(tip == null) return;
+
+	private void closeToolTip() {
+		if (tip == null)
+			return;
 		tip.setVisible(false);
 		tip.getParent().close();
 		tip.dispose();
 		tip = null;
 	}
-	
+
 	private ImageRegistry getImageRegistry() {
 		return RCPActivator.getDefault().getImageRegistry();
 	}
@@ -200,7 +212,6 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		exitItem(shell, menu);
 		menu.setVisible(true);
 	}
-	
 
 	private void extensionItem(Menu menu) {
 		separator(menu);
@@ -208,7 +219,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 	private void openItem(final Shell shell, final Menu menu) {
 		MenuItem boardItem = new MenuItem(menu, SWT.POP_UP);
-		boardItem.addSelectionListener(new SelectionAdapter(){
+		boardItem.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				handleShowOrHideBoard(trayItem);
 				menu.dispose();
@@ -216,9 +227,9 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 			}
 		});
 		Shell activeShell = getActiveShell();
-		if(activeShell != null && activeShell.isVisible()){
+		if (activeShell != null && activeShell.isVisible()) {
 			boardItem.setText(Messages.ApplicationWorkbenchAdvisor_close_menu);
-		}else{
+		} else {
 			boardItem.setText(Messages.ApplicationWorkbenchAdvisor_open_menu);
 		}
 		boardItem.setImage(getAppImage());
@@ -227,10 +238,10 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	private void separator(final Menu menu) {
 		new MenuItem(menu, SWT.SEPARATOR);
 	}
-	
+
 	private void exitItem(final Shell shell, final Menu menu) {
 		MenuItem exit = new MenuItem(menu, SWT.POP_UP);
-		exit.addSelectionListener(new SelectionAdapter(){
+		exit.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				PlatformUI.getWorkbench().close();
 				menu.dispose();
@@ -243,9 +254,11 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 	private Shell getActiveShell() {
 		IWorkbench workbench = PlatformUI.getWorkbench();
-		if(workbench == null) return null;
+		if (workbench == null)
+			return null;
 		IWorkbenchWindow activeWindow = workbench.getActiveWorkbenchWindow();
-		if(activeWindow == null) return null;
+		if (activeWindow == null)
+			return null;
 		Shell shell = activeWindow.getShell();
 		return shell;
 	}
