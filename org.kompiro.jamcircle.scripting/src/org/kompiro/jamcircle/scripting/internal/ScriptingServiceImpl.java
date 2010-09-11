@@ -1,7 +1,6 @@
 package org.kompiro.jamcircle.scripting.internal;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 import org.apache.bsf.BSFException;
@@ -15,6 +14,7 @@ import org.jruby.util.KCode;
 import org.kompiro.jamcircle.scripting.*;
 import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 import org.kompiro.jamcircle.scripting.util.JRubyUtil;
+import org.kompiro.jamcircle.scripting.util.ScriptingSecurityManager;
 
 public class ScriptingServiceImpl implements ScriptingService {
 
@@ -41,7 +41,6 @@ public class ScriptingServiceImpl implements ScriptingService {
 	// private Ruby runtime;
 	private Map<String, Object> globalValues = new HashMap<String, Object>();
 	private ScriptingEngineInitializerLoader loader;
-	private final SecurityManager defaultSecurityManeager = System.getSecurityManager();
 	private ScriptingContainer container;
 
 	public void init() throws ScriptingException {
@@ -135,8 +134,9 @@ public class ScriptingServiceImpl implements ScriptingService {
 	public Object executeScript(ScriptTypes type, String scriptName,
 			String script, int templateLines) throws BSFException {
 		Object result = null;
-
+		ScriptingSecurityManager.runScript();
 		result = doExecuteScript(type, scriptName, script, templateLines, result);
+		ScriptingSecurityManager.finishedScript();
 		return result;
 	}
 
@@ -165,9 +165,16 @@ public class ScriptingServiceImpl implements ScriptingService {
 	}
 
 	public void terminate() {
-		System.setSecurityManager(defaultSecurityManeager);
 		manager.terminate();
 		container.terminate();
+	}
+
+	public PrintStream getOutputStream() {
+		return container.getOutput();
+	}
+
+	public PrintStream getErrorStream() {
+		return container.getError();
 	}
 
 	public void setGlobalValues(Map<String, Object> globalValues) throws ScriptingException {
