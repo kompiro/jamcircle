@@ -47,16 +47,20 @@ public interface ScriptingService extends IAdaptable {
 	Map<String, Object> getGlovalValues();
 
 	/**
-	 * @return
-	 *         Scripting Engine's error stream.
-	 *         Now supports JRuby Engine only.
+	 * set Scripting Engine's error stream.
+	 * 
+	 * @param stream
+	 *            error stream
 	 */
-	public PrintStream getErrorStream();
+	public void setErrorStream(PrintStream stream);
 
 	/**
-	 * @return
-	 *         Scripting Engine's output stream.
-	 *         Now supports JRuby Engine only.
+	 * set Scripting Engine's output stream.
+	 * 
+	 * @param stream
+	 *            output stream
 	 */
-	public PrintStream getOutputStream();
+	public void setOutputStream(PrintStream stream);
+
+	void initialize() throws ScriptingException;
 }

@@ -56,19 +56,21 @@ public class ScriptingServiceImpl implements ScriptingService {
 				container.setHomeDirectory(jRubyUtil.getJRubyHomeFromBundle());
 				container.setEnvironment(jRubyUtil.getDefaultEnvironment());
 				container.setObjectSpaceEnabled(true);
-				initializedVarMap();
-
-				if (loader != null) {
-					setGlobalValues(loader.getGrobalValues());
-					try {
-						loader.loadExtendScript(this);
-					} catch (Exception e) {
-						throw new ScriptingException(e.getLocalizedMessage(), e);
-					}
-				}
-				initialized = true;
 			}
 		}
+	}
+
+	public void initialize() throws ScriptingException {
+		initializedVarMap();
+		if (loader != null) {
+			try {
+				setGlobalValues(loader.getGrobalValues());
+				loader.loadExtendScript(this);
+			} catch (Exception e) {
+				throw new ScriptingException(e.getLocalizedMessage(), e);
+			}
+		}
+		initialized = true;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -169,12 +171,12 @@ public class ScriptingServiceImpl implements ScriptingService {
 		container.terminate();
 	}
 
-	public PrintStream getOutputStream() {
-		return container.getOutput();
+	public void setOutputStream(PrintStream stream) {
+		container.setOutput(stream);
 	}
 
-	public PrintStream getErrorStream() {
-		return container.getError();
+	public void setErrorStream(PrintStream stream) {
+		container.setError(stream);
 	}
 
 	public void setGlobalValues(Map<String, Object> globalValues) throws ScriptingException {

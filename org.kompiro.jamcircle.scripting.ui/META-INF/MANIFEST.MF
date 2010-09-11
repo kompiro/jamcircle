@@ -15,4 +15,6 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Import-Package: org.kompiro.jamcircle.kanban.model,
  org.kompiro.jamcircle.scripting,
+ org.kompiro.jamcircle.scripting.exception,
  org.kompiro.jamcircle.scripting.util
+Service-Component: OSGI-INF/ScriptingUIContext.xml

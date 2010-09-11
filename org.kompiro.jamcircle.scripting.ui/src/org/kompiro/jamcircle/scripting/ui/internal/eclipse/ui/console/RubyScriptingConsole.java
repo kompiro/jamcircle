@@ -41,6 +41,7 @@ import org.jruby.util.KCode;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.BoardContainer;
 import org.kompiro.jamcircle.scripting.ui.*;
+import org.kompiro.jamcircle.scripting.ui.internal.service.ScriptingUIContext;
 import org.kompiro.jamcircle.scripting.util.JRubyUtil;
 import org.kompiro.jamcircle.scripting.util.ScriptingSecurityManager;
 import org.osgi.framework.Bundle;
@@ -501,7 +502,7 @@ public class RubyScriptingConsole extends TextConsole {
 
 			@SuppressWarnings("unchecked")
 			private void defineGlobalValues() {
-				Map<String, Object> glovalValues = ScriptingUIActivator.getDefault().getScriptingService()
+				Map<String, Object> glovalValues = ScriptingUIContext.getContext().getScriptingService()
 						.getGlovalValues();
 				if (glovalValues != null) {
 					container.getVarMap().putAll(glovalValues);
