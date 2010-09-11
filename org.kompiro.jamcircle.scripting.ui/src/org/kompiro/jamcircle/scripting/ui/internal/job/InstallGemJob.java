@@ -4,9 +4,14 @@ import java.io.*;
 
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.ui.console.*;
+import org.kompiro.jamcircle.scripting.ui.*;
 import org.kompiro.jamcircle.scripting.util.JRubyUtil;
 
 public class InstallGemJob extends Job {
+	private static final String COMMAND_NAME_OF_JGEM = "jgem";
 	private final String target;
 	private final JRubyUtil jRubyUtil = new JRubyUtil();
 
@@ -19,7 +24,7 @@ public class InstallGemJob extends Job {
 	protected IStatus run(IProgressMonitor monitor) {
 		String jrubyHome = jRubyUtil.getJRubyHomeFromBundle();
 		String scriptBin = jrubyHome + File.separator + "bin" + File.separator;
-		String scriptPath = scriptBin + "jgem";
+		String scriptPath = scriptBin + COMMAND_NAME_OF_JGEM;
 		final ProcessBuilder builder = new ProcessBuilder(scriptPath, "install", target);
 		String envPath = System.getenv().get("PATH");
 		builder.environment().put("PATH", envPath + File.pathSeparator + scriptBin);
@@ -28,17 +33,37 @@ public class InstallGemJob extends Job {
 		builder.environment().put("GEM_HOME", gemHome);
 		try {
 			Process process = builder.start();
-			InputStreamThread it = new InputStreamThread(process.getInputStream(), System.out);
-			InputStreamThread et = new InputStreamThread(process.getErrorStream(), System.err);
+			IOConsole console = new IOConsole("Gem Console", getRubyAddImageDescriptor());
+			getConsoleManager().addConsoles(new IConsole[] { console });
+			IOConsoleOutputStream outputStream = console.newOutputStream();
+			outputStream.setColor(ScriptingColorEnum.OUTPUT_STREAM_COLOR.getColor());
+			IOConsoleOutputStream errorStream = console.newOutputStream();
+			errorStream.setColor(ScriptingColorEnum.ERROR_STREAM_COLOR.getColor());
+			InputStreamThread it = new InputStreamThread(process.getInputStream(), new PrintStream(outputStream));
+			InputStreamThread et = new InputStreamThread(process.getErrorStream(), new PrintStream(errorStream));
 			it.start();
 			et.start();
 			process.waitFor();
 		} catch (IOException e) {
-			e.printStackTrace();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 		return Status.OK_STATUS;
+	}
+
+	private ImageDescriptor getRubyAddImageDescriptor() {
+		return getImageRegistry().getDescriptor(ScriptingImageEnum.RUBY_ADD.getPath());
+	}
+
+	private ImageRegistry getImageRegistry() {
+		return getActivator().getImageRegistry();
+	}
+
+	private ScriptingUIActivator getActivator() {
+		return ScriptingUIActivator.getDefault();
+	}
+
+	private IConsoleManager getConsoleManager() {
+		return ConsolePlugin.getDefault().getConsoleManager();
 	}
 
 	class InputStreamThread extends Thread {

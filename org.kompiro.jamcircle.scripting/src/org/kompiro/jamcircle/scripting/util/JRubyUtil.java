@@ -11,6 +11,8 @@ import org.osgi.framework.Bundle;
 
 public class JRubyUtil {
 
+	private static final String GEMS_HOME = ".gems";
+
 	public String getJRubyHomeFromBundle() {
 		try {
 			Bundle bundle = Platform.getBundle(Constants.BUNDLE_OF_ORG_JRUBY);
@@ -27,7 +29,7 @@ public class JRubyUtil {
 		if (instancePath.endsWith(File.separator) == false) {
 			instancePath += File.separator;
 		}
-		String gemHome = instancePath + "gems" + File.separator;
+		String gemHome = instancePath + GEMS_HOME + File.separator;
 		return gemHome;
 	}
 

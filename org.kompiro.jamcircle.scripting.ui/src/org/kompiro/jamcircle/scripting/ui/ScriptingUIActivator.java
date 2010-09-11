@@ -41,7 +41,14 @@ public class ScriptingUIActivator extends AbstractUIPlugin {
 				}
 			}
 		});
+		initializeColorRegistry();
 		plugin = this;
+	}
+
+	private void initializeColorRegistry() {
+		for (ScriptingColorEnum e : ScriptingColorEnum.values()) {
+			e.initialize();
+		}
 	}
 
 	public void stop(BundleContext context) throws Exception {

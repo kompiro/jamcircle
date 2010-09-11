@@ -20,7 +20,7 @@ import jline.History;
 
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.resource.*;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.*;
 import org.eclipse.jface.text.contentassist.*;
 import org.eclipse.swt.SWT;
@@ -40,8 +40,7 @@ import org.jruby.ext.Readline;
 import org.jruby.util.KCode;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.BoardContainer;
-import org.kompiro.jamcircle.scripting.ui.Messages;
-import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
+import org.kompiro.jamcircle.scripting.ui.*;
 import org.kompiro.jamcircle.scripting.util.JRubyUtil;
 import org.kompiro.jamcircle.scripting.util.ScriptingSecurityManager;
 import org.osgi.framework.Bundle;
@@ -64,8 +63,6 @@ public class RubyScriptingConsole extends TextConsole {
 	private static final String INIT_SCRIPT_RB = "init.rb"; //$NON-NLS-1$
 	private static final String KEY_OF_BOARD_COMMAND_EXECUTER_ACCESSOR = "$board_command_executer_accessor"; //$NON-NLS-1$
 	private static final String KEY_OF_BOARD_ACCESSOR = "$board_accessor"; //$NON-NLS-1$
-	private static final String OUTPUT_STREAM_COLOR = "RubyScriptingConsole.OutputStreamColor"; //$NON-NLS-1$
-	private static final String ERROR_STREAM_COLOR = "RubyScriptingConsole.ErrorStreamColor"; //$NON-NLS-1$
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator");//$NON-NLS-1$
 
 	/**
@@ -770,20 +767,8 @@ public class RubyScriptingConsole extends TextConsole {
 	}
 
 	private void init_in_swt_thread() {
-		Display display = getDisplay();
-		ColorRegistry colorRegistry = JFaceResources.getColorRegistry();
-		Color outputColor = colorRegistry.get(OUTPUT_STREAM_COLOR);
-		if (outputColor == null) {
-			outputColor = display.getSystemColor(SWT.COLOR_BLUE);
-			colorRegistry.put(OUTPUT_STREAM_COLOR, outputColor.getRGB());
-		}
-		output.setColor(outputColor);
-		Color errorColor = colorRegistry.get(ERROR_STREAM_COLOR);
-		if (errorColor == null) {
-			errorColor = display.getSystemColor(SWT.COLOR_RED);
-			colorRegistry.put(ERROR_STREAM_COLOR, errorColor.getRGB());
-		}
-		error.setColor(errorColor);
+		output.setColor(getOutputColor());
+		error.setColor(getErrorColor());
 		assist.install(consolePage.getViewer());
 		assist.enableAutoActivation(true);
 		assist.enableAutoInsert(true);
@@ -803,6 +788,14 @@ public class RubyScriptingConsole extends TextConsole {
 			output.write(message);
 		} catch (IOException e) {
 		}
+	}
+
+	private Color getOutputColor() {
+		return ScriptingColorEnum.OUTPUT_STREAM_COLOR.getColor();
+	}
+
+	private Color getErrorColor() {
+		return ScriptingColorEnum.ERROR_STREAM_COLOR.getColor();
 	}
 
 	private String getScriptingUIBundleVersion() {
