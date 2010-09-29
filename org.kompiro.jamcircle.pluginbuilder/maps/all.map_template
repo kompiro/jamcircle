@@ -17,6 +17,7 @@ plugin@org.kompiro.jamcircle.storage.ui=COPY,@WORKSPACE@,org.kompiro.jamcircle.s
 plugin@org.kompiro.jamcircle.xmpp=COPY,@WORKSPACE@,org.kompiro.jamcircle.xmpp
 plugin@org.kompiro.jamcircle.xmpp.ui=COPY,@WORKSPACE@,org.kompiro.jamcircle.xmpp.ui
 plugin@org.kompiro.jamcircle.scripting=COPY,@WORKSPACE@,org.kompiro.jamcircle.scripting
+plugin@org.kompiro.jamcircle.scripting.console=COPY,@WORKSPACE@,org.kompiro.jamcircle.scripting.console
 plugin@org.kompiro.jamcircle.scripting.ui=COPY,@WORKSPACE@,org.kompiro.jamcircle.scripting.ui
 plugin@org.kompiro.jamcircle.debug=COPY,@WORKSPACE@,org.kompiro.jamcircle.debug
 plugin@org.kompiro.jamcircle.debug.ui=COPY,@WORKSPACE@,org.kompiro.jamcircle.debug.ui
