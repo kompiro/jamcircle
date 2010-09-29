@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.kompiro.jamcircle.scripting.scriptEngineStreamInitializer">
+      <initializer
+            class="org.kompiro.jamcircle.scripting.console.internal.ScriptingStreamInitializer">
+      </initializer>
+   </extension>
+
+</plugin>
