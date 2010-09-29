@@ -7,7 +7,7 @@ Bundle-Activator: org.kompiro.jamcircle.scripting.console.Activator
 Bundle-Vendor: kompiro.org
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.ui.console;bundle-version="3.5.0",
- org.kompiro.jamcircle.scripting;bundle-version="0.2.0"
+ org.eclipse.ui.console,
+ org.kompiro.jamcircle.scripting
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
