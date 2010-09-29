@@ -1,12 +1,11 @@
 package org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console;
 
-import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.IConsolePageParticipant;
+import org.eclipse.ui.console.*;
 import org.eclipse.ui.part.IPageBookViewPage;
 
 public class ScriptingConsolePageParticipant implements IConsolePageParticipant {
 
-	private IOConsolePage page;
+	private TextConsolePage page;
 
 	public void activated() {
 		page.getViewer().setEditable(true);
@@ -20,7 +19,7 @@ public class ScriptingConsolePageParticipant implements IConsolePageParticipant 
 	}
 
 	public void init(IPageBookViewPage page, IConsole console) {
-		this.page = (IOConsolePage)page;
+		this.page = (TextConsolePage) page;
 	}
 
 	@SuppressWarnings("unchecked")

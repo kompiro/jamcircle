@@ -2,5 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="scriptEngineInitializer" name="Script Engine Initializer" schema="schema/scriptEngineInitializer.exsd"/>
+   <extension-point id="scriptEngineStreamInitializer" name="Script Engine Stream Initializer" schema="schema/scriptEngineStreamInitializer.exsd"/>
 
 </plugin>

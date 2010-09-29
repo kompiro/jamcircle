@@ -34,8 +34,8 @@ public class KanbanUIContext {
 		return scriptingService;
 	}
 
-	public void setScriptingService(ScriptingService scriptService) {
-		this.scriptingService = scriptService;
+	public void setScriptingService(ScriptingService scriptingService) {
+		this.scriptingService = scriptingService;
 	}
 
 	public void setBoardConverter(BoardConverter boardConverter) {

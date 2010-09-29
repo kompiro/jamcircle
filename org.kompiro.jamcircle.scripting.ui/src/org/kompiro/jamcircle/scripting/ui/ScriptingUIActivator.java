@@ -35,7 +35,6 @@ public class ScriptingUIActivator extends AbstractUIPlugin {
 				}
 			}
 		});
-		initializeColorRegistry();
 		plugin = this;
 	}
 

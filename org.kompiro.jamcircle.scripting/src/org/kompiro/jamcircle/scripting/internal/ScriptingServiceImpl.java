@@ -40,37 +40,64 @@ public class ScriptingServiceImpl implements ScriptingService {
 
 	// private Ruby runtime;
 	private Map<String, Object> globalValues = new HashMap<String, Object>();
-	private ScriptingEngineInitializerLoader loader;
+	private ScriptingEngineInitializerLoader scriptLoader;
+	private ScriptingEngineStreamInitializer streamInitializer = new ScriptingEngineStreamInitializer();
 	private ScriptingContainer container;
 
-	public void init() throws ScriptingException {
-		if (!initialized) {
-			synchronized (this) {
-				JRubyUtil jRubyUtil = new JRubyUtil();
-				manager = new BSFManager();
+	public ScriptingServiceImpl() {
+	}
 
-				LocalContextScope scope = LocalContextScope.SINGLETHREAD;
-				container = new ScriptingContainer(scope);
-				container.setRunRubyInProcess(true);
-				container.setKCode(KCode.UTF8);
-				container.setHomeDirectory(jRubyUtil.getJRubyHomeFromBundle());
-				container.setEnvironment(jRubyUtil.getDefaultEnvironment());
-				container.setObjectSpaceEnabled(true);
+	public void init() throws ScriptingException {
+		synchronized (this) {
+			if (initialized == false) {
+				initializeBSFManager();
+				initializeJRubyContainer();
+				initializedStream(this);
+				initializedVarMap();
+				loadScript();
+				initialized = true;
 			}
 		}
 	}
 
-	public void initialize() throws ScriptingException {
-		initializedVarMap();
-		if (loader != null) {
+	private void initializeBSFManager() {
+		manager = new BSFManager();
+	}
+
+	private void initializeJRubyContainer() {
+		LocalContextScope scope = LocalContextScope.SINGLETHREAD;
+		JRubyUtil jRubyUtil = new JRubyUtil();
+		container = new ScriptingContainer(scope);
+		container.setRunRubyInProcess(true);
+		container.setKCode(KCode.UTF8);
+		container.setHomeDirectory(jRubyUtil.getJRubyHomeFromBundle());
+		container.setEnvironment(jRubyUtil.getDefaultEnvironment());
+		container.setObjectSpaceEnabled(true);
+	}
+
+	private void loadScript() throws ScriptingException {
+		if (scriptLoader != null) {
+			setGlobalValues(scriptLoader.getGrobalValues());
 			try {
-				setGlobalValues(loader.getGrobalValues());
-				loader.loadExtendScript(this);
+				scriptLoader.loadExtendScript(this);
 			} catch (Exception e) {
 				throw new ScriptingException(e.getLocalizedMessage(), e);
 			}
 		}
-		initialized = true;
+	}
+
+	private void initializedStream(ScriptingServiceImpl service) throws ScriptingException {
+		if (streamInitializer != null) {
+			streamInitializer.activate();
+			OutputStream out = streamInitializer.getOutputStream();
+			if (out != null) {
+				service.setOutputStream(new PrintStream(out));
+			}
+			OutputStream error = streamInitializer.getErrorStream();
+			if (error != null) {
+				service.setErrorStream(new PrintStream(error));
+			}
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -171,11 +198,11 @@ public class ScriptingServiceImpl implements ScriptingService {
 		container.terminate();
 	}
 
-	public void setOutputStream(PrintStream stream) {
+	private void setOutputStream(PrintStream stream) {
 		container.setOutput(stream);
 	}
 
-	public void setErrorStream(PrintStream stream) {
+	private void setErrorStream(PrintStream stream) {
 		container.setError(stream);
 	}
 
@@ -204,7 +231,7 @@ public class ScriptingServiceImpl implements ScriptingService {
 	}
 
 	public void setScriptingEngineInitializerLoader(ScriptingEngineInitializerLoader loader) {
-		this.loader = loader;
+		this.scriptLoader = loader;
 	}
 
 	public Map<String, Object> getGlovalValues() {

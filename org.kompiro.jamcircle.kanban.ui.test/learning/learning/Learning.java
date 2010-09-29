@@ -11,7 +11,7 @@ import org.junit.Test;
 public class Learning {
 
 	@Test
-	public void testname() throws Exception {
+	public void name() throws Exception {
 
 		ProcessBuilder builder = new ProcessBuilder("/usr/local/git/bin/git");
 		Process process = builder.start();
@@ -24,5 +24,12 @@ public class Learning {
 			}
 			System.out.print((char) c);
 		}
+	}
+
+	@Test
+	public void testname() throws Exception {
+
+		System.out.println(System.getProperty("file.separator"));
+
 	}
 }

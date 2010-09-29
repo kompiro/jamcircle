@@ -1,6 +1,5 @@
 package org.kompiro.jamcircle.scripting;
 
-import java.io.PrintStream;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IAdaptable;
@@ -46,21 +45,4 @@ public interface ScriptingService extends IAdaptable {
 	 */
 	Map<String, Object> getGlovalValues();
 
-	/**
-	 * set Scripting Engine's error stream.
-	 * 
-	 * @param stream
-	 *            error stream
-	 */
-	public void setErrorStream(PrintStream stream);
-
-	/**
-	 * set Scripting Engine's output stream.
-	 * 
-	 * @param stream
-	 *            output stream
-	 */
-	public void setOutputStream(PrintStream stream);
-
-	void initialize() throws ScriptingException;
 }
