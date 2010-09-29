@@ -87,7 +87,7 @@ public class ScriptingEngineInitializerLoaderImplTest {
 		IExtensionPoint value = mock(IExtensionPoint.class);
 		when(registry.getExtensionPoint(POINT_CALLBACK)).thenReturn(value);
 		loader.setRegistry(registry);
-		ScriptingService service = mock(ScriptingService.class);
+		ScriptingService service = mock(ScriptingServiceImpl.class);
 		loader.loadExtendScript(service);
 		verify(service, never()).eval((ScriptTypes) anyObject(), (String) anyObject(), (String) anyObject(),
 				(Map<String, Object>) anyObject());
