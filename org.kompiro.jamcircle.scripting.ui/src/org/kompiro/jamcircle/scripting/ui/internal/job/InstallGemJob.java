@@ -11,6 +11,7 @@ import org.kompiro.jamcircle.scripting.ui.*;
 import org.kompiro.jamcircle.scripting.util.JRubyUtil;
 
 public class InstallGemJob extends Job {
+	private static final String INSTALL_GEM_JOB_NAME = "Run gem install";
 	private static final String CONSOLE_NAME_OF_GEM = "Gem Console";
 	private static final String COMMAND_NAME_OF_JGEM = "jgem";
 	private final String target;
@@ -18,7 +19,7 @@ public class InstallGemJob extends Job {
 	private IOConsole console;
 
 	public InstallGemJob(String target) {
-		super("Run gem install");
+		super(INSTALL_GEM_JOB_NAME);
 		this.target = target;
 		console = new IOConsole(CONSOLE_NAME_OF_GEM, getRubyAddImageDescriptor());
 		getConsoleManager().addConsoles(new IConsole[] { console });
@@ -44,18 +45,21 @@ public class InstallGemJob extends Job {
 			process.waitFor();
 
 		} catch (IOException e) {
+			ScriptingUIActivator.logError(e);
 		} catch (InterruptedException e) {
 		} finally {
 			if (outputStream != null) {
 				try {
 					outputStream.close();
 				} catch (IOException e) {
+					ScriptingUIActivator.logError(e);
 				}
 			}
 			if (errorStream != null) {
 				try {
 					errorStream.close();
 				} catch (IOException e) {
+					ScriptingUIActivator.logError(e);
 				}
 			}
 		}

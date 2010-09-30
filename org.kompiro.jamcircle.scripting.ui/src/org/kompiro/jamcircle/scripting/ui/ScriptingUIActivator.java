@@ -70,4 +70,9 @@ public class ScriptingUIActivator extends AbstractUIPlugin {
 		return new Status(IStatus.ERROR, PLUGIN_ID, Messages.ScriptingUIActivator_error_message, e);
 	}
 
+	public static void logError(Throwable e) {
+		IStatus status = createErrorStatus(e);
+		getDefault().getLog().log(status);
+	}
+
 }
