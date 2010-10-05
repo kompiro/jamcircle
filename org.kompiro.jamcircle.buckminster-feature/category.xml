@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.kompiro.jamcircle.kanban_1.2.0.qualifier.jar" id="org.kompiro.jamcircle.kanban" version="1.2.0.qualifier">
+      <category name="org.kompiro.jamcircle"/>
+   </feature>
+   <feature url="features/org.kompiro.jamcircle.scripting_0.1.0.qualifier.jar" id="org.kompiro.jamcircle.scripting" version="0.1.0.qualifier">
+      <category name="org.kompiro.jamcircle"/>
+   </feature>
+   <feature url="features/org.kompiro.jamcircle.xmpp_0.2.0.qualifier.jar" id="org.kompiro.jamcircle.xmpp" version="0.2.0.qualifier">
+      <category name="org.kompiro.jamcircle"/>
+   </feature>
+   <feature url="features/org.kompiro.jamcircle.extension.feedboard_0.1.0.qualifier.jar" id="org.kompiro.jamcircle.extension.feedboard" version="0.1.0.qualifier">
+      <category name="org.kompiro.jamcircle.extension"/>
+   </feature>
+   <feature url="features/org.kompiro.jamcircle.extension.tracboard_0.1.0.qualifier.jar" id="org.kompiro.jamcircle.extension.tracboard" version="0.1.0.qualifier">
+      <category name="org.kompiro.jamcircle.extension"/>
+   </feature>
+   <category-def name="org.kompiro.jamcircle" label="JAM Circle"/>
+   <category-def name="org.kompiro.jamcircle.extension" label="JAM Circle Extension"/>
+</site>
