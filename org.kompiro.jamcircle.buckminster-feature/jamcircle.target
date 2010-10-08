@@ -16,8 +16,8 @@
 <unit id="org.eclipse.swtbot.feature.group" version="2.0.0.595-dev-e36"/>
 <repository location="http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site"/>
 </location>
-<location path="/Users/kompiro/Downloads/eclipse-delta" type="Directory"/>
-<location path="/Users/kompiro/Downloads/eclipse-nl" type="Directory"/>
+<location path="/var/eclipse-delta" type="Directory"/>
+<location path="/var/eclipse-nl" type="Directory"/>
 </locations>
 <includeBundles>
 <plugin id="org.eclipse.swt.motif.linux.x86"/>
