@@ -21,4 +21,16 @@
          id="org.kompiro.jamcircle"
          version="0.0.0"/>
 
+   <includes
+         id="org.kompiro.jamcircle.rcp"
+         version="0.0.0"/>
+
+   <includes
+         id="org.kompiro.jamcircle.rcp.test"
+         version="0.0.0"/>
+
+   <includes
+         id="org.kompiro.jamcircle.test"
+         version="0.0.0"/>
+
 </feature>
