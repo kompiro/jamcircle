@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JAMCircle Scripting Test
 Bundle-SymbolicName: org.kompiro.jamcircle.scripting.test
-Bundle-Version: 0.0.0
+Bundle-Version: 0.1.0.qualifier
 Bundle-Vendor: kompiro.org
 Fragment-Host: org.kompiro.jamcircle.scripting
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

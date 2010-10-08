@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: XMPP Kanban Bridge Test
 Bundle-SymbolicName: org.kompiro.jamcircle.xmpp.kanban.ui.test
-Bundle-Version: 0.0.0
+Bundle-Version: 0.1.0.qualifier
 Bundle-Vendor: kompiro.org
 Fragment-Host: org.kompiro.jamcircle.xmpp.kanban.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
