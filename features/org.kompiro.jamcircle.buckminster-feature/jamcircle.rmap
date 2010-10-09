@@ -12,7 +12,7 @@
   </rm:searchPath>
   <rm:searchPath name="features">
     <rm:provider componentTypes="eclipse.feature" readerType="local">
-      <rm:uri format="file:///{0}/features/{1}/">
+      <rm:uri format="file:///{0}/features/{1}-feature/">
         <bc:propertyRef key="workspace.root"/>
         <bc:propertyRef key="buckminster.component"/>
       </rm:uri>
