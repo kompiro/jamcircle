@@ -6,7 +6,7 @@
     xmlns:mp="http://www.eclipse.org/buckminster/MavenProvider-1.0"
     xmlns:pp="http://www.eclipse.org/buckminster/PDEMapProvider-1.0">
 
-    <searchPath name="resources">
+    <searchPath name="plugins">
         <provider readerType="local" componentTypes="osgi.bundle,eclipse.feature"
                   mutable="true" source="true">
             <uri format="file:///{0}/{1}/">
@@ -14,6 +14,8 @@
                 <bc:propertyRef key="buckminster.component" />
             </uri>
         </provider>
+    </searchPath>
+    <searchPath name="features">
         <provider readerType="local" componentTypes="eclipse.feature"
                   mutable="true" source="true">
             <uri format="file:///{0}/features/{1}/">
@@ -23,5 +25,6 @@
         </provider>
     </searchPath>
 
-    <locator searchPathRef="resources"/>
+    <locator searchPathRef="plugins"/>
+    <locator searchPathRef="features"/>
 </rmap>
