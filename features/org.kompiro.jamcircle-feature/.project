@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>org.kompiro.jamcircle.rcp.test.feature</name>
+	<name>org.kompiro.jamcircle-feature</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.pde.FeatureNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>README.textile</name>
+			<type>1</type>
+			<location>/home/kompiro/codes/java/jamcircle/README.textile</location>
+		</link>
+	</linkedResources>
 </projectDescription>

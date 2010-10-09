@@ -1,12 +1,12 @@
 #features
-feature@org.kompiro.jamcircle=COPY,@WORKSPACE@/features,org.kompiro.jamcircle
-feature@org.kompiro.jamcircle.rcp=COPY,@WORKSPACE@/features,org.kompiro.jamcircle.rcp.feature
-feature@org.kompiro.jamcircle.rcp.test=COPY,@WORKSPACE@/features,org.kompiro.jamcircle.rcp.test.feature
-feature@org.kompiro.jamcircle.xmpp=COPY,@WORKSPACE@/features,org.kompiro.jamcircle.xmpp.feature
-feature@org.kompiro.jamcircle.kanban=COPY,@WORKSPACE@/features,org.kompiro.jamcircle.kanban.feature
-feature@org.kompiro.jamcircle.scripting=COPY,@WORKSPACE@/features,org.kompiro.jamcircle.scripting.feature
-feature@org.kompiro.jamcircle.test=COPY,@WORKSPACE@/features,org.kompiro.jamcircle.test.feature
-feature@org.kompiro.jamcircle.library=COPY,@WORKSPACE@/features,org.kompiro.jamcircle.library
+feature@org.kompiro.jamcircle=COPY,@WORKSPACE@/features,org.kompiro.jamcircle-feature
+feature@org.kompiro.jamcircle.rcp=COPY,@WORKSPACE@/features,org.kompiro.jamcircle.rcp-feature
+feature@org.kompiro.jamcircle.rcp.test=COPY,@WORKSPACE@/features,org.kompiro.jamcircle.rcp.test-feature
+feature@org.kompiro.jamcircle.xmpp=COPY,@WORKSPACE@/features,org.kompiro.jamcircle.xmpp-feature
+feature@org.kompiro.jamcircle.kanban=COPY,@WORKSPACE@/features,org.kompiro.jamcircle.kanban-feature
+feature@org.kompiro.jamcircle.scripting=COPY,@WORKSPACE@/features,org.kompiro.jamcircle.scripting-feature
+feature@org.kompiro.jamcircle.test=COPY,@WORKSPACE@/features,org.kompiro.jamcircle.test-feature
+feature@org.kompiro.jamcircle.library=COPY,@WORKSPACE@/features,org.kompiro.jamcircle.library-feature
 
 #plugins
 plugin@org.kompiro.jamcircle.rcp=COPY,@WORKSPACE@,org.kompiro.jamcircle.rcp
