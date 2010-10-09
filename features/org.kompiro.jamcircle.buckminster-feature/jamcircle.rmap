@@ -9,7 +9,7 @@
     <searchPath name="map">
         <provider readerType="eclipse.import" componentTypes="osgi.bundle,eclipse.feature"
                   mutable="true" source="true">
-            <uri format="file:///{0}/features/org.kompiro.jamcircle.buckuminster-feature/all.map">
+            <uri format="file://{0}/features/org.kompiro.jamcircle.buckuminster-feature/all.map">
                 <bc:propertyRef key="workspace.root" />
             </uri>
         </provider>
