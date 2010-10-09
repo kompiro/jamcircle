@@ -6,25 +6,14 @@
     xmlns:mp="http://www.eclipse.org/buckminster/MavenProvider-1.0"
     xmlns:pp="http://www.eclipse.org/buckminster/PDEMapProvider-1.0">
 
-    <searchPath name="plugins">
-        <provider readerType="local" componentTypes="osgi.bundle"
+    <searchPath name="map">
+        <provider readerType="eclipse.import" componentTypes="osgi.bundle,eclipse.feature"
                   mutable="true" source="true">
-            <uri format="file:///{0}/{1}/">
+            <uri format="file:///{0}/features/org.kompiro.jamcircle.buckuminster-feature/all.map">
                 <bc:propertyRef key="workspace.root" />
-                <bc:propertyRef key="buckminster.component" />
-            </uri>
-        </provider>
-    </searchPath>
-    <searchPath name="features">
-        <provider readerType="local" componentTypes="eclipse.feature"
-                  mutable="true" source="true">
-            <uri format="file:///{0}/features/{1}/">
-                <bc:propertyRef key="workspace.root" />
-                <bc:propertyRef key="buckminster.component" />
             </uri>
         </provider>
     </searchPath>
 
-    <locator searchPathRef="plugins"/>
-    <locator searchPathRef="features"/>
+    <locator searchPathRef="map"/>
 </rmap>
