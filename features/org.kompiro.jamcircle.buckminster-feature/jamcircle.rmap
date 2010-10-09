@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rm:rmap xmlns:bc="http://www.eclipse.org/buckminster/Common-1.0" xmlns:rm="http://www.eclipse.org/buckminster/RMap-1.0">
-  <rm:locator pattern="^org\.kompiro\.jamcircle.*-feature" searchPathRef="features"/>
+  <rm:locator pattern="^org\.kompiro\.jamcircle.*" searchPathRef="features" failOnError="false"/>
   <rm:locator searchPathRef="plugins"/>
   <rm:searchPath name="plugins">
-    <rm:provider componentTypes="osgi.bundle" readerType="local" resolutionFilter="">
+    <rm:provider componentTypes="osgi.bundle" readerType="local">
       <rm:uri format="file:///{0}/{1}/">
         <bc:propertyRef key="workspace.root"/>
         <bc:propertyRef key="buckminster.component"/>
