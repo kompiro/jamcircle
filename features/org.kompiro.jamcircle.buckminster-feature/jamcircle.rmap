@@ -3,7 +3,7 @@
   <rm:locator pattern="^org.kompiro.jamcircle*-feature" searchPathRef="features"/>
   <rm:locator searchPathRef="plugins"/>
   <rm:searchPath name="plugins">
-    <rm:provider componentTypes="osgi.bundle,eclipse.feature" readerType="local" resolutionFilter="">
+    <rm:provider componentTypes="osgi.bundle" readerType="local" resolutionFilter="">
       <rm:uri format="file:///{0}/{1}/">
         <bc:propertyRef key="workspace.root"/>
         <bc:propertyRef key="buckminster.component"/>
