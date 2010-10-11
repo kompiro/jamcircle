@@ -44,7 +44,6 @@
    <plugin
          id="org.sf.feeling.swt.win32.extension"
          os="win32"
-         ws="win32,wpf"
          arch="x86,x86_64"
          download-size="0"
          install-size="0"
