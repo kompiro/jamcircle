@@ -42,14 +42,6 @@
          version="0.0.0"/>
 
    <plugin
-         id="org.sf.feeling.swt.win32.extension"
-         os="win32"
-         arch="x86,x86_64"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
          id="org.apache.commons.logging"
          download-size="0"
          install-size="0"

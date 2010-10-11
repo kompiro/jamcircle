@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.kompiro.jamcircle.rcp.win32"
+      label="JAMCircle RCP Win32 Extension"
+      version="0.1.0.qualifier"
+      provider-name="kompiro.org"
+      os="win32"
+      arch="x86,x86_64">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <plugin
+         id="org.kompiro.jamcircle.rcp.win32"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.sf.feeling.swt.win32.extension"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>
