@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rm:rmap xmlns:bc="http://www.eclipse.org/buckminster/Common-1.0" xmlns:rm="http://www.eclipse.org/buckminster/RMap-1.0">
   <rm:locator pattern="^org\.kompiro\.jamcircle\.library-feature" searchPathRef="library"/>
-  <rm:locator pattern="^org\.jruby\.jruby" searchPathRef="library"/>
   <rm:locator pattern="^org\.sf\.feeling\.swt\.win32\.extension" searchPathRef="library"/>
   <rm:locator pattern="^org\.kompiro\.jamcircle.*" searchPathRef="features" failOnError="false"/>
   <rm:locator searchPathRef="plugins"/>
 
   <rm:searchPath name="library">
-    <rm:provider componentTypes="eclipse.feature,osgi.bundle" readerType="eclipse.import">
+    <rm:provider componentTypes="eclipse.feature,osgi.bundle" readerType="p2">
       <rm:uri format="http://kompiro.org/jamcircle/lib/"/>
     </rm:provider>
   </rm:searchPath>
