@@ -612,7 +612,7 @@ public class RubyScriptingConsole extends TextConsole {
 		}
 
 		private void addHistory(String line) {
-			if (line == null || line.isEmpty())
+			if (line == null || line.equals(""))
 				return;
 			Readline.getHistory(Readline.getHolder(container.getProvider().getRuntime())).addToHistory(line.trim());
 		}
