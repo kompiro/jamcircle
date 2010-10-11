@@ -6,7 +6,7 @@
   <rm:locator searchPathRef="plugins"/>
 
   <rm:searchPath name="library">
-    <rm:provider componentTypes="eclipse.feature,osgi.bundle" readerType="p2">
+    <rm:provider componentTypes="eclipse.feature,osgi.bundle" readerType="p2" mutable="false" source="false">
       <rm:uri format="http://kompiro.org/jamcircle/lib/"/>
     </rm:provider>
   </rm:searchPath>
