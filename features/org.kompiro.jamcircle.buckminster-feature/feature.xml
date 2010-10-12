@@ -33,4 +33,8 @@
          id="org.kompiro.jamcircle.test"
          version="0.0.0"/>
 
+   <includes
+         id="org.kompiro.jamcircle.rcp.win32"
+         version="0.0.0"/>
+
 </feature>
