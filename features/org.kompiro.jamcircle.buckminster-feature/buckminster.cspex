@@ -9,7 +9,7 @@
             </actorProperties>
             <properties>
                 <property key="profile" value="MailProfile" />
-                <property key="iu" value="org.kompiro.jamcircle.rcp.product" />
+                <property key="iu" value="org.kompiro.jamcircle.product" />
             </properties>
             <prerequisites alias="repository">
                 <attribute name="site.p2" />
