@@ -8,7 +8,7 @@
                 <property key="targets" value="create.product" />
             </actorProperties>
             <properties>
-                <property key="profile" value="MailProfile" />
+                <property key="profile" value="JAMCircleProfile" />
                 <property key="iu" value="org.kompiro.jamcircle.product" />
             </properties>
             <prerequisites alias="repository">
