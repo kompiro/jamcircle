@@ -25,10 +25,6 @@
          id="org.eclipse.equinox.p2.user.ui"
          version="0.0.0"/>
 
-   <includes
-         id="org.eclipse.rcp"
-         version="0.0.0"/>
-
    <plugin
          id="com.ibm.icu"
          download-size="0"
@@ -386,7 +382,6 @@
          id="org.eclipse.ui.carbon"
          os="macosx"
          ws="carbon"
-         arch="x86"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -397,7 +392,6 @@
          id="org.eclipse.ui.cocoa"
          os="macosx"
          ws="cocoa"
-         arch="x86"
          download-size="0"
          install-size="0"
          version="0.0.0"
