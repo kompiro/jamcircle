@@ -2,7 +2,7 @@
 <feature
       id="org.kompiro.jamcircle.library"
       label="JAMCircle Library Bundles"
-      version="0.0.0"
+      version="0.1.0.qualifier"
       provider-name="kompiro.org">
 
    <description url="http://www.example.com/description">
