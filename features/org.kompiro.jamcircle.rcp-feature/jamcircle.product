@@ -69,10 +69,10 @@ http://p.yusukekamiyamane.com/
    </plugins>
 
    <features>
+      <feature id="org.kompiro.jamcircle.library" version="0.1.0.qualifier"/>
+      <feature id="org.kompiro.jamcircle.scripting" version="0.1.1.qualifier"/>
       <feature id="org.kompiro.jamcircle.rcp" version="0.8.2.qualifier"/>
       <feature id="org.kompiro.jamcircle.kanban" version="1.2.0.qualifier"/>
-      <feature id="org.kompiro.jamcircle.library"/>
-      <feature id="org.kompiro.jamcircle.scripting" version="0.1.1.qualifier"/>
       <feature id="org.kompiro.jamcircle.xmpp" version="0.2.0.qualifier"/>
    </features>
 
