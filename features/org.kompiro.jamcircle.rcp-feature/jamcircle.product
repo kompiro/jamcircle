@@ -39,7 +39,6 @@ http://p.yusukekamiyamane.com/
 
    <windowImages i16="/org.kompiro.jamcircle.rcp/icons/kanban_016.gif" i32="/org.kompiro.jamcircle.rcp/icons/kanban_032.gif" i48="/org.kompiro.jamcircle.rcp/icons/kanban_048.gif" i64="/org.kompiro.jamcircle.rcp/icons/kanban_064.gif" i128="/org.kompiro.jamcircle.rcp/icons/kanban_128.gif"/>
 
-
    <launcher name="JAMCircle">
       <linux icon="/org.kompiro.jamcircle.rcp/icons/linux/kanban_048.xpm"/>
       <macosx icon="/org.kompiro.jamcircle.rcp/icons/mac/kanban_032.icns"/>
@@ -55,7 +54,6 @@ http://p.yusukekamiyamane.com/
       </win>
    </launcher>
 
-
    <vm>
       <linux include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5</linux>
       <macos include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5</macos>
@@ -69,11 +67,7 @@ http://p.yusukekamiyamane.com/
    </plugins>
 
    <features>
-      <feature id="org.kompiro.jamcircle.library" version="0.1.0.qualifier"/>
-      <feature id="org.kompiro.jamcircle.scripting" version="0.1.1.qualifier"/>
       <feature id="org.kompiro.jamcircle.rcp" version="0.8.2.qualifier"/>
-      <feature id="org.kompiro.jamcircle.kanban" version="1.2.0.qualifier"/>
-      <feature id="org.kompiro.jamcircle.xmpp" version="0.2.0.qualifier"/>
    </features>
 
    <configurations>

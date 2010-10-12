@@ -29,22 +29,6 @@
          id="org.eclipse.rcp"
          version="0.0.0"/>
 
-   <includes
-         id="org.kompiro.jamcircle.kanban"
-         version="0.0.0"/>
-
-   <includes
-         id="org.kompiro.jamcircle.library"
-         version="0.0.0"/>
-
-   <includes
-         id="org.kompiro.jamcircle.scripting"
-         version="0.0.0"/>
-
-   <includes
-         id="org.kompiro.jamcircle.xmpp"
-         version="0.0.0"/>
-
    <plugin
          id="com.ibm.icu"
          download-size="0"
