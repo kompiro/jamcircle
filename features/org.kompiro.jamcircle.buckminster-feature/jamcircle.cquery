@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cq:componentQuery xmlns:cq="http://www.eclipse.org/buckminster/CQuery-1.0" resourceMap="jamcircle.rmap">
     <cq:rootRequest name="org.kompiro.jamcircle.buckminster" componentType="eclipse.feature"/>
+    <cq:advisorNode namePattern="org.kompiro.jamcircle.rcp.win32" componentType="eclipse.feature">
+        <cq:property key="target.arch" value="x86"/>
+        <cq:property key="target.os" value="win32"/>
+    </cq:advisorNode>
+    <cq:advisorNode namePattern="org.kompiro.jamcircle.rcp" componentType="eclipse.feature">
+        <cq:property key="target.arch" value="*"/>
+        <cq:property key="target.os" value="*"/>
+        <cq:property key="target.ws" value="*"/>
+    </cq:advisorNode>
 </cq:componentQuery>
