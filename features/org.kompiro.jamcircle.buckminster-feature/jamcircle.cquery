@@ -10,4 +10,8 @@
         <cq:property key="target.os" value="*"/>
         <cq:property key="target.ws" value="*"/>
     </cq:advisorNode>
+    <cq:advisorNode namePattern="org.sf.feeling.swt.win32.extension" componentType="osgi.bundle">
+        <cq:property key="target.os" value="win32"/>
+        <cq:property key="target.ws" value="win32"/>
+    </cq:advisorNode>
 </cq:componentQuery>
