@@ -6,9 +6,9 @@
         <cq:property key="target.os" value="win32"/>
     </cq:advisorNode>
     <cq:advisorNode namePattern="org.kompiro.jamcircle.rcp" componentType="eclipse.feature">
-        <cq:property key="target.arch" value="*"/>
-        <cq:property key="target.os" value="*"/>
-        <cq:property key="target.ws" value="*"/>
+        <cq:property key="target.arch" value="x86"/>
+        <cq:property key="target.os" value="win32"/>
+        <cq:property key="target.ws" value="win32"/>
     </cq:advisorNode>
     <cq:advisorNode namePattern="org.sf.feeling.swt.win32.extension" componentType="osgi.bundle">
         <cq:property key="target.os" value="win32"/>
