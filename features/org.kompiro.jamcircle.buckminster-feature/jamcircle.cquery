@@ -14,4 +14,13 @@
         <cq:property key="target.os" value="win32"/>
         <cq:property key="target.ws" value="win32"/>
     </cq:advisorNode>
+    <cq:advisorNode namePattern="org.eclipse.equinox.launcher.gtk.solaris.sparc" componentType="osgi.bundle">
+        <cq:property key="target.arch" value="sparc"/>
+        <cq:property key="target.os" value="solaris"/>
+        <cq:property key="target.ws" value="gtk"/>
+    </cq:advisorNode>
+    <cq:advisorNode namePattern="org.eclipse.equinox.launcher.carbon.macosx" componentType="osgi.bundle">
+        <cq:property key="target.os" value="macosx"/>
+        <cq:property key="target.ws" value="carbon"/>
+    </cq:advisorNode>
 </cq:componentQuery>
