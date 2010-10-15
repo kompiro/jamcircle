@@ -3,12 +3,9 @@
   <rm:locator pattern="^org\..*\.nl_ja" searchPathRef="japanese" failOnError="false"/>
   <rm:locator pattern="^org\.kompiro\.jamcircle.*" searchPathRef="features" failOnError="false"/>
   <rm:locator searchPathRef="plugins"/>
-
   <rm:searchPath name="japanese">
-    <rm:provider componentTypes="osgi.bundle" readerType="local">
-      <rm:uri format="file:///var/eclipse-nl/plugins/{0}/">
-        <bc:propertyRef key="buckminster.component"/>
-      </rm:uri>
+    <rm:provider componentTypes="osgi.bundle" readerType="eclipse.import" source="false">
+      <rm:uri format="file:///var/eclipse-nl/"/>
     </rm:provider>
   </rm:searchPath>
   <rm:searchPath name="plugins">
