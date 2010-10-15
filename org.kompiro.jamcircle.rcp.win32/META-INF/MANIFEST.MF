@@ -10,4 +10,4 @@ Eclipse-ExtensibleAPI: true
 Fragment-Host: org.kompiro.jamcircle.rcp
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Eclipse-PlatformFilter: (& (osgi.ws=win32) (osgi.os=win32) (osgi.arch=x86))
+Eclipse-PlatformFilter: (&(osgi.os=win32) (osgi.arch=x86))
