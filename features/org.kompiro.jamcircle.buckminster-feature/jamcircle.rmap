@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rm:rmap xmlns:bc="http://www.eclipse.org/buckminster/Common-1.0" xmlns:rm="http://www.eclipse.org/buckminster/RMap-1.0">
-  <rm:locator pattern="^org\..*\.nl_ja" searchPathRef="japanese" failOnError="false"/>
   <rm:locator pattern="^org\.kompiro\.jamcircle.*" searchPathRef="features" failOnError="false"/>
   <rm:locator searchPathRef="plugins"/>
-  <rm:searchPath name="japanese">
-    <rm:provider componentTypes="osgi.bundle" readerType="eclipse.import" source="false">
-      <rm:uri format="file:///var/eclipse-nl/"/>
-    </rm:provider>
-  </rm:searchPath>
   <rm:searchPath name="plugins">
     <rm:provider componentTypes="osgi.bundle" readerType="local">
       <rm:uri format="file:///{0}/{1}/">

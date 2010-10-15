@@ -768,7 +768,7 @@
          id="org.eclipse.equinox.frameworkadmin.equinox.nl_ja"
          download-size="1413"
          install-size="1413"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -776,7 +776,7 @@
          id="org.eclipse.equinox.frameworkadmin.nl_ja"
          download-size="1405"
          install-size="1405"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -784,7 +784,7 @@
          id="org.eclipse.equinox.p2.artifact.repository.nl_ja"
          download-size="3371"
          install-size="3371"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -792,7 +792,7 @@
          id="org.eclipse.equinox.p2.console.nl_ja"
          download-size="1402"
          install-size="1402"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -800,7 +800,7 @@
          id="org.eclipse.equinox.p2.core.nl_ja"
          download-size="1399"
          install-size="1399"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -808,7 +808,7 @@
          id="org.eclipse.equinox.p2.director.app.nl_ja"
          download-size="1414"
          install-size="1414"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -816,7 +816,7 @@
          id="org.eclipse.equinox.p2.director.nl_ja"
          download-size="2457"
          install-size="2457"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -824,7 +824,7 @@
          id="org.eclipse.equinox.p2.directorywatcher.nl_ja"
          download-size="1418"
          install-size="1418"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -832,15 +832,7 @@
          id="org.eclipse.equinox.p2.engine.nl_ja"
          download-size="2923"
          install-size="2923"
-         version="3.5.0.v20091121043401"
-         fragment="true"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.equinox.p2.exemplarysetup.nl_ja"
-         download-size="1413"
-         install-size="1413"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -848,7 +840,7 @@
          id="org.eclipse.equinox.p2.extensionlocation.nl_ja"
          download-size="1419"
          install-size="1419"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -856,7 +848,7 @@
          id="org.eclipse.equinox.p2.garbagecollector.nl_ja"
          download-size="1413"
          install-size="1413"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -864,7 +856,7 @@
          id="org.eclipse.equinox.p2.jarprocessor.nl_ja"
          download-size="1411"
          install-size="1411"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -872,7 +864,7 @@
          id="org.eclipse.equinox.p2.metadata.generator.nl_ja"
          download-size="3982"
          install-size="3982"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -880,7 +872,7 @@
          id="org.eclipse.equinox.p2.metadata.nl_ja"
          download-size="1404"
          install-size="1404"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -888,7 +880,7 @@
          id="org.eclipse.equinox.p2.metadata.repository.nl_ja"
          download-size="2678"
          install-size="2678"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -896,7 +888,7 @@
          id="org.eclipse.equinox.p2.publisher.nl_ja"
          download-size="2477"
          install-size="2477"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -904,7 +896,7 @@
          id="org.eclipse.equinox.p2.reconciler.dropins.nl_ja"
          download-size="1410"
          install-size="1410"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -912,7 +904,7 @@
          id="org.eclipse.equinox.p2.repository.nl_ja"
          download-size="3037"
          install-size="3037"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -920,7 +912,7 @@
          id="org.eclipse.equinox.p2.repository.tools.nl_ja"
          download-size="3557"
          install-size="3557"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -928,7 +920,7 @@
          id="org.eclipse.equinox.p2.touchpoint.eclipse.nl_ja"
          download-size="2635"
          install-size="2635"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -936,7 +928,7 @@
          id="org.eclipse.equinox.p2.touchpoint.natives.nl_ja"
          download-size="2698"
          install-size="2698"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -944,7 +936,7 @@
          id="org.eclipse.equinox.p2.ui.nl_ja"
          download-size="4094"
          install-size="4094"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -952,7 +944,7 @@
          id="org.eclipse.equinox.p2.ui.sdk.nl_ja"
          download-size="3125"
          install-size="3125"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -960,7 +952,7 @@
          id="org.eclipse.equinox.p2.ui.sdk.scheduler.nl_ja"
          download-size="3344"
          install-size="3344"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -968,7 +960,7 @@
          id="org.eclipse.equinox.p2.updatechecker.nl_ja"
          download-size="1412"
          install-size="1412"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -976,7 +968,7 @@
          id="org.eclipse.equinox.p2.updatesite.nl_ja"
          download-size="3804"
          install-size="3804"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -984,7 +976,7 @@
          id="org.eclipse.equinox.simpleconfigurator.manipulator.nl_ja"
          download-size="1422"
          install-size="1422"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -992,7 +984,7 @@
          id="org.eclipse.equinox.simpleconfigurator.nl_ja"
          download-size="1406"
          install-size="1406"
-         version="3.5.0.v20091121043401"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
