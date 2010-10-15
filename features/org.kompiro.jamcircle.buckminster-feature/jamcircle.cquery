@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cq:componentQuery xmlns:cq="http://www.eclipse.org/buckminster/CQuery-1.0" resourceMap="jamcircle.rmap">
     <cq:rootRequest name="org.kompiro.jamcircle.buckminster" componentType="eclipse.feature"/>
-    <cq:advisorNode namePattern="org.kompiro.jamcircle.rcp.win32" componentType="eclipse.feature">
+    <cq:advisorNode namePattern="org.kompiro.jamcircle.rcp.win32" componentType="eclipse.feature" useMaterialization="false" useRemoteResolution="false" useTargetPlatform="false">
         <cq:property key="target.arch" value="x86"/>
         <cq:property key="target.os" value="win32"/>
     </cq:advisorNode>
@@ -14,13 +14,14 @@
         <cq:property key="target.os" value="win32"/>
         <cq:property key="target.ws" value="win32"/>
     </cq:advisorNode>
-    <cq:advisorNode namePattern="org.eclipse.equinox.executable" componentType="eclipse.feature">
+    <cq:advisorNode namePattern="org.eclipse.equinox.executable" componentType="eclipse.feature" useMaterialization="false" useRemoteResolution="false" useWorkspace="false">
         <cq:property key="target.arch" value="*"/>
         <cq:property key="target.os" value="*"/>
         <cq:property key="target.ws" value="*"/>
     </cq:advisorNode>
-    <cq:advisorNode namePattern="org.eclipse.core.resources.win32.x86" componentType="osgi.bundle">
+    <cq:advisorNode namePattern="org.eclipse.equinox.launcher.win32.win32.x86" useMaterialization="false" useRemoteResolution="false" useWorkspace="false">
         <cq:property key="target.arch" value="x86"/>
         <cq:property key="target.os" value="win32"/>
+        <cq:property key="target.ws" value="win32"/>
     </cq:advisorNode>
 </cq:componentQuery>
