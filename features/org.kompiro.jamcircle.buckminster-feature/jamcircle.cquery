@@ -14,14 +14,7 @@
         <cq:property key="target.os" value="win32"/>
         <cq:property key="target.ws" value="win32"/>
     </cq:advisorNode>
-    <cq:advisorNode namePattern="org.eclipse.equinox.executable" componentType="eclipse.feature" useMaterialization="false" useRemoteResolution="false" useWorkspace="false">
-        <cq:property key="target.arch" value="*"/>
-        <cq:property key="target.os" value="*"/>
-        <cq:property key="target.ws" value="*"/>
-    </cq:advisorNode>
-    <cq:advisorNode namePattern="org.eclipse.equinox.launcher.win32.win32.x86" componentType="osgi.bundle" useMaterialization="false" useRemoteResolution="false" useWorkspace="false">
-        <cq:property key="target.arch" value="x86"/>
-        <cq:property key="target.os" value="win32"/>
-        <cq:property key="target.ws" value="win32"/>
+    <cq:advisorNode namePattern="\.nl_ja" componentType="osgi.bundle">
+        <cq:property key="osgi.nl" value="ja"/>
     </cq:advisorNode>
 </cq:componentQuery>
