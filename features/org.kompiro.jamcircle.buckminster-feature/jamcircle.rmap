@@ -6,7 +6,7 @@
 
   <rm:searchPath name="japanese">
     <rm:provider componentTypes="osgi.bundle" readerType="local">
-      <rm:uri format="file:///var/eclipse-nl/{0}/">
+      <rm:uri format="file:///var/eclipse-nl/plugins/{0}/">
         <bc:propertyRef key="buckminster.component"/>
       </rm:uri>
     </rm:provider>
