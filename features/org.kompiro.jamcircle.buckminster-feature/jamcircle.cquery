@@ -14,7 +14,7 @@
         <cq:property key="target.os" value="win32"/>
         <cq:property key="target.ws" value="win32"/>
     </cq:advisorNode>
-    <cq:advisorNode namePattern=".*\.nl_ja" componentType="osgi.bundle">
+    <cq:advisorNode namePattern="org.*.nl_ja" componentType="osgi.bundle">
         <cq:property key="osgi.nl" value="ja"/>
     </cq:advisorNode>
 </cq:componentQuery>
