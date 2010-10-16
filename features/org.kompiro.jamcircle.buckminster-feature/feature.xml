@@ -36,6 +36,7 @@
    <includes
          id="org.kompiro.jamcircle.rcp.win32"
          version="0.0.0"
+         optional="true"
          os="win32"
          ws="win32"
          arch="x86"/>
