@@ -29,6 +29,13 @@
          id="org.eclipse.equinox.executable"
          version="0.0.0"/>
 
+   <includes
+         id="org.kompiro.jamcircle.rcp.win32"
+         version="0.0.0"
+         os="win32"
+         ws="win32"
+         arch="x86"/>
+
    <plugin
          id="com.ibm.icu"
          download-size="0"
