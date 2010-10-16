@@ -10,7 +10,7 @@
         <cq:property key="target.os" value="win32"/>
         <cq:property key="target.ws" value="win32"/>
     </cq:advisorNode>
-    <cq:advisorNode namePattern="org.kompiro.jamcircle.rcp.win32" componentType="osgi.bundle" useMaterialization="false" useRemoteResolution="false" useTargetPlatform="false">
+    <cq:advisorNode namePattern="org.kompiro.jamcircle.rcp.extension.win32" componentType="osgi.bundle" useMaterialization="false" useRemoteResolution="false" useTargetPlatform="false">
         <cq:property key="target.arch" value="x86"/>
         <cq:property key="target.os" value="win32"/>
         <cq:property key="target.ws" value="win32"/>
