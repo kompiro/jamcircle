@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.pde.ui.JunitLaunchConfig">
+<setAttribute key="additional_plugins"/>
 <booleanAttribute key="append.args" value="true"/>
 <booleanAttribute key="askclear" value="false"/>
 <booleanAttribute key="automaticAdd" value="true"/>
@@ -11,7 +12,9 @@
 <booleanAttribute key="clearws" value="true"/>
 <booleanAttribute key="clearwslog" value="false"/>
 <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/pde-junit"/>
-<booleanAttribute key="default" value="true"/>
+<booleanAttribute key="default" value="false"/>
+<stringAttribute key="featureDefaultLocation" value="workspace"/>
+<stringAttribute key="featurePluginResolution" value="workspace"/>
 <booleanAttribute key="includeOptional" value="true"/>
 <stringAttribute key="location" value="${workspace_loc}/../junit-workspace"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
@@ -32,9 +35,47 @@
 <stringAttribute key="pde.version" value="3.3"/>
 <stringAttribute key="product" value="org.eclipse.platform.ide"/>
 <booleanAttribute key="run_in_ui_thread" value="true"/>
+<setAttribute key="selected_features">
+<setEntry value="org.eclipse.babel.nls_eclipse_ja:default"/>
+<setEntry value="org.eclipse.babel.nls_rt.equinox.p2_ja:default"/>
+<setEntry value="org.eclipse.babel.nls_rt.equinox_ja:default"/>
+<setEntry value="org.eclipse.cvs.source:default"/>
+<setEntry value="org.eclipse.cvs:default"/>
+<setEntry value="org.eclipse.draw2d:default"/>
+<setEntry value="org.eclipse.equinox.executable:default"/>
+<setEntry value="org.eclipse.equinox.p2.user.ui.source:default"/>
+<setEntry value="org.eclipse.equinox.p2.user.ui:default"/>
+<setEntry value="org.eclipse.gef:default"/>
+<setEntry value="org.eclipse.help.source:default"/>
+<setEntry value="org.eclipse.help:default"/>
+<setEntry value="org.eclipse.jdt.source:default"/>
+<setEntry value="org.eclipse.jdt:default"/>
+<setEntry value="org.eclipse.pde.source:default"/>
+<setEntry value="org.eclipse.pde:default"/>
+<setEntry value="org.eclipse.platform.source:default"/>
+<setEntry value="org.eclipse.platform:default"/>
+<setEntry value="org.eclipse.rcp.source:default"/>
+<setEntry value="org.eclipse.rcp:default"/>
+<setEntry value="org.eclipse.sdk:default"/>
+<setEntry value="org.eclipse.swtbot.eclipse.gef:default"/>
+<setEntry value="org.eclipse.swtbot.eclipse:default"/>
+<setEntry value="org.eclipse.swtbot:default"/>
+<setEntry value="org.kompiro.jamcircle.buckminster:default"/>
+<setEntry value="org.kompiro.jamcircle.extension.feedboard:default"/>
+<setEntry value="org.kompiro.jamcircle.extension.tracboard:default"/>
+<setEntry value="org.kompiro.jamcircle.kanban:default"/>
+<setEntry value="org.kompiro.jamcircle.library:default"/>
+<setEntry value="org.kompiro.jamcircle.rcp.test:default"/>
+<setEntry value="org.kompiro.jamcircle.rcp.win32:default"/>
+<setEntry value="org.kompiro.jamcircle.rcp:default"/>
+<setEntry value="org.kompiro.jamcircle.scripting:default"/>
+<setEntry value="org.kompiro.jamcircle.test:default"/>
+<setEntry value="org.kompiro.jamcircle.xmpp:default"/>
+<setEntry value="org.kompiro.jamcircle:default"/>
+</setAttribute>
 <booleanAttribute key="show_selected_only" value="false"/>
 <booleanAttribute key="tracing" value="false"/>
-<booleanAttribute key="useCustomFeatures" value="false"/>
+<booleanAttribute key="useCustomFeatures" value="true"/>
 <booleanAttribute key="useDefaultConfig" value="true"/>
 <booleanAttribute key="useDefaultConfigArea" value="false"/>
 <booleanAttribute key="useProduct" value="true"/>
