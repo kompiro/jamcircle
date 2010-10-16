@@ -4,12 +4,13 @@
     <cq:advisorNode namePattern="org.kompiro.jamcircle.rcp.win32" componentType="eclipse.feature" useMaterialization="false" useRemoteResolution="false" useTargetPlatform="false">
         <cq:property key="target.arch" value="x86"/>
         <cq:property key="target.os" value="win32"/>
+        <cq:property key="target.ws" value="win32"/>
     </cq:advisorNode>
-    <cq:advisorNode namePattern="org.sf.feeling.swt.win32.extension" componentType="osgi.bundle">
+    <cq:advisorNode namePattern="org.sf.feeling.swt.win32.extension" componentType="osgi.bundle" useMaterialization="false" useRemoteResolution="false" useTargetPlatform="false">
         <cq:property key="target.os" value="win32"/>
         <cq:property key="target.ws" value="win32"/>
     </cq:advisorNode>
-    <cq:advisorNode namePattern="org.kompiro.jamcircle.rcp.win32" componentType="osgi.bundle">
+    <cq:advisorNode namePattern="org.kompiro.jamcircle.rcp.win32" componentType="osgi.bundle" useMaterialization="false" useRemoteResolution="false" useTargetPlatform="false">
         <cq:property key="target.arch" value="x86"/>
         <cq:property key="target.os" value="win32"/>
         <cq:property key="target.ws" value="win32"/>
