@@ -1,13 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cq:componentQuery xmlns:cq="http://www.eclipse.org/buckminster/CQuery-1.0" resourceMap="jamcircle.rmap">
     <cq:rootRequest name="org.kompiro.jamcircle.buckminster" componentType="eclipse.feature"/>
-    <cq:advisorNode namePattern="org.sf.feeling.swt.win32.extension" componentType="osgi.bundle">
-        <cq:property key="target.os" value="win32"/>
-        <cq:property key="target.ws" value="win32"/>
-    </cq:advisorNode>
-    <cq:advisorNode namePattern="org.kompiro.jamcircle.rcp.extension.win32" componentType="osgi.bundle">
-        <cq:property key="target.arch" value="x86"/>
-        <cq:property key="target.os" value="win32"/>
-        <cq:property key="target.ws" value="win32"/>
-    </cq:advisorNode>
 </cq:componentQuery>
