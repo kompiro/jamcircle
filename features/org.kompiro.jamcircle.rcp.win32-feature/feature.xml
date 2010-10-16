@@ -21,7 +21,7 @@
    </license>
 
    <plugin
-         id="org.kompiro.jamcircle.rcp.win32"
+         id="org.kompiro.jamcircle.rcp.extension.win32"
          os="win32"
          ws="win32"
          arch="x86"
