@@ -5,7 +5,8 @@
       version="0.1.0.qualifier"
       provider-name="kompiro.org"
       os="win32"
-      arch="x86,x86_64">
+      ws="win32"
+      arch="x86">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -22,6 +23,7 @@
    <plugin
          id="org.kompiro.jamcircle.rcp.win32"
          os="win32"
+         ws="win32"
          arch="x86"
          download-size="0"
          install-size="0"
