@@ -2,7 +2,7 @@
 <feature
       id="org.kompiro.jamcircle.buckminster"
       label="Buckminster for JAM Circle "
-      version="0.1.0.qualifier"
+      version="0.9.1.qualifier"
       provider-name="kompiro">
 
    <description url="http://www.example.com/description">
