@@ -27,7 +27,7 @@
                 <attribute name="create.product" />
             </prerequisites>
             <products alias="action.output" base="${buckminster.output}">
-                <path path="jamcircle-${target.ws}.${target.os}.${target.arch}-${version.full}.zip" />
+                <path path="jamcircle-${target.ws}.${target.os}.${target.arch}-${version}.zip" />
                 
             </products>
         </public>
