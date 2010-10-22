@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JAMCircle Storage Learning Project
+Bundle-SymbolicName: org.kompiro.jamcircle.storage.learning
+Bundle-Version: 0.0.0
+Bundle-Vendor: kompiro
+Fragment-Host: org.kompiro.jamcircle.storage
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.hamcrest,
+ org.junit

@@ -6,7 +6,6 @@ instructions.configure=\
 
 requires.1.namespace = org.eclipse.equinox.p2.iu
 requires.1.name = org.kompiro.jamcircle.rcp.feature.group
-requires.1.optional = true
 
 requires.2.namespace = org.eclipse.equinox.p2.iu
 requires.2.name = org.kompiro.jamcircle.kanban.feature.group
