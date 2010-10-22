@@ -14,6 +14,7 @@ requires.2.optional = true
 requires.3.namespace = org.eclipse.equinox.p2.iu
 requires.3.name = org.kompiro.jamcircle.xmpp.feature.group
 requires.3.optional = true
+requires.3.greedy = false
 
 requires.4.namespace = org.eclipse.equinox.p2.iu
 requires.4.name = org.kompiro.jamcircle.scripting.feature.group
