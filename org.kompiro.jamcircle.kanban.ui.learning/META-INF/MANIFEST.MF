@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Kanban UI Learning
+Bundle-SymbolicName: org.kompiro.jamcircle.kanban.ui.learning;singleton:=true
+Bundle-Version: 0.0.0
+Bundle-Vendor: kompiro.org
+Fragment-Host: org.kompiro.jamcircle.kanban.ui
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.junit
