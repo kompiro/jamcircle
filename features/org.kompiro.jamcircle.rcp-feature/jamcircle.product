@@ -67,7 +67,8 @@ http://p.yusukekamiyamane.com/
    </plugins>
 
    <features>
-      <feature id="org.kompiro.jamcircle.rcp" version="0.8.2.qualifier"/>
+      <feature id="org.kompiro.jamcircle.rcp"/>
+      <feature id="org.kompiro.jamcircle.xmpp"/>
    </features>
 
    <configurations>
