@@ -1,4 +1,5 @@
 instructions.configure=\
+  org.eclipse.equinox.p2.touchpoint.eclipse.installFeature(feature:org.kompiro.jamcircle.xmpp.feature.group,featureId:default,featureVersion:default)
   org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:0,location:http${#58}//kompiro.org/jamcircle/daily/p2,name:JAMCircle Daily build,enabled:false);\
   org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:1,location:http${#58}//kompiro.org/jamcircle/daily/p2,name:JAMCircle Daily build,enabled:false);\
   org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:0,location:http${#58}//kompiro.org/jamcircle/release/p2,name:JAMCircle Released build,enabled:true);\
@@ -12,9 +13,10 @@ requires.2.name = org.kompiro.jamcircle.kanban.feature.group
 requires.2.optional = true
 #requires.2.greedy = true # install only bundles
 
-requires.3.namespace = org.eclipse.equinox.p2.iu
-requires.3.name = org.kompiro.jamcircle.xmpp.feature.group
 
-requires.4.namespace = org.eclipse.equinox.p2.iu
-requires.4.name = org.kompiro.jamcircle.scripting.feature.group
-requires.4.optional = true
+requires.3.namespace = org.eclipse.equinox.p2.iu
+requires.3.name = org.kompiro.jamcircle.scripting.feature.group
+requires.3.optional = true
+
+#requires.4.namespace = org.eclipse.equinox.p2.iu
+#requires.4.name = org.kompiro.jamcircle.xmpp.feature.group
