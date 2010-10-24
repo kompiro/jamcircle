@@ -15,7 +15,7 @@
                 <attribute name="site.p2" />
             </prerequisites>
             <products alias="destination" base="${buckminster.output}">
-                <path path="jamcircle.${target.ws}.${target.os}.${target.arch}/" />
+                <path path="jamcircle/" />
             </products>
         </public>
         <public name="create.product.zip" actor="ant">
