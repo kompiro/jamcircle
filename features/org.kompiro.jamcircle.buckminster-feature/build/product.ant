@@ -64,10 +64,6 @@
 			<arg value="${repository}"/>
 			<arg value="-destination"/>
 			<arg value="${destination}"/>
-			<arg value="-profile"/>
-			<arg value="${profile}"/>
-			<arg value="-profileProperties" />
-			<arg value="org.eclipse.update.install.features=true" />
 			<arg value="-installIU"/>
 			<arg value="${featureId}"/>
 			<arg value="-p2.os" />
