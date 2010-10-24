@@ -68,7 +68,6 @@ http://p.yusukekamiyamane.com/
 
    <features>
       <feature id="org.kompiro.jamcircle.rcp"/>
-      <feature id="org.kompiro.jamcircle.xmpp"/>
    </features>
 
    <configurations>
