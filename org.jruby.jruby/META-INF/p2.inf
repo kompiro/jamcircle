@@ -1,2 +1,2 @@
 instructions.install=\
-  org.eclipse.equinox.p2.touchpoint.natives.chmod(targetDir:@artifact,targetFile:META-INF/jruby.home/bin,permissions:755,options:-R);
+  org.eclipse.equinox.p2.touchpoint.natives.chmod(targetDir:${artifact.location},targetFile:META-INF/jruby.home/bin,permissions:755,options:-R);
