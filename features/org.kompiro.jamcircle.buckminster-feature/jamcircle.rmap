@@ -14,13 +14,13 @@
   </rm:searchPath>
   <rm:searchPath name="tracboard">
     <rm:provider componentTypes="eclipse.feature" readerType="local">
-      <rm:uri format="file:///{0}/extensions/example.feed/{1}-feature/">
+      <rm:uri format="file:///{0}/extensions/trac-board/{1}-feature/">
         <bc:propertyRef key="workspace.root"/>
         <bc:propertyRef key="buckminster.component"/>
       </rm:uri>
     </rm:provider>
     <rm:provider componentTypes="osgi.bundle" readerType="local">
-      <rm:uri format="file:///{0}/extensions/example.feed/{1}/">
+      <rm:uri format="file:///{0}/extensions/trac-board/{1}/">
         <bc:propertyRef key="workspace.root"/>
         <bc:propertyRef key="buckminster.component"/>
       </rm:uri>
