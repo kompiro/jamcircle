@@ -38,7 +38,6 @@
 			<jvmarg value="-Xmx512m"/>
 			<!-- jvmarg value="-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=y"/ -->
 		</java>
-		<!--
 		<antcall target="runDirector" inheritAll="true">
 			<param name="featureId" value="org.kompiro.jamcircle.rcp.feature.group"/>
 		</antcall>
@@ -51,7 +50,6 @@
 		<antcall target="runDirector" inheritAll="true">
 			<param name="featureId" value="org.kompiro.jamcircle.scripting.feature.group"/>
 		</antcall>
-		-->
 	</target>
 	
 	<target name="runDirector">
