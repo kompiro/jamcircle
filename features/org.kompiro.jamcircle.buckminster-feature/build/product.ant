@@ -74,7 +74,7 @@
 	</target>
 
 	<target name="javancss" description="description">
-    	<property name="javancss" value="${buildHome}/javancss"/>
+    	<property name="javancss" value="${basedir}/javancss"/>
     	<taskdef name="javancss" classname="javancss.JavancssAntTask" classpath="${javancss}/lib/javancss.jar"/>       
 		<javancss 
 			srcdir="${workspace.root}"
