@@ -31,13 +31,14 @@ public class InstallGemJob extends Job {
 		ProcessBuilder builder = createProcessBuilder();
 
 		IOConsoleOutputStream outputStream = null;
+		outputStream = console.newOutputStream();
+		outputStream.setColor(ScriptingColorEnum.OUTPUT_STREAM_COLOR.getColor());
 		IOConsoleOutputStream errorStream = null;
+		errorStream = console.newOutputStream();
+		errorStream.setColor(ScriptingColorEnum.ERROR_STREAM_COLOR.getColor());
+
 		try {
 			Process process = builder.start();
-			outputStream = console.newOutputStream();
-			outputStream.setColor(ScriptingColorEnum.OUTPUT_STREAM_COLOR.getColor());
-			errorStream = console.newOutputStream();
-			errorStream.setColor(ScriptingColorEnum.ERROR_STREAM_COLOR.getColor());
 			InputStreamThread it = new InputStreamThread(process.getInputStream(), new PrintStream(outputStream));
 			InputStreamThread et = new InputStreamThread(process.getErrorStream(), new PrintStream(errorStream));
 			it.start();
@@ -46,6 +47,7 @@ public class InstallGemJob extends Job {
 
 		} catch (IOException e) {
 			ScriptingUIActivator.logError(e);
+			e.printStackTrace(new PrintStream(errorStream));
 		} catch (InterruptedException e) {
 		} finally {
 			if (outputStream != null) {
