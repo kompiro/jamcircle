@@ -2,7 +2,7 @@ package org.kompiro.jamcircle.scripting.console;
 
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.kompiro.jamcircle.scripting.console.internal.*;
+import org.kompiro.jamcircle.scripting.console.internal.ScriptingImageEnum;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -39,10 +39,6 @@ public class Activator extends AbstractUIPlugin {
 		for (ScriptingImageEnum e : ScriptingImageEnum.values()) {
 			initializeImage(reg, e);
 		}
-		for (ScriptingColorEnum e : ScriptingColorEnum.values()) {
-			e.initialize();
-		}
-		ScriptingStreamInitializer.initializer.initColor();
 	}
 
 	private void initializeImage(ImageRegistry reg, ScriptingImageEnum constants) {

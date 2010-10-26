@@ -8,8 +8,8 @@ import org.kompiro.jamcircle.scripting.IScriptingEngineStreamLoader;
 
 public class ScriptingStreamInitializer implements IScriptingEngineStreamLoader {
 
-	private IOConsoleOutputStream outputStream;
-	private IOConsoleOutputStream errorStream;
+	static IOConsoleOutputStream outputStream;
+	static IOConsoleOutputStream errorStream;
 
 	public static ScriptingStreamInitializer initializer;
 
@@ -18,8 +18,8 @@ public class ScriptingStreamInitializer implements IScriptingEngineStreamLoader 
 		// ImageDescriptor desc = getImageDescriptor();
 		ImageDescriptor desc = null;
 		IOConsole console = new IOConsole("Scripting stream", desc);
-		this.outputStream = console.newOutputStream();
-		this.errorStream = console.newOutputStream();
+		ScriptingStreamInitializer.outputStream = console.newOutputStream();
+		ScriptingStreamInitializer.errorStream = console.newOutputStream();
 		getConsoleManager().addConsoles(new IConsole[] { console });
 	}
 
@@ -29,11 +29,6 @@ public class ScriptingStreamInitializer implements IScriptingEngineStreamLoader 
 
 	public OutputStream getErrorStream() {
 		return errorStream;
-	}
-
-	public void initColor() {
-		this.outputStream.setColor(ScriptingColorEnum.OUTPUT_STREAM_COLOR.getColor());
-		this.errorStream.setColor(ScriptingColorEnum.ERROR_STREAM_COLOR.getColor());
 	}
 
 	private IConsoleManager getConsoleManager() {
