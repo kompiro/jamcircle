@@ -73,4 +73,23 @@
 		</java>
 	</target>
 
+	<target name="javancss" description="description">
+    	<property name="javancss" value="${buildHome}/javancss"/>
+    	<taskdef name="javancss" classname="javancss.JavancssAntTask" classpath="${javancss}/lib/javancss.jar"/>       
+		<javancss 
+			srcdir="${workspace.root}"
+			includes="org.kompiro.jamcircle.*/**/*.java" 
+			excludes="**/learning/**,**/org/eclipse/**"
+			ccnPerFuncMax="100" 
+			generateReport="yes"
+			outputfile="${workspace.root}/javancss.xml"
+			format="xml"
+		/>
+		<xslt 
+	      in="${workspace.root}/javancss.xml" 
+	      out="${workspace.root}/javancss.html" 
+	      style="${javancss}/xslt/javancss2html.xsl" 
+	      classpath="${javancss}/lib/javancss.jar"
+	    />
+    </target>
 </project>
