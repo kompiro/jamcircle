@@ -3,7 +3,8 @@
       id="org.kompiro.jamcircle.kanban"
       label="JAM Circle Kanban  Feature"
       version="1.2.0.qualifier"
-      provider-name="kompiro.org">
+      provider-name="kompiro.org"
+      plugin="org.kompiro.jamcircle.kanban.ui">
 
    <description url="http://kompiro.org/jamcircle">
       JAM Circle&apos;s Kanban Platform main Feature.
