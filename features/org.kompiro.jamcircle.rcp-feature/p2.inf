@@ -4,19 +4,19 @@ instructions.configure=\
   org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:0,location:http${#58}//kompiro.org/jamcircle/release/p2,name:JAMCircle Released build,enabled:true);\
   org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:1,location:http${#58}//kompiro.org/jamcircle/release/p2,name:JAMCircle Released build,enabled:true);
   
+requires.0.namespace = org.eclipse.equinox.p2.iu
+requires.0.name = org.kompiro.jamcircle.rcp.feature.group
+requires.0.range = [$version$, 2)
+
 requires.1.namespace = org.eclipse.equinox.p2.iu
-requires.1.name = org.kompiro.jamcircle.rcp.feature.group
-requires.2.optional = true
+requires.1.name = org.kompiro.jamcircle.kanban.feature.group
+requires.1.optional = true
+requires.1.range = [$version$, 2)
 
 requires.2.namespace = org.eclipse.equinox.p2.iu
-requires.2.name = org.kompiro.jamcircle.kanban.feature.group
-requires.2.optional = true
-#requires.2.greedy = true # install only bundles
+requires.2.name = org.kompiro.jamcircle.scripting.feature.group
+requires.2.range = [$version$, 2)
 
 requires.3.namespace = org.eclipse.equinox.p2.iu
-requires.3.name = org.kompiro.jamcircle.scripting.feature.group
-requires.3.optional = true
-
-requires.4.namespace = org.eclipse.equinox.p2.iu
-requires.4.name = org.kompiro.jamcircle.xmpp.feature.group
-requires.4.optional = true
+requires.3.name = org.kompiro.jamcircle.xmpp.feature.group
+requires.3.range = [$version$, 2)
