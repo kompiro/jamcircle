@@ -72,6 +72,9 @@ public class InstallGemJob extends Job {
 		String jrubyHome = jRubyUtil.getJRubyHomeFromBundle();
 		String scriptBin = jrubyHome + File.separator + "bin" + File.separator;
 		String scriptPath = scriptBin + COMMAND_NAME_OF_JGEM;
+		if (Platform.getOS().equals("win32")) {
+			scriptPath = scriptPath + ".bat";
+		}
 
 		ProcessBuilder builder = new ProcessBuilder(scriptPath, "install", target);
 		String envPath = System.getenv().get("PATH");
