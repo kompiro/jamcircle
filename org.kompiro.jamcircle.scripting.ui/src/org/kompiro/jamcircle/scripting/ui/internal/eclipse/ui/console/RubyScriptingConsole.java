@@ -84,7 +84,7 @@ public class RubyScriptingConsole extends TextConsole {
 	/**
 	 * The encoding used to for displaying console output.
 	 */
-	private String fEncoding = "utf-8"; //$NON-NLS-1$
+	private String fEncoding = System.getProperty("file.encoding"); //$NON-NLS-1$
 
 	private IOConsolePage consolePage;
 
