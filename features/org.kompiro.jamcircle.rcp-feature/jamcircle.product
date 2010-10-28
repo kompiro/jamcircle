@@ -104,15 +104,6 @@ http://p.yusukekamiyamane.com/
       <plugin id="org.eclipse.ui.workbench" autoStart="false" startLevel="0" />
       <plugin id="org.eclipse.ui.workbench.texteditor" autoStart="false" startLevel="0" />
       <plugin id="org.jruby.jruby" autoStart="false" startLevel="0" />
-      <plugin id="org.kompiro.jamcircle.debug" autoStart="false" startLevel="0" />
-      <plugin id="org.kompiro.jamcircle.kanban" autoStart="false" startLevel="0" />
-      <plugin id="org.kompiro.jamcircle.kanban.ui" autoStart="false" startLevel="0" />
-      <plugin id="org.kompiro.jamcircle.rcp" autoStart="false" startLevel="0" />
-      <plugin id="org.kompiro.jamcircle.scripting" autoStart="false" startLevel="0" />
-      <plugin id="org.kompiro.jamcircle.scripting.console" autoStart="false" startLevel="0" />
-      <plugin id="org.kompiro.jamcircle.scripting.ui" autoStart="false" startLevel="6" />
-      <plugin id="org.kompiro.jamcircle.storage" autoStart="false" startLevel="0" />
-      <plugin id="org.kompiro.jamcircle.storage.ui" autoStart="false" startLevel="0" />
       <plugin id="org.mozilla.javascript" autoStart="false" startLevel="0" />
       <plugin id="org.sf.feeling.swt.win32.extension" autoStart="false" startLevel="0" />
    </configurations>
