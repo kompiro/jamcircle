@@ -13,6 +13,7 @@ public class Messages extends NLS {
 	public static String BoardEditDialog_board_script_label;
 	public static String BoardEditDialog_board_title_label;
 	public static String BoardEditDialog_title;
+	public static String BoardExportWizard_invocationError;
 	public static String BoardExportWizard_title;
 	public static String BoardExportWizardPage_export_file_selection_dialog_message;
 	public static String BoardExportWizardPage_message;

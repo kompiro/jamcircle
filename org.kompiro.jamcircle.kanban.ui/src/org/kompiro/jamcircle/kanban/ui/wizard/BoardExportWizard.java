@@ -40,7 +40,7 @@ public class BoardExportWizard extends Wizard implements IExportWizard {
 		try {
 			getContainer().run(true, false, runnable);
 		} catch (InvocationTargetException e) {
-			helper.openError(getShell(), "ボードをエクスポート中にエラーが発生しました。", e);
+			helper.openError(getShell(), Messages.BoardExportWizard_invocationError, e);
 			return false;
 		} catch (InterruptedException e) {
 			// cancel case
