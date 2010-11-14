@@ -3,7 +3,6 @@ package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 import java.beans.PropertyChangeEvent;
 
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.*;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -28,38 +27,38 @@ public class InboxEditPart extends AbstractIconEditPart {
 	protected KanbanImageConstants getImageConstants() {
 		return KanbanImageConstants.INBOX_IMAGE;
 	}
-	
+
 	@Override
 	protected String getImageLabel() {
 		return InboxIconModel.NAME;
 	}
-	
+
 	@Override
 	protected Point getLocation() {
 		return getInboxIconModel().getLocation();
 	}
 
 	private InboxIconModel getInboxIconModel() {
-		return (InboxIconModel)getModel();
+		return (InboxIconModel) getModel();
 	}
 
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.LAYOUT_ROLE,new LayoutEditPolicy(){
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new LayoutEditPolicy() {
 
 			@Override
 			protected Command getCreateCommand(CreateRequest request) {
 				return null;
 			}
-			
+
 			protected Command getAddCommand(Request request) {
 				CompoundCommand command = new CompoundCommand();
 				GroupRequest req = (GroupRequest) request;
 				command.setDebugLabel(Messages.InboxEditPart_command_label);
-				for(Object obj : req.getEditParts()){
+				for (Object obj : req.getEditParts()) {
 					if (obj instanceof CardEditPart) {
 						CardEditPart cardPart = (CardEditPart) obj;
-						command.add(new AddCardToContanerCommand(getInboxIconModel(),cardPart.getCardModel()));
+						command.add(new AddCardToContanerCommand(getInboxIconModel(), cardPart.getCardModel()));
 					}
 				}
 				return command;
@@ -74,22 +73,23 @@ public class InboxEditPart extends AbstractIconEditPart {
 			protected Command getMoveChildrenCommand(Request request) {
 				return null;
 			}
-			
+
 		});
 	}
-	
+
 	@Override
 	public void performRequest(Request req) {
-		if(REQ_OPEN.equals(req.getType())){
-			ApplicationWindow window = new ContainerContentsWindow(getViewer().getControl().getShell(),getInboxIconModel(),null);
+		if (REQ_OPEN.equals(req.getType())) {
+			ApplicationWindow window = new ContainerContentsWindow(getViewer().getControl().getShell(),
+					getInboxIconModel(), null);
 			window.create();
 			window.open();
 		}
 	}
-	
+
 	@Override
 	public void doPropertyChange(PropertyChangeEvent prop) {
-		if(isPropLocation(prop)){
+		if (isPropLocation(prop)) {
 			figure.setLocation(getInboxIconModel().getLocation());
 			figure.repaint();
 		}
@@ -99,8 +99,4 @@ public class InboxEditPart extends AbstractIconEditPart {
 		return getInboxIconModel();
 	}
 
-	@Override
-	protected Rectangle getLabelConstraint() {
-		return new Rectangle(0,72-10,72,10);
-	}
 }

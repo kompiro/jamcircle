@@ -18,31 +18,40 @@ public abstract class AbstractIconEditPart extends AbstractEditPart implements
 
 	@Override
 	protected IFigure createFigure() {
-		Image image = getImageRegistry().get(getImageConstants().toString());
+		Image image = createImage();
 		ImageFigure imageFigire = new ImageFigure(image);
 		imageFigire.setLayoutManager(new XYLayout());
-		imageFigire.setSize(72,72);
+		imageFigire.setSize(72, 72);
 		Label labelFigure = new Label();
 		labelFigure.setTextAlignment(PositionConstants.CENTER);
 		labelFigure.setText(getImageLabel());
-		imageFigire.add(labelFigure,getLabelConstraint());
+		imageFigire.add(labelFigure, getLabelConstraint());
 		imageFigire.setLocation(getLocation());
 		return imageFigire;
 	}
 
-	protected abstract Rectangle getLabelConstraint();
+	protected ImageFigure getImageFigure() {
+		return (ImageFigure) getFigure();
+	}
+
+	protected Image createImage() {
+		Image image = getImageRegistry().get(getImageConstants().toString());
+		return image;
+	}
+
+	protected Rectangle getLabelConstraint() {
+		return new Rectangle(0, 72 - 10, 72, 10);
+	}
 
 	protected abstract KanbanImageConstants getImageConstants();
-	
+
 	protected abstract Point getLocation();
-	
+
 	protected abstract String getImageLabel();
 
-	
-	@SuppressWarnings("unchecked")
 	@Override
-	public Object getAdapter(Class key) {
-		if(MoveCommand.class.equals(key)){
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class key) {
+		if (MoveCommand.class.equals(key)) {
 			return new MoveIconCommand();
 		}
 		return super.getAdapter(key);

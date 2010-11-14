@@ -12,4 +12,3 @@ Require-Bundle: com.ibm.icu,
  org.eclipse.swtbot.junit4_x,
  org.mockito
 Bundle-RegisterBuddy: org.mockito,org.apache.log4j
-Export-Package: org.eclipse.swtbot.eclipse.gef.view.finder.widgets

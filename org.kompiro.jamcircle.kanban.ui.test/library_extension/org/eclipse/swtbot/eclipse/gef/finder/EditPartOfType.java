@@ -1,29 +1,30 @@
-package org.eclipse.swtbot.eclipse.gef.view.finder.widgets;
+package org.eclipse.swtbot.eclipse.gef.finder;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.swtbot.swt.finder.matchers.AbstractMatcher;
 import org.hamcrest.*;
 
 /**
- * Tells if a particular widget is of a specified type.
+ * Tells if a particular edit part is of a specified type.
  * 
- * @author Ketan Padegaonkar &lt;KetanPadegaonkar [at] gmail [dot] com&gt;
+ * @author Hiroki Kondo &lt;kompiro [at] gmail [dot] com&gt;
  * @version $Id$
  * @since 2.0
  */
 public class EditPartOfType<T extends EditPart> extends AbstractMatcher<T> {
 
 	/**
-	 * The type of widget to match.
+	 * The type of edit part to match.
 	 */
-	private Class<? extends EditPart>	type;
+	private Class<? extends EditPart> type;
 
 	/**
-	 * Matches a widget that has the specified type
+	 * Matches a edit part that has the specified type
 	 * 
-	 * @param type the type of the widget.
+	 * @param type
+	 *            the type of the edit part.
 	 */
-	EditPartOfType(Class<? extends EditPart> type) {
+	public EditPartOfType(Class<? extends EditPart> type) {
 		this.type = type;
 	}
 
