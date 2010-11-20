@@ -5,119 +5,123 @@ import java.io.File;
 import java.util.*;
 
 import org.kompiro.jamcircle.kanban.KanbanActivator;
+import org.kompiro.jamcircle.storage.model.GraphicalEntityImpl;
 import org.kompiro.jamcircle.storage.service.StorageService;
-
 
 /**
  * This implementation describes Card implmentation wrapper.
+ * 
  * @author kompiro
  */
-public class CardImpl extends GraphicalImpl {
-	
+public class CardImpl extends GraphicalEntityImpl {
+
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
-	public static final String CARD_PATH = "cards" + File.separator;  //$NON-NLS-1$
+	public static final String CARD_PATH = "cards" + File.separator; //$NON-NLS-1$
 
 	private static String TO_STRING_FORMAT = "CARD['#%d':'%s' trashed:'%s' point:'%d,%d']"; //$NON-NLS-1$
 
 	private Card card;
-	
+
 	private boolean deletedVisuals;
 
-	public CardImpl(Card card){
+	public CardImpl(Card card) {
 		super(card);
 		this.card = card;
 	}
-	
-	public void init(){
+
+	public void init() {
 		card.init();
 		String uuid = card.getUUID();
-		if(uuid == null || uuid.length() == 0){
+		if (uuid == null || uuid.length() == 0) {
 			uuid = UUID.randomUUID().toString();
 			card.setUUID(uuid);
 			card.save(false);
 		}
 	}
-	
-	public String getStatus(){
+
+	public String getStatus() {
 		Lane lane = card.getLane();
-		if(lane == null) return EMPTY_STRING;
+		if (lane == null)
+			return EMPTY_STRING;
 		return lane.getStatus();
 	}
-		
-	public boolean isDeletedVisuals(){
+
+	public boolean isDeletedVisuals() {
 		return this.deletedVisuals;
 	}
-	
-	public void setDeletedVisuals(boolean deletedVisuals){
+
+	public void setDeletedVisuals(boolean deletedVisuals) {
 		this.deletedVisuals = deletedVisuals;
 	}
-	
-	public List<File> getFiles(){
+
+	public List<File> getFiles() {
 		List<File> files = getStorageService().getFileService().getFiles(getPath());
-		if(files != null) return files;
+		if (files != null)
+			return files;
 		return Collections.emptyList();
 	}
-	
-	public String getFilePath(){
-		if( ! hasFiles()) return null;
+
+	public String getFilePath() {
+		if (!hasFiles())
+			return null;
 		return getFiles().get(0).getParent();
 	}
 
-	public void addFile(File srcFile){
+	public void addFile(File srcFile) {
 		getStorageService().getFileService().addFile(getPath(), srcFile);
-		PropertyChangeEvent event = new PropertyChangeEvent(card,Card.PROP_FILES,null,srcFile);
+		PropertyChangeEvent event = new PropertyChangeEvent(card, Card.PROP_FILES, null, srcFile);
 		fireEvent(event);
 	}
-	
-	public boolean hasFiles(){
-		return ! getFiles().isEmpty();
+
+	public boolean hasFiles() {
+		return !getFiles().isEmpty();
 	}
-	
-	public void deleteFile(File file){
-		if(hasFile(file)){
+
+	public void deleteFile(File file) {
+		if (hasFile(file)) {
 			file.delete();
-			PropertyChangeEvent event = new PropertyChangeEvent(card,Card.PROP_FILES,file,null);
+			PropertyChangeEvent event = new PropertyChangeEvent(card, Card.PROP_FILES, file, null);
 			fireEvent(event);
 		}
 	}
-	
+
 	public boolean hasFile(File file) {
-		if(file.exists()){
-			for(File target : getFiles()){
-				if(target.getAbsolutePath().equals(file.getAbsolutePath())){
+		if (file.exists()) {
+			for (File target : getFiles()) {
+				if (target.getAbsolutePath().equals(file.getAbsolutePath())) {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
-	public void setCompleted(boolean completed){
+
+	public void setCompleted(boolean completed) {
 		this.card.setCompleted(completed);
 		this.card.setCompletedDate(new Date());
 	}
-	
-	public void setColorType(int colorType){
-		for(ColorTypes type :ColorTypes.values()){
-			if(colorType == type.ordinal()){
+
+	public void setColorType(int colorType) {
+		for (ColorTypes type : ColorTypes.values()) {
+			if (colorType == type.ordinal()) {
 				card.setColorType(type);
 			}
 		}
 	}
-	
 
 	private String getPath() {
 		return CARD_PATH + card.getID();
 	}
-	
+
 	private StorageService getStorageService() {
 		return KanbanActivator.getKanbanService().getStorageService();
 	}
-	
+
 	@Override
 	public String toString() {
-		return String.format(TO_STRING_FORMAT, card.getID(),card.getSubject(),card.isTrashed(),card.getX(),card.getY());
+		return String.format(TO_STRING_FORMAT, card.getID(), card.getSubject(), card.isTrashed(), card.getX(),
+				card.getY());
 	}
 
 }

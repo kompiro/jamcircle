@@ -3,11 +3,9 @@ package org.kompiro.jamcircle.kanban.model;
 import java.beans.PropertyChangeEvent;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
-import org.kompiro.jamcircle.kanban.model.mock.MockGraphicalEntity;
+import org.kompiro.jamcircle.storage.model.EntityImpl;
 
 /**
  * This implementation describes board implementation wrapper.
@@ -18,15 +16,6 @@ public class BoardImpl extends EntityImpl {
 
 	private static final String ERROR_HAS_OCCURED = "SQLException has occured.";//$NON-NLS-1$
 	public static String TO_STRING_FORMAT = "BOARD['#%d':'%s' trashed:'%s']"; //$NON-NLS-1$
-
-	private static ExecutorHandler handler = new ExecutorHandler() {
-		ExecutorService executor = Executors.newSingleThreadExecutor();
-
-		public void handle(Runnable runtime) {
-			executor.execute(runtime);
-		}
-
-	};
 
 	private Board board;
 
@@ -104,7 +93,7 @@ public class BoardImpl extends EntityImpl {
 
 	public boolean addLane(Lane lane) {
 		lane.setBoard(board);
-		if (lane instanceof MockGraphicalEntity) {
+		if (lane.isMock()) {
 			mockLanes.add(lane);
 		} else {
 			lane.save(false);
@@ -139,29 +128,12 @@ public class BoardImpl extends EntityImpl {
 		return board.equals(lane.getBoard()) || mockLanes.contains(lane);
 	}
 
-	public void save(boolean directExecution) {
-		if (directExecution) {
-			board.save();
-			return;
-		}
-		Runnable runnable = new Runnable() {
-			public void run() {
-				board.save();
-			}
-		};
-		handler.handle(runnable);
-	}
-
 	public Board getBoard() {
 		return board;
 	}
 
 	public Board gainBoard() {
 		return board;
-	}
-
-	static void setHandler(ExecutorHandler handler) {
-		BoardImpl.handler = handler;
 	}
 
 	@Override

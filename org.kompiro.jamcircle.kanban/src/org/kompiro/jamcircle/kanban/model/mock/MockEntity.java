@@ -9,16 +9,18 @@ import net.java.ao.*;
 import net.java.ao.schema.PrimaryKey;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
-
+import org.kompiro.jamcircle.storage.model.ExecutorHandler;
 
 /**
- * This implementation describes Entity of Mock and isn't able to store any persistence.
+ * This implementation describes Entity of Mock and isn't able to store any
+ * persistence.
+ * 
  * @author kompiro
  */
 class MockEntity implements Entity {
-	
+
 	private List<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
-	
+
 	@PrimaryKey("id")
 	public int getID() {
 		return 0;
@@ -45,19 +47,22 @@ class MockEntity implements Entity {
 
 	public void save() {
 	}
-	
-	public boolean isMock(){
+
+	public boolean isMock() {
 		return true;
 	}
 
-	
-	protected void fireProperty(String propertyName,Object oldValue,Object newValue){
+	protected void fireProperty(String propertyName, Object oldValue, Object newValue) {
 		PropertyChangeEvent evt = new PropertyChangeEvent(this, propertyName, oldValue, newValue);
-		for(PropertyChangeListener listener : listeners){
+		for (PropertyChangeListener listener : listeners) {
 			listener.propertyChange(evt);
 		}
 	}
-	
+
+	public void setHandler(ExecutorHandler handler) {
+
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		return EqualsBuilder.reflectionEquals(this, obj);

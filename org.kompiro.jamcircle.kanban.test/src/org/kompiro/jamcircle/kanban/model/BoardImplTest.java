@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.kompiro.jamcircle.storage.model.ExecutorHandler;
 
 public class BoardImplTest {
 
@@ -16,12 +17,12 @@ public class BoardImplTest {
 	@Before
 	public void before() throws Exception {
 		handler = mock(ExecutorHandler.class);
-		BoardImpl.setHandler(handler);
 	}
 
 	@Test
 	public void should_call_save() throws Exception {
 		Board board = mock(Board.class);
+		board.setHandler(handler);
 		BoardImpl impl = new BoardImpl(board);
 		impl.save(false);
 		verify(handler, only()).handle((Runnable) anyObject());
@@ -31,6 +32,7 @@ public class BoardImplTest {
 	@Test
 	public void should_call_save_directory() throws Exception {
 		Board board = mock(Board.class);
+		board.setHandler(handler);
 		BoardImpl impl = new BoardImpl(board);
 		impl.save(true);
 		verify(handler, never()).handle((Runnable) anyObject());

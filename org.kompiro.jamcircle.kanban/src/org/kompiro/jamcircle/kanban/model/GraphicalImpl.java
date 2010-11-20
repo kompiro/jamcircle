@@ -2,6 +2,7 @@ package org.kompiro.jamcircle.kanban.model;
 
 import java.beans.PropertyChangeEvent;
 
+import org.kompiro.jamcircle.storage.model.EntityImpl;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 /**

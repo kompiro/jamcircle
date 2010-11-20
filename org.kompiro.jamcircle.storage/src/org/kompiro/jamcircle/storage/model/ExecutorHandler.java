@@ -1,4 +1,4 @@
-package org.kompiro.jamcircle.kanban.model;
+package org.kompiro.jamcircle.storage.model;
 
 public interface ExecutorHandler {
 

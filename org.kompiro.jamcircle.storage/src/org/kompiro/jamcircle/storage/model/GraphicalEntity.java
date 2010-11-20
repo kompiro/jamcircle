@@ -19,43 +19,52 @@ public interface GraphicalEntity extends Entity {
 
 	@Ignore
 	public boolean isDeletedVisuals();
-	
+
 	int getX();
+
 	int getY();
 
 	@NotNull
-	@Default(value="0")
+	@Default(value = "0")
 	void setX(int x);
 
 	@NotNull
-	@Default(value="0")
+	@Default(value = "0")
 	void setY(int y);
-	
+
 	/**
 	 * prepared to move location
 	 */
 	@Ignore
 	void prepareLocation();
-	
+
 	/**
 	 * commited the location of this model
+	 * 
 	 * @param location
 	 */
 	@Ignore
 	void commitLocation(Object location);
-	
+
 	@Ignore
 	boolean isMock();
 
 	boolean isTrashed();
-	
-	@Default(value="false")
+
+	@Default(value = "false")
 	void setTrashed(boolean trashed);
-	
+
 	/**
-	 * This method calls {@link net.java.ao.RawEntity#save(false)} and run in  Executor.
-	 * @param directExecution set true if you need direct {@link net.java.ao.RawEntity#save(false)}
+	 * This method calls {@link net.java.ao.RawEntity#save(false)} and run in
+	 * Executor.
+	 * 
+	 * @param directExecution
+	 *            set true if you need direct
+	 *            {@link net.java.ao.RawEntity#save(false)}
 	 */
-	void save(boolean directExecution);
+	public void save(boolean directExecution);
+
+	@Ignore
+	public void setHandler(ExecutorHandler handler);
 
 }
