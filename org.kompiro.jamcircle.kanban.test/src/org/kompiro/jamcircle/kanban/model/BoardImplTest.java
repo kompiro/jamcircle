@@ -22,9 +22,11 @@ public class BoardImplTest {
 	@Test
 	public void should_call_save() throws Exception {
 		Board board = mock(Board.class);
-		board.setHandler(handler);
+
 		BoardImpl impl = new BoardImpl(board);
+		impl.setHandler(handler);
 		impl.save(false);
+
 		verify(handler, only()).handle((Runnable) anyObject());
 		verify(board, never()).save();
 	}
@@ -32,9 +34,11 @@ public class BoardImplTest {
 	@Test
 	public void should_call_save_directory() throws Exception {
 		Board board = mock(Board.class);
-		board.setHandler(handler);
+
 		BoardImpl impl = new BoardImpl(board);
+		impl.setHandler(handler);
 		impl.save(true);
+
 		verify(handler, never()).handle((Runnable) anyObject());
 		verify(board, only()).save();
 	}
