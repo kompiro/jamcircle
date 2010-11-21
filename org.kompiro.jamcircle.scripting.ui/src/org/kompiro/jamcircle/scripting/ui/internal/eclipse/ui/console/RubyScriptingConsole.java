@@ -571,6 +571,16 @@ public class RubyScriptingConsole extends TextConsole {
 		}
 
 		public void verifyKey(VerifyEvent event) {
+			if ((event.stateMask & SWT.CONTROL) != 0 && event.keyCode == 'c') {
+				container.terminate();
+				try {
+					output.write(LINE_SEPARATOR);
+					output.write(LINE_SEPARATOR);
+					output.write("terminated");
+				} catch (IOException e) {
+				}
+				return;
+			}
 			switch (event.keyCode) {
 			case SWT.ARROW_UP:
 				event.doit = false;
@@ -732,7 +742,9 @@ public class RubyScriptingConsole extends TextConsole {
 		}
 	}
 
-	private void shutdown() {
+	void shutdown() {
+		if (container == null)
+			return;
 		container.terminate();
 		container = null;
 		input = null;
@@ -744,7 +756,6 @@ public class RubyScriptingConsole extends TextConsole {
 			return;
 		display.asyncExec(new Runnable() {
 			public void run() {
-				getConsoleManager().removeConsoles(new IConsole[] { RubyScriptingConsole.this });
 				TextConsoleViewer viewer = consolePage.getViewer();
 				Control control = viewer.getControl();
 				if (control instanceof StyledText) {
@@ -755,6 +766,7 @@ public class RubyScriptingConsole extends TextConsole {
 					handleListener = null;
 				}
 				assist.uninstall();
+				getConsoleManager().removeConsoles(new IConsole[] { RubyScriptingConsole.this });
 			}
 		});
 	}
