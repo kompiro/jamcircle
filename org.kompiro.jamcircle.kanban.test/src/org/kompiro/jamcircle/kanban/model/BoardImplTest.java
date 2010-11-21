@@ -5,6 +5,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import net.java.ao.EntityManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +19,55 @@ public class BoardImplTest {
 	@Before
 	public void before() throws Exception {
 		handler = mock(ExecutorHandler.class);
+	}
+
+	@Test
+	public void add_card() throws Exception {
+		Board board = mock(Board.class);
+		EntityManager manager = mock(EntityManager.class);
+		when(board.getEntityManager()).thenReturn(manager);
+
+		BoardImpl impl = new BoardImpl(board);
+		Card card = mock(Card.class);
+		when(card.isMock()).thenReturn(false);
+		impl.addCard(card);
+
+		verify(manager).flush(card);
+		verify(card).save(false);
+		verify(card).setBoard(board);
+	}
+
+	@Test
+	public void add_card_to_same_board() throws Exception {
+		Board board = mock(Board.class);
+		when(board.getID()).thenReturn(1);
+
+		EntityManager manager = mock(EntityManager.class);
+		when(board.getEntityManager()).thenReturn(manager);
+
+		BoardImpl impl = new BoardImpl(board);
+		Card card = mock(Card.class);
+		when(card.getBoard()).thenReturn(board);
+		when(card.isMock()).thenReturn(false);
+		impl.addCard(card);
+
+		verify(manager).flush(card);
+		verify(card).save(false);
+		verify(card, never()).setBoard(board);
+	}
+
+	@Test
+	public void add_mock_card() throws Exception {
+		Board board = mock(Board.class);
+		EntityManager manager = mock(EntityManager.class);
+		when(board.getEntityManager()).thenReturn(manager);
+
+		BoardImpl impl = new BoardImpl(board);
+		Card card = mock(Card.class);
+		when(card.isMock()).thenReturn(true);
+		impl.addCard(card);
+
+		verify(manager, never()).flush(card);
 	}
 
 	@Test

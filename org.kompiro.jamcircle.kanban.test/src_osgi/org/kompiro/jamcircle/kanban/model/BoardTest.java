@@ -7,8 +7,12 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import java.util.Random;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.service.internal.AbstractKanbanTest;
+import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.storage.model.ExecutorHandler;
 
 public class BoardTest extends AbstractKanbanTest {
@@ -22,6 +26,22 @@ public class BoardTest extends AbstractKanbanTest {
 
 		board.save(false);
 		verify(handler).handle((Runnable) any());
+	}
+
+	@Test
+	@Ignore
+	public void get_script() throws Exception {
+		Board board = createBoardForTest("TEST_BOARD");
+		for (int i = 0; i < 100000; i++) {
+			Random r = new Random(i);
+			String script = "p 'test" + r.nextInt() + "'";
+			board.setScript(script);
+			board.setScriptType(ScriptTypes.JRuby);
+			board.save(false);
+
+			String actual = board.getScript();
+			assertThat(actual, is(script));
+		}
 	}
 
 	@Test
