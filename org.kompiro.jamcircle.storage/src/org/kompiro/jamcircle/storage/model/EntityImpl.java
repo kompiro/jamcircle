@@ -4,8 +4,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import net.java.ao.Entity;
 
@@ -21,14 +19,7 @@ public abstract class EntityImpl {
 	private List<PropertyChangeListener> listeners = new LinkedList<PropertyChangeListener>();
 	protected Entity entity;
 
-	protected ExecutorHandler handler = new ExecutorHandler() {
-		ExecutorService executor = Executors.newSingleThreadExecutor();
-
-		public void handle(Runnable runtime) {
-			executor.execute(runtime);
-		}
-
-	};
+	protected ExecutorHandler handler = new DefaultExecutorHandle();
 
 	public EntityImpl(Entity entity) {
 		this.entity = entity;
@@ -60,15 +51,20 @@ public abstract class EntityImpl {
 
 	public void save(boolean directExecution) {
 		if (directExecution) {
-			entity.save();
+			saveAndFlush();
 			return;
 		}
 		Runnable runnable = new Runnable() {
 			public void run() {
-				entity.save();
+				saveAndFlush();
 			}
 		};
 		handler.handle(runnable);
+	}
+
+	private void saveAndFlush() {
+		entity.save();
+
 	}
 
 	public void setHandler(ExecutorHandler handler) {
