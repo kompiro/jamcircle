@@ -53,6 +53,7 @@ public class BoardExportWizardTest {
 		Board[] boards = new Board[] { board };
 		when(kanbanService.findAllBoard()).thenReturn(boards);
 		wizard.init(null, null);
+		bot.shell(Messages.BoardExportWizard_title).activate();
 	}
 
 	@Test

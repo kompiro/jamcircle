@@ -10,5 +10,6 @@ Require-Bundle: com.ibm.icu,
  org.junit4,
  org.eclipse.swtbot.eclipse.gef.finder,
  org.eclipse.swtbot.junit4_x,
- org.mockito
+ org.mockito,
+ org.hamcrest
 Bundle-RegisterBuddy: org.mockito,org.apache.log4j
