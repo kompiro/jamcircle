@@ -478,6 +478,16 @@ public class RubyScriptingConsole extends TextConsole {
 		createJob();
 	}
 
+	private void terminate() {
+		container.terminate();
+		try {
+			output.write(LINE_SEPARATOR);
+			output.write("terminated...");
+			output.write(LINE_SEPARATOR);
+		} catch (IOException e) {
+		}
+	}
+
 	private void createJob() {
 		final Job initJob = new Job(Messages.RubyScriptingConsole_initialize_runtime_message) {
 
@@ -530,7 +540,7 @@ public class RubyScriptingConsole extends TextConsole {
 				} finally {
 					ScriptingSecurityManager.finishedScript();
 				}
-				shutdown();
+				terminate();
 				return Status.OK_STATUS;
 			}
 
@@ -572,13 +582,7 @@ public class RubyScriptingConsole extends TextConsole {
 
 		public void verifyKey(VerifyEvent event) {
 			if ((event.stateMask & SWT.CONTROL) != 0 && event.keyCode == 'c') {
-				container.terminate();
-				try {
-					output.write(LINE_SEPARATOR);
-					output.write(LINE_SEPARATOR);
-					output.write("terminated");
-				} catch (IOException e) {
-				}
+				terminate();
 				return;
 			}
 			switch (event.keyCode) {
@@ -742,7 +746,7 @@ public class RubyScriptingConsole extends TextConsole {
 		}
 	}
 
-	void shutdown() {
+	public void shutdown() {
 		if (container == null)
 			return;
 		container.terminate();

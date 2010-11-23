@@ -1,7 +1,6 @@
 package org.kompiro.jamcircle.scripting.ui.internal.handlers;
 
 import org.eclipse.core.commands.*;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -19,7 +18,8 @@ public class GemInstallHandler extends AbstractHandler {
 		}
 		String target = dialog.getValue();
 
-		Job job = new InstallGemJob(target);
+		InstallGemJob job = new InstallGemJob();
+		job.setTarget(target);
 		job.schedule();
 		return null;
 	}

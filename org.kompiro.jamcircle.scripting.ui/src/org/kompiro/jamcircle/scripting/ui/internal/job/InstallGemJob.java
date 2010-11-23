@@ -14,21 +14,18 @@ public class InstallGemJob extends Job {
 	private static final String INSTALL_GEM_JOB_NAME = "Run gem install";
 	private static final String CONSOLE_NAME_OF_GEM = "Gem Console";
 	private static final String COMMAND_NAME_OF_JGEM = "jgem";
-	private final String target;
+	private String target;
 	private final JRubyUtil jRubyUtil = new JRubyUtil();
-	private IOConsole console;
 
-	public InstallGemJob(String target) {
+	public InstallGemJob() {
 		super(INSTALL_GEM_JOB_NAME);
-		this.target = target;
-		console = new IOConsole(CONSOLE_NAME_OF_GEM, getRubyAddImageDescriptor());
-		getConsoleManager().addConsoles(new IConsole[] { console });
-
 	}
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 		ProcessBuilder builder = createProcessBuilder();
+		IOConsole console = new IOConsole(CONSOLE_NAME_OF_GEM, getRubyAddImageDescriptor());
+		getConsoleManager().addConsoles(new IConsole[] { console });
 
 		IOConsoleOutputStream outputStream = null;
 		outputStream = console.newOutputStream();
@@ -85,12 +82,22 @@ public class InstallGemJob extends Job {
 		return builder;
 	}
 
+	public void setTarget(String target) {
+		this.target = target;
+	}
+
 	private ImageDescriptor getRubyAddImageDescriptor() {
-		return getImageRegistry().getDescriptor(ScriptingImageEnum.RUBY_ADD.getPath());
+		ImageRegistry imageRegistry = getImageRegistry();
+		if (imageRegistry == null)
+			return null;
+		return imageRegistry.getDescriptor(ScriptingImageEnum.RUBY_ADD.getPath());
 	}
 
 	private ImageRegistry getImageRegistry() {
-		return getActivator().getImageRegistry();
+		ScriptingUIActivator activator = getActivator();
+		if (activator == null)
+			return null;
+		return activator.getImageRegistry();
 	}
 
 	private ScriptingUIActivator getActivator() {
