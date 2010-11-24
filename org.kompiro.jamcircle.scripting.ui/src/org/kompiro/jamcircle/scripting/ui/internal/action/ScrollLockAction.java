@@ -2,6 +2,7 @@ package org.kompiro.jamcircle.scripting.ui.internal.action;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.SWT;
 import org.eclipse.ui.console.IConsoleView;
 import org.kompiro.jamcircle.scripting.ui.*;
 
@@ -16,7 +17,8 @@ public class ScrollLockAction extends Action {
 	private IConsoleView consoleView;
 
 	public ScrollLockAction() {
-		super(Messages.ScrollLockAction_text);
+		super(Messages.ScrollLockAction_text, SWT.TOGGLE);
+		setId("Lock");
 		setToolTipText(Messages.ScrollLockAction_tooltip);
 		setHoverImageDescriptor(getImageDescriptor(ScriptingImageEnum.IMG_LCL_LOCK));
 		setDisabledImageDescriptor(getImageDescriptor(ScriptingImageEnum.IMG_DLCL_LOCK));

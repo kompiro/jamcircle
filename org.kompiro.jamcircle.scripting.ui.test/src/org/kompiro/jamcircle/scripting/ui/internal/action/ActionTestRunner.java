@@ -15,15 +15,14 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
-import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
+import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.TestClass;
 
-public class ActionTestRunner extends SWTBotJunit4ClassRunner {
+public class ActionTestRunner extends BlockJUnit4ClassRunner {
 
 	private Window newWindow = null;
 	private SWTBot bot;
@@ -42,14 +41,10 @@ public class ActionTestRunner extends SWTBotJunit4ClassRunner {
 			throw new IllegalArgumentException(e);
 		}
 		bot = new SWTBot();
-		final Exception[] ex = new Exception[1];
 		Runnable r = new Runnable() {
 			public void run() {
 				try {
 					ActionTestRunner.super.runChild(method, notifier);
-				} catch (Exception e) {
-					ex[0] = e;
-					notifier.fireTestFailure(new Failure(getDescription(), e));
 				} finally {
 					closeDialogs();
 				}
@@ -90,9 +85,6 @@ public class ActionTestRunner extends SWTBotJunit4ClassRunner {
 
 		waitForNonUIThreadFinished(parentShell, nonUIThread);
 		parentShell.dispose();
-		if (ex[0] != null) {
-			throw new IllegalStateException(ex[0]);
-		}
 	}
 
 	private void waitForNonUIThreadFinished(Shell parentShell, Thread nonUIThread) {
