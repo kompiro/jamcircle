@@ -4,6 +4,7 @@ public enum ScriptingImageEnum {
 
 	SCRIPT_GEAR("script_gear.png"), //$NON-NLS-1$
 	RUBY_ADD("ruby_add.png"), //$NON-NLS-1$
+	RUBY_DELETE("ruby_delete.png"), //$NON-NLS-1$
 	RUBY_GEAR("ruby_gear.png"), //$NON-NLS-1$
 	IMG_LCL_LOCK("full/clcl16/lock_co.gif"), //$NON-NLS-1$
 	IMG_DLCL_LOCK("full/dlcl16/lock_co.gif"), //$NON-NLS-1$

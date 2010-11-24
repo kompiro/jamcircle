@@ -30,6 +30,8 @@ public class IOConsolePage extends TextConsolePage {
 
 	private GemListAction fGemListAction;
 
+	private GemUninstallAction fGemUninstallAction;
+
 	public IOConsolePage(TextConsole console, IConsoleView view) {
 		super(console, view);
 
@@ -102,6 +104,7 @@ public class IOConsolePage extends TextConsolePage {
 		fShutdownAction = new ShutdownAction();
 		fShutdownAction.setConsole((RubyScriptingConsole) getConsole());
 		fGemInstallAction = new GemInstallAction();
+		fGemUninstallAction = new GemUninstallAction();
 		fGemListAction = new GemListAction();
 		setAutoScroll(!fScrollLockAction.isChecked());
 	}
@@ -135,6 +138,7 @@ public class IOConsolePage extends TextConsolePage {
 		mgr.appendToGroup(IConsoleConstants.OUTPUT_GROUP, fScrollLockAction);
 		mgr.appendToGroup(IConsoleConstants.LAUNCH_GROUP, fShutdownAction);
 		mgr.appendToGroup(IConsoleConstants.LAUNCH_GROUP, fGemInstallAction);
+		mgr.appendToGroup(IConsoleConstants.LAUNCH_GROUP, fGemUninstallAction);
 		mgr.appendToGroup(IConsoleConstants.LAUNCH_GROUP, fGemListAction);
 	}
 
