@@ -4,8 +4,10 @@ import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.asyncExec;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.net.URL;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -16,6 +18,7 @@ import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.TestClass;
@@ -44,9 +47,11 @@ public class ActionTestRunner extends SWTBotJunit4ClassRunner {
 			public void run() {
 				try {
 					ActionTestRunner.super.runChild(method, notifier);
-					closeDialogs();
 				} catch (Exception e) {
 					ex[0] = e;
+					notifier.fireTestFailure(new Failure(getDescription(), e));
+				} finally {
+					closeDialogs();
 				}
 			}
 
@@ -69,6 +74,12 @@ public class ActionTestRunner extends SWTBotJunit4ClassRunner {
 				});
 				if (title.equals(targetTitle[0])) {
 					activeShell.close();
+					asyncExec(new VoidResult() {
+
+						public void run() {
+							bot.getDisplay().dispose();
+						}
+					});
 				}
 			}
 		};
@@ -131,6 +142,7 @@ public class ActionTestRunner extends SWTBotJunit4ClassRunner {
 				WithAction windowAnnotation = (WithAction) annotation;
 				Class<? extends Action> value = windowAnnotation.value();
 				newAction[0] = value.newInstance();
+				newAction[0].setImageDescriptor(getImageDescriptor());
 			}
 		}
 		Window window = new ApplicationWindow(parentShell) {
@@ -158,6 +170,11 @@ public class ActionTestRunner extends SWTBotJunit4ClassRunner {
 		window.create();
 		this.action = newAction[0];
 		return window;
+	}
+
+	private ImageDescriptor getImageDescriptor() {
+		URL resource = GemInstallAction.class.getResource("dummy.png");
+		return ImageDescriptor.createFromURL(resource);
 	}
 
 }

@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.console.*;
 import org.eclipse.ui.console.IConsoleConstants;
+import org.kompiro.jamcircle.scripting.ui.internal.action.*;
 
 /**
  * A page for an IOConsole
@@ -24,6 +25,8 @@ public class IOConsolePage extends TextConsolePage {
 	private IPropertyChangeListener fPropertyChangeListener;
 
 	private ShutdownAction fShutdownAction;
+
+	private GemInstallAction fGemInstallAction;
 
 	public IOConsolePage(TextConsole console, IConsoleView view) {
 		super(console, view);
@@ -92,8 +95,11 @@ public class IOConsolePage extends TextConsolePage {
 	 */
 	protected void createActions() {
 		super.createActions();
-		fScrollLockAction = new ScrollLockAction(getConsoleView());
-		fShutdownAction = new ShutdownAction((RubyScriptingConsole) getConsole());
+		fScrollLockAction = new ScrollLockAction();
+		fScrollLockAction.setConsoleView(getConsoleView());
+		fShutdownAction = new ShutdownAction();
+		fShutdownAction.setConsole((RubyScriptingConsole) getConsole());
+		fGemInstallAction = new GemInstallAction();
 		setAutoScroll(!fScrollLockAction.isChecked());
 	}
 
@@ -125,6 +131,7 @@ public class IOConsolePage extends TextConsolePage {
 		super.configureToolBar(mgr);
 		mgr.appendToGroup(IConsoleConstants.OUTPUT_GROUP, fScrollLockAction);
 		mgr.appendToGroup(IConsoleConstants.LAUNCH_GROUP, fShutdownAction);
+		mgr.appendToGroup(IConsoleConstants.LAUNCH_GROUP, fGemInstallAction);
 	}
 
 	/*
@@ -140,6 +147,8 @@ public class IOConsolePage extends TextConsolePage {
 			fScrollLockAction.dispose();
 			fScrollLockAction = null;
 		}
+		fShutdownAction = null;
+		fGemInstallAction = null;
 		getConsole().removePropertyChangeListener(fPropertyChangeListener);
 		TextConsoleViewer viewer = getViewer();
 		if (viewer != null) {

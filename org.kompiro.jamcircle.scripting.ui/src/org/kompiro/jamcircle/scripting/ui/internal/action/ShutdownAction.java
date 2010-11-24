@@ -1,29 +1,36 @@
-package org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console;
+package org.kompiro.jamcircle.scripting.ui.internal.action;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.kompiro.jamcircle.scripting.ui.ScriptingImageEnum;
 import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
+import org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console.RubyScriptingConsole;
 
 public class ShutdownAction extends Action {
 
 	private RubyScriptingConsole console;
 
-	public ShutdownAction(RubyScriptingConsole console) {
-		this.console = console;
-		setToolTipText("shutdown RubyScriptingconsole");
+	public ShutdownAction() {
+		setToolTipText("shutdown RubyScriptingConsole");
 		setHoverImageDescriptor(getImageDescriptor(ScriptingImageEnum.IMG_ELCL_CLOSE));
 		setDisabledImageDescriptor(getImageDescriptor(ScriptingImageEnum.IMG_ELCL_CLOSE));
 		setImageDescriptor(getImageDescriptor(ScriptingImageEnum.IMG_ELCL_CLOSE));
 	}
 
 	private ImageDescriptor getImageDescriptor(ScriptingImageEnum key) {
-		return ScriptingUIActivator.getDefault().getImageRegistry().getDescriptor(key.toString());
+		ScriptingUIActivator activator = ScriptingUIActivator.getDefault();
+		if (activator == null)
+			return null;
+		return activator.getImageRegistry().getDescriptor(key.toString());
 	}
 
 	@Override
 	public void run() {
 		console.shutdown();
+	}
+
+	public void setConsole(RubyScriptingConsole console) {
+		this.console = console;
 	}
 
 }
