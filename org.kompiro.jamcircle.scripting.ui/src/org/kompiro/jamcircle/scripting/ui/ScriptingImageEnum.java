@@ -8,7 +8,8 @@ public enum ScriptingImageEnum {
 	IMG_LCL_LOCK("full/clcl16/lock_co.gif"), //$NON-NLS-1$
 	IMG_DLCL_LOCK("full/dlcl16/lock_co.gif"), //$NON-NLS-1$
 	IMG_ELCL_LOCK("full/elcl16/lock_co.gif"), //$NON-NLS-1$
-	IMG_ELCL_CLOSE("full/elcl16/rem_co.gif"); //$NON-NLS-1$
+	IMG_ELCL_CLOSE("full/elcl16/rem_co.gif"), //$NON-NLS-1$
+	RUBY_GO("ruby_go.png"); //$NON-NLS-1$
 
 	private String path;
 

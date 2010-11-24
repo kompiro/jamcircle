@@ -35,37 +35,4 @@
          </view>
       </perspectiveExtension>
    </extension>
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            locationURI="toolbar:org.eclipse.ui.console.ConsoleView?after=additions">
-         <command
-               commandId="org.kompiro.jamcircle.scripting.ui.commands.jruby.gems.install"
-               icon="icons/ruby_add.png"
-               label="Install Gem"
-               style="push"
-               tooltip="Install JRuby Gems to JAMCircle">
-         </command>
-      </menuContribution>
-   </extension>
-   <extension
-         point="org.eclipse.ui.commands">
-      <category
-            id="org.kompiro.jamcircle.scripting.ui.jruby.commands.category"
-            name="JAMCircle JRuby Commands">
-      </category>
-      <command
-            categoryId="org.kompiro.jamcircle.scripting.ui.jruby.commands.category"
-            id="org.kompiro.jamcircle.scripting.ui.commands.jruby.gems.install"
-            name="Install Gems Command">
-      </command>
-   </extension>
-   <extension
-         point="org.eclipse.ui.handlers">
-      <handler
-            class="org.kompiro.jamcircle.scripting.ui.internal.handlers.GemInstallHandler"
-            commandId="org.kompiro.jamcircle.scripting.ui.commands.jruby.gems.install">
-      </handler>
-   </extension>
-
 </plugin>

@@ -479,7 +479,8 @@ public class RubyScriptingConsole extends TextConsole {
 	}
 
 	private void terminate() {
-		container.terminate();
+		if (container != null)
+			container.terminate();
 		try {
 			output.write(LINE_SEPARATOR);
 			output.write("terminated...");
