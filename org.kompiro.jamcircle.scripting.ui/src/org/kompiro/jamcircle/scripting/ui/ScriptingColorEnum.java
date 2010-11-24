@@ -5,7 +5,6 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
 
 public enum ScriptingColorEnum {
 	OUTPUT_STREAM_COLOR("RubyScriptingConsole.OutputStreamColor", SWT.COLOR_BLUE),
@@ -30,6 +29,6 @@ public enum ScriptingColorEnum {
 	}
 
 	private Display getDisplay() {
-		return PlatformUI.getWorkbench().getDisplay();
+		return Display.getDefault();
 	}
 }
