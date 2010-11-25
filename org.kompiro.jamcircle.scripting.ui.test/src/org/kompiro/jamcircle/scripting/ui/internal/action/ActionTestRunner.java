@@ -17,6 +17,7 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
@@ -161,6 +162,21 @@ public class ActionTestRunner extends BlockJUnit4ClassRunner {
 		window.create();
 		this.action = newAction[0];
 		return window;
+	}
+
+	@Override
+	public void run(RunNotifier notifier) {
+		Display display = new Display();
+		RunListener failureSpy = new AsyncScreenshotCaptureListener(display);
+		notifier.removeListener(failureSpy); // remove existing listeners that
+												// could be added by suite or
+												// class runners
+		notifier.addListener(failureSpy);
+		try {
+			super.run(notifier);
+		} finally {
+			notifier.removeListener(failureSpy);
+		}
 	}
 
 	private ImageDescriptor getImageDescriptor() {
