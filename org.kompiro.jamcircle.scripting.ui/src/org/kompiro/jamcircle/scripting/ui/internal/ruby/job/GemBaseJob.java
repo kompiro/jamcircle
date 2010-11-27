@@ -6,34 +6,57 @@ import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.*;
 import org.kompiro.jamcircle.scripting.ui.*;
 import org.kompiro.jamcircle.scripting.util.JRubyUtil;
 
 public abstract class GemBaseJob extends Job {
 	private static final String GEM_JOB_NAME = "Run gem ";
-	private static final String CONSOLE_NAME_OF_GEM = "Gem Console";
+	static final String CONSOLE_NAME_OF_GEM = "Gem Console";
 	private static final String COMMAND_NAME_OF_JGEM = "jgem";
 	private String target;
-	private final JRubyUtil jRubyUtil = new JRubyUtil();
+	private JRubyUtil jRubyUtil = new JRubyUtil();
+	private IConsoleManager consoleManager;
 
 	public GemBaseJob() {
 		super("");
 		setName(GEM_JOB_NAME + getCommand());
 	}
 
+	public void setTarget(String target) {
+		this.target = target;
+	}
+
 	protected IStatus run(IProgressMonitor monitor) {
 		ProcessBuilder builder = createProcessBuilder();
-		IOConsole console = new IOConsole(CONSOLE_NAME_OF_GEM, getRubyAddImageDescriptor());
-		getConsoleManager().addConsoles(new IConsole[] { console });
+		IConsole[] consoles = getConsoleManager().getConsoles();
+		IOConsole console = null;
+		for (IConsole iConsole : consoles) {
+			if (iConsole.getName().equals(CONSOLE_NAME_OF_GEM)) {
+				console = (IOConsole) iConsole;
+			}
+		}
+		if (console == null) {
+			console = createConsole();
+			getConsoleManager().addConsoles(new IConsole[] { console });
+		}
 
-		IOConsoleOutputStream outputStream = null;
-		outputStream = console.newOutputStream();
-		outputStream.setColor(ScriptingColorEnum.OUTPUT_STREAM_COLOR.getColor());
-		IOConsoleOutputStream errorStream = null;
-		errorStream = console.newOutputStream();
-		errorStream.setColor(ScriptingColorEnum.ERROR_STREAM_COLOR.getColor());
+		final IOConsoleOutputStream outputStream = console.newOutputStream();
+		final IOConsoleOutputStream errorStream = console.newOutputStream();
 
+		setColor(outputStream, errorStream);
+
+		runProcessStart(builder, outputStream, errorStream);
+		return Status.OK_STATUS;
+	}
+
+	protected IOConsole createConsole() {
+		return new IOConsole(CONSOLE_NAME_OF_GEM, getRubyAddImageDescriptor());
+	}
+
+	protected void runProcessStart(ProcessBuilder builder, final IOConsoleOutputStream outputStream,
+			final IOConsoleOutputStream errorStream) {
 		try {
 			Process process = builder.start();
 			InputStreamThread it = new InputStreamThread(process.getInputStream(), new PrintStream(outputStream));
@@ -62,14 +85,34 @@ public abstract class GemBaseJob extends Job {
 				}
 			}
 		}
-		return Status.OK_STATUS;
+	}
+
+	protected void setColor(final IOConsoleOutputStream outputStream, final IOConsoleOutputStream errorStream) {
+		PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+			public void run() {
+				outputStream.setColor(ScriptingColorEnum.OUTPUT_STREAM_COLOR.getColor());
+				errorStream.setColor(ScriptingColorEnum.ERROR_STREAM_COLOR.getColor());
+			}
+		});
+	}
+
+	protected String getOS() {
+		return Platform.getOS();
+	}
+
+	void setConsoleManager(IConsoleManager consoleManager) {
+		this.consoleManager = consoleManager;
+	}
+
+	void setjRubyUtil(JRubyUtil jRubyUtil) {
+		this.jRubyUtil = jRubyUtil;
 	}
 
 	private ProcessBuilder createProcessBuilder() {
 		String jrubyHome = jRubyUtil.getJRubyHomeFromBundle();
 		String scriptBin = jrubyHome + File.separator + "bin" + File.separator;
 		String scriptPath = scriptBin + COMMAND_NAME_OF_JGEM;
-		if (Platform.getOS().equals("win32")) {
+		if (getOS().equals("win32")) {
 			scriptPath = scriptPath + ".bat";
 		}
 
@@ -86,10 +129,6 @@ public abstract class GemBaseJob extends Job {
 		String gemHome = jRubyUtil.getGemHome();
 		builder.environment().put("GEM_HOME", gemHome);
 		return builder;
-	}
-
-	public void setTarget(String target) {
-		this.target = target;
 	}
 
 	private ImageDescriptor getRubyAddImageDescriptor() {
@@ -111,7 +150,10 @@ public abstract class GemBaseJob extends Job {
 	}
 
 	private IConsoleManager getConsoleManager() {
-		return ConsolePlugin.getDefault().getConsoleManager();
+		if (consoleManager == null) {
+			consoleManager = ConsolePlugin.getDefault().getConsoleManager();
+		}
+		return consoleManager;
 	}
 
 	class InputStreamThread extends Thread {
