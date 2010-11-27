@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.console.consoleFactories">
       <consoleFactory
-            class="org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console.ScriptingConsoleFactory"
+            class="org.kompiro.jamcircle.scripting.ui.internal.ui.console.ScriptingConsoleFactory"
             icon="icons/script_gear.png"
             label="Ruby Scripting Console">
       </consoleFactory>
@@ -12,7 +12,7 @@
    <extension
          point="org.eclipse.ui.console.consolePageParticipants">
       <consolePageParticipant
-            class="org.kompiro.jamcircle.scripting.ui.internal.eclipse.ui.console.ScriptingConsolePageParticipant"
+            class="org.kompiro.jamcircle.scripting.ui.internal.ui.console.ScriptingConsolePageParticipant"
             id="org.kompiro.jamcircle.scripting.ui.consolePageParticipant">
          <enablement></enablement>
       </consolePageParticipant>
