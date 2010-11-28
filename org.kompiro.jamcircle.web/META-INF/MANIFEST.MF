@@ -130,5 +130,9 @@ Import-Package: VAADIN.themes,
  com.vaadin.ui,
  javax.servlet;version="2.5.0",
  javax.servlet.http;version="2.5.0",
+ org.kompiro.jamcircle.kanban.model,
+ org.kompiro.jamcircle.kanban.service,
+ org.kompiro.jamcircle.scripting,
  org.osgi.framework;version="1.3.0"
 Web-ContextPath: /jamcircle
+Service-Component: OSGI-INF/WebContext.xml
