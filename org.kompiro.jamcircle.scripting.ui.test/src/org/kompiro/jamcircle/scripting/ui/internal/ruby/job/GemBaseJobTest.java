@@ -22,7 +22,7 @@ import org.mockito.ArgumentCaptor;
 
 public class GemBaseJobTest {
 
-	private class GemBaseJobForTest extends GemBaseJob {
+	public class GemBaseJobForTest extends GemBaseJob {
 
 		private String os;
 
@@ -61,39 +61,39 @@ public class GemBaseJobTest {
 
 	@Test
 	public void run_jgem_command() throws Exception {
-	
+
 		String targetOS = "test";
 		GemBaseJob job = initialize(targetOS);
 		job.setTarget("target");
-	
+
 		job.run(new NullProgressMonitor());
-	
+
 		ArgumentCaptor<ProcessBuilder> captor = ArgumentCaptor.forClass(ProcessBuilder.class);
 		verify(job).runProcessStart(captor.capture(), (IOConsoleOutputStream) any(), (IOConsoleOutputStream) any());
-	
+
 		List<String> commands = captor.getValue().command();
 		assertThat(commands.get(0), is("/bin/jgem"));
 		assertThat(commands.get(1), is("job"));
-	
+
 	}
 
 	@Test
 	public void run_jgem_command_with_target_when_set_target() throws Exception {
-	
+
 		String targetOS = "test";
 		GemBaseJob job = initialize(targetOS);
 		job.setTarget("target");
-	
+
 		job.run(new NullProgressMonitor());
-	
+
 		ArgumentCaptor<ProcessBuilder> captor = ArgumentCaptor.forClass(ProcessBuilder.class);
 		verify(job).runProcessStart(captor.capture(), (IOConsoleOutputStream) any(), (IOConsoleOutputStream) any());
-	
+
 		List<String> commands = captor.getValue().command();
 		assertThat(commands.get(0), is("/bin/jgem"));
 		assertThat(commands.get(1), is("job"));
 		assertThat(commands.get(2), is("target"));
-	
+
 	}
 
 	@Test
@@ -140,23 +140,23 @@ public class GemBaseJobTest {
 
 	@Test
 	public void open_only_one_console_when_multiple_running() throws Exception {
-	
+
 		GemBaseJob job = new GemBaseJobForTest("test");
-	
+
 		IConsoleManager consoleManager = mock(IConsoleManager.class);
 		job.setConsoleManager(consoleManager);
 		when(consoleManager.getConsoles()).thenReturn(new IConsole[] {});
-	
+
 		JRubyUtil jRubyUtil = mock(JRubyUtil.class, withSettings().defaultAnswer(RETURNS_SMART_NULLS));
 		job.setjRubyUtil(jRubyUtil);
-	
+
 		job.run(new NullProgressMonitor());
 		verify(consoleManager, times(1)).addConsoles((IConsole[]) any());
-	
+
 		IOConsole console = mock(IOConsole.class);
 		when(console.getName()).thenReturn(GemBaseJob.CONSOLE_NAME_OF_GEM);
 		when(consoleManager.getConsoles()).thenReturn(new IConsole[] { console });
-	
+
 		job.run(new NullProgressMonitor());
 		verify(consoleManager, times(1)).addConsoles((IConsole[]) any());
 	}
