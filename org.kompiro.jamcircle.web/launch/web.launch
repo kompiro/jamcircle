@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.pde.ui.EquinoxLauncher">
+<booleanAttribute key="append.args" value="true"/>
+<booleanAttribute key="automaticAdd" value="true"/>
+<booleanAttribute key="automaticValidate" value="false"/>
+<stringAttribute key="bootstrap" value=""/>
+<stringAttribute key="checked" value="[NONE]"/>
+<booleanAttribute key="clearConfig" value="false"/>
+<stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/web"/>
+<booleanAttribute key="default" value="true"/>
+<booleanAttribute key="default_auto_start" value="true"/>
+<intAttribute key="default_start_level" value="4"/>
+<stringAttribute key="deselected_workspace_plugins" value="org.kompiro.jamcircle.kanban.ui.test,org.sf.feeling.swt.win32.extension,org.kompiro.jamcircle.xmpp.kanban.ui.test,org.kompiro.jamcircle.storage.ui,org.kompiro.jamcircle.scripting.console,org.kompiro.jamcircle.scripting.ui,org.kompiro.jamcircle.rcp.test,org.kompiro.jamcircle.storage.learning,org.kompiro.jamcircle.xmpp.kanban.ui,org.kompiro.jamcircle.storage.test,org.mockito,org.kompiro.jamcircle.scripting.test,org.kompiro.jamcircle.debug.ui,org.kompiro.jamcircle.xmpp.ui,org.kompiro.jamcircle.kanban.ui.learning,org.jivesoftware.smack,org.kompiro.jamcircle.kanban.ui,org.kompiro.jamcircle.xmpp.test,org.kompiro.jamcircle.extension.tracboard,org.kompiro.jamcircle.rcp,org.kompiro.jamcircle.scripting.ui.test,org.kompiro.jamcircle.kanban.test,org.kompiro.jamcircle.xmpp,org.kompiro.jamcircle.rcp.extension.win32,org.kompiro.jamcircle.extension.feedboard"/>
+<booleanAttribute key="includeOptional" value="true"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog -console"/>
+<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Declipse.ignoreApp=true -Dosgi.noShutdown=true -Dlogback.configurationFile=${workspace_loc:org.kompiro.jamcircle.web}/bin/logback.xml -Djetty.home=${workspace_loc:org.kompiro.jamcircle.web}"/>
+<stringAttribute key="pde.version" value="3.3"/>
+<booleanAttribute key="show_selected_only" value="false"/>
+<stringAttribute key="target_bundles" value="org.eclipse.equinox.ds@default:true,org.eclipse.equinox.preferences.nl_ja@default:false,org.eclipse.jetty.webapp@default:default,org.eclipse.equinox.common@2:true,org.eclipse.equinox.app.nl_ja@default:false,org.eclipse.osgi*3.6.1.R36x_v20100806@-1:true,org.eclipse.jetty.deploy@default:default,org.mortbay.jetty.util@default:default,org.eclipse.core.contenttype.nl_ja@default:false,org.eclipse.equinox.ds.nl_ja@default:false,org.eclipse.equinox.http.jetty@default:default,org.eclipse.core.runtime.nl_ja@default:false,org.mortbay.jetty.server@default:default,org.eclipse.core.contenttype@default:default,org.eclipse.equinox.http.servlet@default:default,org.eclipse.jetty.server@default:default,org.apache.commons.logging@default:default,org.eclipse.jetty.xml@default:default,org.eclipse.jetty.io@default:default,org.eclipse.jetty.continuation@default:default,org.eclipse.equinox.security.macosx@default:false,org.eclipse.jetty.servlet@default:default,org.eclipse.equinox.http.registry@default:default,org.eclipse.jetty.util@default:default,org.eclipse.equinox.security.nl_ja@default:false,org.eclipse.equinox.util.nl_ja@default:false,org.eclipse.jetty.http@default:default,org.eclipse.equinox.registry@default:default,org.eclipse.core.jobs@default:default,org.eclipse.equinox.preferences@default:default,org.eclipse.core.runtime@default:true,org.eclipse.jetty.security@default:default,org.eclipse.equinox.util@default:default,org.eclipse.jetty.osgi.boot@default:default,org.eclipse.core.jobs.nl_ja@default:false,org.eclipse.equinox.common.nl_ja@default:false,org.eclipse.equinox.app@default:default,javax.servlet@default:default,org.eclipse.equinox.http.servlet.nl_ja@default:false,org.eclipse.osgi.services@default:default,org.eclipse.equinox.security@default:default,org.eclipse.osgi.nl_ja@default:false"/>
+<stringAttribute key="timestamp" value="1290985562492"/>
+<booleanAttribute key="tracing" value="false"/>
+<booleanAttribute key="useCustomFeatures" value="false"/>
+<booleanAttribute key="useDefaultConfigArea" value="true"/>
+<stringAttribute key="workspace_bundles" value="org.jruby.jruby@default:default,org.apache.commons.lang@default:default,org.kompiro.jamcircle.debug@default:default,com.vaadin@default:default,org.kompiro.jamcircle.scripting@default:default,org.apache.bsf@default:default,org.mozilla.javascript@default:default,org.kompiro.jamcircle.web*0.1.0.qualifier@default:default,org.kompiro.jamcircle.web.test@default:false,org.kompiro.jamcircle.storage@default:default,org.kompiro.jamcircle.kanban@default:default"/>
+</launchConfiguration>
