@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JAM Circle Web Plugin
+Bundle-SymbolicName: org.kompiro.jamcircle.web
+Bundle-Version: 0.1.0.qualifier
+Bundle-Activator: org.kompiro.jamcircle.web.Activator
+Bundle-Vendor: kompiro.org
+Require-Bundle: org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
