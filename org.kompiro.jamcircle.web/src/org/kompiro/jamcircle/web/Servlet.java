@@ -12,12 +12,12 @@ public class Servlet extends AbstractApplicationServlet {
 
 	@Override
 	protected Class<? extends Application> getApplicationClass() {
-		return MyprojectApplication.class;
+		return JAMCircleWebApplication.class;
 	}
 
 	@Override
 	protected Application getNewApplication(HttpServletRequest request) throws ServletException {
-		return new MyprojectApplication();
+		return new JAMCircleWebApplication();
 	}
 
 }
