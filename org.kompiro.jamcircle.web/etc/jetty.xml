@@ -58,7 +58,7 @@
     <!-- mixin jetty-ssl.xml:                                            -->
     <!--   java -jar start.jar etc/jetty.xml etc/jetty-ssl.xml           -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-    
+    <!-- 
     <Call name="addConnector">
       <Arg>
         <New class="org.eclipse.jetty.server.ssl.SslSelectChannelConnector">
@@ -74,6 +74,7 @@
         </New>
       </Arg>
     </Call>
+     -->
     
     
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -154,10 +155,10 @@
 		 <Call name="addAppProvider">
 		   <Arg>
 		     <New class="org.eclipse.jetty.osgi.boot.OSGiAppProvider">
-		       <Set name="monitoredDir"><Property name="jetty.home" default="." />/webapps</Set>
-		       <Set name="defaultsDescriptor"><Property name="jetty.home" default="."/>/etc/webdefault.xml</Set>
+		       <Set name="monitoredDir"><Property name="jetty.home" default="WebContent" />/webapps</Set>
+		       <Set name="defaultsDescriptor"><Property name="jetty.home" default="WebContent"/>/etc/webdefault.xml</Set>
 		       <Set name="scanInterval">5</Set>
-		       <Set name="contextXmlDir"><Property name="jetty.home" default="." />/contexts</Set>
+		       <Set name="contextXmlDir"><Property name="jetty.home" default="WebContent" />/contexts</Set>
 		       <!-- comma separated list of bundle symbolic names that
 		            contain custom tag libraries (*.tld files)
 		            if those bundles don't exist or can't be loaded no errors or warning will be issued!
@@ -263,7 +264,7 @@
           <Set name="append">true</Set>
           <Set name="extended">false</Set>
           <Set name="logCookies">false</Set>
-          <Set name="LogTimeZone">GMT</Set>
+          <Set name="LogTimeZone">JST</Set>
         </New>
       </Set>
     </Ref>

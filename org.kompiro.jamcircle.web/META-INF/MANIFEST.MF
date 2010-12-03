@@ -128,6 +128,9 @@ Import-Package: VAADIN.themes,
  com.vaadin,
  com.vaadin.data,
  com.vaadin.data.util,
+ com.vaadin.terminal,
+ com.vaadin.terminal.gwt,
+ com.vaadin.terminal.gwt.client,
  com.vaadin.terminal.gwt.server,
  com.vaadin.ui,
  javax.servlet;version="2.5.0",
@@ -135,6 +138,11 @@ Import-Package: VAADIN.themes,
  org.kompiro.jamcircle.kanban.model,
  org.kompiro.jamcircle.kanban.service,
  org.kompiro.jamcircle.scripting,
+ org.kompiro.jamcircle.storage.model,
  org.osgi.framework;version="1.3.0"
 Web-ContextPath: /jamcircle
 Service-Component: OSGI-INF/WebContext.xml
+Bundle-ClassPath: .,
+ WEB-INF/lib/icepush-0.2.0.jar,
+ WEB-INF/lib/icepush-gwt.jar,
+ WEB-INF/lib/icepush.jar

@@ -12,12 +12,28 @@
         <servlet-class>org.eclipse.jetty.example.webapp.Servlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    -->
    <servlet>
         <servlet-name>theservlet</servlet-name>
         <servlet-class>org.kompiro.jamcircle.web.Servlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    -->
+    	<servlet>
+		<servlet-name>theservlet</servlet-name>
+		<servlet-class>
+		org.vaadin.artur.icepush.ICEPushServlet</servlet-class>
+		<init-param>
+			<description>Vaadin application class to start</description>
+			<param-name>application</param-name>
+			<param-value>org.kompiro.jamcircle.web.JAMCircleWebApplication</param-value>
+		</init-param>
+		<init-param>
+			<description>
+			Application widgetset</description>
+			<param-name>widgetset</param-name>
+			<param-value>org.kompiro.jamcircle.web.widgetset.jamcircle</param-value>
+		</init-param>
+	</servlet>
     <servlet-mapping>
         <servlet-name>theservlet</servlet-name>
         <url-pattern>/*</url-pattern>
