@@ -1,24 +1,24 @@
 package org.kompiro.jamcircle.web;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.kompiro.jamcircle.kanban.model.*;
-import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 import com.vaadin.data.*;
 import com.vaadin.data.util.ObjectProperty;
 
 public class BoardHierarchy implements Container.Hierarchical {
 	private static final long serialVersionUID = 1L;
-	private Board[] boards;
+	private Board board;
 
-	public BoardHierarchy(Board[] boards) {
-		this.boards = boards;
+	public BoardHierarchy(Board board) {
+		this.board = board;
 	}
 
 	@Override
 	public int size() {
-		return boards.length;
+		return this.board.getLanes().length;
 	}
 
 	@Override
@@ -114,7 +114,7 @@ public class BoardHierarchy implements Container.Hierarchical {
 
 	@Override
 	public Collection<?> rootItemIds() {
-		return Arrays.asList(boards);
+		return Arrays.asList(board.getLanes());
 	}
 
 	@Override
@@ -153,13 +153,6 @@ public class BoardHierarchy implements Container.Hierarchical {
 
 	@Override
 	public Collection<?> getChildren(Object itemId) {
-		if (itemId instanceof Board) {
-			Board board = (Board) itemId;
-			List<GraphicalEntity> entities = new ArrayList<GraphicalEntity>();
-			entities.addAll(Arrays.asList(board.getLanes()));
-			entities.addAll(Arrays.asList(board.getCards()));
-			return entities;
-		}
 		if (itemId instanceof Lane) {
 			Lane lane = (Lane) itemId;
 			return Arrays.asList(lane.getCards());

@@ -16,9 +16,6 @@ public class WebContext {
 	}
 
 	public static WebContext getDefault() {
-		if (context == null) {
-			WebContext.context = new WebContext();
-		}
 		return context;
 	}
 
