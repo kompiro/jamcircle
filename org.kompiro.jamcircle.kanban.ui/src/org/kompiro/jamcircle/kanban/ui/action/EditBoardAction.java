@@ -16,7 +16,7 @@ import org.kompiro.jamcircle.kanban.ui.internal.OpenBoardRunnableWithProgress;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 
-public class EditBoardAction extends Action{
+public class EditBoardAction extends Action {
 
 	private KanbanView view;
 
@@ -26,30 +26,38 @@ public class EditBoardAction extends Action{
 		setImageDescriptor(KanbanImageConstants.EDIT_IMAGE.getImageDescriptor());
 		this.view = kanbanView;
 	}
-	
+
 	@Override
 	public void run() {
 		Board board = getBoard();
 		Shell shell = getShell();
-		BoardEditDialog dialog = new BoardEditDialog(shell,board.getTitle(),board.getScript(),board.getScriptType());
+		BoardEditDialog dialog = new BoardEditDialog(shell, board.getTitle(), board.getScript(), board.getScriptType());
 		int returnCode = dialog.open();
-		if(Dialog.OK == returnCode){
+		if (Dialog.OK == returnCode) {
 			modifyBoard(board, dialog);
 		}
 	}
 
 	private void modifyBoard(Board board, BoardEditDialog dialog) {
+		modifyBoardModel(board, dialog);
+		openBoard(board);
+	}
+
+	private void modifyBoardModel(Board board, BoardEditDialog dialog) {
 		String script = dialog.getScript();
 		String title = dialog.getTitle();
 		ScriptTypes type = dialog.getScriptType();
 		board.setScript(script);
 		board.setTitle(title);
 		board.setScriptType(type);
-		board.save();
+		board.save(true);
+	}
+
+	private void openBoard(Board board) {
 		IProgressService service = (IProgressService) PlatformUI.getWorkbench().getService(IProgressService.class);
 		IRunnableContext context = new ProgressMonitorDialog(getShell());
 		try {
-			service.runInUI(context,new OpenBoardRunnableWithProgress(board),null);
+			service.runInUI(context, new OpenBoardRunnableWithProgress(board), null);
 		} catch (InvocationTargetException ex) {
 			KanbanUIStatusHandler.fail(ex.getTargetException(), Messages.EditBoardAction_error_message);
 		} catch (InterruptedException ex) {
