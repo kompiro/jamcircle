@@ -76,12 +76,12 @@ public interface Board extends Entity, CardContainer, LaneContainer {
 	Board getBoard();
 
 	/**
-	 * This method calls {@link net.java.ao.RawEntity#save(false)} and run in
+	 * This method calls {@link net.java.ao.RawEntity#save()} and run in
 	 * Executor.
 	 * 
 	 * @param directExecution
 	 *            set true if you need direct
-	 *            {@link net.java.ao.RawEntity#save(false)}
+	 *            {@link net.java.ao.RawEntity#save()}
 	 */
 	void save(boolean directExecution);
 
