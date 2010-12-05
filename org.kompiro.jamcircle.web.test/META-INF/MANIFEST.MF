@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JAMCIrcle Web Test
+Bundle-SymbolicName: org.kompiro.jamcircle.web.test
+Bundle-Version: 0.0.0
+Bundle-Vendor: kompiro.org
+Fragment-Host: org.kompiro.jamcircle.web
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
