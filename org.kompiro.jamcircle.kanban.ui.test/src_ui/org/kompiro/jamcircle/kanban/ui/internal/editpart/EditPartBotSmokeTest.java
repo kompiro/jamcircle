@@ -7,6 +7,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Point;
@@ -23,7 +24,9 @@ import org.eclipse.swtbot.eclipse.gef.finder.widgets.*;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferenceConstants;
+import org.eclipse.swtbot.swt.finder.waits.WaitForObjectCondition;
 import org.eclipse.ui.PlatformUI;
+import org.hamcrest.Matcher;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.kompiro.jamcircle.kanban.ui.KanbanPerspective;
@@ -34,10 +37,34 @@ import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class EditPartBotSmokeTest {
 
+	public class WaitForObjectConditionExtension extends WaitForObjectCondition<Object> {
+		private SWTBotGefViewer viewer;
+
+		public WaitForObjectConditionExtension(SWTBotGefViewer viewer, Matcher<Object> matcher) {
+			super(matcher);
+			this.viewer = viewer;
+		}
+
+		public String getFailureMessage() {
+			return "Could not find edit part in selected edit part list"; //$NON-NLS-1$
+		}
+
+		@Override
+		protected List<Object> findMatches() {
+			List<Object> result = new ArrayList<Object>();
+			SWTBotGefEditPart target = viewer.getEditPart(TrashModel.NAME);
+			if (matcher.matches(target.part())) {
+				result.add(target);
+			}
+			return result;
+		}
+	}
+
 	private static final long TIMEOUT = 10 * 1000;
 	private static SWTGefBotExtension bot;
 	private static IMonitorDelegator backup;
 	private static SWTBotGefViewer viewer;
+	private static SWTBotGefView view;
 
 	@BeforeClass
 	public static void before() throws Exception {
@@ -51,7 +78,7 @@ public class EditPartBotSmokeTest {
 		};
 		KanbanView.setDelegator(delegator);
 
-		System.setProperty(SWTBotPreferenceConstants.KEY_TIMEOUT, "1000");
+		System.setProperty(SWTBotPreferenceConstants.KEY_TIMEOUT, "10000");
 		bot = new SWTGefBotExtension();
 		SWTBotView viewById;
 		try {
@@ -63,7 +90,7 @@ public class EditPartBotSmokeTest {
 		SWTBotView activeView = bot.viewById(KanbanView.ID);
 		activeView.getReference().getView(true);
 		activeView.show();
-		SWTBotGefView view = bot.viewById(KanbanView.ID);
+		view = bot.viewById(KanbanView.ID);
 		viewer = view.getSWTBotGefViewer();
 	}
 
@@ -77,6 +104,7 @@ public class EditPartBotSmokeTest {
 		viewer.getEditPart(BoardSelecterModel.NAME).focus();
 		viewer.getEditPart(InboxIconModel.NAME).focus();
 		viewer.getEditPart(LaneCreaterModel.NAME).focus();
+		bot.waitUntil(new WaitForObjectConditionExtension(viewer, instanceOf(TrashEditPart.class)));
 		trashPart().focus();
 	}
 
