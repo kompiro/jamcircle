@@ -81,8 +81,8 @@ public class EditPartBotSmokeTest {
 		System.setProperty(SWTBotPreferenceConstants.KEY_TIMEOUT, "10000");
 		bot = new SWTGefBotExtension();
 		SWTBotView viewById;
+		viewById = bot.activeView();
 		try {
-			viewById = bot.viewById("org.eclipse.ui.internal.introview");
 			viewById.close();
 		} catch (WidgetNotFoundException e) {
 		}
@@ -186,7 +186,6 @@ public class EditPartBotSmokeTest {
 	}
 
 	@Test
-	@Ignore
 	public void createLane() throws Exception {
 		int oldSize = getLaneViewParts().size();
 		viewer.getEditPart(LaneCreaterModel.NAME).doubleClick();
