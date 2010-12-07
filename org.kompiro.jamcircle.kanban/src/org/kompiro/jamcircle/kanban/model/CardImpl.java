@@ -25,6 +25,8 @@ public class CardImpl extends GraphicalEntityImpl {
 
 	private boolean deletedVisuals;
 
+	private StorageService storageService;
+
 	public CardImpl(Card card) {
 		super(card);
 		this.card = card;
@@ -69,6 +71,8 @@ public class CardImpl extends GraphicalEntityImpl {
 	}
 
 	public void addFile(File srcFile) {
+		if (srcFile == null)
+			throw new IllegalArgumentException("srcFile is null.");
 		getStorageService().getFileService().addFile(getPath(), srcFile);
 		PropertyChangeEvent event = new PropertyChangeEvent(card, Card.PROP_FILES, null, srcFile);
 		fireEvent(event);
@@ -115,7 +119,14 @@ public class CardImpl extends GraphicalEntityImpl {
 	}
 
 	private StorageService getStorageService() {
+		if (storageService != null) {
+			return storageService;
+		}
 		return KanbanActivator.getKanbanService().getStorageService();
+	}
+
+	public void setStorageService(StorageService storageService) {
+		this.storageService = storageService;
 	}
 
 	@Override
