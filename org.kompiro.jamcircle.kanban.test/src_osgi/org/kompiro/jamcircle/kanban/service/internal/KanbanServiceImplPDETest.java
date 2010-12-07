@@ -7,12 +7,38 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.junit.Test;
+import org.junit.*;
+import org.kompiro.jamcircle.kanban.OSGiEnvironment;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 
-public class KanbanServiceImplPDETest extends AbstractKanbanTest {
+public class KanbanServiceImplPDETest {
+
+	@Rule
+	public OSGiEnvironment env = new OSGiEnvironment();
+
+	@Rule
+	public KanbanServiceEnvironment serviceEnv = new KanbanServiceEnvironment();
+
+	private KanbanServiceTestHelper helper;
+
+	@BeforeClass
+	public static void initializeEnvironment() throws Exception {
+		Logger.getLogger("net.java.ao").setLevel(Level.FINE);
+	}
+
+	@Before
+	public void before() throws Exception {
+		helper = serviceEnv.getHelper();
+	}
+
+	@After
+	public void after() throws Exception {
+		serviceEnv.getHelper().tearDownKanbanService();
+	}
 
 	@Test
 	public void serviceInitialize() throws Exception {
@@ -22,10 +48,6 @@ public class KanbanServiceImplPDETest extends AbstractKanbanTest {
 		assertEquals(1, boards.length);
 		boards = service.findAllBoard();
 		assertEquals(1, boards.length);
-		Lane[] allLanes = service.findAllLanes();
-		for (Lane lane : allLanes) {
-			System.out.println(lane.getBoard().toString());
-		}
 		Lane[] lanes = boards[0].getLanes();
 		assertEquals(3, lanes.length);
 	}
@@ -50,7 +72,7 @@ public class KanbanServiceImplPDETest extends AbstractKanbanTest {
 		assertEquals("kompiro@test", cards[1].getCreated());
 
 		testUser.setUserName("Hiroki Kondo");
-		testUser.save(false);
+		testUser.save(true);
 
 		card = service.createCard(board, "test for username is NOT null", testUser, 45, 130);
 		cards = service.findAllCards();
@@ -90,7 +112,7 @@ public class KanbanServiceImplPDETest extends AbstractKanbanTest {
 		Board board = service.createBoard("test kanban");
 		Card testCard = service.createCard(board, "test sent to kompiro", null, 0, 0);
 		testCard.setTo(testUser);
-		testCard.save(false);
+		testCard.save(true);
 		Card[] sentcards = service.findCardsSentTo(testUser);
 		assertEquals(1, sentcards.length);
 	}

@@ -3,13 +3,39 @@ package org.kompiro.jamcircle.kanban.boardtemplate.internal;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.junit.Test;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.junit.*;
+import org.kompiro.jamcircle.kanban.OSGiEnvironment;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Lane;
-import org.kompiro.jamcircle.kanban.service.internal.AbstractKanbanTest;
-import org.kompiro.jamcircle.kanban.service.internal.KanbanServiceImpl;
+import org.kompiro.jamcircle.kanban.service.internal.*;
 
-public class TaskBoardTemplateTest extends AbstractKanbanTest {
+public class TaskBoardTemplateTest {
+
+	@Rule
+	public OSGiEnvironment env = new OSGiEnvironment();
+
+	@Rule
+	public KanbanServiceEnvironment serviceEnv = new KanbanServiceEnvironment();
+
+	private KanbanServiceTestHelper helper;
+
+	@BeforeClass
+	public static void initializeEnvironment() throws Exception {
+		Logger.getLogger("net.java.ao").setLevel(Level.FINE);
+	}
+
+	@Before
+	public void before() throws Exception {
+		helper = serviceEnv.getHelper();
+	}
+
+	@After
+	public void after() throws Exception {
+		serviceEnv.getHelper().tearDownKanbanService();
+	}
 
 	@Test
 	public void testInitialize() {

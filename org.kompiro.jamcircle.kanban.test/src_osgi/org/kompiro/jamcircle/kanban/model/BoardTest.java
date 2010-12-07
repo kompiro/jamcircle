@@ -8,18 +8,44 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.junit.Ignore;
-import org.junit.Test;
-import org.kompiro.jamcircle.kanban.service.internal.AbstractKanbanTest;
+import org.junit.*;
+import org.kompiro.jamcircle.kanban.OSGiEnvironment;
+import org.kompiro.jamcircle.kanban.service.internal.KanbanServiceEnvironment;
+import org.kompiro.jamcircle.kanban.service.internal.KanbanServiceTestHelper;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.storage.model.ExecutorHandler;
 
-public class BoardTest extends AbstractKanbanTest {
+public class BoardTest {
+
+	@Rule
+	public OSGiEnvironment env = new OSGiEnvironment();
+
+	@Rule
+	public KanbanServiceEnvironment serviceEnv = new KanbanServiceEnvironment();
+
+	private KanbanServiceTestHelper helper;
+
+	@BeforeClass
+	public static void initializeEnvironment() throws Exception {
+		Logger.getLogger("net.java.ao").setLevel(Level.FINE);
+	}
+
+	@Before
+	public void before() throws Exception {
+		helper = serviceEnv.getHelper();
+	}
+
+	@After
+	public void after() throws Exception {
+		serviceEnv.getHelper().tearDownKanbanService();
+	}
 
 	@Test
 	public void call_handler() throws Exception {
-		Board board = createBoardForTest("TEST_BOARD");
+		Board board = helper.createBoardForTest("TEST_BOARD");
 
 		ExecutorHandler handler = mock(ExecutorHandler.class);
 		board.setHandler(handler);
@@ -31,7 +57,7 @@ public class BoardTest extends AbstractKanbanTest {
 	@Test
 	@Ignore
 	public void get_script() throws Exception {
-		Board board = createBoardForTest("TEST_BOARD");
+		Board board = helper.createBoardForTest("TEST_BOARD");
 		for (int i = 0; i < 100000; i++) {
 			Random r = new Random(i);
 			String script = "p 'test" + r.nextInt() + "'";
@@ -46,8 +72,8 @@ public class BoardTest extends AbstractKanbanTest {
 
 	@Test
 	public void cards() throws Exception {
-		Board board = createBoardForTest("TEST_BOARD");
-		Card card = createCardForTest(board, "BoardTest.cards");
+		Board board = helper.createBoardForTest("TEST_BOARD");
+		Card card = helper.createCardForTest(board, "BoardTest.cards");
 
 		board.addCard(card);
 		assertThat(board.getCards()[0], sameInstance(card));
@@ -60,7 +86,7 @@ public class BoardTest extends AbstractKanbanTest {
 
 	@Test
 	public void mock_cards() throws Exception {
-		Board board = createBoardForTest("TEST_BOARD");
+		Board board = helper.createBoardForTest("TEST_BOARD");
 		Card card = new org.kompiro.jamcircle.kanban.model.mock.Card();
 
 		board.addCard(card);
@@ -74,8 +100,8 @@ public class BoardTest extends AbstractKanbanTest {
 
 	@Test
 	public void lanes() throws Exception {
-		Board board = createBoardForTest("TEST_BOARD");
-		Lane lane = createLaneForTest(board, "BoardTest.lanes");
+		Board board = helper.createBoardForTest("TEST_BOARD");
+		Lane lane = helper.createLaneForTest(board, "BoardTest.lanes");
 
 		board.addLane(lane);
 		assertThat(board.getLanes()[0], sameInstance(lane));
@@ -88,7 +114,7 @@ public class BoardTest extends AbstractKanbanTest {
 
 	@Test
 	public void mock_lanes() throws Exception {
-		Board board = createBoardForTest("TEST_BOARD");
+		Board board = helper.createBoardForTest("TEST_BOARD");
 		Lane lane = new org.kompiro.jamcircle.kanban.model.mock.Lane();
 
 		board.addLane(lane);
@@ -103,8 +129,8 @@ public class BoardTest extends AbstractKanbanTest {
 	@Test
 	public void no_exceptions_are_occured_when_call_toString() throws Exception {
 
-		Board board = createBoardForTest("TEST_BOARD");
-		System.out.println(board.toString());
+		Board board = helper.createBoardForTest("TEST_BOARD");
+		board.toString();
 
 	}
 

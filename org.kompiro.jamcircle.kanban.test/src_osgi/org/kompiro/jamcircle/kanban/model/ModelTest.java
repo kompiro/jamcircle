@@ -8,25 +8,48 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import net.java.ao.DBParam;
+import net.java.ao.EntityManager;
 
-import org.junit.After;
-import org.junit.Test;
+import org.junit.*;
 import org.kompiro.jamcircle.kanban.KanbanActivator;
-import org.kompiro.jamcircle.kanban.service.internal.AbstractKanbanTest;
+import org.kompiro.jamcircle.kanban.OSGiEnvironment;
+import org.kompiro.jamcircle.kanban.service.internal.KanbanServiceEnvironment;
+import org.kompiro.jamcircle.kanban.service.internal.KanbanServiceTestHelper;
 import org.kompiro.jamcircle.kanban.test.util.TestUtils;
 import org.kompiro.jamcircle.storage.service.StorageService;
 
-public class ModelTest extends AbstractKanbanTest {
+public class ModelTest {
 
 	private static final int TARGET_CARD_COUNT = 5;
 	private static final int CURRENT_CARD_COUNT_ON_LANE = 2;
 	private TestUtils util = new TestUtils();
+	private KanbanServiceTestHelper helper;
+	private EntityManager entityManager;
+
+	@Rule
+	public OSGiEnvironment env = new OSGiEnvironment();
+
+	@Rule
+	public KanbanServiceEnvironment serviceEnv = new KanbanServiceEnvironment();
+
+	@BeforeClass
+	public static void initializeEnvironment() throws Exception {
+		Logger.getLogger("net.java.ao").setLevel(Level.FINE);
+	}
+
+	@Before
+	public void before() throws Exception {
+		helper = serviceEnv.getHelper();
+		entityManager = serviceEnv.getEntityManager();
+	}
 
 	@After
 	public void after() throws Exception {
-		helper.deleteAllFile();
+		helper.tearDownKanbanService();
 	}
 
 	@Test
