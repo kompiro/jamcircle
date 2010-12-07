@@ -1,19 +1,25 @@
 package org.kompiro.jamcircle.kanban.service.internal;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
-public class KanbanMigratorTest extends AbstractKanbanTest{
-	
-	@Override
+public class KanbanMigratorTest {
+
+	private KanbanServiceTestHelper helper;
+
 	@Before
 	public void init() throws Exception {
-		// This test needs before initialized Kanban Service.
+		helper = new KanbanServiceTestHelper();
+		helper.tearDownKanbanService();
 	}
-	
+
+	@After
+	public void after() throws Exception {
+		helper.tearDownKanbanService();
+	}
+
 	@Test
 	public void migrate() throws Exception {
-		KanbanServiceImpl service = getKanbanService();
+		KanbanServiceImpl service = helper.getKanbanService();
 		KanbanMigrator migrator = new KanbanMigrator(service);
 		migrator.migrate();
 		// if migrate is OK, then these methods don't throw Exception

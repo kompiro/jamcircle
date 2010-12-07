@@ -562,7 +562,7 @@ public class KanbanServiceImpl implements KanbanService, StorageChageListener {
 		return 0;
 	}
 
-	void setInitialized(boolean initialized) {
+	protected void setInitialized(boolean initialized) {
 		this.initialized = initialized;
 	}
 

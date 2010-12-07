@@ -20,12 +20,12 @@ public class KanbanActivator extends Plugin {
 	public static KanbanActivator getDefault() {
 		return plugin;
 	}
-		
+
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		if(KanbanStatusHandler.isDebug()){
+		if (KanbanStatusHandler.isDebug()) {
 			Logger.getLogger(LIB_NET_JAVA_AO).setLevel(Level.FINE);
-		}else{
+		} else {
 			Logger.getLogger(LIB_NET_JAVA_AO).setLevel(Level.OFF);
 		}
 
@@ -36,12 +36,12 @@ public class KanbanActivator extends Plugin {
 		super.stop(context);
 	}
 
-	public static KanbanServiceImpl getKanbanService(){
+	public static KanbanServiceImpl getKanbanService() {
 		return KanbanServiceImpl.service;
 	}
-	
-	public static IStatus createErrorStatus(String message){
-		return new Status(IStatus.ERROR,ID,message);
+
+	public static IStatus createErrorStatus(String message) {
+		return new Status(IStatus.ERROR, ID, message);
 	}
 
 }

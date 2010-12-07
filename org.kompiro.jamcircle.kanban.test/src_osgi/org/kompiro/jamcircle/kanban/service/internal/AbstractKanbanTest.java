@@ -1,117 +1,63 @@
 package org.kompiro.jamcircle.kanban.service.internal;
 
 import static org.junit.Assume.assumeNotNull;
-import static org.kompiro.jamcircle.kanban.model.Lane.VALUE_OF_HEIGHT;
-import static org.kompiro.jamcircle.kanban.model.Lane.VALUE_OF_WIDTH;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.java.ao.EntityManager;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.*;
 import org.kompiro.jamcircle.kanban.KanbanActivator;
-import org.kompiro.jamcircle.kanban.model.Board;
-import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.Icon;
-import org.kompiro.jamcircle.kanban.model.Lane;
-import org.kompiro.jamcircle.kanban.model.User;
-import org.kompiro.jamcircle.storage.service.FileStorageService;
+import org.kompiro.jamcircle.kanban.model.*;
 
 public abstract class AbstractKanbanTest {
 
-	private static KanbanServiceImpl kanbanService;
+	protected KanbanServiceTestHelper helper;
 	protected EntityManager entityManager;
-	
+
 	@BeforeClass
-	public static void initializeEnvironment() throws Exception{
+	public static void initializeEnvironment() throws Exception {
 		KanbanActivator activator = getActivator();
-		assumeNotNull("Please launch on PDE Environment",activator);
+		assumeNotNull("Please launch on PDE Environment", activator);
 		Logger.getLogger("net.java.ao").setLevel(Level.FINE);
 	}
-	
-	@Before
-	public void init() throws Exception{
-		getKanbanService().forceInit();
-		entityManager = getKanbanService().getEntityManager();
-	}
 
-	protected static KanbanServiceImpl getKanbanService() {
-		if(kanbanService == null){
-			kanbanService = (KanbanServiceImpl)KanbanActivator.getKanbanService();
-		}
-		return kanbanService;
+	@Before
+	public void init() throws Exception {
+		helper = new KanbanServiceTestHelper();
+		helper.forceInitKanbanService();
+		entityManager = helper.getEntityManager();
 	}
 
 	protected static KanbanActivator getActivator() {
 		return KanbanActivator.getDefault();
 	}
 
-	protected Board createBoardForTest(String title){
-		return getKanbanService().createBoard(title);
+	protected Board createBoardForTest(String title) {
+		return helper.createBoardForTest(title);
 	}
-	
-	protected Card createCardForTest(Board board, String subject){
-		return getKanbanService().createCard(board, subject, null, 0, 0);
+
+	protected Card createCardForTest(Board board, String subject) {
+		return helper.createCardForTest(board, subject);
 	}
-	
+
 	protected Lane createLaneForTest(Board board, String status) {
-		return getKanbanService().createLane(board, status, 0, 0, VALUE_OF_WIDTH, VALUE_OF_HEIGHT);
+		return helper.createLaneForTest(board, status);
 	}
 
-	protected Icon createIconForTest(String type){
-		return getKanbanService().addIcon(type, 0, 0);
+	protected Icon createIconForTest(String type) {
+		return helper.createIconForTest(type);
 	}
-	
+
 	protected User createUserForTest(String userId) {
-		return getKanbanService().addUser(userId);
+		return helper.createUserForTest(userId);
 	}
 
-	
 	@SuppressWarnings("restriction")
 	@After
-	public void after() throws Exception{
-		try {
-			getKanbanService().deleteAllCards();
-		} catch (Exception e) {
-			showErrorInAfterMethods("AllCards",e.getLocalizedMessage());
-		}
-		
-		try {
-			getKanbanService().deleteAllLanes();
-		} catch (Exception e) {
-			showErrorInAfterMethods("AllLanes",e.getLocalizedMessage());
-		}
-		
-		try {
-			getKanbanService().deleteAllUsers();
-		} catch (Exception e) {
-			showErrorInAfterMethods("AllUsers",e.getLocalizedMessage());
-		}
-		
-		try {
-			getKanbanService().deleteAllIcons();
-		} catch (Exception e) {
-			showErrorInAfterMethods("AllIcons",e.getLocalizedMessage());
-		}
-
-		try {
-			getKanbanService().deleteAllBoards();
-		} catch (Exception e) {
-			showErrorInAfterMethods("AllBoards",e.getLocalizedMessage());
-		}
-		FileStorageService fileService = getKanbanService().getStorageService().getFileService();
-		((org.kompiro.jamcircle.storage.service.internal.FileStorageServiceImpl)fileService).deleteAll();
-		
-		KanbanServiceImpl service = getKanbanService();
-		service.setInitialized(false);
-	}
-
-	private void showErrorInAfterMethods(String methodName,String localizedMessage) {
-		String message = String.format("%s:%s",methodName,localizedMessage);
-		System.err.println(message);
+	public void after() throws Exception {
+		helper.tearDownKanbanService();
 	}
 
 }
