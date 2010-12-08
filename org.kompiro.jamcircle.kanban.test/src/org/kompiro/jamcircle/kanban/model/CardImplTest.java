@@ -111,4 +111,38 @@ public class CardImplTest {
 		assertThat(result, is(false));
 	}
 
+	@Test
+	public void return_false_called_hasFiles_when_no_files_are_added() throws Exception {
+		boolean result = cardImpl.hasFiles();
+		assertThat(result, is(false));
+	}
+
+	@Test
+	public void return_true_called_hasFiles_when_some_files_are_added() throws Exception {
+		File file = folder.newFile("test.txt");
+		ArrayList<File> files = new ArrayList<File>();
+		files.add(file);
+		when(fileStorageService.getFiles(getPath())).thenReturn(files);
+
+		boolean result = cardImpl.hasFiles();
+		assertThat(result, is(true));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void throw_exception_called_deleteFile_when_args_are_null() throws Exception {
+		cardImpl.deleteFile(null);
+	}
+
+	@Test
+	public void called_deleteFile_when_the_file_is_exist() throws Exception {
+		File file = folder.newFile("test.txt");
+		ArrayList<File> files = new ArrayList<File>();
+		files.add(file);
+		when(fileStorageService.getFiles(getPath())).thenReturn(files);
+
+		assertThat(file.exists(), is(true));
+		cardImpl.deleteFile(file);
+		assertThat(file.exists(), is(false));
+	}
+
 }

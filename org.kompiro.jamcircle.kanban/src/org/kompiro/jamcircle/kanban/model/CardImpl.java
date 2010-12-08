@@ -83,6 +83,8 @@ public class CardImpl extends GraphicalEntityImpl {
 	}
 
 	public void deleteFile(File file) {
+		if (file == null)
+			throw new IllegalArgumentException("file is null.");
 		if (hasFile(file)) {
 			file.delete();
 			PropertyChangeEvent event = new PropertyChangeEvent(card, Card.PROP_FILES, file, null);
