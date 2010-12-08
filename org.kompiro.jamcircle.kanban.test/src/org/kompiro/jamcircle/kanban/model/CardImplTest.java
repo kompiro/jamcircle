@@ -1,6 +1,7 @@
 package org.kompiro.jamcircle.kanban.model;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -10,6 +11,7 @@ import static org.mockito.Mockito.when;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.List;
 
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
@@ -81,13 +83,20 @@ public class CardImplTest {
 
 		File srcFile = folder.newFile("test.txt");
 		cardImpl.addFile(srcFile);
-		assertThat(cardImpl.getFiles().size(), is(1));
-		assertThat(cardImpl.getFiles().get(0).getName(), is(srcFile.getName()));
+		List<File> files = cardImpl.getFiles();
+		assertThat(files.size(), is(1));
+		assertThat(files.get(0).getName(), is(srcFile.getName()));
 
 		File src2File = folder.newFile("test2.txt");
 		cardImpl.addFile(src2File);
-		assertThat(cardImpl.getFiles().size(), is(2));
-		assertThat(cardImpl.getFiles().get(1).getName(), is(src2File.getName()));
+		files = cardImpl.getFiles();
+		assertThat(files.size(), is(2));
+		String[] actualNames = new String[2];
+		for (int i = 0; i < files.size(); i++) {
+			File file = files.get(i);
+			actualNames[i] = file.getName();
+		}
+		assertArrayEquals(new String[] { srcFile.getName(), src2File.getName() }, actualNames);
 	}
 
 	@Test
