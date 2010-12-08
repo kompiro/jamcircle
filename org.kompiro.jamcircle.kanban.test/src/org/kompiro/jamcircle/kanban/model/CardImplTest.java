@@ -1,32 +1,29 @@
 package org.kompiro.jamcircle.kanban.model;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.util.List;
+import java.util.ArrayList;
 
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
+import org.kompiro.jamcircle.storage.service.FileStorageService;
 import org.kompiro.jamcircle.storage.service.StorageService;
-import org.kompiro.jamcircle.storage.service.internal.FileStorageServiceImpl;
 import org.mockito.ArgumentCaptor;
 
-@SuppressWarnings("restriction")
 public class CardImplTest {
 
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
 	private Card card;
 	private CardImpl cardImpl;
-	private FileStorageServiceImpl fileStorageService;
+	private FileStorageService fileStorageService;
 
 	@Before
 	public void before() throws Exception {
@@ -36,16 +33,9 @@ public class CardImplTest {
 		StorageService storageService = mock(StorageService.class);
 		cardImpl.setStorageService(storageService);
 
-		FileStorageServiceImpl service = new FileStorageServiceImpl();
-		fileStorageService = spy(service);
+		fileStorageService = mock(FileStorageService.class);
 		when(storageService.getFileService()).thenReturn(fileStorageService);
-		when(fileStorageService.getFiles(getPath())).thenCallRealMethod();
 
-	}
-
-	@After
-	public void after() throws Exception {
-		fileStorageService.deleteAll();
 	}
 
 	@Test
@@ -74,41 +64,51 @@ public class CardImplTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void call_addFile_is_null() throws Exception {
+	public void call_addFile_arg_is_null() throws Exception {
 		cardImpl.addFile(null);
 	}
 
 	@Test
 	public void call_getFiles() throws Exception {
 
-		File srcFile = folder.newFile("test.txt");
-		cardImpl.addFile(srcFile);
-		List<File> files = cardImpl.getFiles();
-		assertThat(files.size(), is(1));
-		assertThat(files.get(0).getName(), is(srcFile.getName()));
-
-		File src2File = folder.newFile("test2.txt");
-		cardImpl.addFile(src2File);
-		files = cardImpl.getFiles();
-		assertThat(files.size(), is(2));
-		String[] actualNames = new String[2];
-		for (int i = 0; i < files.size(); i++) {
-			File file = files.get(i);
-			actualNames[i] = file.getName();
-		}
-		assertArrayEquals(new String[] { srcFile.getName(), src2File.getName() }, actualNames);
+		cardImpl.getFiles();
+		verify(fileStorageService).getFiles(getPath());
 	}
 
 	@Test
-	public void call_hasFile() throws Exception {
+	public void return_false_called_hasFile_when_no_files_are_added() throws Exception {
+		File file = folder.newFile("test.txt");
+		boolean result = cardImpl.hasFile(file);
 
-		File srcFile = folder.newFile("test.txt");
-		File src2File = folder.newFile("test2.txt");
+		assertThat(result, is(false));
+	}
 
-		cardImpl.addFile(srcFile);
+	@Test
+	public void return_true_called_hasFile_when_the_file_is_existed() throws Exception {
+		ArrayList<File> files = new ArrayList<File>();
+		File file = folder.newFile("test.txt");
+		files.add(file);
+		when(fileStorageService.getFiles(getPath())).thenReturn(files);
+		boolean result = cardImpl.hasFile(file);
+		assertThat(result, is(true));
+	}
 
-		assertThat(cardImpl.hasFile(cardImpl.getFiles().get(0)), is(true));
-		assertThat(cardImpl.hasFile(src2File), is(false));
+	@Test
+	public void return_false_called_hasFile_when_arg_is_not_exist() throws Exception {
+		File file = folder.newFile("test.txt");
+		ArrayList<File> files = new ArrayList<File>();
+		files.add(file);
+		when(fileStorageService.getFiles(getPath())).thenReturn(files);
+
+		File notExisted = folder.newFile("not_exist.txt");
+		boolean result = cardImpl.hasFile(notExisted);
+		assertThat(result, is(false));
+	}
+
+	@Test
+	public void return_false_called_hasFile_when_arg_is_null() throws Exception {
+		boolean result = cardImpl.hasFile(null);
+		assertThat(result, is(false));
 	}
 
 }

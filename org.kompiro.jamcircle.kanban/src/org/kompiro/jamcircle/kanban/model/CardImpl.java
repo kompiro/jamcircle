@@ -91,7 +91,7 @@ public class CardImpl extends GraphicalEntityImpl {
 	}
 
 	public boolean hasFile(File file) {
-		if (file.exists()) {
+		if (file != null && file.exists()) {
 			for (File target : getFiles()) {
 				if (target.getAbsolutePath().equals(file.getAbsolutePath())) {
 					return true;
