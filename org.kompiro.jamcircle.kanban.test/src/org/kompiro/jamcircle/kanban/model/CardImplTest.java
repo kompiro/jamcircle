@@ -13,7 +13,6 @@ import java.io.File;
 
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
-import org.kompiro.jamcircle.storage.service.FileStorageService;
 import org.kompiro.jamcircle.storage.service.StorageService;
 import org.kompiro.jamcircle.storage.service.internal.FileStorageServiceImpl;
 import org.mockito.ArgumentCaptor;
@@ -25,7 +24,7 @@ public class CardImplTest {
 	public TemporaryFolder folder = new TemporaryFolder();
 	private Card card;
 	private CardImpl cardImpl;
-	private FileStorageService fileStorageService;
+	private FileStorageServiceImpl fileStorageService;
 
 	@Before
 	public void before() throws Exception {
@@ -44,7 +43,7 @@ public class CardImplTest {
 
 	@After
 	public void after() throws Exception {
-		fileStorageService.deleteAll()
+		fileStorageService.deleteAll();
 	}
 
 	@Test
