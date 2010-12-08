@@ -42,6 +42,11 @@ public class CardImplTest {
 
 	}
 
+	@After
+	public void after() throws Exception {
+		fileStorageService.deleteAll()
+	}
+
 	@Test
 	public void call_addFile() throws Exception {
 
