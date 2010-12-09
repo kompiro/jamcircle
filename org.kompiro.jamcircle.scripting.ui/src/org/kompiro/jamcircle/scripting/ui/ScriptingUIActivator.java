@@ -54,6 +54,17 @@ public class ScriptingUIActivator extends AbstractUIPlugin {
 	}
 
 	@Override
+	public ImageRegistry getImageRegistry() {
+		final ImageRegistry[] imageRegistry = new ImageRegistry[1];
+		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				imageRegistry[0] = ScriptingUIActivator.super.getImageRegistry();
+			}
+		});
+		return imageRegistry[0];
+	}
+
+	@Override
 	protected void initializeImageRegistry(ImageRegistry reg) {
 		for (ScriptingImageEnum e : ScriptingImageEnum.values()) {
 			initializeImage(reg, e);
