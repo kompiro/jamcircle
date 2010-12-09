@@ -57,7 +57,7 @@ public class ScriptingUIActivator extends AbstractUIPlugin {
 	@Override
 	public ImageRegistry getImageRegistry() {
 		final ImageRegistry[] imageRegistry = new ImageRegistry[1];
-		UIUtil.async(new Runnable() {
+		UIUtil.sync(new Runnable() {
 			public void run() {
 				imageRegistry[0] = ScriptingUIActivator.super.getImageRegistry();
 			}
