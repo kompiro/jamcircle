@@ -144,6 +144,14 @@ public class BoardImpl extends EntityImpl {
 		return board;
 	}
 
+	void setMockCards(List<Card> mockCards) {
+		this.mockCards = mockCards;
+	}
+
+	void setMockLanes(List<Lane> mockLanes) {
+		this.mockLanes = mockLanes;
+	}
+
 	@Override
 	public String toString() {
 		return String.format(TO_STRING_FORMAT, board.getID(), board.getTitle(), board.isTrashed());

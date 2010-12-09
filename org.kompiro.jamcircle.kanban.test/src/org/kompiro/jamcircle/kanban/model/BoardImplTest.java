@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 import net.java.ao.EntityManager;
 
@@ -28,17 +29,27 @@ public class BoardImplTest {
 	private Board board;
 	private BoardImpl impl;
 	private PropertyChangeListener listener;
+	private List<Lane> mockLanes;
+	private List<Card> mockCards;
 
+	@SuppressWarnings("unchecked")
 	@Before
 	public void before() throws Exception {
 		handler = mock(ExecutorHandler.class);
 		manager = mock(EntityManager.class);
+
 		board = mock(Board.class);
 		when(board.getID()).thenReturn(1);
 		when(board.getEntityManager()).thenReturn(manager);
+
 		impl = new BoardImpl(board);
 		listener = mock(PropertyChangeListener.class);
 		impl.addPropertyChangeListener(listener);
+
+		mockCards = mock(List.class);
+		impl.setMockCards(mockCards);
+		mockLanes = mock(List.class);
+		impl.setMockLanes(mockLanes);
 
 	}
 
@@ -68,6 +79,7 @@ public class BoardImplTest {
 		when(card.isMock()).thenReturn(false);
 		impl.addCard(card);
 
+		verify(mockCards, never()).add(card);
 		verify(manager).flush(card, board);
 		verify(card).save(false);
 		verify(card, never()).setBoard(board);
@@ -81,6 +93,7 @@ public class BoardImplTest {
 		impl.addCard(card);
 
 		verify(manager, never()).flush(card, board);
+		verify(mockCards).add(card);
 
 		PropertyChangeEvent value = captorPropertyChangeEvent();
 		assertThat(value, is(not(nullValue())));
@@ -100,6 +113,7 @@ public class BoardImplTest {
 		when(card.isMock()).thenReturn(false);
 		impl.removeCard(card);
 
+		verify(mockCards, never()).remove(card);
 		verify(card).setBoard(null);
 		verify(manager).flush(card, board);
 		verify(card).save(false);
@@ -118,6 +132,7 @@ public class BoardImplTest {
 		when(card.isMock()).thenReturn(true);
 		impl.removeCard(card);
 
+		verify(mockCards).remove(card);
 		verify(card).setBoard(null);
 		verify(manager, never()).flush(card, board);
 
@@ -140,6 +155,7 @@ public class BoardImplTest {
 		when(lane.isMock()).thenReturn(false);
 		impl.addLane(lane);
 
+		verify(mockLanes, never()).add(lane);
 		verify(manager).flush(lane, board);
 		verify(lane).save(false);
 		verify(lane).setBoard(board);
@@ -157,6 +173,7 @@ public class BoardImplTest {
 		when(lane.isMock()).thenReturn(true);
 		impl.addLane(lane);
 
+		verify(mockLanes).add(lane);
 		verify(manager, never()).flush(lane, board);
 
 		PropertyChangeEvent value = captorPropertyChangeEvent();
@@ -178,6 +195,7 @@ public class BoardImplTest {
 		when(lane.isMock()).thenReturn(false);
 		impl.removeLane(lane);
 
+		verify(mockLanes, never()).remove(lane);
 		verify(manager).flush(lane, board);
 		verify(lane).save(false);
 		verify(lane).setBoard(null);
@@ -190,11 +208,12 @@ public class BoardImplTest {
 
 	@Test
 	public void remove_mock_lane() throws Exception {
-
 		Lane lane = mock(Lane.class);
-		when(lane.isMock()).thenReturn(false);
+		when(lane.isMock()).thenReturn(true);
+
 		impl.removeLane(lane);
 
+		verify(mockLanes).remove(lane);
 		verify(lane).setBoard(null);
 
 		PropertyChangeEvent value = captorPropertyChangeEvent();
