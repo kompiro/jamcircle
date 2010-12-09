@@ -29,6 +29,8 @@ public class BoardImpl extends EntityImpl {
 	}
 
 	public boolean addCard(Card card) {
+		if (card == null)
+			throw new IllegalArgumentException("card is null.");
 		Board board2 = card.getBoard();
 		if (board2 == null || board.getID() != board2.getID()) {
 			card.setBoard(board);
@@ -52,6 +54,8 @@ public class BoardImpl extends EntityImpl {
 	}
 
 	public boolean removeCard(Card card) {
+		if (card == null)
+			throw new IllegalArgumentException("card is null.");
 		card.setBoard(null);
 		card.setDeletedVisuals(true);
 		if (card.isMock()) {
@@ -92,6 +96,8 @@ public class BoardImpl extends EntityImpl {
 	}
 
 	public boolean addLane(Lane lane) {
+		if (lane == null)
+			throw new IllegalArgumentException("lane is null");
 		lane.setBoard(board);
 		if (lane.isMock()) {
 			mockLanes.add(lane);

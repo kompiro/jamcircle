@@ -15,17 +15,21 @@ import org.kompiro.jamcircle.storage.model.ExecutorHandler;
 public class BoardImplTest {
 
 	private ExecutorHandler handler;
+	private EntityManager manager;
+	private Board board;
 
 	@Before
 	public void before() throws Exception {
 		handler = mock(ExecutorHandler.class);
+		manager = mock(EntityManager.class);
+		board = mock(Board.class);
+		when(board.getID()).thenReturn(1);
+		when(board.getEntityManager()).thenReturn(manager);
+
 	}
 
 	@Test
 	public void add_card() throws Exception {
-		Board board = mock(Board.class);
-		EntityManager manager = mock(EntityManager.class);
-		when(board.getEntityManager()).thenReturn(manager);
 
 		BoardImpl impl = new BoardImpl(board);
 		Card card = mock(Card.class);
@@ -39,11 +43,6 @@ public class BoardImplTest {
 
 	@Test
 	public void add_card_to_same_board() throws Exception {
-		Board board = mock(Board.class);
-		when(board.getID()).thenReturn(1);
-
-		EntityManager manager = mock(EntityManager.class);
-		when(board.getEntityManager()).thenReturn(manager);
 
 		BoardImpl impl = new BoardImpl(board);
 		Card card = mock(Card.class);
@@ -58,9 +57,6 @@ public class BoardImplTest {
 
 	@Test
 	public void add_mock_card() throws Exception {
-		Board board = mock(Board.class);
-		EntityManager manager = mock(EntityManager.class);
-		when(board.getEntityManager()).thenReturn(manager);
 
 		BoardImpl impl = new BoardImpl(board);
 		Card card = mock(Card.class);
@@ -70,11 +66,43 @@ public class BoardImplTest {
 		verify(manager, never()).flush(card, board);
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void add_null_card() throws Exception {
+		BoardImpl impl = new BoardImpl(board);
+		impl.addCard(null);
+	}
+
+	@Test
+	public void remove_card() throws Exception {
+		BoardImpl impl = new BoardImpl(board);
+		Card card = mock(Card.class);
+		when(card.isMock()).thenReturn(false);
+		impl.removeCard(card);
+
+		verify(card).setBoard(null);
+		verify(manager).flush(card, board);
+		verify(card).save(false);
+	}
+
+	@Test
+	public void remove_mock_card() throws Exception {
+		BoardImpl impl = new BoardImpl(board);
+		Card card = mock(Card.class);
+		when(card.isMock()).thenReturn(true);
+		impl.removeCard(card);
+
+		verify(card).setBoard(null);
+		verify(manager, never()).flush(card, board);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void remove_null_card() throws Exception {
+		BoardImpl impl = new BoardImpl(board);
+		impl.removeCard(null);
+	}
+
 	@Test
 	public void add_lane() throws Exception {
-		Board board = mock(Board.class);
-		EntityManager manager = mock(EntityManager.class);
-		when(board.getEntityManager()).thenReturn(manager);
 
 		BoardImpl impl = new BoardImpl(board);
 		Lane lane = mock(Lane.class);
@@ -88,9 +116,6 @@ public class BoardImplTest {
 
 	@Test
 	public void add_mock_lane() throws Exception {
-		Board board = mock(Board.class);
-		EntityManager manager = mock(EntityManager.class);
-		when(board.getEntityManager()).thenReturn(manager);
 
 		BoardImpl impl = new BoardImpl(board);
 		Lane lane = mock(Lane.class);
@@ -100,9 +125,14 @@ public class BoardImplTest {
 		verify(manager, never()).flush(lane, board);
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void add_null_lane() throws Exception {
+		BoardImpl impl = new BoardImpl(board);
+		impl.addLane(null);
+	}
+
 	@Test
 	public void should_call_save() throws Exception {
-		Board board = mock(Board.class);
 
 		BoardImpl impl = new BoardImpl(board);
 		impl.setHandler(handler);
@@ -114,7 +144,6 @@ public class BoardImplTest {
 
 	@Test
 	public void should_call_save_directory() throws Exception {
-		Board board = mock(Board.class);
 
 		BoardImpl impl = new BoardImpl(board);
 		impl.setHandler(handler);
