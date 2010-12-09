@@ -111,6 +111,8 @@ public class BoardImpl extends EntityImpl {
 	}
 
 	public boolean removeLane(Lane lane) {
+		if (lane == null)
+			throw new IllegalArgumentException("lane is null");
 		lane.setBoard(null);
 		if (lane.isMock()) {
 			mockLanes.remove(lane);
