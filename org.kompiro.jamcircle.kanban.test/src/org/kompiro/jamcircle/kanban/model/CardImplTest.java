@@ -140,7 +140,6 @@ public class CardImplTest {
 		files.add(file);
 		when(fileStorageService.getFiles(getPath())).thenReturn(files);
 
-		assertThat(file.exists(), is(true));
 		cardImpl.deleteFile(file);
 		assertThat(file.exists(), is(false));
 	}
