@@ -5,6 +5,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.kompiro.jamcircle.scripting.ui.util.UIUtil;
 import org.kompiro.jamcircle.scripting.util.ScriptingSecurityHelper;
 import org.kompiro.jamcircle.scripting.util.ScriptingSecurityManager;
 import org.osgi.framework.BundleContext;
@@ -51,6 +52,17 @@ public class ScriptingUIActivator extends AbstractUIPlugin {
 
 	public static ScriptingUIActivator getDefault() {
 		return plugin;
+	}
+
+	@Override
+	public ImageRegistry getImageRegistry() {
+		final ImageRegistry[] imageRegistry = new ImageRegistry[1];
+		UIUtil.async(new Runnable() {
+			public void run() {
+				imageRegistry[0] = ScriptingUIActivator.super.getImageRegistry();
+			}
+		});
+		return imageRegistry[0];
 	}
 
 	@Override
