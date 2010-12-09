@@ -6,22 +6,21 @@ import static org.mockito.Mockito.when;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.ui.console.IConsoleView;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.*;
 import org.kompiro.jamcircle.scripting.ui.internal.action.ScrollLockAction;
 
-@RunWith(ActionTestRunner.class)
-@WithAction(ScrollLockAction.class)
 public class ScrollLockActionTest {
 	private SWTBot bot;
-	private ScrollLockAction action;
+	private ScrollLockAction action = new ScrollLockAction();
+	@Rule
+	public ActionClass<ScrollLockAction> rule = new ActionClass<ScrollLockAction>(action);
 	private IConsoleView consoleView;
 
 	@Before
 	public void before() throws Exception {
 		consoleView = mock(IConsoleView.class);
 		action.setConsoleView(consoleView);
+		bot = rule.getBot();
 	}
 
 	@Test

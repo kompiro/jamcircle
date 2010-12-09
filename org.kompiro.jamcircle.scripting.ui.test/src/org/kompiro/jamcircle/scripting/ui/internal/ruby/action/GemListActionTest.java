@@ -5,20 +5,15 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.kompiro.jamcircle.scripting.ui.internal.ruby.action.GemListAction;
+import org.junit.*;
 import org.kompiro.jamcircle.scripting.ui.internal.ruby.job.ListGemJob;
 
-@RunWith(ActionTestRunner.class)
-@WithAction(GemListAction.class)
 public class GemListActionTest {
 
-	private SWTBot bot;
-	private GemListAction action;
+	private GemListAction action = new GemListAction();
+	@Rule
+	public ActionClass<GemListAction> rule = new ActionClass<GemListAction>(action);
 	private ListGemJob job;
 
 	@Before
@@ -30,7 +25,7 @@ public class GemListActionTest {
 	@Test
 	public void run() throws Exception {
 		assertThat(SWTUtils.isUIThread(SWTUtils.display()), is(false));
-		bot.toolbarButton().click();
+		rule.getBot().toolbarButton().click();
 		verify(job).schedule();
 	}
 

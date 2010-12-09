@@ -8,18 +8,14 @@ import static org.mockito.Mockito.verify;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.kompiro.jamcircle.scripting.ui.internal.ruby.action.GemUninstallAction;
+import org.junit.*;
 import org.kompiro.jamcircle.scripting.ui.internal.ruby.job.UninstallGemJob;
 
-@RunWith(ActionTestRunner.class)
-@WithAction(GemUninstallAction.class)
 public class GemUninstallActionTest {
 
-	private SWTBot bot;
-	private GemUninstallAction action;
+	private GemUninstallAction action = new GemUninstallAction();
+	@Rule
+	public ActionClass<GemUninstallAction> rule = new ActionClass<GemUninstallAction>(action);
 	private UninstallGemJob job;
 
 	@Before
@@ -31,6 +27,7 @@ public class GemUninstallActionTest {
 	@Test
 	public void run() throws Exception {
 		assertThat(SWTUtils.isUIThread(SWTUtils.display()), is(false));
+		SWTBot bot = rule.getBot();
 		bot.toolbarButton().click();
 
 		SWTBotShell shell = bot.shell("Uninstall gem");

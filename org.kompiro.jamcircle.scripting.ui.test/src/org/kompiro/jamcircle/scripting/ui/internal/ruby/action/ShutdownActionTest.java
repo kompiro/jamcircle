@@ -7,24 +7,23 @@ import static org.mockito.Mockito.verify;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.kompiro.jamcircle.scripting.ui.internal.ruby.action.ShutdownAction;
+import org.junit.*;
 import org.kompiro.jamcircle.scripting.ui.internal.ruby.console.RubyScriptingConsole;
 
-@RunWith(ActionTestRunner.class)
-@WithAction(ShutdownAction.class)
 public class ShutdownActionTest {
 
 	private SWTBot bot;
-	private ShutdownAction action;
+	private ShutdownAction action = new ShutdownAction();
+	@Rule
+	public ActionClass<ShutdownAction> rule = new ActionClass<ShutdownAction>(action);
+
 	private RubyScriptingConsole console;
 
 	@Before
 	public void before() throws Exception {
 		console = mock(RubyScriptingConsole.class);
 		action.setConsole(console);
+		bot = rule.getBot();
 	}
 
 	@Test

@@ -9,22 +9,19 @@ import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.*;
-import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.kompiro.jamcircle.scripting.ui.internal.ruby.action.GemInstallAction;
+import org.junit.*;
 import org.kompiro.jamcircle.scripting.ui.internal.ruby.job.InstallGemJob;
 
-@RunWith(ActionTestRunner.class)
-@WithAction(GemInstallAction.class)
 public class GemInstallActionTest {
 
-	private SWTBot bot;
-	private GemInstallAction action;
 	private InstallGemJob job;
+
+	private GemInstallAction action = new GemInstallAction();
+
+	@Rule
+	public ActionClass<GemInstallAction> rule = new ActionClass<GemInstallAction>(action);
 
 	@Before
 	public void before() throws Exception {
@@ -35,13 +32,13 @@ public class GemInstallActionTest {
 	@Test
 	public void run() throws Exception {
 		assertThat(SWTUtils.isUIThread(SWTUtils.display()), is(false));
-		bot.toolbarButton().click();
+		rule.getBot().toolbarButton().click();
 
-		SWTBotShell shell = bot.shell("Install gem");
+		SWTBotShell shell = rule.getBot().shell("Install gem");
 		shell.activate();
 
-		bot.text().setText("test");
-		bot.button("OK").click();
+		rule.getBot().text().setText("test");
+		rule.getBot().button("OK").click();
 		verify(job).setTarget("test");
 		verify(job).schedule();
 	}
