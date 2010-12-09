@@ -32,7 +32,7 @@ public class BoardImplTest {
 		when(card.isMock()).thenReturn(false);
 		impl.addCard(card);
 
-		verify(manager).flush(card);
+		verify(manager).flush(card, board);
 		verify(card).save(false);
 		verify(card).setBoard(board);
 	}
@@ -51,7 +51,7 @@ public class BoardImplTest {
 		when(card.isMock()).thenReturn(false);
 		impl.addCard(card);
 
-		verify(manager).flush(card);
+		verify(manager).flush(card, board);
 		verify(card).save(false);
 		verify(card, never()).setBoard(board);
 	}
@@ -67,7 +67,37 @@ public class BoardImplTest {
 		when(card.isMock()).thenReturn(true);
 		impl.addCard(card);
 
-		verify(manager, never()).flush(card);
+		verify(manager, never()).flush(card, board);
+	}
+
+	@Test
+	public void add_lane() throws Exception {
+		Board board = mock(Board.class);
+		EntityManager manager = mock(EntityManager.class);
+		when(board.getEntityManager()).thenReturn(manager);
+
+		BoardImpl impl = new BoardImpl(board);
+		Lane lane = mock(Lane.class);
+		when(lane.isMock()).thenReturn(false);
+		impl.addLane(lane);
+
+		verify(manager).flush(lane, board);
+		verify(lane).save(false);
+		verify(lane).setBoard(board);
+	}
+
+	@Test
+	public void add_mock_lane() throws Exception {
+		Board board = mock(Board.class);
+		EntityManager manager = mock(EntityManager.class);
+		when(board.getEntityManager()).thenReturn(manager);
+
+		BoardImpl impl = new BoardImpl(board);
+		Lane lane = mock(Lane.class);
+		when(lane.isMock()).thenReturn(true);
+		impl.addLane(lane);
+
+		verify(manager, never()).flush(lane, board);
 	}
 
 	@Test

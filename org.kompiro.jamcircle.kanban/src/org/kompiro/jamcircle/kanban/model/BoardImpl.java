@@ -39,7 +39,7 @@ public class BoardImpl extends EntityImpl {
 			mockCards.add(card);
 		} else {
 			card.save(false);
-			board.getEntityManager().flush(card);
+			board.getEntityManager().flush(card, board);
 			try {
 				board.getEntityManager().find(Card.class, Card.PROP_ID + QUERY, card.getID());
 			} catch (SQLException e) {
