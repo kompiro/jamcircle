@@ -8,11 +8,13 @@ import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.java.ao.EntityManager;
@@ -56,7 +58,7 @@ public class BoardImplTest {
 	@Test
 	public void add_card() throws Exception {
 
-		Card card = mock(Card.class);
+		Card card = mockCard();
 		when(card.isMock()).thenReturn(false);
 		impl.addCard(card);
 
@@ -74,7 +76,7 @@ public class BoardImplTest {
 	@Test
 	public void add_card_to_same_board() throws Exception {
 
-		Card card = mock(Card.class);
+		Card card = mockCard();
 		when(card.getBoard()).thenReturn(board);
 		when(card.isMock()).thenReturn(false);
 		impl.addCard(card);
@@ -88,7 +90,7 @@ public class BoardImplTest {
 	@Test
 	public void add_mock_card() throws Exception {
 
-		Card card = mock(Card.class);
+		Card card = mockCard();
 		when(card.isMock()).thenReturn(true);
 		impl.addCard(card);
 
@@ -109,7 +111,7 @@ public class BoardImplTest {
 
 	@Test
 	public void remove_card() throws Exception {
-		Card card = mock(Card.class);
+		Card card = mockCard();
 		when(card.isMock()).thenReturn(false);
 		impl.removeCard(card);
 
@@ -128,7 +130,7 @@ public class BoardImplTest {
 	@Test
 	public void remove_mock_card() throws Exception {
 
-		Card card = mock(Card.class);
+		Card card = mockCard();
 		when(card.isMock()).thenReturn(true);
 		impl.removeCard(card);
 
@@ -226,6 +228,49 @@ public class BoardImplTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void remove_null_lane() throws Exception {
 		impl.removeLane(null);
+	}
+
+	@Test
+	public void clearMocks() throws Exception {
+
+		ArrayList<Card> cards = new ArrayList<Card>();
+		Card card1 = mockCard();
+		cards.add(card1);
+
+		ArrayList<Lane> lanes = new ArrayList<Lane>();
+		Lane lane1 = mock(Lane.class);
+		lanes.add(lane1);
+
+		impl.setMockCards(cards);
+		impl.setMockLanes(lanes);
+		impl.clearMocks();
+
+		verify(card1).setBoard(null);
+		verify(card1).setDeletedVisuals(true);
+		verify(lane1).setBoard(null);
+		verify(lane1).setDeletedVisuals(true);
+
+		ArgumentCaptor<PropertyChangeEvent> captor = ArgumentCaptor.forClass(PropertyChangeEvent.class);
+		verify(listener, times(2)).propertyChange(captor.capture());
+		List<PropertyChangeEvent> values = captor.getAllValues();
+
+		PropertyChangeEvent cardEvent = values.get(0);
+		assertThat((Card) cardEvent.getOldValue(), is(card1));
+		assertThat(cardEvent.getPropertyName(), is(Board.PROP_CARD));
+
+		PropertyChangeEvent laneEvent = values.get(1);
+		assertThat((Lane) laneEvent.getOldValue(), is(lane1));
+		assertThat(laneEvent.getPropertyName(), is(Board.PROP_LANE));
+
+		assertThat(cards.size(), is(0));
+		assertThat(lanes.size(), is(0));
+
+	}
+
+	private Card mockCard() {
+		Card mock = mock(Card.class);
+		when(mock.isMock()).thenReturn(true);
+		return mock;
 	}
 
 	@Test

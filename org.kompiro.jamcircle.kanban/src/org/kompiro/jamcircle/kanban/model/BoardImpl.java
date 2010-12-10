@@ -82,12 +82,14 @@ public class BoardImpl extends EntityImpl {
 
 	public void clearMocks() {
 		for (Card card : mockCards) {
+			card.setBoard(null);
 			card.setDeletedVisuals(true);
 			PropertyChangeEvent event = new PropertyChangeEvent(board, Board.PROP_CARD, card, null);
 			fireEvent(event);
 		}
 		mockCards.clear();
 		for (Lane lane : mockLanes) {
+			lane.setBoard(null);
 			lane.setDeletedVisuals(true);
 			PropertyChangeEvent event = new PropertyChangeEvent(board, Board.PROP_LANE, lane, null);
 			fireEvent(event);
