@@ -153,7 +153,7 @@ public class BoardImplTest {
 	@Test
 	public void add_lane() throws Exception {
 
-		Lane lane = mock(Lane.class);
+		Lane lane = extracted();
 		when(lane.isMock()).thenReturn(false);
 		impl.addLane(lane);
 
@@ -171,7 +171,7 @@ public class BoardImplTest {
 	@Test
 	public void add_mock_lane() throws Exception {
 
-		Lane lane = mock(Lane.class);
+		Lane lane = extracted();
 		when(lane.isMock()).thenReturn(true);
 		impl.addLane(lane);
 
@@ -185,6 +185,11 @@ public class BoardImplTest {
 
 	}
 
+	private Lane extracted() {
+		Lane lane = mock(Lane.class);
+		return lane;
+	}
+
 	@Test(expected = IllegalArgumentException.class)
 	public void add_null_lane() throws Exception {
 		impl.addLane(null);
@@ -193,7 +198,7 @@ public class BoardImplTest {
 	@Test
 	public void remove_lane() throws Exception {
 
-		Lane lane = mock(Lane.class);
+		Lane lane = extracted();
 		when(lane.isMock()).thenReturn(false);
 		impl.removeLane(lane);
 
@@ -210,7 +215,7 @@ public class BoardImplTest {
 
 	@Test
 	public void remove_mock_lane() throws Exception {
-		Lane lane = mock(Lane.class);
+		Lane lane = extracted();
 		when(lane.isMock()).thenReturn(true);
 
 		impl.removeLane(lane);
@@ -238,7 +243,7 @@ public class BoardImplTest {
 		cards.add(card1);
 
 		ArrayList<Lane> lanes = new ArrayList<Lane>();
-		Lane lane1 = mock(Lane.class);
+		Lane lane1 = extracted();
 		lanes.add(lane1);
 
 		impl.setMockCards(cards);
