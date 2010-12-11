@@ -14,6 +14,7 @@ public class GemUninstallAction extends Action {
 	private UninstallGemJob job = new UninstallGemJob();
 
 	public GemUninstallAction() {
+		setToolTipText("uninstall gem");
 		setImageDescriptor(getImageDescriptor(ScriptingImageEnum.RUBY_DELETE));
 	}
 

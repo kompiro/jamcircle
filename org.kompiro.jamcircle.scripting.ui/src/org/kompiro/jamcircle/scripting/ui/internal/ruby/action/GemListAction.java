@@ -11,6 +11,7 @@ public class GemListAction extends Action {
 	private ListGemJob job = new ListGemJob();
 
 	public GemListAction() {
+		setToolTipText("list of installed gems");
 		setImageDescriptor(getImageDescriptor(ScriptingImageEnum.RUBY_GO));
 	}
 

@@ -11,7 +11,7 @@ public class ShutdownAction extends Action {
 	private RubyScriptingConsole console;
 
 	public ShutdownAction() {
-		setToolTipText("shutdown RubyScriptingConsole");
+		setToolTipText("Shutdown RubyScriptingConsole");
 		setHoverImageDescriptor(getImageDescriptor(ScriptingImageEnum.IMG_ELCL_CLOSE));
 		setDisabledImageDescriptor(getImageDescriptor(ScriptingImageEnum.IMG_ELCL_CLOSE));
 		setImageDescriptor(getImageDescriptor(ScriptingImageEnum.IMG_ELCL_CLOSE));

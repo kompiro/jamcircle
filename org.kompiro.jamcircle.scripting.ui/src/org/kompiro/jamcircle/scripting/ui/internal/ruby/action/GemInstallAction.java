@@ -14,6 +14,7 @@ public class GemInstallAction extends Action {
 	private InstallGemJob job = new InstallGemJob();
 
 	public GemInstallAction() {
+		setToolTipText("install gem");
 		setImageDescriptor(getImageDescriptor(ScriptingImageEnum.RUBY_ADD));
 	}
 

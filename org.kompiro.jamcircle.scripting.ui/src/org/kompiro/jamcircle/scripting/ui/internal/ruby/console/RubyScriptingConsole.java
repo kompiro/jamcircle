@@ -483,9 +483,11 @@ public class RubyScriptingConsole extends TextConsole implements IScriptingConso
 		if (container != null)
 			container.terminate();
 		try {
-			output.write(LINE_SEPARATOR);
-			output.write("terminated...");
-			output.write(LINE_SEPARATOR);
+			if (output != null) {
+				output.write(LINE_SEPARATOR);
+				output.write("terminated...");
+				output.write(LINE_SEPARATOR);
+			}
 		} catch (IOException e) {
 		}
 	}
