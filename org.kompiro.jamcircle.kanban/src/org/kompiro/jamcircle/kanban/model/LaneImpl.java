@@ -9,6 +9,7 @@ import java.util.*;
 
 import org.kompiro.jamcircle.kanban.*;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
+import org.kompiro.jamcircle.storage.service.FileStorageService;
 import org.kompiro.jamcircle.storage.service.StorageService;
 
 /**
@@ -27,6 +28,8 @@ public class LaneImpl extends GraphicalImpl {
 	private final Lane lane;
 
 	private List<Card> mockCards = new ArrayList<Card>();
+
+	private FileStorageService fileService;
 
 	public LaneImpl(Lane lane) throws IllegalArgumentException {
 		super(lane);
@@ -134,25 +137,33 @@ public class LaneImpl extends GraphicalImpl {
 		if (oldIcon != null && oldIcon.exists()) {
 			oldIcon.delete();
 		}
+		// when null, for remove custom icon
 		if (file == null) {
-			PropertyChangeEvent event = new PropertyChangeEvent(lane, Lane.PROP_CUSTOM_ICON, file, oldIcon);
+			PropertyChangeEvent event = new PropertyChangeEvent(lane, Lane.PROP_CUSTOM_ICON, oldIcon, file);
 			fireEvent(event);
 			return;
 		}
-		getStorageService().getFileService().addFile(getIconPath(), file);
-		PropertyChangeEvent event = new PropertyChangeEvent(lane, Lane.PROP_CUSTOM_ICON, file, oldIcon);
+		getFileService().addFile(getIconPath(), file);
+		PropertyChangeEvent event = new PropertyChangeEvent(lane, Lane.PROP_CUSTOM_ICON, oldIcon, file);
 		fireEvent(event);
 	}
 
 	public File getCustomIcon() {
 		List<File> files = getIconFiles();
-		if (files == null)
+		if (files == null || files.size() == 0)
 			return null;
 		return files.get(0);
 	}
 
 	private List<File> getIconFiles() {
-		return getStorageService().getFileService().getFiles(getIconPath());
+		return getFileService().getFiles(getIconPath());
+	}
+
+	private FileStorageService getFileService() {
+		if (fileService == null) {
+			fileService = getStorageService().getFileService();
+		}
+		return fileService;
 	}
 
 	public boolean hasCustomIcon() {
@@ -163,7 +174,11 @@ public class LaneImpl extends GraphicalImpl {
 		this.mockCards = mockCards;
 	}
 
-	private String getIconPath() {
+	public void setFileService(FileStorageService fileService) {
+		this.fileService = fileService;
+	}
+
+	String getIconPath() {
 		return getPath() + ICON_PATH;
 	}
 

@@ -1,8 +1,12 @@
 package org.kompiro.jamcircle.kanban.model;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.only;
@@ -11,13 +15,16 @@ import static org.mockito.Mockito.when;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 
 import net.java.ao.EntityManager;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.TemporaryFolder;
 import org.kompiro.jamcircle.storage.model.ExecutorHandler;
+import org.kompiro.jamcircle.storage.service.FileStorageService;
 import org.mockito.ArgumentCaptor;
 
 public class LaneImplTest {
@@ -32,18 +39,23 @@ public class LaneImplTest {
 	@SuppressWarnings("unchecked")
 	@Before
 	public void before() throws Exception {
-		handler = mock(ExecutorHandler.class);
-		manager = mock(EntityManager.class);
-		Board board = mock(Board.class);
 		lane = mock(Lane.class);
+
+		Board board = mock(Board.class);
 		when(lane.getBoard()).thenReturn(board);
+
+		manager = mock(EntityManager.class);
 		when(lane.getEntityManager()).thenReturn(manager);
+
 		impl = new LaneImpl(lane);
 		listener = mock(PropertyChangeListener.class);
 		impl.addPropertyChangeListener(listener);
 		mockCards = mock(List.class);
 		impl.setMockCards(mockCards);
+		fileService = mock(FileStorageService.class);
+		impl.setFileService(fileService);
 
+		handler = mock(ExecutorHandler.class);
 	}
 
 	@Test
@@ -156,6 +168,91 @@ public class LaneImplTest {
 		Card card = mock(Card.class);
 		impl.removeCard(card);
 
+	}
+
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
+	private FileStorageService fileService;
+
+	@Test
+	public void set_custom_icon_when_empty() throws Exception {
+		File file = folder.newFile("temp.png");
+		impl.setCustomIcon(file);
+		verify(fileService).addFile(anyString(), eq(file));
+
+		ArgumentCaptor<PropertyChangeEvent> captor = ArgumentCaptor.forClass(PropertyChangeEvent.class);
+		verify(listener).propertyChange(captor.capture());
+		PropertyChangeEvent value = captor.getValue();
+		assertThat(value.getPropertyName(), is(Lane.PROP_CUSTOM_ICON));
+		assertThat((File) value.getNewValue(), is(file));
+	}
+
+	@Test
+	public void set_custom_icon_when_registered() throws Exception {
+		List<File> files = new LinkedList<File>();
+		File registered = folder.newFile("already.png");
+		files.add(registered);
+		when(fileService.getFiles(impl.getIconPath())).thenReturn(files);
+
+		File file = folder.newFile("temp.png");
+		impl.setCustomIcon(file);
+		verify(fileService).addFile(anyString(), eq(file));
+
+		ArgumentCaptor<PropertyChangeEvent> captor = ArgumentCaptor.forClass(PropertyChangeEvent.class);
+		verify(listener).propertyChange(captor.capture());
+		PropertyChangeEvent value = captor.getValue();
+		assertThat(value.getPropertyName(), is(Lane.PROP_CUSTOM_ICON));
+		assertThat((File) value.getNewValue(), is(file));
+		assertThat((File) value.getOldValue(), is(registered));
+	}
+
+	@Test
+	public void set_custom_icon_when_null_is_set() throws Exception {
+		List<File> files = new LinkedList<File>();
+		File registered = folder.newFile("already.png");
+		files.add(registered);
+		when(fileService.getFiles(impl.getIconPath())).thenReturn(files);
+
+		impl.setCustomIcon(null);
+		verify(fileService, never()).addFile(anyString(), (File) any());
+
+		ArgumentCaptor<PropertyChangeEvent> captor = ArgumentCaptor.forClass(PropertyChangeEvent.class);
+		verify(listener).propertyChange(captor.capture());
+		PropertyChangeEvent value = captor.getValue();
+		assertThat(value.getPropertyName(), is(Lane.PROP_CUSTOM_ICON));
+		assertThat((File) value.getNewValue(), is(nullValue()));
+		assertThat((File) value.getOldValue(), is(registered));
+
+	}
+
+	@Test
+	public void set_custom_icon_when_empty_and_null_is_set() throws Exception {
+		impl.setCustomIcon(null);
+		verify(fileService, never()).addFile(anyString(), (File) any());
+
+		ArgumentCaptor<PropertyChangeEvent> captor = ArgumentCaptor.forClass(PropertyChangeEvent.class);
+		verify(listener).propertyChange(captor.capture());
+		PropertyChangeEvent value = captor.getValue();
+		assertThat(value.getPropertyName(), is(Lane.PROP_CUSTOM_ICON));
+		assertThat((File) value.getNewValue(), is(nullValue()));
+		assertThat((File) value.getOldValue(), is(nullValue()));
+
+	}
+
+	@Test
+	public void get_custom_icon_when_empty() throws Exception {
+		File file = impl.getCustomIcon();
+		assertThat(file, is(nullValue()));
+	}
+
+	@Test
+	public void get_custom_icon() throws Exception {
+		List<File> files = new LinkedList<File>();
+		File registered = folder.newFile("already.png");
+		files.add(registered);
+		when(fileService.getFiles(impl.getIconPath())).thenReturn(files);
+		File customIcon = impl.getCustomIcon();
+		assertThat(customIcon, is(registered));
 	}
 
 	@Test
