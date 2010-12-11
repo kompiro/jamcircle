@@ -159,6 +159,10 @@ public class LaneImpl extends GraphicalImpl {
 		return getCustomIcon() != null;
 	}
 
+	void setMockCards(List<Card> mockCards) {
+		this.mockCards = mockCards;
+	}
+
 	private String getIconPath() {
 		return getPath() + ICON_PATH;
 	}

@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 import net.java.ao.EntityManager;
 
@@ -26,7 +27,9 @@ public class LaneImplTest {
 	private Lane lane;
 	private PropertyChangeListener listener;
 	private ExecutorHandler handler;
+	private List<Card> mockCards;
 
+	@SuppressWarnings("unchecked")
 	@Before
 	public void before() throws Exception {
 		handler = mock(ExecutorHandler.class);
@@ -38,6 +41,8 @@ public class LaneImplTest {
 		impl = new LaneImpl(lane);
 		listener = mock(PropertyChangeListener.class);
 		impl.addPropertyChangeListener(listener);
+		mockCards = mock(List.class);
+		impl.setMockCards(mockCards);
 
 	}
 
@@ -51,6 +56,7 @@ public class LaneImplTest {
 		verify(card).setTrashed(false);
 		verify(card).setDeletedVisuals(false);
 		verify(manager).flush(card);
+		verify(mockCards, never()).add(card);
 
 		ArgumentCaptor<PropertyChangeEvent> captor = ArgumentCaptor.forClass(PropertyChangeEvent.class);
 		verify(listener).propertyChange(captor.capture());
@@ -72,6 +78,7 @@ public class LaneImplTest {
 		verify(card).setTrashed(false);
 		verify(card).setDeletedVisuals(false);
 		verify(manager, never()).flush(card);
+		verify(mockCards).add(card);
 
 		ArgumentCaptor<PropertyChangeEvent> captor = ArgumentCaptor.forClass(PropertyChangeEvent.class);
 		verify(listener).propertyChange(captor.capture());
@@ -106,6 +113,7 @@ public class LaneImplTest {
 		verify(card).save(false);
 		verify(card).setDeletedVisuals(true);
 		verify(manager).flush(card);
+		verify(mockCards, never()).remove(card);
 
 		ArgumentCaptor<PropertyChangeEvent> captor = ArgumentCaptor.forClass(PropertyChangeEvent.class);
 		verify(listener).propertyChange(captor.capture());
@@ -126,6 +134,7 @@ public class LaneImplTest {
 		verify(card).save(false);
 		verify(card).setDeletedVisuals(true);
 		verify(manager, never()).flush(card);
+		verify(mockCards).remove(card);
 
 		ArgumentCaptor<PropertyChangeEvent> captor = ArgumentCaptor.forClass(PropertyChangeEvent.class);
 		verify(listener).propertyChange(captor.capture());
