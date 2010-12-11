@@ -36,6 +36,7 @@ public class BoardImpl extends EntityImpl {
 			card.setBoard(board);
 		}
 		card.setLane(null);
+		card.setTrashed(false);
 		card.setDeletedVisuals(false);
 		if (card.isMock()) {
 			mockCards.add(card);

@@ -63,6 +63,7 @@ public class BoardImplTest {
 		impl.addCard(card);
 
 		verify(manager).flush(card, board);
+		verify(card).setTrashed(false);
 		verify(card).save(false);
 		verify(card).setBoard(board);
 
@@ -83,6 +84,7 @@ public class BoardImplTest {
 
 		verify(mockCards, never()).add(card);
 		verify(manager).flush(card, board);
+		verify(card).setTrashed(false);
 		verify(card).save(false);
 		verify(card, never()).setBoard(board);
 	}
@@ -96,6 +98,7 @@ public class BoardImplTest {
 
 		verify(manager, never()).flush(card, board);
 		verify(mockCards).add(card);
+		verify(card).setTrashed(false);
 
 		PropertyChangeEvent value = captorPropertyChangeEvent();
 		assertThat(value, is(not(nullValue())));
@@ -153,7 +156,7 @@ public class BoardImplTest {
 	@Test
 	public void add_lane() throws Exception {
 
-		Lane lane = extracted();
+		Lane lane = mockLane();
 		when(lane.isMock()).thenReturn(false);
 		impl.addLane(lane);
 
@@ -171,8 +174,7 @@ public class BoardImplTest {
 	@Test
 	public void add_mock_lane() throws Exception {
 
-		Lane lane = extracted();
-		when(lane.isMock()).thenReturn(true);
+		Lane lane = mockLane();
 		impl.addLane(lane);
 
 		verify(mockLanes).add(lane);
@@ -185,11 +187,6 @@ public class BoardImplTest {
 
 	}
 
-	private Lane extracted() {
-		Lane lane = mock(Lane.class);
-		return lane;
-	}
-
 	@Test(expected = IllegalArgumentException.class)
 	public void add_null_lane() throws Exception {
 		impl.addLane(null);
@@ -198,7 +195,7 @@ public class BoardImplTest {
 	@Test
 	public void remove_lane() throws Exception {
 
-		Lane lane = extracted();
+		Lane lane = mockLane();
 		when(lane.isMock()).thenReturn(false);
 		impl.removeLane(lane);
 
@@ -215,8 +212,7 @@ public class BoardImplTest {
 
 	@Test
 	public void remove_mock_lane() throws Exception {
-		Lane lane = extracted();
-		when(lane.isMock()).thenReturn(true);
+		Lane lane = mockLane();
 
 		impl.removeLane(lane);
 
@@ -243,7 +239,7 @@ public class BoardImplTest {
 		cards.add(card1);
 
 		ArrayList<Lane> lanes = new ArrayList<Lane>();
-		Lane lane1 = extracted();
+		Lane lane1 = mockLane();
 		lanes.add(lane1);
 
 		impl.setMockCards(cards);
@@ -272,12 +268,6 @@ public class BoardImplTest {
 
 	}
 
-	private Card mockCard() {
-		Card mock = mock(Card.class);
-		when(mock.isMock()).thenReturn(true);
-		return mock;
-	}
-
 	@Test
 	public void should_call_save_by_handler() throws Exception {
 
@@ -294,6 +284,18 @@ public class BoardImplTest {
 		impl.save(true);
 
 		verify(handler, never()).handle((Runnable) anyObject());
+	}
+
+	private Lane mockLane() {
+		Lane lane = mock(Lane.class);
+		when(lane.isMock()).thenReturn(true);
+		return lane;
+	}
+
+	private Card mockCard() {
+		Card mock = mock(Card.class);
+		when(mock.isMock()).thenReturn(true);
+		return mock;
 	}
 
 	private PropertyChangeEvent captorPropertyChangeEvent() {
