@@ -7,10 +7,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.junit.*;
-import org.kompiro.jamcircle.kanban.OSGiEnvironment;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Lane;
 import org.kompiro.jamcircle.kanban.service.internal.*;
+import org.kompiro.jamcircle.test.OSGiEnvironment;
 
 public class TaskBoardTemplateTest {
 

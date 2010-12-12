@@ -16,11 +16,11 @@ import net.java.ao.EntityManager;
 
 import org.junit.*;
 import org.kompiro.jamcircle.kanban.KanbanActivator;
-import org.kompiro.jamcircle.kanban.OSGiEnvironment;
 import org.kompiro.jamcircle.kanban.service.internal.KanbanServiceEnvironment;
 import org.kompiro.jamcircle.kanban.service.internal.KanbanServiceTestHelper;
 import org.kompiro.jamcircle.kanban.test.util.TestUtils;
 import org.kompiro.jamcircle.storage.service.StorageService;
+import org.kompiro.jamcircle.test.OSGiEnvironment;
 
 public class ModelTest {
 

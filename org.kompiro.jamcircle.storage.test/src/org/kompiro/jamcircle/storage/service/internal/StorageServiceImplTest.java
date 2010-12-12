@@ -16,17 +16,25 @@ import net.java.ao.EntityManager;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.runtime.jobs.*;
 import org.junit.*;
+import org.junit.rules.TemporaryFolder;
 import org.kompiro.jamcircle.debug.StandardOutputHandler;
 import org.kompiro.jamcircle.debug.SysoutProgressMonitor;
 import org.kompiro.jamcircle.storage.StorageStatusHandler;
 import org.kompiro.jamcircle.storage.service.StorageService;
 import org.kompiro.jamcircle.storage.service.StorageSetting;
+import org.kompiro.jamcircle.test.OSGiEnvironment;
 
 public class StorageServiceImplTest {
 
 	private StorageServiceImpl service;
 	private EntityManager entityManager;
-	private File tempDir;
+
+	@Rule
+	public OSGiEnvironment env = new OSGiEnvironment();
+
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
+	private FileStorageServiceImpl impl;
 
 	@BeforeClass
 	public static void initialize() {
@@ -42,15 +50,16 @@ public class StorageServiceImplTest {
 	@Before
 	public void init() throws Exception {
 		service = new StorageServiceImpl();
-		tempDir = new File(System.getProperty("java.io.tmpdir"));
 		service.loadStorage(
-				new StorageSetting(0, tempDir.getAbsolutePath(), StorageService.ConnectionMode.MEM.toString(), "sa", "")
+				new StorageSetting(0, folder.getRoot().getAbsolutePath(), StorageService.ConnectionMode.MEM.toString(),
+						"sa", "")
 				, new SysoutProgressMonitor());
 		entityManager = service.getEntityManager();
 		assertNotNull(entityManager);
 		entityManager.migrate(GraphicalTestEntity.class);
 		entityManager.delete(entityManager.find(GraphicalTestEntity.class));
 		assertEquals(0, entityManager.count(GraphicalTestEntity.class));
+		impl = (FileStorageServiceImpl) service.getFileService();
 	}
 
 	@After
@@ -68,7 +77,7 @@ public class StorageServiceImplTest {
 
 		assertEquals(1, entityManager.count(GraphicalTestEntity.class));
 
-		File testFile = File.createTempFile("testEntity", ".csv");
+		File testFile = folder.newFile("testEntity.csv");
 		System.out.println(testFile.getAbsolutePath());
 		assertTrue(service.exportEntity(testFile, GraphicalTestEntity.class));
 		assertTrue(service.importEntity(testFile, GraphicalTestEntity.class));
@@ -77,13 +86,15 @@ public class StorageServiceImplTest {
 	}
 
 	@Test
-	public void fileControl() throws Exception {
-		File testFile = File.createTempFile("test", ".txt");
+	public void file_control() throws Exception {
+		File testFile = folder.newFile("test.txt");
 		long current = System.currentTimeMillis();
 		FileUtils.writeStringToFile(testFile, "" + current);
+		File root = folder.newFolder("root");
+		impl.setStoreRoot(root.getAbsolutePath());
 		service.getFileService().addFile("test_dir", testFile);
-		File destFile = new File(tempDir, "test" + File.separator + "test_dir" + File.separator + testFile.getName());
-		System.out.println(destFile.getAbsolutePath());
+		File destFile = new File(new File(root, FileStorageServiceImpl.addtionalPath), "test_dir");
+		destFile = new File(destFile, "test.txt");
 		assertTrue(destFile.exists());
 	}
 
@@ -153,6 +164,26 @@ public class StorageServiceImplTest {
 
 		findInTrash = service.findInTrash(GraphicalTestEntity.class);
 		assertThat(findInTrash.length, is(2));
+	}
+
+	@Test
+	public void countInTrash() throws Exception {
+		int count = service.countInTrash(GraphicalTestEntity.class);
+		assertThat(count, is(0));
+
+		GraphicalTestEntity entity1 = createTestEntity();
+		entity1.setName("entity1");
+		entity1.save(false);
+		count = service.countInTrash(GraphicalTestEntity.class);
+		assertThat(count, is(0));
+
+		GraphicalTestEntity trashed = createTestEntity();
+		trashed.setName("trashed");
+		trashed.setTrashed(true);
+		trashed.save(false);
+		count = service.countInTrash(GraphicalTestEntity.class);
+		assertThat(count, is(1));
+
 	}
 
 	private GraphicalTestEntity createTestEntity() throws SQLException {

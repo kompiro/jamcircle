@@ -18,21 +18,21 @@ public class FileStorageServiceImpl implements FileStorageService {
 	private static final String APPLICATION_DATA = "Application Data"; //$NON-NLS-1$
 	private static final String KEY_OF_SYSTEM_STORAGE_ADDTIONAL_PATH = "storage.addtionalPath"; //$NON-NLS-1$
 	/** this property is used for testing. */
-	private static String addtionalPath = ""; //$NON-NLS-1$
+	static String addtionalPath = ""; //$NON-NLS-1$
 	public static boolean testmode;
 	private String storeRoot;
 
-	static{
-		try{
+	static {
+		try {
 			ResourceBundle r = ResourceBundle.getBundle("storage"); //$NON-NLS-1$
-			if(r != null){
+			if (r != null) {
 				testmode = Boolean.valueOf(r.getString("testmode")); //$NON-NLS-1$
 				addtionalPath = r.getString("addtionalPath"); //$NON-NLS-1$
 			}
-		}catch(MissingResourceException e){
+		} catch (MissingResourceException e) {
 			// Noting because there wouldn't like to set default dbname.
 		}
-		addtionalPath = System.getProperty(KEY_OF_SYSTEM_STORAGE_ADDTIONAL_PATH,addtionalPath);
+		addtionalPath = System.getProperty(KEY_OF_SYSTEM_STORAGE_ADDTIONAL_PATH, addtionalPath);
 	}
 
 	public FileStorageServiceImpl(String storeRoot) {
@@ -51,11 +51,11 @@ public class FileStorageServiceImpl implements FileStorageService {
 		try {
 			FileUtils.copyFile(srcFile, destFile);
 		} catch (IOException e) {
-			String errorMessage = String.format(Messages.FileStorageServiceImpl_copy_error_message,srcFile.getName());
+			String errorMessage = String.format(Messages.FileStorageServiceImpl_copy_error_message, srcFile.getName());
 			StorageStatusHandler.fail(e, errorMessage);
 		}
 	}
-	
+
 	public void deleteFile(String destDir, File targetFile) {
 		String filePath = getStoreRoot() + destDir + File.separator + targetFile.getName();
 		String message = String.format("StorageServiceImpl#fileExists(filePath:'%s')", filePath); //$NON-NLS-1$
@@ -76,20 +76,21 @@ public class FileStorageServiceImpl implements FileStorageService {
 		String filePath = getStoreRoot() + dir + File.separator;
 		File dirFile = new File(filePath);
 		String[] list = dirFile.list();
-		if(list == null || list.length == 0) return null;
+		if (list == null || list.length == 0)
+			return null;
 		return Arrays.asList(dirFile.listFiles());
 	}
 
 	public String getStoreRoot() {
 		assert storeRoot == null : Messages.FileStorageServiceImpl_initialized_error_message;
-		if(addtionalPath != null && !"".equals(addtionalPath)){ //$NON-NLS-1$
+		if (addtionalPath != null && !"".equals(addtionalPath)) { //$NON-NLS-1$
 			return new File(storeRoot).getAbsolutePath() + File.separator + addtionalPath + File.separator;
 		}
 		return new File(storeRoot).getAbsolutePath() + File.separator;
 	}
-	
-	public void deleteAll()  throws FileStorageException{
-		if(testmode == false){
+
+	public void deleteAll() throws FileStorageException {
+		if (testmode == false) {
 			throw new FileStorageException("This API might call cleaning for test only.");
 		}
 		File root = new File(getStoreRoot());
@@ -99,12 +100,12 @@ public class FileStorageServiceImpl implements FileStorageService {
 			throw new FileStorageException(e);
 		}
 	};
-	
+
 	String getDefaultStoreRoot() {
 		String storeRoot = ""; //$NON-NLS-1$
-		if(testmode || !Platform.isRunning()){
+		if (testmode || !Platform.isRunning()) {
 			storeRoot = getDefaultRootForTest();
-		}else{
+		} else {
 			storeRoot = getDefaultRootForUse();
 		}
 		return storeRoot;
@@ -115,12 +116,12 @@ public class FileStorageServiceImpl implements FileStorageService {
 		URL userHome;
 		userHome = Platform.getUserLocation().getURL();
 		storeRoot = userHome.getPath();
-		if(isWin32()){
+		if (isWin32()) {
 			File file = new File(userHome.getFile() + File.separator
 					+ APPLICATION_DATA + File.separator
 					+ JAM_CIRCLE + File.separator);
 			storeRoot = file.getAbsolutePath() + File.separator;
-		}else{
+		} else {
 			storeRoot = storeRoot + JAM_CIRCLE + File.separator;
 		}
 		return storeRoot;
@@ -129,7 +130,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 	private String getDefaultRootForTest() {
 		String storeRoot;
 		String tempDir = System.getProperty("java.io.tmpdir"); //$NON-NLS-1$
-		File testDir = new File(tempDir,JAM_CIRCLE);
+		File testDir = new File(tempDir, JAM_CIRCLE);
 		testDir.mkdir();
 		storeRoot = testDir.getAbsolutePath() + File.separator;
 		return storeRoot;
@@ -143,5 +144,4 @@ public class FileStorageServiceImpl implements FileStorageService {
 		this.storeRoot = storeRoot;
 	}
 
-	
 }
