@@ -1,4 +1,4 @@
-package org.kompiro.jamcircle.kanban;
+package org.kompiro.jamcircle.test;
 
 import org.eclipse.core.runtime.Platform;
 import org.junit.rules.MethodRule;

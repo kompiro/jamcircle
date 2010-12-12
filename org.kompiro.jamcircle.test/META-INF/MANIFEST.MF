@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JAM Circle Test fixture
+Bundle-SymbolicName: org.kompiro.jamcircle.test
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: kompiro.org
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.eclipse.core.runtime;version="3.4.0",
+ org.junit.rules;version="4.8.1",
+ org.junit.runners.model;version="4.8.1"
+Export-Package: org.kompiro.jamcircle.test

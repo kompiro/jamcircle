@@ -6,7 +6,10 @@ Bundle-Version: 0.1.0.qualifier
 Bundle-Vendor: kompiro.org
 Fragment-Host: org.kompiro.jamcircle.kanban
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Require-Bundle: org.junit4,
- com.ibm.icu,
- org.mockito
 Bundle-RegisterBuddy: org.mockito
+Import-Package: org.hamcrest,
+ org.junit,
+ org.junit.rules,
+ org.junit.runners.model,
+ org.kompiro.jamcircle.test,
+ org.mockito
