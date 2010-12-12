@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.junit.*;
+import org.kompiro.jamcircle.scripting.ui.Messages;
 import org.kompiro.jamcircle.scripting.ui.internal.ruby.job.InstallGemJob;
 
 public class GemInstallActionTest {
@@ -34,7 +35,7 @@ public class GemInstallActionTest {
 		assertThat(SWTUtils.isUIThread(SWTUtils.display()), is(false));
 		rule.getBot().toolbarButton().click();
 
-		SWTBotShell shell = rule.getBot().shell("Install gem");
+		SWTBotShell shell = rule.getBot().shell(Messages.GemInstallAction_dialog_title);
 		shell.activate();
 
 		rule.getBot().text().setText("test");

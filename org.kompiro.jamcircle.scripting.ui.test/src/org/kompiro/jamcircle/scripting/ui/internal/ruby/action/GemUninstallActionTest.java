@@ -9,6 +9,7 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.junit.*;
+import org.kompiro.jamcircle.scripting.ui.Messages;
 import org.kompiro.jamcircle.scripting.ui.internal.ruby.job.UninstallGemJob;
 
 public class GemUninstallActionTest {
@@ -30,7 +31,7 @@ public class GemUninstallActionTest {
 		SWTBot bot = rule.getBot();
 		bot.toolbarButton().click();
 
-		SWTBotShell shell = bot.shell("Uninstall gem");
+		SWTBotShell shell = bot.shell(Messages.GemUninstallAction_dialog_title);
 		shell.activate();
 
 		bot.text().setText("test");
