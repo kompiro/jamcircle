@@ -22,7 +22,6 @@ import org.eclipse.gef.ui.parts.SelectionSynchronizer;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.*;
-import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.dnd.*;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.*;
@@ -111,7 +110,7 @@ public class KanbanView extends ViewPart implements StorageChageListener, Proper
 		getGraphicalViewer().setRootEditPart(rootPart);
 		handlers = new CellEditorActionHandler(getActionBars());
 		EditDomain domain = new EditDomain();
-		domain.setCommandStack(new CommandStackImpl());
+		domain.setCommandStack(new SyncCommandStack());
 		domain.addViewer(getGraphicalViewer());
 		handlerListener = new HandlerListener();
 		getCommandStack().addCommandStackListener(handlerListener);
@@ -304,21 +303,6 @@ public class KanbanView extends ViewPart implements StorageChageListener, Proper
 		if (synchronizer == null)
 			synchronizer = new SelectionSynchronizer();
 		return synchronizer;
-	}
-
-	private final class CommandStackImpl extends CommandStack {
-		@Override
-		public void execute(final Command command) {
-			getDisplay().syncExec(new Runnable() {
-				public void run() {
-					BusyIndicator.showWhile(getDisplay(), new Runnable() {
-						public void run() {
-							CommandStackImpl.super.execute(command);
-						}
-					});
-				}
-			});
-		}
 	}
 
 	private final class KanbanViewDropAdapter extends DropTargetAdapter {
