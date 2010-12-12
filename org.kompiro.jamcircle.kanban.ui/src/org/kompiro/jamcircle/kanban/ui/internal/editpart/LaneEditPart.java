@@ -310,7 +310,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			CardFigure card = (CardFigure) child;
 			GraphicalEntity model = (GraphicalEntity) childEditPart.getModel();
 			model.setDeletedVisuals(false);
-			card.setRemoved(false);
+			card.setVisible(true);
 			card.setAdded(false);
 		}
 		getContentPane().add(child, child.getBounds(), -1);
@@ -325,7 +325,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			CardFigure card = area.getTargetFigure();
 			GraphicalEntity model = (GraphicalEntity) childEditPart.getModel();
 			if (model.isDeletedVisuals()) {
-				card.setRemoved(true);
+				card.setVisible(false);
 			}
 			card.repaint();
 		}
@@ -440,6 +440,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 					return executeScript(evt, monitor);
 				}
 			};
+			scriptJob.setSystem(true);
 			scriptJob.schedule();
 		} else if (isPropIconized(evt) || isPropCustomIcon(evt)) {
 			if (isPropCustomIcon(evt)) {
@@ -554,9 +555,8 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		return KanbanUIActivator.getDefault().getScriptingService();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public Object getAdapter(Class key) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class key) {
 		if (MoveCommand.class.equals(key)) {
 			return new ChangeLaneConstraintCommand();
 		}
