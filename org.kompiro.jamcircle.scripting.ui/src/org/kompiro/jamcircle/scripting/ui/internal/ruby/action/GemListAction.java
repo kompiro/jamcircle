@@ -2,8 +2,7 @@ package org.kompiro.jamcircle.scripting.ui.internal.ruby.action;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.kompiro.jamcircle.scripting.ui.ScriptingImageEnum;
-import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
+import org.kompiro.jamcircle.scripting.ui.*;
 import org.kompiro.jamcircle.scripting.ui.internal.ruby.job.ListGemJob;
 
 public class GemListAction extends Action {
@@ -11,7 +10,7 @@ public class GemListAction extends Action {
 	private ListGemJob job = new ListGemJob();
 
 	public GemListAction() {
-		setToolTipText("list of installed gems");
+		setToolTipText(Messages.GemListAction_tooltip);
 		setImageDescriptor(getImageDescriptor(ScriptingImageEnum.RUBY_GO));
 	}
 

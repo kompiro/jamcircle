@@ -4,8 +4,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Shell;
-import org.kompiro.jamcircle.scripting.ui.ScriptingImageEnum;
-import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
+import org.kompiro.jamcircle.scripting.ui.*;
 import org.kompiro.jamcircle.scripting.ui.internal.ruby.job.UninstallGemJob;
 
 public class GemUninstallAction extends Action {
@@ -14,13 +13,13 @@ public class GemUninstallAction extends Action {
 	private UninstallGemJob job = new UninstallGemJob();
 
 	public GemUninstallAction() {
-		setToolTipText("uninstall gem");
+		setToolTipText(Messages.GemUninstallAction_tooltip);
 		setImageDescriptor(getImageDescriptor(ScriptingImageEnum.RUBY_DELETE));
 	}
 
 	@Override
 	public void run() {
-		InputDialog dialog = new InputDialog(shell, "Uninstall gem", "What gem do you want to uninstall?", null, null);
+		InputDialog dialog = new InputDialog(shell, Messages.GemUninstallAction_dialog_title, Messages.GemUninstallAction_dialog_message, null, null);
 		if (InputDialog.OK != dialog.open()) {
 			return;
 		}

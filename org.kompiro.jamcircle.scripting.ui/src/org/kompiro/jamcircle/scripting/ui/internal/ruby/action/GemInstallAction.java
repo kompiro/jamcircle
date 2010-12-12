@@ -4,8 +4,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Shell;
-import org.kompiro.jamcircle.scripting.ui.ScriptingImageEnum;
-import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
+import org.kompiro.jamcircle.scripting.ui.*;
 import org.kompiro.jamcircle.scripting.ui.internal.ruby.job.InstallGemJob;
 
 public class GemInstallAction extends Action {
@@ -14,13 +13,13 @@ public class GemInstallAction extends Action {
 	private InstallGemJob job = new InstallGemJob();
 
 	public GemInstallAction() {
-		setToolTipText("install gem");
+		setToolTipText(Messages.GemInstallAction_tooltip);
 		setImageDescriptor(getImageDescriptor(ScriptingImageEnum.RUBY_ADD));
 	}
 
 	@Override
 	public void run() {
-		InputDialog dialog = new InputDialog(shell, "Install gem", "What gem do you want to install?", null, null);
+		InputDialog dialog = new InputDialog(shell, Messages.GemInstallAction_dialog_title, Messages.GemInstallAction_dialog_message, null, null);
 		if (InputDialog.OK != dialog.open()) {
 			return;
 		}
