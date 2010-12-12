@@ -8,7 +8,7 @@ import org.kompiro.jamcircle.storage.service.internal.StorageAccessRule;
 public class DefaultExecutorHandle implements ExecutorHandler {
 
 	public void handle(final Runnable runtime) {
-		Job job = new Job("save") {
+		Job job = new Job("save entity") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				runtime.run();
@@ -17,7 +17,7 @@ public class DefaultExecutorHandle implements ExecutorHandler {
 		};
 		ISchedulingRule rule = new StorageAccessRule();
 		job.setRule(rule);
-		job.setUser(true);
+		job.setSystem(true);
 		job.schedule();
 	}
 }

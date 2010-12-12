@@ -21,10 +21,11 @@ public class AddCardToOnBoardContainerCommand extends AbstractCommand {
 		this.constraint = constraint;
 		this.container = container;
 	}
-	
+
 	@Override
 	protected void initialize() {
-		if(this.card != null && this.constraint != null && this.container != null) setExecute(true);
+		if (this.card != null && this.constraint != null && this.container != null)
+			setExecute(true);
 	}
 
 	@Override
@@ -38,30 +39,30 @@ public class AddCardToOnBoardContainerCommand extends AbstractCommand {
 	}
 
 	private void changeContainer() throws SQLException {
-		oldLocation = new Point(card.getX(),card.getY());
+		oldLocation = new Point(card.getX(), card.getY());
 		trashed = card.isTrashed();
 		card.prepareLocation();
 		card.setX(constraint.x);
 		card.setY(constraint.y);
 		card.setTrashed(false);
-		card.save(true);
 		container.addCard(card);
 		card.commitLocation(constraint.getLocation());
-		
+		card.save(false);
+
 	}
-	
+
 	@Override
 	public void undo() {
 		card.setX(oldLocation.x);
 		card.setY(oldLocation.y);
 		card.setTrashed(trashed);
-		card.save(false);
 		container.removeCard(card);
+		card.save(false);
 	}
-	
+
 	@Override
 	public String getDebugLabel() {
-		String data = String.format("[card=%s,container=%s]",card.toString(),container.toString()); //$NON-NLS-1$
+		String data = String.format("[card=%s,container=%s]", card.toString(), container.toString()); //$NON-NLS-1$
 		return super.getDebugLabel() + data;
 	}
 }
