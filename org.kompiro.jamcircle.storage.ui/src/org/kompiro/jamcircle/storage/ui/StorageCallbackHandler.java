@@ -13,7 +13,7 @@ public class StorageCallbackHandler implements IUIStorageCallbackHandler {
 	public StorageCallbackHandler() {
 	}
 
-	public void setupStorageSttting() {
+	public void setupStorageSetting() {
 		Display display = getDisplay();
 		display.syncExec(new Runnable() {
 
