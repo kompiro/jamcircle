@@ -17,8 +17,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swtbot.jface.WithWizard;
-import org.eclipse.swtbot.jface.WizardDialogTestRunner;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.junit.Before;
@@ -28,6 +26,8 @@ import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.widget.MessageDialogHelper;
+import org.kompiro.swtbot.extension.jface.WithWizard;
+import org.kompiro.swtbot.extension.jface.WizardDialogTestRunner;
 
 @RunWith(WizardDialogTestRunner.class)
 @WithWizard(BoardExportWizard.class)

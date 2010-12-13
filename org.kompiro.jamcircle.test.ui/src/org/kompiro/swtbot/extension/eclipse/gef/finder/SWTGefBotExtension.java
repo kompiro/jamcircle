@@ -1,9 +1,10 @@
-package org.eclipse.swtbot.eclipse.gef.finder;
+package org.kompiro.swtbot.extension.eclipse.gef.finder;
 
 import static org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory.withPartId;
 import static org.eclipse.swtbot.eclipse.finder.waits.Conditions.waitForView;
 
 import org.eclipse.swtbot.eclipse.finder.waits.WaitForView;
+import org.eclipse.swtbot.eclipse.gef.finder.SWTGefBot;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefView;
 import org.eclipse.ui.IViewReference;
 import org.hamcrest.Matcher;

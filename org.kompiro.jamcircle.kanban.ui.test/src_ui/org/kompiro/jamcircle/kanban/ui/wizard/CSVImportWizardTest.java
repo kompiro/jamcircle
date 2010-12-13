@@ -13,8 +13,6 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swtbot.jface.WithWizard;
-import org.eclipse.swtbot.jface.WizardDialogTestRunner;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.*;
@@ -22,6 +20,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kompiro.jamcircle.kanban.ui.Messages;
+import org.kompiro.swtbot.extension.jface.WithWizard;
+import org.kompiro.swtbot.extension.jface.WizardDialogTestRunner;
 
 @RunWith(WizardDialogTestRunner.class)
 @WithWizard(CSVImportWizard.class)

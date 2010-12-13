@@ -1,4 +1,4 @@
-package org.eclipse.swtbot.jface;
+package org.kompiro.swtbot.extension.jface;
 
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;

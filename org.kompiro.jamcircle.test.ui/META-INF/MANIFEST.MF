@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JAM Circle Testing Library for UI
+Bundle-SymbolicName: org.kompiro.jamcircle.test.ui
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: kompiro.org
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.kompiro.swtbot.extension.eclipse.gef.finder,
+ org.kompiro.swtbot.extension.jface
+Import-Package: org.eclipse.gef,
+ org.eclipse.gef.editparts,
+ org.eclipse.jface.wizard,
+ org.eclipse.swt.widgets,
+ org.eclipse.ui,
+ org.hamcrest,
+ org.junit,
+ org.junit.runner.notification,
+ org.junit.runners,
+ org.junit.runners.model
+Require-Bundle: org.eclipse.swtbot.eclipse.gef.finder

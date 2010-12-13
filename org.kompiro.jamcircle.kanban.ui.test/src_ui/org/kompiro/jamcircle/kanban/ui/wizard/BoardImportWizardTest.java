@@ -9,8 +9,6 @@ import static org.mockito.Mockito.verify;
 import java.io.File;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.swtbot.jface.WithWizard;
-import org.eclipse.swtbot.jface.WizardDialogTestRunner;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
@@ -22,6 +20,8 @@ import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.service.BoardConverter;
 import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.wizard.BoardImportWizard.WizardContainerDelegator;
+import org.kompiro.swtbot.extension.jface.WithWizard;
+import org.kompiro.swtbot.extension.jface.WizardDialogTestRunner;
 
 @RunWith(WizardDialogTestRunner.class)
 @WithWizard(BoardImportWizard.class)

@@ -1,4 +1,4 @@
-package org.eclipse.swtbot.eclipse.gef.finder;
+package org.kompiro.swtbot.extension.eclipse.gef.finder;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

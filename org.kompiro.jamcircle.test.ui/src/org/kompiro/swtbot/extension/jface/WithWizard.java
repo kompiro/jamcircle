@@ -1,4 +1,4 @@
-package org.eclipse.swtbot.jface;
+package org.kompiro.swtbot.extension.jface;
 
 import java.lang.annotation.*;
 

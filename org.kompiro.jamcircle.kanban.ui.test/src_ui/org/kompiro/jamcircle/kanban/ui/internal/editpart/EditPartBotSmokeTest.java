@@ -1,11 +1,11 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
-import static org.eclipse.swtbot.eclipse.gef.finder.EditPartOfType.editPartOfType;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.kompiro.swtbot.extension.eclipse.gef.finder.EditPartOfType.editPartOfType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,6 @@ import org.eclipse.jface.bindings.keys.KeyStroke;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.eclipse.finder.waits.Conditions;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
-import org.eclipse.swtbot.eclipse.gef.finder.SWTGefBotExtension;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.*;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
@@ -33,6 +32,7 @@ import org.kompiro.jamcircle.kanban.ui.KanbanPerspective;
 import org.kompiro.jamcircle.kanban.ui.KanbanView;
 import org.kompiro.jamcircle.kanban.ui.model.*;
 import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator;
+import org.kompiro.swtbot.extension.eclipse.gef.finder.SWTGefBotExtension;
 
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class EditPartBotSmokeTest {

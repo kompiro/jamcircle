@@ -1,4 +1,4 @@
-package org.eclipse.swtbot.eclipse.gef.finder;
+package org.kompiro.swtbot.extension.eclipse.gef.finder;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.swtbot.swt.finder.matchers.AbstractMatcher;
