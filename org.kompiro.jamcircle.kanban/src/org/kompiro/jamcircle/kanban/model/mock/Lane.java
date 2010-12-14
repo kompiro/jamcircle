@@ -1,9 +1,7 @@
 package org.kompiro.jamcircle.kanban.model.mock;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.model.Card;
@@ -11,9 +9,10 @@ import org.kompiro.jamcircle.scripting.ScriptTypes;
 
 /**
  * This implementation is mock of Lane and isn't able to store any persistence.
+ * 
  * @author kompiro
  */
-public class Lane extends MockGraphicalEntity implements org.kompiro.jamcircle.kanban.model.Lane{
+public class Lane extends MockGraphicalEntity implements org.kompiro.jamcircle.kanban.model.Lane {
 
 	private Board board;
 	private int height = VALUE_OF_HEIGHT;
@@ -28,77 +27,84 @@ public class Lane extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	private File icon;
 
 	public void setHeight(int height) {
+		int oldHeight = this.height;
 		this.height = height;
+		fireProperty(Lane.PROP_HEIGHT, oldHeight, height);
 	}
 
 	public void setStatus(String status) {
 		this.status = status;
+		fireProperty(Lane.PROP_STATUS, null, status);
 	}
-	
+
 	public void setScript(String script) {
+		String oldScript = this.script;
 		this.script = script;
+		fireProperty(Lane.PROP_SCRIPT, oldScript, script);
 	}
-	
+
 	public String getScript() {
 		return this.script;
 	}
 
 	public void setWidth(int width) {
+		int oldWidth = this.width;
 		this.width = width;
+		fireProperty(Lane.PROP_WIDTH, oldWidth, width);
 	}
 
 	public Card[] getCards() {
-		return this.cards.toArray(new Card[]{});
+		return this.cards.toArray(new Card[] {});
 	}
-	
+
 	public boolean addCard(Card card) {
 		boolean result = this.cards.add(card);
 		fireProperty(PROP_CARD, null, card);
 		return result;
 	}
-	
+
 	public boolean removeCard(Card card) {
 		boolean result = this.cards.remove(card);
-		fireProperty(PROP_CARD, card,null);
+		fireProperty(PROP_CARD, card, null);
 		return result;
 	}
-	
-	public boolean containCard(Card card){
+
+	public boolean containCard(Card card) {
 		return this.cards.contains(card);
 	}
 
 	public Date getCreateDate() {
 		return this.createDate;
 	}
-	
+
 	public void setCreateDate(Date date) {
 		this.createDate = date;
 	}
-	
+
 	public void commitConstraint(Object bounds) {
-		fireProperty(Lane.PROP_CONSTRAINT,null,bounds);
+		fireProperty(Lane.PROP_CONSTRAINT, null, bounds);
 	}
-		
-	public boolean isIconized(){
+
+	public boolean isIconized() {
 		return this.iconized;
 	}
-	
-	public void setIconized(boolean iconized){
+
+	public void setIconized(boolean iconized) {
 		this.iconized = iconized;
 	}
-	
-	public void setBoard(Board board){
+
+	public void setBoard(Board board) {
 		this.board = board;
 	}
-	
-	public Board getBoard(){
+
+	public Board getBoard() {
 		return board;
 	}
-	
+
 	public Board gainBoard() {
 		return getBoard();
 	}
-	
+
 	public String getContainerName() {
 		return "Lane";
 	}

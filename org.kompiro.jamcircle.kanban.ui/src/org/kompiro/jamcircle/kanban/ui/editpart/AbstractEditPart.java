@@ -29,55 +29,73 @@ import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		implements PropertyChangeListener {
 
+	public class DelegatorRunner implements Runnable {
+		private final PropertyChangeEvent evt;
+
+		private DelegatorRunner(PropertyChangeEvent evt) {
+			this.evt = evt;
+		}
+
+		public void run() {
+			Animation.markBegin();
+			doPropertyChange(evt);
+			Animation.run();
+		}
+
+		public PropertyChangeEvent getEvt() {
+			return evt;
+		};
+	}
+
 	private BoardModel boardModel;
 
 	private IPropertyChangeDelegator delegator;
-	
-	public AbstractEditPart(BoardModel boardModel){
+
+	public AbstractEditPart(BoardModel boardModel) {
 		this.boardModel = boardModel;
 	}
-	
+
 	@Override
 	public void activate() {
 		super.activate();
 		if (getModel() instanceof AbstractModel) {
 			AbstractModel lModel = (AbstractModel) getModel();
 			lModel.addPropertyChangeListener(this);
-		}else if(getModel() instanceof GraphicalEntity){
+		} else if (getModel() instanceof GraphicalEntity) {
 			GraphicalEntity lModel = (GraphicalEntity) getModel();
 			lModel.addPropertyChangeListener(this);
-		}else if (getModel() instanceof GraphicalImpl){
+		} else if (getModel() instanceof GraphicalImpl) {
 			GraphicalImpl impl = (GraphicalImpl) getModel();
 			impl.addPropertyChangeListener(this);
-		}else if (getModel() instanceof Icon){
+		} else if (getModel() instanceof Icon) {
 			Icon impl = (Icon) getModel();
 			impl.addPropertyChangeListener(this);
 		}
 	}
-	
+
 	@Override
 	public void deactivate() {
 		super.deactivate();
-		if(getFigure() instanceof AnnotationArea<?>){
-			AnnotationArea<?> fig = (AnnotationArea<?>)getFigure();
+		if (getFigure() instanceof AnnotationArea<?>) {
+			AnnotationArea<?> fig = (AnnotationArea<?>) getFigure();
 			fig.removeAnnotation();
 		}
 		if (getModel() instanceof AbstractModel) {
 			AbstractModel lModel = (AbstractModel) getModel();
 			lModel.removePropertyChangeListener(this);
-		}else if(getModel() instanceof GraphicalEntity){
+		} else if (getModel() instanceof GraphicalEntity) {
 			GraphicalEntity lModel = (GraphicalEntity) getModel();
 			lModel.removePropertyChangeListener(this);
-		}else if (getModel() instanceof GraphicalImpl){
+		} else if (getModel() instanceof GraphicalImpl) {
 			GraphicalImpl impl = (GraphicalImpl) getModel();
 			impl.removePropertyChangeListener(this);
-		}else if (getModel() instanceof Icon){
+		} else if (getModel() instanceof Icon) {
 			Icon impl = (Icon) getModel();
 			impl.removePropertyChangeListener(this);
 		}
 	}
-	
-	protected KanbanService getKanbanService(){
+
+	protected KanbanService getKanbanService() {
 		return KanbanUIActivator.getDefault().getKanbanService();
 	}
 
@@ -87,13 +105,13 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		EditPart editPart;
 		while (i.hasNext()) {
 			editPart = i.next()
-				.getTargetEditPart(request);
+					.getTargetEditPart(request);
 			if (editPart != null)
 				return editPart;
 		}
-		
+
 		if (RequestConstants.REQ_SELECTION.equals(request.getType())) {
-			if (isSelectable()){
+			if (isSelectable()) {
 				editPart = getParent();
 				if (editPart instanceof AbstractEditPart) {
 					AbstractEditPart part = (AbstractEditPart) editPart;
@@ -102,24 +120,25 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 				return this;
 			}
 		}
-		
-		if(RequestConstants.REQ_ADD.equals(request.getType())){
+
+		if (RequestConstants.REQ_ADD.equals(request.getType())) {
 			return this;
 		}
 		return null;
 	}
-	
+
 	public void reorder(EditPart child) {
 		super.reorderChild(child, 0);
 	}
-	
-	public final IFigure copyFigureForDragAndDrop(){
-		IFigure figure = new Layer(){			
+
+	public final IFigure copyFigureForDragAndDrop() {
+		IFigure figure = new Layer() {
 			@Override
 			public void paint(Graphics graphics) {
 				graphics.setAlpha(100);
 				super.paint(graphics);
 			}
+
 			@Override
 			protected boolean useLocalCoordinates() {
 				return true;
@@ -129,7 +148,7 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		figure.setLayoutManager(new FreeformLayout());
 		IFigure sourceFigure = copiedFigure();
 		figure.add(sourceFigure);
-		sourceFigure.setBounds(sourceFigure.getBounds().getCopy().setLocation(new Point(0,0)));
+		sourceFigure.setBounds(sourceFigure.getBounds().getCopy().setLocation(new Point(0, 0)));
 		figure.setBounds(sourceFigure.getBounds());
 		return figure;
 	}
@@ -143,80 +162,74 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		return new CancelableDragEditPartsTracker(this);
 	}
 
-	public void propertyChange(final PropertyChangeEvent evt){
-		getDelegator().run(new Runnable() {
-			public void run() {
-				Animation.markBegin();
-				doPropertyChange(evt);
-				Animation.run();
-			}
-		});
+	public void propertyChange(final PropertyChangeEvent evt) {
+		getDelegator().run(new DelegatorRunner(evt));
 	}
-	
+
 	private IPropertyChangeDelegator getDelegator() {
-		if(delegator == null){
-			delegator  = new AsyncDisplayDelegator(getDisplay());
+		if (delegator == null) {
+			delegator = new AsyncDisplayDelegator(getDisplay());
 		}
 		return delegator;
 	}
-	
+
 	@Override
 	public void setFigure(IFigure figure) {
 		super.setFigure(figure);
 	}
 
-	protected void doPropertyChange(final PropertyChangeEvent evt){
+	protected void doPropertyChange(final PropertyChangeEvent evt) {
 		final Object newValue = evt.getNewValue();
 		Object oldValue = evt.getOldValue();
 
-		if(newValue != null && (newValue instanceof Entity || newValue instanceof AbstractModel)){
+		if (newValue != null && (newValue instanceof Entity || newValue instanceof AbstractModel)) {
 			addChild(createChild(newValue), -1);
-		}else if(oldValue != null && (oldValue instanceof Entity || oldValue instanceof AbstractModel)){
+		} else if (oldValue != null && (oldValue instanceof Entity || oldValue instanceof AbstractModel)) {
 			EditPart target = null;
-			for(Object obj : getChildren()){
+			for (Object obj : getChildren()) {
 				if (obj instanceof EditPart) {
 					EditPart part = (EditPart) obj;
 					Object rhs = part.getModel();
-					if(oldValue.getClass().equals(rhs.getClass()) && oldValue.equals(rhs)){
+					if (oldValue.getClass().equals(rhs.getClass()) && oldValue.equals(rhs)) {
 						target = part;
 					}
 				}
 			}
-			if(target != null){
+			if (target != null) {
 				removeChild(target);
 			}
-		}		
+		}
 	}
-	
+
 	protected Shell getShell() {
 		return getViewer().getControl().getShell();
 	}
-	
-	protected CommandStack getCommandStack(){
+
+	protected CommandStack getCommandStack() {
 		return getViewer().getEditDomain().getCommandStack();
 	}
 
 	protected ImageRegistry getImageRegistry() {
 		KanbanUIActivator activator = KanbanUIActivator.getDefault();
-		if(activator == null) {
+		if (activator == null) {
 			WorkbenchUtil.getDisplay();
 			return JFaceResources.getImageRegistry();
 		}
 		return activator.getImageRegistry();
 	}
-	
-	public BoardModel getBoardModel(){
+
+	public BoardModel getBoardModel() {
 		return this.boardModel;
 	}
 
 	protected Display getDisplay() {
 		return getViewer().getControl().getDisplay();
 	}
-	
+
 	public void setDelegator(IPropertyChangeDelegator delegator) {
 		this.delegator = delegator;
 	}
-	
+
 	protected boolean isPropLocation(PropertyChangeEvent prop) {
 		return GraphicalEntity.PROP_COMMIT_LOCATION.equals(prop.getPropertyName());
 	}

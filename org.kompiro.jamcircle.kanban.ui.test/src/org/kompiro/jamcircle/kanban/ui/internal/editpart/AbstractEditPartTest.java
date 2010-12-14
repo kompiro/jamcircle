@@ -28,10 +28,11 @@ import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 
 public abstract class AbstractEditPartTest {
 
-//	private static final int LANE_CREATER_COUNT = 1;
+	// private static final int LANE_CREATER_COUNT = 1;
 	private static final int TRACHBOX_COUNT = 1;
 	public static final int INIT_BOARD_CHIHLDREN_SIZE = TRACHBOX_COUNT;
-//		TRACHBOX_COUNT	+ LANE_CREATER_COUNT;
+
+	// TRACHBOX_COUNT + LANE_CREATER_COUNT;
 
 	/**
 	 * Jump asyncrouns execution because these are not testable.
@@ -53,17 +54,17 @@ public abstract class AbstractEditPartTest {
 		public boolean removeCard(Card card) {
 			return boardEntity.removeCard(card);
 		}
-		
+
 	}
 
 	protected static class TrashMock extends TrashModel {
 		public TrashMock() {
-			super(new Icon(){
+			super(new Icon() {
 				@Override
 				public String getClassType() {
 					return TrashModel.class.getName();
 				}
-			},null);
+			}, null);
 		}
 
 		private static final long serialVersionUID = 1L;
@@ -89,20 +90,20 @@ public abstract class AbstractEditPartTest {
 		public boolean removeCard(Card card) {
 			return cards.remove(card);
 		}
-		
+
 		@Override
 		public boolean addLane(org.kompiro.jamcircle.kanban.model.Lane lane) {
 			return lanes.add(lane);
 		}
-		
+
 		@Override
 		public boolean removeLane(Lane lane) {
 			return lanes.remove(lane);
 		}
-		
+
 		@Override
 		public Lane[] getLanes() {
-			return lanes.toArray(new Lane[]{});
+			return lanes.toArray(new Lane[] {});
 		}
 
 	}
@@ -111,60 +112,12 @@ public abstract class AbstractEditPartTest {
 		static final int INIT_WIDTH = 200;
 		static final int INIT_HEIGHT = 200;
 
-		private String status;
-		private List<Card> cards = new ArrayList<Card>();
-		private int height;
-		private int width;
-
 		public LaneMock(String status) {
-			this.status = status;
-			this.width = INIT_WIDTH;
-			this.height = INIT_HEIGHT;
+			setStatus(status);
+			setWidth(INIT_WIDTH);
+			setHeight(INIT_HEIGHT);
 		}
 
-		public String getStatus() {
-			return status;
-		}
-
-		public int getHeight() {
-			return this.height;
-		}
-
-		public int getWidth() {
-			return this.width;
-		}
-
-		public void setHeight(int height) {
-			this.height = height;
-		}
-
-		public void setWidth(int width) {
-			this.width = width;
-		}
-
-		@Override
-		public boolean addCard(Card card) {
-			return cards.add(card);
-		}
-
-		@Override
-		public boolean removeCard(Card card) {
-			return cards.remove(card);
-		}
-
-		@Override
-		public Card[] getCards() {
-			return cards.toArray(new Card[] {});
-		}
-
-		@Override
-		public boolean containCard(Card card){
-			return cards.contains(card);
-		}
-
-		@Override
-		public void commitConstraint(Object bounds) {
-		}
 	}
 
 	protected static ScrollingGraphicalViewer viewer;
@@ -222,7 +175,7 @@ public abstract class AbstractEditPartTest {
 		comp.setLayout(new FillLayout());
 		viewer.createControl(comp);
 		shell.setAlpha(0);
-//		shell.open();
+		// shell.open();
 	}
 
 	protected BoardModel board;
@@ -249,19 +202,17 @@ public abstract class AbstractEditPartTest {
 		assumeTrue(boardPart.isActive());
 		assumeThat(boardPart.getChildren().size(), is(INIT_BOARD_CHIHLDREN_SIZE));
 	}
-	
+
 	@Test
 	public void testname() throws Exception {
-		
-		
-		
+
 	}
 
 	@After
 	public void after() throws Exception {
-		boardEntity.removePropertyChangeListener(board);		
+		boardEntity.removePropertyChangeListener(board);
 	}
-	
+
 	protected Map<Object, GraphicalEditPart> getChildlenPartmap(
 			GraphicalEditPart parentPart) {
 		Map<Object, GraphicalEditPart> partMap = new HashMap<Object, GraphicalEditPart>();
