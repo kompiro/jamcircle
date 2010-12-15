@@ -120,17 +120,24 @@ public class LaneEditPartTest extends AbstractEditPartTest {
 	}
 
 	@Test
-	public void set_script() throws Exception {
+	public void call_property_change_when_set_script() throws Exception {
 		IPropertyChangeDelegator delegator = mock(IPropertyChangeDelegator.class);
 		todoLanePart.setDelegator(delegator);
 		todo.setScript("p 'test'");
 		todo.setScriptType(ScriptTypes.JRuby);
 		todo.save();
+
 		ArgumentCaptor<DelegatorRunner> captor = ArgumentCaptor.forClass(DelegatorRunner.class);
 		verify(delegator).run(captor.capture());
 		DelegatorRunner value = captor.getValue();
 		PropertyChangeEvent evt = value.getEvt();
 		assertThat(evt.getPropertyName(), is(Lane.PROP_SCRIPT));
+	}
+
+	@Test
+	public void when_call_do_prperty_change() throws Exception {
+		todoLanePart.doPropertyChange(new PropertyChangeEvent(todo, Lane.PROP_SCRIPT, null, "p 'test'"));
+
 	}
 
 }

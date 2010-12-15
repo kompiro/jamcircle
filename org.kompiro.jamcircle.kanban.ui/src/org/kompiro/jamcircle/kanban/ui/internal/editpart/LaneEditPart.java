@@ -249,7 +249,6 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		LaneFigure laneFigure = new LaneFigure();
 		laneFigure.setOpaque(true);
 		Lane lane = getLaneModel();
-		System.out.println(lane);
 		laneFigure.setSize(lane.getWidth(), lane.getHeight());
 		laneFigure.setStatus(lane.getStatus());
 		laneFigure.setLocation(new Point(lane.getX(), lane.getY()));
@@ -420,11 +419,13 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		getCommandStack().execute(new LaneUpdateCommand(getLaneModel(), status, script, type, customIcon));
 	}
 
+	// TODO REFACTORE to separate class
 	protected void doPropertyChange(final PropertyChangeEvent evt) {
 		GraphicalEditPart parentPart = (GraphicalEditPart) getParent();
 		Lane lane = getLaneModel();
+		Object newValue = evt.getNewValue();
 		if (isPropConstraint(evt)) {
-			Rectangle constraint = (Rectangle) evt.getNewValue();
+			Rectangle constraint = (Rectangle) newValue;
 			parentPart.setLayoutConstraint(this, getFigure(), constraint);
 		} else if (isPropStatus(evt)) {
 			getLaneFigure().setStatus(lane.getStatus());
@@ -442,10 +443,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			};
 			scriptJob.setSystem(true);
 			scriptJob.schedule();
-		} else if (isPropIconized(evt) || isPropCustomIcon(evt)) {
-			if (isPropCustomIcon(evt)) {
-				createCustomIcon(customIconFigure);
-			}
+		} else if (isPropIconized(evt)) {
 			IFigure parent = getFigure().getParent();
 			removeNotify();
 			parent.remove(getFigure());
@@ -453,6 +451,8 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			Point location = new Point(lane.getX(), lane.getY());
 			if (lane.isIconized()) {
 				if (lane.getCustomIcon() != null) {
+					customIconFigure.dispose();
+					createCustomIcon(customIconFigure);
 					setFigure(customIconLayer);
 					customIconLayer.setLocation(location);
 				} else {
@@ -469,7 +469,20 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			addNotify();
 			getBoardModel().setAnimated(true);
 			refreshVisuals();
+		} else if (isPropCustomIcon(evt)) {
+			boolean iconized = newValue != null;
+			if (iconized) {
+				createCustomIcon(customIconFigure);
+				getLaneModel().setIconized(true);
+			} else {
+				getLaneModel().setIconized(false);
+				disposeCustomIcon();
+			}
 		}
+	}
+
+	private void disposeCustomIcon() {
+		customIconFigure.dispose();
 	}
 
 	private IStatus executeScript(PropertyChangeEvent evt, IProgressMonitor monitor) {
@@ -495,7 +508,9 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	}
 
 	private boolean isPropIconized(PropertyChangeEvent evt) {
-		return Lane.PROP_ICONIZED.equals(evt.getPropertyName());
+		return Lane.PROP_ICONIZED.equals(evt.getPropertyName())
+				&& evt.getNewValue() != null
+				&& !evt.getNewValue().equals(evt.getOldValue());
 	}
 
 	private boolean isPropStatus(PropertyChangeEvent evt) {
@@ -503,7 +518,6 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	}
 
 	private boolean isChildrenChanged(PropertyChangeEvent evt) {
-		KanbanUIStatusHandler.debug("LaneEditPart.isChildrenChanged() name:" + evt.getPropertyName()); //$NON-NLS-1$
 		return Lane.PROP_CARD.equals(evt.getPropertyName());
 	}
 
@@ -512,7 +526,10 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 	}
 
 	private boolean isPropCustomIcon(PropertyChangeEvent evt) {
-		return Lane.PROP_CUSTOM_ICON.equals(evt.getPropertyName());
+		return Lane.PROP_CUSTOM_ICON.equals(evt.getPropertyName())
+				&& (evt.getNewValue() != null || evt.getOldValue() != null)
+				&& evt.getNewValue() != evt.getOldValue();
+
 	}
 
 	public Lane getLaneModel() {
