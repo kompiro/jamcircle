@@ -7,6 +7,7 @@ import net.java.ao.Entity;
 
 import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.*;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
@@ -146,8 +147,16 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		};
 		figure.setOpaque(false);
 		figure.setLayoutManager(new FreeformLayout());
-		IFigure sourceFigure = copiedFigure();
+		final IFigure sourceFigure = copiedFigure();
 		figure.add(sourceFigure);
+		figure.addLayoutListener(new LayoutListener.Stub() {
+			@Override
+			public void invalidate(IFigure container) {
+				Rectangle bounds = sourceFigure.getBounds();
+				bounds.setSize(container.getBounds().getSize());
+				sourceFigure.setBounds(bounds);
+			}
+		});
 		sourceFigure.setBounds(sourceFigure.getBounds().getCopy().setLocation(new Point(0, 0)));
 		figure.setBounds(sourceFigure.getBounds());
 		return figure;
