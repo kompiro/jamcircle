@@ -31,6 +31,8 @@ import org.kompiro.jamcircle.storage.model.GraphicalEntity;
  * @TestContext BoardEditPartTest
  */
 public class BoardEditPart extends AbstractEditPart implements CardContainerEditPart, IBoardEditPart {
+	private static final String MESSAGE_OF_PROPERTY_CHANGE_EVENT = "BoardEditPart propertyChange %s newValue:'%s' oldValue:'%s'"; //$NON-NLS-1$
+
 	public static final String TITLE_FONT_KEY = "org.kompiro.jamcircle.TITLE_FONT_KEY"; //$NON-NLS-1$
 
 	private static final String LAYER_KEY_CARD = "card"; //$NON-NLS-1$
@@ -209,7 +211,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		return new BoardDragTracker(getKanbanService());
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected List getModelChildren() {
 		BoardModel model = (BoardModel) getModel();
@@ -257,9 +259,8 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 	public void doPropertyChange(PropertyChangeEvent evt) {
 		Object newValue = evt.getNewValue();
 		Object oldValue = evt.getOldValue();
-		KanbanUIStatusHandler
-				.debug(String
-						.format("BoardEditPart propertyChange %s newValue:'%s' oldValue:'%s'", evt.getPropertyName(), newValue, oldValue)); //$NON-NLS-1$
+		String message = String.format(MESSAGE_OF_PROPERTY_CHANGE_EVENT, evt.getPropertyName(), newValue, oldValue);
+		KanbanUIStatusHandler.debug(message);
 		super.doPropertyChange(evt);
 		if (isPropTitle(evt)) {
 			if (newValue != null) {
