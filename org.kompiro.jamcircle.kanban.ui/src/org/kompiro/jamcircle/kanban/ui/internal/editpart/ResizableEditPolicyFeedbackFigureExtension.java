@@ -6,9 +6,7 @@ import java.util.List;
 import org.eclipse.draw2d.*;
 import org.eclipse.gef.*;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
-import org.eclipse.gef.handles.AbstractHandle;
-import org.eclipse.gef.handles.RelativeHandleLocator;
-import org.eclipse.gef.handles.ResizeHandle;
+import org.eclipse.gef.handles.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
@@ -17,8 +15,7 @@ import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
 public class ResizableEditPolicyFeedbackFigureExtension extends
 		ResizableEditPolicy {
-	
-	
+
 	/**
 	 * TODO Refactoring
 	 */
@@ -45,7 +42,6 @@ public class ResizableEditPolicyFeedbackFigureExtension extends
 		}
 	}
 
-
 	private final EditPart child;
 
 	public ResizableEditPolicyFeedbackFigureExtension(EditPart child) {
@@ -63,7 +59,7 @@ public class ResizableEditPolicyFeedbackFigureExtension extends
 		}
 		return null;
 	}
-	
+
 	@Override
 	protected void showSelection() {
 		super.showSelection();
@@ -73,8 +69,8 @@ public class ResizableEditPolicyFeedbackFigureExtension extends
 			part.reorder(getHost());
 		}
 	}
-	
-	@SuppressWarnings("unchecked")
+
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected List createSelectionHandles() {
 		List<AbstractHandle> handles = new ArrayList<AbstractHandle>();
@@ -97,12 +93,9 @@ public class ResizableEditPolicyFeedbackFigureExtension extends
 		return handle;
 	}
 
-	
 	@Override
 	protected IFigure getFeedbackLayer() {
 		return getLayer(LayerConstants.SCALED_FEEDBACK_LAYER);
 	}
 
-
 }
-
