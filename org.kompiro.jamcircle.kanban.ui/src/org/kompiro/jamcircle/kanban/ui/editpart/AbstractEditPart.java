@@ -152,12 +152,21 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		figure.addLayoutListener(new LayoutListener.Stub() {
 			@Override
 			public void invalidate(IFigure container) {
+				if (sourceFigure instanceof AnnotationArea) {
+					invalidateForAnnotationAreaForFixSize(sourceFigure, container);
+				}
+			}
+
+			private void invalidateForAnnotationAreaForFixSize(final IFigure sourceFigure, IFigure container) {
 				Rectangle bounds = sourceFigure.getBounds();
-				bounds.setSize(container.getBounds().getSize());
+				Rectangle copy = container.getBounds().getCopy();
+				bounds.setLocation(new Point(0, AnnotationArea.ACTION_ICON_SIZE));
+				bounds.setSize(copy.getSize().expand(0, -AnnotationArea.ACTION_ICON_SIZE * 2));
 				sourceFigure.setBounds(bounds);
 			}
 		});
-		sourceFigure.setBounds(sourceFigure.getBounds().getCopy().setLocation(new Point(0, 0)));
+		Rectangle copy = sourceFigure.getBounds().getCopy();
+		sourceFigure.setBounds(copy.setLocation(new Point(0, 0)));
 		figure.setBounds(sourceFigure.getBounds());
 		return figure;
 	}
