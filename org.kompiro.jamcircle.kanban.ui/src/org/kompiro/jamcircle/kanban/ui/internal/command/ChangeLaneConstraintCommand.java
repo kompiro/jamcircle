@@ -9,54 +9,55 @@ import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 
 /**
  * TODO Divide to change location and change size commands for lane.
+ * 
  * @author kompiro
- *
+ * 
  */
 public class ChangeLaneConstraintCommand extends MoveCommand<Lane> {
 
 	private Lane lane;
 	private Rectangle rect;
 	private Rectangle oldRect;
-	
+
 	public ChangeLaneConstraintCommand() {
 	}
-	
+
 	@Override
 	protected void initialize() {
 		this.lane = getModel();
-		this.oldRect = new Rectangle(lane.getX(),lane.getY(),lane.getWidth(),lane.getHeight());
+		this.oldRect = new Rectangle(lane.getX(), lane.getY(), lane.getWidth(), lane.getHeight());
 		this.rect = getRectangle();
-		if(isChangeSizeMode()){
+		if (isChangeSizeMode()) {
 			setLabel(format(Messages.ChangeLaneConstraintCommand_change_label, lane.getStatus()));
-		}else{
-			setLabel(format(Messages.ChangeLaneConstraintCommand_move_label, lane.getStatus()));			
+		} else {
+			setLabel(format(Messages.ChangeLaneConstraintCommand_move_label, lane.getStatus()));
 		}
-		if(this.lane != null && this.rect != null){
+		if (this.lane != null && this.rect != null) {
 			setExecute(true);
 		}
 	}
 
 	private boolean isChangeSizeMode() {
-		return oldRect.getLocation().equals(rect.getLocation()) && ! lane.isIconized();
+		return oldRect.getLocation().equals(rect.getLocation()) && !lane.isIconized();
 	}
 
 	@Override
 	public void move() {
 		lane.setX(rect.getLocation().x);
 		lane.setY(rect.getLocation().y);
-		if( ! lane.isIconized()){
+		if (!lane.isIconized()) {
 			lane.setWidth(rect.width);
 			lane.setHeight(rect.height);
 		}
 		lane.commitConstraint(rect);
 		lane.save(false);
-		System.out.println(lane);
 	}
-		
+
 	@Override
 	public void undo() {
-		if(oldRect == null) return;
-		
+		if (oldRect == null)
+			return;
+
 		lane.setX(oldRect.getLocation().x);
 		lane.setY(oldRect.getLocation().y);
 		lane.setWidth(oldRect.width);
@@ -64,5 +65,5 @@ public class ChangeLaneConstraintCommand extends MoveCommand<Lane> {
 		lane.commitConstraint(oldRect);
 		lane.save(false);
 	}
-	
+
 }

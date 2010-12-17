@@ -19,9 +19,9 @@ import org.kompiro.jamcircle.kanban.model.GraphicalImpl;
 import org.kompiro.jamcircle.kanban.model.Icon;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.AsyncDisplayDelegator;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.CancelableDragEditPartsTracker;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.AnnotationArea;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
 import org.kompiro.jamcircle.kanban.ui.model.AbstractModel;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
@@ -150,19 +150,22 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 		final IFigure sourceFigure = copiedFigure();
 		figure.add(sourceFigure);
 		figure.addLayoutListener(new LayoutListener.Stub() {
+			@SuppressWarnings("rawtypes")
 			@Override
 			public void invalidate(IFigure container) {
-				if (sourceFigure instanceof AnnotationArea) {
+				AbstractEditPart part = AbstractEditPart.this;
+				if (part instanceof LaneEditPart
+						&& ((LaneEditPart) part).getFigure() instanceof AnnotationArea
+						&& ((AnnotationArea) ((LaneEditPart) part).getFigure()).getTargetFigure() instanceof LaneFigure) {
 					invalidateForAnnotationAreaForFixSize(sourceFigure, container);
 				}
 			}
 
 			private void invalidateForAnnotationAreaForFixSize(final IFigure sourceFigure, IFigure container) {
-				Rectangle bounds = sourceFigure.getBounds();
 				Rectangle copy = container.getBounds().getCopy();
-				bounds.setLocation(new Point(0, AnnotationArea.ACTION_ICON_SIZE));
-				bounds.setSize(copy.getSize().expand(0, -AnnotationArea.ACTION_ICON_SIZE * 2));
-				sourceFigure.setBounds(bounds);
+				copy.setLocation(new Point(0, AnnotationArea.ACTION_ICON_SIZE));
+				copy.setSize(copy.getSize().expand(0, -AnnotationArea.ACTION_ICON_SIZE * 2));
+				sourceFigure.setBounds(copy);
 			}
 		});
 		Rectangle copy = sourceFigure.getBounds().getCopy();

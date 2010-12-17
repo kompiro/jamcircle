@@ -14,7 +14,7 @@ import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 import org.kompiro.jamcircle.kanban.ui.editpart.IconEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.command.*;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.*;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
 public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
@@ -71,9 +71,12 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return !(constraint instanceof Rectangle);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected EditPolicy createChildEditPolicy(final EditPart child) {
-		if (child instanceof LaneEditPart)
+		if (child instanceof LaneEditPart
+				&& ((LaneEditPart) child).getFigure() instanceof AnnotationArea
+				&& ((AnnotationArea) ((LaneEditPart) child).getFigure()).getTargetFigure() instanceof LaneFigure)
 			return new ResizableEditPolicyFeedbackFigureExtension(child);
 		return new NonResizableEditPolicyFeedbackFigureExtension(child);
 	}
