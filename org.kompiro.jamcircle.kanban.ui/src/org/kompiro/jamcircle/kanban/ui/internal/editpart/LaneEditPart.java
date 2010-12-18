@@ -361,6 +361,7 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 		return actionLayer;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new LaneXYLayoutEditPolicy());
@@ -392,6 +393,12 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			}
 
 		});
+		if (getFigure() instanceof AnnotationArea
+				&& ((AnnotationArea) getFigure()).getTargetFigure() instanceof LaneFigure) {
+			installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new ResizableEditPolicyFeedbackFigureExtension(this));
+		} else {
+			installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new NonResizableEditPolicyFeedbackFigureExtension(this));
+		}
 	}
 
 	@Override

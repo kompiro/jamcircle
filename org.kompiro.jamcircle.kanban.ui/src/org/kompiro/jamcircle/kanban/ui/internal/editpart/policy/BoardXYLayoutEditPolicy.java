@@ -71,9 +71,13 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return !(constraint instanceof Rectangle);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	protected EditPolicy createChildEditPolicy(final EditPart child) {
+	protected EditPolicy createChildEditPolicy(EditPart child) {
+		return initializedPrimaryDragEditPolicy(child);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private EditPolicy initializedPrimaryDragEditPolicy(EditPart child) {
 		if (child instanceof LaneEditPart
 				&& ((LaneEditPart) child).getFigure() instanceof AnnotationArea
 				&& ((AnnotationArea) ((LaneEditPart) child).getFigure()).getTargetFigure() instanceof LaneFigure)
