@@ -48,6 +48,7 @@
 		<antcall target="runDirector" inheritAll="true">
 			<param name="featureId" value="org.kompiro.jamcircle.scripting.feature.group"/>
 		</antcall>
+		<antcall target="remove_launcher"/>
 	</target>
 	
 	<target name="runDirector">
@@ -70,6 +71,16 @@
 			<jvmarg value="-Xmx512m"/>
 		</java>
 	</target>
+	
+	<!-- ================================= 
+          target: remove_launcher      
+          removed eclipse launcher from destributed package.
+          It is unused in JAM Circle package.
+         ================================= -->
+    <target name="remove_launcher" description="removed eclipse launcher from destribution">
+        
+    </target>
+
 
 	<target name="javancss" description="description">
     	<property name="javancss" value="${basedir}/javancss"/>
