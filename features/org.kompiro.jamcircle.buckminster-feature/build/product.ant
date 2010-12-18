@@ -81,6 +81,7 @@
         <delete dir="${destination}/Eclipse.app" failonerror="false"/>
         <delete file="${destination}/launcher" failonerror="false"/>
         <delete file="${destination}/launcher.exe" failonerror="false"/>
+        <delete file="${destination}/eclipsec.exe" failonerror="false"/>
     </target>
 
 
