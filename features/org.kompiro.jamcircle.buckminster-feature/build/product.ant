@@ -78,13 +78,9 @@
           It is unused in JAM Circle package.
          ================================= -->
     <target name="remove_launcher" description="removed eclipse launcher from destribution">
-<<<<<<< HEAD
         <delete dir="${destination}/Eclipse.app" failonerror="false"/>
         <delete file="${destination}/launcher" failonerror="false"/>
         <delete file="${destination}/launcher.exe" failonerror="false"/>
-=======
-        
->>>>>>> b917ad3fb056853635f87493da3a82d015388985
     </target>
 
 
