@@ -10,14 +10,9 @@
 <repository location="http://download.eclipse.org/releases/helios"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" type="InstallableUnit">
-<unit id="org.eclipse.swtbot.eclipse.feature.group" version="2.0.1.20101106_1831-73ca7af-dev-e36"/>
 <unit id="org.eclipse.swtbot.eclipse.gef.feature.group" version="2.0.1.20101106_1831-73ca7af-dev-e36"/>
 <unit id="org.eclipse.swtbot.feature.group" version="2.0.1.20101106_1831-73ca7af-dev-e36"/>
 <repository location="http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site"/>
-</location>
-<location includeAllPlatforms="true" includeMode="slicer" type="InstallableUnit">
-<unit id="org.eclipse.gef.sdk.feature.group" version="3.6.1.v20100908-1100-7G7R2A5WNcBQPZgXAHiSXMXYaKPI"/>
-<repository location="http://download.eclipse.org/tools/gef/updates/milestones/"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" type="InstallableUnit">
 <unit id="org.eclipse.babel.nls_eclipse_ja.feature.group" version="3.6.0.v20101211043401"/>
@@ -25,6 +20,10 @@
 <unit id="org.eclipse.babel.nls_rt.equinox.p2_ja.feature.group" version="3.6.0.v20101211043401"/>
 <unit id="org.eclipse.babel.nls_tools.gef_ja.feature.group" version="3.6.0.v20101211043401"/>
 <repository location="http://download.eclipse.org/technology/babel/update-site/R0.8.1/helios"/>
+</location>
+<location includeAllPlatforms="true" includeMode="slicer" type="InstallableUnit">
+<unit id="org.eclipse.gef.all.feature.group" version="3.6.1.v20100908-1100-787D17PhSyGcDBx8Zy_MhtyNUO45"/>
+<repository location="http://download.eclipse.org/tools/gef/updates/releases/"/>
 </location>
 </locations>
 </target>
