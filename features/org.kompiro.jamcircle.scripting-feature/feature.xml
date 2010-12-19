@@ -29,9 +29,9 @@
       <import plugin="org.eclipse.osgi"/>
       <import plugin="org.eclipse.osgi.services"/>
       <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.ui.console"/>
       <import plugin="org.eclipse.jface.text"/>
       <import plugin="org.kompiro.jamcircle.kanban"/>
+      <import plugin="org.eclipse.ui.console"/>
    </requires>
 
    <plugin
@@ -50,34 +50,6 @@
 
    <plugin
          id="org.kompiro.jamcircle.scripting.console"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ui.console"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.core.variables"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ui.workbench.texteditor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.core.expressions"
          download-size="0"
          install-size="0"
          version="0.0.0"

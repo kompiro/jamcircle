@@ -17,6 +17,12 @@
       [Enter License Description here.]
    </license>
 
+   <requires>
+      <import plugin="org.apache.commons.logging" version="1.0.4" match="compatible"/>
+      <import plugin="org.apache.bsf" version="2.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.osgi"/>
+   </requires>
+
    <plugin
          id="org.jivesoftware.smack"
          download-size="0"
