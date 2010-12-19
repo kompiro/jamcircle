@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.kompiro.jamcircle"
-      label="JAM Circle Main Feature"
-      version="0.0.0"
+      label="JAM Circle Main Features"
+      version="0.9.1"
       provider-name="kompiro.org">
 
    <description url="http://kompiro.org/jamcircle/">
