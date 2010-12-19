@@ -20,10 +20,12 @@
 <repository location="http://download.eclipse.org/technology/babel/update-site/R0.8.1/galileo"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" type="InstallableUnit">
+<unit id="org.eclipse.equinox.executable.feature.group" version="3.3.201.R35x_v20091211-7M-FngFELSU3Pqlv3JdZn"/>
 <unit id="org.eclipse.platform.sdk" version="3.5.2.M20100211-1343"/>
 <unit id="org.eclipse.rcp.sdk.id" version="3.5.2.M20100211-1343"/>
 <unit id="org.eclipse.sdk.ide" version="3.5.2.M20100211-1343"/>
 <unit id="org.eclipse.equinox.p2.sdk.feature.group" version="3.5.1.R35x_v20090811-8q7BGE-G13DHKOBciHlrWmr7PD93"/>
+<unit id="org.eclipse.equinox.sdk.feature.group" version="3.5.2.r352_v20100209-7G7MAD7lQiEeG_QL5AOoAHLYaYBg"/>
 <repository location="http://download.eclipse.org/releases/galileo/"/>
 </location>
 </locations>
