@@ -28,8 +28,8 @@
 <stringAttribute key="selected_workspace_plugins" value="org.kompiro.jamcircle.extension.tracboard@default:default,org.kompiro.jamcircle.kanban.model@default:default,org.kompiro.jamcircle.debug@default:default,org.kompiro.jamcircle.storage.ui@default:default,org.kompiro.jamcircle.test@default:default,org.jruby.jruby@default:default,org.kompiro.jamcircle.kanban.model.test@default:false,org.kompiro.jamcircle.xmpp@default:default,org.kompiro.jamcircle.test.ui@default:default,org.kompiro.jamcircle.debug.ui@default:default,org.kompiro.jamcircle.scripting@default:default,org.kompiro.jamcircle.scripting.ui@6:default,org.kompiro.jamcircle.xmpp.kanban.ui@default:default,org.apache.commons.lang@default:default,org.kompiro.jamcircle.extension.feedboard@default:default,org.jivesoftware.smack@default:default,org.kompiro.jamcircle.rcp@default:default,org.apache.bsf@default:default,org.mozilla.javascript@default:default,org.kompiro.jamcircle.kanban@default:default,org.kompiro.jamcircle.xmpp.ui@default:default,org.kompiro.jamcircle.kanban.ui@default:default,org.kompiro.jamcircle.scripting.console@default:default,org.kompiro.jamcircle.storage@default:default"/>
 <booleanAttribute key="show_selected_only" value="false"/>
 <stringAttribute key="templateConfig" value="${target_home}/configuration/config.ini"/>
-<stringAttribute key="timestamp" value="1292943379155"/>
-<booleanAttribute key="tracing" value="false"/>
+<stringAttribute key="timestamp" value="1292946009792"/>
+<booleanAttribute key="tracing" value="true"/>
 <booleanAttribute key="useCustomFeatures" value="false"/>
 <booleanAttribute key="useDefaultConfig" value="true"/>
 <booleanAttribute key="useDefaultConfigArea" value="true"/>

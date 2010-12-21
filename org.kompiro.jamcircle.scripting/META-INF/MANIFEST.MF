@@ -5,14 +5,16 @@ Bundle-SymbolicName: org.kompiro.jamcircle.scripting;singleton:=true
 Bundle-Version: 0.2.0.qualifier
 Bundle-Vendor: kompiro.org
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Import-Package: org.osgi.framework;version="1.3.0",
+Import-Package: org.apache.bsf,
+ org.apache.bsf.util,
+ org.eclipse.core.runtime;version="3.4.0",
+ org.eclipse.osgi.service.datalocation;version="1.3.0",
+ org.eclipse.osgi.util;version="1.1.0",
+ org.osgi.framework;version="1.3.0",
  org.osgi.service.component;version="1.1.0"
 Bundle-ActivationPolicy: lazy
 Export-Package: org.kompiro.jamcircle.scripting,
  org.kompiro.jamcircle.scripting.exception,
  org.kompiro.jamcircle.scripting.util
-Require-Bundle: org.mozilla.javascript,
- org.jruby.jruby,
- org.apache.bsf,
- org.eclipse.core.runtime
 Service-Component: OSGI-INF/ScriptingService.xml,OSGI-INF/ScriptingEngineInitializerLoader.xml
+Require-Bundle: org.jruby.jruby;bundle-version="1.5.2"
