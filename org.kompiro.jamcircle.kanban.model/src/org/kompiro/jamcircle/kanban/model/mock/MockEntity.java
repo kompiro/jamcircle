@@ -19,7 +19,7 @@ import org.kompiro.jamcircle.storage.model.ExecutorHandler;
  */
 class MockEntity implements Entity {
 
-	private List<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
+	private final List<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
 
 	@PrimaryKey("id")
 	public int getID() {
