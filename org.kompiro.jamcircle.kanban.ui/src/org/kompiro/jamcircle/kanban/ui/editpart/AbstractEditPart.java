@@ -77,8 +77,14 @@ public abstract class AbstractEditPart extends AbstractGraphicalEditPart
 	@Override
 	public void deactivate() {
 		super.deactivate();
-		if (getFigure() instanceof AnnotationArea<?>) {
-			AnnotationArea<?> fig = (AnnotationArea<?>) getFigure();
+		final IFigure[] figure = new IFigure[1];
+		WorkbenchUtil.sync(new Runnable() {
+			public void run() {
+				figure[0] = AbstractEditPart.this.getFigure();
+			}
+		});
+		if (figure[0] instanceof AnnotationArea<?>) {
+			AnnotationArea<?> fig = (AnnotationArea<?>) figure[0];
 			fig.removeAnnotation();
 		}
 		if (getModel() instanceof AbstractModel) {
