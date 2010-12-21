@@ -6,5 +6,14 @@ Bundle-Version: 0.1.0.qualifier
 Bundle-Vendor: kompiro.org
 Fragment-Host: org.kompiro.jamcircle.xmpp.kanban.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Require-Bundle: org.junit4,
- org.mockito
+Import-Package: org.apache.commons.lang;version="2.4.0",
+ org.eclipse.draw2d.geometry,
+ org.eclipse.gef,
+ org.eclipse.gef.commands,
+ org.eclipse.gef.editparts,
+ org.hamcrest;version="1.1.0",
+ org.junit;version="4.8.1",
+ org.kompiro.jamcircle.kanban.model,
+ org.kompiro.jamcircle.kanban.model.mock,
+ org.mockito,
+ org.mockito.stubbing

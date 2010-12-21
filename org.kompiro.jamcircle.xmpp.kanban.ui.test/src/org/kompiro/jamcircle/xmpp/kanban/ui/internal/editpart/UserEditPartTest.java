@@ -1,6 +1,9 @@
 package org.kompiro.jamcircle.xmpp.kanban.ui.internal.editpart;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -17,55 +20,53 @@ import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 import org.kompiro.jamcircle.xmpp.kanban.ui.internal.command.DeleteUserCommand;
 import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
 
-
 public class UserEditPartTest {
-	
+
 	private UserEditPart part;
 
 	@Before
 	public void before() throws Exception {
 		createEditPart();
 	}
-	
+
 	@Test
 	public void supportMoveCommand() throws Exception {
 		Object object = part.getAdapter(MoveCommand.class);
-		assertThat(object,not(nullValue()));
-		assertThat(object,instanceOf(MoveCommand.class));
+		assertThat(object, not(nullValue()));
+		assertThat(object, instanceOf(MoveCommand.class));
 	}
 
-	
 	@Test
 	public void supportDeleteCommand() throws Exception {
 		Object object = part.getAdapter(DeleteCommand.class);
-		assertThat(object,not(nullValue()));
-		assertThat(object,instanceOf(CompoundCommand.class));
-		CompoundCommand compoundCommand = (CompoundCommand)object;
-		assertThat(compoundCommand.size(),is(2));
-		assertThat(compoundCommand.getCommands().get(0),instanceOf(DeleteIconModelCommand.class));
-		assertThat(compoundCommand.getCommands().get(1),instanceOf(DeleteUserCommand.class));
+		assertThat(object, not(nullValue()));
+		assertThat(object, instanceOf(CompoundCommand.class));
+		CompoundCommand compoundCommand = (CompoundCommand) object;
+		assertThat(compoundCommand.size(), is(2));
+		assertThat(compoundCommand.getCommands().get(0), instanceOf(DeleteIconModelCommand.class));
+		assertThat(compoundCommand.getCommands().get(1), instanceOf(DeleteUserCommand.class));
 	}
-	
+
 	@Test
 	public void performLocation() throws Exception {
 		User user = mock(User.class);
-		UserModel model = new UserModel(user );
+		UserModel model = new UserModel(user);
 		part.setModel(model);
 		part.activate();
-		WorkbenchUtil.getDisplay().syncExec(new Runnable(){
+		WorkbenchUtil.getDisplay().syncExec(new Runnable() {
 			public void run() {
 				part.getFigure();
 			}
 		});
-		IPropertyChangeDelegator delegator = new IPropertyChangeDelegator(){
+		IPropertyChangeDelegator delegator = new IPropertyChangeDelegator() {
 			public void run(Runnable runner) {
 				runner.run();
-			}			
+			}
 		};
-		part.setDelegator(delegator );
-		Point location = new Point(100,200);
+		part.setDelegator(delegator);
+		Point location = new Point(100, 200);
 		model.setLocation(location);
-		
+
 	}
 
 	private void createEditPart() {
@@ -73,6 +74,5 @@ public class UserEditPartTest {
 		BoardModel boardModel = new BoardModel(board);
 		part = new UserEditPart(boardModel);
 	}
-	
-	
+
 }
