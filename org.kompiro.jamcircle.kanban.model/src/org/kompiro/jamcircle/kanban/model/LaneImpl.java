@@ -7,7 +7,6 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.*;
 
-import org.kompiro.jamcircle.kanban.*;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.storage.service.FileStorageService;
 import org.kompiro.jamcircle.storage.service.StorageService;
@@ -187,7 +186,7 @@ public class LaneImpl extends GraphicalImpl {
 	}
 
 	private StorageService getStorageService() {
-		return KanbanActivator.getKanbanService().getStorageService();
+		return KanbanModelContext.getDefault().getStorageService();
 	}
 
 	@Override

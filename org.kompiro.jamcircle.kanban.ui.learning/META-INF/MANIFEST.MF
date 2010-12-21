@@ -6,4 +6,4 @@ Bundle-Version: 0.0.0
 Bundle-Vendor: kompiro.org
 Fragment-Host: org.kompiro.jamcircle.kanban.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.junit
+Import-Package: org.junit;version="4.8.1"

@@ -5,18 +5,21 @@ Bundle-SymbolicName: org.kompiro.jamcircle.kanban;singleton:=true
 Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.kompiro.jamcircle.kanban.KanbanActivator
 Bundle-Vendor: kompiro.org
-Require-Bundle: org.eclipse.core.runtime,
- org.kompiro.jamcircle.storage;visibility:=reexport,
- org.kompiro.jamcircle.scripting;visibility:=reexport,
- org.apache.commons.lang,
- org.kompiro.jamcircle.debug
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: org.kompiro.jamcircle.kanban,
  org.kompiro.jamcircle.kanban.boardtemplate,
- org.kompiro.jamcircle.kanban.model,
- org.kompiro.jamcircle.kanban.model.mock,
  org.kompiro.jamcircle.kanban.service,
  org.kompiro.jamcircle.kanban.service.internal;x-friends:="org.kompiro.jamcircle.kanban.ui.test"
 Eclipse-BuddyPolicy: dependent
 Service-Component: OSGI-INF/KanbanService.xml, OSGI-INF/BoardConverter.xml
+Import-Package: net.java.ao,
+ org.eclipse.core.runtime;version="3.4.0",
+ org.eclipse.osgi.util;version="1.1.0",
+ org.kompiro.jamcircle.debug,
+ org.kompiro.jamcircle.kanban.model,
+ org.kompiro.jamcircle.kanban.model.mock,
+ org.kompiro.jamcircle.scripting,
+ org.kompiro.jamcircle.storage.model,
+ org.kompiro.jamcircle.storage.service,
+ org.osgi.framework;version="1.5.0"

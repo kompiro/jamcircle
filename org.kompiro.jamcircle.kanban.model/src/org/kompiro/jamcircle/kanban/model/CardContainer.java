@@ -10,6 +10,7 @@ import org.apache.commons.lang.NotImplementedException;
 
 /**
  * This interface describes CardContainer.
+ * 
  * @author kompiro
  */
 public interface CardContainer {
@@ -17,23 +18,24 @@ public interface CardContainer {
 	boolean addCard(Card card);
 
 	boolean removeCard(Card card);
-	
+
 	boolean containCard(Card card);
-	
+
 	@Ignore
 	Card[] getCards();
-	
+
 	void addPropertyChangeListener(PropertyChangeListener listener);
 
 	void removePropertyChangeListener(PropertyChangeListener listener);
-	
+
 	String getContainerName();
-	
-	// HACK: if it named getXXX,then ActiveObjects creates index... So I renamed.
+
+	// HACK: if it named getXXX,then ActiveObjects creates index... So I
+	// renamed.
 	Board gainBoard();
-	
-	public class Mock implements CardContainer{
-		
+
+	public class Mock implements CardContainer {
+
 		private List<Card> cards = new ArrayList<Card>();
 
 		public boolean addCard(Card card) {
@@ -44,7 +46,7 @@ public interface CardContainer {
 		}
 
 		public Card[] getCards() {
-			return cards.toArray(new Card[]{});
+			return cards.toArray(new Card[] {});
 		}
 
 		public String getContainerName() {
@@ -58,13 +60,13 @@ public interface CardContainer {
 		public boolean removeCard(Card card) {
 			return cards.remove(card);
 		}
-		
+
 		public Board gainBoard() {
 			throw new NotImplementedException();
 		}
 
 		public void removePropertyChangeListener(PropertyChangeListener listener) {
 		}
-		
+
 	}
 }

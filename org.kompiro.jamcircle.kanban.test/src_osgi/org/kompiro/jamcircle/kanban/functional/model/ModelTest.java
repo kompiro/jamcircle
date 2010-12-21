@@ -1,4 +1,4 @@
-package org.kompiro.jamcircle.kanban.model;
+package org.kompiro.jamcircle.kanban.functional.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -16,6 +16,7 @@ import net.java.ao.EntityManager;
 
 import org.junit.*;
 import org.kompiro.jamcircle.kanban.KanbanActivator;
+import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.internal.KanbanServiceEnvironment;
 import org.kompiro.jamcircle.kanban.service.internal.KanbanServiceTestHelper;
 import org.kompiro.jamcircle.kanban.test.util.TestUtils;

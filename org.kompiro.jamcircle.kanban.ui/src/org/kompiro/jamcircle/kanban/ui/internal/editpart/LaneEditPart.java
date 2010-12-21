@@ -20,6 +20,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.ui.*;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 import org.kompiro.jamcircle.kanban.ui.dialog.LaneEditDialog;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;

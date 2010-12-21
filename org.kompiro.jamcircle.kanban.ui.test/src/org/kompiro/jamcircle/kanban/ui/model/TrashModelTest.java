@@ -25,7 +25,6 @@ import org.kompiro.jamcircle.storage.service.internal.StorageServiceImpl;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-@SuppressWarnings("restriction")
 public class TrashModelTest {
 
 	private TrashModel trash;

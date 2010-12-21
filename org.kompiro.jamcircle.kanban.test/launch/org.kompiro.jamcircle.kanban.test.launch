@@ -32,6 +32,7 @@
 <stringAttribute key="product" value="org.eclipse.equinox.p2.director.app.product"/>
 <booleanAttribute key="run_in_ui_thread" value="true"/>
 <booleanAttribute key="show_selected_only" value="false"/>
+<stringAttribute key="timestamp" value="1292944110461"/>
 <booleanAttribute key="tracing" value="false"/>
 <booleanAttribute key="useCustomFeatures" value="false"/>
 <booleanAttribute key="useDefaultConfig" value="true"/>

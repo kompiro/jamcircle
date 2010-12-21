@@ -28,6 +28,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.CellEditorActionHandler;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.ui.*;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 import org.kompiro.jamcircle.kanban.ui.command.provider.ConfirmProvider;
 import org.kompiro.jamcircle.kanban.ui.command.provider.MessageDialogConfirmProvider;
@@ -42,7 +43,7 @@ import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
 
 public class CardEditPart extends AbstractEditPart {
-	
+
 	private static final String LINE_BREAK = System.getProperty("line.separator"); //$NON-NLS-1$
 	private static final String EMPTY = ""; //$NON-NLS-1$
 
@@ -56,15 +57,15 @@ public class CardEditPart extends AbstractEditPart {
 		public void actionPerformed(ActionEvent event) {
 			Shell shell = getShell();
 			Card card = getCardModel();
-			CardEditDialog dialog = new CardEditDialog(shell,card);
+			CardEditDialog dialog = new CardEditDialog(shell, card);
 			int returnCode = dialog.open();
-			if(Dialog.OK == returnCode){
+			if (Dialog.OK == returnCode) {
 				String subject = dialog.getSubjectText();
 				String content = dialog.getContentText();
 				Date dueDate = dialog.getDueDate();
 				List<File> files = dialog.getFiles();
 				ConfirmProvider provider = new MessageDialogConfirmProvider(getShell());
-				CardUpdateCommand command = new CardUpdateCommand(provider,card,subject,content,dueDate,files);
+				CardUpdateCommand command = new CardUpdateCommand(provider, card, subject, content, dueDate, files);
 				getCommandStack().execute(command);
 			}
 		}
@@ -79,12 +80,13 @@ public class CardEditPart extends AbstractEditPart {
 
 		public void actionPerformed(ActionEvent event) {
 			GroupRequest deleteReq =
-				new GroupRequest(RequestConstants.REQ_DELETE);
+					new GroupRequest(RequestConstants.REQ_DELETE);
 			deleteReq.setEditParts(CardEditPart.this);
 
 			CompoundCommand compoundCmd = new CompoundCommand();
 			Command cmd = CardEditPart.this.getCommand(deleteReq);
-			if (cmd != null) compoundCmd.add(cmd);
+			if (cmd != null)
+				compoundCmd.add(cmd);
 			getCommandStack().execute(compoundCmd);
 		}
 	}
@@ -102,10 +104,10 @@ public class CardEditPart extends AbstractEditPart {
 				Clickable colorIcon = (Clickable) source;
 				Control control = getViewer().getControl();
 				CommandStack stack = getCommandStack();
-				ColorPopUpHelper helper = new ColorPopUpHelper(control,stack,getCardModel());
+				ColorPopUpHelper helper = new ColorPopUpHelper(control, stack, getCardModel());
 				org.eclipse.swt.graphics.Point target = control.getDisplay().getCursorLocation();
-				
-				helper.displayToolTipNear(colorIcon,target.x,target.y);
+
+				helper.displayToolTipNear(colorIcon, target.x, target.y);
 			}
 		}
 	}
@@ -133,9 +135,10 @@ public class CardEditPart extends AbstractEditPart {
 		public void actionPerformed(ActionEvent event) {
 			Shell shell = getShell();
 			Card card = getCardModel();
-			String title = String.format(Messages.CardEditPart_contents_title, card.getID(),card.getSubject());
+			String title = String.format(Messages.CardEditPart_contents_title, card.getID(), card.getSubject());
 			String content = card.getContent();
-			BrowserPopupDialog dialog = new BrowserPopupDialog(shell,title,Messages.CardEditPart_contents_status_bar,content);
+			BrowserPopupDialog dialog = new BrowserPopupDialog(shell, title, Messages.CardEditPart_contents_status_bar,
+					content);
 			dialog.create();
 			dialog.open();
 		}
@@ -150,7 +153,7 @@ public class CardEditPart extends AbstractEditPart {
 
 		public void actionPerformed(ActionEvent event) {
 			Card card = getCardModel();
-			CardContainer container = (CardContainer)CardEditPart.this.getParent().getModel();
+			CardContainer container = (CardContainer) CardEditPart.this.getParent().getModel();
 			CompoundCommand command = new CompoundCommand();
 			command.add(new CardStoreCommand((org.kompiro.jamcircle.kanban.model.mock.Card) card, container));
 			command.add(new RemoveCardCommand(card, container));
@@ -171,43 +174,44 @@ public class CardEditPart extends AbstractEditPart {
 				Clickable colorIcon = (Clickable) source;
 				Control control = getViewer().getControl();
 				CommandStack stack = getCommandStack();
-				FlagPopUpHelper helper = new FlagPopUpHelper(control,stack,getCardModel());
+				FlagPopUpHelper helper = new FlagPopUpHelper(control, stack, getCardModel());
 				org.eclipse.swt.graphics.Point target = control.getDisplay().getCursorLocation();
-				
-				helper.displayToolTipNear(colorIcon,target.x,target.y);
+
+				helper.displayToolTipNear(colorIcon, target.x, target.y);
 			}
 		}
 	}
 
-	private class SubjectDirectEditManager extends DirectEditManager{
+	private class SubjectDirectEditManager extends DirectEditManager {
 
 		public SubjectDirectEditManager(CellEditorLocator locator) {
 			super(CardEditPart.this, TextCellEditor.class, locator);
 		}
 
 		protected CellEditor createCellEditorOn(Composite composite) {
-			return new TextCellEditor(composite,SWT.MULTI|SWT.WRAP);
+			return new TextCellEditor(composite, SWT.MULTI | SWT.WRAP);
 		}
-		
+
 		@Override
 		protected void initCellEditor() {
 			IViewPart kanbanView = WorkbenchUtil.findKanbanView();
-			CellEditorActionHandler handlers = (CellEditorActionHandler)kanbanView.getAdapter(CellEditorActionHandler.class);
+			CellEditorActionHandler handlers = (CellEditorActionHandler) kanbanView
+					.getAdapter(CellEditorActionHandler.class);
 			handlers.addCellEditor(getCellEditor());
-		    getCellEditor().setValue(getCardModel().getSubject());
-		    Text text = (Text) getCellEditor().getControl();
-		    text.selectAll();
+			getCellEditor().setValue(getCardModel().getSubject());
+			Text text = (Text) getCellEditor().getControl();
+			text.selectAll();
 		}
-		
+
 	}
-		
+
 	private StatusIcon userIcon;
 	private Clickable pageIcon;
 	private Clickable fileIcon;
 	private Clickable colorIcon;
 	private Clickable editIcon;
 	private Clickable storeIcon;
-	
+
 	private StatusIcon dueIcon;
 	private StatusIcon overDueIcon;
 
@@ -223,24 +227,23 @@ public class CardEditPart extends AbstractEditPart {
 	private boolean movable = true;
 	private AnnotationArea<CardFigure> anotationArea;
 	private CardFigure cardFigure;
-	
 
 	public CardEditPart(BoardModel board) {
 		super(board);
 	}
-	
+
 	@Override
 	protected IFigure createFigure() {
 		Card model = getCardModel();
 		cardFigure = createCardFigure(model);
 		dueDummy = new Figure();
 		dueDummy.setLayoutManager(new StackLayout());
-		dueDummy.setSize(16,16);
+		dueDummy.setSize(16, 16);
 		anotationArea = new AnnotationArea<CardFigure>(cardFigure);
 
 		return anotationArea;
 	}
-	
+
 	@Override
 	protected IFigure copiedFigure() {
 		return createCardFigure(getCardModel());
@@ -251,18 +254,18 @@ public class CardEditPart extends AbstractEditPart {
 		figure.setSubject(model.getSubject());
 		figure.setMock(model.isMock());
 		figure.setId(model.getID());
-		
+
 		figure.setColorType(model.getColorType());
-		figure.setLocation(new Point(model.getX(),model.getY()));
+		figure.setLocation(new Point(model.getX(), model.getY()));
 		boolean animated = getBoardModel().isAnimated();
-		if(!animated){
+		if (!animated) {
 			figure.setAdded(true);
 		}
 		return figure;
 	}
 
 	private void createIcons() {
-		
+
 		createFlagSection();
 		createEditIcon();
 		createColorIcon();
@@ -276,11 +279,10 @@ public class CardEditPart extends AbstractEditPart {
 		dueIcon = new StatusIcon(KanbanImageConstants.CLOCK_IMAGE.getIamge());
 		overDueIcon = new StatusIcon(KanbanImageConstants.CLOCK_RED_IMAGE.getIamge());
 	}
-	
+
 	private void createStoreIcon() {
 		storeIcon = new StoreDBActionIcon(KanbanImageConstants.DB_ADD_IMAGE.getIamge());
 	}
-
 
 	private void createPageIcon() {
 		pageIcon = new OpenContentsActionIcon(KanbanImageConstants.PAGE_IMAGE.getIamge());
@@ -313,15 +315,16 @@ public class CardEditPart extends AbstractEditPart {
 		flagSection = new Figure();
 		flagSection.setLayoutManager(new StackLayout());
 	}
-	
+
 	@Override
 	public void activate() {
 		super.activate();
-		if( ! PlatformUI.isWorkbenchRunning()) return;
+		if (!PlatformUI.isWorkbenchRunning())
+			return;
 		createIcons();
 		hideActionIcons();
 		IFigure actionSection = getActionSection();
-		if(getCardModel().isMock()){
+		if (getCardModel().isMock()) {
 			actionSection.add(storeIcon);
 		}
 		actionSection.add(flagEditIcon);
@@ -346,7 +349,7 @@ public class CardEditPart extends AbstractEditPart {
 		setDue(card);
 		setFlag(card);
 	}
-	
+
 	IFigure getStatusSection() {
 		return anotationArea.getStatusSection();
 	}
@@ -354,16 +357,15 @@ public class CardEditPart extends AbstractEditPart {
 	IFigure getActionSection() {
 		return anotationArea.getActionSection();
 	}
-	
 
 	private void setFlag(Card card) {
-		if(flagCurrentIcon != null){
+		if (flagCurrentIcon != null) {
 			flagSection.remove(flagCurrentIcon);
 		}
-		if(card.getFlagType() == null){
+		if (card.getFlagType() == null) {
 			flagCurrentIcon = null;
-		}else{
-			switch (getCardModel().getFlagType()){
+		} else {
+			switch (getCardModel().getFlagType()) {
 			case RED:
 				flagCurrentIcon = flagRedIcon;
 				break;
@@ -381,26 +383,27 @@ public class CardEditPart extends AbstractEditPart {
 				break;
 			}
 		}
-		if(flagCurrentIcon != null) flagSection.add(flagCurrentIcon,0);
+		if (flagCurrentIcon != null)
+			flagSection.add(flagCurrentIcon, 0);
 	}
 
 	private void setDue(Card card) {
-		if(card.getDueDate() == null){
+		if (card.getDueDate() == null) {
 			dueDummy.setVisible(false);
 			overDueIcon.setToolTip(null);
 			dueIcon.setVisible(false);
 			dueIcon.setToolTip(null);
-		}else{
+		} else {
 			dueDummy.setVisible(true);
 			String dueText = DateFormat.getDateInstance().format(card.getDueDate());
 			Label tip = new Label();
 			tip.setText(dueText);
 			overDueIcon.setToolTip(tip);
 			dueIcon.setToolTip(tip);
-			if(System.currentTimeMillis() > card.getDueDate().getTime()){
+			if (System.currentTimeMillis() > card.getDueDate().getTime()) {
 				overDueIcon.setVisible(true);
 				dueIcon.setVisible(false);
-			}else{
+			} else {
 				dueIcon.setVisible(true);
 				overDueIcon.setVisible(false);
 			}
@@ -410,15 +413,15 @@ public class CardEditPart extends AbstractEditPart {
 	private void setCompleted(Card card) {
 		boolean completed = card.isCompleted();
 		completedIcon.setVisible(completed);
-		if(completed){
+		if (completed) {
 			Label dateLabel = new Label();
 			Date completedDate = card.getCompletedDate();
-			if(completedDate != null){
+			if (completedDate != null) {
 				String date = DateFormat.getDateInstance().format(completedDate);
 				dateLabel.setText(date);
 				completedIcon.setToolTip(dateLabel);
 			}
-		}else{
+		} else {
 			completedIcon.setToolTip(null);
 		}
 	}
@@ -429,20 +432,20 @@ public class CardEditPart extends AbstractEditPart {
 	@Override
 	public Command getCommand(Request request) {
 		Command command = super.getCommand(request);
-		if(command == null && RequestConstants.REQ_ADD.equals(request.getType())){
+		if (command == null && RequestConstants.REQ_ADD.equals(request.getType())) {
 			EditPart parent = getParent();
-			while(command == null && parent != null){
+			while (command == null && parent != null) {
 				command = parent.getCommand(request);
-				if(command == null) parent = getParent();
+				if (command == null)
+					parent = getParent();
 			}
 		}
 		return command;
 	}
 
-	
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy(){
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
 			@Override
 			protected Command createDeleteCommand(GroupRequest deleteRequest) {
 				CompoundCommand command = new CompoundCommand();
@@ -450,16 +453,16 @@ public class CardEditPart extends AbstractEditPart {
 				requestToParent.setEditParts(CardEditPart.this);
 				requestToParent.setType(REQ_ORPHAN_CHILDREN);
 				command.add(getParent().getCommand(requestToParent));
-				command.add(new AddCardToContanerCommand(getBoardModel().getTrashModel(),getCardModel()));
+				command.add(new AddCardToContanerCommand(getBoardModel().getTrashModel(), getCardModel()));
 				return command;
 			}
 		});
-	    installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE,new DirectEditPolicy(){
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
 
 			@Override
 			protected Command getDirectEditCommand(DirectEditRequest request) {
-				String value = (String)request.getCellEditor().getValue();
-				return new CardSubjectDirectEditCommand(getCardModel(),value);
+				String value = (String) request.getCellEditor().getValue();
+				return new CardSubjectDirectEditCommand(getCardModel(), value);
 			}
 
 			@Override
@@ -468,12 +471,11 @@ public class CardEditPart extends AbstractEditPart {
 
 		});
 	}
-	
 
 	@Override
 	public void performRequest(Request req) {
-		if(RequestConstants.REQ_OPEN.equals(req.getType())){
-			if(directManager == null){
+		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
+			if (directManager == null) {
 				directManager = new SubjectDirectEditManager(new CellEditorLocator(getCardFigure().getMiddleSection()));
 			}
 			directManager.show();
@@ -483,66 +485,58 @@ public class CardEditPart extends AbstractEditPart {
 	private void effectToParentConstraint() {
 		Figure cardFigure = (Figure) getFigure();
 		GraphicalEditPart part = (GraphicalEditPart) getParent();
-		if(part != null){
+		if (part != null) {
 			Object constraint = cardFigure.getBounds();
 			part.setLayoutConstraint(this, cardFigure, constraint);
-		}else{
+		} else {
 			cardFigure.removeAll();
 		}
 	}
-	
+
 	public void doPropertyChange(final PropertyChangeEvent evt) {
 		KanbanUIStatusHandler.debug(
 				"CardEditPart#propertyChange evt.getPropertyName:'%s' evt.getNewValue:'%s' evt.getSource:'%s'"//$NON-NLS-1$ 
-				,evt.getPropertyName(),evt.getNewValue(),evt.getSource()); 
-		if(isPropLocation(evt)){
+				, evt.getPropertyName(), evt.getNewValue(), evt.getSource());
+		if (isPropLocation(evt)) {
 			Object newValue = evt.getNewValue();
-			if( ! (newValue instanceof Integer)) return ;
-			Point location = (Point) new Point(getCardModel().getX(),getCardModel().getY());
+			if (!(newValue instanceof Integer))
+				return;
+			Point location = (Point) new Point(getCardModel().getX(), getCardModel().getY());
 			IFigure figure = getFigure();
-			if(movable){
+			if (movable) {
 				figure.revalidate();
 				effectToParentConstraint();
 			}
 			figure.setLocation(location);
-		}
-		else if(isPropPrepareLocation(evt)){
+		} else if (isPropPrepareLocation(evt)) {
 			movable = false;
-		}
-		else if(isPropCommitLocation(evt)){
+		} else if (isPropCommitLocation(evt)) {
 			getCardFigure().revalidate();
 			Object newValue = evt.getNewValue();
 			Point location = (Point) newValue;
 			cardFigure.setLocation(location);
 			effectToParentConstraint();
 			movable = true;
-		}
-		else if(isPropSubject(evt)){
+		} else if (isPropSubject(evt)) {
 			String subject = (String) evt.getNewValue();
 			getCardFigure().setSubject(subject);
-		}
-		else if(isPropBody(evt)){
+		} else if (isPropBody(evt)) {
 			setContent(getCardModel().getContent());
-		}
-		else if(isPropFiles(evt)){
+		} else if (isPropFiles(evt)) {
 			setFiles(getCardModel().getFiles());
-		}
-		else if(isPropColorChanged(evt)){
+		} else if (isPropColorChanged(evt)) {
 			getCardFigure().setColorType((ColorTypes) evt.getNewValue());
-		}
-		else if(isPropCompleted(evt)){
+		} else if (isPropCompleted(evt)) {
 			setCompleted(getCardModel());
-		}
-		else if(isPropDue(evt)){
+		} else if (isPropDue(evt)) {
 			setDue(getCardModel());
-		}else if(isPropFlag(evt)){
+		} else if (isPropFlag(evt)) {
 			setFlag(getCardModel());
-		}
-		else{
-			KanbanUIStatusHandler.info("no property handler:property name:%s",evt.getPropertyName()); //$NON-NLS-1$
+		} else {
+			KanbanUIStatusHandler.info("no property handler:property name:%s", evt.getPropertyName()); //$NON-NLS-1$
 		}
 	}
-	
+
 	private boolean isPropCommitLocation(PropertyChangeEvent evt) {
 		return Card.PROP_COMMIT_LOCATION.equals(evt.getPropertyName());
 	}
@@ -566,10 +560,10 @@ public class CardEditPart extends AbstractEditPart {
 	private boolean isPropFiles(PropertyChangeEvent evt) {
 		return Card.PROP_FILES.equals(evt.getPropertyName());
 	}
-	
+
 	protected boolean isPropLocation(PropertyChangeEvent evt) {
-		return Card.PROP_LOCATION_X.equals(evt.getPropertyName())||
-		Card.PROP_LOCATION_Y.equals(evt.getPropertyName());
+		return Card.PROP_LOCATION_X.equals(evt.getPropertyName()) ||
+				Card.PROP_LOCATION_Y.equals(evt.getPropertyName());
 	}
 
 	private boolean isPropSubject(PropertyChangeEvent evt) {
@@ -579,29 +573,30 @@ public class CardEditPart extends AbstractEditPart {
 	private boolean isPropBody(PropertyChangeEvent evt) {
 		return Card.PROP_CONTENT.equals(evt.getPropertyName());
 	}
-	
-	private boolean isPropColorChanged(PropertyChangeEvent evt){
+
+	private boolean isPropColorChanged(PropertyChangeEvent evt) {
 		return HasColorTypeEntity.PROP_COLOR_TYPE.equals(evt.getPropertyName());
 	}
 
-	public Card getCardModel(){
+	public Card getCardModel() {
 		return (Card) getModel();
 	}
 
-	CardFigure getCardFigure(){
+	CardFigure getCardFigure() {
 		return cardFigure;
 	}
-	
-	private void setFiles(List<File> files){
-		if(files == null || files.size() == 0 ){
+
+	private void setFiles(List<File> files) {
+		if (files == null || files.size() == 0) {
 			getFileIcon().setVisible(false);
 			getFileIcon().setToolTip(null);
-		}else{
+		} else {
 			Label f = new Label();
 			StringBuilder builder = new StringBuilder();
 			boolean isNotFirst = false;
-			for(File file : files){
-				if(isNotFirst) builder.append(LINE_BREAK); //$NON-NLS-1$
+			for (File file : files) {
+				if (isNotFirst)
+					builder.append(LINE_BREAK); //$NON-NLS-1$
 				builder.append(file.getAbsolutePath());
 				isNotFirst = true;
 			}
@@ -610,26 +605,25 @@ public class CardEditPart extends AbstractEditPart {
 			getFileIcon().setToolTip(f);
 		}
 	}
-	
+
 	private void setFrom(User from) {
-		if(from != null){
+		if (from != null) {
 			Label f = new Label(from.getUserId());
 			getUserIcon().setToolTip(f);
 			getUserIcon().setVisible(true);
-		}else{
+		} else {
 			getUserIcon().setToolTip(null);
 			getUserIcon().setVisible(false);
 		}
 	}
 
 	private void setContent(String content) {
-		if(content == null || EMPTY.equals(content)){ //$NON-NLS-1$
+		if (content == null || EMPTY.equals(content)) { //$NON-NLS-1$
 			getPageIcon().setVisible(false);
-		}else{
+		} else {
 			getPageIcon().setVisible(true);
 		}
 	}
-
 
 	private IFigure getPageIcon() {
 		return pageIcon;
@@ -648,7 +642,6 @@ public class CardEditPart extends AbstractEditPart {
 		showActionIcons();
 		super.showTargetFeedback(request);
 	}
-
 
 	@Override
 	public void eraseTargetFeedback(Request request) {
@@ -671,40 +664,39 @@ public class CardEditPart extends AbstractEditPart {
 		colorIcon.setVisible(false);
 		deleteIcon.setVisible(false);
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	@Override
-	public Object getAdapter(Class key) {
-		if(MoveCommand.class.equals(key)){
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class key) {
+		if (MoveCommand.class.equals(key)) {
 			return new MoveCardCommand();
 		}
 		return super.getAdapter(key);
 	}
-	
+
 	void setFileIcon(Clickable fileIcon) {
 		this.fileIcon = fileIcon;
 	}
-	
+
 	void setPageIcon(Clickable pageIcon) {
 		this.pageIcon = pageIcon;
 	}
-	
+
 	void setCompletedIcon(StatusIcon completedIcon) {
 		this.completedIcon = completedIcon;
 	}
-	
+
 	void setDueIcon(StatusIcon dueIcon) {
 		this.dueIcon = dueIcon;
 	}
-	
+
 	void setDueDummy(IFigure dueDummy) {
 		this.dueDummy = dueDummy;
 	}
-	
+
 	void setOverDueIcon(StatusIcon overDueIcon) {
 		this.overDueIcon = overDueIcon;
 	}
-	
+
 	public void setCardFigure(CardFigure cardFigure) {
 		this.cardFigure = cardFigure;
 	}

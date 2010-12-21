@@ -5,14 +5,20 @@ Bundle-SymbolicName: org.kompiro.jamcircle.xmpp;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.kompiro.jamcircle.xmpp.XMPPActivator
 Bundle-Vendor: kompiro.org
-Require-Bundle: org.eclipse.core.runtime,
- org.jivesoftware.smack;visibility:=reexport,
- org.eclipse.equinox.security,
- org.kompiro.jamcircle.kanban,
- org.kompiro.jamcircle.debug
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: org.kompiro.jamcircle.xmpp,
  org.kompiro.jamcircle.xmpp.service,
  org.kompiro.jamcircle.xmpp.util
 Service-Component: OSGI-INF/XMPPConnectionService.xml
+Import-Package: org.eclipse.core.runtime,
+ org.eclipse.core.runtime.jobs,
+ org.eclipse.equinox.security.storage,
+ org.eclipse.osgi.util,
+ org.jivesoftware.smack,
+ org.jivesoftware.smack.packet,
+ org.jivesoftware.smackx.filetransfer,
+ org.kompiro.jamcircle.debug,
+ org.kompiro.jamcircle.kanban.model,
+ org.kompiro.jamcircle.kanban.service,
+ org.osgi.framework

@@ -26,7 +26,7 @@ public class BoardNewWizard extends Wizard implements INewWizard {
 		kanbanService = KanbanUIActivator.getDefault().getKanbanService();
 		setNeedsProgressMonitor(true);
 	}
-	
+
 	public void addPages() {
 		page = new BoardNewWizardPage(kanbanService.getKanbanDataInitializers());
 		addPage(page);
@@ -40,10 +40,11 @@ public class BoardNewWizard extends Wizard implements INewWizard {
 				monitor.internalWorked(3);
 				KanbanBoardTemplate initializer = page.getInitializer();
 				initializer.initialize(board);
-				UIJob job = new UIJob(Messages.BoardNewWizard_create_ui_job_title){
+				UIJob job = new UIJob(Messages.BoardNewWizard_create_ui_job_title) {
 					public org.eclipse.core.runtime.IStatus runInUIThread(IProgressMonitor monitor) {
 						KanbanView view = WorkbenchUtil.findKanbanView();
-						if(view != null) view.setContents(board, monitor);
+						if (view != null)
+							view.setContents(board, monitor);
 						return Status.OK_STATUS;
 					};
 				};
@@ -62,7 +63,7 @@ public class BoardNewWizard extends Wizard implements INewWizard {
 		}
 		return true;
 	}
-	
+
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 	}
 }

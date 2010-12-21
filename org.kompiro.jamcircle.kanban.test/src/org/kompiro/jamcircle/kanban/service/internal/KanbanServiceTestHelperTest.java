@@ -14,7 +14,6 @@ import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.storage.service.StorageService;
 import org.kompiro.jamcircle.storage.service.internal.FileStorageServiceImpl;
 
-@SuppressWarnings("restriction")
 public class KanbanServiceTestHelperTest {
 
 	private KanbanServiceTestHelper helper;

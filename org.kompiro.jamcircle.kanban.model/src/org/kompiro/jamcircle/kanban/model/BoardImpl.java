@@ -4,7 +4,6 @@ import java.beans.PropertyChangeEvent;
 import java.sql.SQLException;
 import java.util.*;
 
-import org.kompiro.jamcircle.kanban.KanbanStatusHandler;
 import org.kompiro.jamcircle.storage.model.EntityImpl;
 
 /**

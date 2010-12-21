@@ -4,7 +4,6 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.*;
 
-import org.kompiro.jamcircle.kanban.KanbanActivator;
 import org.kompiro.jamcircle.storage.model.GraphicalEntityImpl;
 import org.kompiro.jamcircle.storage.service.StorageService;
 
@@ -124,7 +123,7 @@ public class CardImpl extends GraphicalEntityImpl {
 		if (storageService != null) {
 			return storageService;
 		}
-		return KanbanActivator.getKanbanService().getStorageService();
+		return KanbanModelContext.getDefault().getStorageService();
 	}
 
 	public void setStorageService(StorageService storageService) {

@@ -1,4 +1,4 @@
-package org.kompiro.jamcircle.kanban.model;
+package org.kompiro.jamcircle.kanban.functional.model;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -8,6 +8,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.junit.*;
+import org.kompiro.jamcircle.kanban.model.Board;
+import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.service.internal.KanbanServiceEnvironment;
 import org.kompiro.jamcircle.kanban.service.internal.KanbanServiceTestHelper;
 import org.kompiro.jamcircle.storage.model.ExecutorHandler;

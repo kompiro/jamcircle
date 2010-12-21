@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JAM Circle Kanban Model Test
+Bundle-SymbolicName: org.kompiro.jamcircle.kanban.model.test
+Bundle-Version: 0.0.0
+Bundle-Vendor: kompiro.org
+Fragment-Host: org.kompiro.jamcircle.kanban.model
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.hamcrest,
+ org.junit,
+ org.junit.rules,
+ org.kompiro.jamcircle.kanban,
+ org.kompiro.jamcircle.kanban.service,
+ org.kompiro.jamcircle.test,
+ org.mockito,
+ org.mockito.stubbing

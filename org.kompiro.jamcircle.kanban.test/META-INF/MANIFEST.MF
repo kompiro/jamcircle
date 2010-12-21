@@ -7,9 +7,13 @@ Bundle-Vendor: kompiro.org
 Fragment-Host: org.kompiro.jamcircle.kanban
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-RegisterBuddy: org.mockito
-Import-Package: org.hamcrest,
+Import-Package: net.java.ao,
+ org.hamcrest,
  org.junit,
  org.junit.rules,
  org.junit.runners.model,
+ org.kompiro.jamcircle.storage.model,
+ org.kompiro.jamcircle.storage.service,
+ org.kompiro.jamcircle.storage.service.internal,
  org.kompiro.jamcircle.test,
  org.mockito

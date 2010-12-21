@@ -19,6 +19,7 @@ Export-Package: net.java.ao,
  org.kompiro.jamcircle.storage,
  org.kompiro.jamcircle.storage.exception,
  org.kompiro.jamcircle.storage.model,
- org.kompiro.jamcircle.storage.service
+ org.kompiro.jamcircle.storage.service,
+ org.kompiro.jamcircle.storage.service.internal;x-friends:="org.kompiro.jamcircle.kanban.test,org.kompiro.jamcircle.kanban.ui.test"
 Bundle-Vendor: kompiro.org
 Service-Component: OSGI-INF/StorageService.xml
