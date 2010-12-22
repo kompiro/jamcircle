@@ -7,14 +7,14 @@ Bundle-Vendor: kompiro.org
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Import-Package: org.apache.bsf,
  org.apache.bsf.util,
- org.eclipse.core.runtime;version="3.4.0",
- org.eclipse.osgi.service.datalocation;version="1.3.0",
- org.eclipse.osgi.util;version="1.1.0",
- org.osgi.framework;version="1.3.0",
- org.osgi.service.component;version="1.1.0"
+ org.eclipse.core.runtime,
+ org.eclipse.osgi.service.datalocation,
+ org.eclipse.osgi.util,
+ org.osgi.framework,
+ org.osgi.service.component
 Bundle-ActivationPolicy: lazy
 Export-Package: org.kompiro.jamcircle.scripting,
  org.kompiro.jamcircle.scripting.exception,
  org.kompiro.jamcircle.scripting.util
 Service-Component: OSGI-INF/ScriptingService.xml,OSGI-INF/ScriptingEngineInitializerLoader.xml
-Require-Bundle: org.jruby.jruby;bundle-version="1.5.2"
+Require-Bundle: org.jruby.jruby

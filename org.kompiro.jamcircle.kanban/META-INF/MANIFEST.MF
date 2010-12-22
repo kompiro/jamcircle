@@ -14,12 +14,12 @@ Export-Package: org.kompiro.jamcircle.kanban,
 Eclipse-BuddyPolicy: dependent
 Service-Component: OSGI-INF/KanbanService.xml, OSGI-INF/BoardConverter.xml
 Import-Package: net.java.ao,
- org.eclipse.core.runtime;version="3.4.0",
- org.eclipse.osgi.util;version="1.1.0",
+ org.eclipse.core.runtime,
+ org.eclipse.osgi.util,
  org.kompiro.jamcircle.debug,
  org.kompiro.jamcircle.kanban.model,
  org.kompiro.jamcircle.kanban.model.mock,
  org.kompiro.jamcircle.scripting,
  org.kompiro.jamcircle.storage.model,
  org.kompiro.jamcircle.storage.service,
- org.osgi.framework;version="1.5.0"
+ org.osgi.framework

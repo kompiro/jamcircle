@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JAM Circle Kanban model bundle
-Bundle-SymbolicName: org.kompiro.jamcircle.kanban.model
+Bundle-SymbolicName: org.kompiro.jamcircle.kanban.model;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-Activator: org.kompiro.jamcircle.kanban.model.Activator
 Bundle-Vendor: kompiro.org
@@ -10,7 +10,7 @@ Import-Package: net.java.ao,
  net.java.ao.schema,
  org.apache.commons.lang,
  org.apache.commons.lang.builder,
- org.eclipse.core.runtime;version="3.4.0",
+ org.eclipse.core.runtime,
  org.eclipse.osgi.util,
  org.kompiro.jamcircle.debug,
  org.kompiro.jamcircle.scripting,

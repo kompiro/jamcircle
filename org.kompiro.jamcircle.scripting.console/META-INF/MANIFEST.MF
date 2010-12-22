@@ -15,4 +15,4 @@ Import-Package: org.eclipse.jface.resource,
  org.eclipse.ui.console,
  org.eclipse.ui.plugin,
  org.kompiro.jamcircle.scripting,
- org.osgi.framework;version="1.5.0"
+ org.osgi.framework
