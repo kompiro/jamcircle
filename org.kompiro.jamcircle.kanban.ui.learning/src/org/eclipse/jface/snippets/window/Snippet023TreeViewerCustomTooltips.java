@@ -23,22 +23,26 @@ import org.eclipse.swt.widgets.*;
 /**
  * A simple TreeViewer to demonstrate how custom tooltips could be created
  * easily. This is an extended version from
- * http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/org.eclipse.swt.snippets/src/org/eclipse/swt/snippets/Snippet125.java
+ * http://dev.eclipse.org/viewcvs/index.cgi/%
+ * 7Echeckout%7E/org.eclipse.swt.snippets/src/org/eclipse/swt/snippets/Snippet125.ja
+ * v
+ * a
  * 
- * This code is for users pre 3.3 others could use newly added tooltip support in
- * {@link CellLabelProvider}
+ * This code is for users pre 3.3 others could use newly added tooltip support
+ * in {@link CellLabelProvider}
  * 
  * @author Tom Schindl <tom.schindl@bestsolution.at>
  * 
  */
-@SuppressWarnings("unchecked")
 public class Snippet023TreeViewerCustomTooltips {
 	private class MyContentProvider implements ITreeContentProvider {
 
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
+		 * @see
+		 * org.eclipse.jface.viewers.IStructuredContentProvider#getElements(
+		 * java.lang.Object)
 		 */
 		public Object[] getElements(Object inputElement) {
 			return ((MyModel) inputElement).child.toArray();
@@ -56,8 +60,10 @@ public class Snippet023TreeViewerCustomTooltips {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer,
-		 *      java.lang.Object, java.lang.Object)
+		 * @see
+		 * org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse
+		 * .jface.viewers.Viewer,
+		 * java.lang.Object, java.lang.Object)
 		 */
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 
@@ -66,7 +72,9 @@ public class Snippet023TreeViewerCustomTooltips {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.Object)
+		 * @see
+		 * org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang
+		 * .Object)
 		 */
 		public Object[] getChildren(Object parentElement) {
 			return getElements(parentElement);
@@ -75,7 +83,9 @@ public class Snippet023TreeViewerCustomTooltips {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
+		 * @see
+		 * org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang
+		 * .Object)
 		 */
 		public Object getParent(Object element) {
 			if (element == null) {
@@ -88,7 +98,9 @@ public class Snippet023TreeViewerCustomTooltips {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.Object)
+		 * @see
+		 * org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang
+		 * .Object)
 		 */
 		public boolean hasChildren(Object element) {
 			return ((MyModel) element).child.size() > 0;
@@ -99,7 +111,7 @@ public class Snippet023TreeViewerCustomTooltips {
 	public class MyModel {
 		public MyModel parent;
 
-		public ArrayList child = new ArrayList();
+		public ArrayList<MyModel> child = new ArrayList<MyModel>();
 
 		public int counter;
 
@@ -127,80 +139,84 @@ public class Snippet023TreeViewerCustomTooltips {
 		v.setInput(createModel());
 		v.getTree().setToolTipText("");
 
-		final Listener labelListener = new Listener () {
-			public void handleEvent (Event event) {
-				Label label = (Label)event.widget;
-				Shell shell = label.getShell ();
+		final Listener labelListener = new Listener() {
+			public void handleEvent(Event event) {
+				Label label = (Label) event.widget;
+				Shell shell = label.getShell();
 				switch (event.type) {
-					case SWT.MouseDown:
-						Event e = new Event ();
-						e.item = (TreeItem) label.getData ("_TABLEITEM");
-						// Assuming table is single select, set the selection as if
+				case SWT.MouseDown:
+						Event e = new Event();
+						e.item = (TreeItem) label.getData("_TABLEITEM");
+						// Assuming table is single select, set the selection as
+						// if
 						// the mouse down event went through to the table
-						v.getTree().setSelection (new TreeItem [] {(TreeItem) e.item});
-						v.getTree().notifyListeners (SWT.Selection, e);
-						shell.dispose ();
+						v.getTree().setSelection(new TreeItem[] { (TreeItem) e.item });
+						v.getTree().notifyListeners(SWT.Selection, e);
+						shell.dispose();
 						v.getTree().setFocus();
 						break;
 					case SWT.MouseExit:
-						shell.dispose ();
-						break;
-				}
-			}
-		};
-		
-		Listener treeListener = new Listener () {
-			Shell tip = null;
-			Label label = null;
-			public void handleEvent (Event event) {
-				switch (event.type) {
-					case SWT.Dispose:
-					case SWT.KeyDown:
-					case SWT.MouseMove: {
-						if (tip == null) break;
-						tip.dispose ();
-						tip = null;
-						label = null;
+						shell.dispose();
 						break;
 					}
-					case SWT.MouseHover: {
-						Point coords = new Point(event.x, event.y);
-						TreeItem item = v.getTree().getItem(coords);
-						if (item != null) {
-							int columns = v.getTree().getColumnCount();
+				}
+		};
 
-							for (int i = 0; i < columns || i == 0; i++) {
-								if (item.getBounds(i).contains(coords)) {
-									if (tip != null  && !tip.isDisposed ()) tip.dispose ();
-									tip = new Shell (v.getTree().getShell(), SWT.ON_TOP | SWT.NO_FOCUS | SWT.TOOL);
-									tip.setBackground (v.getTree().getDisplay().getSystemColor (SWT.COLOR_INFO_BACKGROUND));
-									FillLayout layout = new FillLayout ();
-									layout.marginWidth = 2;
-									tip.setLayout (layout);
-									label = new Label (tip, SWT.NONE);
-									label.setForeground (v.getTree().getDisplay().getSystemColor (SWT.COLOR_INFO_FOREGROUND));
-									label.setBackground (v.getTree().getDisplay().getSystemColor (SWT.COLOR_INFO_BACKGROUND));
-									label.setData ("_TABLEITEM", item);
-									label.setText ("Tooltip: " + item.getData()+ " => Column: " + i);
-									label.addListener (SWT.MouseExit, labelListener);
-									label.addListener (SWT.MouseDown, labelListener);
-									Point size = tip.computeSize (SWT.DEFAULT, SWT.DEFAULT);
-									Rectangle rect = item.getBounds (i);
-									Point pt = v.getTree().toDisplay (rect.x, rect.y);
-									tip.setBounds (pt.x, pt.y, size.x, size.y);
-									tip.setVisible (true);
-									break;
-								}
+		Listener treeListener = new Listener() {
+			Shell tip = null;
+			Label label = null;
+
+			public void handleEvent(Event event) {
+				switch (event.type) {
+				case SWT.Dispose:
+					case SWT.KeyDown:
+					case SWT.MouseMove: {
+					if (tip == null)
+						break;
+					tip.dispose();
+					tip = null;
+					label = null;
+					break;
+				}
+				case SWT.MouseHover: {
+					Point coords = new Point(event.x, event.y);
+					TreeItem item = v.getTree().getItem(coords);
+					if (item != null) {
+						int columns = v.getTree().getColumnCount();
+
+						for (int i = 0; i < columns || i == 0; i++) {
+							if (item.getBounds(i).contains(coords)) {
+								if (tip != null && !tip.isDisposed())
+									tip.dispose();
+								tip = new Shell(v.getTree().getShell(), SWT.ON_TOP | SWT.NO_FOCUS | SWT.TOOL);
+								tip.setBackground(v.getTree().getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+								FillLayout layout = new FillLayout();
+								layout.marginWidth = 2;
+								tip.setLayout(layout);
+								label = new Label(tip, SWT.NONE);
+								label.setForeground(v.getTree().getDisplay().getSystemColor(SWT.COLOR_INFO_FOREGROUND));
+								label.setBackground(v.getTree().getDisplay().getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+								label.setData("_TABLEITEM", item);
+								label.setText("Tooltip: " + item.getData() + " => Column: " + i);
+								label.addListener(SWT.MouseExit, labelListener);
+								label.addListener(SWT.MouseDown, labelListener);
+								Point size = tip.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+								Rectangle rect = item.getBounds(i);
+								Point pt = v.getTree().toDisplay(rect.x, rect.y);
+								tip.setBounds(pt.x, pt.y, size.x, size.y);
+								tip.setVisible(true);
+								break;
 							}
 						}
 					}
 				}
+				}
 			}
 		};
-		v.getTree().addListener (SWT.Dispose, treeListener);
-		v.getTree().addListener (SWT.KeyDown, treeListener);
-		v.getTree().addListener (SWT.MouseMove, treeListener);
-		v.getTree().addListener (SWT.MouseHover, treeListener);
+		v.getTree().addListener(SWT.Dispose, treeListener);
+		v.getTree().addListener(SWT.KeyDown, treeListener);
+		v.getTree().addListener(SWT.MouseMove, treeListener);
+		v.getTree().addListener(SWT.MouseHover, treeListener);
 	}
 
 	private MyModel createModel() {
@@ -235,4 +251,3 @@ public class Snippet023TreeViewerCustomTooltips {
 		display.dispose();
 	}
 }
-

@@ -21,12 +21,12 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.*;
 
 /**
- * Demonstrates how to use keyboard-editing support in a TreeViewer with no column
+ * Demonstrates how to use keyboard-editing support in a TreeViewer with no
+ * column
  * 
  * @author Tom Schindl <tom.schindl@bestsolution.at>
  * 
  */
-@SuppressWarnings("unchecked")
 public class Snippet043NoColumnTreeViewerKeyboardEditing {
 	public Snippet043NoColumnTreeViewerKeyboardEditing(final Shell shell) {
 		Button b = new Button(shell, SWT.PUSH);
@@ -161,7 +161,7 @@ public class Snippet043NoColumnTreeViewerKeyboardEditing {
 	public class MyModel {
 		public MyModel parent;
 
-		public ArrayList child = new ArrayList();
+		public ArrayList<MyModel> child = new ArrayList<MyModel>();
 
 		public int counter;
 

@@ -28,58 +28,63 @@ import org.kompiro.jamcircle.xmpp.kanban.ui.internal.command.*;
 import org.kompiro.jamcircle.xmpp.kanban.ui.internal.figure.UserFigure;
 import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
 
-public class UserEditPart extends AbstractEditPart implements IconEditPart{
+public class UserEditPart extends AbstractEditPart implements IconEditPart {
 
 	@Override
 	protected IFigure createFigure() {
 		UserModel model = (UserModel) getModel();
-		UserFigure userFigure = new UserFigure(model,getImageRegistry());
+		UserFigure userFigure = new UserFigure(model, getImageRegistry());
 		userFigure.setLocation(model.getLocation());
 		return userFigure;
 	}
 
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new LayoutEditPolicy(){
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new LayoutEditPolicy() {
 			@Override
 			protected EditPolicy createChildEditPolicy(EditPart child) {
 				return null;
 			}
+
 			@Override
 			protected Command getCreateCommand(CreateRequest request) {
 				return null;
 			}
+
 			@Override
 			protected Command getMoveChildrenCommand(Request request) {
 				return null;
 			}
+
 			@Override
 			protected Command getAddCommand(final Request request) {
 				CompoundCommand command = new CompoundCommand();
 				if (request instanceof ChangeBoundsRequest) {
 					ChangeBoundsRequest req = (ChangeBoundsRequest) request;
-					for(Object obj : req.getEditParts()){
+					for (Object obj : req.getEditParts()) {
 						if (obj instanceof GraphicalEditPart) {
 							GraphicalEditPart part = (GraphicalEditPart) obj;
 
 							EditPart parent = part.getParent();
-							if(parent == null || !(parent instanceof GraphicalEditPart)) continue;
-							createAddCommand(command,req,part,(GraphicalEditPart)parent);
+							if (parent == null || !(parent instanceof GraphicalEditPart))
+								continue;
+							createAddCommand(command, req, part, (GraphicalEditPart) parent);
 						}
 					}
 				}
 				return command;
 			}
 
-			private void createAddCommand(CompoundCommand command, ChangeBoundsRequest request, GraphicalEditPart part, GraphicalEditPart parent) {
+			private void createAddCommand(CompoundCommand command, ChangeBoundsRequest request, GraphicalEditPart part,
+					GraphicalEditPart parent) {
 				SendCardCommand sendCommand = new SendCardCommand();
 				sendCommand.setPart(part);
 				sendCommand.setTarget(getUserModel().getUser());
 				command.add(sendCommand);
 			}
 		});
-		
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy(){
+
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new ComponentEditPolicy() {
 			@Override
 			protected Command createDeleteCommand(GroupRequest deleteRequest) {
 				CompoundCommand command = new CompoundCommand();
@@ -92,12 +97,12 @@ public class UserEditPart extends AbstractEditPart implements IconEditPart{
 			}
 		});
 	}
-	
-	public UserEditPart(BoardModel board){
+
+	public UserEditPart(BoardModel board) {
 		super(board);
 	}
-	
-	public UserModel getUserModel(){
+
+	public UserModel getUserModel() {
 		return (UserModel) getModel();
 	}
 
@@ -112,19 +117,18 @@ public class UserEditPart extends AbstractEditPart implements IconEditPart{
 		getFigure().setBackgroundColor(null);
 		super.eraseTargetFeedback(request);
 	}
-			
+
 	@Override
 	protected void refreshVisuals() {
 		getFigure().repaint();
 	}
-	
+
 	@Override
 	public void doPropertyChange(PropertyChangeEvent prop) {
-		if(isPropLocation(prop)){
+		if (isPropLocation(prop)) {
 			figure.setLocation((Point) prop.getNewValue());
-			refreshVisuals();			
-		}
-		else if(isPropPresence(prop)){
+			refreshVisuals();
+		} else if (isPropPresence(prop)) {
 			refreshVisuals();
 		}
 	}
@@ -136,37 +140,38 @@ public class UserEditPart extends AbstractEditPart implements IconEditPart{
 	private boolean isPropPresence(PropertyChangeEvent prop) {
 		return UserModel.PROP_PRESENCE.equals(prop.getPropertyName());
 	}
-	
+
 	@Override
 	public void performRequest(Request req) {
-		if(RequestConstants.REQ_OPEN.equals(req.getType())){
+		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
 			Shell shell = getViewer().getControl().getShell();
-			ApplicationWindow window = new ApplicationWindow(shell){
+			ApplicationWindow window = new ApplicationWindow(shell) {
 				private CardListListener listener;
 				private CardListTableViewer viewer;
+
 				protected Control createContents(Composite parent) {
 					viewer = new CardListTableViewer(parent);
 					CardContainer container = getVirtualCardContainer();
 					viewer.setInput(container);
-					listener = new CardListListener(){
+					listener = new CardListListener() {
 
 						public void dragFinished(DragSourceEvent event,
 								CardListTableViewer viewer) {
 							event.doit = false;
 							event.data = null;
 						}
-						
+
 					};
 					viewer.addCardListListener(listener);
 					return parent;
 				}
-				
+
 				@Override
 				public boolean close() {
 					viewer.removeCardListListener(listener);
 					return super.close();
 				}
-				
+
 				@Override
 				protected void configureShell(Shell shell) {
 					shell.setText(Messages.UserEditPart_shell_title + getUserModel().getName());
@@ -186,22 +191,22 @@ public class UserEditPart extends AbstractEditPart implements IconEditPart{
 		KanbanService service = getKanbanService();
 		Card[] cards = service.findCardsSentTo(getUserModel().getUser());
 		CardContainer container = new CardContainer.Mock();
-		if(cards == null) return container;
-		for(Card card : cards){
+		if (cards == null)
+			return container;
+		for (Card card : cards) {
 			container.addCard(card);
 		}
 		return container;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public Object getAdapter(Class key) {
-		if(MoveCommand.class.equals(key)){
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class key) {
+		if (MoveCommand.class.equals(key)) {
 			return new MoveUserCommand();
 		}
-		if(DeleteCommand.class.equals(key)){
+		if (DeleteCommand.class.equals(key)) {
 			CompoundCommand compoundCommand = new CompoundCommand();
-			DeleteIconModelCommand command = new DeleteIconModelCommand();
+			DeleteIconModelCommand<UserModel> command = new DeleteIconModelCommand<UserModel>();
 			command.setModel(getUserModel());
 			command.setContainer(getBoardModel());
 			compoundCommand.add(command);

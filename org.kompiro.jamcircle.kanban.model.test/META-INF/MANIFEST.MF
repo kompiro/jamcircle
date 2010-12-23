@@ -9,8 +9,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.hamcrest,
  org.junit,
  org.junit.rules,
- org.kompiro.jamcircle.kanban,
- org.kompiro.jamcircle.kanban.service,
  org.kompiro.jamcircle.test,
  org.mockito,
  org.mockito.stubbing

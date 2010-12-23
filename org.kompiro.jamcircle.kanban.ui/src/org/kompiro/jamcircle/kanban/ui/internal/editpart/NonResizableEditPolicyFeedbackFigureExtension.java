@@ -28,7 +28,7 @@ public class NonResizableEditPolicyFeedbackFigureExtension extends
 		}
 		return null;
 	}
-	
+
 	@Override
 	protected void showSelection() {
 		super.showSelection();
@@ -38,8 +38,8 @@ public class NonResizableEditPolicyFeedbackFigureExtension extends
 			part.reorder(getHost());
 		}
 	}
-	
-	@SuppressWarnings("unchecked")
+
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected List createSelectionHandles() {
 		List<AbstractHandle> handles = new ArrayList<AbstractHandle>();

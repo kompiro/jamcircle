@@ -25,7 +25,6 @@ import net.java.ao.DBParam;
 import net.java.ao.EntityManager;
 
 import org.junit.*;
-import org.kompiro.jamcircle.kanban.functional.model.*;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.storage.service.StorageService;
 import org.kompiro.jamcircle.storage.service.internal.StorageServiceImpl;

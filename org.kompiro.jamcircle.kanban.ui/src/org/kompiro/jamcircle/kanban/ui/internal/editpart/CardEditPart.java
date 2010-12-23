@@ -257,10 +257,6 @@ public class CardEditPart extends AbstractEditPart {
 
 		figure.setColorType(model.getColorType());
 		figure.setLocation(new Point(model.getX(), model.getY()));
-		boolean animated = getBoardModel().isAnimated();
-		if (!animated) {
-			figure.setAdded(true);
-		}
 		return figure;
 	}
 

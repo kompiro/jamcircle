@@ -19,19 +19,20 @@ import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneIconFigure;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.LaneCreaterModel;
 
-public class LaneCreaterEditPart extends AbstractEditPart implements IconEditPart{
+public class LaneCreaterEditPart extends AbstractEditPart implements IconEditPart {
 
-	public LaneCreaterEditPart(BoardModel board){
+	public LaneCreaterEditPart(BoardModel board) {
 		super(board);
 	}
-	
+
 	@Override
 	protected IFigure createFigure() {
 		LaneIconFigure laneIconFigure = new LaneIconFigure();
 		laneIconFigure.setStatus(getLaneCreaterModel().getName());
-		Image addImage = KanbanUIActivator.getDefault().getImageRegistry().get(KanbanImageConstants.ADD_IMAGE.toString());
+		Image addImage = KanbanUIActivator.getDefault().getImageRegistry()
+				.get(KanbanImageConstants.ADD_IMAGE.toString());
 		ImageFigure addFigure = new ImageFigure(addImage);
-		laneIconFigure.add(addFigure, new Rectangle(72-20,72-20,16,16));
+		laneIconFigure.add(addFigure, new Rectangle(72 - 20, 72 - 20, 16, 16));
 		laneIconFigure.setLocation(getLaneCreaterModel().getLocation());
 		return laneIconFigure;
 	}
@@ -42,33 +43,31 @@ public class LaneCreaterEditPart extends AbstractEditPart implements IconEditPar
 
 	@Override
 	public void performRequest(Request req) {
-		if(RequestConstants.REQ_OPEN.equals(req.getType())){
-			LaneCreateRequest request = new LaneCreateRequest(getKanbanService(),getBoardModel().getBoard());
+		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
+			LaneCreateRequest request = new LaneCreateRequest(getKanbanService(), getBoardModel().getBoard());
 			request.setLocation(figure.getBounds().getLocation().getCopy().getTranslated(64, 64));
 			Command command = getParent().getCommand(request);
 			getCommandStack().execute(command);
 		}
 	}
-	
-	public LaneCreaterModel getLaneCreaterModel(){
-		return (LaneCreaterModel)getModel();
+
+	public LaneCreaterModel getLaneCreaterModel() {
+		return (LaneCreaterModel) getModel();
 	}
 
 	public void doPropertyChange(PropertyChangeEvent evt) {
-		if(isPropLocation(evt)){
+		if (isPropLocation(evt)) {
 			figure.setLocation(getLaneCreaterModel().getLocation());
 			figure.repaint();
 		}
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	@Override
-	public Object getAdapter(Class key) {
-		if(MoveCommand.class.equals(key)){
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class key) {
+		if (MoveCommand.class.equals(key)) {
 			return new MoveIconCommand();
 		}
 		return super.getAdapter(key);
 	}
-
 
 }

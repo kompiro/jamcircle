@@ -16,4 +16,5 @@ Import-Package: net.java.ao,
  org.kompiro.jamcircle.storage.service,
  org.kompiro.jamcircle.storage.service.internal,
  org.kompiro.jamcircle.test,
- org.mockito
+ org.mockito,
+ org.mockito.stubbing

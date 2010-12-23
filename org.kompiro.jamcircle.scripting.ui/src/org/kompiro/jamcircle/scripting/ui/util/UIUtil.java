@@ -1,58 +1,56 @@
 package org.kompiro.jamcircle.scripting.ui.util;
 
-
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.*;
 
 public class UIUtil {
-	
-	public static void openWarning(final String title,final String message){
+
+	public static void openWarning(final String title, final String message) {
 		sync(new Runnable() {
-			
+
 			public void run() {
 				Shell parent = getShell();
 				MessageDialog.openWarning(parent, title, message);
 			}
 		});
 	}
-	
-	private static Display getDisplay(){
+
+	private static Display getDisplay() {
 		IWorkbench workbench = getWorkbench();
 		Display defDisplay = Display.getDefault();
-		if(workbench == null){
+		if (workbench == null) {
 			return defDisplay;
 		}
-		try{
-			if(workbench == null) return defDisplay;
+		try {
 			Display display = workbench.getDisplay();
-			if(display != null) return display;
+			if (display != null)
+				return display;
 			IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-			if(activeWorkbenchWindow == null) return defDisplay;
+			if (activeWorkbenchWindow == null)
+				return defDisplay;
 			display = activeWorkbenchWindow.getShell().getDisplay();
 			return display;
-		}catch(IllegalStateException e){
+		} catch (IllegalStateException e) {
 			return defDisplay;
 		}
 
 	}
-	
-	public static void async(Runnable runnable){
+
+	public static void async(Runnable runnable) {
 		Display display = getDisplay();
-		if(display == null){
+		if (display == null) {
 			runnable.run();
 			return;
 		}
 		display.asyncExec(runnable);
 	}
-	
-	public static void sync(Runnable runnable){
+
+	public static void sync(Runnable runnable) {
 		Display display = getDisplay();
-		if(display == null){
+		if (display == null) {
 			runnable.run();
 			return;
 		}
@@ -60,27 +58,31 @@ public class UIUtil {
 	}
 
 	private static IWorkbench getWorkbench() {
-		if(Platform.isRunning()){
-			if(PlatformUI.isWorkbenchRunning()){
+		if (Platform.isRunning()) {
+			if (PlatformUI.isWorkbenchRunning()) {
 				return PlatformUI.getWorkbench();
 			}
 		}
 		return null;
 	}
-	
-	private static IWorkbenchWindow getWorkbenchWindow(){
+
+	private static IWorkbenchWindow getWorkbenchWindow() {
 		IWorkbench workbench = getWorkbench();
-		if(workbench == null) return null;
+		if (workbench == null)
+			return null;
 		IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
-		if(window != null) return window;
-		if(workbench.getWorkbenchWindowCount() == 0) return null;
+		if (window != null)
+			return window;
+		if (workbench.getWorkbenchWindowCount() == 0)
+			return null;
 		return workbench.getWorkbenchWindows()[0];
 	}
 
 	private static Shell getShell() {
 		IWorkbenchWindow window = getWorkbenchWindow();
-		if(window == null) return null;
+		if (window == null)
+			return null;
 		return window.getShell();
 	}
-	
+
 }

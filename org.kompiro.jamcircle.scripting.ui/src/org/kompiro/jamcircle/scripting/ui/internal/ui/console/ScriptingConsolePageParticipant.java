@@ -22,8 +22,7 @@ public class ScriptingConsolePageParticipant implements IConsolePageParticipant 
 		this.page = (TextConsolePage) page;
 	}
 
-	@SuppressWarnings("unchecked")
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		return null;
 	}
 

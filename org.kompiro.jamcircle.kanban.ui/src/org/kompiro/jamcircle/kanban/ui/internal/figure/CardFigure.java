@@ -24,9 +24,7 @@ public class CardFigure extends RoundedRectangle {
 	public static final int CARD_CHARS_OF_LINES = 10;
 	public static final int CARD_LINES = 4;
 
-	private static final int ANIMATION_TIME = 100;
 	private static final int LINE_WIDTH = 4;
-	private static final int FRAMES = 8;
 
 	public static final String COLOR_KEY_CARD_BODY = "color_key_card_body"; //$NON-NLS-1$
 	public static final String COLOR_KEY_CARD_BORDER = "color_key_card_border"; //$NON-NLS-1$
@@ -34,9 +32,6 @@ public class CardFigure extends RoundedRectangle {
 	public static int theta = 45;
 	public static int maxColorCount = 360 / theta;
 
-	private int alpha = 50;
-	private boolean added = false;
-	private boolean removed = false;
 	private TextFlow subject;
 
 	private Label idLabel;
@@ -194,62 +189,11 @@ public class CardFigure extends RoundedRectangle {
 		}
 	}
 
-	// public void setRemoved(boolean removed) {
-	// this.removed = removed;
-	// }
-
 	@Override
 	protected void fireFigureMoved() {
 		invalidate();
 		super.fireFigureMoved();
 	}
-
-	@Override
-	public void paint(Graphics graphics) {
-		//		KanbanUIStatusHandler.debugUI("CardFigure#paint() '%s' added:'%s' removed:'%s' alpha:'%d' visible:'%s'", //$NON-NLS-1$
-		// idLabel.getText(),added,removed,alpha,isVisible());
-		// if(!added){
-		// doAddedAnimation(graphics);
-		// }
-		// if(removed){
-		// doRemovedAnimation(graphics);
-		// }
-		super.paint(graphics);
-	}
-
-	// private void doAddedAnimation(Graphics graphics) {
-	// if(alpha < 255){
-	// alpha += 255/FRAMES;
-	// alpha = alpha > 255 ? 255 : alpha;
-	// repaintAnimation();
-	// }else{
-	// added = true;
-	// }
-	// graphics.setAlpha(alpha);
-	// }
-	//
-	// private void doRemovedAnimation(Graphics graphics) {
-	// if(alpha > 0){
-	// alpha -= 255/FRAMES;
-	// alpha = alpha < 0 ? 0 : alpha;
-	// repaintAnimation();
-	// }else{
-	// // for Animation Tip
-	// setVisible(false);
-	// }
-	// graphics.setAlpha(alpha);
-	// }
-	//
-	// private void repaintAnimation() {
-	// Display display = getDisplay();
-	// if(display == null) return;
-	// Runnable runnable = new Runnable() {
-	// public void run() {
-	// repaint();
-	// }
-	// };
-	// display.timerExec(ANIMATION_TIME / FRAMES,runnable);
-	// }
 
 	private static Display getDisplay() {
 		return WorkbenchUtil.getDisplay();
@@ -262,13 +206,6 @@ public class CardFigure extends RoundedRectangle {
 
 	public Figure getStatusSection() {
 		return statusSection;
-	}
-
-	public void setAdded(boolean added) {
-		this.added = added;
-		if (added) {
-			alpha = 255;
-		}
 	}
 
 }

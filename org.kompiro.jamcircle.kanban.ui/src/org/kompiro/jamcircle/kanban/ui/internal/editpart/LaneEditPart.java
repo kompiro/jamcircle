@@ -311,7 +311,6 @@ public class LaneEditPart extends AbstractEditPart implements CardContainerEditP
 			GraphicalEntity model = (GraphicalEntity) childEditPart.getModel();
 			model.setDeletedVisuals(false);
 			card.setVisible(true);
-			card.setAdded(false);
 		}
 		getContentPane().add(child, child.getBounds(), -1);
 	}

@@ -5,7 +5,6 @@ import static org.kompiro.jamcircle.kanban.model.Lane.VALUE_OF_WIDTH;
 import net.java.ao.EntityManager;
 
 import org.kompiro.jamcircle.kanban.KanbanActivator;
-import org.kompiro.jamcircle.kanban.functional.model.*;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.storage.service.FileStorageService;
 
