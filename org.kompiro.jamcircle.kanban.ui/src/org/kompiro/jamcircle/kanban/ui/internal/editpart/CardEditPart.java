@@ -198,7 +198,10 @@ public class CardEditPart extends AbstractEditPart {
 			CellEditorActionHandler handlers = (CellEditorActionHandler) kanbanView
 					.getAdapter(CellEditorActionHandler.class);
 			handlers.addCellEditor(getCellEditor());
-			getCellEditor().setValue(getCardModel().getSubject());
+			String subject = getCardModel().getSubject();
+			if (subject == null)
+				subject = "";
+			getCellEditor().setValue(subject);
 			Text text = (Text) getCellEditor().getControl();
 			text.selectAll();
 		}
