@@ -8,8 +8,7 @@ Bundle-Vendor: kompiro.org
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Import-Package: jline,
- org.eclipse.core.runtime;version="3.4.0",
+Import-Package: org.eclipse.core.runtime,
  org.eclipse.core.runtime.jobs,
  org.eclipse.jface,
  org.eclipse.jface.action,
@@ -19,7 +18,7 @@ Import-Package: jline,
  org.eclipse.jface.text.contentassist,
  org.eclipse.jface.text.source,
  org.eclipse.jface.util,
- org.eclipse.osgi.util;version="1.1.0",
+ org.eclipse.osgi.util,
  org.eclipse.swt,
  org.eclipse.swt.custom,
  org.eclipse.swt.events,
@@ -32,12 +31,10 @@ Import-Package: jline,
  org.eclipse.ui.plugin,
  org.eclipse.ui.progress,
  org.eclipse.ui.statushandlers,
- org.jruby.embed;version="1.5.2",
- org.jruby.ext;version="1.5.2",
- org.jruby.util;version="1.5.2",
  org.kompiro.jamcircle.kanban.model,
  org.kompiro.jamcircle.scripting,
  org.kompiro.jamcircle.scripting.exception,
  org.kompiro.jamcircle.scripting.util,
- org.osgi.framework;version="1.5.0"
+ org.osgi.framework
 Service-Component: OSGI-INF/ScriptingUIContext.xml
+Require-Bundle: org.jruby.jruby

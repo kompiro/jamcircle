@@ -3,19 +3,4 @@
 <plugin>
    <extension-point id="boardTemplate" name="Board template by Java" schema="schema/boardTemplate.exsd"/>
    <extension-point id="boardScriptTemplate" name="Board template by implemented script" schema="schema/boardScriptTemplate.exsd"/>
-   <extension
-         point="org.kompiro.jamcircle.scripting.scriptEngineInitializer">
-      <initializer
-            class="org.kompiro.jamcircle.kanban.model.KanbanScriptingEngineInitializer">
-         <script
-               file="script/init.rb"
-               type="JRuby">
-         </script>
-         <script
-               file="script/init.js"
-               type="JavaScript">
-         </script>
-      </initializer>
-   </extension>
-
 </plugin>

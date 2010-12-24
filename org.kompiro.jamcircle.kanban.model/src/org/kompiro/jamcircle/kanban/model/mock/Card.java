@@ -13,10 +13,11 @@ import org.kompiro.jamcircle.kanban.model.User;
 
 /**
  * This implementation is mock of Card and isn't able to store any persistence.
+ * 
  * @author kompiro
  */
 public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.kanban.model.Card {
-	
+
 	private int id;
 	private String content;
 	private String subject;
@@ -35,16 +36,16 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	private FlagTypes flagType;
 	private User to;
 	private User from;
-	
-	public Card(){
+
+	public Card() {
 		this.createdDate = new Date();
 	}
-	
-	public Card(String subject){
+
+	public Card(String subject) {
 		this();
 		this.subject = subject;
 	}
-	
+
 	public String getContent() {
 		return content;
 	}
@@ -72,11 +73,12 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	public void setLane(Lane lane) {
 		Lane oldValue = this.lane;
 		this.lane = lane;
-		fireProperty(PROP_LANE,oldValue,lane);
+		fireProperty(PROP_LANE, oldValue, lane);
 	}
 
 	public String getStatus() {
-		if(lane == null) return "";
+		if (lane == null)
+			return "";
 		return lane.getStatus();
 	}
 
@@ -150,7 +152,7 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public boolean hasFiles() {
-		return ! files.isEmpty();
+		return !files.isEmpty();
 	}
 
 	public String getFilePath() {
@@ -158,9 +160,10 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public boolean hasFile(File file) {
-		if( ! file.exists()) return false;
-		for(File target : files){
-			if(target.getAbsolutePath().equals(file.getAbsolutePath())){
+		if (!file.exists())
+			return false;
+		for (File target : files) {
+			if (target.getAbsolutePath().equals(file.getAbsolutePath())) {
 				return true;
 			}
 		}
@@ -177,7 +180,7 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	}
 
 	public void setUUID(String uuid) {
-		Object oldValue = this.uuid;		
+		Object oldValue = this.uuid;
 		this.uuid = uuid;
 		fireProperty(PROP_UUID, oldValue, uuid);
 	}
@@ -191,10 +194,10 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 		this.colorType = colorType;
 		fireProperty(PROP_COLOR_TYPE, oldValue, colorType);
 	}
-	
-	public void setColorType(int colorType){
-		for(ColorTypes type :ColorTypes.values()){
-			if(colorType == type.ordinal()){
+
+	public void setColorType(int colorType) {
+		for (ColorTypes type : ColorTypes.values()) {
+			if (colorType == type.ordinal()) {
 				setColorType(type);
 			}
 		}
@@ -253,20 +256,18 @@ public class Card extends MockGraphicalEntity implements org.kompiro.jamcircle.k
 	public void setID(int id) {
 		this.id = id;
 	}
-	
+
 	@Override
 	public int getID() {
 		return this.id;
 	}
-	
 
 	public void commitLocation() {
 		fireProperty(PROP_COMMIT_LOCATION, null, null);
 	}
-	
+
 	public void prepareLocation() {
 		fireProperty(PROP_PREPARE_LOCATION, null, null);
 	}
-
 
 }
