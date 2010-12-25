@@ -21,3 +21,4 @@ Import-Package: net.java.ao,
 Bundle-ActivationPolicy: lazy
 Export-Package: org.kompiro.jamcircle.kanban.model,
  org.kompiro.jamcircle.kanban.model.mock
+Service-Component: OSGI-INF/KanbanModelContext.xml
