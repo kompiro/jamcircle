@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JAM Ciecle Scripting Kanban Bridge Bundle
+Bundle-SymbolicName: org.kompiro.jamcircle.scripting.kanban;singleton:=true
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: kompiro.org
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.kompiro.jamcircle.kanban.model,
+ org.kompiro.jamcircle.scripting,
+ org.kompiro.jamcircle.scripting.exception,
+ org.osgi.framework
+Bundle-ActivationPolicy: lazy

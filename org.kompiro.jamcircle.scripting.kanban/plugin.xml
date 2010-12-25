@@ -4,7 +4,7 @@
    <extension
          point="org.kompiro.jamcircle.scripting.scriptEngineInitializer">
       <initializer
-            class="org.kompiro.jamcircle.kanban.model.KanbanScriptingEngineInitializer">
+            class="org.kompiro.jamcircle.scripting.kanban.internal.KanbanScriptingEngineInitializer">
          <script
                file="script/init.rb"
                type="JRuby">

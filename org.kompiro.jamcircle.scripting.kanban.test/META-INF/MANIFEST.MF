@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JAM Circle Scripting Kanban Test
+Bundle-SymbolicName: org.kompiro.jamcircle.scripting.kanban.test
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: kompiro.org
+Fragment-Host: org.kompiro.jamcircle.scripting.kanban
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.junit
