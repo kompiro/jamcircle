@@ -617,6 +617,10 @@ public class KanbanServiceImpl implements KanbanService, StorageChageListener {
 		return storageService.isTestMode();
 	}
 
+	public void flushAll() {
+		getEntityManager().flushAll();
+	}
+
 	public void migrate(Class<? extends Entity>... classes) {
 		storageService.migrate(classes);
 	}

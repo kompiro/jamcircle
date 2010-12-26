@@ -427,4 +427,9 @@ public interface KanbanService {
 
 	boolean isTestMode();
 
+	/**
+	 * flush all loaded entities.
+	 */
+	void flushAll();
+
 }

@@ -256,6 +256,7 @@ public class KanbanView extends ViewPart implements StorageChageListener, Proper
 		if (boardModel != null) {
 			boardModel.getBoard().removePropertyChangeListener(boardModel);
 		}
+		getKanbanService().flushAll();
 		boardModel = new BoardModel(board);
 		board.addPropertyChangeListener(boardModel);
 

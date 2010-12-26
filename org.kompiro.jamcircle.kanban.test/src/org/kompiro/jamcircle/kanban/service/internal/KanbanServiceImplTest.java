@@ -198,6 +198,12 @@ public class KanbanServiceImplTest {
 		assertThat(arg1.getValue()[0].getValue().toString(), is("card_1"));
 	}
 
+	@Test
+	public void flushAll() throws Exception {
+		serviceImpl.flushAll();
+		verify(managerMock).flushAll();
+	}
+
 	private void assertFirePropertyWhenCreated(
 			PropertyChangeEvent actual,
 			Class<?> clazz) {
