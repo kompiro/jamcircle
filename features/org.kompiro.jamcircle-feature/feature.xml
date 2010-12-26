@@ -18,10 +18,6 @@ RCP.
       %license
    </license>
 
-   <url>
-      <discovery label="JAM Circle Project site" url="http://kompiro.org/jamcircle/update/"/>
-   </url>
-
    <includes
          id="org.kompiro.jamcircle.library"
          version="0.0.0"/>

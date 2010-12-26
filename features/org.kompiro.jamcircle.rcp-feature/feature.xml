@@ -17,10 +17,6 @@
       %license
    </license>
 
-   <url>
-      <discovery label="JAM Circle Project Page" url="http://kompiro.org/jamcircle"/>
-   </url>
-
    <includes
          id="org.eclipse.equinox.p2.user.ui"
          version="0.0.0"/>
