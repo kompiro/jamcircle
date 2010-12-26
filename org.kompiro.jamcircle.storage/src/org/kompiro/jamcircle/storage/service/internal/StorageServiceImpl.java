@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.Job;
 import org.h2.tools.Csv;
 import org.kompiro.jamcircle.storage.*;
+import org.kompiro.jamcircle.storage.exception.DBMigrationNeededException;
 import org.kompiro.jamcircle.storage.exception.StorageConnectException;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 import org.kompiro.jamcircle.storage.service.*;
@@ -157,18 +158,24 @@ public class StorageServiceImpl implements StorageService {
 		}
 	}
 
-	private void createEntityManager(String uri, String username, String password) throws StorageConnectException {
-		DatabaseProvider provider;
-		provider = new H2DatabaseProvider(uri, username, password);
+	protected void createEntityManager(String uri, String username, String password) throws StorageConnectException {
+		DatabaseProvider provider = createDatabaseProvider(uri, username, password);
 		try {
 			provider.getConnection();
 		} catch (SQLException e) {
+			if (org.h2.constant.ErrorCode.FILE_VERSION_ERROR_1 == e.getErrorCode()) {
+				throw new DBMigrationNeededException(e);
+			}
 			throw new StorageConnectException(e);
 		}
 		if (StorageStatusHandler.isDebug()) {
 			StorageStatusHandler.info(format("path:%s", uri), true); //$NON-NLS-1$
 		}
 		manager = new EntityManager(provider);
+	}
+
+	protected DatabaseProvider createDatabaseProvider(String uri, String username, String password) {
+		return new H2DatabaseProvider(uri, username, password);
 	}
 
 	public void recreateEntityManagerForTest() throws StorageConnectException {
