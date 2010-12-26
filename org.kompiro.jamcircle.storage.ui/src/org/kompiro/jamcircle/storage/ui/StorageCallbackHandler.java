@@ -15,14 +15,18 @@ public class StorageCallbackHandler implements IUIStorageCallbackHandler {
 
 	public void setupStorageSetting() {
 		Display display = getDisplay();
+		if (display == null)
+			return;
 		display.syncExec(new Runnable() {
-
 			public void run() {
 				StorageSettingWizard wizard = new StorageSettingWizard();
 				WizardDialog dialog = new WizardDialog(new Shell(), wizard);
 				dialog.open();
 			}
 		});
+	}
+
+	public void databaseMigrate() {
 	}
 
 	public Display getDisplay() {
