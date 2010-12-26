@@ -4,10 +4,10 @@ import org.eclipse.core.runtime.jobs.ISchedulingRule;
 
 public class StorageAccessRule implements ISchedulingRule {
 	public boolean isConflicting(ISchedulingRule rule) {
-		return rule.getClass().equals(StorageAccessRule.class);
+		return rule == this;
 	}
 
 	public boolean contains(ISchedulingRule rule) {
-		return rule.getClass().equals(StorageAccessRule.class);
+		return rule == this;
 	}
 }

@@ -2,11 +2,14 @@ package org.kompiro.jamcircle.storage.service.internal;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
 import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.UUID;
@@ -16,9 +19,7 @@ import net.java.ao.*;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
-import org.kompiro.jamcircle.storage.exception.DBMigrationNeededException;
-import org.kompiro.jamcircle.storage.service.StorageService;
-import org.kompiro.jamcircle.storage.service.StorageSetting;
+import org.kompiro.jamcircle.storage.service.*;
 
 /**
  * @TestContext StorageServiceImpl
@@ -64,8 +65,12 @@ public class StorageServiceImplUsingMockTest {
 		verify(entity, times(1)).setTrashed(false);
 	}
 
-	@Test(expected = DBMigrationNeededException.class)
 	public void migrate_needed() throws Exception {
+		DatabaseMigrator migrator = mock(DatabaseMigrator.class);
+		service.setDatabaseMigrator(migrator);
+		StorageSettings settings = mock(StorageSettings.class);
+		service.setSettings(settings);
+
 		service = new StorageServiceImpl() {
 			@Override
 			protected DatabaseProvider createDatabaseProvider(String uri, String username, String password) {
@@ -91,6 +96,8 @@ public class StorageServiceImplUsingMockTest {
 		StorageSetting setting = new StorageSetting(0, folder.getRoot().getAbsolutePath(),
 				StorageService.ConnectionMode.MEM.toString(), "sa", "");
 		service.loadStorage(setting, new NullProgressMonitor());
+		verify(migrator).execute((File) anyObject(), (File) anyObject(), eq(true), eq("sa"), eq(""), eq(true));
+		verify(settings).storeSttings();
 	}
 
 	@Test

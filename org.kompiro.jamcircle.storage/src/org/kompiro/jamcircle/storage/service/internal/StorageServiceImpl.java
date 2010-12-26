@@ -2,8 +2,7 @@ package org.kompiro.jamcircle.storage.service.internal;
 
 import static java.lang.String.format;
 
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.sql.*;
 import java.util.*;
@@ -14,10 +13,10 @@ import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.Job;
 import org.h2.tools.Csv;
 import org.kompiro.jamcircle.storage.*;
-import org.kompiro.jamcircle.storage.exception.DBMigrationNeededException;
 import org.kompiro.jamcircle.storage.exception.StorageConnectException;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 import org.kompiro.jamcircle.storage.service.*;
+import org.osgi.framework.Bundle;
 
 /**
  * This service provides storage service.
@@ -81,6 +80,7 @@ public class StorageServiceImpl implements StorageService {
 	private EntityManager manager;
 	private FileStorageService fileService;
 	private StorageCallbackHandlerLoader loader = new StorageCallbackHandlerLoader();
+	private DatabaseMigrator migrator = new DatabaseMigrator();
 
 	public void activate() {
 		loadStorageSetting();
@@ -164,14 +164,46 @@ public class StorageServiceImpl implements StorageService {
 			provider.getConnection();
 		} catch (SQLException e) {
 			if (org.h2.constant.ErrorCode.FILE_VERSION_ERROR_1 == e.getErrorCode()) {
-				throw new DBMigrationNeededException(e);
+				databaseMigration(username, password);
+			} else {
+				throw new StorageConnectException(e);
 			}
-			throw new StorageConnectException(e);
 		}
 		if (StorageStatusHandler.isDebug()) {
 			StorageStatusHandler.info(format("path:%s", uri), true); //$NON-NLS-1$
 		}
 		manager = new EntityManager(provider);
+	}
+
+	private void databaseMigration(String username, String password) throws StorageConnectException {
+		File oldH2Jar = getOldH2Jar();
+		try {
+			migrator.execute(oldH2Jar, new File(fileService.getStoreRoot()), true, username, password, false);
+		} catch (Exception ex) {
+			throw new StorageConnectException(ex);
+		}
+	}
+
+	private File getOldH2Jar() throws StorageConnectException {
+		File bundleFile = getBundleFile();
+		if (bundleFile == null)
+			return null;
+		File oldH2Jar = new File(bundleFile, "lib/h2.jar"); //$NON-NLS-1$
+		return oldH2Jar;
+	}
+
+	private File getBundleFile() throws StorageConnectException {
+		StorageActivator activator = StorageActivator.getDefault();
+		if (activator == null)
+			return null;
+		Bundle bundle = activator.getBundle();
+		File bundleFile;
+		try {
+			bundleFile = FileLocator.getBundleFile(bundle);
+		} catch (IOException ex) {
+			throw new StorageConnectException(ex);
+		}
+		return bundleFile;
 	}
 
 	protected DatabaseProvider createDatabaseProvider(String uri, String username, String password) {
@@ -437,6 +469,10 @@ public class StorageServiceImpl implements StorageService {
 
 	public void setFileService(FileStorageService fileService) {
 		this.fileService = fileService;
+	}
+
+	public void setDatabaseMigrator(DatabaseMigrator migrator) {
+		this.migrator = migrator;
 	}
 
 }
