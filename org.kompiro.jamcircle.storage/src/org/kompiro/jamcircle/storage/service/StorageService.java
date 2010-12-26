@@ -29,9 +29,9 @@ public interface StorageService {
 	
 	public void deleteTrashedEntity(Class<? extends GraphicalEntity> entityClass);
 	
-	public void addStorageChangeListener(StorageChageListener listener);
+	public void addStorageChangeListener(StorageChangeListener listener);
 
-	public void removeStorageChangeListener(StorageChageListener listener);
+	public void removeStorageChangeListener(StorageChangeListener listener);
 
 	public <T extends Entity> T createEntity(Class<T> clazz, DBParam[] params);
 

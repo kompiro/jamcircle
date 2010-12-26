@@ -44,9 +44,9 @@ import org.kompiro.jamcircle.kanban.ui.widget.*;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer.CardWrapper;
 import org.kompiro.jamcircle.scripting.ScriptingService;
 import org.kompiro.jamcircle.scripting.exception.ScriptingException;
-import org.kompiro.jamcircle.storage.service.StorageChageListener;
+import org.kompiro.jamcircle.storage.service.StorageChangeListener;
 
-public class KanbanView extends ViewPart implements StorageChageListener, PropertyChangeListener {
+public class KanbanView extends ViewPart implements StorageChangeListener, PropertyChangeListener {
 
 	public static String ID = "org.kompiro.jamcircle.kanban.KanbanView"; //$NON-NLS-1$
 

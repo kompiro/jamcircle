@@ -22,7 +22,7 @@ import org.kompiro.jamcircle.kanban.service.internal.loader.BoardScriptTemplateL
 import org.kompiro.jamcircle.kanban.service.internal.loader.BoardTemplateLoaderImpl;
 import org.kompiro.jamcircle.kanban.service.loader.BoardTemplateLoader;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
-import org.kompiro.jamcircle.storage.service.StorageChageListener;
+import org.kompiro.jamcircle.storage.service.StorageChangeListener;
 import org.kompiro.jamcircle.storage.service.StorageService;
 
 /**
@@ -32,7 +32,7 @@ import org.kompiro.jamcircle.storage.service.StorageService;
  *              org.kompiro.jamcircle.kanban.service.internal.
  *              KanbanServiceImplTest
  */
-public class KanbanServiceImpl implements KanbanService, StorageChageListener {
+public class KanbanServiceImpl implements KanbanService, StorageChangeListener {
 
 	private static final String QUERY_TRUE = " = true";
 	private static final String QUERY = " = ?";
@@ -539,11 +539,11 @@ public class KanbanServiceImpl implements KanbanService, StorageChageListener {
 		return this.templates.toArray(new KanbanBoardTemplate[] {});
 	}
 
-	public void addStorageChangeListener(StorageChageListener listener) {
+	public void addStorageChangeListener(StorageChangeListener listener) {
 		getStorageService().addStorageChangeListener(listener);
 	}
 
-	public void removeStorageChangeListener(StorageChageListener listener) {
+	public void removeStorageChangeListener(StorageChangeListener listener) {
 		getStorageService().removeStorageChangeListener(listener);
 	}
 

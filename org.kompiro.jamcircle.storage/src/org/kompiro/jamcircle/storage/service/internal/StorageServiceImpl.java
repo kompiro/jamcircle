@@ -51,8 +51,8 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	private final class StorageChageListenerComparator implements
-			Comparator<StorageChageListener> {
-		public int compare(StorageChageListener o1, StorageChageListener o2) {
+			Comparator<StorageChangeListener> {
+		public int compare(StorageChangeListener o1, StorageChangeListener o2) {
 			return o1.getPriority() - o2.getPriority();
 		}
 	}
@@ -61,7 +61,7 @@ public class StorageServiceImpl implements StorageService {
 	private static final String KEY_OF_SYSTEM_STORAGE_DBNAME = "storage.dbname"; //$NON-NLS-1$
 	static String dbName = System.getProperty(KEY_OF_SYSTEM_STORAGE_DBNAME, RESOURCE_NAME);
 
-	private List<StorageChageListener> listeners = new ArrayList<StorageChageListener>();
+	private List<StorageChangeListener> listeners = new ArrayList<StorageChangeListener>();
 	private StorageSettings settings = new StorageSettings();
 	public static boolean testmode = FileStorageServiceImpl.testmode;
 
@@ -139,7 +139,7 @@ public class StorageServiceImpl implements StorageService {
 		createEntityManager(uri, setting.getUsername(), setting.getPassword());
 		progress(monitor, 60, Messages.StorageServiceImpl_store_setting_message);
 		storeSetting(setting);
-		for (StorageChageListener listener : listeners) {
+		for (StorageChangeListener listener : listeners) {
 			listener.changedStorage(monitor);
 		}
 		monitor.done();
@@ -380,12 +380,12 @@ public class StorageServiceImpl implements StorageService {
 		this.settings = settings;
 	}
 
-	public void addStorageChangeListener(StorageChageListener listener) {
+	public void addStorageChangeListener(StorageChangeListener listener) {
 		this.listeners.add(listener);
 		Collections.sort(this.listeners, new StorageChageListenerComparator());
 	}
 
-	public void removeStorageChangeListener(StorageChageListener listener) {
+	public void removeStorageChangeListener(StorageChangeListener listener) {
 		this.listeners.remove(listener);
 		Collections.sort(this.listeners, new StorageChageListenerComparator());
 	}

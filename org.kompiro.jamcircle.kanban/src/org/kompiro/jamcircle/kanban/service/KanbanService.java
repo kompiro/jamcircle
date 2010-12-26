@@ -8,7 +8,7 @@ import net.java.ao.Entity;
 import org.kompiro.jamcircle.kanban.boardtemplate.KanbanBoardTemplate;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
-import org.kompiro.jamcircle.storage.service.StorageChageListener;
+import org.kompiro.jamcircle.storage.service.StorageChangeListener;
 
 /**
  * This class provides Kanban feature's based services.<br>
@@ -415,25 +415,73 @@ public interface KanbanService {
 	KanbanBoardTemplate[] getKanbanBoardTemplates();
 
 	/**
+	 * add to listen storage resource change event.
 	 * 
 	 * @param listener
 	 */
-	void addStorageChangeListener(StorageChageListener listener);
+	void addStorageChangeListener(StorageChangeListener listener);
 
-	void removeStorageChangeListener(StorageChageListener listener);
+	/**
+	 * remove to listen storage resource change event.
+	 * 
+	 * @param listener
+	 */
+	void removeStorageChangeListener(StorageChangeListener listener);
 
+	/**
+	 * add to listen to change current board event.
+	 * 
+	 * @param boardChangeListener
+	 */
 	void addPropertyChangeListener(PropertyChangeListener boardChangeListener);
 
+	/**
+	 * remove to listen to change current board event.
+	 * 
+	 * @param boardChangeListener
+	 */
 	void removePropertyChangeListener(PropertyChangeListener boardChangeListener);
 
+	/**
+	 * count how many target class entities in trash.
+	 * 
+	 * @param clazz
+	 *            target class
+	 * @return
+	 *         number of specified class entities
+	 */
 	int countInTrash(Class<? extends GraphicalEntity> clazz);
 
+	/**
+	 * discard entity to trash
+	 * 
+	 * @param entity
+	 *            target entity
+	 */
 	void discardToTrash(GraphicalEntity entity);
 
+	/**
+	 * pickup entity from trash
+	 * 
+	 * @param entity
+	 *            target entity
+	 */
 	void pickupFromTrash(GraphicalEntity entity);
 
+	/**
+	 * delete entity from database
+	 * 
+	 * @param entity
+	 *            target entity
+	 */
 	void delete(Entity entity);
 
+	/**
+	 * test mode flag.(FOR TESTING PURPOSE ONLY)
+	 * 
+	 * @return
+	 *         true: under the testing environment.
+	 */
 	boolean isTestMode();
 
 	/**
