@@ -34,7 +34,7 @@ public class WizardDialogTestRunner extends BlockJUnit4ClassRunner {
 		}
 		bot = new SWTBot();
 		final boolean[] finishPressed = new boolean[1];
-		WizardDialog dialog = new WizardDialogForTest(parentShell, newWizard, finishPressed);
+		final WizardDialog dialog = new WizardDialogForTest(parentShell, newWizard, finishPressed);
 		final Exception[] ex = new Exception[1];
 		Runnable r = new Runnable() {
 			public void run() {
@@ -49,17 +49,14 @@ public class WizardDialogTestRunner extends BlockJUnit4ClassRunner {
 			private void closeDialogs() {
 				SWTBotShell activeShell;
 				try {
-					activeShell = bot.activeShell();
+					activeShell = bot.shell(newWizard.getWindowTitle());
 				} catch (WidgetNotFoundException e) {
 					// already closed.
 					return;
 				}
 				if (activeShell.widget == null)
 					return;
-				String title = activeShell.getText();
-				if (title.equals(newWizard.getWindowTitle())) {
-					activeShell.close();
-				}
+				activeShell.close();
 			}
 		};
 		Thread nonUIThread = new Thread(r);
