@@ -28,7 +28,7 @@ public class BoardNewWizard extends Wizard implements INewWizard {
 	}
 
 	public void addPages() {
-		page = new BoardNewWizardPage(kanbanService.getKanbanDataInitializers());
+		page = new BoardNewWizardPage(kanbanService.getKanbanBoardTemplates());
 		addPage(page);
 	}
 

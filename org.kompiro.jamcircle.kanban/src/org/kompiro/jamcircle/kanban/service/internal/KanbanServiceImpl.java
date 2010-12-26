@@ -535,7 +535,7 @@ public class KanbanServiceImpl implements KanbanService, StorageChageListener {
 		return getStorageService().countInTrash(clazz);
 	}
 
-	public KanbanBoardTemplate[] getKanbanDataInitializers() {
+	public KanbanBoardTemplate[] getKanbanBoardTemplates() {
 		return this.templates.toArray(new KanbanBoardTemplate[] {});
 	}
 

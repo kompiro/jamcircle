@@ -407,8 +407,17 @@ public interface KanbanService {
 	boolean importIcons(File importFile);
 
 	// Others
-	KanbanBoardTemplate[] getKanbanDataInitializers();
+	/**
+	 * get kanban board template.
+	 * 
+	 * @return board template
+	 */
+	KanbanBoardTemplate[] getKanbanBoardTemplates();
 
+	/**
+	 * 
+	 * @param listener
+	 */
 	void addStorageChangeListener(StorageChageListener listener);
 
 	void removeStorageChangeListener(StorageChageListener listener);
