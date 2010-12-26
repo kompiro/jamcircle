@@ -131,7 +131,7 @@ public class StorageServiceImpl implements StorageService {
 				uri = format("jdbc:h2:%s", setting.getUri() + dbName); //$NON-NLS-1$
 			} else {
 				fileService = new FileStorageServiceImpl(setting.getUri());
-				uri = format("jdbc:h2:%s", getDBPath()); //$NON-NLS-1$
+				uri = format("jdbc:h2:%s;AUTO_SERVER=TRUE", getDBPath()); //$NON-NLS-1$
 			}
 		}
 
