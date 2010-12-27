@@ -5,7 +5,7 @@ Card = org.kompiro.jamcircle.kanban.model.mock.Card;
 Lane = org.kompiro.jamcircle.kanban.model.mock.Lane; 
 User = org.kompiro.jamcircle.kanban.model.mock.User;
 
-UIUtil = org.kompiro.jamcircle.scripting.ui.util.UIUtil
+UIUtil = org.kompiro.jamcircle.scripting.ui.util.UIUtil.new
 
 def board
   return $board_accessor.board
@@ -13,6 +13,10 @@ end
 
 def show_warning(title,message)
   UIUtil.open_warning(title,message)
+end
+
+def selection
+  return UIUtil.selection
 end
 
 def board_command_executer

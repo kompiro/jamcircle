@@ -59,7 +59,7 @@ import org.osgi.framework.Bundle;
  */
 public class RubyScriptingConsole extends TextConsole implements IScriptingConsole {
 
-	private static final String KANBAN_VIEW = "org.kompiro.jamcircle.kanban.KanbanView";//$NON-NLS-1$
+	public static final String KANBAN_VIEW = "org.kompiro.jamcircle.kanban.KanbanView";//$NON-NLS-1$
 	private static final String EMPTY = ""; //$NON-NLS-1$
 	private static final String KEY_OF_BUNDLE_VERSION = "Bundle-Version"; //$NON-NLS-1$
 	private static final String INIT_SCRIPT_RB = "init.rb"; //$NON-NLS-1$

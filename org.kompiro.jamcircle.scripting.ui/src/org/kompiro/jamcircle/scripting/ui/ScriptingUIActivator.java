@@ -15,6 +15,8 @@ import org.osgi.framework.BundleContext;
  */
 public class ScriptingUIActivator extends AbstractUIPlugin {
 
+	private static final UIUtil util = new UIUtil();
+
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.kompiro.jamcircle.scripting.ui"; //$NON-NLS-1$
 
@@ -57,7 +59,7 @@ public class ScriptingUIActivator extends AbstractUIPlugin {
 	@Override
 	public ImageRegistry getImageRegistry() {
 		final ImageRegistry[] imageRegistry = new ImageRegistry[1];
-		UIUtil.sync(new Runnable() {
+		util.sync(new Runnable() {
 			public void run() {
 				imageRegistry[0] = ScriptingUIActivator.super.getImageRegistry();
 			}

@@ -2,15 +2,31 @@ package org.kompiro.jamcircle.scripting.ui.util;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.*;
+import org.kompiro.jamcircle.scripting.ui.internal.ruby.console.RubyScriptingConsole;
 
 public class UIUtil {
 
-	public static void openWarning(final String title, final String message) {
-		sync(new Runnable() {
+	public String inspectionPartId;
 
+	public void inspection() {
+		final IWorkbenchPart[] part = new IWorkbenchPart[1];
+		sync(new Runnable() {
+			public void run() {
+				IPartService partService = getWorkbenchWindow().getPartService();
+				if (partService == null)
+					return;
+				part[0] = partService.getActivePart();
+			}
+		});
+		inspectionPartId = part[0].getSite().getId();
+	}
+
+	public void openWarning(final String title, final String message) {
+		sync(new Runnable() {
 			public void run() {
 				Shell parent = getShell();
 				MessageDialog.openWarning(parent, title, message);
@@ -18,7 +34,20 @@ public class UIUtil {
 		});
 	}
 
-	private static Display getDisplay() {
+	public ISelection getSelection() {
+		final ISelection[] selection = new ISelection[1];
+		sync(new Runnable() {
+			public void run() {
+				ISelectionService selectionService = getWorkbenchWindow().getSelectionService();
+				if (selectionService == null)
+					return;
+				selection[0] = selectionService.getSelection(RubyScriptingConsole.KANBAN_VIEW);
+			}
+		});
+		return selection[0];
+	}
+
+	private Display getDisplay() {
 		IWorkbench workbench = getWorkbench();
 		Display defDisplay = Display.getDefault();
 		if (workbench == null) {
@@ -39,7 +68,7 @@ public class UIUtil {
 
 	}
 
-	public static void async(Runnable runnable) {
+	public void async(Runnable runnable) {
 		Display display = getDisplay();
 		if (display == null) {
 			runnable.run();
@@ -48,7 +77,7 @@ public class UIUtil {
 		display.asyncExec(runnable);
 	}
 
-	public static void sync(Runnable runnable) {
+	public void sync(Runnable runnable) {
 		Display display = getDisplay();
 		if (display == null) {
 			runnable.run();
@@ -57,7 +86,7 @@ public class UIUtil {
 		display.syncExec(runnable);
 	}
 
-	private static IWorkbench getWorkbench() {
+	private IWorkbench getWorkbench() {
 		if (Platform.isRunning()) {
 			if (PlatformUI.isWorkbenchRunning()) {
 				return PlatformUI.getWorkbench();
@@ -66,7 +95,7 @@ public class UIUtil {
 		return null;
 	}
 
-	private static IWorkbenchWindow getWorkbenchWindow() {
+	private IWorkbenchWindow getWorkbenchWindow() {
 		IWorkbench workbench = getWorkbench();
 		if (workbench == null)
 			return null;
@@ -78,7 +107,7 @@ public class UIUtil {
 		return workbench.getWorkbenchWindows()[0];
 	}
 
-	private static Shell getShell() {
+	private Shell getShell() {
 		IWorkbenchWindow window = getWorkbenchWindow();
 		if (window == null)
 			return null;
