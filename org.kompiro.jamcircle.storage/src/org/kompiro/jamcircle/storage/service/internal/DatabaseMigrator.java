@@ -64,7 +64,7 @@ public class DatabaseMigrator {
 
 	private String getJavaExecutablePath() {
 		String pathToJava;
-		if (File.separator.equals("\\")) {
+		if (System.getProperty("os.name").startsWith("Windows")) {
 			pathToJava = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java.exe";
 		} else {
 			pathToJava = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
