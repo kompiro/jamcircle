@@ -1,5 +1,6 @@
 package org.kompiro.jamcircle.kanban.ui.widget;
 
+import static java.lang.String.format;
 import static org.kompiro.jamcircle.kanban.ui.widget.WidgetConstants.KEY_OF_DATA_ID;
 
 import org.eclipse.jface.layout.GridDataFactory;
@@ -72,8 +73,10 @@ public class BoardListTableWidget {
 	}
 
 	private Board getBoard(Object element) {
-		if (!(element instanceof BoardWrapper))
-			throw new IllegalArgumentException();
+		if (!(element instanceof BoardWrapper)) {
+			String message = format("element is '%s'", element.toString());
+			throw new IllegalArgumentException(message);
+		}
 		return ((BoardWrapper) element).getBoard();
 	}
 

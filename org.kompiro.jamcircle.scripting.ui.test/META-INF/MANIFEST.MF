@@ -23,5 +23,6 @@ Import-Package: org.eclipse.jface.action,
  org.junit;version="4.8.1",
  org.junit.rules;version="4.8.1",
  org.junit.runners.model;version="4.8.1",
+ org.kompiro.swtbot.extension.jface,
  org.mockito,
  org.mockito.stubbing

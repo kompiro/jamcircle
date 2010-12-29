@@ -11,6 +11,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.junit.*;
 import org.kompiro.jamcircle.scripting.ui.Messages;
 import org.kompiro.jamcircle.scripting.ui.internal.ruby.job.UninstallGemJob;
+import org.kompiro.swtbot.extension.jface.ActionClass;
 
 public class GemUninstallActionTest {
 

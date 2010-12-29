@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
 import org.junit.*;
 import org.kompiro.jamcircle.scripting.ui.internal.ruby.job.ListGemJob;
+import org.kompiro.swtbot.extension.jface.ActionClass;
 
 public class GemListActionTest {
 

@@ -20,29 +20,29 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.*;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.widget.MessageDialogHelper;
-import org.kompiro.swtbot.extension.jface.WithWizard;
-import org.kompiro.swtbot.extension.jface.WizardDialogTestRunner;
+import org.kompiro.swtbot.extension.jface.WizardClass;
 
-@RunWith(WizardDialogTestRunner.class)
-@WithWizard(BoardExportWizard.class)
 public class BoardExportWizardTest {
-	private SWTBot bot;
-	private BoardExportWizard wizard;
 	private Board board;
 	private KanbanService kanbanService;
 	private MessageDialogHelper helper;
 	private BoardExportRunnerWithProgress runner;
 	private SWTBotShell shellBot;
 
+	@Rule
+	public WizardClass<BoardExportWizard> rule = new WizardClass<BoardExportWizard>(BoardExportWizard.class);
+	private SWTBot bot;
+	private BoardExportWizard wizard;
+
 	@Before
 	public void before() throws Throwable {
+		wizard = rule.getWizard();
+		bot = rule.getBot();
 		kanbanService = mock(KanbanService.class);
 		helper = mock(MessageDialogHelper.class);
 		wizard.setKanbanService(kanbanService);
@@ -108,9 +108,7 @@ public class BoardExportWizardTest {
 	}
 
 	private void setFile() throws IOException {
-		// SWTBotText fileText =
-		// bot.textWithLabel(Messages.Wizard_file_output_label);
-		SWTBotText fileText = bot.text();
+		SWTBotText fileText = bot.textWithLabel(Messages.Wizard_file_output_label);
 		assertThat(fileText.getText(), is(""));
 		File tmpFile = File.createTempFile("tmp", ".txt");
 		String path = tmpFile.getAbsolutePath();

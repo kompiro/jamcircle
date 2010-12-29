@@ -22,18 +22,15 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.*;
 import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.widget.MessageDialogHelper;
-import org.kompiro.swtbot.extension.jface.WithWizard;
-import org.kompiro.swtbot.extension.jface.WizardDialogTestRunner;
+import org.kompiro.swtbot.extension.jface.WizardClass;
 
-@RunWith(WizardDialogTestRunner.class)
-@WithWizard(CSVExportWizard.class)
 public class CSVExportWizardTest {
 
+	@Rule
+	public WizardClass<CSVExportWizard> rule = new WizardClass<CSVExportWizard>(CSVExportWizard.class);
 	private SWTBot bot;
 	private CSVExportWizard wizard;
 
@@ -43,6 +40,8 @@ public class CSVExportWizardTest {
 
 	@Before
 	public void before() {
+		bot = rule.getBot();
+		wizard = rule.getWizard();
 		target = bot.shell(Messages.CSVExportWizard_title);
 		runner = mock(IExportRunnableWithProgress.class);
 		helper = mock(MessageDialogHelper.class);

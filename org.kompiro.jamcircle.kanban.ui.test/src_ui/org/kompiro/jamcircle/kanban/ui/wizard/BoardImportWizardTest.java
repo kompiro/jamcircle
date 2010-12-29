@@ -13,19 +13,17 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.*;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.service.BoardConverter;
 import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.wizard.BoardImportWizard.WizardContainerDelegator;
-import org.kompiro.swtbot.extension.jface.WithWizard;
-import org.kompiro.swtbot.extension.jface.WizardDialogTestRunner;
+import org.kompiro.swtbot.extension.jface.WizardClass;
 
-@RunWith(WizardDialogTestRunner.class)
-@WithWizard(BoardImportWizard.class)
 public class BoardImportWizardTest {
+
+	@Rule
+	public WizardClass<BoardImportWizard> rule = new WizardClass<BoardImportWizard>(BoardImportWizard.class);
 
 	private SWTBot bot;
 	private BoardImportWizard wizard;
@@ -36,6 +34,8 @@ public class BoardImportWizardTest {
 
 	@Before
 	public void before() {
+		bot = rule.getBot();
+		wizard = rule.getWizard();
 		boardConverter = mock(BoardConverter.class);
 		wizard.setConverter(boardConverter);
 		delegator = mock(WizardContainerDelegator.class);

@@ -16,16 +16,15 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.*;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.*;
 import org.kompiro.jamcircle.kanban.ui.Messages;
-import org.kompiro.swtbot.extension.jface.WithWizard;
-import org.kompiro.swtbot.extension.jface.WizardDialogTestRunner;
+import org.kompiro.swtbot.extension.jface.WizardClass;
 
-@RunWith(WizardDialogTestRunner.class)
-@WithWizard(CSVImportWizard.class)
 public class CSVImportWizardTest {
+
+	@Rule
+	public WizardClass<CSVImportWizard> rule = new WizardClass<CSVImportWizard>(CSVImportWizard.class);
+
 	private SWTBot bot;
 	private CSVImportWizard wizard;
 
@@ -34,6 +33,8 @@ public class CSVImportWizardTest {
 
 	@Before
 	public void before() {
+		bot = rule.getBot();
+		wizard = rule.getWizard();
 		target = bot.shell(Messages.CSVImportWizard_title);
 		runner = mock(CSVImportRunnerWithProgress.class);
 		wizard.setRunner(runner);

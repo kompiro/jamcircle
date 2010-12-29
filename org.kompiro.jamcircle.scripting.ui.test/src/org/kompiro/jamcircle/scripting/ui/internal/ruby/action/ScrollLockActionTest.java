@@ -8,6 +8,7 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.ui.console.IConsoleView;
 import org.junit.*;
 import org.kompiro.jamcircle.scripting.ui.internal.action.ScrollLockAction;
+import org.kompiro.swtbot.extension.jface.ActionClass;
 
 public class ScrollLockActionTest {
 	private SWTBot bot;

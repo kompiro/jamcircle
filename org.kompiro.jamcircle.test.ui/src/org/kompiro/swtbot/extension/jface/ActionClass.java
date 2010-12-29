@@ -1,6 +1,4 @@
-package org.kompiro.jamcircle.scripting.ui.internal.ruby.action;
-
-import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.asyncExec;
+package org.kompiro.swtbot.extension.jface;
 
 import java.net.URL;
 
@@ -12,58 +10,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swtbot.swt.finder.SWTBot;
-import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
-import org.eclipse.swtbot.swt.finder.results.VoidResult;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
 public class ActionClass<T extends Action> implements MethodRule {
-
-	private final class RunOnNonUIThread implements Runnable {
-		private final Statement base;
-
-		private RunOnNonUIThread(Statement base) {
-			this.base = base;
-		}
-
-		public void run() {
-			try {
-				base.evaluate();
-			} catch (Throwable e) {
-			} finally {
-				closeDialogs();
-			}
-		}
-
-		private void closeDialogs() {
-			SWTBotShell activeShell;
-			try {
-				activeShell = bot.activeShell();
-			} catch (WidgetNotFoundException e) {
-				// already closed.
-				return;
-			}
-			if (activeShell.widget == null)
-				return;
-			String title = activeShell.getText();
-			final String[] targetTitle = new String[1];
-			asyncExec(new VoidResult() {
-				public void run() {
-					targetTitle[0] = newWindow.getShell().getText();
-				}
-			});
-			if (title.equals(targetTitle[0])) {
-				activeShell.close();
-				asyncExec(new VoidResult() {
-					public void run() {
-						bot.getDisplay().dispose();
-					}
-				});
-			}
-		}
-	}
 
 	private static final long TIMEOUT_BY_SYSTEM = 1000L * 60 * 3;
 	private Window newWindow = null;
@@ -85,7 +36,7 @@ public class ActionClass<T extends Action> implements MethodRule {
 					throw new IllegalArgumentException(e);
 				}
 				bot = new SWTBot();
-				Runnable r = new RunOnNonUIThread(base);
+				RunOnNonUIThread r = new RunOnNonUIThread(base, newWindow.getShell());
 				Thread nonUIThread = new Thread(r);
 				nonUIThread.setName("Runnning Test Thread");//$NON-NLS-1$
 				nonUIThread.start();
@@ -93,6 +44,8 @@ public class ActionClass<T extends Action> implements MethodRule {
 
 				waitForNonUIThreadFinished(parentShell, nonUIThread);
 				parentShell.dispose();
+				if (r.getThrowable() != null)
+					throw r.getThrowable();
 			}
 		};
 	}

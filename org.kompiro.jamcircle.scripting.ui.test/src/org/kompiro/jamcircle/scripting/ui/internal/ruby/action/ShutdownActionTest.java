@@ -9,6 +9,7 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
 import org.junit.*;
 import org.kompiro.jamcircle.scripting.ui.internal.ruby.console.RubyScriptingConsole;
+import org.kompiro.swtbot.extension.jface.ActionClass;
 
 public class ShutdownActionTest {
 
