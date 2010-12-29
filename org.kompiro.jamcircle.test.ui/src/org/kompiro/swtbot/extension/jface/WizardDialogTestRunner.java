@@ -1,5 +1,7 @@
 package org.kompiro.swtbot.extension.jface;
 
+import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.asyncExec;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
@@ -8,8 +10,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.swt.finder.SWTBot;
-import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
@@ -47,16 +48,14 @@ public class WizardDialogTestRunner extends BlockJUnit4ClassRunner {
 			}
 
 			private void closeDialogs() {
-				SWTBotShell activeShell;
-				try {
-					activeShell = bot.shell(newWizard.getWindowTitle());
-				} catch (WidgetNotFoundException e) {
-					// already closed.
-					return;
+				if (dialog.getShell() != null) {
+					asyncExec(new VoidResult() {
+						@Override
+						public void run() {
+							dialog.getShell().close();
+						}
+					});
 				}
-				if (activeShell.widget == null)
-					return;
-				activeShell.close();
 			}
 		};
 		Thread nonUIThread = new Thread(r);
@@ -65,7 +64,6 @@ public class WizardDialogTestRunner extends BlockJUnit4ClassRunner {
 		dialog.open();
 
 		waitForNonUIThreadFinished(parentShell, nonUIThread);
-		parentShell.dispose();
 		if (ex[0] != null) {
 			throw new IllegalStateException(ex[0]);
 		}

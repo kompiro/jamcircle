@@ -18,6 +18,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +39,7 @@ public class BoardExportWizardTest {
 	private KanbanService kanbanService;
 	private MessageDialogHelper helper;
 	private BoardExportRunnerWithProgress runner;
+	private SWTBotShell shellBot;
 
 	@Before
 	public void before() throws Throwable {
@@ -53,12 +55,12 @@ public class BoardExportWizardTest {
 		Board[] boards = new Board[] { board };
 		when(kanbanService.findAllBoard()).thenReturn(boards);
 		wizard.init(null, null);
-		bot.shell(Messages.BoardExportWizard_title).activate();
+		shellBot = bot.shell(Messages.BoardExportWizard_title).activate();
 	}
 
 	@Test
 	public void show() throws Throwable {
-		bot.shell(Messages.BoardExportWizard_title).isOpen();
+		shellBot.isOpen();
 	}
 
 	@Test
@@ -86,7 +88,7 @@ public class BoardExportWizardTest {
 		doThrow(toBeThrown).when(runner).run(any(IProgressMonitor.class));
 		setFile();
 		bot.button(IDialogConstants.FINISH_LABEL).click();
-		bot.shell(Messages.BoardExportWizard_title).isOpen();
+		shellBot.isOpen();
 		verify(helper).openError(any(Shell.class), any(String.class), eq(toBeThrown));
 	}
 
@@ -106,7 +108,9 @@ public class BoardExportWizardTest {
 	}
 
 	private void setFile() throws IOException {
-		SWTBotText fileText = bot.textWithLabel(Messages.Wizard_file_output_label);
+		// SWTBotText fileText =
+		// bot.textWithLabel(Messages.Wizard_file_output_label);
+		SWTBotText fileText = bot.text();
 		assertThat(fileText.getText(), is(""));
 		File tmpFile = File.createTempFile("tmp", ".txt");
 		String path = tmpFile.getAbsolutePath();
