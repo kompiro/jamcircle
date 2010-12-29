@@ -7,8 +7,7 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.console.*;
-import org.eclipse.ui.console.IConsoleConstants;
-import org.kompiro.jamcircle.scripting.ui.internal.action.*;
+import org.kompiro.jamcircle.scripting.ui.internal.action.ScrollLockAction;
 import org.kompiro.jamcircle.scripting.ui.internal.ruby.action.*;
 import org.kompiro.jamcircle.scripting.ui.internal.ruby.console.RubyScriptingConsole;
 
@@ -16,7 +15,7 @@ import org.kompiro.jamcircle.scripting.ui.internal.ruby.console.RubyScriptingCon
  * A page for an IOConsole
  * 
  * @since 3.1
- *        Copied from org.eclipse.ui.console 3.4.0 by kompiro
+ *        Copied from org.eclipse.ui.console.IOConsole 3.4.0 by kompiro
  */
 public class IScriptingIOConsolePage extends TextConsolePage {
 
@@ -33,6 +32,8 @@ public class IScriptingIOConsolePage extends TextConsolePage {
 	private GemListAction fGemListAction;
 
 	private GemUninstallAction fGemUninstallAction;
+
+	private HistoryAction fHistoryAction;
 
 	public IScriptingIOConsolePage(TextConsole console, IConsoleView view) {
 		super(console, view);
@@ -104,7 +105,10 @@ public class IScriptingIOConsolePage extends TextConsolePage {
 		fScrollLockAction = new ScrollLockAction();
 		fScrollLockAction.setConsoleView(getConsoleView());
 		fShutdownAction = new ShutdownAction();
-		fShutdownAction.setConsole((RubyScriptingConsole) getConsole());
+		RubyScriptingConsole console = (RubyScriptingConsole) getConsole();
+		fShutdownAction.setConsole(console);
+		fHistoryAction = new HistoryAction();
+		fHistoryAction.setConsole(console);
 		fGemInstallAction = new GemInstallAction();
 		fGemUninstallAction = new GemUninstallAction();
 		fGemListAction = new GemListAction();
@@ -138,6 +142,7 @@ public class IScriptingIOConsolePage extends TextConsolePage {
 	protected void configureToolBar(IToolBarManager mgr) {
 		super.configureToolBar(mgr);
 		mgr.appendToGroup(IConsoleConstants.OUTPUT_GROUP, fScrollLockAction);
+		mgr.appendToGroup(IConsoleConstants.OUTPUT_GROUP, fHistoryAction);
 		mgr.appendToGroup(IConsoleConstants.LAUNCH_GROUP, fShutdownAction);
 		mgr.appendToGroup(IConsoleConstants.LAUNCH_GROUP, fGemInstallAction);
 		mgr.appendToGroup(IConsoleConstants.LAUNCH_GROUP, fGemUninstallAction);
@@ -157,6 +162,7 @@ public class IScriptingIOConsolePage extends TextConsolePage {
 			fScrollLockAction.dispose();
 			fScrollLockAction = null;
 		}
+		fHistoryAction = null;
 		fShutdownAction = null;
 		fGemInstallAction = null;
 		getConsole().removePropertyChangeListener(fPropertyChangeListener);

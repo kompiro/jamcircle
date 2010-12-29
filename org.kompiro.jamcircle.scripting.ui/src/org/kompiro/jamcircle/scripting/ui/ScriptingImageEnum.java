@@ -3,6 +3,7 @@ package org.kompiro.jamcircle.scripting.ui;
 public enum ScriptingImageEnum {
 
 	SCRIPT_GEAR("script_gear.png"), //$NON-NLS-1$
+	EDIT("pencil_go.png"), //$NON-NLS-1$
 	RUBY_ADD("ruby_add.png"), //$NON-NLS-1$
 	RUBY_DELETE("ruby_delete.png"), //$NON-NLS-1$
 	RUBY_GEAR("ruby_gear.png"), //$NON-NLS-1$

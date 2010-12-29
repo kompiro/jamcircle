@@ -779,6 +779,16 @@ public class RubyScriptingConsole extends TextConsole implements IScriptingConso
 		});
 	}
 
+	public List<String> getHistoryList() {
+		History history = Readline.getHistory(Readline.getHolder(container.getProvider().getRuntime()));
+		List<String> list = new ArrayList<String>();
+		for (Object line : history.getHistoryList()) {
+			if (line != null)
+				list.add(line.toString());
+		}
+		return list;
+	}
+
 	private Display getDisplay() {
 		return PlatformUI.getWorkbench().getDisplay();
 	}
