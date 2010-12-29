@@ -1,6 +1,5 @@
 package org.kompiro.jamcircle.kanban.ui.action;
 
-
 import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalViewer;
@@ -17,7 +16,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.Messages;
 
-public class CaptureBoardAction extends Action{
+// TODO separate class
+public class CaptureBoardAction extends Action {
 
 	private static final String MENU_CLOSE = Messages.CaptureBoardAction_menu_close;
 	private static final String TEXT_SAVE = Messages.CaptureBoardAction_save_action_title;
@@ -30,26 +30,28 @@ public class CaptureBoardAction extends Action{
 		private static final String EXTENSION_JPG = "*.jpg"; //$NON-NLS-1$
 		private static final String EXTENSION_PNG = "*.png"; //$NON-NLS-1$
 		private Shell parentShell;
+
 		public SaveImageAction(Shell parentShell) {
 			super(TEXT_SAVE);
 			setImageDescriptor(KanbanImageConstants.SAVE_IMAGE.getImageDescriptor());
 			this.parentShell = parentShell;
 		}
-		
+
 		@Override
 		public void run() {
-			FileDialog dialog = new FileDialog(parentShell,SWT.SAVE);
-			dialog.setFilterExtensions(new String[]{EXTENSION_PNG,EXTENSION_JPG});
-			dialog.setFilterNames(new String[]{EXTENSION_PNG,EXTENSION_JPG});
+			FileDialog dialog = new FileDialog(parentShell, SWT.SAVE);
+			dialog.setFilterExtensions(new String[] { EXTENSION_PNG, EXTENSION_JPG });
+			dialog.setFilterNames(new String[] { EXTENSION_PNG, EXTENSION_JPG });
 			String path = dialog.open();
-			if(path == null) return;
-	        ImageLoader loader = new ImageLoader();
-	        loader.data = new ImageData[] { shown.getImageData() };
-	        if(path.matches(MATCHE_PATTERN_JPG_)){
-		        loader.save(path, SWT.IMAGE_JPEG);	        	
-	        }else{
-		        loader.save(path, SWT.IMAGE_PNG);
-	        }
+			if (path == null)
+				return;
+			ImageLoader loader = new ImageLoader();
+			loader.data = new ImageData[] { shown.getImageData() };
+			if (path.matches(MATCHE_PATTERN_JPG_)) {
+				loader.save(path, SWT.IMAGE_JPEG);
+			} else {
+				loader.save(path, SWT.IMAGE_PNG);
+			}
 		}
 	}
 
@@ -96,7 +98,7 @@ public class CaptureBoardAction extends Action{
 		setImageDescriptor(KanbanImageConstants.CAMERA_IMAGE.getImageDescriptor());
 		this.part = part;
 	}
-	
+
 	public void run() {
 		GraphicalViewerImpl viewer = (GraphicalViewerImpl) part.getAdapter(GraphicalViewer.class);
 		canvas = (FigureCanvas) viewer.getControl();
@@ -108,7 +110,7 @@ public class CaptureBoardAction extends Action{
 		MenuManager fileMenu = new MenuManager(MENU_FILE);
 		menuBarManager.add(fileMenu);
 		fileMenu.add(saveAction);
-		fileMenu.add(new Action(MENU_CLOSE){
+		fileMenu.add(new Action(MENU_CLOSE) {
 			@Override
 			public void run() {
 				window.close();
@@ -120,4 +122,3 @@ public class CaptureBoardAction extends Action{
 	}
 
 }
-
