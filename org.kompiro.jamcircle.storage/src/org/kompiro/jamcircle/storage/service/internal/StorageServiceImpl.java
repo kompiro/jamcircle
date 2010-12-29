@@ -3,14 +3,13 @@ package org.kompiro.jamcircle.storage.service.internal;
 import static java.lang.String.format;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.sql.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import net.java.ao.*;
 
 import org.eclipse.core.runtime.*;
-import org.eclipse.core.runtime.jobs.Job;
 import org.h2.tools.Csv;
 import org.kompiro.jamcircle.storage.*;
 import org.kompiro.jamcircle.storage.exception.StorageConnectException;
@@ -40,16 +39,6 @@ public class StorageServiceImpl implements StorageService {
 	private static final String DB_NAME = "dbname"; //$NON-NLS-1$
 	private static final String RESOURCE_NAME = "storage"; //$NON-NLS-1$
 
-	public abstract class StorageAccessJob extends Job {
-
-		private StorageAccessJob(String name) {
-			super(name);
-			setSystem(true);
-			setRule(new StorageAccessRule());
-		}
-
-	}
-
 	private final class StorageChageListenerComparator implements
 			Comparator<StorageChangeListener> {
 		public int compare(StorageChangeListener o1, StorageChangeListener o2) {
@@ -64,6 +53,7 @@ public class StorageServiceImpl implements StorageService {
 	private List<StorageChangeListener> listeners = new ArrayList<StorageChangeListener>();
 	private StorageSettings settings = new StorageSettings();
 	public static boolean testmode = FileStorageServiceImpl.testmode;
+	public static final ExecutorService STORAGE_ACCESS_EXECUTOR = Executors.newSingleThreadExecutor();
 
 	static {
 		try {
@@ -286,9 +276,8 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	public void deleteTrashedEntity(final Class<? extends GraphicalEntity> entityClass) {
-		Job storageJob = new StorageAccessJob("deleteTrashedEntity") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+		STORAGE_ACCESS_EXECUTOR.submit(new Callable<Object>() {
+			public Object call() throws Exception {
 				try {
 					EntityManager entityManager = getEntityManager();
 					GraphicalEntity[] entities = entityManager.find(entityClass,
@@ -298,10 +287,9 @@ public class StorageServiceImpl implements StorageService {
 				} catch (SQLException e) {
 					StorageStatusHandler.fail(e, "StorageServiceImpl#deleteTrashedEntity()"); //$NON-NLS-1$
 				}
-				return Status.OK_STATUS;
+				return null;
 			}
-		};
-		storageJob.schedule();
+		});
 	}
 
 	public String getDBPath() {
@@ -309,13 +297,11 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	public <T extends Entity> T createEntity(final Class<T> clazz, final DBParam[] params) {
-		@SuppressWarnings("unchecked")
-		final T[] entity = (T[]) new Entity[1];
-		Job storageJob = new StorageAccessJob("createEntity") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+		Future<T> future = STORAGE_ACCESS_EXECUTOR.submit(new Callable<T>() {
+			public T call() throws Exception {
+				T entity = null;
 				try {
-					entity[0] = getEntityManager().create(clazz, params);
+					entity = getEntityManager().create(clazz, params);
 				} catch (SQLException e) {
 					StringBuilder builder = new StringBuilder();
 					for (DBParam param : params) {
@@ -324,16 +310,16 @@ public class StorageServiceImpl implements StorageService {
 					}
 					StorageStatusHandler.fail(e, "StorageServiceImpl#create() '%s'", builder.toString()); //$NON-NLS-1$
 				}
-				return Status.OK_STATUS;
+				return entity;
 			}
-		};
-		storageJob.schedule();
+		});
 		try {
-			storageJob.join();
+			return future.get();
 		} catch (InterruptedException e) {
+		} catch (ExecutionException e) {
+			StorageStatusHandler.fail(e, "StorageServiceImpl#create()", true); //$NON-NLS-1$
 		}
-		return entity[0];
-
+		return null;
 	}
 
 	public void discard(GraphicalEntity entity) {
@@ -342,22 +328,16 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	public void delete(final Entity entity) {
-		Job storageJob = new StorageAccessJob("delete") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+		STORAGE_ACCESS_EXECUTOR.submit(new Callable<Object>() {
+			public Object call() throws Exception {
 				try {
 					getEntityManager().delete(entity);
 				} catch (SQLException e) {
 					StorageStatusHandler.fail(e, "StorageServiceImpl#delete()"); //$NON-NLS-1$
 				}
-				return Status.OK_STATUS;
+				return null;
 			}
-		};
-		storageJob.schedule();
-		try {
-			storageJob.join();
-		} catch (InterruptedException e) {
-		}
+		});
 	}
 
 	public void pickup(GraphicalEntity entity) {
@@ -391,27 +371,24 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	public <T extends Entity> T[] findInTrash(final Class<T> clazz) {
-		final List<T> results = new ArrayList<T>();
-		Job storageJob = new StorageAccessJob("findInTrash") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+		Future<T[]> future = STORAGE_ACCESS_EXECUTOR.submit(new Callable<T[]>() {
+			public T[] call() throws Exception {
+				T[] founds = null;
 				try {
-					T[] found = getEntityManager().find(clazz, GraphicalEntity.PROP_TRASHED + QUERY, true);
-					results.addAll(Arrays.asList(found));
+					founds = getEntityManager().find(clazz, GraphicalEntity.PROP_TRASHED + QUERY, true);
 				} catch (SQLException e) {
 					StorageStatusHandler.fail(e, "StorageServiceImpl#countInTrash()", true); //$NON-NLS-1$
 				}
-				return Status.OK_STATUS;
+				return founds;
 			}
-		};
-		storageJob.schedule();
+		});
 		try {
-			storageJob.join();
+			return future.get();
 		} catch (InterruptedException e) {
+		} catch (ExecutionException e) {
+			StorageStatusHandler.fail(e, "StorageServiceImpl#countInTrash()", true); //$NON-NLS-1$
 		}
-		@SuppressWarnings("unchecked")
-		T[] newInstance = (T[]) Array.newInstance(clazz, 0);
-		return results.toArray(newInstance);
+		return null;
 	}
 
 	public boolean isTestMode() {
@@ -434,25 +411,23 @@ public class StorageServiceImpl implements StorageService {
 	}
 
 	public int count(final Class<? extends Entity> clazz) {
-		final int[] result = new int[1];
-		Job storageJob = new StorageAccessJob("count") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+		Future<Integer> future = STORAGE_ACCESS_EXECUTOR.submit(new Callable<Integer>() {
+			public Integer call() throws Exception {
 				try {
-					result[0] = getEntityManager().count(clazz);
+					return getEntityManager().count(clazz);
 				} catch (SQLException e) {
 					StorageStatusHandler.fail(e, "StorageServiceImpl#count()", true); //$NON-NLS-1$
-					result[0] = 0;
+					return 0;
 				}
-				return Status.OK_STATUS;
 			}
-		};
-		storageJob.schedule();
+		});
 		try {
-			storageJob.join();
+			return future.get();
 		} catch (InterruptedException e) {
+		} catch (ExecutionException e) {
+			StorageStatusHandler.fail(e, "StorageServiceImpl#count()", true); //$NON-NLS-1$
 		}
-		return result[0];
+		return 0;
 	}
 
 	public void setEntityManager(EntityManager manager) {
