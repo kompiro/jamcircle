@@ -391,6 +391,15 @@ public class StorageServiceImpl implements StorageService {
 		return null;
 	}
 
+	public <T extends Entity> void flushEntity(final T... entity) {
+		STORAGE_ACCESS_EXECUTOR.submit(new Callable<T>() {
+			public T call() throws Exception {
+				getEntityManager().flush(entity);
+				return null;
+			}
+		});
+	}
+
 	public boolean isTestMode() {
 		return testmode;
 	}
