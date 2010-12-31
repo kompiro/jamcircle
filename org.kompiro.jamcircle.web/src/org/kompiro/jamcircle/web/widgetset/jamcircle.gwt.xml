@@ -18,7 +18,6 @@
      Google Chrome.
     -->
     <!-- <set-property name="user.agent" value="gecko"/> -->
-
-
     <inherits name="org.vaadin.artur.icepush.IcepushaddonWidgetset" />
+    <inherits name="com.vaadin.incubator.dragdroplayouts.DragDropLayoutsWidgetSet" />
 </module>

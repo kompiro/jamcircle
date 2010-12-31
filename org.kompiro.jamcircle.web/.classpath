@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/dragdroplayouts-0.4.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/icepush-0.2.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/icepush-gwt.jar"/>
 	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/icepush.jar"/>

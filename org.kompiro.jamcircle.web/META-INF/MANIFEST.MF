@@ -134,6 +134,9 @@ Import-Package: VAADIN.themes,
  com.vaadin.terminal,
  com.vaadin.terminal.gwt,
  com.vaadin.terminal.gwt.client,
+ com.vaadin.terminal.gwt.client.ui,
+ com.vaadin.terminal.gwt.client.ui.dd,
+ com.vaadin.terminal.gwt.client.ui.layout,
  com.vaadin.terminal.gwt.server,
  com.vaadin.ui,
  javax.servlet;version="2.5.0",
@@ -150,4 +153,5 @@ Service-Component: OSGI-INF/WebContext.xml
 Bundle-ClassPath: .,
  WEB-INF/lib/icepush-0.2.0.jar,
  WEB-INF/lib/icepush-gwt.jar,
- WEB-INF/lib/icepush.jar
+ WEB-INF/lib/icepush.jar,
+ WEB-INF/lib/dragdroplayouts-0.4.4.jar
