@@ -4,7 +4,6 @@ import static java.lang.String.format;
 
 import java.beans.PropertyChangeEvent;
 import java.io.File;
-import java.sql.SQLException;
 import java.util.*;
 
 import org.kompiro.jamcircle.scripting.ScriptTypes;
@@ -30,6 +29,8 @@ public class LaneImpl extends GraphicalImpl {
 
 	private FileStorageService fileService;
 
+	private StorageService storageService;
+
 	public LaneImpl(Lane lane) throws IllegalArgumentException {
 		super(lane);
 		this.lane = lane;
@@ -54,12 +55,7 @@ public class LaneImpl extends GraphicalImpl {
 		if (card.isMock()) {
 			mockCards.add(card);
 		} else {
-			lane.getEntityManager().flush(card);
-			try {
-				lane.getEntityManager().find(Card.class, Card.PROP_ID + QUERY, card.getID());
-			} catch (SQLException e) {
-				KanbanStatusHandler.fail(e, Messages.LaneImpl_error_sql);
-			}
+			getStorageService().flushEntity(lane);
 		}
 		PropertyChangeEvent event = new PropertyChangeEvent(lane, Lane.PROP_CARD, null, card);
 		fireEvent(event);
@@ -92,12 +88,7 @@ public class LaneImpl extends GraphicalImpl {
 		if (card.isMock()) {
 			mockCards.remove(card);
 		} else {
-			lane.getEntityManager().flush(card);
-			try {
-				lane.getEntityManager().find(Card.class, Card.PROP_ID + QUERY, card.getID());
-			} catch (SQLException e) {
-				KanbanStatusHandler.fail(e, Messages.LaneImpl_error_sql);
-			}
+			getStorageService().flushEntity(lane);
 		}
 
 		PropertyChangeEvent event = new PropertyChangeEvent(lane, Lane.PROP_CARD, card, null);
@@ -186,7 +177,14 @@ public class LaneImpl extends GraphicalImpl {
 	}
 
 	private StorageService getStorageService() {
-		return KanbanModelContext.getDefault().getStorageService();
+		if (storageService == null) {
+			storageService = KanbanModelContext.getDefault().getStorageService();
+		}
+		return storageService;
+	}
+
+	public void setStorageService(StorageService storageService) {
+		this.storageService = storageService;
 	}
 
 	@Override

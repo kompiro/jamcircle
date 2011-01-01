@@ -144,4 +144,48 @@ public class CardImplTest {
 		assertThat(file.exists(), is(false));
 	}
 
+	@Test
+	public void to_string_when_default_value() throws Exception {
+		assertThat(cardImpl.toString(), is("CARD['#0':'null' trashed:'false' point:'0,0']"));
+	}
+
+	@Test
+	public void to_string_when_customed_subject_value() throws Exception {
+		when(card.getSubject()).thenReturn("test");
+		assertThat(cardImpl.toString(), is("CARD['#0':'test' trashed:'false' point:'0,0']"));
+	}
+
+	@Test
+	public void to_string_when_customed_trashed_value() throws Exception {
+		when(card.isTrashed()).thenReturn(true);
+		assertThat(cardImpl.toString(), is("CARD['#0':'null' trashed:'true' point:'0,0']"));
+	}
+
+	@Test
+	public void to_string_when_customed_x_point_value() throws Exception {
+		when(card.getX()).thenReturn(10);
+		assertThat(cardImpl.toString(), is("CARD['#0':'null' trashed:'false' point:'10,0']"));
+	}
+
+	@Test
+	public void to_string_when_customed_y_point_value() throws Exception {
+		when(card.getY()).thenReturn(10);
+		assertThat(cardImpl.toString(), is("CARD['#0':'null' trashed:'false' point:'0,10']"));
+	}
+
+	@Test
+	public void to_string_when_set_lane() throws Exception {
+		Lane lane = mock(Lane.class);
+		when(card.getLane()).thenReturn(lane);
+		assertThat(cardImpl.toString(), is("CARD['#0':'null' trashed:'false' point:'0,0' LANE:'#0' : 'null']"));
+	}
+
+	@Test
+	public void to_string_when_set_lane_status() throws Exception {
+		Lane lane = mock(Lane.class);
+		when(lane.getStatus()).thenReturn("test");
+		when(card.getLane()).thenReturn(lane);
+		assertThat(cardImpl.toString(), is("CARD['#0':'null' trashed:'false' point:'0,0' LANE:'#0' : 'test']"));
+	}
+
 }

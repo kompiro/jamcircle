@@ -20,6 +20,8 @@ public class CardImpl extends GraphicalEntityImpl {
 
 	private static String TO_STRING_FORMAT = "CARD['#%d':'%s' trashed:'%s' point:'%d,%d']"; //$NON-NLS-1$
 
+	private static String TO_STRING_UNDER_LANE_FORMAT = "CARD['#%d':'%s' trashed:'%s' point:'%d,%d' LANE:'#%d' : '%s']"; //$NON-NLS-1$
+
 	private Card card;
 
 	private boolean deletedVisuals;
@@ -132,8 +134,14 @@ public class CardImpl extends GraphicalEntityImpl {
 
 	@Override
 	public String toString() {
-		return String.format(TO_STRING_FORMAT, card.getID(), card.getSubject(), card.isTrashed(), card.getX(),
-				card.getY());
+		Lane lane = card.getLane();
+		if (lane == null) {
+			return String.format(TO_STRING_FORMAT, card.getID(), card.getSubject(), card.isTrashed(), card.getX(),
+					card.getY());
+		}
+		return String.format(TO_STRING_UNDER_LANE_FORMAT, card.getID(), card.getSubject(), card.isTrashed(),
+				card.getX(),
+				card.getY(), lane.getID(), lane.getStatus());
 	}
 
 }

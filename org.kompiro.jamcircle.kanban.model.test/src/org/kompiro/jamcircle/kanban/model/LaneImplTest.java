@@ -25,6 +25,7 @@ import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 import org.kompiro.jamcircle.storage.model.ExecutorHandler;
 import org.kompiro.jamcircle.storage.service.FileStorageService;
+import org.kompiro.jamcircle.storage.service.StorageService;
 import org.mockito.ArgumentCaptor;
 
 public class LaneImplTest {
@@ -35,6 +36,7 @@ public class LaneImplTest {
 	private PropertyChangeListener listener;
 	private ExecutorHandler handler;
 	private List<Card> mockCards;
+	private StorageService storageService;
 
 	@SuppressWarnings("unchecked")
 	@Before
@@ -55,6 +57,9 @@ public class LaneImplTest {
 		fileService = mock(FileStorageService.class);
 		impl.setFileService(fileService);
 
+		storageService = mock(StorageService.class);
+		impl.setStorageService(storageService);
+
 		handler = mock(ExecutorHandler.class);
 	}
 
@@ -67,7 +72,7 @@ public class LaneImplTest {
 		verify(card).save(false);
 		verify(card).setTrashed(false);
 		verify(card).setDeletedVisuals(false);
-		verify(manager).flush(card);
+		verify(storageService).flushEntity(lane);
 		verify(mockCards, never()).add(card);
 
 		ArgumentCaptor<PropertyChangeEvent> captor = ArgumentCaptor.forClass(PropertyChangeEvent.class);
@@ -89,7 +94,7 @@ public class LaneImplTest {
 		verify(card).save(false);
 		verify(card).setTrashed(false);
 		verify(card).setDeletedVisuals(false);
-		verify(manager, never()).flush(card);
+		verify(storageService, never()).flushEntity(lane);
 		verify(mockCards).add(card);
 
 		ArgumentCaptor<PropertyChangeEvent> captor = ArgumentCaptor.forClass(PropertyChangeEvent.class);
@@ -124,7 +129,7 @@ public class LaneImplTest {
 		verify(card).setBoard(null);
 		verify(card).save(false);
 		verify(card).setDeletedVisuals(true);
-		verify(manager).flush(card);
+		verify(storageService).flushEntity(lane);
 		verify(mockCards, never()).remove(card);
 
 		ArgumentCaptor<PropertyChangeEvent> captor = ArgumentCaptor.forClass(PropertyChangeEvent.class);
