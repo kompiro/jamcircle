@@ -50,12 +50,10 @@ public class LaneFigure {
 			Card card = getCard(component);
 			card.setX(x);
 			card.setY(y);
-			card.save(false);
 			String location = getLocation(x, y);
 			Panel panel = (Panel) layout.getParent();
 			CardContainer parent = (CardContainer) panel.getData();
 			parent.addCard(card);
-			System.out.println(card.getLane());
 			layout.addComponent(component, location);
 		}
 
@@ -82,8 +80,10 @@ public class LaneFigure {
 
 	private Panel panel;
 	private DDAbsoluteLayout layout;
+	private Lane lane;
 
-	public LaneFigure(AbsoluteLayout boardLayout, Lane lane) {
+	public LaneFigure(Lane lane) {
+		this.lane = lane;
 		this.panel = new Panel();
 		panel.setData(lane);
 		panel.setCaption(lane.getContainerName());
@@ -93,11 +93,7 @@ public class LaneFigure {
 		layout.setSizeFull();
 		layout.setDragMode(LayoutDragMode.CLONE);
 		layout.setDropHandler(new LaneDropHandler());
-
 		panel.setContent(layout);
-
-		String location = getLocation(lane.getX(), lane.getY());
-		boardLayout.addComponent(panel, location);
 	}
 
 	private String getLocation(int x, int y) {
@@ -111,6 +107,14 @@ public class LaneFigure {
 
 	public AbsoluteLayout getLayout() {
 		return layout;
+	}
+
+	public String getLocation() {
+		return getLocation(lane.getX(), lane.getY());
+	}
+
+	public Panel getPanel() {
+		return panel;
 	}
 
 }
