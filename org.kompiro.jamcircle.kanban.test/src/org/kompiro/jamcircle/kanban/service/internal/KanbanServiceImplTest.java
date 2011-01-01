@@ -13,6 +13,7 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -21,8 +22,7 @@ import static org.mockito.Mockito.when;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import net.java.ao.DBParam;
-import net.java.ao.EntityManager;
+import net.java.ao.*;
 
 import org.junit.*;
 import org.kompiro.jamcircle.kanban.model.*;
@@ -202,6 +202,104 @@ public class KanbanServiceImplTest {
 	public void flushAll() throws Exception {
 		serviceImpl.flushAll();
 		verify(managerMock).flushAll();
+	}
+
+	@Test
+	public void flushBoard_when_cards_on_board_are_null() throws Exception {
+		Board board = mock(Board.class);
+		Lane lane1 = mock(Lane.class);
+		Lane lane2 = mock(Lane.class);
+		Card card = mock(Card.class);
+		when(lane1.getCards()).thenReturn(new Card[] { card });
+		Lane[] lanes = new Lane[] { lane1, lane2 };
+		when(board.getLanesFromDB()).thenReturn(lanes);
+		serviceImpl.flushBoard(board);
+		verify(storageService).flushEntity(new Entity[] { board, lane1, lane2, card });
+	}
+
+	@Test
+	public void flushBoard() throws Exception {
+		Board board = mock(Board.class);
+		Lane lane1 = mock(Lane.class);
+		Lane lane2 = mock(Lane.class);
+		Card card1 = mock(Card.class);
+		Card card2 = mock(Card.class);
+		Card card3 = mock(Card.class);
+		when(lane1.getCards()).thenReturn(new Card[] { card1 });
+		when(lane2.getCards()).thenReturn(new Card[] { card2 });
+		when(board.getCardsFromDB()).thenReturn(new Card[] { card3 });
+		Lane[] lanes = new Lane[] { lane1, lane2 };
+		when(board.getLanesFromDB()).thenReturn(lanes);
+		serviceImpl.flushBoard(board);
+		verify(storageService).flushEntity(new Entity[] { board, card3, lane1, lane2, card1, card2 });
+	}
+
+	@Test
+	public void flushBoard_when_mock_cards_on_board() throws Exception {
+		Board board = mock(Board.class);
+		Lane lane1 = mock(Lane.class);
+		Lane lane2 = mock(Lane.class);
+		Card card1 = mock(Card.class);
+		Card card2 = mock(Card.class);
+		Card card3 = mock(Card.class);
+		when(lane1.getCards()).thenReturn(new Card[] { card1 });
+		when(lane2.getCards()).thenReturn(new Card[] { card2 });
+		when(board.getCards()).thenReturn(new Card[] { card3 });
+		Lane[] lanes = new Lane[] { lane1, lane2 };
+		when(board.getLanesFromDB()).thenReturn(lanes);
+		serviceImpl.flushBoard(board);
+		verify(storageService).flushEntity(new Entity[] { board, lane1, lane2, card1, card2 });
+	}
+
+	@Test
+	public void flushBoard_when_mock_cards_on_lane() throws Exception {
+		Board board = mock(Board.class);
+		Lane lane1 = mock(Lane.class);
+		Lane lane2 = mock(Lane.class);
+		Card card1 = mock(Card.class);
+		when(card1.isMock()).thenReturn(true);
+		Card card2 = mock(Card.class);
+		Card card3 = mock(Card.class);
+		when(lane1.getCards()).thenReturn(new Card[] { card1 });
+		when(lane2.getCards()).thenReturn(new Card[] { card2 });
+		when(board.getCards()).thenReturn(new Card[] { card3 });
+		Lane[] lanes = new Lane[] { lane1, lane2 };
+		when(board.getLanesFromDB()).thenReturn(lanes);
+		serviceImpl.flushBoard(board);
+		verify(storageService).flushEntity(new Entity[] { board, lane1, lane2, card2 });
+	}
+
+	@Test
+	public void flushBoard_when_lanes_and_cards_on_board_and_are_null() throws Exception {
+		Board board = mock(Board.class);
+		serviceImpl.flushBoard(board);
+		verify(storageService).flushEntity(new Entity[] { board });
+	}
+
+	@Test
+	public void flushBoard_when_board_is_null() throws Exception {
+		serviceImpl.flushBoard(null);
+		verify(storageService, never()).flushEntity((Entity[]) any());
+	}
+
+	@Test
+	public void flushBoard_when_lanes_on_board_are_null() throws Exception {
+		Board board = mock(Board.class);
+		Card card = mock(Card.class);
+		when(board.getCardsFromDB()).thenReturn(new Card[] { card });
+		serviceImpl.flushBoard(board);
+		verify(storageService).flushEntity(new Entity[] { board, card });
+	}
+
+	@Test
+	public void flushBoard_when_cards_on_lane_and_board_are_null() throws Exception {
+		Board board = mock(Board.class);
+		Lane lane1 = mock(Lane.class);
+		Lane lane2 = mock(Lane.class);
+		Lane[] lanes = new Lane[] { lane1, lane2 };
+		when(board.getLanesFromDB()).thenReturn(lanes);
+		serviceImpl.flushBoard(board);
+		verify(storageService).flushEntity(new Entity[] { board, lane1, lane2 });
 	}
 
 	private void assertFirePropertyWhenCreated(
