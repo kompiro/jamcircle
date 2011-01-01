@@ -271,6 +271,14 @@ public interface KanbanService {
 	 */
 	boolean importBoards(File importFile);
 
+	/**
+	 * flush cache information.
+	 * 
+	 * @param board
+	 *            target board
+	 */
+	void flushBoard(Board board);
+
 	// User Section
 
 	/**

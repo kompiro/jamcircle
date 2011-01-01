@@ -447,6 +447,20 @@ public class KanbanServiceImpl implements KanbanService, StorageChangeListener {
 		}
 	}
 
+	public void flushBoard(Board board) {
+		List<Entity> entities = new ArrayList<Entity>();
+		entities.add(board);
+		entities.addAll(Arrays.asList(board.getCardsFromDB()));
+		Lane[] lanes = board.getLanesFromDB();
+		entities.addAll(Arrays.asList(lanes));
+		for (Lane lane : lanes) {
+			entities.addAll(Arrays.asList(lane.getCards()));
+		}
+		entities.addAll(Arrays.asList(board.getCardsFromDB()));
+		getStorageService().flushEntity(entities.toArray(new Entity[] {}));
+
+	}
+
 	public Board createBoard(String title) {
 		Board board = null;
 		DBParam[] params = new DBParam[] {
