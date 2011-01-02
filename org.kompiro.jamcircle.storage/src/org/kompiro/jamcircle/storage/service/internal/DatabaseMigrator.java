@@ -48,15 +48,27 @@ public class DatabaseMigrator {
 		println("Migrating " + file.getName());
 		String url = "jdbc:h2:" + file.getAbsolutePath();
 		url = url.substring(0, url.length() - ".data.db".length());
-		exec(new String[] {
-				pathToJavaExe,
-				"-Xmx128m",
-				"-cp", oldH2Jar.getAbsolutePath(),
-				"org.h2.tools.Script",
-				"-script", TEMP_SCRIPT,
-				"-url", url,
-				"-user", user,
-				"-password", password });
+		
+		if(password == null || password.equals("")){
+			exec(wrapQuote(pathToJavaExe),
+					"-Xmx128m",
+					"-cp", wrapQuote(oldH2Jar.getAbsolutePath()),
+					"org.h2.tools.Script",
+					"-script", TEMP_SCRIPT,
+					"-url", wrapQuote(url),
+					"-user", user 
+			);
+		}else{
+			exec(wrapQuote(pathToJavaExe),
+					"-Xmx128m",
+					"-cp", wrapQuote(oldH2Jar.getAbsolutePath()),
+					"org.h2.tools.Script",
+					"-script", TEMP_SCRIPT,
+					"-url", wrapQuote(url),
+					"-user", user,
+					"-password", password 
+			);
+		}
 		file.renameTo(new File(file.getAbsoluteFile() + ".backup"));
 		RunScript.execute(url, user, password, TEMP_SCRIPT, "UTF-8", true);
 		new File(TEMP_SCRIPT).delete();
@@ -76,6 +88,10 @@ public class DatabaseMigrator {
 		return pathToJava;
 	}
 
+	private String wrapQuote(String wrapped) {
+		return "\"" + wrapped + "\"";
+	}
+
 	private void println(String s) {
 		if (!quiet) {
 			sysOut.println(s);
@@ -88,7 +104,7 @@ public class DatabaseMigrator {
 		}
 	}
 
-	private int exec(String[] command) {
+	private int exec(String... command) {
 		try {
 			for (String c : command) {
 				print(c + " ");
