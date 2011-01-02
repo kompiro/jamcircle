@@ -50,21 +50,21 @@ public class DatabaseMigrator {
 		url = url.substring(0, url.length() - ".data.db".length());
 		
 		if(password == null || password.equals("")){
-			exec(wrapQuote(pathToJavaExe),
+			exec(pathToJavaExe,
 					"-Xmx128m",
-					"-cp", wrapQuote(oldH2Jar.getAbsolutePath()),
+					"-cp", oldH2Jar.getAbsolutePath(),
 					"org.h2.tools.Script",
 					"-script", TEMP_SCRIPT,
-					"-url", wrapQuote(url),
+					"-url", url,
 					"-user", user 
 			);
 		}else{
-			exec(wrapQuote(pathToJavaExe),
+			exec(pathToJavaExe,
 					"-Xmx128m",
-					"-cp", wrapQuote(oldH2Jar.getAbsolutePath()),
+					"-cp",oldH2Jar.getAbsolutePath(),
 					"org.h2.tools.Script",
 					"-script", TEMP_SCRIPT,
-					"-url", wrapQuote(url),
+					"-url", url,
 					"-user", user,
 					"-password", password 
 			);
@@ -88,9 +88,6 @@ public class DatabaseMigrator {
 		return pathToJava;
 	}
 
-	private String wrapQuote(String wrapped) {
-		return "\"" + wrapped + "\"";
-	}
 
 	private void println(String s) {
 		if (!quiet) {
