@@ -2,14 +2,10 @@ package org.kompiro.jamcircle.kanban.ui.internal.view;
 
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.gef.GraphicalViewer;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.progress.UIJob;
 import org.kompiro.jamcircle.kanban.model.Icon;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.KanbanPreferenceConstants;
@@ -23,9 +19,7 @@ import org.kompiro.jamcircle.kanban.ui.model.DefaultIconModelFactory;
 import org.kompiro.jamcircle.kanban.ui.model.IconModel;
 import org.kompiro.jamcircle.kanban.ui.model.IconModelFactory;
 import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator;
-import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator.MonitorRunnable;
-import org.kompiro.jamcircle.kanban.ui.util.JobMonitorDelegator;
-import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
+import org.kompiro.jamcircle.kanban.ui.util.UIJobMonitorDelegator;
 import org.kompiro.jamcircle.scripting.ScriptingService;
 
 /**
@@ -35,7 +29,7 @@ public class StorageContentsOperatorImpl implements StorageContentsOperator{
 
 	private KanbanUIEditPartFactory factory = new KanbanUIEditPartFactory();
 	private IconModelFactory iconModelFactory;
-	private IMonitorDelegator delegator = new JobMonitorDelegator(Messages.KanbanView_execute_script_message);
+	private IMonitorDelegator delegator = new UIJobMonitorDelegator(Messages.KanbanView_execute_script_message);
 	private ScriptingService scriptingService;
 	private KanbanService kanbanService;
 	private InstanceScope instanceScope = new InstanceScope();
@@ -54,7 +48,7 @@ public class StorageContentsOperatorImpl implements StorageContentsOperator{
 		iconModelFactory = new DefaultIconModelFactory(kanbanService);
 	}
 
-	public void setContents(final GraphicalViewer viewer,final BoardModel boardModel, IProgressMonitor monitor) {
+	public void setContents(GraphicalViewer viewer,BoardModel boardModel, IProgressMonitor monitor) {
 		viewer.setEditPartFactory(factory);		
 		String taskName = String.format(Messages.KanbanView_open_message,boardModel.getTitle()); 
 		monitor.subTask(taskName);
@@ -64,30 +58,16 @@ public class StorageContentsOperatorImpl implements StorageContentsOperator{
 		monitor.internalWorked(1);
 		initializeIcon(boardModel);
 		monitor.internalWorked(1);
-		Display display = WorkbenchUtil.getDisplay();
-		if(display != null){
-			UIJob job = new UIJob(display,"set contents") {
-				@Override
-				public IStatus runInUIThread(IProgressMonitor monitor) {
-					viewer.setContents(boardModel);
-					executeScript(viewer,boardModel);
-					storeCurrentBoard(boardModel.getID());
-					return Status.OK_STATUS;
-				}
-			};
-			job.schedule();
-		} else {
-			viewer.setContents(boardModel);
-			executeScript(viewer,boardModel);
-			storeCurrentBoard(boardModel.getID());
-		}
+		SetContentRunnable runner = new SetContentRunnable(boardModel, viewer);
+		runner.setMonitor(monitor);
+		runner.run();
+		executeScript(viewer,boardModel);
+		storeCurrentBoard(boardModel.getID());
 	}
 
+
 	private void executeScript(GraphicalViewer viewer ,BoardModel boardModel) {
-		
-		MonitorRunnable runner = new BoardScriptRunnable(boardModel, viewer, getScriptingService());
-		
-		delegator.run(runner);
+		delegator.run(new BoardScriptRunnable(boardModel, viewer, getScriptingService()));
 
 	}
 

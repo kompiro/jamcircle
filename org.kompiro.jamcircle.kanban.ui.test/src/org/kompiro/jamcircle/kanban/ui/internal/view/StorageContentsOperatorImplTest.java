@@ -3,12 +3,17 @@ package org.kompiro.jamcircle.kanban.ui.internal.view;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Map;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.swt.widgets.Control;
 import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.Board;
@@ -61,6 +66,15 @@ public class StorageContentsOperatorImplTest {
 	@Test
 	public void setContents() throws Exception {
 		BoardModel board = mock(BoardModel.class);
+		GraphicalViewer viewer = createMockGraphicalViewer();
+		operator.setContents(viewer, board , new NullProgressMonitor());
+		
+		verify(viewer).setContents(board);
+	}
+	
+	@Test
+	public void setContents_when_viewers_returns_control_is_null() throws Exception {
+		BoardModel board = mock(BoardModel.class);
 		GraphicalViewer viewer = mock(GraphicalViewer.class);
 		operator.setContents(viewer, board , new NullProgressMonitor());
 		
@@ -71,7 +85,7 @@ public class StorageContentsOperatorImplTest {
 	@Test
 	public void setContents_script_is_not_called() throws Exception {
 		BoardModel board = mock(BoardModel.class);
-		GraphicalViewer viewer = mock(GraphicalViewer.class);
+		GraphicalViewer viewer = createMockGraphicalViewer();
 		operator.setContents(viewer, board , new NullProgressMonitor());
 		
 		verify(scriptingService,never()).eval((ScriptTypes)any(), anyString(), anyString(), (Map<String, Object>)any());
@@ -88,10 +102,16 @@ public class StorageContentsOperatorImplTest {
 		when(board.getScriptType()).thenReturn(ScriptTypes.JRuby);
 		when(board.getScript()).thenReturn("p 'hello'");
 
-		GraphicalViewer viewer = mock(GraphicalViewer.class);
+		GraphicalViewer viewer = createMockGraphicalViewer();
 		operator.setContents(viewer,boardModel , new NullProgressMonitor());
-		
 		verify(scriptingService).eval(eq(ScriptTypes.JRuby), anyString(), anyString(), (Map<String, Object>)any());
+	}
+
+	private GraphicalViewer createMockGraphicalViewer() {
+		GraphicalViewer viewer = mock(GraphicalViewer.class);
+		Control control = mock(Control.class);
+		when(viewer.getControl()).thenReturn(control);
+		return viewer;
 	}
 
 	private StorageContentsOperatorImpl createOperator(

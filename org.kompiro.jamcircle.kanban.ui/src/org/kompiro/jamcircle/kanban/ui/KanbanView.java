@@ -2,46 +2,93 @@ package org.kompiro.jamcircle.kanban.ui;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
+import java.util.EventObject;
 import java.util.List;
 
-import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.*;
+import org.eclipse.gef.EditDomain;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer.Conditional;
-import org.eclipse.gef.commands.*;
+import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CommandStackListener;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ScalableRootEditPart;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
-import org.eclipse.gef.ui.actions.*;
+import org.eclipse.gef.ui.actions.DeleteAction;
+import org.eclipse.gef.ui.actions.RedoAction;
+import org.eclipse.gef.ui.actions.SelectAllAction;
+import org.eclipse.gef.ui.actions.UndoAction;
+import org.eclipse.gef.ui.actions.ZoomInAction;
+import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
-import org.eclipse.jface.action.*;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IStatusLineManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.jface.viewers.*;
-import org.eclipse.swt.dnd.*;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.FileTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.part.CellEditorActionHandler;
 import org.eclipse.ui.part.ViewPart;
-import org.kompiro.jamcircle.kanban.model.*;
+import org.eclipse.ui.progress.IProgressService;
+import org.kompiro.jamcircle.kanban.model.Board;
+import org.kompiro.jamcircle.kanban.model.BoardContainer;
+import org.kompiro.jamcircle.kanban.model.Card;
+import org.kompiro.jamcircle.kanban.model.CardContainer;
+import org.kompiro.jamcircle.kanban.model.User;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
-import org.kompiro.jamcircle.kanban.ui.action.*;
+import org.kompiro.jamcircle.kanban.ui.action.CaptureBoardAction;
+import org.kompiro.jamcircle.kanban.ui.action.CopyAction;
+import org.kompiro.jamcircle.kanban.ui.action.CutAction;
+import org.kompiro.jamcircle.kanban.ui.action.EditBoardAction;
+import org.kompiro.jamcircle.kanban.ui.action.OpenCardListAction;
+import org.kompiro.jamcircle.kanban.ui.action.OpenCommandListAction;
+import org.kompiro.jamcircle.kanban.ui.action.PasteAction;
 import org.kompiro.jamcircle.kanban.ui.editpart.IBoardEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.command.RemoveCardCommand;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardCommandExecuter;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardDragTracker;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardEditPart;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardCreateRequest;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.view.StorageContentsOperator;
 import org.kompiro.jamcircle.kanban.ui.internal.view.StorageContentsOperatorImpl;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
-import org.kompiro.jamcircle.kanban.ui.util.*;
-import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator.MonitorRunnable;
-import org.kompiro.jamcircle.kanban.ui.widget.*;
+import org.kompiro.jamcircle.kanban.ui.util.GraphicalUtil;
+import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator;
+import org.kompiro.jamcircle.kanban.ui.util.UIJobMonitorDelegator;
+import org.kompiro.jamcircle.kanban.ui.util.WorkbenchUtil;
+import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer.CardWrapper;
+import org.kompiro.jamcircle.kanban.ui.widget.CardObjectTransfer;
 import org.kompiro.jamcircle.scripting.ScriptingService;
 import org.kompiro.jamcircle.scripting.exception.ScriptingException;
 import org.kompiro.jamcircle.storage.service.StorageChangeListener;
@@ -264,23 +311,26 @@ public class KanbanView extends ViewPart implements StorageChangeListener, Prope
 	}
 
 	private void storageInitialize() {
-		final IProgressMonitor monitor = new NullProgressMonitor();
-		MonitorRunnable runner = new MonitorRunnable() {
-			public void run() {
-				monitor.subTask(Messages.KanbanView_storage_initialize_task_message);
-				KanbanService service = getKanbanService();
-				int id = getPreference().getInt(KanbanPreferenceConstants.BOARD_ID.toString(), 1);
-				KanbanUIStatusHandler.debugUI("KanbanView#storageInitialize() id:'%d'", id); //$NON-NLS-1$
-				Board board = service.findBoard(id);
-				if (board == null) {
-					board = service.findBoard(1);
+		IProgressService service = getSite().getWorkbenchWindow().getWorkbench().getProgressService();
+		try {
+			service.run(true,false, new IRunnableWithProgress() {
+				public void run(IProgressMonitor monitor) throws InvocationTargetException,
+						InterruptedException {
+					monitor.subTask(Messages.KanbanView_storage_initialize_task_message);
+					KanbanService service = getKanbanService();
+					int id = getPreference().getInt(KanbanPreferenceConstants.BOARD_ID.toString(), 1);
+					KanbanUIStatusHandler.debugUI("KanbanView#storageInitialize() id:'%d'", id); //$NON-NLS-1$
+					Board board = service.findBoard(id);
+					if (board == null) {
+						board = service.findBoard(1);
+					}
+					monitor.internalWorked(30.0);
+					setContents(board, monitor);
 				}
-				monitor.internalWorked(30.0);
-				setContents(board, monitor);
-			}
-		};
-		runner.setMonitor(monitor);
-		runner.run();
+			});
+		} catch (InvocationTargetException e) {
+		} catch (InterruptedException e) {
+		}
 	}
 
 	@Override

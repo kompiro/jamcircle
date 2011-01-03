@@ -8,7 +8,7 @@ public interface StorageContentsOperator {
 	
 	/**
 	 * initialized operator
-	 * @throws IllegalStateException When some fields are illegal state,it throws.
+	 * @throws IllegalStateException is threw when a field's state are illegal.
 	 */
 	void initialize() throws IllegalStateException;
 
