@@ -2,12 +2,11 @@ package org.kompiro.jamcircle.kanban.ui;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.draw2d.Viewport;
@@ -22,7 +21,6 @@ import org.eclipse.gef.ui.actions.*;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.SelectionSynchronizer;
 import org.eclipse.jface.action.*;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.dnd.*;
@@ -32,7 +30,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.part.CellEditorActionHandler;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.progress.IProgressService;
+import org.eclipse.ui.progress.UIJob;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.action.*;
@@ -267,28 +265,23 @@ public class KanbanView extends ViewPart implements StorageChangeListener, Prope
 	}
 
 	private void storageInitialize() {
-		IProgressService service =
-				getSite().getWorkbenchWindow().getWorkbench().getProgressService();
-		try {
-			service.run(true, false, new IRunnableWithProgress() {
-				public void run(IProgressMonitor monitor) throws
-						InvocationTargetException,
-						InterruptedException {
-					monitor.subTask(Messages.KanbanView_storage_initialize_task_message);
-					KanbanService service = getKanbanService();
-					int id = getPreference().getInt(KanbanPreferenceConstants.BOARD_ID.toString(), 1);
-					KanbanUIStatusHandler.debugUI("KanbanView#storageInitialize() id:'%d'", id); //$NON-NLS-1$
-					Board board = service.findBoard(id);
-					if (board == null) {
-						board = service.findBoard(1);
-					}
-					monitor.internalWorked(30.0);
-					setContents(board, monitor);
+		Job job = new UIJob(Messages.KanbanView_storage_initialize_task_message) {
+			@Override
+			public IStatus runInUIThread(IProgressMonitor monitor) {
+				KanbanService service = getKanbanService();
+				int id = getPreference().getInt(KanbanPreferenceConstants.BOARD_ID.toString(), 1);
+				KanbanUIStatusHandler.debugUI("KanbanView#storageInitialize() id:'%d'", id); //$NON-NLS-1$
+				Board board = service.findBoard(id);
+				if (board == null) {
+					board = service.findBoard(1);
 				}
-			});
-		} catch (InvocationTargetException e) {
-		} catch (InterruptedException e) {
-		}
+				monitor.internalWorked(30.0);
+				setContents(board, monitor);
+				return Status.OK_STATUS;
+			}
+
+		};
+		job.schedule();
 	}
 
 	@Override
