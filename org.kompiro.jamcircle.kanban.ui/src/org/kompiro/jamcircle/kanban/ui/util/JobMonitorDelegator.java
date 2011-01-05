@@ -1,20 +1,19 @@
 package org.kompiro.jamcircle.kanban.ui.util;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.Job;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 
 public class JobMonitorDelegator implements IMonitorDelegator {
 	private String message;
+	private Job job;
 
 	public JobMonitorDelegator(String message) {
 		this.message = message;
 	}
 
 	public void run(final MonitorRunnable runner) {
-		Job job = new Job(message) {
+		job = new Job(message) {
 
 			@Override
 			public IStatus run(IProgressMonitor monitor) {
@@ -28,5 +27,11 @@ public class JobMonitorDelegator implements IMonitorDelegator {
 			}
 		};
 		job.schedule();
+	}
+
+	public void join() throws InterruptedException {
+		if (job != null && job.getThread() != Thread.currentThread()) {
+			job.join();
+		}
 	}
 }

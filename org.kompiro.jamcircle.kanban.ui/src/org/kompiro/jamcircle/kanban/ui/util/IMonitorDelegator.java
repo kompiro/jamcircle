@@ -12,12 +12,17 @@ public interface IMonitorDelegator {
 			runner.run();
 		}
 
+		public void join() throws InterruptedException {
+		}
+
 	}
 
 	void run(MonitorRunnable runner);
-	
+
+	void join() throws InterruptedException;
+
 	public abstract class MonitorRunnable implements Runnable {
-		protected  IProgressMonitor monitor;
+		protected IProgressMonitor monitor;
 
 		public MonitorRunnable() {
 		}

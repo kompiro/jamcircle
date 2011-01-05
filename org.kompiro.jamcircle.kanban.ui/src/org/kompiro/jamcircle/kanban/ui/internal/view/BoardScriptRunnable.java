@@ -11,6 +11,7 @@ import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardCommandExecuter;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardEditPart;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
+import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator;
 import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator.MonitorRunnable;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.scripting.ScriptingService;
@@ -29,15 +30,23 @@ class BoardScriptRunnable extends MonitorRunnable {
 	private final BoardModel boardModel;
 	private final GraphicalViewer viewer;
 	private ScriptingService scriptingService;
+	private IMonitorDelegator preJob;
 
 	BoardScriptRunnable(BoardModel boardModel,
-			GraphicalViewer viewer, ScriptingService scriptingService) {
+			GraphicalViewer viewer, ScriptingService scriptingService, IMonitorDelegator delegator) {
 		this.boardModel = boardModel;
 		this.viewer = viewer;
 		this.scriptingService = scriptingService;
+		this.preJob = delegator;
 	}
 
 	public void run() {
+		try {
+			if (preJob != null) {
+				preJob.join();
+			}
+		} catch (InterruptedException e) {
+		}
 		if (boardModel.hasScript()) {
 			SubMonitor sub = SubMonitor.convert(monitor);
 			sub.setTaskName(Messages.KanbanView_execute_script_task_name);

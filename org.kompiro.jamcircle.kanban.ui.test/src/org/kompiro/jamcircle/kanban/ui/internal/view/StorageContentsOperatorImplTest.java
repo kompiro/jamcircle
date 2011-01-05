@@ -37,7 +37,7 @@ public class StorageContentsOperatorImplTest {
 		KanbanUIExtensionEditPartFactory extensionFactory = mock(KanbanUIExtensionEditPartFactory.class);
 		doNothing().when(extensionFactory).initialize();
 		operator.setExtensionFactory(extensionFactory);
-		operator.setDelegator(new IMonitorDelegator.DirectExecute());
+		operator.setDummyDelegator(new IMonitorDelegator.DirectExecute());
 	}
 	
 	@Test

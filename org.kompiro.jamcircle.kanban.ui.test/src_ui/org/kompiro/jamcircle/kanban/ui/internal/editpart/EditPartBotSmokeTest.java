@@ -69,14 +69,7 @@ public class EditPartBotSmokeTest {
 	@BeforeClass
 	public static void before() throws Exception {
 		backup = KanbanView.getDelegator();
-		IMonitorDelegator delegator = new IMonitorDelegator() {
-
-			public void run(MonitorRunnable runner) {
-				runner.run();
-			}
-
-		};
-		KanbanView.setDelegator(delegator);
+		KanbanView.setDelegator(new IMonitorDelegator.DirectExecute());
 
 		System.setProperty(SWTBotPreferenceConstants.KEY_TIMEOUT, "10000");
 		bot = new SWTGefBotExtension();
