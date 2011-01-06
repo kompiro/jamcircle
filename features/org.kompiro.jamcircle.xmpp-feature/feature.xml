@@ -17,20 +17,24 @@
       %license
    </license>
 
-   <includes
-         id="org.kompiro.jamcircle.library"
-         version="0.0.0"/>
-
    <requires>
       <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.jivesoftware.smack"/>
       <import plugin="org.eclipse.equinox.security"/>
       <import plugin="org.kompiro.jamcircle.kanban"/>
-      <import plugin="org.kompiro.jamcircle.debug"/>
-      <import plugin="org.kompiro.jamcircle.kanban.ui"/>
-      <import plugin="org.eclipse.gef"/>
-      <import plugin="org.eclipse.ui"/>
       <import plugin="org.apache.commons.lang"/>
+      <import plugin="org.eclipse.gef"/>
+      <import plugin="org.kompiro.jamcircle.kanban.ui"/>
+      <import plugin="org.eclipse.core.jobs"/>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.kompiro.jamcircle.kanban.model"/>
+      <import plugin="org.eclipse.draw2d"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.kompiro.jamcircle.storage"/>
+      <import plugin="org.eclipse.core.commands"/>
+      <import plugin="org.eclipse.equinox.preferences"/>
+      <import plugin="org.eclipse.ui.workbench"/>
    </requires>
 
    <plugin
@@ -49,6 +53,19 @@
 
    <plugin
          id="org.kompiro.jamcircle.xmpp.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.jivesoftware.smack"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.kompiro.jamcircle.debug"
          download-size="0"
          install-size="0"
          version="0.0.0"

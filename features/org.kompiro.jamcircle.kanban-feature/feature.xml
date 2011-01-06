@@ -2,7 +2,7 @@
 <feature
       id="org.kompiro.jamcircle.kanban"
       label="JAM Circle Kanban  Feature"
-      version="1.2.0.qualifier"
+      version="1.2.1.qualifier"
       provider-name="kompiro.org"
       plugin="org.kompiro.jamcircle.kanban.ui">
 
@@ -22,22 +22,21 @@
       <discovery label="JAM Circle Project Page" url="http://kompiro.org/jamcircle"/>
    </url>
 
-   <includes
-         id="org.kompiro.jamcircle.library"
-         version="0.0.0"/>
-
    <requires>
       <import plugin="org.eclipse.core.runtime" version="3.2.0" match="compatible"/>
-      <import plugin="org.apache.commons.lang"/>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.equinox.security.ui"/>
-      <import plugin="org.eclipse.equinox.security"/>
-      <import plugin="org.mozilla.javascript"/>
-      <import plugin="org.jruby.jruby"/>
-      <import plugin="org.apache.bsf"/>
       <import plugin="org.eclipse.osgi"/>
-      <import plugin="org.eclipse.osgi.services"/>
       <import plugin="org.eclipse.gef"/>
+      <import plugin="org.eclipse.equinox.security"/>
+      <import plugin="org.eclipse.osgi.services"/>
+      <import plugin="org.eclipse.core.jobs"/>
+      <import plugin="org.eclipse.equinox.preferences"/>
+      <import plugin="org.eclipse.draw2d"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.workbench"/>
+      <import plugin="org.eclipse.equinox.app"/>
+      <import plugin="org.eclipse.core.commands"/>
    </requires>
 
    <plugin
@@ -87,5 +86,36 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="org.apache.bsf"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.apache.commons.lang"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.apache.commons.logging"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.jruby.jruby"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.mozilla.javascript"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>
