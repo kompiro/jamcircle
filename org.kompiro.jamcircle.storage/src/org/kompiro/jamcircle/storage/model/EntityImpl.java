@@ -5,9 +5,9 @@ import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.kompiro.jamcircle.storage.service.internal.DefaultExecutorHandle;
-
 import net.java.ao.Entity;
+
+import org.kompiro.jamcircle.storage.service.internal.DefaultExecutorHandle;
 
 /**
  * This implementation describes ActiveObjects Entity implementation.<br>
@@ -58,7 +58,9 @@ public abstract class EntityImpl {
 		}
 		Runnable runnable = new Runnable() {
 			public void run() {
-				saveAndFlush();
+				synchronized (entity) {
+					saveAndFlush();
+				}
 			}
 		};
 		handler.handle(runnable);
