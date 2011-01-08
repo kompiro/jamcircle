@@ -1,5 +1,7 @@
 package org.kompiro.jamcircle.web.figure;
 
+import static java.lang.String.format;
+
 import org.kompiro.jamcircle.kanban.model.Card;
 
 import com.vaadin.ui.*;
@@ -14,7 +16,7 @@ public class CardFigure {
 		AbsoluteLayout layout = new AbsoluteLayout();
 		container.setWidth(toPx(138));
 		container.setHeight(toPx(76));
-		Label label = new Label(card.getSubject());
+		Label label = new Label(format("%d : %s", card.getID(), card.getSubject()));
 		int x = card.getX();
 		int y = card.getY();
 		String location = getLocation(x, y);
