@@ -1,5 +1,7 @@
 package org.kompiro.jamcircle.kanban.model;
 
+import static java.lang.String.format;
+
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.*;
@@ -18,9 +20,9 @@ public class CardImpl extends GraphicalEntityImpl {
 
 	public static final String CARD_PATH = "cards" + File.separator; //$NON-NLS-1$
 
-	private static String TO_STRING_FORMAT = "CARD['#%d':'%s' trashed:'%s' point:'%d,%d']"; //$NON-NLS-1$
+	private static String TO_STRING_FORMAT = "CARD['#%d':'%s' trashed:'%s' point:'%d,%d' BOARD:'%s']"; //$NON-NLS-1$
 
-	private static String TO_STRING_UNDER_LANE_FORMAT = "CARD['#%d':'%s' trashed:'%s' point:'%d,%d' LANE:'#%d' : '%s']"; //$NON-NLS-1$
+	private static String TO_STRING_UNDER_LANE_FORMAT = "CARD['#%d':'%s' trashed:'%s' point:'%d,%d' BOARD:'%s' LANE:'#%d' : '%s']"; //$NON-NLS-1$
 
 	private Card card;
 
@@ -136,12 +138,11 @@ public class CardImpl extends GraphicalEntityImpl {
 	public String toString() {
 		Lane lane = card.getLane();
 		if (lane == null) {
-			return String.format(TO_STRING_FORMAT, card.getID(), card.getSubject(), card.isTrashed(), card.getX(),
-					card.getY());
+			return format(TO_STRING_FORMAT, card.getID(), card.getSubject(), card.isTrashed(), card.getX(),
+					card.getY(), card.getBoard());
 		}
-		return String.format(TO_STRING_UNDER_LANE_FORMAT, card.getID(), card.getSubject(), card.isTrashed(),
-				card.getX(),
-				card.getY(), lane.getID(), lane.getStatus());
+		return format(TO_STRING_UNDER_LANE_FORMAT, card.getID(), card.getSubject(), card.isTrashed(),
+				card.getX(), card.getY(), card.getBoard(), lane.getID(), lane.getStatus());
 	}
 
 }
