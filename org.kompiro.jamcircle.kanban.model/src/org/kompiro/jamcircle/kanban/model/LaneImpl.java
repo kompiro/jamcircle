@@ -11,7 +11,7 @@ import org.kompiro.jamcircle.storage.service.FileStorageService;
 import org.kompiro.jamcircle.storage.service.StorageService;
 
 /**
- * This implementation describes Lane implmentation wrapper.
+ * This implementation describes Lane implementation wrapper.
  * 
  * @author kompiro
  */
