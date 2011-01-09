@@ -146,38 +146,39 @@ public class CardImplTest {
 
 	@Test
 	public void to_string_when_default_value() throws Exception {
-		assertThat(cardImpl.toString(), is("CARD['#0':'null' trashed:'false' point:'0,0']"));
+		assertThat(cardImpl.toString(), is("CARD['#0':'null' trashed:'false' point:'0,0' BOARD:'null']"));
 	}
 
 	@Test
 	public void to_string_when_customed_subject_value() throws Exception {
 		when(card.getSubject()).thenReturn("test");
-		assertThat(cardImpl.toString(), is("CARD['#0':'test' trashed:'false' point:'0,0']"));
+		assertThat(cardImpl.toString(), is("CARD['#0':'test' trashed:'false' point:'0,0' BOARD:'null']"));
 	}
 
 	@Test
 	public void to_string_when_customed_trashed_value() throws Exception {
 		when(card.isTrashed()).thenReturn(true);
-		assertThat(cardImpl.toString(), is("CARD['#0':'null' trashed:'true' point:'0,0']"));
+		assertThat(cardImpl.toString(), is("CARD['#0':'null' trashed:'true' point:'0,0' BOARD:'null']"));
 	}
 
 	@Test
 	public void to_string_when_customed_x_point_value() throws Exception {
 		when(card.getX()).thenReturn(10);
-		assertThat(cardImpl.toString(), is("CARD['#0':'null' trashed:'false' point:'10,0']"));
+		assertThat(cardImpl.toString(), is("CARD['#0':'null' trashed:'false' point:'10,0' BOARD:'null']"));
 	}
 
 	@Test
 	public void to_string_when_customed_y_point_value() throws Exception {
 		when(card.getY()).thenReturn(10);
-		assertThat(cardImpl.toString(), is("CARD['#0':'null' trashed:'false' point:'0,10']"));
+		assertThat(cardImpl.toString(), is("CARD['#0':'null' trashed:'false' point:'0,10' BOARD:'null']"));
 	}
 
 	@Test
 	public void to_string_when_set_lane() throws Exception {
 		Lane lane = mock(Lane.class);
 		when(card.getLane()).thenReturn(lane);
-		assertThat(cardImpl.toString(), is("CARD['#0':'null' trashed:'false' point:'0,0' LANE:'#0' : 'null']"));
+		assertThat(cardImpl.toString(),
+				is("CARD['#0':'null' trashed:'false' point:'0,0' BOARD:'null' LANE:'#0' : 'null']"));
 	}
 
 	@Test
@@ -185,7 +186,30 @@ public class CardImplTest {
 		Lane lane = mock(Lane.class);
 		when(lane.getStatus()).thenReturn("test");
 		when(card.getLane()).thenReturn(lane);
-		assertThat(cardImpl.toString(), is("CARD['#0':'null' trashed:'false' point:'0,0' LANE:'#0' : 'test']"));
+		assertThat(cardImpl.toString(),
+				is("CARD['#0':'null' trashed:'false' point:'0,0' BOARD:'null' LANE:'#0' : 'test']"));
+	}
+
+	@Test
+	public void to_string_when_set_board() throws Exception {
+		Board board = mock(Board.class);
+		when(board.toString()).thenReturn("test");
+		when(card.getBoard()).thenReturn(board);
+		assertThat(
+				cardImpl.toString(),
+				is("CARD['#0':'null' trashed:'false' point:'0,0' BOARD:'test']"));
+	}
+
+	@Test
+	public void to_string_when_set_board_and_lane() throws Exception {
+		Lane lane = mock(Lane.class);
+		when(lane.getStatus()).thenReturn("test");
+		when(card.getLane()).thenReturn(lane);
+		Board board = mock(Board.class);
+		when(board.toString()).thenReturn("test");
+		when(card.getBoard()).thenReturn(board);
+		assertThat(cardImpl.toString(),
+				is("CARD['#0':'null' trashed:'false' point:'0,0' BOARD:'test' LANE:'#0' : 'test']"));
 	}
 
 }
