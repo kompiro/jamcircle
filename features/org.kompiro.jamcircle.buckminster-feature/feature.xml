@@ -2,7 +2,7 @@
 <feature
       id="org.kompiro.jamcircle.buckminster"
       label="Buckminster for JAM Circle "
-      version="0.9.1"
+      version="0.10.0"
       provider-name="kompiro.org">
 
    <description url="http://www.example.com/description">
@@ -39,10 +39,6 @@
 
    <includes
          id="org.kompiro.jamcircle.extension.tracboard"
-         version="0.0.0"/>
-
-   <includes
-         id="org.kompiro.jamcircle.web"
          version="0.0.0"/>
 
 </feature>
