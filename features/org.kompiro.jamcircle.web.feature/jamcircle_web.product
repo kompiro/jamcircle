@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.5"?>
+
+<product name="JAM Circle Web Application" uid="org.kompiro.jamcircle.web.product" application="org.eclipse.ui.ide.workbench" version="0.10.0" useFeatures="false" includeLaunchers="true">
+
+   <configIni use="default">
+   </configIni>
+
+   <launcherArgs>
+      <programArgs>-consoleLog -console</programArgs>
+      <vmArgs>-Declipse.ignoreApp=true -Dosgi.noShutdown=true -Dlogback.configurationFile=${workspace_loc:org.kompiro.jamcircle.jetty}/logback.xml -Dorg.eclipse.equinox.http.jetty.http.port=8080</vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+   </launcherArgs>
+
+   <launcher name="JAMCircleWeb">
+      <macosx icon="/org.kompiro.jamcircle.rcp/icons/mac/kanban_032.icns"/>
+      <solaris/>
+      <win useIco="false">
+         <bmp/>
+      </win>
+   </launcher>
+
+   <vm>
+   </vm>
+
+   <plugins>
+      <plugin id="com.vaadin"/>
+      <plugin id="javax.servlet"/>
+      <plugin id="org.apache.bsf"/>
+      <plugin id="org.apache.commons.lang"/>
+      <plugin id="org.apache.commons.logging"/>
+      <plugin id="org.eclipse.core.contenttype"/>
+      <plugin id="org.eclipse.core.jobs"/>
+      <plugin id="org.eclipse.core.runtime"/>
+      <plugin id="org.eclipse.equinox.app"/>
+      <plugin id="org.eclipse.equinox.common"/>
+      <plugin id="org.eclipse.equinox.ds"/>
+      <plugin id="org.eclipse.equinox.http.registry"/>
+      <plugin id="org.eclipse.equinox.http.servlet"/>
+      <plugin id="org.eclipse.equinox.preferences"/>
+      <plugin id="org.eclipse.equinox.registry"/>
+      <plugin id="org.eclipse.equinox.security"/>
+      <plugin id="org.eclipse.equinox.security.macosx" fragment="true"/>
+      <plugin id="org.eclipse.equinox.util"/>
+      <plugin id="org.eclipse.jetty.client"/>
+      <plugin id="org.eclipse.jetty.continuation"/>
+      <plugin id="org.eclipse.jetty.deploy"/>
+      <plugin id="org.eclipse.jetty.http"/>
+      <plugin id="org.eclipse.jetty.io"/>
+      <plugin id="org.eclipse.jetty.jmx"/>
+      <plugin id="org.eclipse.jetty.osgi.boot"/>
+      <plugin id="org.eclipse.jetty.osgi.boot.warurl"/>
+      <plugin id="org.eclipse.jetty.osgi.httpservice"/>
+      <plugin id="org.eclipse.jetty.rewrite"/>
+      <plugin id="org.eclipse.jetty.security"/>
+      <plugin id="org.eclipse.jetty.server"/>
+      <plugin id="org.eclipse.jetty.servlet"/>
+      <plugin id="org.eclipse.jetty.servlets"/>
+      <plugin id="org.eclipse.jetty.util"/>
+      <plugin id="org.eclipse.jetty.webapp"/>
+      <plugin id="org.eclipse.jetty.websocket"/>
+      <plugin id="org.eclipse.jetty.xml"/>
+      <plugin id="org.eclipse.osgi"/>
+      <plugin id="org.eclipse.osgi.services"/>
+      <plugin id="org.jruby.jruby"/>
+      <plugin id="org.kompiro.jamcircle.debug"/>
+      <plugin id="org.kompiro.jamcircle.jetty"/>
+      <plugin id="org.kompiro.jamcircle.kanban"/>
+      <plugin id="org.kompiro.jamcircle.kanban.model"/>
+      <plugin id="org.kompiro.jamcircle.scripting"/>
+      <plugin id="org.kompiro.jamcircle.scripting.kanban"/>
+      <plugin id="org.kompiro.jamcircle.storage"/>
+      <plugin id="org.kompiro.jamcircle.web"/>
+      <plugin id="org.mozilla.javascript"/>
+   </plugins>
+
+   <configurations>
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.jetty.osgi.boot" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.osgi" autoStart="true" startLevel="-1" />
+   </configurations>
+
+</product>
