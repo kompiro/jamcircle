@@ -1,8 +1,12 @@
 package org.kompiro.jamcircle.web.figure;
 
 import org.kompiro.jamcircle.kanban.model.*;
+import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.web.WebContext;
 import org.kompiro.jamcircle.web.figure.dd.CardAccept;
 
+import com.vaadin.event.MouseEvents;
+import com.vaadin.event.MouseEvents.ClickEvent;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
@@ -67,8 +71,9 @@ public class LaneFigure {
 	private Panel panel;
 	private DDAbsoluteLayout layout;
 	private Lane lane;
+	private KanbanService kanbanService = WebContext.getDefault().getKanbanService();
 
-	public LaneFigure(Lane lane) {
+	public LaneFigure(final Lane lane) {
 		this.lane = lane;
 		this.panel = new Panel();
 		panel.setData(lane);
@@ -80,6 +85,23 @@ public class LaneFigure {
 		layout.setDragMode(LayoutDragMode.CLONE);
 		layout.setDropHandler(new LaneDropHandler());
 		panel.setContent(layout);
+		panel.addListener(new MouseEvents.ClickListener() {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void click(ClickEvent event) {
+				if (event.isDoubleClick()) {
+					Card card = kanbanService.createCard(lane.getBoard(), "新しいカード", null, event.getRelativeX(),
+							event.getRelativeY());
+					new CardFigure(layout, card);
+					Panel panel = (Panel) layout.getParent();
+					CardContainer parent = (CardContainer) panel.getData();
+					parent.addCard(card);
+				}
+			}
+
+		});
 	}
 
 	private String getLocation(int x, int y) {
