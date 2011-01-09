@@ -2,6 +2,7 @@
 <rm:rmap xmlns:bc="http://www.eclipse.org/buckminster/Common-1.0" xmlns:rm="http://www.eclipse.org/buckminster/RMap-1.0">
   <rm:locator pattern="^org\.kompiro\.jamcircle\.extension\.feedboard" searchPathRef="feedboard" failOnError="false"/>
   <rm:locator pattern="^org\.kompiro\.jamcircle\.extension\.tracboard" searchPathRef="tracboard" failOnError="false"/>
+  <rm:locator pattern="^org\.kompiro\.jamcircle\.web\.all" searchPathRef="web" failOnError="false"/>
   <rm:locator pattern="^org\.kompiro\.jamcircle.*" searchPathRef="features" failOnError="false"/>
   <rm:locator searchPathRef="plugins"/>
   <rm:searchPath name="plugins">
@@ -37,6 +38,13 @@
       <rm:uri format="file:///{0}/extensions/example.feed/{1}/">
         <bc:propertyRef key="workspace.root"/>
         <bc:propertyRef key="buckminster.component"/>
+      </rm:uri>
+    </rm:provider>
+  </rm:searchPath>
+  <rm:searchPath name="web">
+    <rm:provider componentTypes="eclipse.feature" readerType="local">
+      <rm:uri format="file:///{0}/features/org.kompiro.jamcircle.web.all-feature/">
+        <bc:propertyRef key="workspace.root"/>
       </rm:uri>
     </rm:provider>
   </rm:searchPath>
