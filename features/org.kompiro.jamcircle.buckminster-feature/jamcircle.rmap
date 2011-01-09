@@ -41,13 +41,6 @@
       </rm:uri>
     </rm:provider>
   </rm:searchPath>
-  <rm:searchPath name="web">
-    <rm:provider componentTypes="eclipse.feature" readerType="local">
-      <rm:uri format="file:///{0}/features/org.kompiro.jamcircle.web.all-feature/">
-        <bc:propertyRef key="workspace.root"/>
-      </rm:uri>
-    </rm:provider>
-  </rm:searchPath>
   <rm:searchPath name="features">
     <rm:provider componentTypes="eclipse.feature" readerType="local">
       <rm:uri format="file:///{0}/features/{1}-feature/">

@@ -26,7 +26,7 @@
          version="0.0.0"/>
 
    <includes
-         id="org.kompiro.jamcircle.web.all"
+         id="org.kompiro.jamcircle.web"
          version="0.0.0"/>
 
 
