@@ -41,4 +41,8 @@
          id="org.kompiro.jamcircle.extension.tracboard"
          version="0.0.0"/>
 
+   <includes
+         id="org.kompiro.jamcircle.web"
+         version="0.0.0"/>
+
 </feature>
