@@ -1,35 +1,19 @@
 package org.kompiro.jamcircle.web.figure;
 
 import org.kompiro.jamcircle.kanban.model.*;
+import org.kompiro.jamcircle.web.figure.dd.CardAccept;
 
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
-import com.vaadin.event.dd.acceptcriteria.*;
+import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.incubator.dragdroplayouts.DDAbsoluteLayout;
+import com.vaadin.incubator.dragdroplayouts.DDAbsoluteLayout.AbsoluteLayoutTargetDetails;
 import com.vaadin.incubator.dragdroplayouts.client.ui.LayoutDragMode;
+import com.vaadin.incubator.dragdroplayouts.events.LayoutBoundTransferable;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Panel;
 
 public class LaneFigure {
-
-	public final class CardAccept extends ClientSideCriterion {
-
-		private static final long serialVersionUID = -2515981634029336423L;
-
-		@Override
-		public boolean accept(DragAndDropEvent event) {
-			Panel component = getComponent(event);
-			if (component.getData() instanceof Card) {
-				return true;
-			}
-			return false;
-		}
-
-		private Panel getComponent(DragAndDropEvent event) {
-			return (Panel) event.getTransferable().getData("component");
-		}
-
-	}
 
 	private final class LaneDropHandler implements DropHandler {
 
@@ -38,11 +22,13 @@ public class LaneFigure {
 		@Override
 		public void drop(DragAndDropEvent event) {
 			Panel component = getComponent(event);
-			int x = Integer.valueOf(event.getTargetDetails().getData("relativeLeft").toString());
-			int y = Integer.valueOf(event.getTargetDetails().getData("relativeTop").toString());
-			DDAbsoluteLayout layout = (DDAbsoluteLayout) event.getTargetDetails().getTarget();
-			Panel container = (Panel) component.getParent().getParent();
-			remove(component, container);
+			AbsoluteLayoutTargetDetails targetDetails = (AbsoluteLayoutTargetDetails) event.getTargetDetails();
+			int x = targetDetails.getRelativeLeft();
+			int y = targetDetails.getRelativeTop();
+			DDAbsoluteLayout layout = (DDAbsoluteLayout) targetDetails.getTarget();
+			LayoutBoundTransferable transferable = (LayoutBoundTransferable) event.getTransferable();
+			DDAbsoluteLayout sourceLayout = (DDAbsoluteLayout) transferable.getSourceComponent();
+			remove(component, sourceLayout);
 			add(component, x, y, layout);
 		}
 
@@ -57,10 +43,10 @@ public class LaneFigure {
 			layout.addComponent(component, location);
 		}
 
-		private void remove(Panel component, Panel container) {
-			CardContainer parent = (CardContainer) container.getData();
+		private void remove(Panel component, DDAbsoluteLayout layout) {
+			CardContainer parent = (CardContainer) ((Panel) (layout.getParent())).getData();
 			Card card = getCard(component);
-			container.removeComponent(component);
+			layout.removeComponent(component);
 			parent.removeCard(card);
 		}
 
@@ -74,7 +60,7 @@ public class LaneFigure {
 
 		@Override
 		public AcceptCriterion getAcceptCriterion() {
-			return AcceptAll.get();
+			return CardAccept.get();
 		}
 	}
 

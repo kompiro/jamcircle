@@ -31,7 +31,7 @@
 			<description>
 			Application widgetset</description>
 			<param-name>widgetset</param-name>
-			<param-value>org.kompiro.jamcircle.web.widgetset.jamcircle</param-value>
+			<param-value>org.kompiro.jamcircle.web.jamcircle</param-value>
 		</init-param>
 	</servlet>
     <servlet-mapping>

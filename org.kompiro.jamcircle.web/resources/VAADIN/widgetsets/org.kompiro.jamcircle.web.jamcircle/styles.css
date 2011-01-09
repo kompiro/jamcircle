@@ -1,3 +1,11 @@
+/* Absolute layout styles */
+.v-ddabsolutelayout-drag-shadow{
+	background-color: rgba(169,209,255,.6);
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+}
+
 /* Horizontal and vertical styles */
 .v-ddorderedlayout-over{
 	-moz-border-radius: 4px;
@@ -168,13 +176,31 @@
 	padding: 9px 8px 0 6px;
 }
 .v-tabsheet-tabs .new-tab-left{
-	border-left: 2px solid rgb(169,209,255);
-	margin-right: -2px;
+	border-left: 2px solid #1d9dff;
+	margin-right: -1px;
 }
 .v-tabsheet-tabs .new-tab-right{
-	border-right: 2px solid rgb(169,209,255);
+	border-right: 2px solid #1d9dff;
+	margin-left: -1px;
 }
 .v-tabsheet-tabs .new-tab-center{
-	border-top: 2px solid rgb(169,209,255);
+	border-top: 2px solid #1d9dff;
 	margin-bottom: -2px;
+}
+
+/* Accordion styles */
+.v-accordion-item.dd-over,
+.v-accordion-item-caption .v-caption.dd-over{
+	background:none;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;	
+	background-color: rgb(169,209,255); /* IE fallback */
+	background-color: rgba(169,209,255,.6);			
+}
+.v-accordion .spacer{	
+	background-color: #1d9dff;
+	height:2px;
+	width:100%;
+	position:relative;
 }

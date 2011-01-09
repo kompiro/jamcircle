@@ -57,7 +57,7 @@ See configure target to adjust this buildfile.
         <echo>Modify this example Ant script to compile your own widget sets.</echo>
 
         <!-- Name of the widget set -->
-        <property name="widgetset" value="org.kompiro.jamcircle.web.widgetset.jamcircle"/>
+        <property name="widgetset" value="org.kompiro.jamcircle.web.jamcircle"/>
 
         <!-- Define if the widget set be generated automatically -->
         <!-- from all widget sets included in the class path.    -->
@@ -67,7 +67,7 @@ See configure target to adjust this buildfile.
     	<!-- generated widget sets. Must be relative to         --> 
     	<!-- $src-location, that is, under the first entry in   --> 
     	<!--  class path.                                       --> 
-        <property name="widgetset-path" value="com/vaadin/demo/widgetset"/>
+        <property name="widgetset-path" value="org/kompiro/jamcircle/web"/>
     </target>
 
     <!-- Note: Modify this example to compile your own widgetset Jar. -->
@@ -109,6 +109,7 @@ See configure target to adjust this buildfile.
 		<!-- Includes paths required for both server and client-side compilation -->
 		<path id="compile.classpath">
 			<!-- The source location must be first, as required by generate-widgetset. -->
+            <pathelement path="${base}../org.kompiro.jamcircle.kanban.model/bin" />
             <pathelement path="${src-location}" />
 			<pathelement path="${server-side-destination}" />
 			<pathelement path="${vaadin-jar-location}" />
