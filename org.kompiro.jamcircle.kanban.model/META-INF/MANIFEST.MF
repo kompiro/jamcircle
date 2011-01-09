@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: JAM Circle Kanban model bundle
 Bundle-SymbolicName: org.kompiro.jamcircle.kanban.model;singleton:=true
 Bundle-Version: 0.1.0.qualifier
-Bundle-Activator: org.kompiro.jamcircle.kanban.model.Activator
 Bundle-Vendor: kompiro.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: net.java.ao,
