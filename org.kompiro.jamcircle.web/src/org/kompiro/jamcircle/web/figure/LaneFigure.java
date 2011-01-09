@@ -92,7 +92,7 @@ public class LaneFigure {
 			@Override
 			public void click(ClickEvent event) {
 				if (event.isDoubleClick()) {
-					Card card = kanbanService.createCard(lane.getBoard(), "新しいカード", null, event.getRelativeX(),
+					Card card = kanbanService.createCard(lane.getBoard(), "New card", null, event.getRelativeX(),
 							event.getRelativeY());
 					new CardFigure(layout, card);
 					Panel panel = (Panel) layout.getParent();
