@@ -22,7 +22,7 @@ public class WizardClass<T extends Wizard> implements MethodRule {
 				Shell parentShell = new Shell();
 				bot = new SWTBot();
 				wizard = wizardClass.newInstance();
-				RunOnNonUIThread runOnNonUIThread = new RunOnNonUIThread(base, parentShell);
+				RunOnNonUIThread runOnNonUIThread = new RunOnNonUIThread(bot, base, parentShell);
 				Thread nonUIThread = new Thread(runOnNonUIThread);
 				nonUIThread.setName("Runnning Test Thread");//$NON-NLS-1$
 				nonUIThread.start();

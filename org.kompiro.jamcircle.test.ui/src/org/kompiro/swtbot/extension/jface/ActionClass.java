@@ -36,7 +36,7 @@ public class ActionClass<T extends Action> implements MethodRule {
 					throw new IllegalArgumentException(e);
 				}
 				bot = new SWTBot();
-				RunOnNonUIThread r = new RunOnNonUIThread(base, newWindow.getShell());
+				RunOnNonUIThread r = new RunOnNonUIThread(bot, base, newWindow.getShell());
 				Thread nonUIThread = new Thread(r);
 				nonUIThread.setName("Runnning Test Thread");//$NON-NLS-1$
 				nonUIThread.start();
