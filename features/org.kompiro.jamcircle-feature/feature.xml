@@ -2,7 +2,7 @@
 <feature
       id="org.kompiro.jamcircle"
       label="JAM Circle Main Features"
-      version="0.9.1"
+      version="0.10.0"
       provider-name="kompiro.org">
 
    <description url="http://kompiro.org/jamcircle/">
