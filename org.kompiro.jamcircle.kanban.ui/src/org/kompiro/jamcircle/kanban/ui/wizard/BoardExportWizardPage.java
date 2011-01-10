@@ -91,6 +91,7 @@ public class BoardExportWizardPage extends WizardPage {
 
 	public void setBoards(Board[] boards) {
 		this.boards = boards;
+		list.setInput(boards);
 	}
 
 }

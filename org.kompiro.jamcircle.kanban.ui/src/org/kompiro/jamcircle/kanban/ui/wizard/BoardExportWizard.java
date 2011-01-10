@@ -34,6 +34,10 @@ public class BoardExportWizard extends Wizard implements IExportWizard {
 	@Override
 	public boolean performFinish() {
 		Board board = page.getBoard();
+		if (board == null) {
+			helper.openError(getShell(), Messages.BoardExportWizard_invocationError, null);
+			return false;
+		}
 		File target = new File(page.getFile(), board.getTitle() + BoardConverter.BOARD_FORMAT_FILE_EXTENSION_NAME);
 		runnable.setBoard(board);
 		runnable.setFile(target);

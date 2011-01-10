@@ -73,6 +73,8 @@ public class BoardListTableWidget {
 	}
 
 	private Board getBoard(Object element) {
+		if (element == null)
+			return null;
 		if (!(element instanceof BoardWrapper)) {
 			String message = format("element is '%s'", element.toString());
 			throw new IllegalArgumentException(message);

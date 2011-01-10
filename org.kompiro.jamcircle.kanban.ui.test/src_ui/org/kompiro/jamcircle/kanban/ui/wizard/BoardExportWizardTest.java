@@ -1,5 +1,6 @@
 package org.kompiro.jamcircle.kanban.ui.wizard;
 
+import static org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable.syncExec;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
@@ -18,6 +19,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.swt.finder.results.VoidResult;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.junit.*;
@@ -54,7 +56,11 @@ public class BoardExportWizardTest {
 		when(board.getTitle()).thenReturn("test");
 		Board[] boards = new Board[] { board };
 		when(kanbanService.findAllBoard()).thenReturn(boards);
-		wizard.init(null, null);
+		syncExec(new VoidResult() {
+			public void run() {
+				wizard.init(null, null);
+			}
+		});
 		shellBot = bot.shell(Messages.BoardExportWizard_title).activate();
 	}
 
