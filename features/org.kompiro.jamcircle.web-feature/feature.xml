@@ -19,7 +19,6 @@
 
    <requires>
       <import plugin="org.kompiro.jamcircle.debug"/>
-      <import plugin="org.mortbay.jetty.util"/>
       <import plugin="org.eclipse.jetty.deploy" version="7.0.0" match="compatible"/>
       <import plugin="org.eclipse.jetty.http" version="7.0.0" match="compatible"/>
       <import plugin="org.eclipse.jetty.io" version="7.0.0" match="compatible"/>
@@ -28,15 +27,6 @@
       <import plugin="org.eclipse.jetty.util" version="7.0.0" match="compatible"/>
       <import plugin="org.eclipse.jetty.webapp" version="7.0.0" match="compatible"/>
       <import plugin="org.eclipse.jetty.xml" version="7.0.0" match="compatible"/>
-      <import plugin="org.slf4j.api"/>
-      <import plugin="javax.mail.glassfish"/>
-      <import plugin="com.sun.el"/>
-      <import plugin="javax.el"/>
-      <import plugin="javax.servlet.jsp"/>
-      <import plugin="javax.servlet.jsp.jstl"/>
-      <import plugin="org.apache.jasper.glassfish"/>
-      <import plugin="org.apache.taglibs.standard.glassfish"/>
-      <import plugin="org.eclipse.jdt.apt.core"/>
       <import plugin="org.apache.commons.logging" version="1.0.4" match="greaterOrEqual"/>
       <import plugin="org.apache.bsf" version="2.4.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.equinox.common" version="3.2.0" match="compatible"/>
@@ -47,6 +37,7 @@
       <import plugin="org.eclipse.core.contenttype" version="3.3.0" match="compatible"/>
       <import plugin="org.eclipse.equinox.app" version="1.0.0" match="compatible"/>
       <import plugin="org.eclipse.equinox.security" version="1.0.0" match="compatible"/>
+      <import feature="org.kompiro.jamcircle.kanban" version="1.2.1" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -67,13 +58,6 @@
          download-size="0"
          install-size="0"
          version="0.0.0"/>
-
-   <plugin
-         id="org.kompiro.jamcircle.kanban.model"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 
    <plugin
          id="org.eclipse.jetty.client"
@@ -195,44 +179,6 @@
 
    <plugin
          id="org.eclipse.jetty.xml"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.kompiro.jamcircle.storage"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.kompiro.jamcircle.scripting"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.jruby.jruby"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.apache.bsf"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.mozilla.javascript"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.kompiro.jamcircle.kanban"
          download-size="0"
          install-size="0"
          version="0.0.0"
