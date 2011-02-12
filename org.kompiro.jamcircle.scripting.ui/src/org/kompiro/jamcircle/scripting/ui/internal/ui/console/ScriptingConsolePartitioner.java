@@ -13,7 +13,6 @@ import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsoleDocumentPartitioner;
 import org.eclipse.ui.progress.UIJob;
 import org.eclipse.ui.progress.WorkbenchJob;
-import org.kompiro.jamcircle.scripting.ui.internal.ruby.console.RubyScriptingConsole;
 
 /**
  * Partitions an IOConsole's document
@@ -66,7 +65,7 @@ public class ScriptingConsolePartitioner implements IConsoleDocumentPartitioner,
 	private int lowWaterMark = -1;
 	private boolean connected = false;
 
-	private RubyScriptingConsole console;
+	private IScriptingConsole console;
 
 	private TrimJob trimJob = new TrimJob();
 	/**
@@ -78,7 +77,7 @@ public class ScriptingConsolePartitioner implements IConsoleDocumentPartitioner,
 
 	private int fBuffer;
 
-	public ScriptingConsolePartitioner(ScriptingConsoleInputStream inputStream, RubyScriptingConsole console) {
+	public ScriptingConsolePartitioner(ScriptingConsoleInputStream inputStream, IScriptingConsole console) {
 		this.inputStream = inputStream;
 		this.console = console;
 		trimJob.setRule(console.getSchedulingRule());

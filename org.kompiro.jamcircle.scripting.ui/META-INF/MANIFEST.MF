@@ -39,4 +39,5 @@ Import-Package: org.eclipse.core.runtime,
  org.kompiro.jamcircle.scripting.util,
  org.osgi.framework
 Service-Component: OSGI-INF/ScriptingUIContext.xml
-Require-Bundle: org.jruby.jruby
+Require-Bundle: org.jruby.jruby,
+ org.mozilla.javascript

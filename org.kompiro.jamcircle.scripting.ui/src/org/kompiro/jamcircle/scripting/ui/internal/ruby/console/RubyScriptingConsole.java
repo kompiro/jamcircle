@@ -48,7 +48,7 @@ import org.kompiro.jamcircle.scripting.util.ScriptingSecurityManager;
 import org.osgi.framework.Bundle;
 
 /**
- * A console that displays text from I/O streams. An I/O console can have
+ * A console that execute ruby script from I/O streams. An I/O console can have
  * multiple
  * output streams connected to it and provides one input stream connected to the
  * keyboard.

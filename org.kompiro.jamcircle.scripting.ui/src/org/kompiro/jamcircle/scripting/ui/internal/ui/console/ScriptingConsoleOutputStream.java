@@ -16,7 +16,6 @@ import java.io.OutputStream;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.WorkbenchEncoding;
 import org.eclipse.ui.console.ConsolePlugin;
-import org.kompiro.jamcircle.scripting.ui.internal.ruby.console.RubyScriptingConsole;
 
 /**
  * OutputStream used to write to an IOConsole.
@@ -80,7 +79,7 @@ public class ScriptingConsoleOutputStream extends OutputStream {
 	 * @param console
 	 *            I/O console
 	 */
-	public ScriptingConsoleOutputStream(RubyScriptingConsole console) {
+	public ScriptingConsoleOutputStream(IScriptingConsole console) {
 		this.console = console;
 		this.partitioner = (ScriptingConsolePartitioner) console.getPartitioner();
 	}
@@ -105,7 +104,8 @@ public class ScriptingConsoleOutputStream extends OutputStream {
 		if (newFontStyle != fontStyle) {
 			int old = fontStyle;
 			fontStyle = newFontStyle;
-			console.firePropertyChange(this, IScriptingConsoleConstants.P_FONT_STYLE, new Integer(old), new Integer(fontStyle));
+			console.firePropertyChange(this, IScriptingConsoleConstants.P_FONT_STYLE, new Integer(old), new Integer(
+					fontStyle));
 		}
 	}
 
