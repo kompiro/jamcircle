@@ -11,8 +11,8 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.tools.DragEditPartsTracker;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.kompiro.jamcircle.kanban.command.CancelableCommand;
 import org.kompiro.jamcircle.kanban.ui.Messages;
-import org.kompiro.jamcircle.kanban.ui.command.CancelableCommand;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractEditPart;
 
 public class CancelableDragEditPartsTracker extends

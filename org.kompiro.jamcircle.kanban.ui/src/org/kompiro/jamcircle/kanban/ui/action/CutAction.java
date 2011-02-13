@@ -8,11 +8,11 @@ import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.*;
 import org.eclipse.ui.actions.ActionFactory;
+import org.kompiro.jamcircle.kanban.command.CutCardCommand;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
 import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.editpart.CardContainerEditPart;
-import org.kompiro.jamcircle.kanban.ui.internal.command.CutCardCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;
 
 public class CutAction extends SelectionAction {

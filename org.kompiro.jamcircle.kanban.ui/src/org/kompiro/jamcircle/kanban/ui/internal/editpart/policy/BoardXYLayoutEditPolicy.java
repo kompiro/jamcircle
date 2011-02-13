@@ -7,12 +7,10 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.GroupRequest;
+import org.kompiro.jamcircle.kanban.command.*;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.Lane;
-import org.kompiro.jamcircle.kanban.ui.command.DeleteCommand;
-import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
 import org.kompiro.jamcircle.kanban.ui.editpart.IconEditPart;
-import org.kompiro.jamcircle.kanban.ui.internal.command.*;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.*;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
@@ -106,8 +104,7 @@ public class BoardXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		} else if (object instanceof Lane) {
 			Lane card = (Lane) object;
 			CreateLaneCommand command = new CreateLaneCommand();
-			Object container = getHost().getModel();
-			command.setContainer((BoardModel) container);
+			command.setContainer(getBoardModel());
 			command.setModel(card);
 			return command;
 		}

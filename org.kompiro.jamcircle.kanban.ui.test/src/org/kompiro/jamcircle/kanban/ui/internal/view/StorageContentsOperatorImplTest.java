@@ -24,9 +24,8 @@ import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.scripting.ScriptingService;
 
-
 public class StorageContentsOperatorImplTest {
-	
+
 	private StorageContentsOperatorImpl operator;
 	private ScriptingService scriptingService;
 
@@ -37,60 +36,61 @@ public class StorageContentsOperatorImplTest {
 		KanbanUIExtensionEditPartFactory extensionFactory = mock(KanbanUIExtensionEditPartFactory.class);
 		doNothing().when(extensionFactory).initialize();
 		operator.setExtensionFactory(extensionFactory);
-		operator.setDummyDelegator(new IMonitorDelegator.DirectExecute());
+		StorageContentsOperatorImpl.setDelegator(new IMonitorDelegator.DirectExecute());
 	}
-	
+
 	@Test
 	public void initialize_ok() throws Exception {
 		operator.initialize();
 	}
-	
-	@Test(expected=IllegalStateException.class)
+
+	@Test(expected = IllegalStateException.class)
 	public void initialize_extension_factory_is_null_error() throws Exception {
 		operator.setExtensionFactory(null);
 		operator.initialize();
 	}
-	
-	@Test(expected=IllegalStateException.class)
+
+	@Test(expected = IllegalStateException.class)
 	public void initialize_scripting_service_is_null_error() throws Exception {
-		StorageContentsOperatorImpl operator = new StorageContentsOperatorImpl(null,mock(KanbanService.class));
+		StorageContentsOperatorImpl operator = new StorageContentsOperatorImpl(null, mock(KanbanService.class));
 		operator.initialize();
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected = IllegalStateException.class)
 	public void initialize_kanban_service_is_null_error() throws Exception {
-		StorageContentsOperatorImpl operator = new StorageContentsOperatorImpl(mock(ScriptingService.class),null);
+		StorageContentsOperatorImpl operator = new StorageContentsOperatorImpl(mock(ScriptingService.class), null);
 		operator.initialize();
 	}
-	
+
 	@Test
 	public void setContents() throws Exception {
 		BoardModel board = mock(BoardModel.class);
 		GraphicalViewer viewer = createMockGraphicalViewer();
-		operator.setContents(viewer, board , new NullProgressMonitor());
-		
+		operator.setContents(viewer, board, new NullProgressMonitor());
+
 		verify(viewer).setContents(board);
 	}
-	
+
 	@Test
 	public void setContents_when_viewers_returns_control_is_null() throws Exception {
 		BoardModel board = mock(BoardModel.class);
 		GraphicalViewer viewer = mock(GraphicalViewer.class);
-		operator.setContents(viewer, board , new NullProgressMonitor());
-		
+		operator.setContents(viewer, board, new NullProgressMonitor());
+
 		verify(viewer).setContents(board);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void setContents_script_is_not_called() throws Exception {
 		BoardModel board = mock(BoardModel.class);
 		GraphicalViewer viewer = createMockGraphicalViewer();
-		operator.setContents(viewer, board , new NullProgressMonitor());
-		
-		verify(scriptingService,never()).eval((ScriptTypes)any(), anyString(), anyString(), (Map<String, Object>)any());
+		operator.setContents(viewer, board, new NullProgressMonitor());
+
+		verify(scriptingService, never()).eval((ScriptTypes) any(), anyString(), anyString(),
+				(Map<String, Object>) any());
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void setContents_script_is_called() throws Exception {
@@ -98,13 +98,13 @@ public class StorageContentsOperatorImplTest {
 		Board board = mock(Board.class);
 		when(boardModel.getBoard()).thenReturn(board);
 		when(boardModel.hasScript()).thenReturn(true);
-		
+
 		when(board.getScriptType()).thenReturn(ScriptTypes.JRuby);
 		when(board.getScript()).thenReturn("p 'hello'");
 
 		GraphicalViewer viewer = createMockGraphicalViewer();
-		operator.setContents(viewer,boardModel , new NullProgressMonitor());
-		verify(scriptingService).eval(eq(ScriptTypes.JRuby), anyString(), anyString(), (Map<String, Object>)any());
+		operator.setContents(viewer, boardModel, new NullProgressMonitor());
+		verify(scriptingService).eval(eq(ScriptTypes.JRuby), anyString(), anyString(), (Map<String, Object>) any());
 	}
 
 	private GraphicalViewer createMockGraphicalViewer() {
@@ -117,9 +117,8 @@ public class StorageContentsOperatorImplTest {
 	private StorageContentsOperatorImpl createOperator(
 			ScriptingService scriptingService) {
 		KanbanService kanbanService = mock(KanbanService.class);
-		StorageContentsOperatorImpl operator = new StorageContentsOperatorImpl(scriptingService , kanbanService );
+		StorageContentsOperatorImpl operator = new StorageContentsOperatorImpl(scriptingService, kanbanService);
 		return operator;
 	}
 
-	
 }

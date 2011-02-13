@@ -21,11 +21,11 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.*;
 import org.junit.*;
+import org.kompiro.jamcircle.kanban.command.ChangeLaneConstraintCommand;
+import org.kompiro.jamcircle.kanban.command.DeleteCommand;
 import org.kompiro.jamcircle.kanban.model.mock.Board;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
-import org.kompiro.jamcircle.kanban.ui.command.DeleteCommand;
 import org.kompiro.jamcircle.kanban.ui.editpart.IconEditPart;
-import org.kompiro.jamcircle.kanban.ui.internal.command.ChangeLaneConstraintCommand;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.IconModel;
 

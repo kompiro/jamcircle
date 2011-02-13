@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JAM Circle Kanban Command Test
+Bundle-SymbolicName: org.kompiro.jamcircle.kanban.command.test
+Bundle-Version: 0.0.0.qualifier
+Bundle-Vendor: kompiro.org
+Fragment-Host: org.kompiro.jamcircle.kanban.command
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Import-Package: org.apache.commons.lang,
+ org.hamcrest,
+ org.junit,
+ org.kompiro.jamcircle.storage.model,
+ org.mockito,
+ org.mockito.stubbing

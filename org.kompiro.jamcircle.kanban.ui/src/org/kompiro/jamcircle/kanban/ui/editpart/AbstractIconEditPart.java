@@ -4,9 +4,9 @@ import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.Image;
+import org.kompiro.jamcircle.kanban.command.MoveCommand;
+import org.kompiro.jamcircle.kanban.command.MoveIconCommand;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
-import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
-import org.kompiro.jamcircle.kanban.ui.internal.command.MoveIconCommand;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 
 public abstract class AbstractIconEditPart extends AbstractEditPart implements

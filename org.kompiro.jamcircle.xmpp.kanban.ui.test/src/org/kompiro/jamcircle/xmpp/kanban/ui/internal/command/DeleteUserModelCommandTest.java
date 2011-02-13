@@ -6,7 +6,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.kompiro.jamcircle.kanban.ui.command.DeleteIconModelCommand;
+import org.kompiro.jamcircle.kanban.command.DeleteIconModelCommand;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
 

@@ -15,11 +15,11 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.kompiro.jamcircle.kanban.command.ChangeFlagCommand;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.FlagTypes;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
 import org.kompiro.jamcircle.kanban.ui.Messages;
-import org.kompiro.jamcircle.kanban.ui.internal.command.ChangeFlagCommand;
 
 public class FlagPopUpHelper extends PopUpHelper{
 	private static final String KEY_OF_FLAG_IMAGE = "FLAG_%s_IMAGE"; //$NON-NLS-1$

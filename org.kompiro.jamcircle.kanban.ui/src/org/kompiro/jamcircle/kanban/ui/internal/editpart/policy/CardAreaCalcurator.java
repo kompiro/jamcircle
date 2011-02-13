@@ -2,17 +2,13 @@ package org.kompiro.jamcircle.kanban.ui.internal.editpart.policy;
 
 import java.util.Map;
 
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.geometry.*;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.LaneEditPart;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.AnnotationArea;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
-import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure;
+import org.kompiro.jamcircle.kanban.ui.internal.figure.*;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.LaneFigure.CardArea;
 
 public class CardAreaCalcurator {

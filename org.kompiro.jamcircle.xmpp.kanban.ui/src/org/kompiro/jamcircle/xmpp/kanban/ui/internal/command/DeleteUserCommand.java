@@ -1,7 +1,7 @@
 package org.kompiro.jamcircle.xmpp.kanban.ui.internal.command;
 
+import org.kompiro.jamcircle.kanban.command.AbstractCommand;
 import org.kompiro.jamcircle.kanban.model.User;
-import org.kompiro.jamcircle.kanban.ui.command.AbstractCommand;
 import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
 
 

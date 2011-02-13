@@ -8,6 +8,7 @@ import org.eclipse.ui.PlatformUI;
 import org.kompiro.jamcircle.kanban.model.Icon;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.*;
+import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;
 import org.kompiro.jamcircle.kanban.ui.model.*;
 import org.kompiro.jamcircle.kanban.ui.util.*;
@@ -18,10 +19,11 @@ import org.kompiro.jamcircle.scripting.ScriptingService;
  */
 public class StorageContentsOperatorImpl implements StorageContentsOperator {
 
+	private static IMonitorDelegator uiDelegator = new UIJobMonitorDelegator(Messages.KanbanView_open_message);
+	private static IMonitorDelegator delegator = new JobMonitorDelegator(Messages.KanbanView_execute_script_message);
+
 	private KanbanUIEditPartFactory factory = new KanbanUIEditPartFactory();
 	private IconModelFactory iconModelFactory;
-	private IMonitorDelegator uiDelegator = new UIJobMonitorDelegator(Messages.KanbanView_open_message);
-	private IMonitorDelegator delegator = new JobMonitorDelegator(Messages.KanbanView_execute_script_message);
 	private ScriptingService scriptingService;
 	private KanbanService kanbanService;
 	private InstanceScope instanceScope = new InstanceScope();
@@ -91,9 +93,9 @@ public class StorageContentsOperatorImpl implements StorageContentsOperator {
 		return scriptingService;
 	}
 
-	void setDummyDelegator(IMonitorDelegator delegator) {
-		this.uiDelegator = delegator;
-		this.delegator = delegator;
+	public static void setDelegator(IMonitorDelegator delegator) {
+		StorageContentsOperatorImpl.uiDelegator = delegator;
+		StorageContentsOperatorImpl.delegator = delegator;
 	}
 
 	public void setExtensionFactory(

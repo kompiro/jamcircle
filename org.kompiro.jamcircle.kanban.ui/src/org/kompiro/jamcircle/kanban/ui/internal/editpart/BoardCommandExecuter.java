@@ -6,9 +6,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.*;
-import org.kompiro.jamcircle.kanban.model.Card;
-import org.kompiro.jamcircle.kanban.model.BoardContainer;
-import org.kompiro.jamcircle.kanban.model.Lane;
+import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 public class BoardCommandExecuter implements BoardContainer {

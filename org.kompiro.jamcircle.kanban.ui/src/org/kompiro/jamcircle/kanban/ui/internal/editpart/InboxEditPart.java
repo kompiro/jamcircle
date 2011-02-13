@@ -10,11 +10,11 @@ import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.eclipse.jface.window.ApplicationWindow;
+import org.kompiro.jamcircle.kanban.command.AddCardToContanerCommand;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
 import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
 import org.kompiro.jamcircle.kanban.ui.Messages;
 import org.kompiro.jamcircle.kanban.ui.editpart.AbstractIconEditPart;
-import org.kompiro.jamcircle.kanban.ui.internal.command.AddCardToContanerCommand;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.model.InboxIconModel;
 

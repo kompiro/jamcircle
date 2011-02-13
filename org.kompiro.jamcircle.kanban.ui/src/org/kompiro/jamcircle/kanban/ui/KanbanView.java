@@ -5,8 +5,8 @@ import java.beans.PropertyChangeListener;
 import java.util.*;
 import java.util.List;
 
-import org.eclipse.core.runtime.*;
-import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.draw2d.Viewport;
@@ -30,17 +30,17 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.part.CellEditorActionHandler;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.progress.UIJob;
+import org.kompiro.jamcircle.kanban.command.RemoveCardCommand;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.action.*;
 import org.kompiro.jamcircle.kanban.ui.editpart.IBoardEditPart;
-import org.kompiro.jamcircle.kanban.ui.internal.command.RemoveCardCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;
 import org.kompiro.jamcircle.kanban.ui.internal.view.StorageContentsOperator;
 import org.kompiro.jamcircle.kanban.ui.internal.view.StorageContentsOperatorImpl;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.util.*;
+import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator.MonitorRunnable;
 import org.kompiro.jamcircle.kanban.ui.widget.*;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListTableViewer.CardWrapper;
 import org.kompiro.jamcircle.scripting.ScriptingService;
@@ -89,8 +89,7 @@ public class KanbanView extends ViewPart implements StorageChangeListener, Prope
 
 	private IAction editBoardAction;
 
-	private StorageContentsOperator operator = new StorageContentsOperatorImpl(getScriptingService(),
-			getKanbanService());
+	private StorageContentsOperator operator;
 	private static IMonitorDelegator delegator = new UIJobMonitorDelegator(
 			Messages.KanbanView_storage_initialize_message);
 
@@ -100,6 +99,7 @@ public class KanbanView extends ViewPart implements StorageChangeListener, Prope
 			getKanbanService().addPropertyChangeListener(this);
 		}
 		KanbanJFaceResource.initialize();
+		operator = new StorageContentsOperatorImpl(getScriptingService(), getKanbanService());
 		operator.initialize();
 
 	}
@@ -265,9 +265,9 @@ public class KanbanView extends ViewPart implements StorageChangeListener, Prope
 	}
 
 	private void storageInitialize() {
-		Job job = new UIJob(Messages.KanbanView_storage_initialize_task_message) {
-			@Override
-			public IStatus runInUIThread(IProgressMonitor monitor) {
+		delegator.run(new MonitorRunnable() {
+
+			public void run() {
 				KanbanService service = getKanbanService();
 				int id = getPreference().getInt(KanbanPreferenceConstants.BOARD_ID.toString(), 1);
 				KanbanUIStatusHandler.debugUI("KanbanView#storageInitialize() id:'%d'", id); //$NON-NLS-1$
@@ -277,11 +277,8 @@ public class KanbanView extends ViewPart implements StorageChangeListener, Prope
 				}
 				monitor.internalWorked(30.0);
 				setContents(board, monitor);
-				return Status.OK_STATUS;
 			}
-
-		};
-		job.schedule();
+		});
 	}
 
 	@Override
@@ -469,6 +466,7 @@ public class KanbanView extends ViewPart implements StorageChangeListener, Prope
 
 	public static void setDelegator(IMonitorDelegator delegator) {
 		KanbanView.delegator = delegator;
+		StorageContentsOperatorImpl.setDelegator(delegator);
 	}
 
 	public static IMonitorDelegator getDelegator() {

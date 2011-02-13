@@ -1,6 +1,8 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart.policy;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -13,9 +15,9 @@ import org.eclipse.gef.*;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.junit.Before;
 import org.junit.Test;
+import org.kompiro.jamcircle.kanban.command.MoveCardCommand;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
 import org.kompiro.jamcircle.kanban.model.mock.Lane;
-import org.kompiro.jamcircle.kanban.ui.internal.command.MoveCardCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 

@@ -1,8 +1,8 @@
 package org.kompiro.jamcircle.xmpp.kanban.ui.internal.command;
 
+import org.kompiro.jamcircle.kanban.command.AbstractCommand;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
-import org.kompiro.jamcircle.kanban.ui.command.AbstractCommand;
 
 public class CreateCardCommand extends AbstractCommand {
     private CardContainer container;

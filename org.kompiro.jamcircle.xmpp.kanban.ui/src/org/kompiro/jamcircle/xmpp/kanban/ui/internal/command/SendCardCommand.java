@@ -1,9 +1,9 @@
 package org.kompiro.jamcircle.xmpp.kanban.ui.internal.command;
 
 import org.eclipse.gef.EditPart;
+import org.kompiro.jamcircle.kanban.command.CancelableCommand;
 import org.kompiro.jamcircle.kanban.model.Card;
 import org.kompiro.jamcircle.kanban.model.User;
-import org.kompiro.jamcircle.kanban.ui.command.CancelableCommand;
 import org.kompiro.jamcircle.xmpp.kanban.ui.Messages;
 
 public class SendCardCommand extends AbstractCommand implements CancelableCommand{

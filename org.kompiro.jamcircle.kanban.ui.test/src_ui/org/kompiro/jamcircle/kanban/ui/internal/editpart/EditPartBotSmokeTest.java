@@ -19,6 +19,7 @@ import org.eclipse.jface.bindings.keys.KeyStroke;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.eclipse.finder.waits.Conditions;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
+import org.eclipse.swtbot.eclipse.gef.finder.SWTGefBot;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.*;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
@@ -32,7 +33,6 @@ import org.kompiro.jamcircle.kanban.ui.KanbanPerspective;
 import org.kompiro.jamcircle.kanban.ui.KanbanView;
 import org.kompiro.jamcircle.kanban.ui.model.*;
 import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator;
-import org.kompiro.swtbot.extension.eclipse.gef.finder.SWTGefBotExtension;
 
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class EditPartBotSmokeTest {
@@ -61,7 +61,7 @@ public class EditPartBotSmokeTest {
 	}
 
 	private static final long TIMEOUT = 10 * 1000;
-	private static SWTGefBotExtension bot;
+	private static SWTGefBot bot;
 	private static IMonitorDelegator backup;
 	private static SWTBotGefViewer viewer;
 	private static SWTBotGefView view;
@@ -72,7 +72,7 @@ public class EditPartBotSmokeTest {
 		KanbanView.setDelegator(new IMonitorDelegator.DirectExecute());
 
 		System.setProperty(SWTBotPreferenceConstants.KEY_TIMEOUT, "10000");
-		bot = new SWTGefBotExtension();
+		bot = new SWTGefBot();
 		SWTBotView viewById;
 		viewById = bot.activeView();
 		try {
@@ -80,10 +80,9 @@ public class EditPartBotSmokeTest {
 		} catch (WidgetNotFoundException e) {
 		}
 		bot.perspectiveById(KanbanPerspective.ID).activate();
-		SWTBotView activeView = bot.viewById(KanbanView.ID);
-		activeView.getReference().getView(true);
-		activeView.show();
-		view = bot.viewById(KanbanView.ID);
+		SWTBotView kanbanView = bot.viewById(KanbanView.ID);
+		kanbanView.show();
+		view = bot.gefView(kanbanView.getTitle());
 		viewer = view.getSWTBotGefViewer();
 	}
 

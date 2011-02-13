@@ -2,7 +2,7 @@ package org.kompiro.jamcircle.xmpp.kanban.ui.internal.command;
 
 
 import org.eclipse.draw2d.geometry.Point;
-import org.kompiro.jamcircle.kanban.ui.command.MoveCommand;
+import org.kompiro.jamcircle.kanban.command.MoveCommand;
 import org.kompiro.jamcircle.xmpp.kanban.ui.Messages;
 import org.kompiro.jamcircle.xmpp.kanban.ui.model.UserModel;
 

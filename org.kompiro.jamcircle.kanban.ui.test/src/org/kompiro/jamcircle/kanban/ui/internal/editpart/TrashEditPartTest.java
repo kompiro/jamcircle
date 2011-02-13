@@ -1,8 +1,12 @@
 package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
-import static org.junit.Assume.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeNotNull;
+import static org.junit.Assume.assumeThat;
+import static org.junit.Assume.assumeTrue;
 
 import java.util.Map;
 
@@ -14,8 +18,8 @@ import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.GroupRequest;
 import org.junit.Before;
 import org.junit.Test;
+import org.kompiro.jamcircle.kanban.command.*;
 import org.kompiro.jamcircle.kanban.model.mock.Card;
-import org.kompiro.jamcircle.kanban.ui.internal.command.*;
 import org.kompiro.jamcircle.kanban.ui.model.TrashModel;
 
 public class TrashEditPartTest extends AbstractEditPartTest{

@@ -21,11 +21,31 @@
          id="org.kompiro.jamcircle"
          version="0.0.0"/>
 
-   <plugin
-         id="org.junit4"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
+   <requires>
+      <import plugin="org.kompiro.jamcircle.kanban"/>
+      <import plugin="org.kompiro.jamcircle.kanban.ui"/>
+      <import plugin="org.kompiro.jamcircle.scripting.ui"/>
+      <import plugin="org.kompiro.jamcircle.storage"/>
+      <import plugin="org.junit4"/>
+      <import plugin="org.mockito"/>
+      <import plugin="org.kompiro.jamcircle.xmpp"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.workbench"/>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.kompiro.jamcircle.scripting"/>
+      <import plugin="org.kompiro.jamcircle.xmpp.kanban.ui"/>
+      <import plugin="org.junit"/>
+      <import plugin="org.eclipse.gef"/>
+      <import plugin="org.eclipse.swtbot.eclipse.finder"/>
+      <import plugin="org.eclipse.swtbot.eclipse.gef.finder"/>
+      <import plugin="org.eclipse.swtbot.swt.finder"/>
+      <import plugin="org.hamcrest"/>
+      <import plugin="org.kompiro.jamcircle.kanban.model"/>
+      <import plugin="org.kompiro.jamcircle.kanban.command"/>
+   </requires>
 
    <plugin
          id="org.kompiro.jamcircle.kanban.test"
@@ -63,12 +83,6 @@
          fragment="true"/>
 
    <plugin
-         id="org.mockito"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
          id="org.kompiro.jamcircle.debug.ui"
          download-size="0"
          install-size="0"
@@ -90,103 +104,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.apache.log4j"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.swtbot.eclipse.finder"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.swtbot.junit4_x"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.swtbot.swt.finder"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ui.views.log"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.hamcrest"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.hamcrest.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.hamcrest.integration"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.hamcrest.library"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.hamcrest.text"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.jdt.launching"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.debug.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.jdt.debug"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.eclipse.jdt.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.kompiro.jamcircle.test"
          download-size="0"
          install-size="0"
@@ -202,6 +119,14 @@
 
    <plugin
          id="org.kompiro.jamcircle.kanban.model.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.kompiro.jamcircle.kanban.command.test"
          download-size="0"
          install-size="0"
          version="0.0.0"

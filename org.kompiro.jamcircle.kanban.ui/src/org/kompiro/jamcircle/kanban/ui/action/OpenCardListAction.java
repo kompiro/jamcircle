@@ -5,9 +5,7 @@ import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
 import org.kompiro.jamcircle.kanban.model.CardContainer;
-import org.kompiro.jamcircle.kanban.ui.KanbanImageConstants;
-import org.kompiro.jamcircle.kanban.ui.KanbanUIActivator;
-import org.kompiro.jamcircle.kanban.ui.Messages;
+import org.kompiro.jamcircle.kanban.ui.*;
 import org.kompiro.jamcircle.kanban.ui.editpart.CardContainerEditPart;
 import org.kompiro.jamcircle.kanban.ui.widget.CardListWindow;
 

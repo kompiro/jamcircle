@@ -2,7 +2,8 @@ package org.kompiro.jamcircle.kanban.ui.internal.editpart.policy;
 
 import java.util.Map;
 
-import org.eclipse.draw2d.geometry.*;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.CardEditPart;

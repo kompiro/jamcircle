@@ -5,7 +5,7 @@ import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.xmpp.kanban.ui.internal.XMPPKanbanUIContext;
 import org.kompiro.jamcircle.xmpp.service.XMPPConnectionService;
 
-public abstract class AbstractCommand extends org.kompiro.jamcircle.kanban.ui.command.AbstractCommand {
+public abstract class AbstractCommand extends org.kompiro.jamcircle.kanban.command.AbstractCommand {
 
 	private boolean undoable = true;
 	

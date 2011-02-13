@@ -3,14 +3,16 @@ package org.kompiro.jamcircle.kanban.ui.internal.editpart;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.eclipse.gef.*;
 import org.eclipse.gef.commands.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.kompiro.jamcircle.kanban.command.*;
 import org.kompiro.jamcircle.kanban.model.*;
-import org.kompiro.jamcircle.kanban.ui.internal.command.*;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.mockito.*;
 

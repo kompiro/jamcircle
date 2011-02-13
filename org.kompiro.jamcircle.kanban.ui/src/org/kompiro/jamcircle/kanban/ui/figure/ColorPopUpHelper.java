@@ -13,9 +13,9 @@ import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.kompiro.jamcircle.kanban.command.ChangeColorCommand;
 import org.kompiro.jamcircle.kanban.model.ColorTypes;
 import org.kompiro.jamcircle.kanban.model.HasColorTypeEntity;
-import org.kompiro.jamcircle.kanban.ui.internal.command.ChangeColorCommand;
 import org.kompiro.jamcircle.kanban.ui.internal.figure.CardFigure;
 
 public class ColorPopUpHelper extends PopUpHelper{
