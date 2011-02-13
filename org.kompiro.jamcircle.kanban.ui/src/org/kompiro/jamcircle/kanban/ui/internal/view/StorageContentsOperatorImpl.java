@@ -8,8 +8,7 @@ import org.eclipse.ui.PlatformUI;
 import org.kompiro.jamcircle.kanban.model.Icon;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
 import org.kompiro.jamcircle.kanban.ui.*;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.KanbanUIEditPartFactory;
-import org.kompiro.jamcircle.kanban.ui.internal.editpart.KanbanUIExtensionEditPartFactory;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.*;
 import org.kompiro.jamcircle.kanban.ui.model.*;
 import org.kompiro.jamcircle.kanban.ui.util.*;
 import org.kompiro.jamcircle.scripting.ScriptingService;
@@ -54,14 +53,16 @@ public class StorageContentsOperatorImpl implements StorageContentsOperator {
 		monitor.internalWorked(1);
 		initializeIcon(boardModel);
 		monitor.internalWorked(1);
-		SetContentRunnable runner = new SetContentRunnable(boardModel, viewer);
+
+		BoardEditPart boardEditPart = (BoardEditPart) factory.createEditPart(null, boardModel);
+		SetContentRunnable runner = new SetContentRunnable(boardEditPart, viewer);
 		uiDelegator.run(runner);
-		executeScript(viewer, boardModel);
+		executeScript(boardEditPart);
 		storeCurrentBoard(boardModel.getID());
 	}
 
-	private void executeScript(GraphicalViewer viewer, BoardModel boardModel) {
-		delegator.run(new BoardScriptRunnable(boardModel, viewer, getScriptingService(), uiDelegator));
+	private void executeScript(BoardEditPart boardEditPart) {
+		delegator.run(new BoardScriptRunnable(boardEditPart, getScriptingService(), uiDelegator));
 
 	}
 

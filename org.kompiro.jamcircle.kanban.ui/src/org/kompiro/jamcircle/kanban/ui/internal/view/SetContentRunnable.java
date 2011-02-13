@@ -2,23 +2,22 @@ package org.kompiro.jamcircle.kanban.ui.internal.view;
 
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.gef.GraphicalViewer;
-import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardEditPart;
 import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator.MonitorRunnable;
 
 class SetContentRunnable extends MonitorRunnable {
-	private final BoardModel boardModel;
+	private final BoardEditPart boardEditPart;
 	private final GraphicalViewer viewer;
 
-	SetContentRunnable(BoardModel boardModel,
+	SetContentRunnable(BoardEditPart boardEditPart,
 			GraphicalViewer viewer) {
-		this.boardModel = boardModel;
+		this.boardEditPart = boardEditPart;
 		this.viewer = viewer;
 	}
 
 	public void run() {
 		SubMonitor sub = SubMonitor.convert(monitor);
 		sub.subTask("set viewer");
-		viewer.setContents(boardModel);
+		viewer.setContents(boardEditPart);
 	}
 }
-

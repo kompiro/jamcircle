@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.gef.GraphicalViewer;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.ui.KanbanUIStatusHandler;
 import org.kompiro.jamcircle.kanban.ui.Messages;
@@ -27,15 +26,12 @@ class BoardScriptRunnable extends MonitorRunnable {
 	private static final String BEAN_NAME_MONITOR = "monitor";//$NON-NLS-1$
 	private static final String BEAN_NAME_BOARD_PART = "boardPart";//$NON-NLS-1$
 
-	private final BoardModel boardModel;
-	private final GraphicalViewer viewer;
 	private ScriptingService scriptingService;
 	private IMonitorDelegator preJob;
+	private BoardEditPart boardEditPart;
 
-	BoardScriptRunnable(BoardModel boardModel,
-			GraphicalViewer viewer, ScriptingService scriptingService, IMonitorDelegator delegator) {
-		this.boardModel = boardModel;
-		this.viewer = viewer;
+	BoardScriptRunnable(BoardEditPart boardEditPart, ScriptingService scriptingService, IMonitorDelegator delegator) {
+		this.boardEditPart = boardEditPart;
 		this.scriptingService = scriptingService;
 		this.preJob = delegator;
 	}
@@ -47,12 +43,13 @@ class BoardScriptRunnable extends MonitorRunnable {
 			}
 		} catch (InterruptedException e) {
 		}
+		BoardModel boardModel = boardEditPart.getBoardModel();
 		if (boardModel.hasScript()) {
 			SubMonitor sub = SubMonitor.convert(monitor);
 			sub.setTaskName(Messages.KanbanView_execute_script_task_name);
 			boardModel.clearMocks();
 
-			Map<String, Object> beans = createBeans(viewer, boardModel, sub);
+			Map<String, Object> beans = createBeans(boardModel, sub);
 
 			Board board = boardModel.getBoard();
 			String script = board.getScript();
@@ -66,13 +63,12 @@ class BoardScriptRunnable extends MonitorRunnable {
 		}
 	}
 
-	private Map<String, Object> createBeans(
-			GraphicalViewer viewer, BoardModel boardModel, SubMonitor sub) {
+	private Map<String, Object> createBeans(BoardModel boardModel, SubMonitor sub) {
 		Map<String, Object> beans = new HashMap<String, Object>();
 		beans.put(BEAN_NAME_BOARD, boardModel);
 		beans.put(BEAN_NAME_MONITOR, sub);
-		beans.put(BEAN_NAME_BOARD_PART, viewer.getContents());
-		beans.put(BEAN_NAME_BOARD_COMMAND_EXECUTER, new BoardCommandExecuter((BoardEditPart) viewer.getContents()));
+		beans.put(BEAN_NAME_BOARD_PART, this.boardEditPart);
+		beans.put(BEAN_NAME_BOARD_COMMAND_EXECUTER, new BoardCommandExecuter(this.boardEditPart));
 		return beans;
 	}
 }
