@@ -18,6 +18,7 @@ import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.test.OSGiEnvironment;
 
 public class KanbanServiceImplFunctionalTest {
@@ -73,7 +74,7 @@ public class KanbanServiceImplFunctionalTest {
 	}
 
 	@Test
-	public void create_some_board() throws Exception {
+	public void create_some_boards() throws Exception {
 		Board board1 = service.createBoard("test kanban");
 		Board board2 = service.createBoard("added");
 
@@ -87,7 +88,7 @@ public class KanbanServiceImplFunctionalTest {
 	public void create_card() throws Exception {
 		Board board = service.createBoard("test kanban");
 		Card card = service.createCard(board, "test", null, 10, 20);
-		Card[] cards = service.findAllCards();
+		Card[] cards = board.getCards();
 		assertEquals(1, cards.length);
 
 		Card actualCard1 = cards[0];
@@ -97,16 +98,16 @@ public class KanbanServiceImplFunctionalTest {
 		assertThat(actualCard1.getCreateDate(), is(notNullValue()));
 		assertThat(actualCard1.getX(), is(10));
 		assertThat(actualCard1.getY(), is(20));
-		assertThat(card, is(actualCard1));
+		assertThat(actualCard1, is(card));
 	}
 
 	@Test
-	public void create_some_card() throws Exception {
+	public void create_some_cards() throws Exception {
 		Board board = service.createBoard("test kanban");
 		Card card1 = service.createCard(board, "test", null, 10, 20);
 		Card card2 = service.createCard(board, "test2", null, 15, 30);
 
-		Card[] cards = service.findAllCards();
+		Card[] cards = board.getCards();
 
 		assertThat(cards.length, is(2));
 
@@ -202,6 +203,66 @@ public class KanbanServiceImplFunctionalTest {
 	}
 
 	@Test
+	public void create_lane() throws Exception {
+		Board board = service.createBoard("test kanban");
+		Lane lane = service.createLane(board, "test", 0, 0, 100, 100);
+		assertThat(lane.getStatus(), is("test"));
+		assertThat(lane.getX(), is(0));
+		assertThat(lane.getY(), is(0));
+		assertThat(lane.getWidth(), is(100));
+		assertThat(lane.getHeight(), is(100));
+		assertThat(lane.getScript(), is(nullValue()));
+		assertThat(lane.getScriptType(), is(ScriptTypes.JavaScript));
+
+		Lane[] lanes = board.getLanes();
+		assertThat(lanes.length, is(1));
+		assertThat(lanes[0], is(lane));
+	}
+
+	@Test
+	public void create_some_lanes() throws Exception {
+		Board board = service.createBoard("test kanban");
+		Lane lane1 = service.createLane(board, "test1", 0, 0, 100, 100);
+		Lane lane2 = service.createLane(board, "test2", 100, 100, 200, 200);
+		assertThat(lane1.getStatus(), is("test1"));
+		assertThat(lane1.getX(), is(0));
+		assertThat(lane1.getY(), is(0));
+		assertThat(lane1.getWidth(), is(100));
+		assertThat(lane1.getHeight(), is(100));
+		assertThat(lane1.getScript(), is(nullValue()));
+		assertThat(lane1.getScriptType(), is(ScriptTypes.JavaScript));
+
+		assertThat(lane2.getStatus(), is("test2"));
+		assertThat(lane2.getX(), is(100));
+		assertThat(lane2.getY(), is(100));
+		assertThat(lane2.getWidth(), is(200));
+		assertThat(lane2.getHeight(), is(200));
+		assertThat(lane2.getScript(), is(nullValue()));
+		assertThat(lane2.getScriptType(), is(ScriptTypes.JavaScript));
+
+		Lane[] lanes = board.getLanes();
+		assertThat(lanes.length, is(2));
+		assertThat(lanes[0], is(lane1));
+		assertThat(lanes[1], is(lane2));
+
+	}
+
+	@Test
+	public void set_custom_icon_to_lane() throws Exception {
+		Board board = service.createBoard("test kanban");
+		Lane lane1 = service.createLane(board, "test1", 0, 0, 100, 100);
+		File icon = folder.newFile("custom.gif");
+		lane1.setCustomIcon(icon);
+		File customIcon = lane1.getCustomIcon();
+		assertThat(customIcon, is(notNullValue()));
+		assertThat(customIcon.getName(), is("custom.gif"));
+
+		Lane lane = board.getLanes()[0];
+		File customIcon2 = lane.getCustomIcon();
+		assertThat(customIcon, is(customIcon2));
+	}
+
+	@Test
 	public void has_user() throws Exception {
 		assertFalse(service.hasUser("kompiro@test"));
 		service.addUser("kompiro@test");
@@ -219,7 +280,8 @@ public class KanbanServiceImplFunctionalTest {
 	@Test
 	public void add_icon() throws Exception {
 		Icon icon = service.addIcon("test_type", 0, 0);
-		assertNotNull(icon);
+		assertThat(icon, is(notNullValue()));
+		assertThat(icon.getClassType(), is("test_type"));
 	}
 
 	@Test
