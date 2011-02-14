@@ -59,16 +59,16 @@ public class BoardHierarchy implements Container.Hierarchical {
 		if ("caption".equals(propertyId)) {
 			if (itemId instanceof Board) {
 				Board board = (Board) itemId;
-				return new ObjectProperty(board.getTitle());
+				return new ObjectProperty<String>(board.getTitle());
 			}
 			if (itemId instanceof Lane) {
 				Lane card = (Lane) itemId;
-				return new ObjectProperty(card.getStatus());
+				return new ObjectProperty<String>(card.getStatus());
 			}
 
 			if (itemId instanceof Card) {
 				Card card = (Card) itemId;
-				return new ObjectProperty(card.getSubject());
+				return new ObjectProperty<String>(card.getSubject());
 			}
 		} else if ("icon".equals(propertyId)) {
 

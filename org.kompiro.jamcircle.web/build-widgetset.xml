@@ -37,7 +37,7 @@ See configure target to adjust this buildfile.
 		
 		<!-- Location of Vaadin JAR -->
 		<property name="vaadin-jar-location" 
-			      value="${base}../com.vaadin/META-INF/vaadin-6.5.0.pre1.jar" />
+			      value="${base}../com.vaadin/META-INF/vaadin-6.5.1.jar" />
 		
 		<!-- Location of project source code -->
 		<property name="src-location" 

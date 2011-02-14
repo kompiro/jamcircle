@@ -151,7 +151,7 @@ Import-Package: VAADIN.themes,
 Web-ContextPath: /jamcircle
 Service-Component: OSGI-INF/WebContext.xml
 Bundle-ClassPath: .,
- WEB-INF/lib/icepush-0.2.0.jar,
  WEB-INF/lib/icepush-gwt.jar,
  WEB-INF/lib/icepush.jar,
- WEB-INF/lib/dragdroplayouts-0.4.4.jar
+ WEB-INF/lib/dragdroplayouts-0.4.5.jar,
+ WEB-INF/lib/icepush-0.2.1.jar

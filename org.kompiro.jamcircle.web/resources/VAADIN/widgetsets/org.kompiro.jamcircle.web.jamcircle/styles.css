@@ -1,5 +1,6 @@
 /* Absolute layout styles */
 .v-ddabsolutelayout-drag-shadow{
+	background-color: rgb(169,209,255); /* IE fallback */
 	background-color: rgba(169,209,255,.6);
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
@@ -14,6 +15,7 @@
 }
 .v-ddorderedlayout-over-middle,
 .v-ddorderedlayout-over-center{	
+	background-color: rgb(169,209,255); /* IE fallback */
 	background-color: rgba(169,209,255,.6);
 }
 .v-ddorderedlayout-over.v-ddorderedlayout-over-left{	
