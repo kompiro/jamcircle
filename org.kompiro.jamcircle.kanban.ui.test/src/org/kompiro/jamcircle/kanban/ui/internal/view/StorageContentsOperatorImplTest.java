@@ -1,5 +1,7 @@
 package org.kompiro.jamcircle.kanban.ui.internal.view;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -18,11 +20,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kompiro.jamcircle.kanban.model.Board;
 import org.kompiro.jamcircle.kanban.service.KanbanService;
+import org.kompiro.jamcircle.kanban.ui.internal.editpart.BoardEditPart;
 import org.kompiro.jamcircle.kanban.ui.internal.editpart.KanbanUIExtensionEditPartFactory;
 import org.kompiro.jamcircle.kanban.ui.model.BoardModel;
 import org.kompiro.jamcircle.kanban.ui.util.IMonitorDelegator;
 import org.kompiro.jamcircle.scripting.ScriptTypes;
 import org.kompiro.jamcircle.scripting.ScriptingService;
+import org.mockito.ArgumentCaptor;
 
 public class StorageContentsOperatorImplTest {
 
@@ -67,8 +71,10 @@ public class StorageContentsOperatorImplTest {
 		BoardModel board = mock(BoardModel.class);
 		GraphicalViewer viewer = createMockGraphicalViewer();
 		operator.setContents(viewer, board, new NullProgressMonitor());
+		ArgumentCaptor<BoardEditPart> captor = ArgumentCaptor.forClass(BoardEditPart.class);
 
-		verify(viewer).setContents(board);
+		verify(viewer).setContents(captor.capture());
+		assertThat(captor.getValue().getBoardModel(), is(board));
 	}
 
 	@Test
@@ -76,8 +82,10 @@ public class StorageContentsOperatorImplTest {
 		BoardModel board = mock(BoardModel.class);
 		GraphicalViewer viewer = mock(GraphicalViewer.class);
 		operator.setContents(viewer, board, new NullProgressMonitor());
+		ArgumentCaptor<BoardEditPart> captor = ArgumentCaptor.forClass(BoardEditPart.class);
 
-		verify(viewer).setContents(board);
+		verify(viewer).setContents(captor.capture());
+		assertThat(captor.getValue().getBoardModel(), is(board));
 	}
 
 	@SuppressWarnings("unchecked")
