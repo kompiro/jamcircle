@@ -5,7 +5,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.kompiro.jamcircle.scripting.ui.ScriptingImageEnum;
 import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
 import org.kompiro.jamcircle.scripting.ui.internal.ruby.console.RubyScriptingConsole;
-import org.kompiro.jamcircle.scripting.ui.internal.ruby.dialog.RubyHistoryWindow;
+import org.kompiro.jamcircle.scripting.ui.internal.ruby.dialog.HistoryWindow;
 
 public class HistoryAction extends Action {
 
@@ -27,7 +27,7 @@ public class HistoryAction extends Action {
 
 	@Override
 	public void run() {
-		RubyHistoryWindow window = new RubyHistoryWindow(null, console.getHistoryList());
+		HistoryWindow window = new HistoryWindow(null, console.getHistoryList());
 		window.create();
 		window.open();
 	}

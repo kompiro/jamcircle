@@ -17,7 +17,7 @@ import org.kompiro.jamcircle.scripting.delegator.SaveHistoryDeligator;
 import org.kompiro.jamcircle.scripting.ui.ScriptingImageEnum;
 import org.kompiro.jamcircle.scripting.ui.ScriptingUIActivator;
 
-public class RubyHistoryWindow extends ApplicationWindow {
+public class HistoryWindow extends ApplicationWindow {
 
 	private class SaveRubyHistoryAction extends Action {
 
@@ -28,7 +28,7 @@ public class RubyHistoryWindow extends ApplicationWindow {
 
 		@Override
 		public void run() {
-			FileDialog dialog = new FileDialog(getShell(), SWT.SAVE | SWT.APPLICATION_MODAL);
+			FileDialog dialog = new FileDialog(getShell(), SWT.SAVE);
 			dialog.setOverwrite(true);
 			String file = dialog.open();
 			if (file != null) {
@@ -50,7 +50,7 @@ public class RubyHistoryWindow extends ApplicationWindow {
 	private String histories;
 	private SaveHistoryDeligator delegator = new DefaultSaveHistoryDelegator();
 
-	public RubyHistoryWindow(Shell parentShell, List<String> history) {
+	public HistoryWindow(Shell parentShell, List<String> history) {
 		super(parentShell);
 		StringBuilder builder = new StringBuilder();
 		for (String line : history) {
