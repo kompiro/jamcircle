@@ -26,7 +26,7 @@ import org.kompiro.jamcircle.kanban.ui.widget.TableListWrapper;
 
 public class BoardNewWizardPage extends WizardPage {
 	
-	private class TemplateWrapper implements TableListWrapper{
+	private static class TemplateWrapper implements TableListWrapper{
 
 		private boolean even;
 		private KanbanBoardTemplate template;

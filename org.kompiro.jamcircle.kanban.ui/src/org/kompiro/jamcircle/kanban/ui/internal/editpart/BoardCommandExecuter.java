@@ -10,8 +10,8 @@ import org.kompiro.jamcircle.kanban.model.*;
 import org.kompiro.jamcircle.storage.model.GraphicalEntity;
 
 public class BoardCommandExecuter implements BoardContainer {
-	
-	private final class GraphicalCreationFactory implements
+
+	private static final class GraphicalCreationFactory implements
 			CreationFactory {
 		private GraphicalEntity entity;
 
@@ -30,7 +30,7 @@ public class BoardCommandExecuter implements BoardContainer {
 
 	private BoardEditPart part;
 
-	public BoardCommandExecuter(BoardEditPart part){
+	public BoardCommandExecuter(BoardEditPart part) {
 		this.part = part;
 	}
 
@@ -38,7 +38,7 @@ public class BoardCommandExecuter implements BoardContainer {
 		GraphicalCreationFactory factory = new GraphicalCreationFactory(card);
 		executeAddCommand(factory);
 	}
-	
+
 	public void addLane(Lane lane) {
 		GraphicalCreationFactory factory = new GraphicalCreationFactory(lane);
 		executeAddCommand(factory);
@@ -57,11 +57,12 @@ public class BoardCommandExecuter implements BoardContainer {
 		EditPart target = null;
 		List<CardEditPart> cardChildren = part.getCardChildren();
 		for (CardEditPart cardEditPart : cardChildren) {
-			if(card.equals(cardEditPart.getCardModel())){
+			if (card.equals(cardEditPart.getCardModel())) {
 				target = cardEditPart;
 			}
 		}
-		if(target == null) return;
+		if (target == null)
+			return;
 		request.setEditParts(target);
 		Command command = part.getCommand(request);
 		part.getCommandStack().execute(command);
@@ -72,15 +73,15 @@ public class BoardCommandExecuter implements BoardContainer {
 		EditPart target = null;
 		List<LaneEditPart> laneChildren = part.getLaneChildren();
 		for (LaneEditPart laneEditPart : laneChildren) {
-			if(lane.equals(laneEditPart.getLaneModel())){
+			if (lane.equals(laneEditPart.getLaneModel())) {
 				target = laneEditPart;
 			}
 		}
-		if(target == null) return;
+		if (target == null)
+			return;
 		request.setEditParts(target);
 		Command command = part.getCommand(request);
 		part.getCommandStack().execute(command);
 	}
-
 
 }

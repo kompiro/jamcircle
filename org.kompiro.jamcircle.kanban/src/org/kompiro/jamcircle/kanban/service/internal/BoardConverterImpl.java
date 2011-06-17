@@ -100,15 +100,31 @@ public class BoardConverterImpl implements BoardConverter {
 
 	private void createIconEntity(ZipOutputStream stream, File customIcon, String containerName, String fileName) {
 		ZipEntry entry = new ZipEntry(containerName + fileName);
+		FileInputStream fileInputStream = null;
+		InputStream inputStream = null;
 		try {
 			stream.putNextEntry(entry);
-			InputStream inputStream = new BufferedInputStream(new FileInputStream(customIcon));
+			fileInputStream = new FileInputStream(customIcon);
+			inputStream = new BufferedInputStream(fileInputStream);
 			int len;
 			byte[] buf = new byte[8192];
 			while ((len = inputStream.read(buf)) != -1) {
 				stream.write(buf, 0, len);
 			}
 		} catch (IOException e) {
+		} finally {
+			if (fileInputStream != null) {
+				try {
+					fileInputStream.close();
+				} catch (IOException e) {
+				}
+			}
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+				}
+			}
 		}
 	}
 

@@ -69,7 +69,7 @@ public class CommandListTableViewer {
 		}
 	}
 	
-	class CommandWrapper {
+	static class CommandWrapper {
 		private int row;
 		private Command command;
 
@@ -114,7 +114,7 @@ public class CommandListTableViewer {
 		
 	}
 	
-	class NameSorter extends ViewerSorter {
+	static class NameSorter extends ViewerSorter {
 	}
 
 	public CommandListTableViewer() {

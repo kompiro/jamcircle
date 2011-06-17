@@ -29,7 +29,7 @@ public class CardListTableViewer implements PropertyChangeListener {
 	public static final String ID_CARD_LIST = "card_list"; //$NON-NLS-1$
 	public List<CardListListener> listeners = new ArrayList<CardListListener>();
 
-	public final class CardWrapper implements TableListWrapper {
+	public final static class CardWrapper implements TableListWrapper {
 		private Card card;
 		private boolean even;
 		private CardContainer container;
@@ -61,7 +61,7 @@ public class CardListTableViewer implements PropertyChangeListener {
 		}
 	}
 
-	private final class CardListContentProvider implements IStructuredContentProvider {
+	private final static class CardListContentProvider implements IStructuredContentProvider {
 
 		public void dispose() {
 		}

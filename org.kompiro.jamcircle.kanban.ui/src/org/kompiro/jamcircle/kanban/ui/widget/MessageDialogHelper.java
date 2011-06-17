@@ -22,7 +22,11 @@ public class MessageDialogHelper {
 	 *            message.
 	 */
 	public void openError(Shell shell, String message, Throwable e) {
-		MessageDialog.openError(shell, message, e.getMessage());
+		String errorMessage = "";
+		if (e != null) {
+			errorMessage = e.getMessage();
+		}
+		MessageDialog.openError(shell, message, errorMessage);
 	}
 
 }

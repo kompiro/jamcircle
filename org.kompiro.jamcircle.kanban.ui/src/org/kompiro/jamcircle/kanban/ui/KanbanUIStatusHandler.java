@@ -16,7 +16,6 @@ public class KanbanUIStatusHandler {
 	private static final String ID_PLUGIN = KanbanUIActivator.ID_PLUGIN;
 
 	private static Set<IStatusHandler> handlers = new HashSet<IStatusHandler>();
-	private static DateFormat formatter = new SimpleDateFormat(DATE_FORMATTER);
 
 	private static final boolean ENABLE_LOGGING;
 	private static final boolean ENABLE_UI_DEBUG;
@@ -45,6 +44,7 @@ public class KanbanUIStatusHandler {
 				handler.fail(status, true);
 			}
 		} else {
+			DateFormat formatter = new SimpleDateFormat(DATE_FORMATTER);
 			String message = String.format("%s %s", formatter.format(new Date()), status.getMessage()); //$NON-NLS-1$
 			for (IStatusHandler handler : handlers) {
 				handler.info(message);

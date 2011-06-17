@@ -1,40 +1,26 @@
 package org.kompiro.jamcircle.kanban.ui.internal.figure;
 
-import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.GridData;
-import org.eclipse.draw2d.GridLayout;
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.LineBorder;
-import org.eclipse.draw2d.RectangleFigure;
-import org.eclipse.draw2d.SchemeBorder;
-import org.eclipse.draw2d.StackLayout;
-import org.eclipse.draw2d.ToolbarLayout;
-import org.eclipse.draw2d.XYLayout;
+import org.eclipse.draw2d.*;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontMetrics;
-import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.*;
 import org.kompiro.jamcircle.kanban.ui.Messages;
 
 public class LaneFigure extends RectangleFigure {
 
 	static final int LANE_BORDER_LINE_WIDTH = 4;
 	public static final String KEY_OF_LANE_HEADER = "LANE_HEADER"; //$NON-NLS-1$
-	
-	public class CardArea extends Figure {
+
+	public static final class CardArea extends Figure {
 		@Override
 		protected boolean useLocalCoordinates() {
 			return true;
 		}
 	}
-	
+
 	static final int LANE_SIZE_OF_CORNER = 20;
 	public static final int MARGIN = 5;
 	public static final String COLOR_KEY_LANE_BODY = "color_key_lane_body"; //$NON-NLS-1$
@@ -46,15 +32,15 @@ public class LaneFigure extends RectangleFigure {
 	private Figure actionSection;
 	private Figure statusPaneFigure;
 	private Figure actionPaneFigure;
-	
-	public LaneFigure(){
-//		corner = new Dimension(LANE_SIZE_OF_CORNER, LANE_SIZE_OF_CORNER);
-		GridLayout manager = new GridLayout(1,true);
+
+	public LaneFigure() {
+		// corner = new Dimension(LANE_SIZE_OF_CORNER, LANE_SIZE_OF_CORNER);
+		GridLayout manager = new GridLayout(1, true);
 		manager.marginHeight = 0;
 		manager.marginWidth = 0;
 
 		setLayoutManager(manager);
-		
+
 		SchemeBorder outer = new ShadowRectangleBoarder();
 		setBorder(outer);
 		setBackgroundColor(JFaceResources.getColorRegistry().get(COLOR_KEY_LANE_BODY));
@@ -83,10 +69,10 @@ public class LaneFigure extends RectangleFigure {
 		graphics.drawLine(in.getTopLeft(), in.getTopRight());
 		graphics.drawLine(in.getTopLeft(), in.getBottomLeft());
 	}
-		
-	
+
 	public void setStatus(String status) {
-		if(statusFigure == null) throw new IllegalStateException(Messages.LaneFigure_initialized_error_message);
+		if (statusFigure == null)
+			throw new IllegalStateException(Messages.LaneFigure_initialized_error_message);
 		statusFigure.setText(status);
 	}
 
@@ -110,37 +96,36 @@ public class LaneFigure extends RectangleFigure {
 		headerFigure.add(actionPaneFigure);
 		GridData constraint = new GridData(GridData.FILL_HORIZONTAL);
 		constraint.heightHint = height;
-		add(headerFigure,constraint);
+		add(headerFigure, constraint);
 	}
 
 	private void createStatusLabel() {
-		int height = (int)getStatusAreaHeight();
+		int height = (int) getStatusAreaHeight();
 		statusFigure = new Label();
 		Font statusFont = getFontRegistry().get(KEY_OF_LANE_HEADER);
 		statusFigure.setFont(statusFont);
 		GridData constraint;
 		constraint = new GridData();
-		constraint.heightHint = (int)height;
+		constraint.heightHint = (int) height;
 		constraint.grabExcessHorizontalSpace = true;
 		constraint.grabExcessVerticalSpace = true;
 		constraint.horizontalAlignment = SWT.FILL;
 		constraint.verticalAlignment = SWT.TOP;
-		statusPaneFigure.add(statusFigure,constraint);
+		statusPaneFigure.add(statusFigure, constraint);
 	}
 
 	private void createActionSection() {
 		actionSection = new Figure();
 		actionSection.setLayoutManager(new ToolbarLayout(true));
-		int height = (int)getStatusAreaHeight();
+		int height = (int) getStatusAreaHeight();
 		GridData iconizeConstraint = new GridData();
-		iconizeConstraint.heightHint = (int)height;
+		iconizeConstraint.heightHint = (int) height;
 		iconizeConstraint.grabExcessHorizontalSpace = true;
 		iconizeConstraint.grabExcessVerticalSpace = true;
 		iconizeConstraint.horizontalAlignment = SWT.RIGHT;
 		iconizeConstraint.verticalAlignment = SWT.CENTER;
-		actionPaneFigure.add(actionSection,iconizeConstraint);
+		actionPaneFigure.add(actionSection, iconizeConstraint);
 	}
-
 
 	private int getStatusAreaHeight() {
 		FontRegistry registry = getFontRegistry();
@@ -148,16 +133,16 @@ public class LaneFigure extends RectangleFigure {
 		GC gc = new GC(statusFont.getDevice());
 		gc.setFont(statusFont);
 		FontMetrics fontMetrics = gc.getFontMetrics();
-		int height = (int)(fontMetrics.getHeight() * 1.5);
+		int height = (int) (fontMetrics.getHeight() * 1.5);
 		return height;
 	}
 
 	private FontRegistry getFontRegistry() {
 		return JFaceResources.getFontRegistry();
 	}
-	
+
 	private void createCardArea() {
-		IFigure cardAreaSection = new Figure(); 
+		IFigure cardAreaSection = new Figure();
 		cardAreaSection.setLayoutManager(new GridLayout());
 		cardArea = new CardArea();
 		cardArea.setLayoutManager(new XYLayout());
@@ -165,11 +150,11 @@ public class LaneFigure extends RectangleFigure {
 		cardArea.setSize(CardFigure.CARD_SIZE);
 
 		GridData constraint = new GridData(GridData.FILL_BOTH);
-		cardAreaSection.add(cardArea,constraint);
+		cardAreaSection.add(cardArea, constraint);
 		constraint = new GridData(GridData.FILL_BOTH);
 		constraint.widthHint = CardFigure.CARD_WIDTH;
 		constraint.heightHint = CardFigure.CARD_HEIGHT;
-		add(cardAreaSection,constraint);
+		add(cardAreaSection, constraint);
 	}
 
 	public CardArea getCardArea() {
@@ -178,8 +163,8 @@ public class LaneFigure extends RectangleFigure {
 
 	@Override
 	public void paint(Graphics graphics) {
-		if(isCreating()){
-			graphics.setAlpha(128);			
+		if (isCreating()) {
+			graphics.setAlpha(128);
 		}
 		super.paint(graphics);
 	}
@@ -187,19 +172,20 @@ public class LaneFigure extends RectangleFigure {
 	private boolean isCreating() {
 		return creating;
 	}
-	
-	public void setCreating(boolean creating){
+
+	public void setCreating(boolean creating) {
 		this.creating = creating;
 	}
-	
-	public int getMaxCardLocationX(Dimension sourceSize,Dimension targetSize){
+
+	public int getMaxCardLocationX(Dimension sourceSize, Dimension targetSize) {
 		return sourceSize.width - (targetSize.width + LANE_SIZE_OF_CORNER + MARGIN);
 	}
-	public int getMaxCardLocationY(Dimension sourceSize,Dimension targetSize){
-		return sourceSize.height - (targetSize.height + LANE_SIZE_OF_CORNER + MARGIN + (int)getStatusAreaHeight());
+
+	public int getMaxCardLocationY(Dimension sourceSize, Dimension targetSize) {
+		return sourceSize.height - (targetSize.height + LANE_SIZE_OF_CORNER + MARGIN + (int) getStatusAreaHeight());
 	}
-			
-	public IFigure getActionSection(){
+
+	public IFigure getActionSection() {
 		return this.actionSection;
 	}
 }

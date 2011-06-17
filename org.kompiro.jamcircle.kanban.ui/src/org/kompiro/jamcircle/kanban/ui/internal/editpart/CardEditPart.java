@@ -183,7 +183,7 @@ public class CardEditPart extends AbstractEditPart {
 
 	private class SubjectDirectEditManager extends DirectEditManager {
 
-		public SubjectDirectEditManager(CellEditorLocator locator) {
+		public SubjectDirectEditManager(CardCellEditorLocator locator) {
 			super(CardEditPart.this, TextCellEditor.class, locator);
 		}
 
@@ -474,7 +474,7 @@ public class CardEditPart extends AbstractEditPart {
 	public void performRequest(Request req) {
 		if (RequestConstants.REQ_OPEN.equals(req.getType())) {
 			if (directManager == null) {
-				directManager = new SubjectDirectEditManager(new CellEditorLocator(getCardFigure().getMiddleSection()));
+				directManager = new SubjectDirectEditManager(new CardCellEditorLocator(getCardFigure().getMiddleSection()));
 			}
 			directManager.show();
 		}

@@ -19,7 +19,7 @@ public class ResizableEditPolicyFeedbackFigureExtension extends
 	/**
 	 * TODO Refactoring
 	 */
-	private final class LaneResizeHandle extends ResizeHandle {
+	private final static class LaneResizeHandle extends ResizeHandle {
 		private LaneResizeHandle(GraphicalEditPart owner, int direction) {
 			super(owner, direction);
 			IFigure figure = owner.getFigure();

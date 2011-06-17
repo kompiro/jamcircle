@@ -20,19 +20,20 @@ public class BoardDragTracker extends MarqueeDragTracker {
 	public static final String PROPERTY_DRAG_TO_MOVE_VIEWPOINT = "move viewpoint"; //$NON-NLS-1$
 
 	private static final int RIGHT_CLICK = 3;
-	
+
 	private KanbanService service;
 	private Point startLocation;
 
 	private Point viewLocation;
 
-	public BoardDragTracker(KanbanService service){
+	public BoardDragTracker(KanbanService service) {
 		this.service = service;
 	}
-	
+
 	@Override
 	protected boolean handleButtonDown(int button) {
-		if(!isGraphicalViewer()) return true;
+		if (!isGraphicalViewer())
+			return true;
 		startLocation = getCurrentMouseLocation().getCopy();
 		if (button == RIGHT_CLICK) {
 			if (stateTransition(STATE_INITIAL, STATE_DRAG)) {
@@ -42,14 +43,14 @@ public class BoardDragTracker extends MarqueeDragTracker {
 			}
 			return true;
 		}
-		
+
 		return super.handleButtonDown(button);
 	}
-	
+
 	@Override
 	protected boolean handleDrag() {
 		if (isInState(STATE_DRAG | STATE_DRAG_IN_PROGRESS) && isRightClick()) {
-			if(isInState(STATE_DRAG)){
+			if (isInState(STATE_DRAG)) {
 				stateTransition(STATE_DRAG, STATE_DRAG_IN_PROGRESS);
 			}
 			Dimension difference = getDifference();
@@ -58,19 +59,20 @@ public class BoardDragTracker extends MarqueeDragTracker {
 		}
 		return super.handleDrag();
 	}
-	
+
 	@Override
 	protected boolean handleDragInProgress() {
-		if(isRightClick()) return true;
+		if (isRightClick())
+			return true;
 		return super.handleDragInProgress();
 	}
-	
+
 	@Override
 	protected boolean handleButtonUp(int button) {
-		if(button == RIGHT_CLICK){
+		if (button == RIGHT_CLICK) {
 			Dimension difference = getDifference();
 			int area = difference.getArea();
-			if(Math.abs(area) <= 4){
+			if (Math.abs(area) <= 4) {
 				getCurrentViewer().getControl().getMenu().setVisible(true);
 			}
 			if (stateTransition(STATE_DRAG_IN_PROGRESS, STATE_TERMINAL)) {
@@ -79,10 +81,10 @@ public class BoardDragTracker extends MarqueeDragTracker {
 			handleFinished();
 			return true;
 		}
-		
+
 		return super.handleButtonUp(button);
 	}
-	
+
 	@Override
 	protected void handleFinished() {
 		startLocation = null;
@@ -92,17 +94,17 @@ public class BoardDragTracker extends MarqueeDragTracker {
 
 	@Override
 	protected boolean handleDoubleClick(final int button) {
-		if(button == RIGHT_CLICK) return false;
+		if (button == RIGHT_CLICK)
+			return false;
 		EditPart target = getCurrentViewer().findObjectAtExcluding(getLocation(),
 					getExclusionSet(), getTargetingConditional());
 		final CreateRequest request = createCardRequest(target);
-		executeCommand(getCommand(target,request));
+		executeCommand(getCommand(target, request));
 		target.showTargetFeedback(request);
 		return true;
 	}
-	
-	
-	private Command getCommand(EditPart target, CreateRequest request){
+
+	private Command getCommand(EditPart target, CreateRequest request) {
 		return target.getCommand(request);
 	}
 
@@ -117,23 +119,20 @@ public class BoardDragTracker extends MarqueeDragTracker {
 			}
 		};
 	}
-	
+
 	private CreateRequest createCardRequest(EditPart target) {
 		if (target instanceof AbstractEditPart) {
 			AbstractEditPart boardTarget = (AbstractEditPart) target;
 			BoardModel boardModel = boardTarget.getBoardModel();
-			final CreateRequest request = new CardCreateRequest(service,boardModel.getBoard());
+			final CreateRequest request = new CardCreateRequest(service, boardModel.getBoard());
 			Point location = getLocation().getCopy();
-			if (target instanceof GraphicalEditPart) {
-				location = location.getTranslated(getViewLocation());
-			}
+			location = location.getTranslated(getViewLocation());
 			request.setLocation(location);
 			return request;
 		}
 		return null;
 	}
 
-	
 	private Dimension getDifference() {
 		Point mouseLocation = getCurrentMouseLocation();
 		Dimension difference = mouseLocation.getDifference(startLocation);
@@ -144,19 +143,18 @@ public class BoardDragTracker extends MarqueeDragTracker {
 		return getCurrentInput().isMouseButtonDown(RIGHT_CLICK);
 	}
 
-	
 	private Point getCurrentMouseLocation() {
 		return getCurrentInput().getMouseLocation();
 	}
-		
+
 	private boolean isGraphicalViewer() {
 		return getCurrentViewer() instanceof GraphicalViewer;
 	}
-	
+
 	private Point getViewLocation() {
 		return getViewport().getViewLocation();
 	}
-	
+
 	private Viewport getViewport() {
 		GraphicalEditPart rootEditPart = (GraphicalEditPart) getCurrentViewer()
 				.getRootEditPart();

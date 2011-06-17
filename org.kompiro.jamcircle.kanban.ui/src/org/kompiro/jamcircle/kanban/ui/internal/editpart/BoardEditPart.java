@@ -41,7 +41,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 	private static final String LAYER_KEY_BOARD = "background"; //$NON-NLS-1$
 	private static final String LAYER_KEY_BOARD_TITLE = "title"; //$NON-NLS-1$
 
-	private final class CardLayer extends Layer {
+	private static final class CardLayer extends Layer {
 
 		public CardLayer() {
 			addLayoutListener(LayoutAnimator.getDefault());
@@ -60,7 +60,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		}
 	}
 
-	private final class LaneLayer extends Layer {
+	private static final class LaneLayer extends Layer {
 
 		public LaneLayer() {
 			// addLayoutListener(LayoutAnimator.getDefault());
@@ -74,7 +74,7 @@ public class BoardEditPart extends AbstractEditPart implements CardContainerEdit
 		}
 	}
 
-	private final class IconLayer extends Layer {
+	private static final class IconLayer extends Layer {
 
 		public IconLayer() {
 			// addLayoutListener(LayoutAnimator.getDefault());
