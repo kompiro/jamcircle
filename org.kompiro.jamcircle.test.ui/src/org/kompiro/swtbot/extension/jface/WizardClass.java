@@ -27,9 +27,10 @@ public class WizardClass<T extends Wizard> implements MethodRule {
 				nonUIThread.setName("Runnning Test Thread");//$NON-NLS-1$
 				nonUIThread.start();
 				WizardDialog dialog = new WizardDialog(parentShell, wizard);
+				dialog.setBlockOnOpen(false);
 				dialog.create();
 				dialog.open();
-
+				nonUIThread.join(10);
 				waitForNonUIThreadFinished(parentShell, nonUIThread);
 				if (runOnNonUIThread.getThrowable() != null) {
 					throw runOnNonUIThread.getThrowable();
@@ -55,6 +56,10 @@ public class WizardClass<T extends Wizard> implements MethodRule {
 					display.sleep();
 				}
 				if (System.currentTimeMillis() > timeout) {
+					if (parentShell.isDisposed() == false) {
+						parentShell.dispose();
+						nonUIThread.interrupt();
+					}
 					break;
 				}
 			} catch (Throwable e) {
